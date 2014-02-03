@@ -1,0 +1,18 @@
+package one.two.three.four {
+
+  package five.six.seven {
+
+    package eight.nine.ten.eleven {
+
+      package twelve.thirteen.fourteen {
+
+        package fifteen.sixteen {
+
+          object A {
+            val b = 1
+          }
+        }
+      }
+    }
+  }
+}

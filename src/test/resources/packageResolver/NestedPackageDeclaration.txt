@@ -1,0 +1,9 @@
+package one.two {
+
+  package three {
+
+    object A {
+      val b = 1
+    }
+  }
+}

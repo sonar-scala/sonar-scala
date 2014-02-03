@@ -1,0 +1,6 @@
+// Just a test
+
+/*
+ * This comment describes the
+ * content of the file.
+ */

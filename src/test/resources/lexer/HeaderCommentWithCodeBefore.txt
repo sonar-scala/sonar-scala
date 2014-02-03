@@ -1,0 +1,8 @@
+public class HelloWorld {
+  val a = 1
+}
+
+/*
+ * This comment describes the
+ * content of the file.
+ */

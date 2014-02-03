@@ -1,0 +1,22 @@
+package one {
+
+  package two.three.four.five.six.seven {
+
+    package eight {
+
+      object B
+
+      package nine.ten.eleven.twelve.thirteen.fourteen {
+
+        object C
+
+        package fifteen.sixteen {
+
+          object A {
+            val b = 1
+          }
+        }
+      }
+    }
+  }
+}

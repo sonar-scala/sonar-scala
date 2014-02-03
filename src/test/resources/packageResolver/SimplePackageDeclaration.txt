@@ -1,0 +1,6 @@
+package one {
+
+  object A {
+    val b = 1
+  }
+}

@@ -43,7 +43,7 @@ public class ScoverageSourceImporterSensor implements Sensor {
                                 String charset) {
         try {
             String source = FileUtils.readFileToString(inputFile.getFile(), charset);
-            File resource = ScalaFile.fromIOFile(inputFile.getFile(), project);
+            ScalaFile resource =  new ScalaFile(File.fromIOFile(inputFile.getFile(), project).getKey());
             if (resource == null) {
                 LOGGER.warn("[ScoverageSourceImporterSensor] Resource null! " + inputFile.getRelativePath());
                 return;
@@ -54,10 +54,5 @@ public class ScoverageSourceImporterSensor implements Sensor {
         } catch (IOException ioe) {
             LOGGER.error("Could not read the file: " + inputFile.getFile().getAbsolutePath(), ioe);
         }
-    }
-
-    @Override
-    public String toString() {
-        return getClass().getSimpleName();
     }
 }

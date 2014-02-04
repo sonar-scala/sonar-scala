@@ -33,34 +33,20 @@ import org.sonar.api.resources.Directory;
 import org.sonar.api.resources.InputFile;
 import org.sonar.api.resources.Project;
 import org.sonar.api.resources.ProjectFileSystem;
-import org.sonar.plugins.cobertura.api.AbstractCoberturaParser;
-import org.sonar.plugins.cobertura.api.CoberturaUtils;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
 public class CoberturaSensor implements Sensor, CoverageExtension {
 
     private static final Logger LOG = LoggerFactory.getLogger(CoberturaSensor.class);
-    private static final AbstractCoberturaParser COBERTURA_PARSER = new ScalaCoberturaParser();
 
     public boolean shouldExecuteOnProject(Project project) {
         return project.getAnalysisType().isDynamic(true) && Scala.INSTANCE.getKey().equals(project.getLanguageKey());
     }
 
     public void analyse(Project project, SensorContext context) {
-        File report = CoberturaUtils.getReport(project);
-        if (report != null) {
-            //parseReport(report, context);
-            parseFakeReport(project, context);
-        }
-    }
-
-    protected void parseReport(File xmlFile, final SensorContext context) {
-        LOG.info("parsing {}", xmlFile);
-
-        COBERTURA_PARSER.parseReport(xmlFile, context);
+        parseFakeReport(project, context);
     }
 
     @Override

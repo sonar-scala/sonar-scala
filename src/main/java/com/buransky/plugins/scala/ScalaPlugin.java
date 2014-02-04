@@ -19,17 +19,14 @@
  */
 package com.buransky.plugins.scala;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.buransky.plugins.scala.cobertura.CoberturaSensor;
 import com.buransky.plugins.scala.language.Scala;
+import com.buransky.plugins.scala.sensor.ScalaSourceImporterSensor;
 import org.sonar.api.Extension;
 import org.sonar.api.SonarPlugin;
-import com.buransky.plugins.scala.colorization.ScalaColorizerFormat;
-import com.buransky.plugins.scala.sensor.BaseMetricsSensor;
-import com.buransky.plugins.scala.sensor.ScalaSourceImporterSensor;
-import com.buransky.plugins.scala.surefire.SurefireSensor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This class is the entry point for all extensions made by the
@@ -40,34 +37,30 @@ import com.buransky.plugins.scala.surefire.SurefireSensor;
  */
 public class ScalaPlugin extends SonarPlugin {
 
-  public List<Class<? extends Extension>> getExtensions() {
-    final List<Class<? extends Extension>> extensions = new ArrayList<Class<? extends Extension>>();
-    extensions.add(Scala.class);
-    extensions.add(ScalaSourceImporterSensor.class);
-    extensions.add(ScalaColorizerFormat.class);
-    extensions.add(BaseMetricsSensor.class);
-    extensions.add(ScalaDefaultProfile.class);
-    extensions.add(CoberturaSensor.class);
-    extensions.add(SurefireSensor.class);
+    public List<Class<? extends Extension>> getExtensions() {
+        final List<Class<? extends Extension>> extensions = new ArrayList<Class<? extends Extension>>();
+        extensions.add(Scala.class);
+        extensions.add(ScalaSourceImporterSensor.class);
+        extensions.add(CoberturaSensor.class);
 
-    return extensions;
-  }
+        return extensions;
+    }
 
-  @Override
-  public String toString() {
-    return getClass().getSimpleName();
-  }
+    @Override
+    public String toString() {
+        return getClass().getSimpleName();
+    }
 
-  public static String getPathToScalaLibrary() {
-    return getPathByResource("scala/package.class");
-  }
+    public static String getPathToScalaLibrary() {
+        return getPathByResource("scala/package.class");
+    }
 
-  /**
-   * Godin: during execution of Sonar Batch all dependencies of a plugin are downloaded and
-   * available locally as JAR-files, so we can use this kind of hack to locate JARs.
-   */
-  private static String getPathByResource(String name) {
-    String path = ScalaPlugin.class.getClassLoader().getResource(name).getPath();
-    return path.substring("file:".length(), path.lastIndexOf('!'));
-  }
+    /**
+     * Godin: during execution of Sonar Batch all dependencies of a plugin are downloaded and
+     * available locally as JAR-files, so we can use this kind of hack to locate JARs.
+     */
+    private static String getPathByResource(String name) {
+        String path = ScalaPlugin.class.getClassLoader().getResource(name).getPath();
+        return path.substring("file:".length(), path.lastIndexOf('!'));
+    }
 }

@@ -17,25 +17,31 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package com.buransky.plugins.scala.language;
+package com.buransky.plugins.scoverage.sensor;
 
-import org.sonar.api.resources.AbstractLanguage;
+import com.buransky.plugins.scoverage.language.Scala;
+import org.sonar.api.batch.Sensor;
+import org.sonar.api.resources.Project;
 
 /**
- * This class implements Scala as a language for Sonar.
+ * This is a helper base class for sensors that should only be executed on Scala projects.
  *
  * @author Felix Müller
  * @since 0.1
  */
-public class Scala extends AbstractLanguage {
+public abstract class AbstractScalaSensor implements Sensor {
 
-  public static final Scala INSTANCE = new Scala();
+  private final Scala scala;
 
-  public Scala() {
-    super("scala", "Scala");
+  protected AbstractScalaSensor(Scala scala) {
+    this.scala = scala;
   }
 
-  public String[] getFileSuffixes() {
-    return new String[] { "scala" };
+  public final boolean shouldExecuteOnProject(Project project) {
+    return project.getLanguage().equals(scala);
+  }
+
+  public final Scala getScala() {
+    return scala;
   }
 }

@@ -76,7 +76,7 @@
     <sonar.pluginKey>scoverage</sonar.pluginKey>
     <sonar.pluginName>Scoverage</sonar.pluginName>
 
-    <sonar.pluginClass>com.buransky.plugins.scala.ScalaPlugin</sonar.pluginClass>
+    <sonar.pluginClass>com.buransky.plugins.scoverage.ScoveragePlugin</sonar.pluginClass>
 
     <scala.version>2.9.1</scala.version>
   </properties>

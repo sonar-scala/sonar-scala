@@ -17,10 +17,10 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package com.buransky.plugins.scala.cobertura;
+package com.buransky.plugins.scoverage.sensor;
 
-import com.buransky.plugins.scala.language.Scala;
-import com.buransky.plugins.scala.language.ScalaRealFile;
+import com.buransky.plugins.scoverage.language.Scala;
+import com.buransky.plugins.scoverage.language.ScalaFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.batch.CoverageExtension;
@@ -37,9 +37,9 @@ import org.sonar.api.resources.ProjectFileSystem;
 import java.util.HashMap;
 import java.util.Map;
 
-public class CoberturaSensor implements Sensor, CoverageExtension {
+public class ScoverageSensor implements Sensor, CoverageExtension {
 
-    private static final Logger LOG = LoggerFactory.getLogger(CoberturaSensor.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ScoverageSensor.class);
 
     public boolean shouldExecuteOnProject(Project project) {
         return project.getAnalysisType().isDynamic(true) && Scala.INSTANCE.getKey().equals(project.getLanguageKey());
@@ -51,7 +51,7 @@ public class CoberturaSensor implements Sensor, CoverageExtension {
 
     @Override
     public String toString() {
-        return "Scala CoberturaSensor";
+        return "Scala ScoverageSensor";
     }
 
     private void parseFakeReport(Project project, final SensorContext context) {
@@ -59,8 +59,8 @@ public class CoberturaSensor implements Sensor, CoverageExtension {
 
         HashMap<String, Directory> dirs = new HashMap<String, Directory>();
         for (InputFile sourceFile : fileSystem.mainFiles("scala")) {
-            LOG.info("[CoberturaSensor] Set coverage for [" + sourceFile.getRelativePath() + "]");
-            ScalaRealFile scalaSourcefile = ScalaRealFile.fromInputFile(sourceFile);
+            LOG.info("[ScoverageSensor] Set coverage for [" + sourceFile.getRelativePath() + "]");
+            ScalaFile scalaSourcefile = ScalaFile.fromInputFile(sourceFile);
 
             CoverageMeasuresBuilder coverage = CoverageMeasuresBuilder.create();
             coverage.setHits(1, 1);
@@ -86,7 +86,7 @@ public class CoberturaSensor implements Sensor, CoverageExtension {
         }
 
         for (Map.Entry<String, Directory> e: dirs.entrySet()) {
-            LOG.info("[CoberturaSensor] Set dir coverage for [" + e.getKey() + "]");
+            LOG.info("[ScoverageSensor] Set dir coverage for [" + e.getKey() + "]");
             context.saveMeasure(e.getValue(), new Measure(CoreMetrics.COVERAGE, 23.4));
         }
 

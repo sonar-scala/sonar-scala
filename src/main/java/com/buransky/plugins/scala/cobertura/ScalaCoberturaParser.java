@@ -19,29 +19,43 @@
  */
 package com.buransky.plugins.scala.cobertura;
 
+import com.buransky.plugins.scala.language.ScalaRealFile;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sonar.plugins.cobertura.api.AbstractCoberturaParser;
 import org.sonar.api.resources.Resource;
 import com.buransky.plugins.scala.language.ScalaFile;
 
+import java.io.File;
+
 public class ScalaCoberturaParser extends AbstractCoberturaParser {
+    private static final Logger LOG = LoggerFactory.getLogger(ScalaCoberturaParser.class);
+
     @Override
     protected Resource<?> getResource(String fileName) {
-        // TODO update the sbt scct plugin to provide the correct fully qualified class name.
-        if (fileName.startsWith("src.main.scala."))
-            fileName = fileName.replace("src.main.scala.", "");
-        else if (fileName.startsWith("app."))
-            fileName = fileName.replace("app.", "");
+//        // TODO update the sbt scct plugin to provide the correct fully qualified class name.
+//        if (fileName.startsWith("src.main.scala."))
+//            fileName = fileName.replace("src.main.scala.", "");
+//        else if (fileName.startsWith("app."))
+//            fileName = fileName.replace("app.", "");
+//
+//        int packageTerminator = fileName.lastIndexOf('.');
+//
+//        if (packageTerminator < 0 ) {
+//            return new ScalaFile(null, fileName, false);
+//        }
+//        else {
+//            String packageName = fileName.substring(0, packageTerminator);
+//            String className = fileName.substring(packageTerminator + 1, fileName.length());
+//
+//            return new ScalaFile(packageName, className, false);
+//        }
 
-        int packageTerminator = fileName.lastIndexOf('.');
+        File f = new File(fileName);
+        Resource result = new ScalaRealFile(f.getParent(), f.getName(), false);
 
-        if (packageTerminator < 0 ) {
-            return new ScalaFile(null, fileName, false);
-        }
-        else {
-            String packageName = fileName.substring(0, packageTerminator);
-            String className = fileName.substring(packageTerminator + 1, fileName.length());
+        LOG.info("[Scoverage] getResource [" + result.getKey() + "]");
 
-            return new ScalaFile(packageName, className, false);
-        }
+        return result;
     }
 }

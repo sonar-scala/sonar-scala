@@ -1,9 +1,6 @@
 package com.buransky.plugins.scoverage.sensor;
 
-import com.buransky.plugins.scoverage.FileStatementCoverage;
-import com.buransky.plugins.scoverage.ParentStatementCoverage;
-import com.buransky.plugins.scoverage.ScoverageParser;
-import com.buransky.plugins.scoverage.StatementCoverage;
+import com.buransky.plugins.scoverage.*;
 import com.buransky.plugins.scoverage.language.Scala;
 import com.buransky.plugins.scoverage.measure.ScalaMetrics;
 import com.buransky.plugins.scoverage.resource.ScalaDirectory;
@@ -14,6 +11,7 @@ import org.sonar.api.batch.CoverageExtension;
 import org.sonar.api.batch.Sensor;
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.measures.CoreMetrics;
+import org.sonar.api.measures.CoverageMeasuresBuilder;
 import org.sonar.api.measures.Measure;
 import org.sonar.api.resources.*;
 import scala.collection.JavaConversions;
@@ -67,6 +65,21 @@ public class ScoverageSensor implements Sensor, CoverageExtension {
         context.saveMeasure(scalaSourcefile, createStatementCoverage(fileCoverage.rate()));
 
         log("Process file [" + scalaSourcefile.getKey() + ", " + fileCoverage.rate() + "]");
+
+        // Save line coverage. This is needed just for source code highlighting.
+        saveLineCoverage(fileCoverage.lines(), scalaSourcefile, context);
+    }
+
+    private void saveLineCoverage(scala.collection.Iterable<CoveredLine> coveredLines,
+                                  ScalaFile scalaSourcefile, SensorContext context) {
+        CoverageMeasuresBuilder coverage = CoverageMeasuresBuilder.create();
+        for (CoveredLine coveredLine: JavaConversions.asJavaIterable(coveredLines)) {
+            coverage.setHits(coveredLine.line(), coveredLine.hitCount());
+        }
+
+        for (Measure measure : coverage.createMeasures()) {
+            context.saveMeasure(scalaSourcefile, measure);
+        }
     }
 
     private void processChildren(scala.collection.Iterable<StatementCoverage> children, SensorContext context,

@@ -3,13 +3,17 @@ package com.buransky.plugins.scoverage
 
 object ScoverageParser {
   def parse(scoverageXmlPath: String): ParentStatementCoverage = {
-    val errorCodeFile = FileStatementCoverage("ErrorCode.scala", 17, 13)
-    val graphFile = FileStatementCoverage("Graph.scala", 42, 0)
+    val errorCodeFile = FileStatementCoverage("ErrorCode.scala", 17, 13,
+      List(CoveredLine(10, 2), CoveredLine(11, 0),
+        CoveredLine(25, 1)))
 
-    val file2 = FileStatementCoverage("file2.scala", 2, 1)
+    val graphFile = FileStatementCoverage("Graph.scala", 42, 0,
+      List(CoveredLine(33, 0), CoveredLine(3, 1), CoveredLine(1, 0), CoveredLine(2, 2)))
+
+    val file2 = FileStatementCoverage("file2.scala", 2, 1, Nil)
     val bbbDir = ParentStatementCoverage("bbb", Seq(file2))
 
-    val file1 = FileStatementCoverage("file1.scala", 100, 33)
+    val file1 = FileStatementCoverage("file1.scala", 100, 33, Nil)
     val aaaDir = ParentStatementCoverage("aaa", Seq(file1, errorCodeFile, graphFile, bbbDir))
 
     val project = ParentStatementCoverage("project", Seq(aaaDir))
@@ -40,4 +44,6 @@ case class ParentStatementCoverage(name: String, children: Iterable[StatementCov
 }
 
 case class FileStatementCoverage(name: String, statementsCount: Int,
-  coveredStatementsCount: Int) extends StatementCoverage
+  coveredStatementsCount: Int, lines: Iterable[CoveredLine]) extends StatementCoverage
+
+case class CoveredLine(line: Int, hitCount: Int)

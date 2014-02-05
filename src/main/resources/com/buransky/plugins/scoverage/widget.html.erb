@@ -1,0 +1,10 @@
+<% measure=measure('scoverage')
+   if measure
+%>
+  <div class="dashbox">
+    <h3>
+    Statement coverage : <%= format_measure(measure, :suffix => ' %') %>
+    <%= dashboard_configuration.selected_period? ? format_variation(measure) : trend_icon(measure) -%>
+    </h3>
+  </div>
+<% end %>

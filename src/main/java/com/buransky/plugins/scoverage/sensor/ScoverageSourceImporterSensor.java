@@ -1,7 +1,7 @@
 package com.buransky.plugins.scoverage.sensor;
 
 import com.buransky.plugins.scoverage.language.Scala;
-import com.buransky.plugins.scoverage.language.ScalaFile;
+import com.buransky.plugins.scoverage.resource.ScalaFile;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,15 +39,18 @@ public class ScoverageSourceImporterSensor implements Sensor {
         }
     }
 
+    @Override
+    public String toString() {
+        return "Scoverage source importer";
+    }
+
     private void addFileToSonar(Project project, SensorContext sensorContext, InputFile inputFile,
                                 String charset) {
         try {
             String source = FileUtils.readFileToString(inputFile.getFile(), charset);
-            ScalaFile resource =  new ScalaFile(File.fromIOFile(inputFile.getFile(), project).getKey());
-            if (resource == null) {
-                LOGGER.warn("[ScoverageSourceImporterSensor] Resource null! " + inputFile.getRelativePath());
-                return;
-            }
+
+            String key = File.fromIOFile(inputFile.getFile(), project).getKey();
+            ScalaFile resource =  new ScalaFile(key);
 
             sensorContext.index(resource);
             sensorContext.saveSource(resource, source);

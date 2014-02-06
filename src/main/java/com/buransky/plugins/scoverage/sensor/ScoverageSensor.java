@@ -25,7 +25,7 @@ public class ScoverageSensor implements Sensor, CoverageExtension {
     private final ScoverageReportParser scoverageReportParser;
 
     public ScoverageSensor() {
-        this(XmlScoverageReportParser$.MODULE$);
+        this(XmlScoverageReportParser$.MODULE$.apply(""));
     }
 
     public ScoverageSensor(ScoverageReportParser scoverageReportParser) {
@@ -37,7 +37,7 @@ public class ScoverageSensor implements Sensor, CoverageExtension {
     }
 
     public void analyse(Project project, SensorContext context) {
-        processProject(scoverageReportParser.parse(""), project, context);
+        processProject(scoverageReportParser.parse(), project, context);
         //parseFakeReport(project, context);
     }
 

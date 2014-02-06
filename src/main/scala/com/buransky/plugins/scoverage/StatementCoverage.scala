@@ -75,7 +75,7 @@ object StatementCoverage {
     val multilineStatements = statements.filter { s => s.start.line != s.end.line }
     val extraStatements = multilineStatements.flatMap { s =>
       for (i <- (s.start.line + 1) to s.end.line)
-      yield CoveredStatement(StatementPosition(i, 0), StatementPosition(i, 0), s.hitCount)
+        yield CoveredStatement(StatementPosition(i, 0), StatementPosition(i, 0), s.hitCount)
     }
 
     // Group statements by starting line

@@ -69,7 +69,8 @@
   </repositories>
 
   <properties>
-    <sonar.version>3.0</sonar.version>
+    <sonar.version>3.6</sonar.version>
+    <sonar-java.version>1.4</sonar-java.version>
 
     <!--<sonar.pluginKey>scala</sonar.pluginKey>
     <sonar.pluginName>Scala</sonar.pluginName>-->
@@ -78,7 +79,7 @@
 
     <sonar.pluginClass>com.buransky.plugins.scoverage.ScoveragePlugin</sonar.pluginClass>
 
-    <scala.version>2.10.3</scala.version>
+    <scala.version>2.10.0</scala.version>
   </properties>
 
   <dependencies>
@@ -86,19 +87,16 @@
       <groupId>org.codehaus.sonar</groupId>
       <artifactId>sonar-plugin-api</artifactId>
       <version>${sonar.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.codehaus.sonar.plugins</groupId>
-      <artifactId>sonar-surefire-plugin</artifactId>
-      <version>${sonar.version}</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>org.codehaus.sonar.plugins</groupId>
-      <artifactId>sonar-cobertura-plugin</artifactId>
-      <version>${sonar.version}</version>
+      <groupId>org.codehaus.sonar-plugins.java</groupId>
+      <artifactId>sonar-java-plugin</artifactId>
+      <version>${sonar-java.version}</version>
+      <type>sonar-plugin</type>
       <scope>provided</scope>
     </dependency>
+
     <dependency>
       <groupId>org.scala-lang</groupId>
       <artifactId>scala-library</artifactId>
@@ -115,6 +113,7 @@
       <groupId>org.codehaus.sonar</groupId>
       <artifactId>sonar-testing-harness</artifactId>
       <version>${sonar.version}</version>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.scalatest</groupId>

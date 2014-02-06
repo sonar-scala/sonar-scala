@@ -11,11 +11,14 @@ import org.slf4j.LoggerFactory;
 import org.sonar.api.batch.CoverageExtension;
 import org.sonar.api.batch.Sensor;
 import org.sonar.api.batch.SensorContext;
+import org.sonar.api.config.Settings;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.measures.CoverageMeasuresBuilder;
 import org.sonar.api.measures.Measure;
 import org.sonar.api.resources.*;
+import org.sonar.api.scan.filesystem.ModuleFileSystem;
 import scala.collection.JavaConversions;
+import org.sonar.api.scan.filesystem.PathResolver;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -23,13 +26,22 @@ import java.util.Map;
 public class ScoverageSensor implements Sensor, CoverageExtension {
     private static final Logger log = LoggerFactory.getLogger(ScoverageSensor.class);
     private final ScoverageReportParser scoverageReportParser;
+    private final Settings settings;
+    private final PathResolver pathResolver;
+    private final ModuleFileSystem moduleFileSystem;
 
-    public ScoverageSensor() {
-        this(XmlScoverageReportParser$.MODULE$.apply());
+    private static final String SCOVERAGE_REPORT_PATH_PROPERTY = "sonar.scoverage.reportPath";
+
+    public ScoverageSensor(Settings settings, PathResolver pathResolver, ModuleFileSystem fileSystem) {
+        this(XmlScoverageReportParser$.MODULE$.apply(), settings, pathResolver, fileSystem);
     }
 
-    public ScoverageSensor(ScoverageReportParser scoverageReportParser) {
+    public ScoverageSensor(ScoverageReportParser scoverageReportParser, Settings settings,
+                           PathResolver pathResolver, ModuleFileSystem moduleFileSystem) {
         this.scoverageReportParser = scoverageReportParser;
+        this.settings = settings;
+        this.pathResolver = pathResolver;
+        this.moduleFileSystem = moduleFileSystem;
     }
 
     public boolean shouldExecuteOnProject(Project project) {
@@ -37,8 +49,9 @@ public class ScoverageSensor implements Sensor, CoverageExtension {
     }
 
     public void analyse(Project project, SensorContext context) {
-        processProject(scoverageReportParser.parse(getScoverageReportPath(project)), project, context);
-        //parseFakeReport(project, context);
+        String reportPath = getScoverageReportPath();
+        if (reportPath != null)
+            processProject(scoverageReportParser.parse(reportPath), project, context);
     }
 
     @Override
@@ -46,8 +59,19 @@ public class ScoverageSensor implements Sensor, CoverageExtension {
         return "Scoverage sensor";
     }
 
-    private String getScoverageReportPath(Project project) {
-        return "";
+    private String getScoverageReportPath() {
+        String path = settings.getString(SCOVERAGE_REPORT_PATH_PROPERTY);
+        if (path == null) {
+            log.error("Scoverage report path not set! [" + SCOVERAGE_REPORT_PATH_PROPERTY + "]");
+            return null;
+        }
+        java.io.File report = pathResolver.relativeFile(moduleFileSystem.baseDir(), path);
+        if (!report.exists() || !report.isFile()) {
+            log.error("Scoverage report not found at {}", report);
+            return null;
+        }
+
+        return report.getAbsolutePath();
     }
 
     private void processProject(ProjectStatementCoverage projectCoverage,

@@ -1,7 +1,7 @@
 package com.buransky.plugins.scoverage
 
 trait ScoverageReportParser {
-  def parse(): ProjectStatementCoverage
+  def parse(reportFilePath: String): ProjectStatementCoverage
 }
 
 case class ScoverageException(message: String, source: Throwable = null)

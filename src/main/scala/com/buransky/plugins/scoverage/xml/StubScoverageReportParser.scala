@@ -9,7 +9,7 @@ import com.buransky.plugins.scoverage.DirectoryStatementCoverage
 import scala.io.Source
 
 class StubScoverageReportParser extends ScoverageReportParser {
-  def parse(): ProjectStatementCoverage = {
+  def parse(reportFilePath: String): ProjectStatementCoverage = {
     val errorCodeFile = FileStatementCoverage("ErrorCode.scala", 17, 13,
       List(simpleStatement(10, 2), simpleStatement(11, 0),
         simpleStatement(25, 1)))

@@ -1,246 +1,173 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-  <modelVersion>4.0.0</modelVersion>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-    <!--
-  <parent>
-    <groupId>org.codehaus.sonar-plugins</groupId>
-    <artifactId>parent</artifactId>
-    <version>16</version>
-  </parent>-->
+    <groupId>com.buransky</groupId>
+    <artifactId>sonar-scoverage-plugin</artifactId>
 
-  <!--<artifactId>sonar-scala-plugin</artifactId>-->
+    <packaging>sonar-plugin</packaging>
+    <version>1.0-SNAPSHOT</version>
 
-  <groupId>com.buransky</groupId>
-  <artifactId>sonar-scoverage-plugin</artifactId>
-
-  <packaging>sonar-plugin</packaging>
-  <version>0.1-SNAPSHOT</version>
-
-  <name>Sonar Scoverage Plugin</name>
+    <name>Sonar Scoverage Plugin</name>
     <description>Sonar Scoverage Plugin</description>
 
-    <!--
-  <description>Enables analysis of Scala projects into Sonar.</description>
-  <url>http://docs.codehaus.org/display/SONAR/Scala+Plugin</url>
-  <inceptionYear>2014</inceptionYear>-->
+    <licenses>
+        <license>
+            <name>GNU LGPL 3</name>
+            <url>http://www.gnu.org/licenses/lgpl.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
 
-  <licenses>
-    <license>
-      <name>GNU LGPL 3</name>
-      <url>http://www.gnu.org/licenses/lgpl.txt</url>
-      <distribution>repo</distribution>
-    </license>
-  </licenses>
+    <repositories>
+        <repository>
+            <id>scala-tools</id>
+            <name>Scala Tools</name>
+            <url>http://scala-tools.org/repo-releases/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
 
-    <!--
-  <developers>
-    <developer>
-      <id>fmueller</id>
-      <name>Felix Müller</name>
-      <email>felix.mueller.berlin@googlemail.com</email>
-      <timezone>+1</timezone>
-    </developer>
-  </developers>
+    <properties>
+        <sonar.version>3.6</sonar.version>
+        <sonar-java.version>1.4</sonar-java.version>
 
-  <scm>
-    <connection>scm:svn:http://svn.codehaus.org/sonar-plugins/trunk/scala</connection>
-    <developerConnection>scm:svn:https://svn.codehaus.org/sonar-plugins/trunk/scala</developerConnection>
-    <url>scm:svn:https://svn.codehaus.org/sonar-plugins/trunk/scala</url>
-  </scm>
+        <!--<sonar.pluginKey>scala</sonar.pluginKey>
+        <sonar.pluginName>Scala</sonar.pluginName>-->
+        <sonar.pluginKey>scoverage</sonar.pluginKey>
+        <sonar.pluginName>Scoverage</sonar.pluginName>
 
-  <issueManagement>
-    <system>JIRA</system>
-    <url>http://jira.codehaus.org/browse/SONARPLUGINS/component/14772</url>
-  </issueManagement>-->
+        <sonar.pluginClass>com.buransky.plugins.scoverage.ScoveragePlugin</sonar.pluginClass>
 
-  <repositories>
-    <repository>
-      <id>scala-tools</id>
-      <name>Scala Tools</name>
-      <url>http://scala-tools.org/repo-releases/</url>
-      <releases>
-        <enabled>true</enabled>
-      </releases>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-    </repository>
-  </repositories>
+        <scala.version>2.10.0</scala.version>
+    </properties>
 
-  <properties>
-    <sonar.version>3.6</sonar.version>
-    <sonar-java.version>1.4</sonar-java.version>
-
-    <!--<sonar.pluginKey>scala</sonar.pluginKey>
-    <sonar.pluginName>Scala</sonar.pluginName>-->
-    <sonar.pluginKey>scoverage</sonar.pluginKey>
-    <sonar.pluginName>Scoverage</sonar.pluginName>
-
-    <sonar.pluginClass>com.buransky.plugins.scoverage.ScoveragePlugin</sonar.pluginClass>
-
-    <scala.version>2.10.0</scala.version>
-  </properties>
-
-  <dependencies>
-    <dependency>
-      <groupId>org.codehaus.sonar</groupId>
-      <artifactId>sonar-plugin-api</artifactId>
-      <version>${sonar.version}</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.codehaus.sonar-plugins.java</groupId>
-      <artifactId>sonar-java-plugin</artifactId>
-      <version>${sonar-java.version}</version>
-      <type>sonar-plugin</type>
-      <scope>provided</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>org.scala-lang</groupId>
-      <artifactId>scala-library</artifactId>
-      <version>${scala.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.scala-lang</groupId>
-      <artifactId>scala-compiler</artifactId>
-      <version>${scala.version}</version>
-    </dependency>
-
-    <!-- unit tests -->
-    <dependency>
-      <groupId>org.codehaus.sonar</groupId>
-      <artifactId>sonar-testing-harness</artifactId>
-      <version>${sonar.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.scalatest</groupId>
-      <artifactId>scalatest_2.10</artifactId>
-      <version>2.0</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-    	<groupId>org.apache.maven</groupId>
-    	<artifactId>maven-project</artifactId>
-    	<version>2.2.1</version>
-    	<scope>test</scope>
-    </dependency>
-  </dependencies>
-
-  <build>
-    <pluginManagement>
-      <plugins>
-        <plugin>
-          <groupId>org.codehaus.mojo</groupId>
-          <artifactId>cobertura-maven-plugin</artifactId>
-          <version>2.5</version>
-        </plugin>
-        <plugin>
-          <groupId>org.codehaus.sonar-plugins.pdf-report</groupId>
-          <artifactId>maven-pdfreport-plugin</artifactId>
-          <version>1.2</version>
-        </plugin>
-        <plugin>
-          <groupId>org.codehaus.mojo</groupId>
-          <artifactId>sonar-maven-plugin</artifactId>
-          <version>1.0-beta-2</version>
-        </plugin>
-        <plugin>
-          <groupId>org.codehaus.sonar</groupId>
-          <artifactId>sonar-maven-plugin</artifactId>
-          <version>${sonar.version}</version>
-        </plugin>
-      </plugins>
-    </pluginManagement>
-
-    <plugins>
-        <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-compiler-plugin</artifactId>
-            <version>3.1</version>
-        </plugin>
-        <plugin>
+    <dependencies>
+        <dependency>
             <groupId>org.codehaus.sonar</groupId>
-            <artifactId>sonar-packaging-maven-plugin</artifactId>
-            <version>1.7</version>
-            <extensions>true</extensions>
-            <configuration>
-                <pluginClass>${sonar.pluginClass}</pluginClass>
-            </configuration>
-        </plugin>
-        <plugin>
-            <groupId>org.scala-tools</groupId>
-            <artifactId>maven-scala-plugin</artifactId>
-            <version>2.15.2</version>
-            <executions>
-              <execution>
-                <id>scala-compile</id>
-                <phase>process-resources</phase>
-                <goals>
-                  <goal>compile</goal>
-                </goals>
-              </execution>
-              <execution>
-                <id>scala-test-compile</id>
-                <phase>process-test-resources</phase>
-                <goals>
-                  <goal>testCompile</goal>
-                </goals>
-              </execution>
-            </executions>
-        </plugin>
+            <artifactId>sonar-plugin-api</artifactId>
+            <version>${sonar.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.codehaus.sonar-plugins.java</groupId>
+            <artifactId>sonar-java-plugin</artifactId>
+            <version>${sonar-java.version}</version>
+            <type>sonar-plugin</type>
+            <scope>provided</scope>
+        </dependency>
 
-        <!--
-      <plugin>
-        <groupId>com.mycila.maven-license-plugin</groupId>
-        <artifactId>maven-license-plugin</artifactId>
-        <configuration>
-          <encoding>${project.build.sourceEncoding}</encoding>
-          <properties>
-            <owner>All contributors</owner>
-            <year>2011 - 2013</year>
-          </properties>
-          <includes>
-            <include>src/main/java/**</include>
-            <include>src/main/scala/**</include>
-            <include>src/test/java/**</include>
-            <include>src/test/scala/**</include>
-          </includes>
-          <mapping>
-            <java>SLASHSTAR_STYLE</java>
-            <scala>SLASHSTAR_STYLE</scala>
-          </mapping>
-          <strictCheck>true</strictCheck>
-        </configuration>
-        <executions>
-          <execution>
-            <id>add-license-headers</id>
-            <phase>process-sources</phase>
-            <goals>
-              <goal>format</goal>
-            </goals>
-          </execution>
-          <execution>
-            <id>enforce-license-headers</id>
-            <phase>verify</phase>
-            <goals>
-              <goal>check</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>-->
-      <plugin>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <version>2.6</version>
-        <configuration>
-          <includes>
-            <include>**/*Spec.class</include>
-            <include>**/*Test.class</include>
-          </includes>
-        </configuration>
-      </plugin>
-    </plugins>
-  </build>
+        <dependency>
+            <groupId>org.scala-lang</groupId>
+            <artifactId>scala-library</artifactId>
+            <version>${scala.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.scala-lang</groupId>
+            <artifactId>scala-compiler</artifactId>
+            <version>${scala.version}</version>
+        </dependency>
+
+        <!-- unit tests -->
+        <dependency>
+            <groupId>org.codehaus.sonar</groupId>
+            <artifactId>sonar-testing-harness</artifactId>
+            <version>${sonar.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.scalatest</groupId>
+            <artifactId>scalatest_2.10</artifactId>
+            <version>2.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-project</artifactId>
+            <version>2.2.1</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>cobertura-maven-plugin</artifactId>
+                    <version>2.5</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.codehaus.sonar-plugins.pdf-report</groupId>
+                    <artifactId>maven-pdfreport-plugin</artifactId>
+                    <version>1.2</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>sonar-maven-plugin</artifactId>
+                    <version>1.0-beta-2</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.codehaus.sonar</groupId>
+                    <artifactId>sonar-maven-plugin</artifactId>
+                    <version>${sonar.version}</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.1</version>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.sonar</groupId>
+                <artifactId>sonar-packaging-maven-plugin</artifactId>
+                <version>1.7</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <pluginClass>${sonar.pluginClass}</pluginClass>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.scala-tools</groupId>
+                <artifactId>maven-scala-plugin</artifactId>
+                <version>2.15.2</version>
+                <executions>
+                    <execution>
+                        <id>scala-compile</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>scala-test-compile</id>
+                        <phase>process-test-resources</phase>
+                        <goals>
+                            <goal>testCompile</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.6</version>
+                <configuration>
+                    <includes>
+                        <include>**/*Spec.class</include>
+                        <include>**/*Test.class</include>
+                    </includes>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>

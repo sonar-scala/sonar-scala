@@ -123,6 +123,14 @@ class XmlScoverageReportConstructingParser(source: Source) extends ConstructingP
         case _ => DirectoryStatementCoverage(name, childNodes)
       }
     }
+
+    def toProjectStatementCoverage: ProjectStatementCoverage = {
+      toStatementCoverage match {
+        case node: NodeStatementCoverage => ProjectStatementCoverage("", node.children)
+        case file: FileStatementCoverage => ProjectStatementCoverage("", List(file))
+        case _ => throw new ScoverageException("Illegal statement coverage!")
+      }
+    }
   }
 
   private def projectFromMap(statementsInFile: Map[String, List[CoveredStatement]]):
@@ -139,20 +147,30 @@ class XmlScoverageReportConstructingParser(source: Source) extends ConstructingP
     chained.foreach(root.add(_))
 
     // Transform file system tree into coverage structure tree
-    ProjectStatementCoverage("", List(root.toStatementCoverage))
+    root.toProjectStatementCoverage
   }
 
   private def pathToChain(filePath: String, coverage: FileStatementCoverage): DirOrFile = {
     val path = Paths.get(filePath)
 
-    val names = for (i <- 0 to path.getNameCount - 1)
-      yield path.getFileName.toString
+    if (path.getNameCount < 1)
+      throw new ScoverageException("Path cannot be empty!")
 
-    names.foldLeft(DirOrFile("", Nil, Some(coverage))) { (dirOrFile, name) =>
-      val child = DirOrFile(name, Nil, dirOrFile.coverage)
-      dirOrFile.children = List(child)
-      child
-    }
+    // Get directories
+    val dirs = for (i <- 0 to path.getNameCount - 2)
+      yield DirOrFile(path.getName(i).toString, Nil, None)
+
+    // Chain directories
+    for (i <- 0 to dirs.length - 2)
+      dirs(i).children = List(dirs(i + 1))
+
+    // Get file
+    val file = DirOrFile(path.getName(path.getNameCount - 1).toString, Nil, Some(coverage))
+
+    // Append file
+    dirs.last.children = List(file)
+
+    dirs(0)
   }
 
   private def fileStatementCoverage(statementsInFile: Map[String, List[CoveredStatement]]):

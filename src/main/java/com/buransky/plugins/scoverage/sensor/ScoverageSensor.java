@@ -5,6 +5,7 @@ import com.buransky.plugins.scoverage.language.Scala;
 import com.buransky.plugins.scoverage.measure.ScalaMetrics;
 import com.buransky.plugins.scoverage.resource.ScalaDirectory;
 import com.buransky.plugins.scoverage.resource.ScalaFile;
+import com.buransky.plugins.scoverage.xml.XmlScoverageReportParser$;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.batch.CoverageExtension;
@@ -21,13 +22,22 @@ import java.util.Map;
 
 public class ScoverageSensor implements Sensor, CoverageExtension {
     private static final Logger log = LoggerFactory.getLogger(ScoverageSensor.class);
+    private final ScoverageReportParser scoverageReportParser;
+
+    public ScoverageSensor() {
+        this(XmlScoverageReportParser$.MODULE$);
+    }
+
+    public ScoverageSensor(ScoverageReportParser scoverageReportParser) {
+        this.scoverageReportParser = scoverageReportParser;
+    }
 
     public boolean shouldExecuteOnProject(Project project) {
         return project.getAnalysisType().isDynamic(true) && Scala.INSTANCE.getKey().equals(project.getLanguageKey());
     }
 
     public void analyse(Project project, SensorContext context) {
-        processProject(ScoverageParser.parse(""), project, context);
+        processProject(scoverageReportParser.parse(""), project, context);
         //parseFakeReport(project, context);
     }
 
@@ -36,7 +46,7 @@ public class ScoverageSensor implements Sensor, CoverageExtension {
         return "Scoverage sensor";
     }
 
-    private void processProject(ParentStatementCoverage projectCoverage,
+    private void processProject(ProjectStatementCoverage projectCoverage,
                                 Project project, SensorContext context) {
         // Save project measure
         context.saveMeasure(project, createStatementCoverage(projectCoverage.rate()));
@@ -46,7 +56,7 @@ public class ScoverageSensor implements Sensor, CoverageExtension {
         processChildren(projectCoverage.children(), context, "");
     }
 
-    private void processDirectory(ParentStatementCoverage directoryCoverage, SensorContext context,
+    private void processDirectory(DirectoryStatementCoverage directoryCoverage, SensorContext context,
                                   String parentDirectory) {
         String currentDirectory = appendFilePath(parentDirectory, directoryCoverage.name());
 
@@ -67,16 +77,22 @@ public class ScoverageSensor implements Sensor, CoverageExtension {
         log("Process file [" + scalaSourcefile.getKey() + ", " + fileCoverage.rate() + "]");
 
         // Save line coverage. This is needed just for source code highlighting.
-        saveLineCoverage(fileCoverage.lines(), scalaSourcefile, context);
+        saveLineCoverage(fileCoverage.statements(), scalaSourcefile, context);
     }
 
-    private void saveLineCoverage(scala.collection.Iterable<CoveredLine> coveredLines,
+    private void saveLineCoverage(scala.collection.Iterable<CoveredStatement> coveredStatements,
                                   ScalaFile scalaSourcefile, SensorContext context) {
+        // Convert statements to lines
+        scala.collection.Iterable<CoveredLine> coveredLines =
+                StatementCoverage$.MODULE$.statementCoverageToLineCoverage(coveredStatements);
+
+        // Set line hits
         CoverageMeasuresBuilder coverage = CoverageMeasuresBuilder.create();
         for (CoveredLine coveredLine: JavaConversions.asJavaIterable(coveredLines)) {
             coverage.setHits(coveredLine.line(), coveredLine.hitCount());
         }
 
+        // Save measures
         for (Measure measure : coverage.createMeasures()) {
             context.saveMeasure(scalaSourcefile, measure);
         }
@@ -92,8 +108,8 @@ public class ScoverageSensor implements Sensor, CoverageExtension {
 
     private void processChild(StatementCoverage dirOrFile, SensorContext context,
                               String directory) {
-        if (dirOrFile instanceof ParentStatementCoverage) {
-            processDirectory((ParentStatementCoverage) dirOrFile, context, directory);
+        if (dirOrFile instanceof DirectoryStatementCoverage) {
+            processDirectory((DirectoryStatementCoverage) dirOrFile, context, directory);
         }
         else {
             if (dirOrFile instanceof FileStatementCoverage) {

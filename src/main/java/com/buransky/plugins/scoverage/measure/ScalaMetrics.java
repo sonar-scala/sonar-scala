@@ -22,6 +22,7 @@ package com.buransky.plugins.scoverage.measure;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.measures.Metric;
 import org.sonar.api.measures.Metrics;
+import org.sonar.api.measures.Metric.ValueType;
 
 import java.util.Arrays;
 import java.util.List;
@@ -34,8 +35,8 @@ import java.util.List;
 public final class ScalaMetrics implements Metrics {
     private static final String STATEMENT_COVERAGE_KEY = "scoverage";
     public static final Metric STATEMENT_COVERAGE = new Metric.Builder(STATEMENT_COVERAGE_KEY,
-            "Statement coverage", Metric.ValueType.PERCENT)
-            .setDescription("Statement coverage by unit tests")
+            "Statement coverage", ValueType.PERCENT)
+            .setDescription("Statement coverage by tests")
             .setDirection(Metric.DIRECTION_BETTER)
             .setQualitative(true)
             .setDomain(CoreMetrics.DOMAIN_TESTS)
@@ -43,8 +44,18 @@ public final class ScalaMetrics implements Metrics {
             .setBestValue(100.0)
             .create();
 
+    public static final String COVERED_STATEMENTS_KEY = "covered_statements";
+    public static final Metric COVERED_STATEMENTS = new Metric.Builder(COVERED_STATEMENTS_KEY,
+        "Covered statements", Metric.ValueType.INT)
+        .setDescription("Number of statements covered by tests")
+        .setDirection(Metric.DIRECTION_BETTER)
+        .setQualitative(false)
+        .setDomain(CoreMetrics.DOMAIN_SIZE)
+        .setFormula(new org.sonar.api.measures.SumChildValuesFormula(false))
+        .create();
+
     @Override
     public List<Metric> getMetrics() {
-        return Arrays.asList(STATEMENT_COVERAGE);
+        return Arrays.asList(STATEMENT_COVERAGE, COVERED_STATEMENTS);
     }
 }

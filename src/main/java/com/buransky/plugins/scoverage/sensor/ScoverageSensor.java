@@ -37,6 +37,8 @@ import org.sonar.api.scan.filesystem.ModuleFileSystem;
 import scala.collection.JavaConversions;
 import org.sonar.api.scan.filesystem.PathResolver;
 import com.buransky.plugins.scoverage.util.LogUtil;
+import org.sonar.api.measures.CoreMetrics;
+import com.buransky.plugins.scoverage.resource.SingleDirectory;
 
 /**
  *  Main sensor for importing Scoverage report to Sonar.
@@ -70,21 +72,56 @@ public class ScoverageSensor implements Sensor, CoverageExtension {
 
     public void analyse(Project project, SensorContext context) {
         String reportPath = getScoverageReportPath();
-        if (reportPath != null)
+        if (reportPath != null) {
             processProject(scoverageReportParser.parse(reportPath), project, context);
+        }
+        else {
+            if (project.isModule()) {
+                log.warn(LogUtil.f("Report path not set for " + project.name() + " module! [" +
+                  project.name() + "." + SCOVERAGE_REPORT_PATH_PROPERTY + "]"));
+            }
+            else {
+                // Compute overall statement coverage from submodules
+                long totalStatementCount = 0;
+                long coveredStatementCount = 0;
+                for (Project module: project.getModules()) {
+                    // Aggregate modules
+                    Measure moduleStatementCount = context.getMeasure(module, CoreMetrics.STATEMENTS);
+                    Measure moduleCoveredStatementCount = context.getMeasure(module, ScalaMetrics.COVERED_STATEMENTS);
+
+                    if ((moduleStatementCount == null) || (moduleCoveredStatementCount == null))
+                        log.debug(LogUtil.f("Module has no statement coverage. [" + module.name() + "]"));
+                    else {
+                        totalStatementCount += moduleStatementCount.getValue();
+                        coveredStatementCount += moduleCoveredStatementCount.getValue();
+
+                        log.debug(LogUtil.f("Statement count for " + module.name() + " module. [" +
+                            moduleStatementCount.getValue() + ", " + moduleCoveredStatementCount.getValue() + "]"));
+                    }
+                }
+
+                if (totalStatementCount > 0) {
+                    Double overall = (coveredStatementCount / (double)totalStatementCount) * 100.0;
+
+                    // Set overall statement coverage
+                    context.saveMeasure(project, createStatementCoverage(overall));
+
+                    log.info(LogUtil.f("Overall statement coverage is " + String.format("%1$,.2f", overall)));
+                }
+            }
+        }
     }
 
     @Override
     public String toString() {
-        return "Scoverage sensor";
+        return getClass().getSimpleName();
     }
 
     private String getScoverageReportPath() {
         String path = settings.getString(SCOVERAGE_REPORT_PATH_PROPERTY);
-        if (path == null) {
-            log.info(LogUtil.f("Report path not set! [" + SCOVERAGE_REPORT_PATH_PROPERTY + "]"));
+        if (path == null)
             return null;
-        }
+
         java.io.File report = pathResolver.relativeFile(moduleFileSystem.baseDir(), path);
         if (!report.exists() || !report.isFile()) {
             log.error(LogUtil.f("Report not found at {}"), report);
@@ -96,9 +133,11 @@ public class ScoverageSensor implements Sensor, CoverageExtension {
 
     private void processProject(ProjectStatementCoverage projectCoverage,
                                 Project project, SensorContext context) {
-        // Save project measure
-        context.saveMeasure(project, createStatementCoverage(projectCoverage.rate()));
-        log.info(LogUtil.f("Project coverage = " + projectCoverage.rate()));
+        // Save measures
+        saveMeasures(context, project, projectCoverage);
+
+        log.info(LogUtil.f("Statement coverage for " + project.getKey() + " is " +
+            String.format("%1$,.2f", projectCoverage.rate())));
 
         // Process children
         processChildren(projectCoverage.children(), context, "");
@@ -108,10 +147,8 @@ public class ScoverageSensor implements Sensor, CoverageExtension {
                                   String parentDirectory) {
         String currentDirectory = appendFilePath(parentDirectory, directoryCoverage.name());
 
-        com.buransky.plugins.scoverage.resource.SingleDirectory directory = new com.buransky.plugins.scoverage.resource.SingleDirectory(currentDirectory);
-        context.saveMeasure(directory, createStatementCoverage(directoryCoverage.rate()));
-
-        log.info(LogUtil.f("Process directory [" + directory.getKey() + ", " + directoryCoverage.rate() + "]"));
+        // Save measures
+        saveMeasures(context, new SingleDirectory(currentDirectory), directoryCoverage);
 
         // Process children
         processChildren(directoryCoverage.children(), context, currentDirectory);
@@ -120,12 +157,21 @@ public class ScoverageSensor implements Sensor, CoverageExtension {
     private void processFile(FileStatementCoverage fileCoverage, SensorContext context,
                              String directory) {
         ScalaFile scalaSourcefile = new ScalaFile(appendFilePath(directory, fileCoverage.name()));
-        context.saveMeasure(scalaSourcefile, createStatementCoverage(fileCoverage.rate()));
 
-        log.info(LogUtil.f("Process file [" + scalaSourcefile.getKey() + ", " + fileCoverage.rate() + "]"));
+        // Save measures
+        saveMeasures(context, scalaSourcefile, fileCoverage);
 
         // Save line coverage. This is needed just for source code highlighting.
         saveLineCoverage(fileCoverage.statements(), scalaSourcefile, context);
+    }
+
+    private void saveMeasures(SensorContext context, Resource resource, StatementCoverage statementCoverage) {
+      context.saveMeasure(resource, createStatementCoverage(statementCoverage.rate()));
+      context.saveMeasure(resource, createStatementCount(statementCoverage.statementCount()));
+      context.saveMeasure(resource, createCoveredStatementCount(statementCoverage.coveredStatementsCount()));
+
+      log.debug(LogUtil.f("Save measures [" + statementCoverage.rate() + ", " + statementCoverage.statementCount() +
+          ", " + statementCoverage.coveredStatementsCount() + ", " + resource.getKey() + "]"));
     }
 
     private void saveLineCoverage(scala.collection.Iterable<CoveredStatement> coveredStatements,
@@ -172,6 +218,14 @@ public class ScoverageSensor implements Sensor, CoverageExtension {
 
     private Measure createStatementCoverage(Double rate) {
         return new Measure(ScalaMetrics.STATEMENT_COVERAGE, rate);
+    }
+
+    private Measure createStatementCount(int statements) {
+        return new Measure(CoreMetrics.STATEMENTS, (double)statements);
+    }
+
+    private Measure createCoveredStatementCount(int coveredStatements) {
+        return new Measure(ScalaMetrics.COVERED_STATEMENTS, (double)coveredStatements);
     }
 
     private String appendFilePath(String src, String name) {

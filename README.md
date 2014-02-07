@@ -47,6 +47,10 @@ the project dashboard, click **Configure widgets** in the top-right corner, clic
 the **Custom Measures** section. Click **Edit** in the newly added **Custom Measures** widget and choose
 **Statement coverage** for **Metric 1**. Click **Save**, **Back to dashboard**. Enjoy.
 
+## Screenshots ##
+
+![Alt text](/doc/img/01_dashboard.png "Project dashboard with Scoverage plugin")
+
 [PluginJar]: https://github.com/RadoBuransky/sonar-scoverage-plugin/releases/download/v1.0-SNAPSHOT/sonar-scoverage-plugin-1.0-SNAPSHOT.jar
 [SonarQube]: http://www.sonarqube.org/ "SonarQube"
 [Scoverage]: https://github.com/scoverage/scalac-scoverage-plugin "Scoverage"

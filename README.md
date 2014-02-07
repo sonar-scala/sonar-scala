@@ -49,7 +49,17 @@ the **Custom Measures** section. Click **Edit** in the newly added **Custom Meas
 
 ## Screenshots ##
 
-![Alt text](/doc/img/01_dashboard.png "Project dashboard with Scoverage plugin")
+Project dashboard with Scoverage plugin:
+![Project dashboard with Scoverage plugin](/doc/img/01_dashboard.png "Project dashboard with Scoverage plugin")
+
+Multi-module project overview:
+![Multi-module project overview](/doc/img/02_detail.png "Multi-module project overview")
+
+Columns with statement coverage, total number of statements and number of covered statements:
+![Columns](/doc/img/03_columns.png "Columns")
+
+Source code markup with covered and uncovered lines:
+![Source code markup](/doc/img/04_coverage.png "Source code markup")
 
 [PluginJar]: https://github.com/RadoBuransky/sonar-scoverage-plugin/releases/download/v1.0-SNAPSHOT/sonar-scoverage-plugin-1.0-SNAPSHOT.jar
 [SonarQube]: http://www.sonarqube.org/ "SonarQube"

@@ -27,7 +27,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public final class ScalaMetrics implements Metrics {
-    public static final String STATEMENT_COVERAGE_KEY = "scoverage";
+    private static final String STATEMENT_COVERAGE_KEY = "scoverage";
     public static final Metric STATEMENT_COVERAGE = new Metric.Builder(STATEMENT_COVERAGE_KEY,
             "Statement coverage", Metric.ValueType.PERCENT)
             .setDescription("Statement coverage by unit tests")

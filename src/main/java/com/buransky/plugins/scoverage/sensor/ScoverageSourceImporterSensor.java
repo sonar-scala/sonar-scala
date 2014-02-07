@@ -29,9 +29,10 @@ import org.sonar.api.batch.Phase.Name;
 import org.sonar.api.batch.Sensor;
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.resources.File;
-import org.sonar.api.resources.InputFile;
 import org.sonar.api.resources.Project;
-import org.sonar.api.resources.ProjectFileSystem;
+import org.sonar.api.scan.filesystem.FileQuery;
+import org.sonar.api.scan.filesystem.FileType;
+import org.sonar.api.scan.filesystem.ModuleFileSystem;
 
 import java.io.IOException;
 
@@ -40,9 +41,11 @@ public class ScoverageSourceImporterSensor implements Sensor {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ScoverageSourceImporterSensor.class);
     private final Scala scala;
+    private final ModuleFileSystem moduleFileSystem;
 
-    public ScoverageSourceImporterSensor(Scala scala) {
+    public ScoverageSourceImporterSensor(Scala scala, ModuleFileSystem moduleFileSystem) {
         this.scala = scala;
+        this.moduleFileSystem = moduleFileSystem;
     }
 
     public boolean shouldExecuteOnProject(Project project) {
@@ -50,10 +53,10 @@ public class ScoverageSourceImporterSensor implements Sensor {
     }
 
     public void analyse(Project project, SensorContext sensorContext) {
-        ProjectFileSystem fileSystem = project.getFileSystem();
-        String charset = fileSystem.getSourceCharset().toString();
+        String charset = moduleFileSystem.sourceCharset().toString();
 
-        for (InputFile sourceFile : fileSystem.mainFiles(scala.getKey())) {
+        FileQuery query = FileQuery.on(FileType.SOURCE).onLanguage(scala.getKey());
+        for (java.io.File sourceFile : moduleFileSystem.files(query)) {
             addFileToSonar(project, sensorContext, sourceFile, charset);
         }
     }
@@ -63,18 +66,17 @@ public class ScoverageSourceImporterSensor implements Sensor {
         return "Scoverage source importer";
     }
 
-    private void addFileToSonar(Project project, SensorContext sensorContext, InputFile inputFile,
+    private void addFileToSonar(Project project, SensorContext sensorContext, java.io.File sourceFile,
                                 String charset) {
         try {
-            String source = FileUtils.readFileToString(inputFile.getFile(), charset);
-
-            String key = File.fromIOFile(inputFile.getFile(), project).getKey();
+            String source = FileUtils.readFileToString(sourceFile, charset);
+            String key = File.fromIOFile(sourceFile, project).getKey();
             ScalaFile resource =  new ScalaFile(key);
 
             sensorContext.index(resource);
             sensorContext.saveSource(resource, source);
         } catch (IOException ioe) {
-            LOGGER.error("Could not read the file: " + inputFile.getFile().getAbsolutePath(), ioe);
+            LOGGER.error("Could not read the file: " + sourceFile.getAbsolutePath(), ioe);
         }
     }
 }

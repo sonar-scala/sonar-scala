@@ -24,7 +24,7 @@ import org.sonar.api.resources.File;
 import org.sonar.api.resources.Language;
 import org.sonar.api.resources.Resource;
 
-public class ScalaFile extends Resource<ScalaDirectory> {
+public class ScalaFile extends Resource {
     private final File file;
     private ScalaDirectory parent;
 

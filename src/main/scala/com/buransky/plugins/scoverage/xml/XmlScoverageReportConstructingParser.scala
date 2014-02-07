@@ -25,7 +25,6 @@ import scala.xml.parsing.ConstructingParser
 import scala.xml.{Text, NamespaceBinding, MetaData}
 import org.apache.log4j.Logger
 import scala.collection.mutable
-import java.nio.file.Paths
 import scala.annotation.tailrec
 import java.io.File
 
@@ -170,21 +169,22 @@ class XmlScoverageReportConstructingParser(source: Source) extends ConstructingP
   }
 
   private def pathToChain(filePath: String, coverage: FileStatementCoverage): DirOrFile = {
-    val path = Paths.get(filePath)
+    //val path = Paths.get(filePath)
+    val path = splitPath(filePath)
 
-    if (path.getNameCount < 1)
+    if (path.length < 1)
       throw new ScoverageException("Path cannot be empty!")
 
     // Get directories
-    val dirs = for (i <- 0 to path.getNameCount - 2)
-      yield DirOrFile(path.getName(i).toString, Nil, None)
+    val dirs = for (i <- 0 to path.length - 2)
+      yield DirOrFile(path(i), Nil, None)
 
     // Chain directories
     for (i <- 0 to dirs.length - 2)
       dirs(i).children = List(dirs(i + 1))
 
     // Get file
-    val file = DirOrFile(path.getName(path.getNameCount - 1).toString, Nil, Some(coverage))
+    val file = DirOrFile(path(path.length - 1).toString, Nil, Some(coverage))
 
     // Append file
     dirs.last.children = List(file)
@@ -195,7 +195,7 @@ class XmlScoverageReportConstructingParser(source: Source) extends ConstructingP
   private def fileStatementCoverage(statementsInFile: Map[String, List[CoveredStatement]]):
     Map[String, FileStatementCoverage] = {
     statementsInFile.map { sif =>
-      val fileStatementCoverage = FileStatementCoverage(Paths.get(sif._1).getFileName.toString,
+      val fileStatementCoverage = FileStatementCoverage(splitPath(sif._1).last,
         sif._2.length, coveredStatements(sif._2), sif._2)
 
       (sif._1, fileStatementCoverage)
@@ -204,4 +204,6 @@ class XmlScoverageReportConstructingParser(source: Source) extends ConstructingP
 
   private def coveredStatements(statements: Iterable[CoveredStatement]) =
     statements.count(_.hitCount > 0)
+
+  private def splitPath(filePath: String) = filePath.split(File.separator)
 }

@@ -36,6 +36,7 @@ import org.sonar.api.resources.*;
 import org.sonar.api.scan.filesystem.ModuleFileSystem;
 import scala.collection.JavaConversions;
 import org.sonar.api.scan.filesystem.PathResolver;
+import com.buransky.plugins.scoverage.util.LogUtil;
 
 /**
  *  Main sensor for importing Scoverage report to Sonar.
@@ -81,12 +82,12 @@ public class ScoverageSensor implements Sensor, CoverageExtension {
     private String getScoverageReportPath() {
         String path = settings.getString(SCOVERAGE_REPORT_PATH_PROPERTY);
         if (path == null) {
-            log.error("Scoverage report path not set! [" + SCOVERAGE_REPORT_PATH_PROPERTY + "]");
+            log.info(LogUtil.f("Report path not set! [" + SCOVERAGE_REPORT_PATH_PROPERTY + "]"));
             return null;
         }
         java.io.File report = pathResolver.relativeFile(moduleFileSystem.baseDir(), path);
         if (!report.exists() || !report.isFile()) {
-            log.error("Scoverage report not found at {}", report);
+            log.error(LogUtil.f("Report not found at {}"), report);
             return null;
         }
 
@@ -97,7 +98,7 @@ public class ScoverageSensor implements Sensor, CoverageExtension {
                                 Project project, SensorContext context) {
         // Save project measure
         context.saveMeasure(project, createStatementCoverage(projectCoverage.rate()));
-        log("Project coverage = " + projectCoverage.rate());
+        log.info(LogUtil.f("Project coverage = " + projectCoverage.rate()));
 
         // Process children
         processChildren(projectCoverage.children(), context, "");
@@ -110,7 +111,7 @@ public class ScoverageSensor implements Sensor, CoverageExtension {
         com.buransky.plugins.scoverage.resource.SingleDirectory directory = new com.buransky.plugins.scoverage.resource.SingleDirectory(currentDirectory);
         context.saveMeasure(directory, createStatementCoverage(directoryCoverage.rate()));
 
-        log("Process directory [" + directory.getKey() + ", " + directoryCoverage.rate() + "]");
+        log.info(LogUtil.f("Process directory [" + directory.getKey() + ", " + directoryCoverage.rate() + "]"));
 
         // Process children
         processChildren(directoryCoverage.children(), context, currentDirectory);
@@ -121,7 +122,7 @@ public class ScoverageSensor implements Sensor, CoverageExtension {
         ScalaFile scalaSourcefile = new ScalaFile(appendFilePath(directory, fileCoverage.name()));
         context.saveMeasure(scalaSourcefile, createStatementCoverage(fileCoverage.rate()));
 
-        log("Process file [" + scalaSourcefile.getKey() + ", " + fileCoverage.rate() + "]");
+        log.info(LogUtil.f("Process file [" + scalaSourcefile.getKey() + ", " + fileCoverage.rate() + "]"));
 
         // Save line coverage. This is needed just for source code highlighting.
         saveLineCoverage(fileCoverage.statements(), scalaSourcefile, context);
@@ -182,9 +183,4 @@ public class ScoverageSensor implements Sensor, CoverageExtension {
 
         return result + name;
     }
-
-    private static void log(String message) {
-        log.info("[Scoverage] " + message);
-    }
-
 }

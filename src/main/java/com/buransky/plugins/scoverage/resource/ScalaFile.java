@@ -23,6 +23,7 @@ import com.buransky.plugins.scoverage.language.Scala;
 import org.sonar.api.resources.File;
 import org.sonar.api.resources.Language;
 import org.sonar.api.resources.Resource;
+import org.sonar.api.resources.Directory;
 
 /**
  * Scala source code file resource.
@@ -76,6 +77,10 @@ public class ScalaFile extends Resource {
         if (parent == null) {
             parent = new SingleDirectory(file.getParent().getKey());
         }
+
+        if (Directory.ROOT.equals(parent.getKey()))
+          return null;
+
         return parent;
     }
 

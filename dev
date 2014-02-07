@@ -1,8 +1,0 @@
-#!/bin/bash
-
-/home/rado/bin/sonar/bin/linux-x86-64/sonar.sh stop
-
-mvn install -DskipTests
-cp ./target/sonar-scoverage-plugin-1.0-SNAPSHOT.jar /home/rado/bin/sonar/extensions/plugins/
-
-/home/rado/bin/sonar/bin/linux-x86-64/sonar.sh start

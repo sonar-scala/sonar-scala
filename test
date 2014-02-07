@@ -1,7 +1,0 @@
-#!/bin/bash
-
-cd /home/rado/workspace/aaa
-#sbt clean scoverage:test
-/home/rado/bin/sonar-runner/bin/sonar-runner
-
-cd /home/rado//workspace/sonar-scoverage-plugin

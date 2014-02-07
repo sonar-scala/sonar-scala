@@ -1,0 +1,580 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>org.codehaus.sonar-plugins</groupId>
+  <artifactId>parent</artifactId>
+  <version>18</version>
+  <packaging>pom</packaging>
+
+  <name>Sonar plugins parent</name>
+  <url>http://sonar-plugins.codehaus.org</url>
+  <inceptionYear>2009</inceptionYear>
+  <!-- License defined here, because most of projects uses this license. Can be overridden in children POMs. -->
+  <licenses>
+    <license>
+      <name>GNU LGPL 3</name>
+      <url>http://www.gnu.org/licenses/lgpl.txt</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+
+  <mailingLists>
+    <mailingList>
+      <name>Sonar dev mailing list</name>
+      <subscribe>http://xircles.codehaus.org/projects/sonar/lists</subscribe>
+      <unsubscribe>http://xircles.codehaus.org/projects/sonar/lists</unsubscribe>
+      <post>dev@sonar.codehaus.org</post>
+    </mailingList>
+  </mailingLists>
+
+  <prerequisites>
+    <!-- Note that "prerequisites" not inherited, but used by versions-maven-plugin -->
+    <maven>${maven.min.version}</maven>
+  </prerequisites>
+
+  <scm>
+    <connection>scm:svn:http://svn.codehaus.org/sonar-plugins/tags/18</connection>
+    <developerConnection>scm:svn:https://svn.codehaus.org/sonar-plugins/tags/18</developerConnection>
+    <url>scm:svn:https://svn.codehaus.org/sonar-plugins/tags/18</url>
+  </scm>
+  <issueManagement>
+    <system>jira</system>
+    <url>http://jira.codehaus.org/browse/SONARPLUGINS</url>
+  </issueManagement>
+  <ciManagement>
+    <system>bamboo</system>
+    <url>http://bamboo.ci.codehaus.org/browse/SONAR</url>
+  </ciManagement>
+  <distributionManagement>
+    <repository>
+      <id>codehaus.org</id>
+      <name>Sonar plugins repository</name>
+      <url>dav:https://dav.codehaus.org/repository/sonar-plugins</url>
+    </repository>
+    <snapshotRepository>
+      <id>${sonar.snapshotRepository.id}</id>
+      <name>Sonar plugins snapshot repository</name>
+      <uniqueVersion>false</uniqueVersion>
+      <url>${sonar.snapshotRepository.url}</url>
+    </snapshotRepository>
+  </distributionManagement>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.min.version>2.2.1</maven.min.version>
+    <jdk.min.version>1.6</jdk.min.version>
+    <timestamp>${maven.build.timestamp}</timestamp>
+    <maven.build.timestamp.format>yyyy-MM-dd'T'HH:mm:ssZ</maven.build.timestamp.format>
+    <sonar.snapshotRepository.id>codehaus.org</sonar.snapshotRepository.id>
+    <sonar.snapshotRepository.url>dav:https://dav.codehaus.org/snapshots.repository/sonar-plugins</sonar.snapshotRepository.url>
+
+    <!-- ================ -->
+    <!-- Plugins versions -->
+    <!-- ================ -->
+    <version.assembly.plugin>2.4</version.assembly.plugin>
+    <version.clean.plugin>2.5</version.clean.plugin>
+    <version.compiler.plugin>3.0</version.compiler.plugin>
+    <version.dependency.plugin>2.8</version.dependency.plugin>
+    <version.deploy.plugin>2.7</version.deploy.plugin>
+    <version.enforcer.plugin>1.2</version.enforcer.plugin>
+    <version.failsafe.plugin>2.12.4</version.failsafe.plugin>
+    <version.install.plugin>2.4</version.install.plugin>
+    <version.jar.plugin>2.4</version.jar.plugin>
+    <version.jarjar.plugin>1.7</version.jarjar.plugin>
+    <version.javadoc.plugin>2.9</version.javadoc.plugin>
+    <version.license.plugin>1.9.0</version.license.plugin>
+    <version.plugin.plugin>3.2</version.plugin.plugin>
+    <version.release.plugin>2.4.2</version.release.plugin>
+    <version.resources.plugin>2.6</version.resources.plugin>
+    <version.shade.plugin>1.7.1</version.shade.plugin>
+    <version.source.plugin>2.2.1</version.source.plugin>
+    <version.surefire.plugin>2.12.4</version.surefire.plugin>
+    <version.site.plugin>3.2</version.site.plugin>
+    <version.gpg.plugin>1.4</version.gpg.plugin>
+
+    <version.animal-sniffer.plugin>1.9</version.animal-sniffer.plugin>
+    <version.buildnumber.plugin>1.2</version.buildnumber.plugin>
+    <version.native2ascii.plugin>1.0-beta-1</version.native2ascii.plugin>
+
+    <version.sonar-packaging.plugin>1.5</version.sonar-packaging.plugin>
+    <version.sonar-dev.plugin>1.6</version.sonar-dev.plugin>
+
+    <!-- To configure maven-license-plugin to check license headers -->
+    <license.name>GNU LGPL 3</license.name>
+    <license.title>${project.name}</license.title>
+    <license.year>${project.inceptionYear}</license.year>
+    <license.owner>${project.organization.name}</license.owner>
+    <license.mailto>dev@sonar.codehaus.org</license.mailto>
+
+    <!-- To configure animal-sniffer to check API compat -->
+    <animal-sniffer.signature.groupId>org.codehaus.mojo.signature</animal-sniffer.signature.groupId>
+    <animal-sniffer.signature.artifactId>java16</animal-sniffer.signature.artifactId>
+    <animal-sniffer.signature.version>1.1</animal-sniffer.signature.version>
+  </properties>
+
+  <build>
+    <extensions>
+      <!-- See SONARPLUGINS-839 and SONARPLUGINS-840 -->
+      <extension>
+        <groupId>org.apache.maven.wagon</groupId>
+        <artifactId>wagon-webdav</artifactId>
+        <version>1.0-beta-2</version>
+      </extension>
+    </extensions>
+
+    <pluginManagement>
+      <plugins>
+        <!-- Plugins ordered by shortname (archetype, assembly ...) -->
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>animal-sniffer-maven-plugin</artifactId>
+          <version>${version.animal-sniffer.plugin}</version>
+          <configuration>
+            <signature>
+              <groupId>${animal-sniffer.signature.groupId}</groupId>
+              <artifactId>${animal-sniffer.signature.artifactId}</artifactId>
+              <version>${animal-sniffer.signature.version}</version>
+            </signature>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-assembly-plugin</artifactId>
+          <version>${version.assembly.plugin}</version>
+          <configuration>
+            <archiverConfig>
+              <!-- Workaround for http://jira.codehaus.org/browse/MASSEMBLY-422 -->
+              <!-- 420(dec) = 644(oct) -->
+              <fileMode>420</fileMode>
+              <!-- 493(dec) = 755(oct) -->
+              <directoryMode>493</directoryMode>
+              <defaultDirectoryMode>493</defaultDirectoryMode>
+            </archiverConfig>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>buildnumber-maven-plugin</artifactId>
+          <version>${version.buildnumber.plugin}</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-clean-plugin</artifactId>
+          <version>${version.clean.plugin}</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>${version.compiler.plugin}</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-dependency-plugin</artifactId>
+          <version>${version.dependency.plugin}</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-deploy-plugin</artifactId>
+          <version>${version.deploy.plugin}</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-enforcer-plugin</artifactId>
+          <version>${version.enforcer.plugin}</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-failsafe-plugin</artifactId>
+          <version>${version.failsafe.plugin}</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-install-plugin</artifactId>
+          <version>${version.install.plugin}</version>
+        </plugin>
+        <plugin>
+          <groupId>org.sonatype.plugins</groupId>
+          <artifactId>jarjar-maven-plugin</artifactId>
+          <version>${version.jarjar.plugin}</version>
+        </plugin>
+        <plugin>
+          <groupId>com.mycila.maven-license-plugin</groupId>
+          <artifactId>maven-license-plugin</artifactId>
+          <version>${version.license.plugin}</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-jar-plugin</artifactId>
+          <version>${version.jar.plugin}</version>
+          <configuration>
+            <archive>
+              <manifestEntries>
+                <Version>${project.version}</Version>
+                <!-- ${buildNumber} is the svn revision generated by the buildnumber-maven-plugin -->
+                <Implementation-Build>${buildNumber}</Implementation-Build>
+                <Build-Time>${timestamp}</Build-Time>
+              </manifestEntries>
+            </archive>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-javadoc-plugin</artifactId>
+          <version>${version.javadoc.plugin}</version>
+          <configuration>
+            <quiet>true</quiet>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-plugin-plugin</artifactId>
+          <version>${version.plugin.plugin}</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-release-plugin</artifactId>
+          <version>${version.release.plugin}</version>
+          <configuration>
+            <tagBase>https://svn.codehaus.org/sonar-plugins/tags</tagBase>
+            <autoVersionSubmodules>true</autoVersionSubmodules>
+            <useReleaseProfile>false</useReleaseProfile>
+            <!--
+            Allows to activate release profile during release.
+            We don't use releaseProfiles parameter, because it affects only release:perform goal
+            -->
+            <arguments>-Prelease</arguments>
+          </configuration>
+          <dependencies>
+            <!--
+              Dependencies required to release a Git branch.
+              See http://jira.codehaus.org/browse/SONARPLUGINS-3344
+            -->
+            <dependency>
+              <groupId>org.apache.maven.scm</groupId>
+              <artifactId>maven-scm-api</artifactId>
+              <version>1.8.1</version>
+            </dependency>
+            <dependency>
+              <groupId>org.apache.maven.scm</groupId>
+              <artifactId>maven-scm-provider-gitexe</artifactId>
+              <version>1.8.1</version>
+            </dependency>
+          </dependencies>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-resources-plugin</artifactId>
+          <version>${version.resources.plugin}</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-shade-plugin</artifactId>
+          <version>${version.shade.plugin}</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-source-plugin</artifactId>
+          <version>${version.source.plugin}</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>${version.surefire.plugin}</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-site-plugin</artifactId>
+          <version>${version.site.plugin}</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-gpg-plugin</artifactId>
+          <version>${version.gpg.plugin}</version>
+        </plugin>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>native2ascii-maven-plugin</artifactId>
+          <version>${version.native2ascii.plugin}</version>
+        </plugin>
+        <plugin>
+          <groupId>org.codehaus.sonar</groupId>
+          <artifactId>sonar-packaging-maven-plugin</artifactId>
+          <version>${version.sonar-packaging.plugin}</version>
+        </plugin>
+        <plugin>
+          <groupId>org.codehaus.sonar</groupId>
+          <artifactId>sonar-dev-maven-plugin</artifactId>
+          <version>${version.sonar-dev.plugin}</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+
+    <plugins>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>buildnumber-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <phase>validate</phase>
+            <goals>
+              <goal>create</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <doCheck>false</doCheck>
+          <doUpdate>false</doUpdate>
+          <getRevisionOnlyOnce>true</getRevisionOnlyOnce>
+          <revisionOnScmFailure>0</revisionOnScmFailure>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>${jdk.min.version}</source>
+          <target>${jdk.min.version}</target>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <runOrder>random</runOrder>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-enforcer-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>enforce</id>
+            <goals>
+              <goal>enforce</goal>
+            </goals>
+            <configuration>
+              <rules>
+                <requireMavenVersion>
+                  <message>To build this project Maven ${maven.min.version} (or upper) is required. Please install it.</message>
+                  <version>${maven.min.version}</version>
+                </requireMavenVersion>
+                <requireJavaVersion>
+                  <message>To build this project JDK ${jdk.min.version} (or upper) is required. Please install it.</message>
+                  <version>${jdk.min.version}</version>
+                </requireJavaVersion>
+                <requirePluginVersions>
+                  <!--
+                  This rule produces warning under Maven 3.0 :
+                  "This rule is not compatible with the current version of Maven."
+                  -->
+                  <message>Build reproducibility : always define plugin versions!</message>
+                  <banLatest>true</banLatest>
+                  <banRelease>true</banRelease>
+                  <phases>clean,deploy</phases>
+                </requirePluginVersions>
+                <bannedDependencies>
+                  <!-- See SONARPLUGINS-506 -->
+                  <message>Animal-sniffer throws exception when icu4j version 2.6.1 used.</message>
+                  <searchTransitive>true</searchTransitive>
+                  <excludes>
+                    <exclude>com.ibm.icu:icu4j:[2.6.1]</exclude>
+                  </excludes>
+                </bannedDependencies>
+                <!-- TODO SONARPLUGINS-797
+                <DependencyConvergence />
+                -->
+              </rules>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>animal-sniffer-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>enforce-java-api-compatibility</id>
+            <phase>verify</phase>
+            <goals>
+              <goal>check</goal>
+            </goals>
+            <configuration>
+              <signature>
+                <groupId>${animal-sniffer.signature.groupId}</groupId>
+                <artifactId>${animal-sniffer.signature.artifactId}</artifactId>
+                <version>${animal-sniffer.signature.version}</version>
+              </signature>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-source-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>attach-sources</id>
+            <phase>verify</phase>
+            <goals>
+              <goal>jar-no-fork</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>com.mycila.maven-license-plugin</groupId>
+        <artifactId>maven-license-plugin</artifactId>
+        <dependencies>
+          <dependency>
+            <groupId>org.codehaus.sonar-plugins</groupId>
+            <artifactId>license-headers</artifactId>
+            <version>1.0</version>
+          </dependency>
+        </dependencies>
+        <configuration>
+          <header>org/sonar/plugins/licenseheaders/${license.name}.txt</header>
+          <validHeaders>
+            <validHeader>org/sonar/plugins/licenseheaders/SonarSource.txt</validHeader>
+          </validHeaders>
+          <strictCheck>true</strictCheck>
+          <includes>
+            <include>src/main/java/**</include>
+            <include>src/test/java/**</include>
+          </includes>
+          <mapping>
+            <java>SLASHSTAR_STYLE</java>
+          </mapping>
+          <properties>
+            <title>${license.title}</title>
+            <year>${license.year}</year>
+            <owner>${license.owner}</owner>
+            <mailto>${license.mailto}</mailto>
+          </properties>
+          <encoding>${project.build.sourceEncoding}</encoding>
+        </configuration>
+        <executions>
+          <execution>
+            <id>enforce-license-headers</id>
+            <phase>validate</phase>
+            <goals>
+              <goal>check</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.codehaus.sonar</groupId>
+        <artifactId>sonar-packaging-maven-plugin</artifactId>
+        <extensions>true</extensions>
+        <configuration>
+          <archive>
+            <manifestEntries>
+              <!-- ${buildNumber} is the svn revision generated by the buildnumber-maven-plugin -->
+              <Implementation-Build>${buildNumber}</Implementation-Build>
+              <Build-Time>${timestamp}</Build-Time>
+            </manifestEntries>
+          </archive>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+  <profiles>
+    <profile>
+      <id>skipSanityChecks</id>
+      <activation>
+        <property>
+          <name>skipSanityChecks</name>
+          <value>true</value>
+        </property>
+      </activation>
+      <properties>
+        <animal.sniffer.skip>true</animal.sniffer.skip>
+        <license.skip>true</license.skip>
+      </properties>
+    </profile>
+    <!-- This profile is activated when a project is released. -->
+    <profile>
+      <id>release</id>
+      <build>
+        <plugins>
+          <!-- Generates Javadoc -->
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>attach-javadocs</id>
+                <goals>
+                  <goal>jar</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <id>coverage-per-test</id>
+      <dependencies>
+        <dependency>
+          <groupId>org.codehaus.sonar-plugins.java</groupId>
+          <artifactId>sonar-jacoco-listeners</artifactId>
+          <version>1.2</version>
+          <scope>test</scope>
+        </dependency>
+      </dependencies>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <configuration>
+              <properties>
+                <property>
+                  <name>listener</name>
+                  <value>org.sonar.java.jacoco.JUnitListener</value>
+                </property>
+              </properties>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <id>integration-tests</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-failsafe-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>integration-test</id>
+                <phase>integration-test</phase>
+                <goals>
+                  <goal>integration-test</goal>
+                </goals>
+              </execution>
+              <execution>
+                <id>verify</id>
+                <phase>verify</phase>
+                <goals>
+                  <goal>verify</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+</project>

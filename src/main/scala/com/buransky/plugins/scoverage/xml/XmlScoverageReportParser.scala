@@ -23,6 +23,11 @@ import scala.io.Source
 import com.buransky.plugins.scoverage.{ProjectStatementCoverage, ScoverageReportParser, ScoverageException}
 import org.apache.log4j.Logger
 
+/**
+ * Bridge between parser implementation and coverage provider.
+ *
+ * @author Rado Buransky
+ */
 class XmlScoverageReportParser extends ScoverageReportParser {
   private val log = Logger.getLogger(classOf[XmlScoverageReportParser])
 

@@ -30,6 +30,11 @@ import org.sonar.api.SonarPlugin;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Plugin entry point.
+ *
+ * @author Rado Buransky
+ */
 public class ScoveragePlugin extends SonarPlugin {
 
     public List<Class<? extends Extension>> getExtensions() {

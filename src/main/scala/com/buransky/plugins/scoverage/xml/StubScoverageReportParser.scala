@@ -27,6 +27,11 @@ import com.buransky.plugins.scoverage.FileStatementCoverage
 import com.buransky.plugins.scoverage.DirectoryStatementCoverage
 import scala.io.Source
 
+/**
+ * Stub with some dummy data so that we don't have to parse XML for testing.
+ *
+ * @author Rado Buransky
+ */
 class StubScoverageReportParser extends ScoverageReportParser {
   def parse(reportFilePath: String): ProjectStatementCoverage = {
     val errorCodeFile = FileStatementCoverage("ErrorCode.scala", 17, 13,

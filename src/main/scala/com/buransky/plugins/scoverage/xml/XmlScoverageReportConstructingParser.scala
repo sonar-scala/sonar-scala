@@ -28,6 +28,11 @@ import scala.collection.mutable
 import scala.annotation.tailrec
 import java.io.File
 
+/**
+ * Scoverage XML parser based on ConstructingParser provided by standard Scala library.
+ *
+ * @author Rado Buransky
+ */
 class XmlScoverageReportConstructingParser(source: Source) extends ConstructingParser(source, false) {
   private val log = Logger.getLogger(classOf[XmlScoverageReportConstructingParser])
 

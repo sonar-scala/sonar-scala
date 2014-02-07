@@ -19,9 +19,19 @@
  */
 package com.buransky.plugins.scoverage
 
+/**
+ * Interface for Scoverage report parser.
+ *
+ * @author Rado Buransky
+ */
 trait ScoverageReportParser {
   def parse(reportFilePath: String): ProjectStatementCoverage
 }
 
+/**
+ * Common Scoverage exception.
+ *
+ * @author Rado Buransky
+ */
 case class ScoverageException(message: String, source: Throwable = null)
   extends Exception(message, source)

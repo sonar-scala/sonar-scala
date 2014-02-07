@@ -22,6 +22,11 @@ package com.buransky.plugins.scoverage.widget;
 import org.sonar.api.web.AbstractRubyTemplate;
 import org.sonar.api.web.RubyRailsWidget;
 
+/**
+ * UI widget that can be added to the main dashboard to display overall statement coverage for the project.
+ *
+ * @author Rado Buransky
+ */
 public class ScoverageWidget extends AbstractRubyTemplate implements RubyRailsWidget {
 
     public String getId() {

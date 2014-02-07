@@ -21,6 +21,11 @@ package com.buransky.plugins.scoverage.language;
 
 import org.sonar.api.resources.AbstractLanguage;
 
+/**
+ * Scala language.
+ *
+ * @author Rado Buransky
+ */
 public class Scala extends AbstractLanguage {
 
   public static final Scala INSTANCE = new Scala();

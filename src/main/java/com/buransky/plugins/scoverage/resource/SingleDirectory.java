@@ -24,16 +24,22 @@ import org.sonar.api.resources.Directory;
 import org.sonar.api.resources.Language;
 import org.sonar.api.resources.Resource;
 
-public class ScalaDirectory extends Directory {
+/**
+ * Single directory in file system. Unlike org.sonar.api.resources.Directory that can represent
+ * a chain of directories.
+ *
+ * @author Rado Buransky
+ */
+public class SingleDirectory extends Directory {
     private final String name;
-    private final ScalaDirectory parent;
+    private final SingleDirectory parent;
 
-    public ScalaDirectory(String key) {
+    public SingleDirectory(String key) {
         super(key);
 
         int i = getKey().lastIndexOf(SEPARATOR);
         if (i > 0) {
-            parent = new ScalaDirectory(key.substring(0, i));
+            parent = new SingleDirectory(key.substring(0, i));
             name = key.substring(i + 1);
         }
         else {

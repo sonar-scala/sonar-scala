@@ -22,7 +22,6 @@ package com.buransky.plugins.scoverage.sensor;
 import com.buransky.plugins.scoverage.*;
 import com.buransky.plugins.scoverage.language.Scala;
 import com.buransky.plugins.scoverage.measure.ScalaMetrics;
-import com.buransky.plugins.scoverage.resource.ScalaDirectory;
 import com.buransky.plugins.scoverage.resource.ScalaFile;
 import com.buransky.plugins.scoverage.xml.XmlScoverageReportParser$;
 import org.slf4j.Logger;
@@ -31,7 +30,6 @@ import org.sonar.api.batch.CoverageExtension;
 import org.sonar.api.batch.Sensor;
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.config.Settings;
-import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.measures.CoverageMeasuresBuilder;
 import org.sonar.api.measures.Measure;
 import org.sonar.api.resources.*;
@@ -39,9 +37,11 @@ import org.sonar.api.scan.filesystem.ModuleFileSystem;
 import scala.collection.JavaConversions;
 import org.sonar.api.scan.filesystem.PathResolver;
 
-import java.util.HashMap;
-import java.util.Map;
-
+/**
+ *  Main sensor for importing Scoverage report to Sonar.
+ *
+ * @author Rado Buransky
+ */
 public class ScoverageSensor implements Sensor, CoverageExtension {
     private static final Logger log = LoggerFactory.getLogger(ScoverageSensor.class);
     private final ScoverageReportParser scoverageReportParser;
@@ -107,7 +107,7 @@ public class ScoverageSensor implements Sensor, CoverageExtension {
                                   String parentDirectory) {
         String currentDirectory = appendFilePath(parentDirectory, directoryCoverage.name());
 
-        ScalaDirectory directory = new ScalaDirectory(currentDirectory);
+        com.buransky.plugins.scoverage.resource.SingleDirectory directory = new com.buransky.plugins.scoverage.resource.SingleDirectory(currentDirectory);
         context.saveMeasure(directory, createStatementCoverage(directoryCoverage.rate()));
 
         log("Process directory [" + directory.getKey() + ", " + directoryCoverage.rate() + "]");

@@ -24,9 +24,14 @@ import org.sonar.api.resources.File;
 import org.sonar.api.resources.Language;
 import org.sonar.api.resources.Resource;
 
+/**
+ * Scala source code file resource.
+ *
+ * @author Rado Buransky
+ */
 public class ScalaFile extends Resource {
     private final File file;
-    private ScalaDirectory parent;
+    private SingleDirectory parent;
 
     public ScalaFile(String key) {
         if (key == null)
@@ -67,9 +72,9 @@ public class ScalaFile extends Resource {
     }
 
     @Override
-    public ScalaDirectory getParent() {
+    public SingleDirectory getParent() {
         if (parent == null) {
-            parent = new ScalaDirectory(file.getParent().getKey());
+            parent = new SingleDirectory(file.getParent().getKey());
         }
         return parent;
     }

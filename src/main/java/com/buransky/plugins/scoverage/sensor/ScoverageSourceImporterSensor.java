@@ -36,6 +36,11 @@ import org.sonar.api.scan.filesystem.ModuleFileSystem;
 
 import java.io.IOException;
 
+/**
+ * Imports Scala source code files to Sonar.
+ *
+ * @author Rado Buransky
+ */
 @Phase(name = Name.PRE)
 public class ScoverageSourceImporterSensor implements Sensor {
 

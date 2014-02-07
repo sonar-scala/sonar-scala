@@ -26,6 +26,11 @@ import org.sonar.api.measures.Metrics;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Statement coverage metric definition.
+ *
+ * @author Rado Buransky
+ */
 public final class ScalaMetrics implements Metrics {
     private static final String STATEMENT_COVERAGE_KEY = "scoverage";
     public static final Metric STATEMENT_COVERAGE = new Metric.Builder(STATEMENT_COVERAGE_KEY,

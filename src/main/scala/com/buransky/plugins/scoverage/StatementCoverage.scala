@@ -22,6 +22,8 @@ package com.buransky.plugins.scoverage
 /**
  * Statement coverage represents rate at which are statements of a certain source code unit
  * being covered by tests.
+ *
+ * @author Rado Buransky
  */
 sealed trait StatementCoverage {
   /**
@@ -59,23 +61,40 @@ trait NodeStatementCoverage extends StatementCoverage {
 /**
  * Root node. In multi-module projects it can contain other ProjectStatementCoverage
  * elements as children.
- *
- * @param name Name of the project or module.
- * @param children
  */
 case class ProjectStatementCoverage(name: String, children: Iterable[StatementCoverage])
   extends NodeStatementCoverage
 
+/**
+ * Physical directory in file system.
+ */
 case class DirectoryStatementCoverage(name: String, children: Iterable[StatementCoverage])
   extends NodeStatementCoverage
 
+/**
+ * Scala source code file.
+ */
 case class FileStatementCoverage(name: String, statementCount: Int, coveredStatementsCount: Int,
                                  statements: Iterable[CoveredStatement]) extends StatementCoverage
 
+/**
+ * Position a Scala source code file.
+ */
 case class StatementPosition(line: Int, pos: Int)
 
+/**
+ * Coverage information about the Scala statement.
+ *
+ * @param start Starting position of the statement.
+ * @param end Ending position of the statement.
+ * @param hitCount How many times has the statement been hit by unit tests. Zero means
+ *                 that the statement is not covered.
+ */
 case class CoveredStatement(start: StatementPosition, end: StatementPosition, hitCount: Int)
 
+/**
+ * Aggregated statement coverage for a given source code line.
+ */
 case class CoveredLine(line: Int, hitCount: Int)
 
 object StatementCoverage {

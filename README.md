@@ -63,6 +63,10 @@ the project dashboard, click **Configure widgets** in the top-right corner, clic
 the **Custom Measures** section. Click **Edit** in the newly added **Custom Measures** widget and choose
 **Statement coverage** for **Metric 1**. Click **Save**, **Back to dashboard**. Enjoy.
 
+## Sample project ##
+
+Take a look at a sample SBT multi-module project located in this repository in the `samples` folder.
+
 ## Screenshots ##
 
 Project dashboard with Scoverage plugin:

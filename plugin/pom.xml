@@ -10,8 +10,8 @@
         <relativePath>../parent/pom.xml</relativePath>
     </parent>
 
-    <artifactId>sonar-scoverage-plugin</artifactId>
-    <version>1.0.1-SNAPSHOT</version>
+    <artifactId>sonar-scoverage-plugin-sonar3.5.1</artifactId>
+    <version>1.0.1</version>
     <packaging>sonar-plugin</packaging>
     <name>Sonar Scoverage Plugin</name>
 

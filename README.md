@@ -25,6 +25,11 @@ just plain average of coverage rates for sub-projects.
 - [SonarQube] 4.0
 - [Scoverage] 0.95.7
 
+### Support for older version of Sonar 3.5.1 ###
+
+If you have Sonar 3.5.1, take a look into the [dedicated branch] [Plugin351] or directly
+[download binary JAR] [Plugin351Jar].
+
 ## Installation ##
 
 Download and copy [sonar-scoverage-plugin-1.0.0.jar] [PluginJar] to the Sonar plugins directory
@@ -85,3 +90,5 @@ Source code markup with covered and uncovered lines:
 [SonarQube]: http://www.sonarqube.org/ "SonarQube"
 [Scoverage]: https://github.com/scoverage/scalac-scoverage-plugin "Scoverage"
 [sbt-scoverage]: https://github.com/scoverage/sbt-scoverage
+[Plugin351]: https://github.com/RadoBuransky/sonar-scoverage-plugin/tree/sonar3.5.1
+[Plugin351Jar]: https://github.com/RadoBuransky/sonar-scoverage-plugin/releases/download/v1.0.1-Sonar3.5.1/sonar-scoverage-plugin-sonar3.5.1-1.0.1.jar

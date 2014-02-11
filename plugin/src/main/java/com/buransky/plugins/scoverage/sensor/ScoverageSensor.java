@@ -72,44 +72,12 @@ public class ScoverageSensor implements Sensor, CoverageExtension {
 
     public void analyse(Project project, SensorContext context) {
         String reportPath = getScoverageReportPath();
-        if (reportPath != null) {
+        if (reportPath != null)
+            // Single-module project
             processProject(scoverageReportParser.parse(reportPath), project, context);
-        }
-        else {
-            if (project.isModule()) {
-                log.warn(LogUtil.f("Report path not set for " + project.name() + " module! [" +
-                  project.name() + "." + SCOVERAGE_REPORT_PATH_PROPERTY + "]"));
-            }
-            else {
-                // Compute overall statement coverage from submodules
-                long totalStatementCount = 0;
-                long coveredStatementCount = 0;
-                for (Project module: project.getModules()) {
-                    // Aggregate modules
-                    Measure moduleStatementCount = context.getMeasure(module, CoreMetrics.STATEMENTS);
-                    Measure moduleCoveredStatementCount = context.getMeasure(module, ScalaMetrics.COVERED_STATEMENTS);
-
-                    if ((moduleStatementCount == null) || (moduleCoveredStatementCount == null))
-                        log.debug(LogUtil.f("Module has no statement coverage. [" + module.name() + "]"));
-                    else {
-                        totalStatementCount += moduleStatementCount.getValue();
-                        coveredStatementCount += moduleCoveredStatementCount.getValue();
-
-                        log.debug(LogUtil.f("Statement count for " + module.name() + " module. [" +
-                            moduleStatementCount.getValue() + ", " + moduleCoveredStatementCount.getValue() + "]"));
-                    }
-                }
-
-                if (totalStatementCount > 0) {
-                    Double overall = (coveredStatementCount / (double)totalStatementCount) * 100.0;
-
-                    // Set overall statement coverage
-                    context.saveMeasure(project, createStatementCoverage(overall));
-
-                    log.info(LogUtil.f("Overall statement coverage is " + String.format("%1$,.2f", overall)));
-                }
-            }
-        }
+        else
+            // Multi-module project has report path set for each module individually
+            analyseMultiModuleProject(project, context);
     }
 
     @Override
@@ -129,6 +97,62 @@ public class ScoverageSensor implements Sensor, CoverageExtension {
         }
 
         return report.getAbsolutePath();
+    }
+
+    private void analyseMultiModuleProject(Project project, SensorContext context) {
+        if (project.isModule()) {
+            log.warn(LogUtil.f("Report path not set for " + project.name() + " module! [" +
+                    project.name() + "." + SCOVERAGE_REPORT_PATH_PROPERTY + "]"));
+            return;
+        }
+
+        // Compute overall statement coverage from submodules
+        long totalStatementCount = 0;
+        long coveredStatementCount = 0;
+        for (Project module: project.getModules()) {
+            totalStatementCount += analyseStatementCountForModule(module, context);
+            coveredStatementCount += analyseCoveredStatementCountForModule(module, context);
+        }
+
+        if (totalStatementCount > 0) {
+            // Convert to percentage
+            Double overall = (coveredStatementCount / (double)totalStatementCount) * 100.0;
+
+            // Set overall statement coverage
+            context.saveMeasure(project, createStatementCoverage(overall));
+
+            log.info(LogUtil.f("Overall statement coverage is " + String.format("%1$,.2f", overall)));
+        }
+    }
+
+    private long analyseCoveredStatementCountForModule(Project module, SensorContext context) {
+        // Aggregate modules
+        Measure moduleCoveredStatementCount = context.getMeasure(module, ScalaMetrics.COVERED_STATEMENTS);
+
+        if (moduleCoveredStatementCount == null) {
+            log.debug(LogUtil.f("Module has no statement coverage. [" + module.name() + "]"));
+            return 0;
+        }
+
+        log.debug(LogUtil.f("Covered statement count for " + module.name() + " module. [" +
+                moduleCoveredStatementCount.getValue() + "]"));
+
+        return moduleCoveredStatementCount.getValue().longValue();
+    }
+
+    private long analyseStatementCountForModule(Project module, SensorContext context) {
+        // Aggregate modules
+        Measure moduleStatementCount = context.getMeasure(module, CoreMetrics.STATEMENTS);
+
+        if (moduleStatementCount == null) {
+            log.debug(LogUtil.f("Module has no number of statements. [" + module.name() + "]"));
+            return 0;
+        }
+
+        log.debug(LogUtil.f("Statement count for " + module.name() + " module. [" +
+                moduleStatementCount.getValue() + "]"));
+
+        return moduleStatementCount.getValue().longValue();
     }
 
     private void processProject(ProjectStatementCoverage projectCoverage,

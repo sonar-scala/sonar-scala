@@ -22,9 +22,7 @@ package com.buransky.plugins.scoverage.xml
 import org.scalatest.{FlatSpec, Matchers}
 import org.scalatest.junit.JUnitRunner
 import org.junit.runner.RunWith
-import com.buransky.plugins.scoverage.xml.data.XmlReportFile1
 import com.buransky.plugins.scoverage.ScoverageException
-import scala.io.Source
 
 @RunWith(classOf[JUnitRunner])
 class XmlScoverageReportParserSpec extends FlatSpec with Matchers {

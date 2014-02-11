@@ -69,7 +69,7 @@
     </repositories>
 
     <properties>
-        <sonar.version>4.0</sonar.version>
+        <sonar.version>3.5.1</sonar.version>
 
         <sonar.pluginKey>scoverage</sonar.pluginKey>
         <sonar.pluginName>Scoverage</sonar.pluginName>

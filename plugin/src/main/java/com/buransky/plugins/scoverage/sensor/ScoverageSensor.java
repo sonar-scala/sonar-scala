@@ -77,8 +77,8 @@ public class ScoverageSensor implements Sensor, CoverageExtension {
         }
         else {
             if (project.isModule()) {
-                log.warn(LogUtil.f("Report path not set for " + project.name() + " module! [" +
-                  project.name() + "." + SCOVERAGE_REPORT_PATH_PROPERTY + "]"));
+                log.warn(LogUtil.f("Report path not set for " + project.getName() + " module! [" +
+                  project.getName() + "." + SCOVERAGE_REPORT_PATH_PROPERTY + "]"));
             }
             else {
                 // Compute overall statement coverage from submodules
@@ -90,12 +90,12 @@ public class ScoverageSensor implements Sensor, CoverageExtension {
                     Measure moduleCoveredStatementCount = context.getMeasure(module, ScalaMetrics.COVERED_STATEMENTS);
 
                     if ((moduleStatementCount == null) || (moduleCoveredStatementCount == null))
-                        log.debug(LogUtil.f("Module has no statement coverage. [" + module.name() + "]"));
+                        log.debug(LogUtil.f("Module has no statement coverage. [" + module.getName() + "]"));
                     else {
                         totalStatementCount += moduleStatementCount.getValue();
                         coveredStatementCount += moduleCoveredStatementCount.getValue();
 
-                        log.debug(LogUtil.f("Statement count for " + module.name() + " module. [" +
+                        log.debug(LogUtil.f("Statement count for " + module.getName() + " module. [" +
                             moduleStatementCount.getValue() + ", " + moduleCoveredStatementCount.getValue() + "]"));
                     }
                 }

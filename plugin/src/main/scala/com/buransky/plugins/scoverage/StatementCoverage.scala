@@ -29,7 +29,11 @@ sealed trait StatementCoverage {
   /**
    * Percentage rate ranging from 0 up to 100%.
    */
-  lazy val rate: Double = (coveredStatementsCount.toDouble / statementCount.toDouble) * 100.0
+  lazy val rate: Double =
+    if (statementCount == 0)
+      0.0
+    else
+      (coveredStatementsCount.toDouble / statementCount.toDouble) * 100.0
 
   /**
    * Total number of all statements within the source code unit,

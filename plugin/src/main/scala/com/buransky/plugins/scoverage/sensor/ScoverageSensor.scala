@@ -44,8 +44,8 @@ import com.buransky.plugins.scoverage.xml.XmlScoverageReportParser
 class ScoverageSensor(settings: Settings, pathResolver: PathResolver, moduleFileSystem: ModuleFileSystem, scala: Scala)
   extends Sensor with CoverageExtension {
   private val log = LoggerFactory.getLogger(classOf[ScoverageSensor])
-  private val SCOVERAGE_REPORT_PATH_PROPERTY = "sonar.scoverage.reportPath"
-  protected lazy val scoverageReportParser = XmlScoverageReportParser()
+  protected val SCOVERAGE_REPORT_PATH_PROPERTY = "sonar.scoverage.reportPath"
+  protected lazy val scoverageReportParser: ScoverageReportParser = XmlScoverageReportParser()
 
   override def shouldExecuteOnProject(project: Project): Boolean =
     project.getAnalysisType.isDynamic(true) && (scala.getKey == project.getLanguageKey)

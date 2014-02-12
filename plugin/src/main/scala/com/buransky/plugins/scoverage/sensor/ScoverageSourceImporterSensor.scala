@@ -57,7 +57,7 @@ class ScoverageSourceImporterSensor(moduleFileSystem: ModuleFileSystem, scala: S
     try {
       val source = FileUtils.readFileToString(sourceFile, charset)
       val key = File.fromIOFile(sourceFile, project).getKey()
-      val resource =  new ScalaFile(key, scala)
+      val resource = new ScalaFile(key, scala)
 
       sensorContext.index(resource)
       sensorContext.saveSource(resource, source)

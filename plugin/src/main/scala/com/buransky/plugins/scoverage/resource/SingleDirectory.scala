@@ -31,18 +31,12 @@ import com.buransky.plugins.scoverage.language.Scala
 class SingleDirectory(key: String, scala: Scala) extends Directory(key) {
   private val name: String = {
     val i = key.lastIndexOf(Directory.SEPARATOR)
-    if (i > 0)
-      key.substring(i + 1)
-    else
-      key
+    if (i >= 0) key.substring(i + 1) else key
   }
 
   private val parent: Option[SingleDirectory] = {
     val i = key.lastIndexOf(Directory.SEPARATOR)
-    if (i > 0)
-      Some(new SingleDirectory(key.substring(0, i), scala))
-    else
-      None
+    if (i > 0) Some(new SingleDirectory(key.substring(0, i), scala)) else None
   }
 
   override lazy val getName = name

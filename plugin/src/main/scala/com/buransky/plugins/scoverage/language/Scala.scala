@@ -17,10 +17,21 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package com.buransky.plugins.scoverage.util;
+package com.buransky.plugins.scoverage.language
 
-public class LogUtil {
-  public static String f(String msg) {
-    return "[scoverage] " + msg;
-  }
+import org.sonar.api.resources.AbstractLanguage
+
+/**
+ * Scala language.
+ *
+ * @author Rado Buransky
+ */
+class Scala extends AbstractLanguage(Scala.key, Scala.name) {
+  val getFileSuffixes = Array(Scala.fileExtension)
+}
+
+object Scala {
+  val key = "scala"
+  val name = "Scala"
+  val fileExtension = "scala"
 }

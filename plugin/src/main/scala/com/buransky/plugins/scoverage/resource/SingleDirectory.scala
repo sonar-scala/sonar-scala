@@ -17,12 +17,10 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package com.buransky.plugins.scoverage.resource;
+package com.buransky.plugins.scoverage.resource
 
-import com.buransky.plugins.scoverage.language.Scala;
-import org.sonar.api.resources.Directory;
-import org.sonar.api.resources.Language;
-import org.sonar.api.resources.Resource;
+import org.sonar.api.resources.Directory
+import com.buransky.plugins.scoverage.language.Scala
 
 /**
  * Single directory in file system. Unlike org.sonar.api.resources.Directory that can represent
@@ -30,36 +28,26 @@ import org.sonar.api.resources.Resource;
  *
  * @author Rado Buransky
  */
-public class SingleDirectory extends Directory {
-    private final String name;
-    private final SingleDirectory parent;
+class SingleDirectory(key: String, scala: Scala) extends Directory(key) {
+  private val name: String = {
+    val i = key.lastIndexOf(Directory.SEPARATOR)
+    if (i > 0)
+      key.substring(i + 1)
+    else
+      key
+  }
 
-    public SingleDirectory(String key) {
-        super(key);
+  private val parent: Option[SingleDirectory] = {
+    val i = key.lastIndexOf(Directory.SEPARATOR)
+    if (i > 0)
+      Some(new SingleDirectory(key.substring(0, i), scala))
+    else
+      None
+  }
 
-        int i = getKey().lastIndexOf(SEPARATOR);
-        if (i > 0) {
-            parent = new SingleDirectory(key.substring(0, i));
-            name = key.substring(i + 1);
-        }
-        else {
-            name = key;
-            parent = null;
-        }
-    }
+  override lazy val getName = name
 
-    @Override
-    public String getName() {
-        return name;
-    }
+  override lazy val getLanguage = scala
 
-    @Override
-    public Language getLanguage() {
-        return Scala.INSTANCE;
-    }
-
-    @Override
-    public Resource getParent() {
-        return parent;
-    }
+  override lazy val getParent = parent.getOrElse(null)
 }

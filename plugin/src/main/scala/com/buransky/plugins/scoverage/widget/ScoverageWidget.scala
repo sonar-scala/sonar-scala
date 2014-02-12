@@ -17,28 +17,17 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package com.buransky.plugins.scoverage.widget;
+package com.buransky.plugins.scoverage.widget
 
-import org.sonar.api.web.AbstractRubyTemplate;
-import org.sonar.api.web.RubyRailsWidget;
+import org.sonar.api.web.{RubyRailsWidget, AbstractRubyTemplate}
 
 /**
  * UI widget that can be added to the main dashboard to display overall statement coverage for the project.
  *
  * @author Rado Buransky
  */
-public class ScoverageWidget extends AbstractRubyTemplate implements RubyRailsWidget {
-
-    public String getId() {
-        return "scoverage";
-    }
-
-    public String getTitle() {
-        return "Statement coverage";
-    }
-
-    @Override
-    protected String getTemplatePath() {
-        return "/com/buransky/plugins/scoverage/widget.html.erb";
-    }
+class ScoverageWidget extends AbstractRubyTemplate with RubyRailsWidget {
+  val getId = "scoverage"
+  val getTitle = "Statement coverage"
+  override val getTemplatePath = "/com/buransky/plugins/scoverage/widget.html.erb"
 }

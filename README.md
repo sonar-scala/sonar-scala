@@ -32,7 +32,7 @@ If you have Sonar 3.5.1, take a look into the [dedicated branch] [Plugin351] or 
 
 ## Installation ##
 
-Download and copy [sonar-scoverage-plugin-1.0.0.jar] [PluginJar] to the Sonar plugins directory
+Download and copy [sonar-scoverage-plugin-1.0.1.jar] [PluginJar] to the Sonar plugins directory
 (usually <SONAR_INSTALLATION_ROOT>/extensions/plugins). Restart Sonar.
 
 ## Configure Sonar runner ##
@@ -86,7 +86,7 @@ Columns with statement coverage, total number of statements and number of covere
 Source code markup with covered and uncovered lines:
 ![Source code markup](/doc/img/04_coverage.png "Source code markup")
 
-[PluginJar]: https://github.com/RadoBuransky/sonar-scoverage-plugin/releases/download/v1.0.0/sonar-scoverage-plugin-1.0.0.jar
+[PluginJar]: https://github.com/RadoBuransky/sonar-scoverage-plugin/releases/download/1.0.1/sonar-scoverage-plugin-1.0.1.jar
 [SonarQube]: http://www.sonarqube.org/ "SonarQube"
 [Scoverage]: https://github.com/scoverage/scalac-scoverage-plugin "Scoverage"
 [sbt-scoverage]: https://github.com/scoverage/sbt-scoverage

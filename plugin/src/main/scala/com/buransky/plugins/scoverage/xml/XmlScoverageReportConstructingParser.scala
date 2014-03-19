@@ -191,10 +191,16 @@ class XmlScoverageReportConstructingParser(source: Source) extends ConstructingP
     // Get file
     val file = DirOrFile(path(path.length - 1).toString, Nil, Some(coverage))
 
-    // Append file
-    dirs.last.children = List(file)
+    if (dirs.isEmpty) {
+      // File in root dir
+      file
+    }
+    else {
+      // Append file
+      dirs.last.children = List(file)
 
-    dirs(0)
+      dirs(0)
+    }
   }
 
   private def fileStatementCoverage(statementsInFile: Map[String, List[CoveredStatement]]):

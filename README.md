@@ -91,4 +91,4 @@ Source code markup with covered and uncovered lines:
 [Scoverage]: https://github.com/scoverage/scalac-scoverage-plugin "Scoverage"
 [sbt-scoverage]: https://github.com/scoverage/sbt-scoverage
 [Plugin351]: https://github.com/RadoBuransky/sonar-scoverage-plugin/tree/sonar3.5.1
-[Plugin351Jar]: https://github.com/RadoBuransky/sonar-scoverage-plugin/releases/download/v1.0.1-Sonar3.5.1/sonar-scoverage-plugin-sonar3.5.1-1.0.1.jar
+[Plugin351Jar]: https://github.com/RadoBuransky/sonar-scoverage-plugin/releases/download/v1.0.2-Sonar3.5.1/sonar-scoverage-plugin-sonar3.5.1-1.0.2.jar

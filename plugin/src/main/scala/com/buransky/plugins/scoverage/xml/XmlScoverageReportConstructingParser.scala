@@ -27,6 +27,7 @@ import org.apache.log4j.Logger
 import scala.collection.mutable
 import scala.annotation.tailrec
 import java.io.File
+import com.buransky.plugins.scoverage.util.PathUtil
 
 /**
  * Scoverage XML parser based on ConstructingParser provided by standard Scala library.
@@ -174,8 +175,7 @@ class XmlScoverageReportConstructingParser(source: Source) extends ConstructingP
   }
 
   private def pathToChain(filePath: String, coverage: FileStatementCoverage): DirOrFile = {
-    //val path = Paths.get(filePath)
-    val path = splitPath(filePath)
+    val path = PathUtil.splitPath(filePath)
 
     if (path.length < 1)
       throw new ScoverageException("Path cannot be empty!")
@@ -206,7 +206,7 @@ class XmlScoverageReportConstructingParser(source: Source) extends ConstructingP
   private def fileStatementCoverage(statementsInFile: Map[String, List[CoveredStatement]]):
     Map[String, FileStatementCoverage] = {
     statementsInFile.map { sif =>
-      val fileStatementCoverage = FileStatementCoverage(splitPath(sif._1).last,
+      val fileStatementCoverage = FileStatementCoverage(PathUtil.splitPath(sif._1).last,
         sif._2.length, coveredStatements(sif._2), sif._2)
 
       (sif._1, fileStatementCoverage)
@@ -215,6 +215,4 @@ class XmlScoverageReportConstructingParser(source: Source) extends ConstructingP
 
   private def coveredStatements(statements: Iterable[CoveredStatement]) =
     statements.count(_.hitCount > 0)
-
-  private def splitPath(filePath: String) = filePath.split(File.separator)
 }

@@ -20,6 +20,8 @@ trait BelgianBeer extends Beer {
     throw new IllegalArgumentException("Too big beer for belgian beer!")
 
   override def isGood = true
+
+  def f(l: List[Int]) = l.filter(_ > 0).filter(_ < 42).takeWhile(_ != 3).foreach(println(_))
 }
 
 case class HordonBeer(volume: Double) extends SlovakBeer {

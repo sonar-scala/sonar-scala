@@ -86,7 +86,7 @@ Columns with statement coverage, total number of statements and number of covere
 Source code markup with covered and uncovered lines:
 ![Source code markup](/doc/img/04_coverage.png "Source code markup")
 
-[PluginJar]: https://github.com/RadoBuransky/sonar-scoverage-plugin/releases/download/1.0.1/sonar-scoverage-plugin-1.0.1.jar
+[PluginJar]: https://github.com/RadoBuransky/sonar-scoverage-plugin/releases/download/1.0.2/sonar-scoverage-plugin-1.0.2.jar
 [SonarQube]: http://www.sonarqube.org/ "SonarQube"
 [Scoverage]: https://github.com/scoverage/scalac-scoverage-plugin "Scoverage"
 [sbt-scoverage]: https://github.com/scoverage/sbt-scoverage

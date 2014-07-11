@@ -1,4 +1,9 @@
-sonar-scalastyle
-================
+# Sonar Scala Style Plugin
 
-SonarQube plugin for ScalaStyle
+Wraps up scala style as a SonarQube plugin.
+
+http://www.scalastyle.org/
+
+Supports Sonar 4.3.1 +
+
+

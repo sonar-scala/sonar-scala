@@ -1,0 +1,65 @@
+/*
+ * Sonar Scala Style Plugin
+ * Copyright (C) 2014 All contributors
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
+ */
+
+package com.ncredinburgh.sonar.scalastyle
+
+import java.io.File
+
+import org.scalastyle.Message
+import org.scalastyle.FileSpec
+import org.scalastyle.Directory
+import org.scalastyle.ScalastyleChecker
+import org.scalastyle.ErrorLevel
+import org.scalastyle.ScalastyleConfiguration
+import org.scalastyle.ConfigurationChecker
+import org.slf4j.LoggerFactory
+import org.sonar.api.profiles.RulesProfile
+import org.sonar.api.rules.ActiveRule
+import scala.collection.JavaConversions._
+
+/**
+ * Runs ScalaStyle based on active rules
+ */
+class ScalaStyleRunner(rp: RulesProfile) {
+
+  private val log = LoggerFactory.getLogger(classOf[ScalaStyleRunner])
+
+  def run(encoding : String, files : java.util.List[File]) : List[Message[FileSpec]] = {
+
+    log.debug("Using config " + config)
+
+    val fileSpecs = Directory.getFilesAsJava(Some(encoding), files)
+
+    val messages = new ScalastyleChecker[FileSpec]().checkFiles(config, fileSpecs)
+
+    messages
+  }
+
+  def config : ScalastyleConfiguration = {
+    val sonarRules = rp.getActiveRulesByRepository(Constants.REPOSITORY_KEY)
+    val checkers = sonarRules.map(ruleToChecker).toList
+    new ScalastyleConfiguration("sonar", true, checkers)
+  }
+
+  private def ruleToChecker(activeRule: ActiveRule) = {
+    val params = activeRule.getActiveRuleParams.map(p => (p.getKey, p.getValue)).toMap
+    ConfigurationChecker(activeRule.getRuleKey, ErrorLevel, true, params, None, None)
+  }
+
+}

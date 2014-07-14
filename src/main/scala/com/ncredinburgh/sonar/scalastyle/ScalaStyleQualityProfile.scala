@@ -17,23 +17,21 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
 package com.ncredinburgh.sonar.scalastyle
-import org.sonar.api.SonarPlugin
-import scala.collection.mutable.ListBuffer
+
+import org.sonar.api.profiles.{ProfileDefinition, RulesProfile}
+import org.sonar.api.utils.ValidationMessages
 import scala.collection.JavaConversions._
-import org.sonar.api.Extension
-import com.ncredinburgh.sonar.scalastyle.core.{ScalaSourceImporter, ScalaLanguage}
 
 /**
- * Plugin entry point.
+ * This class creates the default "Scalastyle" quality profile
  */
-class ScalaStylePlugin extends SonarPlugin {
-  override def getExtensions: java.util.List[Class[_ <: Extension]] = ListBuffer(
-    classOf[ScalaLanguage],
-    classOf[ScalaSourceImporter],
-    classOf[ScalaStyleRepository],
-    classOf[ScalaStyleQualityProfile],
-    classOf[ScalaStyleSensor]
-  )
-
-  override val toString = getClass.getSimpleName
+class ScalaStyleQualityProfile(scalaStyleRepository: ScalaStyleRepository) extends ProfileDefinition {
+  
+  override def createProfile(validation: ValidationMessages): RulesProfile = {
+    val profile = RulesProfile.create(Constants.PROFILE_NAME, Constants.SCALA_KEY)
+    scalaStyleRepository.createRules.foreach(rule => profile.activateRule(rule, rule.getSeverity))
+    profile
+  }
 }
+
+

@@ -37,5 +37,7 @@ class ScalaStyleResourcesSpec  extends FlatSpec with Matchers with Inspectors {
     forAll (ScalaStyleResources.allDefinedRules) { r : RepositoryRule => r.description.length should be > 0 }
   }
 
-
+  it should "get all parameters of rules" in {
+    forAll(ScalaStyleResources.allDefinedRules) { r: RepositoryRule => r.params.foreach(_.defaultVal != "")}
+  }
 }

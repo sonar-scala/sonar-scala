@@ -43,7 +43,7 @@ object ScalaStyleResources {
     checker <- definitions \\ "scalastyle-definition" \ "checker"
     id = (checker \ "@id").text.trim
     clazz = (checker \ "@class").text.trim
-    params = (checker \ "parameters" \ "parameter").map(n => Param(nodeToParameterKey(n), nodeToPropertyType(n), "", ""))
+    params = (checker \ "parameters" \ "parameter").map(n => Param(nodeToParameterKey(n), nodeToPropertyType(n), "", nodeToDefaultValue(n)))
   } yield RepositoryRule(clazz, id, longDescription(id), params.toList)
 
 
@@ -98,6 +98,9 @@ object ScalaStyleResources {
     case "boolean" => PropertyType.BOOLEAN
     case _ => PropertyType.STRING
   }
+
+  private def nodeToDefaultValue(n: Node)
+  = (n \ "@default").text.trim
 
   private def xmlFromClassPath(s : String) =  scala.xml.XML.load(fromClassPath(s))
 

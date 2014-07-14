@@ -47,8 +47,7 @@ class ScalaStyleRepository extends RuleRepository(Constants.REPOSITORY_KEY, Cons
                                                   .setDefaultValue(r.defaultVal)
                                                   .setType(r.typeName)
                                                   .setKey(r.name)
-                                                  .setDescription(r.desc)
-                                                  .setDefaultValue(ScalaStyleResources.parameterDefault(repoRule.clazz,r.name))}
+                                                  .setDescription(r.desc)}
 
 
     params.foreach( p => log.debug("Created param for " + rule.getKey + " : " + p) )

@@ -60,18 +60,6 @@ object ScalaStyleResources {
     getMessage(key + ".description")
   }
 
-  def parameterDefault(clazz: String, paramKey: String): String = {
-    val strings = for {
-      check <- defaultConfig \\ "scalastyle" \ "check"  if (check \ "@class").text == clazz
-      p <- check \ "parameters" \ "parameter" if (p \ "@name").text == paramKey
-    } yield {
-      p.text.trim
-    }
-
-    // actually only ever expect 1 match
-    strings.mkString(",")
-  }
-
   private def descriptionFromDocumentation(key: String): String = {
     val strings = for {
       check <- documentation \\ "scalastyle-documentation" \ "check" if (check \ "@id").text == key
@@ -99,8 +87,7 @@ object ScalaStyleResources {
     case _ => PropertyType.STRING
   }
 
-  private def nodeToDefaultValue(n: Node)
-  = (n \ "@default").text.trim
+  private def nodeToDefaultValue(n: Node) = (n \ "@default").text.trim
 
   private def xmlFromClassPath(s : String) =  scala.xml.XML.load(fromClassPath(s))
 

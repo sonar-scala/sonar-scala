@@ -29,7 +29,8 @@ class ScalaStyleQualityProfile(scalaStyleRepository: ScalaStyleRepository) exten
   
   override def createProfile(validation: ValidationMessages): RulesProfile = {
     val profile = RulesProfile.create(Constants.PROFILE_NAME, Constants.SCALA_KEY)
-    scalaStyleRepository.createRules.foreach(rule => profile.activateRule(rule, rule.getSeverity))
+    val defaultRules = scalaStyleRepository.createRules.filterNot(_.getParams.exists(_.getDefaultValue == ""))
+    defaultRules.foreach(rule => profile.activateRule(rule, rule.getSeverity))
     profile
   }
 }

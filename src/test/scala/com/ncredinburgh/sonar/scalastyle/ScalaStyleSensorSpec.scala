@@ -71,14 +71,14 @@ class ScalaStyleSensorSpec extends FlatSpec with Matchers with MockitoSugar {
 
   }
 
-
-  "A Scalastyle Sensor" should "execute when a project is using Scala" in new Fixture {
-    when(project.getLanguageKey()).thenReturn(Constants.SCALA_KEY)
+  "A Scalastyle Sensor" should "execute when the project have Scala files" in new Fixture {
+    val scalaFiles = List(new File("foo"), new File("bar"))
+    when(fs.files(any[FileQuery])).thenReturn(scalaFiles)
     assert( testee.shouldExecuteOnProject(project) )
   }
 
-  it should "not execute when a project is not using Scala" in new Fixture {
-    when(project.getLanguageKey()).thenReturn("not scala")
+  it should "not execute when there isn't any Scala files" in new Fixture {
+    when(fs.files(FileQuery.onSource.onLanguage(Constants.SCALA_KEY))).thenReturn(List())
     assert( !testee.shouldExecuteOnProject(project) )
   }
 

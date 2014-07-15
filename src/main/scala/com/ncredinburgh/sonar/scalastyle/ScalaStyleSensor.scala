@@ -47,8 +47,9 @@ class ScalaStyleSensor(resourcePerspectives: ResourcePerspectives
 
   private val log = LoggerFactory.getLogger(classOf[ScalaStyleSensor])
 
-
-  override def shouldExecuteOnProject(project: Project): Boolean = (Constants.SCALA_KEY == project.getLanguageKey)
+  override def shouldExecuteOnProject(project: Project): Boolean = {
+    moduleFileSystem.files(FileQuery.onSource.onLanguage(Constants.SCALA_KEY)).nonEmpty
+  }
 
   override def analyse(project: Project, context: SensorContext) : Unit = {
 

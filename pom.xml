@@ -34,7 +34,7 @@
 
         <scala.version>2.10.4</scala.version>
         <scala.major.version>2.10</scala.major.version>
-        <scoverage-plugin.version>0.98.2</scoverage-plugin.version>
+        <scoverage-plugin.version>0.99.5</scoverage-plugin.version>
         <maven.plugin.scoverage.version>0.98.2</maven.plugin.scoverage.version>
 
         <!-- needed? -->
@@ -168,6 +168,8 @@
                             <args>
                                 <arg>-g:vars</arg>
                                 <arg>-P:scoverage:dataDir:${project.build.outputDirectory}</arg>
+                                <arg>-unchecked</arg>
+                                <arg>-deprecation</arg>
                             </args>
                         </configuration>
                     </execution>

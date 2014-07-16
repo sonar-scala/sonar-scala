@@ -18,21 +18,40 @@
  */
 package com.ncredinburgh.sonar.scalastyle
 
+import org.slf4j.LoggerFactory
 import org.sonar.api.profiles.{ProfileDefinition, RulesProfile}
+import org.sonar.api.rules.ActiveRule
 import org.sonar.api.utils.ValidationMessages
 import scala.collection.JavaConversions._
+import org.scalastyle.ScalastyleError
+import scala.xml.XML
 
 /**
- * This class creates the default "Scalastyle" quality profile
+ * This class creates the default "Scalastyle" quality profile from Scalastyle's default_config.xml
  */
 class ScalaStyleQualityProfile(scalaStyleRepository: ScalaStyleRepository) extends ProfileDefinition {
-  
+
+  private val log = LoggerFactory.getLogger(classOf[ScalaStyleRepository])
+  private val defaultConfigRules = xmlFromClassPath("/default_config.xml") \\ "scalastyle" \ "check"
+
   override def createProfile(validation: ValidationMessages): RulesProfile = {
     val profile = RulesProfile.create(Constants.PROFILE_NAME, Constants.SCALA_KEY)
-    val defaultRules = scalaStyleRepository.createRules.filterNot(_.getParams.exists(_.getDefaultValue == ""))
-    defaultRules.foreach(rule => profile.activateRule(rule, rule.getSeverity))
+    val defaultKeys = defaultConfigRules.filter(x => (x \ "@enabled").text.equals("true")).map(x => (x \ "@class").text)
+    val defaultRules = scalaStyleRepository.createRules.filter(rule => defaultKeys.contains(rule.getKey) )
+    val activeRules = defaultRules.map(rule => profile.activateRule(rule, rule.getSeverity))
+    activeRules.foreach(setParameters(_))
     profile
   }
+
+  def setParameters(activeRule: ActiveRule) {
+    defaultConfigRules.find(x => (x \ "@class").text.equals(activeRule.getRuleKey) ) match {
+      case Some(rule) => {
+        val params = (rule \ "parameters" \ "parameter").map(n => ((n \ "@name").text, n.text )).toMap
+        params foreach { case (key, value) => activeRule.setParameter(key, value) }
+      }
+      case _ => log.warn("Default rule with key " + activeRule.getRuleKey + " could not found in default_config.xml")
+    }
+  }
+
+  private def xmlFromClassPath(s : String) = XML.load(classOf[ScalastyleError].getResourceAsStream(s))
 }
-
-

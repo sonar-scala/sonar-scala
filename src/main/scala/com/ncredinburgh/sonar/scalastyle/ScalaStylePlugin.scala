@@ -21,7 +21,7 @@ import org.sonar.api.SonarPlugin
 import scala.collection.mutable.ListBuffer
 import scala.collection.JavaConversions._
 import org.sonar.api.Extension
-import com.ncredinburgh.sonar.scalastyle.core.{ScalaSourceImporter, ScalaLanguage}
+import com.ncredinburgh.sonar.scalastyle.core.ScalaLanguage
 
 /**
  * Plugin entry point.
@@ -29,7 +29,6 @@ import com.ncredinburgh.sonar.scalastyle.core.{ScalaSourceImporter, ScalaLanguag
 class ScalaStylePlugin extends SonarPlugin {
   override def getExtensions: java.util.List[Class[_ <: Extension]] = ListBuffer(
     classOf[ScalaLanguage],
-    classOf[ScalaSourceImporter],
     classOf[ScalaStyleRepository],
     classOf[ScalaStyleQualityProfile],
     classOf[ScalaStyleSensor]

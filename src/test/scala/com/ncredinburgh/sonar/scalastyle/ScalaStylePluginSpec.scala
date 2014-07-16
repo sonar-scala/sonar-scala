@@ -18,11 +18,10 @@
  */
 package com.ncredinburgh.sonar.scalastyle
 
-import com.ncredinburgh.sonar.scalastyle.core.{ScalaSourceImporter, ScalaLanguage}
+import com.ncredinburgh.sonar.scalastyle.core.ScalaLanguage
 import org.scalatest.{Matchers, FlatSpec}
 
 import scala.collection.JavaConverters._
-import org.sonar.api.Extension
 
 /**
  * Created by hc185053 on 12/06/2014.
@@ -41,9 +40,5 @@ class ScalaStylePluginSpec  extends FlatSpec with Matchers {
 
   it should "provide a scala language" in {
     assert (testee.getExtensions.asScala.exists(_ == classOf[ScalaLanguage]))
-  }
-
-  it should "provide a scala source importer" in {
-    assert (testee.getExtensions.asScala.exists(_ == classOf[ScalaSourceImporter]))
   }
 }

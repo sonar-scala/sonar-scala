@@ -34,8 +34,6 @@
 
         <scala.version>2.10.4</scala.version>
         <scala.major.version>2.10</scala.major.version>
-        <scoverage-plugin.version>0.99.5</scoverage-plugin.version>
-        <maven.plugin.scoverage.version>0.98.2</maven.plugin.scoverage.version>
 
         <!-- needed? -->
         <sonar.language>scala</sonar.language>
@@ -114,15 +112,6 @@
             <scope>test</scope>
         </dependency>
 
-
-        <dependency>
-            <groupId>org.scoverage</groupId>
-            <artifactId>scalac-scoverage-plugin_2.10</artifactId>
-            <version>${scoverage-plugin.version}</version>
-           <!-- <scope>test</scope> -->
-        </dependency>
-
-
     </dependencies>
 
     <build>
@@ -158,16 +147,8 @@
                                 <jvmArg>-Xms64m</jvmArg>
                                 <jvmArg>-Xmx1024m</jvmArg>
                             </jvmArgs>
-                            <compilerPlugins>
-                                <compilerPlugin>
-                                    <groupId>org.scoverage</groupId>
-                                    <artifactId>scalac-scoverage-plugin_${scala.major.version}</artifactId>
-                                    <version>${scoverage-plugin.version}</version>
-                                </compilerPlugin>
-                            </compilerPlugins>
                             <args>
                                 <arg>-g:vars</arg>
-                                <arg>-P:scoverage:dataDir:${project.build.outputDirectory}</arg>
                                 <arg>-unchecked</arg>
                                 <arg>-deprecation</arg>
                             </args>
@@ -181,11 +162,6 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.scoverage</groupId>
-                <artifactId>maven-scoverage-plugin</artifactId>
-                <version>${maven.plugin.scoverage.version}</version>
             </plugin>
             <!-- disable surefire -->
             <plugin>

@@ -1,5 +1,5 @@
 /*
- * Sonar Scala Stlye Plugin
+ * Sonar Scalastyle Plugin
  * Copyright (C) 2014 All contributors
  *
  * This program is free software; you can redistribute it and/or
@@ -26,16 +26,16 @@ import scala.collection.JavaConverters._
 /**
  * Created by hc185053 on 12/06/2014.
  */
-class ScalaStylePluginSpec  extends FlatSpec with Matchers {
+class ScalastylePluginSpec  extends FlatSpec with Matchers {
 
-  val testee = new ScalaStylePlugin
+  val testee = new ScalastylePlugin
 
-  "a scala style plugin" should "provide a scala style sensor" in {
-    assert (testee.getExtensions.asScala.exists(_ == classOf[ScalaStyleSensor]))
+  "a scalastyle plugin" should "provide a scalastyle sensor" in {
+    assert (testee.getExtensions.asScala.exists(_ == classOf[ScalastyleSensor]))
   }
 
-  it should "provide a scala style repository" in {
-    assert (testee.getExtensions.asScala.exists(_ == classOf[ScalaStyleRepository]))
+  it should "provide a scalastyle repository" in {
+    assert (testee.getExtensions.asScala.exists(_ == classOf[ScalastyleRepository]))
   }
 
   it should "provide a scala language" in {

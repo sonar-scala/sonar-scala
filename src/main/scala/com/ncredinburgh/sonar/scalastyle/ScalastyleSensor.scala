@@ -34,8 +34,8 @@ import scala.collection.JavaConversions._
 /**
  * Main sensor for return Scalastyle issues to Sonar.
  */
-class ScalaStyleSensor(resourcePerspectives: ResourcePerspectives,
-    runner: ScalaStyleRunner,
+class ScalastyleSensor(resourcePerspectives: ResourcePerspectives,
+    runner: ScalastyleRunner,
     moduleFileSystem: ModuleFileSystem,
     rf: RuleFinder)
   extends Sensor {
@@ -43,9 +43,9 @@ class ScalaStyleSensor(resourcePerspectives: ResourcePerspectives,
   def this(resourcePerspectives: ResourcePerspectives,
       rp: RulesProfile,
       moduleFileSystem: ModuleFileSystem,
-      rf: RuleFinder) = this(resourcePerspectives, new ScalaStyleRunner(rp), moduleFileSystem, rf)
+      rf: RuleFinder) = this(resourcePerspectives, new ScalastyleRunner(rp), moduleFileSystem, rf)
 
-  private val log = LoggerFactory.getLogger(classOf[ScalaStyleSensor])
+  private val log = LoggerFactory.getLogger(classOf[ScalastyleSensor])
 
   override def shouldExecuteOnProject(project: Project): Boolean = {
     moduleFileSystem.files(FileQuery.onSource.onLanguage(Constants.ScalaKey)).nonEmpty
@@ -99,7 +99,7 @@ class ScalaStyleSensor(resourcePerspectives: ResourcePerspectives,
   }
 
   private def processException(exception: StyleException[FileSpec]): Unit = {
-    log.error("Got exception message from ScalaStyle. " +
+    log.error("Got exception message from Scalastyle. " +
       "Check you have valid parameters configured for all rules. Exception message was: " + exception.message)
   }
 

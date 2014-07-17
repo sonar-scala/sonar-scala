@@ -1,5 +1,5 @@
 /*
- * Sonar Scala Stlye Plugin
+ * Sonar Scalastyle Plugin
  * Copyright (C) 2014 All contributors
  *
  * This program is free software; you can redistribute it and/or
@@ -23,21 +23,21 @@ import org.scalatest.{Inspectors, Matchers, FlatSpec}
 /**
  * Created by hc185053 on 16/06/2014.
  */
-class ScalaStyleResourcesSpec  extends FlatSpec with Matchers with Inspectors {
+class ScalastyleResourcesSpec  extends FlatSpec with Matchers with Inspectors {
 
   "the configuration" should "allow access to description in documentation for a checker" in {
-    assert( ScalaStyleResources.longDescription("line.size.limit") contains "Lines that are too long can be hard to read and horizontal scrolling is annoying")
+    assert( ScalastyleResources.longDescription("line.size.limit") contains "Lines that are too long can be hard to read and horizontal scrolling is annoying")
   }
 
   it should "return all defined checkers" in {
-    assert( ScalaStyleResources.allDefinedRules.size == 56)
+    assert( ScalastyleResources.allDefinedRules.size == 56)
   }
 
   it should "give rules a description" in {
-    forAll (ScalaStyleResources.allDefinedRules) { r : RepositoryRule => r.description.length should be > 0 }
+    forAll (ScalastyleResources.allDefinedRules) { r : RepositoryRule => r.description.length should be > 0 }
   }
 
   it should "get all parameters of rules" in {
-    forAll(ScalaStyleResources.allDefinedRules) { r: RepositoryRule => r.params.foreach(_.defaultVal != "")}
+    forAll(ScalastyleResources.allDefinedRules) { r: RepositoryRule => r.params.foreach(_.defaultVal != "")}
   }
 }

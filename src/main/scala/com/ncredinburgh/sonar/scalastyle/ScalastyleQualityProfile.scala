@@ -1,5 +1,5 @@
 /*
- * Sonar Scala Style Plugin
+ * Sonar Scalastyle Plugin
  * Copyright (C) 2014 All contributors
  *
  * This program is free software; you can redistribute it and/or
@@ -29,16 +29,16 @@ import scala.xml.XML
 /**
  * This class creates the default "Scalastyle" quality profile from Scalastyle's default_config.xml
  */
-class ScalaStyleQualityProfile(scalaStyleRepository: ScalaStyleRepository) extends ProfileDefinition {
+class ScalastyleQualityProfile(scalastyleRepository: ScalastyleRepository) extends ProfileDefinition {
 
-  private val log = LoggerFactory.getLogger(classOf[ScalaStyleRepository])
+  private val log = LoggerFactory.getLogger(classOf[ScalastyleRepository])
   private val defaultConfigRules = xmlFromClassPath("/default_config.xml") \\ "scalastyle" \ "check"
 
   override def createProfile(validation: ValidationMessages): RulesProfile = {
     val profile = RulesProfile.create(Constants.ProfileName, Constants.ScalaKey)
     val enabledRules = defaultConfigRules filter (x => (x \ "@enabled").text.equals("true"))
     val defaultKeys = enabledRules map (x => (x \ "@class").text)
-    val defaultRules = scalaStyleRepository.createRules filter (rule => defaultKeys.contains(rule.getKey) )
+    val defaultRules = scalastyleRepository.createRules filter (rule => defaultKeys.contains(rule.getKey) )
     val activeRules = defaultRules map (rule => profile.activateRule(rule, rule.getSeverity))
     activeRules.foreach(setParameters(_))
     profile

@@ -10,12 +10,12 @@
     </parent>
 
     <groupId>com.ncredinburgh</groupId>
-    <artifactId>sonar-scala-style</artifactId>
+    <artifactId>sonar-scalastyle</artifactId>
     <packaging>sonar-plugin</packaging>
     <version>0.0.1-SNAPSHOT</version>
 
-    <name>Sonar Scala Style Plugin</name>
-    <description>Enables analysis of Scala projects with Scala Style.</description>
+    <name>Sonar Scalastyle Plugin</name>
+    <description>Enables analysis of Scala projects with Scalastyle.</description>
     <inceptionYear>2014</inceptionYear>
 
     <licenses>
@@ -28,9 +28,9 @@
 
     <properties>
         <sonar.version>4.1</sonar.version>
-        <sonar.pluginKey>ScalaStyle</sonar.pluginKey>
-        <sonar.pluginName>Scala Style</sonar.pluginName>
-        <sonar.pluginClass>com.ncredinburgh.sonar.scalastyle.ScalaStylePlugin</sonar.pluginClass>
+        <sonar.pluginKey>Scalastyle</sonar.pluginKey>
+        <sonar.pluginName>Scalastyle</sonar.pluginName>
+        <sonar.pluginClass>com.ncredinburgh.sonar.scalastyle.ScalastylePlugin</sonar.pluginClass>
 
         <scala.version>2.10.4</scala.version>
         <scala.major.version>2.10</scala.major.version>

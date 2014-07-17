@@ -1,5 +1,5 @@
 /*
- * Sonar Scala Stlye Plugin
+ * Sonar Scalastyle Plugin
  * Copyright (C) 2014 All contributors
  *
  * This program is free software; you can redistribute it and/or
@@ -25,11 +25,11 @@ import scala.collection.JavaConversions._
 /**
  * Created by hc185053 on 12/06/2014.
  */
-class ScalaStyleRepositorySpec extends FlatSpec with Matchers with Inspectors {
+class ScalastyleRepositorySpec extends FlatSpec with Matchers with Inspectors {
 
-  val testee = new ScalaStyleRepository
+  val testee = new ScalastyleRepository
 
-  "a scala style repository" should "return a list of rules" in {
+  "a scalastyle repository" should "return a list of rules" in {
     assert(!testee.createRules.isEmpty)
   }
 
@@ -67,7 +67,7 @@ class ScalaStyleRepositorySpec extends FlatSpec with Matchers with Inspectors {
     rule.get.getParam("regex").getType shouldEqual "REGULAR_EXPRESSION"
   }
 
-  it should "default parameters to scala style preferred defaults" in {
+  it should "default parameters to scalastyle preferred defaults" in {
     val rule = testee.createRules.find(_.getKey == "org.scalastyle.scalariform.ParameterNumberChecker")
     rule.get.getParam("maxParameters").getDefaultValueAsInteger shouldEqual 8
   }

@@ -1,5 +1,5 @@
 /*
- * Sonar Scala Style Plugin
+ * Sonar Scalastyle Plugin
  * Copyright (C) 2014 All contributors
  *
  * This program is free software; you can redistribute it and/or
@@ -25,10 +25,10 @@ import org.sonar.api.PropertyType
 import scala.xml.Node
 
 /**
- * Provides access to the various .property and XML files that scala style provides
+ * Provides access to the various .property and XML files that Scalastyle provides
  * to describe its checkers.
  */
-object ScalaStyleResources {
+object ScalastyleResources {
 
   private val defaultConfig = xmlFromClassPath("/default_config.xml")
   private val definitions = xmlFromClassPath("/scalastyle_definition.xml")
@@ -37,7 +37,7 @@ object ScalaStyleResources {
 
   properties.load(fromClassPath("/scalastyle_messages.properties"))
 
-  // scala style does not provide descriptions for some checkers so add our own
+  // Scalastyle does not provide descriptions for some checkers so add our own
   properties.load(this.getClass.getResourceAsStream("/scalastyle_override_messages.properties"))
 
   def allDefinedRules: Seq[RepositoryRule] = for {

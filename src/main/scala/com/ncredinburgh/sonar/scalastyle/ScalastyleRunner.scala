@@ -1,5 +1,5 @@
 /*
- * Sonar Scala Style Plugin
+ * Sonar Scalastyle Plugin
  * Copyright (C) 2014 All contributors
  *
  * This program is free software; you can redistribute it and/or
@@ -34,10 +34,10 @@ import org.sonar.api.rules.ActiveRule
 import scala.collection.JavaConversions._
 
 /**
- * Runs ScalaStyle based on active rules
+ * Runs Scalastyle based on active rules
  */
-class ScalaStyleRunner(rp: RulesProfile) {
-  private val log = LoggerFactory.getLogger(classOf[ScalaStyleRunner])
+class ScalastyleRunner(rp: RulesProfile) {
+  private val log = LoggerFactory.getLogger(classOf[ScalastyleRunner])
 
   def run(encoding: String, files: java.util.List[File]): List[Message[FileSpec]] = {
     log.debug("Using config " + config)

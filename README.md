@@ -1,6 +1,6 @@
-# Sonar Scala Style Plugin
+# Sonar Scalastyle Plugin
 
-Wraps up scala style as a SonarQube plugin.
+Wraps up Scalastyle as a SonarQube plugin.
 
 http://www.scalastyle.org/
 

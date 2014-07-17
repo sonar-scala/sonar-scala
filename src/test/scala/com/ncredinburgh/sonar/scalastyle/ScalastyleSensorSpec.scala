@@ -1,5 +1,5 @@
 /*
- * Sonar Scala Stlye Plugin
+ * Sonar Scalastyle Plugin
  * Copyright (C) 2014 All contributors
  *
  * This program is free software; you can redistribute it and/or
@@ -42,19 +42,19 @@ import scala.collection.JavaConversions._
 /**
  * Created by keir on 13/06/14.
  */
-class ScalaStyleSensorSpec extends FlatSpec with Matchers with MockitoSugar {
+class ScalastyleSensorSpec extends FlatSpec with Matchers with MockitoSugar {
 
   trait Fixture {
     val fs = mock[ModuleFileSystem]
     val project = mock[Project]
-    val runner = mock[ScalaStyleRunner]
+    val runner = mock[ScalastyleRunner]
     val perspective = mock[ResourcePerspectives]
     val issuable = mock[Issuable]
     val issueBuilder = new DefaultIssueBuilder().componentKey("foo");
     val rf = mock[RuleFinder]
     val aRule = Rule.create("repo", "key")
 
-    val testee = new ScalaStyleSensor(perspective, runner, fs, rf)
+    val testee = new ScalastyleSensor(perspective, runner, fs, rf)
     val context = mock[SensorContext]
 
     when(runner.run(anyString, anyListOf(classOf[File]))).thenReturn(List())

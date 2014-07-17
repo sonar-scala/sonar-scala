@@ -1,5 +1,5 @@
 /*
- * Sonar Scala Style Plugin
+ * Sonar Scalastyle Plugin
  * Copyright (C) 2014 All contributors
  *
  * This program is free software; you can redistribute it and/or
@@ -24,21 +24,21 @@ import org.sonar.api.rules._
 import scala.collection.JavaConversions._
 
 /**
- * ScalaStyle rules repository - creates a rule for each checker shipped with ScalaStyle based
- * on the scalastyle_definition.xml file that ships with the ScalaStyle jar.
+ * Scalastyle rules repository - creates a rule for each checker shipped with Scalastyle based
+ * on the scalastyle_definition.xml file that ships with the Scalastyle jar.
  */
-class ScalaStyleRepository extends RuleRepository(Constants.RepositoryKey, Constants.ScalaKey) {
+class ScalastyleRepository extends RuleRepository(Constants.RepositoryKey, Constants.ScalaKey) {
 
-  private val log = LoggerFactory.getLogger(classOf[ScalaStyleRepository])
+  private val log = LoggerFactory.getLogger(classOf[ScalastyleRepository])
 
-  override def createRules: java.util.List[Rule] = ScalaStyleResources.allDefinedRules map (toRule)
+  override def createRules: java.util.List[Rule] = ScalastyleResources.allDefinedRules map (toRule)
 
   private def toRule(repoRule : RepositoryRule) = {
     val rule = Rule.create
     val key = repoRule.id
     rule.setRepositoryKey(Constants.RepositoryKey)
     rule.setKey(repoRule.clazz)
-    rule.setName(ScalaStyleResources.shortDescription(key))
+    rule.setName(ScalastyleResources.shortDescription(key))
     rule.setDescription(repoRule.description)
     rule.setConfigKey(key)
     rule.setSeverity(RulePriority.MAJOR)

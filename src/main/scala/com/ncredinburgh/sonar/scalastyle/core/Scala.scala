@@ -22,6 +22,6 @@ import com.ncredinburgh.sonar.scalastyle.Constants
 import org.sonar.api.config.Settings
 import org.sonar.api.resources.AbstractLanguage
 
-class ScalaLanguage(s: Settings) extends AbstractLanguage(Constants.ScalaKey, "Scala") {
+class Scala(s: Settings) extends AbstractLanguage(Constants.ScalaKey, "Scala") {
   override def getFileSuffixes: Array[String] = Array("scala")
 }

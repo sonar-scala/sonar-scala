@@ -18,7 +18,7 @@
  */
 package com.ncredinburgh.sonar.scalastyle
 
-import com.ncredinburgh.sonar.scalastyle.core.ScalaLanguage
+import com.ncredinburgh.sonar.scalastyle.core.Scala
 import org.scalatest.{Matchers, FlatSpec}
 
 import scala.collection.JavaConverters._
@@ -39,6 +39,6 @@ class ScalastylePluginSpec  extends FlatSpec with Matchers {
   }
 
   it should "provide a scala language" in {
-    assert (testee.getExtensions.asScala.exists(_ == classOf[ScalaLanguage]))
+    assert (testee.getExtensions.asScala.exists(_ == classOf[Scala]))
   }
 }

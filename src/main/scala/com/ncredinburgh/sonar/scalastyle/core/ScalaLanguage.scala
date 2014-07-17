@@ -18,19 +18,10 @@
  */
 package com.ncredinburgh.sonar.scalastyle.core
 
-import org.sonar.api.config.Settings;
-import org.sonar.api.resources.AbstractLanguage;
-import org.sonar.api.resources.Project;
+import com.ncredinburgh.sonar.scalastyle.Constants
+import org.sonar.api.config.Settings
+import org.sonar.api.resources.AbstractLanguage
 
-
-
- class ScalaLanguage(s : Settings) extends AbstractLanguage(ScalaLanguage.KEY, "Scala") {
-
-  override def getFileSuffixes : Array[String] = {
-    Array("scala")
-  }
-}
-
-object ScalaLanguage {
-  val KEY = "scala"
+class ScalaLanguage(s: Settings) extends AbstractLanguage(Constants.ScalaKey, "Scala") {
+  override def getFileSuffixes: Array[String] = Array("scala")
 }

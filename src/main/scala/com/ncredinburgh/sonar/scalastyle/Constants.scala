@@ -1,5 +1,5 @@
 /*
- * Sonar Scala Style Plugin
+ * Sonar Scalastyle Plugin
  * Copyright (C) 2014 All contributors
  *
  * This program is free software; you can redistribute it and/or
@@ -19,7 +19,7 @@
 package com.ncredinburgh.sonar.scalastyle
 
 object Constants {
-  val SCALA_KEY = "scala"
-  val REPOSITORY_KEY ="scala-style";
-  val PROFILE_NAME = "Scalastyle"
+  val ScalaKey = "scala"
+  val RepositoryKey = "scala-style"
+  val ProfileName = "Scalastyle"
 }

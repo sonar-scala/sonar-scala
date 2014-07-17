@@ -1,6 +1,6 @@
 /*
  * Sonar Scala Stlye Plugin
- * Copyright (C) 2011 - 2014 All contributors
+ * Copyright (C) 2014 All contributors
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -45,7 +45,6 @@ import scala.collection.JavaConversions._
 class ScalaStyleSensorSpec extends FlatSpec with Matchers with MockitoSugar {
 
   trait Fixture {
-
     val fs = mock[ModuleFileSystem]
     val project = mock[Project]
     val runner = mock[ScalaStyleRunner]
@@ -55,48 +54,43 @@ class ScalaStyleSensorSpec extends FlatSpec with Matchers with MockitoSugar {
     val rf = mock[RuleFinder]
     val aRule = Rule.create("repo", "key")
 
-    val testee = new ScalaStyleSensor(perspective,runner,fs,rf)
-    val context: SensorContext = mock[SensorContext]
+    val testee = new ScalaStyleSensor(perspective, runner, fs, rf)
+    val context = mock[SensorContext]
 
     when(runner.run(anyString, anyListOf(classOf[File]))).thenReturn(List())
-
     when(fs.files(any[FileQuery])).thenReturn(List())
     when(fs.sourceCharset()).thenReturn(StandardCharsets.UTF_8)
-
     when(perspective.as(any(), any(classOf[org.sonar.api.resources.Resource]))).thenReturn(issuable)
-
-    when(issuable.newIssueBuilder()).thenReturn(issueBuilder);
-
+    when(issuable.newIssueBuilder()).thenReturn(issueBuilder)
     when(rf.find(any[RuleQuery])).thenReturn(aRule)
-
   }
 
   "A Scalastyle Sensor" should "execute when the project have Scala files" in new Fixture {
     val scalaFiles = List(new File("foo"), new File("bar"))
     when(fs.files(any[FileQuery])).thenReturn(scalaFiles)
+
     assert( testee.shouldExecuteOnProject(project) )
   }
 
   it should "not execute when there isn't any Scala files" in new Fixture {
-    when(fs.files(FileQuery.onSource.onLanguage(Constants.SCALA_KEY))).thenReturn(List())
+    when(fs.files(FileQuery.onSource.onLanguage(Constants.ScalaKey))).thenReturn(List())
+
     assert( !testee.shouldExecuteOnProject(project) )
   }
 
   it should "analyse all scala source files in project" in new Fixture {
     val files = List(new File("foo"), new File("bar"))
     when(fs.files(any[FileQuery])).thenReturn(files)
-
-    testee.analyse(project, context);
+    testee.analyse(project, context)
 
     verify(runner).run(StandardCharsets.UTF_8.name(), files)
   }
 
   it should "report scalastyle errors as SonarQube issues" in new Fixture {
-    val anError = new StyleError[FileSpec](new RealFileSpec("foo", None),classOf[ForBraceChecker], "foo", WarningLevel, List(), None)
+    val anError = new StyleError[FileSpec](new RealFileSpec("foo", None), classOf[ForBraceChecker], "foo", WarningLevel, List(), None)
     when(runner.run(anyString, anyListOf(classOf[File]))).thenReturn(List(anError))
-    testee.analyse(project, context);
+    testee.analyse(project, context)
 
-    verify(issuable).addIssue(any[Issue]);
+    verify(issuable).addIssue(any[Issue])
   }
-
 }

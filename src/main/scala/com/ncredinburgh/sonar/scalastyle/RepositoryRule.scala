@@ -22,8 +22,8 @@ import org.sonar.api.PropertyType
 
 case class RepositoryRule(clazz : String, val id : String, val description : String, val params : List[Param])
 
-case class Param(val name : String, val t : PropertyType, val desc : String, val defaultVal : String) {
-  def typeName : String = t.name()
+case class Param(val name: String, val t: PropertyType, val desc: String, val defaultVal: String) {
+  def typeName: String = t.name()
 }
 
 

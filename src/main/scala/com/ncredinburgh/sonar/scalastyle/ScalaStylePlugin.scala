@@ -17,6 +17,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
 package com.ncredinburgh.sonar.scalastyle
+
 import org.sonar.api.SonarPlugin
 import scala.collection.mutable.ListBuffer
 import scala.collection.JavaConversions._

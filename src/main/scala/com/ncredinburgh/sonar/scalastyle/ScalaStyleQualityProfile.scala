@@ -35,10 +35,11 @@ class ScalaStyleQualityProfile(scalaStyleRepository: ScalaStyleRepository) exten
   private val defaultConfigRules = xmlFromClassPath("/default_config.xml") \\ "scalastyle" \ "check"
 
   override def createProfile(validation: ValidationMessages): RulesProfile = {
-    val profile = RulesProfile.create(Constants.PROFILE_NAME, Constants.SCALA_KEY)
-    val defaultKeys = defaultConfigRules.filter(x => (x \ "@enabled").text.equals("true")).map(x => (x \ "@class").text)
-    val defaultRules = scalaStyleRepository.createRules.filter(rule => defaultKeys.contains(rule.getKey) )
-    val activeRules = defaultRules.map(rule => profile.activateRule(rule, rule.getSeverity))
+    val profile = RulesProfile.create(Constants.ProfileName, Constants.ScalaKey)
+    val enabledRules = defaultConfigRules filter (x => (x \ "@enabled").text.equals("true"))
+    val defaultKeys = enabledRules map (x => (x \ "@class").text)
+    val defaultRules = scalaStyleRepository.createRules filter (rule => defaultKeys.contains(rule.getKey) )
+    val activeRules = defaultRules map (rule => profile.activateRule(rule, rule.getSeverity))
     activeRules.foreach(setParameters(_))
     profile
   }
@@ -53,5 +54,5 @@ class ScalaStyleQualityProfile(scalaStyleRepository: ScalaStyleRepository) exten
     }
   }
 
-  private def xmlFromClassPath(s : String) = XML.load(classOf[ScalastyleError].getResourceAsStream(s))
+  private def xmlFromClassPath(s: String) = XML.load(classOf[ScalastyleError].getResourceAsStream(s))
 }

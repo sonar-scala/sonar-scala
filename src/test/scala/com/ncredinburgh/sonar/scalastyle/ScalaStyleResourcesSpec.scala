@@ -1,6 +1,6 @@
 /*
  * Sonar Scala Stlye Plugin
- * Copyright (C) 2011 - 2014 All contributors
+ * Copyright (C) 2014 All contributors
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public

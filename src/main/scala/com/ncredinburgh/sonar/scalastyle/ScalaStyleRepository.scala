@@ -27,30 +27,29 @@ import scala.collection.JavaConversions._
  * ScalaStyle rules repository - creates a rule for each checker shipped with ScalaStyle based
  * on the scalastyle_definition.xml file that ships with the ScalaStyle jar.
  */
-class ScalaStyleRepository extends RuleRepository(Constants.REPOSITORY_KEY, Constants.SCALA_KEY) {
+class ScalaStyleRepository extends RuleRepository(Constants.RepositoryKey, Constants.ScalaKey) {
 
   private val log = LoggerFactory.getLogger(classOf[ScalaStyleRepository])
 
-  override def createRules() : java.util.List[Rule] = ScalaStyleResources.allDefinedRules.map(toRule)
+  override def createRules: java.util.List[Rule] = ScalaStyleResources.allDefinedRules map (toRule)
 
   private def toRule(repoRule : RepositoryRule) = {
     val rule = Rule.create
     val key = repoRule.id
-    rule.setRepositoryKey(Constants.REPOSITORY_KEY)
+    rule.setRepositoryKey(Constants.RepositoryKey)
     rule.setKey(repoRule.clazz)
     rule.setName(ScalaStyleResources.shortDescription(key))
     rule.setDescription(repoRule.description)
-    rule.setConfigKey(key); // is this needed?
-    rule.setSeverity(RulePriority.MAJOR);
+    rule.setConfigKey(key)
+    rule.setSeverity(RulePriority.MAJOR)
 
-    val params      = repoRule.params.map{ (r : Param) => rule.createParameter()
-                                                  .setDefaultValue(r.defaultVal)
-                                                  .setType(r.typeName)
-                                                  .setKey(r.name)
-                                                  .setDescription(r.desc)}
+    val params = repoRule.params map { (r: Param) => rule.createParameter
+                                                      .setDefaultValue(r.defaultVal)
+                                                      .setType(r.typeName)
+                                                      .setKey(r.name)
+                                                      .setDescription(r.desc)}
 
-
-    params.foreach( p => log.debug("Created param for " + rule.getKey + " : " + p) )
+    params foreach ( p => log.debug("Created param for " + rule.getKey + " : " + p) )
 
     rule
   }

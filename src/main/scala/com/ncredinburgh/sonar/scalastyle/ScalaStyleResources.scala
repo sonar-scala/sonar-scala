@@ -18,6 +18,7 @@
  */
 package com.ncredinburgh.sonar.scalastyle
 
+import java.io.InputStream
 import java.util.Properties
 import org.scalastyle.ScalastyleError
 import org.sonar.api.PropertyType
@@ -43,11 +44,11 @@ object ScalaStyleResources {
     checker <- definitions \\ "scalastyle-definition" \ "checker"
     id = (checker \ "@id").text.trim
     clazz = (checker \ "@class").text.trim
-    params = (checker \ "parameters" \ "parameter").map(n => Param(nodeToParameterKey(n), nodeToPropertyType(n), "", nodeToDefaultValue(n)))
+    params = (checker \ "parameters" \ "parameter") map (n => Param(nodeToParameterKey(n), nodeToPropertyType(n), "", nodeToDefaultValue(n)))
   } yield RepositoryRule(clazz, id, longDescription(id), params.toList)
 
 
-  def longDescription(key: String) : String  = {
+  def longDescription(key: String): String  = {
     val doc = descriptionFromDocumentation(key)
     if (doc.isEmpty) {
       shortDescription(key)
@@ -56,27 +57,23 @@ object ScalaStyleResources {
     }
   }
 
-  def shortDescription(key: String) : String = {
-    getMessage(key + ".description")
-  }
+  def shortDescription(key: String): String = getMessage(key + ".description")
 
   private def descriptionFromDocumentation(key: String): String = {
     val strings = for {
       check <- documentation \\ "scalastyle-documentation" \ "check" if (check \ "@id").text == key
       node <- check \ "justification"
-    } yield {
-      node.text.trim
-    }
+    } yield node.text.trim
 
     strings.mkString("\n")
   }
 
 
-  private def getMessage(key: String) = properties.getProperty(key)
+  private def getMessage(key: String): String = properties.getProperty(key)
 
-  private def nodeToParameterKey(n: Node) = (n \ "@name").text.trim
+  private def nodeToParameterKey(n: Node): String = (n \ "@name").text.trim
 
-  private def nodeToPropertyType(n: Node) = (n \ "@type").text match {
+  private def nodeToPropertyType(n: Node): PropertyType = (n \ "@type").text match {
     case "string" => if ((n \ "@name").text == "regex") {
       PropertyType.REGULAR_EXPRESSION
     } else {
@@ -87,10 +84,9 @@ object ScalaStyleResources {
     case _ => PropertyType.STRING
   }
 
-  private def nodeToDefaultValue(n: Node) = (n \ "@default").text.trim
+  private def nodeToDefaultValue(n: Node): String = (n \ "@default").text.trim
 
-  private def xmlFromClassPath(s : String) =  scala.xml.XML.load(fromClassPath(s))
+  private def xmlFromClassPath(s: String) =  scala.xml.XML.load(fromClassPath(s))
 
-  private def fromClassPath(s : String) = classOf[ScalastyleError].getResourceAsStream(s)
-
+  private def fromClassPath(s: String): InputStream = classOf[ScalastyleError].getResourceAsStream(s)
 }

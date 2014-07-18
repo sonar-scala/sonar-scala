@@ -21,8 +21,6 @@ package com.ncredinburgh.sonar.scalastyle
 import com.ncredinburgh.sonar.scalastyle.core.Scala
 import org.scalatest.{Matchers, FlatSpec}
 
-import scala.collection.JavaConverters._
-
 /**
  * Created by hc185053 on 12/06/2014.
  */
@@ -31,14 +29,18 @@ class ScalastylePluginSpec  extends FlatSpec with Matchers {
   val testee = new ScalastylePlugin
 
   "a scalastyle plugin" should "provide a scalastyle sensor" in {
-    assert (testee.getExtensions.asScala.exists(_ == classOf[ScalastyleSensor]))
+    assert(testee.getExtensions.contains(classOf[ScalastyleSensor]))
   }
 
   it should "provide a scalastyle repository" in {
-    assert (testee.getExtensions.asScala.exists(_ == classOf[ScalastyleRepository]))
+    assert(testee.getExtensions.contains(classOf[ScalastyleRepository]))
   }
 
   it should "provide a scala language" in {
-    assert (testee.getExtensions.asScala.exists(_ == classOf[Scala]))
+    assert(testee.getExtensions.contains(classOf[Scala]))
+  }
+
+  it should "provide a scalastyle quality profile" in {
+    assert(testee.getExtensions.contains(classOf[ScalastyleQualityProfile]))
   }
 }

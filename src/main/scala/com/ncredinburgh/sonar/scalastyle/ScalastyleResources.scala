@@ -22,7 +22,7 @@ import java.io.InputStream
 import java.util.Properties
 import org.scalastyle.ScalastyleError
 import org.sonar.api.PropertyType
-import scala.xml.Node
+import scala.xml.{Elem, XML, Node}
 
 /**
  * Provides access to the various .property and XML files that Scalastyle provides
@@ -47,33 +47,25 @@ object ScalastyleResources {
     params = (checker \ "parameters" \ "parameter") map (n => Param(nodeToParameterKey(n), nodeToPropertyType(n), "", nodeToDefaultValue(n)))
   } yield RepositoryRule(clazz, id, longDescription(id), params.toList)
 
-
-  def longDescription(key: String): String  = {
-    val doc = descriptionFromDocumentation(key)
-    if (doc.isEmpty) {
-      shortDescription(key)
-    } else {
-      doc
-    }
-  }
+  def longDescription(key: String): String = descriptionFromDocumentation(key) getOrElse shortDescription(key)
 
   def shortDescription(key: String): String = getMessage(key + ".description")
 
-  private def descriptionFromDocumentation(key: String): String = {
-    val strings = for {
-      check <- documentation \\ "scalastyle-documentation" \ "check" if (check \ "@id").text == key
-      node <- check \ "justification"
-    } yield node.text.trim
-
-    strings.mkString("\n")
+  private def descriptionFromDocumentation(key: String): Option[String] = {
+    documentation \\ "scalastyle-documentation" \ "check" find { _ \\ "@id" exists (_.text == key) } match {
+      case Some(node) => {
+        val description =  (node \ "justification").text.trim
+        if (description != "") Some(description) else None
+      }
+      case None => None
+    }
   }
-
 
   private def getMessage(key: String): String = properties.getProperty(key)
 
   private def nodeToParameterKey(n: Node): String = (n \ "@name").text.trim
 
-  private def nodeToPropertyType(n: Node): PropertyType = (n \ "@type").text match {
+  private def nodeToPropertyType(n: Node): PropertyType = (n \ "@type").text.trim match {
     case "string" => if ((n \ "@name").text == "regex") {
       PropertyType.REGULAR_EXPRESSION
     } else {
@@ -86,7 +78,7 @@ object ScalastyleResources {
 
   private def nodeToDefaultValue(n: Node): String = (n \ "@default").text.trim
 
-  private def xmlFromClassPath(s: String) =  scala.xml.XML.load(fromClassPath(s))
+  private def xmlFromClassPath(s: String): Elem =  XML.load(fromClassPath(s))
 
   private def fromClassPath(s: String): InputStream = classOf[ScalastyleError].getResourceAsStream(s)
 }

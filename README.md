@@ -6,7 +6,7 @@ http://www.scalastyle.org/
 
 ### Instructions
 
-* Download and unzip SonarQube [4.3.2](http://dist.sonar.codehaus.org/sonarqube-4.3.2.zip) or [4.4-RC2](http://dist.sonar.codehaus.org/sonarqube-4.4-RC2.zip).
+* Download and unzip SonarQube [4.3.2](http://dist.sonar.codehaus.org/sonarqube-4.3.2.zip) or [4.4-RC3](http://dist.sonar.codehaus.org/sonarqube-4.4-RC3.zip).
 * Download and unzip [Sonar Runner](http://repo1.maven.org/maven2/org/codehaus/sonar/runner/sonar-runner-dist/2.4/sonar-runner-dist-2.4.zip).
 * Download the [Sonar Scalastyle Plugin](https://github.com/emrehan/sonar-scalastyle/releases/download/v0.0.1-SNAPSHOT/sonar-scalastyle-plugin-0.0.1-SNAPSHOT.jar).
 * Copy the plugin to `extensions/plugins` directory of SonarQube.

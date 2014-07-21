@@ -25,6 +25,7 @@ import org.sonar.api.component.ResourcePerspectives
 import org.sonar.api.issue.{Issuable, Issue}
 import org.sonar.api.profiles.RulesProfile
 import org.sonar.api.resources.Project
+import org.sonar.api.rule.RuleKey
 import org.sonar.api.rules.{Rule, RuleFinder, RuleQuery}
 import org.sonar.api.scan.filesystem.{FileQuery, ModuleFileSystem}
 
@@ -41,18 +42,20 @@ class ScalastyleSensor(resourcePerspectives: ResourcePerspectives,
   extends Sensor {
 
   def this(resourcePerspectives: ResourcePerspectives,
-      rp: RulesProfile,
-      moduleFileSystem: ModuleFileSystem,
-      rf: RuleFinder) = this(resourcePerspectives, new ScalastyleRunner(rp), moduleFileSystem, rf)
+           rp: RulesProfile,
+           moduleFileSystem: ModuleFileSystem,
+           rf: RuleFinder) = this(resourcePerspectives, new ScalastyleRunner(rp), moduleFileSystem, rf)
+
+  val ScalaFileQuery = FileQuery.onSource.onLanguage(Constants.ScalaKey)
 
   private val log = LoggerFactory.getLogger(classOf[ScalastyleSensor])
 
   override def shouldExecuteOnProject(project: Project): Boolean = {
-    moduleFileSystem.files(FileQuery.onSource.onLanguage(Constants.ScalaKey)).nonEmpty
+    moduleFileSystem.files(ScalaFileQuery).nonEmpty
   }
 
   override def analyse(project: Project, context: SensorContext): Unit = {
-    val files = moduleFileSystem.files(FileQuery.onSource.onLanguage(Constants.ScalaKey))
+    val files = moduleFileSystem.files(ScalaFileQuery)
     val encoding = moduleFileSystem.sourceCharset.name
     val messages = runner.run(encoding, files.toList)
 

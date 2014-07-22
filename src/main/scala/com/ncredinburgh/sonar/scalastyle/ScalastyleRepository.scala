@@ -37,6 +37,7 @@ class ScalastyleRepository extends RuleRepository(Constants.RepositoryKey, Const
     val rule = Rule.create
     val key = repoRule.id
     rule.setRepositoryKey(Constants.RepositoryKey)
+    rule.setLanguage(Constants.ScalaKey)
     rule.setKey(repoRule.clazz)
     rule.setName(ScalastyleResources.shortDescription(key))
     rule.setDescription(repoRule.description)

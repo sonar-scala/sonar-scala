@@ -18,10 +18,11 @@
  */
 package com.ncredinburgh.sonar.scalastyle
 
-import org.scalatest.{PrivateMethodTester, Inspectors, Matchers, FlatSpec}
-
 import java.io.InputStream
+
+import org.scalatest.{FlatSpec, Inspectors, Matchers, PrivateMethodTester}
 import org.sonar.api.PropertyType
+
 import scala.xml.Elem
 
 /**

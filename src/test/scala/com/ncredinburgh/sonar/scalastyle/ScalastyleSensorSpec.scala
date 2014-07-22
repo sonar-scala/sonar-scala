@@ -24,14 +24,13 @@ import java.nio.charset.StandardCharsets
 import org.mockito.Matchers._
 import org.mockito.Mockito._
 import org.scalastyle._
-import org.scalastyle.scalariform.{ForBraceChecker, IfBraceChecker}
 import org.scalastyle.file.FileLengthChecker
+import org.scalastyle.scalariform.{ForBraceChecker, IfBraceChecker}
 import org.scalatest._
 import org.scalatest.mock.MockitoSugar
 import org.sonar.api.batch.SensorContext
 import org.sonar.api.component.ResourcePerspectives
-import org.sonar.api.issue.Issue
-import org.sonar.api.issue.Issuable
+import org.sonar.api.issue.{Issuable, Issue}
 import org.sonar.api.resources.Project
 import org.sonar.api.rules.{Rule, RuleFinder, RuleQuery}
 import org.sonar.api.scan.filesystem.{FileQuery, ModuleFileSystem}

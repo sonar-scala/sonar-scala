@@ -19,12 +19,12 @@
 package com.ncredinburgh.sonar.scalastyle
 
 import com.ncredinburgh.sonar.scalastyle.core.Scala
-import org.scalatest.{Matchers, FlatSpec}
+import org.scalatest.{FlatSpec, Matchers}
 
 /**
  * Created by hc185053 on 12/06/2014.
  */
-class ScalastylePluginSpec  extends FlatSpec with Matchers {
+class ScalastylePluginSpec extends FlatSpec with Matchers {
 
   val testee = new ScalastylePlugin
 

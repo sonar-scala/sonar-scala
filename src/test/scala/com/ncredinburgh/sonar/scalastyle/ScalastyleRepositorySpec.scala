@@ -19,7 +19,8 @@
 package com.ncredinburgh.sonar.scalastyle
 
 import org.scalatest._
-import org.sonar.api.rules.{RulePriority, Rule}
+import org.sonar.api.rules.{Rule, RulePriority}
+
 import scala.collection.JavaConversions._
 
 /**

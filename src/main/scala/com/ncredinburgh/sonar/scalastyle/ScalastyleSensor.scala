@@ -71,7 +71,7 @@ class ScalastyleSensor(resourcePerspectives: ResourcePerspectives,
   private def processError(error: StyleError[FileSpec]): Unit = {
     log.debug("Error message for rule " + error.clazz.getName)
 
-    val ioFile = new java.io.File(error.fileSpec.name) //We assume that the filespec name is an absolute path
+    val ioFile = new java.io.File(error.fileSpec.name) // We assume that the filespec name is an absolute path
     val resource = org.sonar.api.resources.File.fromIOFile(ioFile, moduleFileSystem.sourceDirs)
     val issuable = Option(resourcePerspectives.as(classOf[Issuable], resource))
     val rule: Rule = findSonarRuleForError(error)

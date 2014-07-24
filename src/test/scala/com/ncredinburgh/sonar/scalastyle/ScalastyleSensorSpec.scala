@@ -106,8 +106,9 @@ class ScalastyleSensorSpec extends FlatSpec with Matchers with MockitoSugar with
   }
 
   it should "report a scalastyle error as a SonarQube issue" in new Fixture {
-    val anError = new StyleError[FileSpec](new RealFileSpec("foo", None), classOf[ForBraceChecker], "org.scalastyle.scalariform.ForBraceChecker", WarningLevel, List(), None)
-    when(runner.run(anyString, anyListOf(classOf[File]))).thenReturn(List(anError))
+    val error = new StyleError[FileSpec](new RealFileSpec("foo", None), classOf[ForBraceChecker],
+      "org.scalastyle.scalariform.ForBraceChecker", WarningLevel, List(), None)
+    when(runner.run(anyString, anyListOf(classOf[File]))).thenReturn(List(error))
 
     testee.analyse(project, context)
 
@@ -115,8 +116,10 @@ class ScalastyleSensorSpec extends FlatSpec with Matchers with MockitoSugar with
   }
 
   it should "report scalastyle errors as SonarQube issues" in new Fixture {
-    val error1 = new StyleError[FileSpec](new RealFileSpec("foo", None), classOf[FileLengthChecker], "org.scalastyle.file.FileLengthChecker", WarningLevel, List(), None)
-    val error2 = new StyleError[FileSpec](new RealFileSpec("bar", None), classOf[IfBraceChecker], "org.scalastyle.scalariform.IfBraceChecker", WarningLevel, List(), None)
+    val error1 = new StyleError[FileSpec](new RealFileSpec("foo", None), classOf[FileLengthChecker],
+      "org.scalastyle.file.FileLengthChecker", WarningLevel, List(), None)
+    val error2 = new StyleError[FileSpec](new RealFileSpec("bar", None), classOf[IfBraceChecker],
+      "org.scalastyle.scalariform.IfBraceChecker", WarningLevel, List(), None)
     when(runner.run(anyString, anyListOf(classOf[File]))).thenReturn(List(error1, error2))
 
     testee.analyse(project, context)
@@ -126,7 +129,8 @@ class ScalastyleSensorSpec extends FlatSpec with Matchers with MockitoSugar with
 
   it should "find sonar rule for error" in new Fixture {
     val findSonarRuleForError = PrivateMethod[Rule]('findSonarRuleForError)
-    val error = new StyleError[FileSpec](new RealFileSpec("foo", None), classOf[FileLengthChecker], "org.scalastyle.file.FileLengthChecker", WarningLevel, List(), None)
+    val error = new StyleError[FileSpec](new RealFileSpec("foo", None), classOf[FileLengthChecker],
+      "org.scalastyle.file.FileLengthChecker", WarningLevel, List(), None)
 
     val rule = testee invokePrivate findSonarRuleForError(error)
 

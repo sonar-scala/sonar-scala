@@ -1,3 +1,21 @@
+/*
+ * Sonar Scalastyle Plugin
+ * Copyright (C) 2014 All contributors
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
+ */
 package com.ncredinburgh.sonar.scalastyle
 
 import java.io.File
@@ -12,6 +30,9 @@ import org.sonar.api.rules.{Rule, RulePriority}
 
 import scala.collection.JavaConversions._
 
+/**
+ * Tests ScalastyleRunner
+ */
 class ScalastyleRunnerSpec extends FlatSpec with Matchers with MockitoSugar with PrivateMethodTester {
 
   trait Fixture {
@@ -26,7 +47,7 @@ class ScalastyleRunnerSpec extends FlatSpec with Matchers with MockitoSugar with
 
   "a scalastyle runner" should "report StyleError messages if there are rule violations" in new Fixture {
     val files = List(new File("src/test/resources/ScalaFile1.scala"))
-    
+
     val messages = testeeSpy.run(charset, files)
 
     messages.length shouldEqual 5
@@ -39,7 +60,7 @@ class ScalastyleRunnerSpec extends FlatSpec with Matchers with MockitoSugar with
 
   it should "not report StyleError messages if there are no violations" in new Fixture {
     val files = List(new File("src/test/resources/ScalaFile2.scala"))
-    
+
     val messages = testeeSpy.run(charset, files)
 
     messages.length shouldEqual 4
@@ -51,9 +72,9 @@ class ScalastyleRunnerSpec extends FlatSpec with Matchers with MockitoSugar with
 
   it should "be able to run several violations" in new Fixture {
     val files = List(new File("src/test/resources/ScalaFile1.scala"), new File("src/test/resources/ScalaFile2.scala"))
-    
+
     val messages = testeeSpy.run(charset, files)
-    
+
     messages.length shouldEqual 7
     messages(0).toString shouldEqual "StartWork()"
     messages(1).toString shouldEqual "StartFile(/Users/emrehantuzun/Desktop/sonar-scalastyle/src/test/resources/ScalaFile1.scala)"
@@ -90,7 +111,7 @@ class ScalastyleRunnerSpec extends FlatSpec with Matchers with MockitoSugar with
     val activeRule = profile.activateRule(rule, rule.getSeverity)
     activeRule.setParameter("allowed", "1")
     activeRule.setParameter("ignoreRegex", "^&quot;&quot;$")
-    
+
     val checker = testee invokePrivate ruleToChecker(activeRule)
     val expectedChecker = ConfigurationChecker(className, ErrorLevel, true, Map("allowed" -> "1", "ignoreRegex" -> "^&quot;&quot;$"), None, None)
 

@@ -30,7 +30,6 @@ import scala.xml.{Elem, XML, Node}
  */
 object ScalastyleResources {
 
-  private val defaultConfig = xmlFromClassPath("/default_config.xml")
   private val definitions = xmlFromClassPath("/scalastyle_definition.xml")
   private val documentation = xmlFromClassPath("/scalastyle_documentation.xml")
   private val properties = new Properties()
@@ -41,11 +40,20 @@ object ScalastyleResources {
   properties.load(this.getClass.getResourceAsStream("/scalastyle_override_messages.properties"))
 
   def allDefinedRules: Seq[RepositoryRule] = for {
-    checker <- definitions \\ "scalastyle-definition" \ "checker"
-    id = (checker \ "@id").text.trim
-    clazz = (checker \ "@class").text.trim
-    params = (checker \ "parameters" \ "parameter") map (n => Param(nodeToParameterKey(n), nodeToPropertyType(n), "", nodeToDefaultValue(n)))
-  } yield RepositoryRule(clazz, id, longDescription(id), params.toList)
+    checker <- definitions \\ "checker"
+    clazz = (checker \ "@class").text
+    id = (checker \ "@id").text
+    longDesc = longDescription(id)
+    params = nodeToParams(checker, id)
+  } yield RepositoryRule(clazz, id, longDesc, params)
+
+  def nodeToParams(checker: Node, id: String): List[Param] = for {
+    parameter <- (checker \\ "parameter").toList
+    key = nodeToParameterKey(parameter)
+    propertyType = nodeToPropertyType(parameter)
+    description = nodeToPropertyDescription(parameter, id)
+    defaultValue = nodeToDefaultValue(parameter)
+  } yield Param(key, propertyType, description, defaultValue)
 
   def longDescription(key: String): String = descriptionFromDocumentation(key) getOrElse shortDescription(key)
 
@@ -68,12 +76,19 @@ object ScalastyleResources {
   private def nodeToPropertyType(n: Node): PropertyType = (n \ "@type").text.trim match {
     case "string" => if ((n \ "@name").text == "regex") {
       PropertyType.REGULAR_EXPRESSION
+    } else if ((n \ "@name").text == "header") {
+      PropertyType.TEXT
     } else {
       PropertyType.STRING
     }
     case "integer" => PropertyType.INTEGER
     case "boolean" => PropertyType.BOOLEAN
     case _ => PropertyType.STRING
+  }
+
+  private def nodeToPropertyDescription(node: Node, id: String): String = {
+    val key = nodeToParameterKey(node)
+    getMessage(id + "." + key + ".description")
   }
 
   private def nodeToDefaultValue(n: Node): String = (n \ "@default").text.trim

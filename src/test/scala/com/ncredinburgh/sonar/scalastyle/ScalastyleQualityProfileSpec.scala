@@ -25,6 +25,9 @@ import org.sonar.api.utils.ValidationMessages
 
 import scala.collection.JavaConversions._
 
+/**
+ * Tests ScalastyleQualityProfile
+ */
 class ScalastyleQualityProfileSpec extends FlatSpec with Matchers with MockitoSugar {
   trait Fixture {
     val scalastyleRepository = new ScalastyleRepository

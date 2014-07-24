@@ -24,7 +24,7 @@ import org.sonar.api.rules.{Rule, RulePriority}
 import scala.collection.JavaConversions._
 
 /**
- * Created by hc185053 on 12/06/2014.
+ * Tests ScalastyleRepository
  */
 class ScalastyleRepositorySpec extends FlatSpec with Matchers with Inspectors {
 

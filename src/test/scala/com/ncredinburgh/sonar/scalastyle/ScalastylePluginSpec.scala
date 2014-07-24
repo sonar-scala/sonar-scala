@@ -22,7 +22,7 @@ import com.ncredinburgh.sonar.scalastyle.core.Scala
 import org.scalatest.{FlatSpec, Matchers}
 
 /**
- * Created by hc185053 on 12/06/2014.
+ * Tests ScalastylePlugin
  */
 class ScalastylePluginSpec extends FlatSpec with Matchers {
 

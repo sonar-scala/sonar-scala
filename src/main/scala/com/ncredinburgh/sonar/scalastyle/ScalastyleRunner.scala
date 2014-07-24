@@ -34,7 +34,7 @@ import org.sonar.api.rules.ActiveRule
 import scala.collection.JavaConversions._
 
 /**
- * Runs Scalastyle based on active rules
+ * Runs Scalastyle based on active rules in the given RulesProfile
  */
 class ScalastyleRunner(rp: RulesProfile) {
   private val log = LoggerFactory.getLogger(classOf[ScalastyleRunner])

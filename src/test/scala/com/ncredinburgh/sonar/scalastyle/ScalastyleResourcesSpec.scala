@@ -26,7 +26,7 @@ import org.sonar.api.PropertyType
 import scala.xml.Elem
 
 /**
- * Created by hc185053 on 16/06/2014.
+ * Tests ScalastyleResources
  */
 class ScalastyleResourcesSpec  extends FlatSpec with Matchers with Inspectors with PrivateMethodTester {
 
@@ -57,7 +57,8 @@ class ScalastyleResourcesSpec  extends FlatSpec with Matchers with Inspectors wi
   }
 
   "the configuration" should "allow access to description in documentation for a checker" in {
-    ScalastyleResources.longDescription("line.size.limit") shouldEqual "Lines that are too long can be hard to read and horizontal scrolling is annoying."
+    ScalastyleResources.longDescription("line.size.limit") shouldEqual
+      "Lines that are too long can be hard to read and horizontal scrolling is annoying."
   }
 
   it should "return all defined checkers" in {
@@ -84,7 +85,7 @@ class ScalastyleResourcesSpec  extends FlatSpec with Matchers with Inspectors wi
   }
 
   it should "get long description from documentation" in {
-    ScalastyleResources.longDescription("magic.number") shouldEqual 
+    ScalastyleResources.longDescription("magic.number") shouldEqual
       "Replacing a magic number with a named constant can make code easier to read and understand, and can avoid some subtle bugs."
 
     // In case no long description found, return the short description

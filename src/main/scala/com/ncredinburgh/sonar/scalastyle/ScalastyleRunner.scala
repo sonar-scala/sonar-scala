@@ -46,13 +46,13 @@ class ScalastyleRunner(rp: RulesProfile) {
 
     val fileSpecs = Directory.getFilesAsJava(Some(encoding), files)
     val messages = new ScalastyleChecker[FileSpec]().checkFiles(config, fileSpecs)
-    
+
     // only errors and exceptions are of interest
     messages.collect { _ match {
-     case e: StyleError[_] => e 
+     case e: StyleError[_] => e
      case ex: StyleException[_] => ex
    }}
-    
+
   }
 
   def config: ScalastyleConfiguration = {

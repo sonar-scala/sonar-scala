@@ -49,8 +49,8 @@ class ScalastyleRunnerSpec extends FlatSpec with Matchers with MockitoSugar with
   "a scalastyle runner" should "report StyleError messages if there are rule violations" in new Fixture {
     val files = List(new File("src/test/resources/ScalaFile1.scala"))
 
-    val messages = testeeSpy.run(charset, files).map(_.toString) 
-    
+    val messages = testeeSpy.run(charset, files).map(_.toString)
+
     messages should contain ("StyleError key=header.matches args=List() lineNumber=Some(1) column=None customMessage=None")
 
   }

@@ -1,5 +1,5 @@
 /*
- * Sonar Scala Style Plugin
+ * Sonar Scalastyle Plugin
  * Copyright (C) 2014 All contributors
  *
  * This program is free software; you can redistribute it and/or
@@ -18,19 +18,15 @@
  */
 package com.ncredinburgh.sonar.scalastyle.core
 
-import org.sonar.api.config.Settings;
-import org.sonar.api.resources.AbstractLanguage;
-import org.sonar.api.resources.Project;
+import com.ncredinburgh.sonar.scalastyle.Constants
+import org.sonar.api.config.Settings
+import org.sonar.api.resources.AbstractLanguage
 
-
-
- class ScalaLanguage(s : Settings) extends AbstractLanguage(ScalaLanguage.KEY, "Scala") {
-
-  override def getFileSuffixes : Array[String] = {
-    Array("scala")
-  }
-}
-
-object ScalaLanguage {
-  val KEY = "scala"
+/**
+ * Defines Scala as a language for SonarQube.
+ * It creates two Scala languages if used with the Sonar Scala Plugin.
+ * When the Sonar Scala Plugin relased this class should be deleted and the plugin should depend on it.
+ */
+class Scala(s: Settings) extends AbstractLanguage(Constants.ScalaKey, "Scala") {
+  override def getFileSuffixes: Array[String] = Array("scala")
 }

@@ -1,5 +1,5 @@
 /*
- * Sonar Scala Style Plugin
+ * Sonar Scalastyle Plugin
  * Copyright (C) 2014 All contributors
  *
  * This program is free software; you can redistribute it and/or
@@ -17,21 +17,22 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
 package com.ncredinburgh.sonar.scalastyle
+
 import org.sonar.api.SonarPlugin
 import scala.collection.mutable.ListBuffer
 import scala.collection.JavaConversions._
 import org.sonar.api.Extension
-import com.ncredinburgh.sonar.scalastyle.core.{ScalaSourceImporter, ScalaLanguage}
+import com.ncredinburgh.sonar.scalastyle.core.Scala
 
 /**
  * Plugin entry point.
  */
-class ScalaStylePlugin extends SonarPlugin {
+class ScalastylePlugin extends SonarPlugin {
   override def getExtensions: java.util.List[Class[_ <: Extension]] = ListBuffer(
-    classOf[ScalaLanguage],
-    classOf[ScalaSourceImporter],
-    classOf[ScalaStyleRepository],
-    classOf[ScalaStyleSensor]
+    classOf[Scala],
+    classOf[ScalastyleRepository],
+    classOf[ScalastyleQualityProfile],
+    classOf[ScalastyleSensor]
   )
 
   override val toString = getClass.getSimpleName

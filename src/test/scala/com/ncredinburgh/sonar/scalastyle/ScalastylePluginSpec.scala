@@ -1,5 +1,5 @@
 /*
- * Sonar Scala Style Plugin
+ * Sonar Scalastyle Plugin
  * Copyright (C) 2014 All contributors
  *
  * This program is free software; you can redistribute it and/or
@@ -16,24 +16,31 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package com.ncredinburgh.sonar.scalastyle.core
+package com.ncredinburgh.sonar.scalastyle
+
+import com.ncredinburgh.sonar.scalastyle.core.Scala
+import org.scalatest.{FlatSpec, Matchers}
 
 /**
- * Created by hc185053 on 13/06/2014.
+ * Tests ScalastylePlugin
  */
-import org.sonar.api.batch.AbstractSourceImporter;
-import org.sonar.api.batch.Phase;
-import org.sonar.api.batch.SensorContext;
-import org.sonar.api.resources.InputFileUtils;
-import org.sonar.api.resources.ProjectFileSystem;
+class ScalastylePluginSpec extends FlatSpec with Matchers {
 
-@Phase(name = Phase.Name.PRE)
-class ScalaSourceImporter(lang : ScalaLanguage) extends AbstractSourceImporter(lang) {
+  val testee = new ScalastylePlugin
 
-  override def analyse( fileSystem : ProjectFileSystem,  context : SensorContext) : Unit = {
-    parseDirs(context, InputFileUtils.toFiles(fileSystem.mainFiles(ScalaLanguage.KEY)), fileSystem.getSourceDirs(), false, fileSystem.getSourceCharset());
+  "a scalastyle plugin" should "provide a scalastyle sensor" in {
+    assert(testee.getExtensions.contains(classOf[ScalastyleSensor]))
   }
 
-  override def toString() : String = getClass().getSimpleName()
+  it should "provide a scalastyle repository" in {
+    assert(testee.getExtensions.contains(classOf[ScalastyleRepository]))
+  }
 
+  it should "provide a scala language" in {
+    assert(testee.getExtensions.contains(classOf[Scala]))
+  }
+
+  it should "provide a scalastyle quality profile" in {
+    assert(testee.getExtensions.contains(classOf[ScalastyleQualityProfile]))
+  }
 }

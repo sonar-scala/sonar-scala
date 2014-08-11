@@ -1,5 +1,5 @@
 /*
- * Sonar Scala Style Plugin
+ * Sonar Scalastyle Plugin
  * Copyright (C) 2014 All contributors
  *
  * This program is free software; you can redistribute it and/or
@@ -34,32 +34,28 @@ import org.sonar.api.rules.ActiveRule
 import scala.collection.JavaConversions._
 
 /**
- * Runs ScalaStyle based on active rules
+ * Runs Scalastyle based on active rules in the given RulesProfile
  */
-class ScalaStyleRunner(rp: RulesProfile) {
+class ScalastyleRunner(rp: RulesProfile) {
+  private val log = LoggerFactory.getLogger(classOf[ScalastyleRunner])
 
-  private val log = LoggerFactory.getLogger(classOf[ScalaStyleRunner])
-
-  def run(encoding : String, files : java.util.List[File]) : List[Message[FileSpec]] = {
-
+  def run(encoding: String, files: java.util.List[File]): List[Message[FileSpec]] = {
     log.debug("Using config " + config)
 
     val fileSpecs = Directory.getFilesAsJava(Some(encoding), files)
-
     val messages = new ScalastyleChecker[FileSpec]().checkFiles(config, fileSpecs)
 
     messages
   }
 
-  def config : ScalastyleConfiguration = {
-    val sonarRules = rp.getActiveRulesByRepository(Constants.REPOSITORY_KEY)
+  def config: ScalastyleConfiguration = {
+    val sonarRules = rp.getActiveRulesByRepository(Constants.RepositoryKey)
     val checkers = sonarRules.map(ruleToChecker).toList
     new ScalastyleConfiguration("sonar", true, checkers)
   }
 
-  private def ruleToChecker(activeRule: ActiveRule) = {
+  private def ruleToChecker(activeRule: ActiveRule): ConfigurationChecker = {
     val params = activeRule.getActiveRuleParams.map(p => (p.getKey, p.getValue)).toMap
     ConfigurationChecker(activeRule.getRuleKey, ErrorLevel, true, params, None, None)
   }
-
 }

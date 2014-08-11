@@ -21,6 +21,8 @@ package com.ncredinburgh.sonar.scalastyle
 
 import java.io.File
 
+import org.scalastyle.StyleError
+import org.scalastyle.StyleException
 import org.scalastyle.Message
 import org.scalastyle.FileSpec
 import org.scalastyle.Directory
@@ -44,8 +46,13 @@ class ScalastyleRunner(rp: RulesProfile) {
 
     val fileSpecs = Directory.getFilesAsJava(Some(encoding), files)
     val messages = new ScalastyleChecker[FileSpec]().checkFiles(config, fileSpecs)
-
-    messages
+    
+    // only errors and exceptions are of interest
+    messages.collect { _ match {
+     case e: StyleError[_] => e 
+     case ex: StyleException[_] => ex
+   }}
+    
   }
 
   def config: ScalastyleConfiguration = {

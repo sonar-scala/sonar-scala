@@ -22,7 +22,8 @@ import java.io.File
 import java.nio.charset.StandardCharsets
 
 import org.mockito.Mockito._
-import org.scalastyle.{ConfigurationChecker, ErrorLevel, ScalastyleConfiguration}
+import org.scalastyle._
+import org.scalastyle.StyleError
 import org.scalatest.mock.MockitoSugar
 import org.scalatest.{FlatSpec, Matchers, PrivateMethodTester}
 import org.sonar.api.profiles.RulesProfile
@@ -48,14 +49,10 @@ class ScalastyleRunnerSpec extends FlatSpec with Matchers with MockitoSugar with
   "a scalastyle runner" should "report StyleError messages if there are rule violations" in new Fixture {
     val files = List(new File("src/test/resources/ScalaFile1.scala"))
 
-    val messages = testeeSpy.run(charset, files)
+    val messages = testeeSpy.run(charset, files).map(_.toString) 
+    
+    messages should contain ("StyleError key=header.matches args=List() lineNumber=Some(1) column=None customMessage=None")
 
-    messages.length shouldEqual 5
-    messages(0).toString shouldEqual "StartWork()"
-    messages(1).toString shouldEqual "StartFile(/Users/emrehantuzun/Desktop/sonar-scalastyle/src/test/resources/ScalaFile1.scala)"
-    messages(2).toString shouldEqual "StyleError key=header.matches args=List() lineNumber=Some(1) column=None customMessage=None"
-    messages(3).toString shouldEqual "EndFile(/Users/emrehantuzun/Desktop/sonar-scalastyle/src/test/resources/ScalaFile1.scala)"
-    messages(4).toString shouldEqual "EndWork()"
   }
 
   it should "not report StyleError messages if there are no violations" in new Fixture {
@@ -63,26 +60,15 @@ class ScalastyleRunnerSpec extends FlatSpec with Matchers with MockitoSugar with
 
     val messages = testeeSpy.run(charset, files)
 
-    messages.length shouldEqual 4
-    messages(0).toString shouldEqual "StartWork()"
-    messages(1).toString shouldEqual "StartFile(/Users/emrehantuzun/Desktop/sonar-scalastyle/src/test/resources/ScalaFile2.scala)"
-    messages(2).toString shouldEqual "EndFile(/Users/emrehantuzun/Desktop/sonar-scalastyle/src/test/resources/ScalaFile2.scala)"
-    messages(3).toString shouldEqual "EndWork()"
+    messages.length shouldEqual 0
   }
 
-  it should "be able to run several violations" in new Fixture {
+  it should "scan multiple files" in new Fixture {
     val files = List(new File("src/test/resources/ScalaFile1.scala"), new File("src/test/resources/ScalaFile2.scala"))
 
     val messages = testeeSpy.run(charset, files)
 
-    messages.length shouldEqual 7
-    messages(0).toString shouldEqual "StartWork()"
-    messages(1).toString shouldEqual "StartFile(/Users/emrehantuzun/Desktop/sonar-scalastyle/src/test/resources/ScalaFile1.scala)"
-    messages(2).toString shouldEqual "StyleError key=header.matches args=List() lineNumber=Some(1) column=None customMessage=None"
-    messages(3).toString shouldEqual "EndFile(/Users/emrehantuzun/Desktop/sonar-scalastyle/src/test/resources/ScalaFile1.scala)"
-    messages(4).toString shouldEqual "StartFile(/Users/emrehantuzun/Desktop/sonar-scalastyle/src/test/resources/ScalaFile2.scala)"
-    messages(5).toString shouldEqual "EndFile(/Users/emrehantuzun/Desktop/sonar-scalastyle/src/test/resources/ScalaFile2.scala)"
-    messages(6).toString shouldEqual "EndWork()"
+    messages.length shouldEqual 1
   }
 
   it should "convert rules to checker" in {

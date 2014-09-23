@@ -1,61 +1,70 @@
 /*
- * Sonar Scoverage Plugin
- * Copyright (C) 2013 Rado Buransky
- * dev@sonar.codehaus.org
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 3 of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
- */
+* Sonar Scoverage Plugin
+* Copyright (C) 2013 Rado Buransky
+* dev@sonar.codehaus.org
+*
+* This program is free software; you can redistribute it and/or
+* modify it under the terms of the GNU Lesser General Public
+* License as published by the Free Software Foundation; either
+* version 3 of the License, or (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+* Lesser General Public License for more details.
+*
+* You should have received a copy of the GNU Lesser General Public
+* License along with this program; if not, write to the Free Software
+* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
+*/
 package com.buransky.plugins.scoverage.sensor
 
-import org.junit.runner.RunWith
-import org.scalatest.junit.JUnitRunner
-import org.scalatest.{Matchers, FlatSpec}
-import org.scalatest.mock.MockitoSugar
-import org.sonar.api.resources.Project
-import org.mockito.Mockito._
+import java.util
+
 import com.buransky.plugins.scoverage.language.Scala
-import org.sonar.api.scan.filesystem.{PathResolver, ModuleFileSystem}
-import org.sonar.api.config.Settings
-import org.sonar.api.resources.Project.AnalysisType
-import org.sonar.api.batch.SensorContext
 import com.buransky.plugins.scoverage.{ProjectStatementCoverage, ScoverageReportParser}
+import org.junit.runner.RunWith
+import org.mockito.Mockito._
+import org.scalatest.junit.JUnitRunner
+import org.scalatest.mock.MockitoSugar
+import org.scalatest.{FlatSpec, Matchers}
+import org.sonar.api.batch.fs.FileSystem
+import org.sonar.api.config.Settings
+import org.sonar.api.resources.Project
+import org.sonar.api.resources.Project.AnalysisType
+import org.sonar.api.scan.filesystem.PathResolver
+
+import scala.collection.JavaConversions._
+
 
 @RunWith(classOf[JUnitRunner])
 class ScoverageSensorSpec extends FlatSpec with Matchers with MockitoSugar {
   behavior of "shouldExecuteOnProject"
 
   it should "succeed for Scala project" in new ShouldExecuteOnProject {
-    checkShouldExecuteOnProject("scala", true)
+    checkShouldExecuteOnProject(List("scala"), true)
+  }
+
+  it should "succeed for mixed projects" in new ShouldExecuteOnProject {
+    checkShouldExecuteOnProject(List("scala", "java"), true)
   }
 
   it should "fail for Java project" in new ShouldExecuteOnProject {
-    checkShouldExecuteOnProject("java", false)
+    checkShouldExecuteOnProject(List("java"), false)
   }
 
   class ShouldExecuteOnProject extends ScoverageSensorScope {
-    protected def checkShouldExecuteOnProject(language: String, expectedResult: Boolean) {
+    protected def checkShouldExecuteOnProject(languages: Iterable[String], expectedResult: Boolean) {
       // Setup
       val project = mock[Project]
       when(project.getAnalysisType).thenReturn(AnalysisType.DYNAMIC)
-      when(project.getLanguageKey).thenReturn(language)
+      when(fileSystem.languages()).thenReturn(new util.TreeSet(languages))
 
       // Execute & asser
       shouldExecuteOnProject(project) should equal(expectedResult)
 
       verify(project, times(1)).getAnalysisType
-      verify(project, times(1)).getLanguageKey
+      verify(fileSystem, times(1)).languages
 
     }
   }
@@ -73,7 +82,7 @@ class ScoverageSensorSpec extends FlatSpec with Matchers with MockitoSugar {
     when(reportFile.isFile).thenReturn(true)
     when(reportFile.getAbsolutePath).thenReturn(reportAbsolutePath)
     when(settings.getString(SCOVERAGE_REPORT_PATH_PROPERTY)).thenReturn(pathToScoverageReport)
-    when(moduleFileSystem.baseDir).thenReturn(moduleBaseDir)
+    when(fileSystem.baseDir).thenReturn(moduleBaseDir)
     when(pathResolver.relativeFile(moduleBaseDir, pathToScoverageReport)).thenReturn(reportFile)
     when(scoverageReportParser.parse(reportAbsolutePath)).thenReturn(projectStatementCoverage)
 
@@ -92,7 +101,7 @@ class ScoverageSensorSpec extends FlatSpec with Matchers with MockitoSugar {
     val scala = new Scala
     val settings = mock[Settings]
     val pathResolver = mock[PathResolver]
-    val moduleFileSystem = mock[ModuleFileSystem]
-  } with ScoverageSensor(settings, pathResolver, moduleFileSystem, scala)
+    val fileSystem = mock[FileSystem]
+  } with ScoverageSensor(settings, pathResolver, fileSystem, scala)
 
 }

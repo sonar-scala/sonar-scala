@@ -19,36 +19,34 @@
  */
 package com.buransky.plugins.scoverage.sensor
 
-import org.sonar.api.batch.{SensorContext, CoverageExtension, Sensor}
-import org.sonar.api.measures.{CoverageMeasuresBuilder, CoreMetrics, Measure}
-import com.buransky.plugins.scoverage.measure.ScalaMetrics
-import com.buransky.plugins.scoverage._
-import com.buransky.plugins.scoverage.resource.{SingleDirectory, ScalaFile}
-import scala.collection.JavaConversions._
-import org.sonar.api.resources.{Project, Resource}
-import com.buransky.plugins.scoverage.util.LogUtil
-import com.buransky.plugins.scoverage.CoveredStatement
-import com.buransky.plugins.scoverage.FileStatementCoverage
-import com.buransky.plugins.scoverage.DirectoryStatementCoverage
 import com.buransky.plugins.scoverage.language.Scala
-import org.sonar.api.scan.filesystem.{PathResolver, ModuleFileSystem}
-import org.sonar.api.config.Settings
-import org.slf4j.LoggerFactory
+import com.buransky.plugins.scoverage.measure.ScalaMetrics
+import com.buransky.plugins.scoverage.util.LogUtil
 import com.buransky.plugins.scoverage.xml.XmlScoverageReportParser
+import com.buransky.plugins.scoverage.{CoveredStatement, DirectoryStatementCoverage, FileStatementCoverage, _}
+import org.slf4j.LoggerFactory
+import org.sonar.api.batch.fs.{FileSystem, InputFile}
+import org.sonar.api.batch.{CoverageExtension, Sensor, SensorContext}
+import org.sonar.api.config.Settings
+import org.sonar.api.measures.{CoreMetrics, CoverageMeasuresBuilder, Measure}
+import org.sonar.api.resources.{File, Project, Resource}
+import org.sonar.api.scan.filesystem.PathResolver
+
+import scala.collection.JavaConversions._
 
 /**
  *  Main sensor for importing Scoverage report to Sonar.
  *
  * @author Rado Buransky
  */
-class ScoverageSensor(settings: Settings, pathResolver: PathResolver, moduleFileSystem: ModuleFileSystem, scala: Scala)
+class ScoverageSensor(settings: Settings, pathResolver: PathResolver, fileSystem: FileSystem, scala: Scala)
   extends Sensor with CoverageExtension {
   private val log = LoggerFactory.getLogger(classOf[ScoverageSensor])
   protected val SCOVERAGE_REPORT_PATH_PROPERTY = "sonar.scoverage.reportPath"
   protected lazy val scoverageReportParser: ScoverageReportParser = XmlScoverageReportParser()
 
   override def shouldExecuteOnProject(project: Project): Boolean =
-    project.getAnalysisType.isDynamic(true) && (scala.getKey == project.getLanguageKey)
+    project.getAnalysisType.isDynamic(true) && fileSystem.languages().contains(scala.getKey)
 
   override def analyse(project: Project, context: SensorContext) {
     scoverageReportPath match {
@@ -68,7 +66,7 @@ class ScoverageSensor(settings: Settings, pathResolver: PathResolver, moduleFile
     settings.getString(SCOVERAGE_REPORT_PATH_PROPERTY) match {
       case null => None
       case path: String =>
-        pathResolver.relativeFile(moduleFileSystem.baseDir, path) match {
+        pathResolver.relativeFile(fileSystem.baseDir, path) match {
           case report: java.io.File if !report.exists || !report.isFile =>
             log.error(LogUtil.f("Report not found at {}"), report)
             None
@@ -140,23 +138,31 @@ class ScoverageSensor(settings: Settings, pathResolver: PathResolver, moduleFile
 
   private def processDirectory(directoryCoverage: DirectoryStatementCoverage, context: SensorContext,
                                parentDirectory: String) {
-    val currentDirectory = appendFilePath(parentDirectory, directoryCoverage.name)
-
-    // Save measures
-    saveMeasures(context, new SingleDirectory(currentDirectory, scala), directoryCoverage)
-
     // Process children
-    processChildren(directoryCoverage.children, context, currentDirectory)
+    processChildren(directoryCoverage.children, context, appendFilePath(parentDirectory, directoryCoverage.name))
   }
 
   private def processFile(fileCoverage: FileStatementCoverage, context: SensorContext, directory: String) {
-    val scalaSourceFile = new ScalaFile(appendFilePath(directory, fileCoverage.name), scala)
+    val relativePath = appendFilePath(directory, fileCoverage.name)
 
-    // Save measures
-    saveMeasures(context, scalaSourceFile, fileCoverage)
+    val p = fileSystem.predicates()
+    val files = fileSystem.inputFiles(p.and(p.matchesPathPattern("**/" + relativePath),
+      p.hasLanguage(scala.getKey), p.hasType(InputFile.Type.MAIN)))
 
-    // Save line coverage. This is needed just for source code highlighting.
-    saveLineCoverage(fileCoverage.statements, scalaSourceFile, context)
+    files.headOption match {
+      case Some(file) => {
+        //val scalaSourceFile = new ScalaFile(file.relativePath(), scala)
+        val scalaSourceFile = File.create(file.relativePath())
+
+        // Save measures
+        saveMeasures(context, scalaSourceFile, fileCoverage)
+
+        // Save line coverage. This is needed just for source code highlighting.
+        saveLineCoverage(fileCoverage.statements, scalaSourceFile, context)
+      }
+
+      case None => log.warn("File not found in file system! " + relativePath)
+    }
   }
 
   private def saveMeasures(context: SensorContext, resource: Resource, statementCoverage: StatementCoverage) {
@@ -168,7 +174,7 @@ class ScoverageSensor(settings: Settings, pathResolver: PathResolver, moduleFile
       ", " + statementCoverage.coveredStatementsCount + ", " + resource.getKey + "]"))
   }
 
-  private def saveLineCoverage(coveredStatements: Iterable[CoveredStatement], scalaSourceFile: ScalaFile,
+  private def saveLineCoverage(coveredStatements: Iterable[CoveredStatement], resource: Resource,
                                context: SensorContext) {
     // Convert statements to lines
     val coveredLines = StatementCoverage.statementCoverageToLineCoverage(coveredStatements)
@@ -180,7 +186,7 @@ class ScoverageSensor(settings: Settings, pathResolver: PathResolver, moduleFile
     }
 
     // Save measures
-    coverage.createMeasures().toList.foreach(context.saveMeasure(scalaSourceFile, _))
+    coverage.createMeasures().toList.foreach(context.saveMeasure(resource, _))
   }
 
   private def processChildren(children: Iterable[StatementCoverage], context: SensorContext, directory: String) {

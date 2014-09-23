@@ -19,7 +19,10 @@
  */
 package com.buransky.plugins.scoverage.sensor
 
+import java.lang
+
 import org.sonar.api.batch.SensorContext
+import org.sonar.api.batch.fs.InputFile
 import org.sonar.api.resources.Resource
 import org.sonar.api.measures.{Measure, Metric}
 import scala.collection.mutable
@@ -61,4 +64,6 @@ class TestSensorContext extends SensorContext {
   def saveViolation(x$1: org.sonar.api.rules.Violation): Unit = ???
   def saveViolation(x$1: org.sonar.api.rules.Violation,x$2: Boolean): Unit = ???
   def saveViolations(x$1: java.util.Collection[org.sonar.api.rules.Violation]): Unit = ???
+  override def saveMeasure(p1: InputFile, p2: Metric, p3: lang.Double): Measure = ???
+  override def saveMeasure(p1: InputFile, p2: Measure): Measure = ???
 }

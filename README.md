@@ -25,15 +25,15 @@ just plain average of coverage rates for sub-projects.
 - [SonarQube] 4.2
 - [Scoverage] 0.95.7
 
-### Support for older versions of Sonar ###
-
-- SonarQube 4.0: Install version 1.0.2 sonar-scoverage-plugin-1.0.2.jar] [Plugin102Jar].
-- SonarQube 3.5.1: Take a look into the [dedicated branch] [Plugin351] or directly [download binary JAR] [Plugin351Jar].
-
 ## Installation ##
 
 Download and copy [sonar-scoverage-plugin-1.1.0.jar] [LatestPluginJar] to the Sonar plugins directory
 (usually <SONAR_INSTALLATION_ROOT>/extensions/plugins). Restart Sonar.
+
+### Support for older versions of Sonar ###
+
+- SonarQube 4.0: Install version 1.0.2 [sonar-scoverage-plugin-1.0.2.jar] [Plugin102Jar].
+- SonarQube 3.5.1: Take a look into the [dedicated branch] [Plugin351] or directly [download binary JAR] [Plugin351Jar].
 
 ## Configure Sonar runner ##
 

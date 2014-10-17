@@ -1,9 +1,9 @@
-organization := "com.buransky"
+organization in ThisBuild := "com.buransky"
 
-scalaVersion := "2.10.3"
+scalaVersion in ThisBuild := "2.10.4"
 
-lazy val root = project.in(file(".")).aggregate(module1, module2)
+version in ThisBuild := "1.0.0"
 
-lazy val module1 = project.in(file("module1"))
+lazy val module1 = project
 
-lazy val module2 = project.in(file("module2"))
+lazy val module2 = project

@@ -1,5 +1,6 @@
+import sbt._
+
 object Common {
-  val organization = "com.buransky"
   val baseName = "multi-module"
-  val version = "1.0.0"
+  val scalatest = "org.scalatest" %%  "scalatest" % "2.0" % "test"
 }

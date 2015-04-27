@@ -25,7 +25,6 @@ import org.sonar.api.component.ResourcePerspectives
 import org.sonar.api.issue.{Issuable, Issue}
 import org.sonar.api.profiles.RulesProfile
 import org.sonar.api.resources.Project
-import org.sonar.api.rule.RuleKey
 import org.sonar.api.rules.{Rule, RuleFinder, RuleQuery}
 import org.sonar.api.scan.filesystem.{FileQuery, ModuleFileSystem}
 
@@ -59,7 +58,7 @@ class ScalastyleSensor(resourcePerspectives: ResourcePerspectives,
     val encoding = moduleFileSystem.sourceCharset.name
     val messages = runner.run(encoding, files.toList)
 
-    messages foreach (processMessage(_))
+    messages foreach processMessage
   }
 
   private def processMessage(message: Message[FileSpec]): Unit = message match {

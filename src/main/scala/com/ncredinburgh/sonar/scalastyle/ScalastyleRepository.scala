@@ -31,7 +31,7 @@ class ScalastyleRepository extends RuleRepository(Constants.RepositoryKey, Const
 
   private val log = LoggerFactory.getLogger(classOf[ScalastyleRepository])
 
-  override def createRules: java.util.List[Rule] = ScalastyleResources.allDefinedRules map (toRule)
+  override def createRules: java.util.List[Rule] = ScalastyleResources.allDefinedRules map toRule
 
   private def toRule(repoRule : RepositoryRule) = {
     val rule = Rule.create
@@ -39,18 +39,26 @@ class ScalastyleRepository extends RuleRepository(Constants.RepositoryKey, Const
     rule.setRepositoryKey(Constants.RepositoryKey)
     rule.setLanguage(Constants.ScalaKey)
     rule.setKey(repoRule.clazz)
-    rule.setName(ScalastyleResources.shortDescription(key))
+    rule.setName(ScalastyleResources.label(key))
     rule.setDescription(repoRule.description)
     rule.setConfigKey(key)
+    // currently all rules comes with "warning" default level so we can treat with major severity
     rule.setSeverity(RulePriority.MAJOR)
 
-    val params = repoRule.params map { (r: Param) => rule.createParameter
-                                                      .setDefaultValue(r.defaultVal)
-                                                      .setType(r.typeName)
-                                                      .setKey(r.name)
-                                                      .setDescription(r.desc)}
 
-    params foreach ( p => log.debug("Created param for " + rule.getKey + " : " + p) )
+    val params = repoRule.params map {
+      case param =>
+        rule
+          .createParameter
+          .setDefaultValue(param.defaultVal)
+          .setType(param.typeName)
+          .setKey(param.name)
+          .setDescription(param.desc)
+    }
+
+    params foreach ( p => log.debug(s"Created a param for ${rule.getKey} : $p") )
+
+    log.debug(s"Created a rule: $rule")
 
     rule
   }

@@ -40,16 +40,15 @@ class ScalastyleQualityProfile(scalastyleRepository: ScalastyleRepository) exten
     val defaultKeys = enabledRules map (x => (x \ "@class").text)
     val defaultRules = scalastyleRepository.createRules filter (rule => defaultKeys.contains(rule.getKey) )
     val activeRules = defaultRules map (rule => profile.activateRule(rule, rule.getSeverity))
-    activeRules.foreach(setParameters(_))
+    activeRules.foreach(setParameters)
     profile
   }
 
   def setParameters(activeRule: ActiveRule) {
     defaultConfigRules.find(x => (x \ "@class").text.equals(activeRule.getRuleKey) ) match {
-      case Some(rule) => {
+      case Some(rule) =>
         val params = (rule \ "parameters" \ "parameter").map(n => ((n \ "@name").text, n.text )).toMap
         params foreach { case (key, value) => activeRule.setParameter(key, value) }
-      }
       case _ => log.warn("Default rule with key " + activeRule.getRuleKey + " could not found in default_config.xml")
     }
   }

@@ -20,9 +20,9 @@ package com.ncredinburgh.sonar.scalastyle
 
 import org.sonar.api.PropertyType
 
-case class RepositoryRule(clazz : String, val id : String, val description : String, val params : List[Param])
+case class RepositoryRule(clazz : String, id : String, description : String, params : List[Param])
 
-case class Param(val name: String, val t: PropertyType, val desc: String, val defaultVal: String) {
+case class Param(name: String, t: PropertyType, desc: String, defaultVal: String) {
   def typeName: String = t.name()
 }
 

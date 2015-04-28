@@ -1,10 +1,12 @@
 # Multi-module SBT sample project for Sonar Scoverage plugin #
 
-Run scoverage to generate coverage reports:
+ 1. Create quality profile for Scala language and set it to be used by default.
 
-    $ sbt clean scoverage:test
+ 2. Run scoverage to generate coverage reports:
 
-And then run Sonar runner to upload data from reports to the Sonar server:
+    $ sbt clean coverage test
+
+ 3. And then run Sonar runner to upload data from reports to the Sonar server:
 
     $ sonar-runner
 

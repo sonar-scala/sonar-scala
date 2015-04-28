@@ -22,8 +22,8 @@ just plain average of coverage rates for sub-projects.
 
 ## Requirements ##
 
-- [SonarQube] 4.2
-- [Scoverage] 0.95.7
+- [SonarQube] 5.1
+- [Scoverage] 1.1.0
 
 ## Installation ##
 

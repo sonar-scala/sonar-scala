@@ -99,3 +99,5 @@ Source code markup with covered and uncovered lines:
 [sbt-scoverage]: https://github.com/scoverage/sbt-scoverage
 [Plugin351]: https://github.com/RadoBuransky/sonar-scoverage-plugin/tree/sonar3.5.1
 [Plugin351Jar]: https://github.com/RadoBuransky/sonar-scoverage-plugin/releases/download/v1.0.2-Sonar3.5.1/sonar-scoverage-plugin-sonar3.5.1-1.0.2.jar
+
+[![Analytics](https://ga-beacon.appspot.com/UA-55603212-2/sonar-scoverage-plugin/README.md)](https://github.com/igrigorik/ga-beacon)

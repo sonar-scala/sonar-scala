@@ -1,4 +1,4 @@
 language: java
 script: "mvn -f plugin/pom.xml install"
 jdk:
-   - openjdk6
+   - openjdk7

@@ -18,12 +18,12 @@
  */
 package com.ncredinburgh.sonar.scalastyle
 
-import org.sonar.api.PropertyType
+import org.sonar.api.server.rule.RuleParamType
 
 case class RepositoryRule(clazz : String, id : String, description : String, params : List[Param])
 
-case class Param(name: String, t: PropertyType, desc: String, defaultVal: String) {
-  def typeName: String = t.name()
-}
+case class Param(name: String, `type`: RuleParamType, desc: String, defaultVal: String)
+
+
 
 

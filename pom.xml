@@ -27,7 +27,7 @@
     </licenses>
 
     <properties>
-        <sonar.version>4.1</sonar.version>
+        <sonar.version>4.5.4</sonar.version>
         <sonar.pluginKey>Scalastyle</sonar.pluginKey>
         <sonar.pluginName>Scalastyle</sonar.pluginName>
         <sonar.pluginClass>com.ncredinburgh.sonar.scalastyle.ScalastylePlugin</sonar.pluginClass>

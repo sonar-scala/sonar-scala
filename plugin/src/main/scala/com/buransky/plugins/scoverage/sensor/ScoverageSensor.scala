@@ -161,7 +161,7 @@ class ScoverageSensor(settings: Settings, pathResolver: PathResolver, fileSystem
         saveLineCoverage(fileCoverage.statements, scalaSourceFile, context)
       }
 
-      case None => log.warn("File not found in file system! " + relativePath)
+      case None => log.warn(s"File not found in file system! [$directory, ${fileCoverage.name}]")
     }
   }
 

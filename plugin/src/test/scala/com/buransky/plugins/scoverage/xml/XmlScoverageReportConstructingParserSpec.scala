@@ -25,28 +25,43 @@ import org.scalatest.{Matchers, FlatSpec}
 import scala.io.Source
 import com.buransky.plugins.scoverage.xml.data.XmlReportFile1
 import scala._
-import com.buransky.plugins.scoverage.FileStatementCoverage
-import com.buransky.plugins.scoverage.DirectoryStatementCoverage
+import com.buransky.plugins.scoverage.{ProjectStatementCoverage, FileStatementCoverage, DirectoryStatementCoverage}
 
 @RunWith(classOf[JUnitRunner])
 class XmlScoverageReportConstructingParserSpec extends FlatSpec with Matchers {
   behavior of "parse source"
 
-  it must "parse file1 correctly" in {
-    parseFile1(XmlReportFile1.data)
+  ignore must "parse old broken Scoverage 0.95 file correctly" in {
+    assertReportFile(XmlReportFile1.scoverage095Data, 24.53)(assertScoverage095Data)
   }
 
-  it must "parse file1 correctly even without XML declaration" in {
-    parseFile1(XmlReportFile1.dataWithoutDeclaration)
+  it must "parse new fixed Scoverage 1.0.4 file correctly" in {
+    assertReportFile(XmlReportFile1.scoverage104Data, 50.0) { projectCoverage =>
+      assert(projectCoverage.name === "")
+      assert(projectCoverage.children.size.toInt === 1)
+      projectCoverage.children.head match {
+        case mainClass: FileStatementCoverage =>
+          assert(mainClass.name == "/home/rado/workspace/sonar-test/src/main/scala/com/rr/test/sonar/MainClass.scala")
+        case other => fail(s"This is not a file statement coverage! [$other]")
+      }
+    }
   }
 
-  private def parseFile1(data: String) {
+  ignore must "parse file1 correctly even without XML declaration" in {
+    assertReportFile(XmlReportFile1.dataWithoutDeclaration, 24.53)(assertScoverage095Data)
+  }
+
+  private def assertReportFile(data: String, expectedCoverage: Double)(f: (ProjectStatementCoverage) => Unit) {
     val parser = new XmlScoverageReportConstructingParser(Source.fromString(data))
     val projectCoverage = parser.parse()
 
     // Assert coverage
-    checkRate(24.53, projectCoverage.rate)
+    checkRate(expectedCoverage, projectCoverage.rate)
 
+    f(projectCoverage)
+  }
+
+  private def assertScoverage095Data(projectCoverage: ProjectStatementCoverage): Unit = {
     // Assert structure
     projectCoverage.name should equal("")
 

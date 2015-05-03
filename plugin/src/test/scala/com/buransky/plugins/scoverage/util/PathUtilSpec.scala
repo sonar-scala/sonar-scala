@@ -30,14 +30,14 @@ class UnixPathUtilSpec extends ParamPathUtilSpec("Unix", "/")
 class WindowsPathUtilSpec extends ParamPathUtilSpec("Windows", "\\")
 
 abstract class ParamPathUtilSpec(osName: String, separator: String) extends FlatSpec with Matchers {
-  behavior of s"splitPath for ${osName}"
+  behavior of s"splitPath for $osName"
 
   it should "work for empty path" in {
     PathUtil.splitPath("", separator) should equal(List(""))
   }
 
   it should "work with separator at the beginning" in {
-    PathUtil.splitPath(s"${separator}a", separator) should equal(List("", "a"))
+    PathUtil.splitPath(s"${separator}a", separator) should equal(List(separator, "a"))
   }
 
   it should "work with separator in the middle" in {

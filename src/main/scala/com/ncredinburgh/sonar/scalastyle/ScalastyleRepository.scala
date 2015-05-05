@@ -29,16 +29,18 @@ import org.sonar.api.server.rule.RulesDefinition
 class ScalastyleRepository extends RulesDefinition {
 
   override def define(context: RulesDefinition.Context): Unit = {
-    val repository = context.createRepository(Constants.RepositoryKey, Constants.ScalaKey).setName("Scalastyle Rules")
+    val repository = context
+      .createRepository(Constants.RepositoryKey, Constants.ScalaKey)
+      .setName(Constants.RepositoryName)
     ScalastyleResources.allDefinedRules map {
-      case repoRule =>
-        val rule = repository.createRule(repoRule.clazz)
-        rule.setName(ScalastyleResources.label(repoRule.id))
-        rule.setHtmlDescription(repoRule.description)
+      case resRule =>
+        val rule = repository.createRule(resRule.clazz)
+        rule.setName(ScalastyleResources.label(resRule.id))
+        rule.setHtmlDescription(resRule.description)
         // currently all rules comes with "warning" default level so we can treat with major severity
         rule.setSeverity(Severity.MAJOR)
 
-        repoRule.params map {
+        resRule.params map {
           case param =>
             rule
               .createParam(param.name)

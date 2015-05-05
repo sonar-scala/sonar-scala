@@ -28,6 +28,7 @@ import org.sonar.api.utils.ValidationMessages
 
 import scala.collection.JavaConversions._
 
+
 /**
  * Tests ScalastyleQualityProfile
  */

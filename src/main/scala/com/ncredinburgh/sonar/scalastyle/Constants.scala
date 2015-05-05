@@ -21,5 +21,6 @@ package com.ncredinburgh.sonar.scalastyle
 object Constants {
   val ScalaKey = "scala"
   val RepositoryKey = "Scalastyle"
+  val RepositoryName = "Scalastyle Rules"
   val ProfileName = "Scalastyle"
 }

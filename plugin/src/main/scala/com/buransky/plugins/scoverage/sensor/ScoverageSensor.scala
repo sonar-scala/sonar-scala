@@ -147,12 +147,14 @@ class ScoverageSensor(settings: Settings, pathResolver: PathResolver, fileSystem
   private def processFile(fileCoverage: FileStatementCoverage, context: SensorContext, directory: String) {
     val path = appendFilePath(directory, fileCoverage.name)
     val p = fileSystem.predicates()
+    val files = fileSystem.inputFiles(p.and(p.matchesPathPattern("**/" + relativePath),
+      p.hasLanguage(scala.getKey), p.hasType(InputFile.Type.MAIN)))
 
     val pathPredicate = if (new io.File(path).isAbsolute) p.hasAbsolutePath(path) else p.matchesPathPattern("**/" + path)
     val files = fileSystem.inputFiles(p.and(
       pathPredicate,
       p.hasLanguage(scala.getKey),
-      p.hasType(InputFile.Type.MAIN)))
+      p.hasType(InputFile.Type.MAIN))).toList
 
     files.headOption match {
       case Some(file) =>

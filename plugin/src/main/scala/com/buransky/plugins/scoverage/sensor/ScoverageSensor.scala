@@ -19,6 +19,8 @@
  */
 package com.buransky.plugins.scoverage.sensor
 
+import java.io
+
 import com.buransky.plugins.scoverage.language.Scala
 import com.buransky.plugins.scoverage.measure.ScalaMetrics
 import com.buransky.plugins.scoverage.util.LogUtil
@@ -143,15 +145,17 @@ class ScoverageSensor(settings: Settings, pathResolver: PathResolver, fileSystem
   }
 
   private def processFile(fileCoverage: FileStatementCoverage, context: SensorContext, directory: String) {
-    val relativePath = appendFilePath(directory, fileCoverage.name)
-
+    val path = appendFilePath(directory, fileCoverage.name)
     val p = fileSystem.predicates()
-    val files = fileSystem.inputFiles(p.and(p.matchesPathPattern("**/" + relativePath),
-      p.hasLanguage(scala.getKey), p.hasType(InputFile.Type.MAIN)))
+
+    val pathPredicate = if (new io.File(path).isAbsolute) p.hasAbsolutePath(path) else p.matchesPathPattern("**/" + path)
+    val files = fileSystem.inputFiles(p.and(
+      pathPredicate,
+      p.hasLanguage(scala.getKey),
+      p.hasType(InputFile.Type.MAIN)))
 
     files.headOption match {
-      case Some(file) => {
-        //val scalaSourceFile = new ScalaFile(file.relativePath(), scala)
+      case Some(file) =>
         val scalaSourceFile = File.create(file.relativePath())
 
         // Save measures
@@ -159,9 +163,13 @@ class ScoverageSensor(settings: Settings, pathResolver: PathResolver, fileSystem
 
         // Save line coverage. This is needed just for source code highlighting.
         saveLineCoverage(fileCoverage.statements, scalaSourceFile, context)
-      }
 
-      case None => log.warn(s"File not found in file system! [$directory, ${fileCoverage.name}]")
+      case None => {
+        fileSystem.inputFiles(p.all()).foreach { inputFile =>
+          log.debug(inputFile.absolutePath())
+        }
+        log.warn(s"File not found in file system! [$pathPredicate]")
+      }
     }
   }
 
@@ -210,7 +218,12 @@ class ScoverageSensor(settings: Settings, pathResolver: PathResolver, fileSystem
     new Measure(ScalaMetrics.coveredStatements, coveredStatements);
 
   private def appendFilePath(src: String, name: String) = {
-    val result = if (!src.isEmpty) src + java.io.File.separator else ""
+    val result = src match {
+      case java.io.File.separator => java.io.File.separator
+      case empty if empty.isEmpty => ""
+      case other => other + java.io.File.separator
+    }
+
     result + name
   }
 }

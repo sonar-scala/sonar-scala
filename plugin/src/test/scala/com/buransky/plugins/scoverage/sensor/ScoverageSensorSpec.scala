@@ -19,16 +19,17 @@
 */
 package com.buransky.plugins.scoverage.sensor
 
+import java.io.File
 import java.util
 
 import com.buransky.plugins.scoverage.language.Scala
-import com.buransky.plugins.scoverage.{ProjectStatementCoverage, ScoverageReportParser}
+import com.buransky.plugins.scoverage.{FileStatementCoverage, DirectoryStatementCoverage, ProjectStatementCoverage, ScoverageReportParser}
 import org.junit.runner.RunWith
 import org.mockito.Mockito._
 import org.scalatest.junit.JUnitRunner
 import org.scalatest.mock.MockitoSugar
 import org.scalatest.{FlatSpec, Matchers}
-import org.sonar.api.batch.fs.FileSystem
+import org.sonar.api.batch.fs.{FilePredicate, FilePredicates, FileSystem}
 import org.sonar.api.config.Settings
 import org.sonar.api.resources.Project
 import org.sonar.api.resources.Project.AnalysisType
@@ -75,19 +76,35 @@ class ScoverageSensorSpec extends FlatSpec with Matchers with MockitoSugar {
     // Setup
     val pathToScoverageReport = "#path-to-scoverage-report#"
     val reportAbsolutePath = "#report-absolute-path#"
-    val projectStatementCoverage = ProjectStatementCoverage("project-name", Nil)
+    val projectStatementCoverage =
+      ProjectStatementCoverage("project-name", List(
+        DirectoryStatementCoverage(File.separator, List(
+          DirectoryStatementCoverage("home", List(
+            FileStatementCoverage("a.scala", 3, 2, Nil)
+          ))
+        )),
+        DirectoryStatementCoverage("x", List(
+          FileStatementCoverage("b.scala", 1, 0, Nil)
+        ))
+      ))
     val reportFile = mock[java.io.File]
     val moduleBaseDir = mock[java.io.File]
+    val filePredicates = mock[FilePredicates]
     when(reportFile.exists).thenReturn(true)
     when(reportFile.isFile).thenReturn(true)
     when(reportFile.getAbsolutePath).thenReturn(reportAbsolutePath)
     when(settings.getString(SCOVERAGE_REPORT_PATH_PROPERTY)).thenReturn(pathToScoverageReport)
     when(fileSystem.baseDir).thenReturn(moduleBaseDir)
+    when(fileSystem.predicates).thenReturn(filePredicates)
+    when(fileSystem.inputFiles(org.mockito.Matchers.any[FilePredicate]())).thenReturn(Nil)
     when(pathResolver.relativeFile(moduleBaseDir, pathToScoverageReport)).thenReturn(reportFile)
     when(scoverageReportParser.parse(reportAbsolutePath)).thenReturn(projectStatementCoverage)
 
     // Execute
     analyse(project, context)
+
+    verify(filePredicates).hasAbsolutePath("/home/a.scala")
+    verify(filePredicates).matchesPathPattern("**/x/b.scala")
   }
 
   class AnalyseScoverageSensorScope extends ScoverageSensorScope {

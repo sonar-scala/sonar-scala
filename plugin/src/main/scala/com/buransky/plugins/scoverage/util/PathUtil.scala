@@ -27,5 +27,8 @@ import java.io.File
  */
 object PathUtil {
   def splitPath(filePath: String, separator: String = File.separator): List[String] =
-    filePath.split(separator.replaceAllLiterally("\\", "\\\\")).toList
+    filePath.split(separator.replaceAllLiterally("\\", "\\\\")).toList match {
+      case "" :: tail if tail.nonEmpty => separator :: tail
+      case other => other
+    }
 }

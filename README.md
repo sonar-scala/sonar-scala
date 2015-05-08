@@ -1,4 +1,4 @@
-#Scoverage Plugin for Sonar 4.2#
+#Scoverage Plugin for Sonar 4.5#
 
 [![Build Status](https://travis-ci.org/RadoBuransky/sonar-scoverage-plugin.png)](https://travis-ci.org/RadoBuransky/sonar-scoverage-plugin)
 
@@ -22,12 +22,12 @@ just plain average of coverage rates for sub-projects.
 
 ## Requirements ##
 
-- [SonarQube] 4.2
+- [SonarQube] 4.5
 - [Scoverage] 1.1.0
 
 ## Installation ##
 
-Download and copy [sonar-scoverage-plugin-4.2.0.jar] [PluginJar] to the Sonar plugins directory
+Download and copy [sonar-scoverage-plugin-4.5.0.jar] [PluginJar] to the Sonar plugins directory
 (usually <SONAR_INSTALLATION_ROOT>/extensions/plugins). Restart Sonar.
 
 ## Configure Sonar runner ##
@@ -81,7 +81,7 @@ Columns with statement coverage, total number of statements and number of covere
 Source code markup with covered and uncovered lines:
 ![Source code markup](/doc/img/04_coverage.png "Source code markup")
 
-[PluginJar]: https://github.com/RadoBuransky/sonar-scoverage-plugin/releases/download/v4.2.0/sonar-scoverage-plugin-4.2.0.jar
+[PluginJar]: https://github.com/RadoBuransky/sonar-scoverage-plugin/releases/download/v4.5.0/sonar-scoverage-plugin-4.5.0.jar
 [SonarQube]: http://www.sonarqube.org/ "SonarQube"
 [Scoverage]: https://github.com/scoverage/scalac-scoverage-plugin "Scoverage"
 [sbt-scoverage]: https://github.com/scoverage/sbt-scoverage

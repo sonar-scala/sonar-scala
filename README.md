@@ -44,7 +44,7 @@ root directory:
 If your project is based on SBT and you're using [Scoverage plugin for SBT] [sbt-scoverage] you can
 generate the Scoverage report by executing following from command line:
 
-    $ sbt clean scoverage:test
+    $  sbt clean coverage test
 
 And then run Sonar runner to upload the report to the Sonar server:
 

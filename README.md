@@ -28,14 +28,14 @@ just plain average of coverage rates for sub-projects.
 
 ## Installation ##
 
-Download and copy [sonar-scoverage-plugin-1.0.1.jar] [PluginJar] to the Sonar plugins directory
+Download and copy [sonar-scoverage-plugin-5.1.1.jar] [PluginJar] to the Sonar plugins directory
 (usually <SONAR_INSTALLATION_ROOT>/extensions/plugins). Restart Sonar.
 
 ### Support for older versions of Sonar ###
 
-- SonarQube 4.2: Install version 1.1.0 [sonar-scoverage-plugin-1.1.0.jar] [Plugin110Jar].
-- SonarQube 4.0: Install version 1.0.2 [sonar-scoverage-plugin-1.0.2.jar] [Plugin102Jar].
-- SonarQube 3.5.1: Take a look into the [dedicated branch] [Plugin351] or directly [download binary JAR] [Plugin351Jar].
+- [SonarQube 4.5] (https://github.com/RadoBuransky/sonar-scoverage-plugin/tree/sonar45)
+- [SonarQube 4.2] (https://github.com/RadoBuransky/sonar-scoverage-plugin/tree/sonar45)
+- [SonarQube 3.5] (https://github.com/RadoBuransky/sonar-scoverage-plugin/tree/sonar35)
 
 ## Configure Sonar runner ##
 
@@ -90,7 +90,7 @@ Source code markup with covered and uncovered lines:
 
 ## Changelog ##
 
-### 5.1.0 - 28 Apr 2015 ###
+### 5.1.1 - 7 May 2015 ###
 
 - Upgrade to SonarQube 5.1 API
 
@@ -98,9 +98,7 @@ Source code markup with covered and uncovered lines:
 
 - Upgrade to SonarQube 4.2 API
 
-[LatestPluginJar]: https://github.com/RadoBuransky/sonar-scoverage-plugin/releases/download/v5.1.0-SNAPSHOT/sonar-scoverage-plugin-5.1.0-SNAPSHOT.jar
-[Plugin110Jar]: https://github.com/RadoBuransky/sonar-scoverage-plugin/releases/download/1.1.0/sonar-scoverage-plugin-1.1.0.jar
-[Plugin102Jar]: https://github.com/RadoBuransky/sonar-scoverage-plugin/releases/download/1.0.2/sonar-scoverage-plugin-1.0.2.jar
+[LatestPluginJar]: https://github.com/RadoBuransky/sonar-scoverage-plugin/releases/download/v5.1.1/sonar-scoverage-plugin-5.1.1.jar
 [SonarQube]: http://www.sonarqube.org/ "SonarQube"
 [Scoverage]: https://github.com/scoverage/scalac-scoverage-plugin "Scoverage"
 [sbt-scoverage]: https://github.com/scoverage/sbt-scoverage

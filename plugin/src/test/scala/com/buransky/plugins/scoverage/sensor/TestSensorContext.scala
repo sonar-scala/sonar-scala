@@ -23,8 +23,15 @@ import java.lang.Double
 import java.util.Date
 import java.{io, util}
 
-import org.sonar.api.batch.fs.{InputFile, InputPath}
-import org.sonar.api.batch.{Event, SensorContext}
+import org.sonar.api.batch.fs.{FileSystem, InputFile, InputPath}
+import org.sonar.api.batch.rule.ActiveRules
+import org.sonar.api.batch.sensor.dependency.NewDependency
+import org.sonar.api.batch.sensor.duplication.NewDuplication
+import org.sonar.api.batch.sensor.highlighting.NewHighlighting
+import org.sonar.api.batch.sensor.issue.NewIssue
+import org.sonar.api.batch.sensor.measure.NewMeasure
+import org.sonar.api.batch.{AnalysisMode, Event, SensorContext}
+import org.sonar.api.config.Settings
 import org.sonar.api.design.Dependency
 import org.sonar.api.measures.{Measure, MeasuresFilter, Metric}
 import org.sonar.api.resources.{ProjectLink, Resource}
@@ -102,4 +109,22 @@ class TestSensorContext extends SensorContext {
   override def saveMeasure(inputFile: InputFile, metric: Metric[_ <: io.Serializable], value: Double): Measure[_ <: io.Serializable] = ???
 
   override def saveMeasure(inputFile: InputFile, measure: Measure[_ <: io.Serializable]): Measure[_ <: io.Serializable] = ???
+
+  override def newDuplication(): NewDuplication = ???
+
+  override def activeRules(): ActiveRules = ???
+
+  override def newHighlighting(): NewHighlighting = ???
+
+  override def analysisMode(): AnalysisMode = ???
+
+  override def fileSystem(): FileSystem = ???
+
+  override def newDependency(): NewDependency = ???
+
+  override def settings(): Settings = ???
+
+  override def newMeasure[G <: io.Serializable](): NewMeasure[G] = ???
+
+  override def newIssue(): NewIssue = ???
 }

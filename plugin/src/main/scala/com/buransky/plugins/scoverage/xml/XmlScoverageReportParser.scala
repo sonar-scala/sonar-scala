@@ -19,10 +19,11 @@
  */
 package com.buransky.plugins.scoverage.xml
 
-import scala.io.Source
-import com.buransky.plugins.scoverage.{ProjectStatementCoverage, ScoverageReportParser, ScoverageException}
-import org.apache.log4j.Logger
 import com.buransky.plugins.scoverage.util.LogUtil
+import com.buransky.plugins.scoverage.{ProjectStatementCoverage, ScoverageException, ScoverageReportParser}
+import org.sonar.api.utils.log.Loggers
+
+import scala.io.Source
 
 /**
  * Bridge between parser implementation and coverage provider.
@@ -30,7 +31,7 @@ import com.buransky.plugins.scoverage.util.LogUtil
  * @author Rado Buransky
  */
 class XmlScoverageReportParser extends ScoverageReportParser {
-  private val log = Logger.getLogger(classOf[XmlScoverageReportParser])
+  private val log = Loggers.get(classOf[XmlScoverageReportParser])
 
   def parse(reportFilePath: String): ProjectStatementCoverage = {
     require(reportFilePath != null)

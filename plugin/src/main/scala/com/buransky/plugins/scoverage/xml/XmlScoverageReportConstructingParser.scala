@@ -19,15 +19,17 @@
  */
 package com.buransky.plugins.scoverage.xml
 
+import java.io.File
+
 import com.buransky.plugins.scoverage._
+import com.buransky.plugins.scoverage.util.PathUtil
+import org.sonar.api.utils.log.Loggers
+
+import scala.annotation.tailrec
+import scala.collection.mutable
 import scala.io.Source
 import scala.xml.parsing.ConstructingParser
-import scala.xml.{Text, NamespaceBinding, MetaData}
-import org.apache.log4j.Logger
-import scala.collection.mutable
-import scala.annotation.tailrec
-import java.io.File
-import com.buransky.plugins.scoverage.util.PathUtil
+import scala.xml.{MetaData, NamespaceBinding, Text}
 
 /**
  * Scoverage XML parser based on ConstructingParser provided by standard Scala library.
@@ -35,7 +37,7 @@ import com.buransky.plugins.scoverage.util.PathUtil
  * @author Rado Buransky
  */
 class XmlScoverageReportConstructingParser(source: Source) extends ConstructingParser(source, false) {
-  private val log = Logger.getLogger(classOf[XmlScoverageReportConstructingParser])
+  private val log = Loggers.get(classOf[XmlScoverageReportConstructingParser])
 
   private val CLASS_ELEMENT = "class"
   private val FILENAME_ATTRIBUTE = "filename"

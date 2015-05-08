@@ -168,7 +168,7 @@ class ScoverageSensor(settings: Settings, pathResolver: PathResolver, fileSystem
         fileSystem.inputFiles(p.all()).foreach { inputFile =>
           log.debug(inputFile.absolutePath())
         }
-        log.warn(s"File not found in file system! [$pathPredicate]")
+        log.warn(s"File not found in file system! [$directory, ${fileCoverage.name}]")
       }
     }
   }

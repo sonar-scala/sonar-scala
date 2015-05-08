@@ -1,4 +1,4 @@
-#Sonar Scoverage Plugin 5.1.0#
+#Scoverage Plugin for Sonar#
 
 [![Build Status](https://travis-ci.org/RadoBuransky/sonar-scoverage-plugin.png)](https://travis-ci.org/RadoBuransky/sonar-scoverage-plugin)
 [![Analytics](https://ga-beacon.appspot.com/UA-55603212-2/sonar-scoverage-plugin)](https://github.com/igrigorik/ga-beacon)
@@ -28,7 +28,7 @@ just plain average of coverage rates for sub-projects.
 
 ## Installation ##
 
-Download and copy [sonar-scoverage-plugin-5.1.0-SNAPSHOT.jar] [LatestPluginJar] to the Sonar plugins directory
+Download and copy [sonar-scoverage-plugin-1.0.1.jar] [PluginJar] to the Sonar plugins directory
 (usually <SONAR_INSTALLATION_ROOT>/extensions/plugins). Restart Sonar.
 
 ### Support for older versions of Sonar ###
@@ -104,5 +104,3 @@ Source code markup with covered and uncovered lines:
 [SonarQube]: http://www.sonarqube.org/ "SonarQube"
 [Scoverage]: https://github.com/scoverage/scalac-scoverage-plugin "Scoverage"
 [sbt-scoverage]: https://github.com/scoverage/sbt-scoverage
-[Plugin351]: https://github.com/RadoBuransky/sonar-scoverage-plugin/tree/sonar3.5.1
-[Plugin351Jar]: https://github.com/RadoBuransky/sonar-scoverage-plugin/releases/download/v1.0.2-Sonar3.5.1/sonar-scoverage-plugin-sonar3.5.1-1.0.2.jar

@@ -19,51 +19,87 @@
  */
 package com.buransky.plugins.scoverage.sensor
 
-import java.lang
+import java.lang.Double
+import java.util.Date
+import java.{io, util}
 
-import org.sonar.api.batch.SensorContext
-import org.sonar.api.batch.fs.InputFile
-import org.sonar.api.resources.Resource
-import org.sonar.api.measures.{Measure, Metric}
+import org.sonar.api.batch.fs.{InputFile, InputPath}
+import org.sonar.api.batch.{Event, SensorContext}
+import org.sonar.api.design.Dependency
+import org.sonar.api.measures.{Measure, MeasuresFilter, Metric}
+import org.sonar.api.resources.{ProjectLink, Resource}
+import org.sonar.api.rules.Violation
+
 import scala.collection.mutable
 
 class TestSensorContext extends SensorContext {
-  private val measures = mutable.Map[String, Measure]()
 
-  def createEvent(x$1: org.sonar.api.resources.Resource,x$2: String,x$3: String,x$4: String,x$5: java.util.Date): org.sonar.api.batch.Event = ???
-  def deleteEvent(x$1: org.sonar.api.batch.Event): Unit = ???
-  def deleteLink(x$1: String): Unit = ???
-  def getChildren(x$1: org.sonar.api.resources.Resource): java.util.Collection[org.sonar.api.resources.Resource] = ???
-  def getDependencies(): java.util.Set[org.sonar.api.design.Dependency] = ???
-  def getEvents(x$1: org.sonar.api.resources.Resource): java.util.List[org.sonar.api.batch.Event] = ???
-  def getIncomingDependencies(x$1: org.sonar.api.resources.Resource): java.util.Collection[org.sonar.api.design.Dependency] = ???
-  def getMeasure(x$1: org.sonar.api.resources.Resource,x$2: org.sonar.api.measures.Metric): org.sonar.api.measures.Measure = ???
-  def getMeasure(x$1: org.sonar.api.measures.Metric): org.sonar.api.measures.Measure = ???
-  def getMeasures[M](x$1: org.sonar.api.resources.Resource,x$2: org.sonar.api.measures.MeasuresFilter[M]): M = ???
-  def getMeasures[M](x$1: org.sonar.api.measures.MeasuresFilter[M]): M = ???
-  def getOutgoingDependencies(x$1: org.sonar.api.resources.Resource): java.util.Collection[org.sonar.api.design.Dependency] = ???
-  def getParent(x$1: org.sonar.api.resources.Resource): org.sonar.api.resources.Resource = ???
-  def getResource[R <: org.sonar.api.resources.Resource](x$1: R): R = ???
-  def index(x$1: org.sonar.api.resources.Resource,x$2: org.sonar.api.resources.Resource): Boolean = ???
-  def index(x$1: org.sonar.api.resources.Resource): Boolean = ???
-  def isExcluded(x$1: org.sonar.api.resources.Resource): Boolean = ???
-  def isIndexed(x$1: org.sonar.api.resources.Resource,x$2: Boolean): Boolean = ???
-  def saveDependency(x$1: org.sonar.api.design.Dependency): org.sonar.api.design.Dependency = ???
-  def saveLink(x$1: org.sonar.api.resources.ProjectLink): Unit = ???
+  private val measures = mutable.Map[String, Measure[_ <: io.Serializable]]()
 
-  def saveMeasure(resource: Resource, measure: Measure): Measure = {
+  override def saveDependency(dependency: Dependency): Dependency = ???
+
+  override def isExcluded(reference: Resource): Boolean = ???
+
+  override def deleteLink(key: String): Unit = ???
+
+  override def isIndexed(reference: Resource, acceptExcluded: Boolean): Boolean = ???
+
+  override def saveViolations(violations: util.Collection[Violation]): Unit = ???
+
+  override def getParent(reference: Resource): Resource = ???
+
+  override def getOutgoingDependencies(from: Resource): util.Collection[Dependency] = ???
+
+  override def saveSource(reference: Resource, source: String): Unit = ???
+
+  override def getMeasures[M](filter: MeasuresFilter[M]): M = ???
+
+  override def getMeasures[M](resource: Resource, filter: MeasuresFilter[M]): M = ???
+
+  override def deleteEvent(event: Event): Unit = ???
+
+  override def saveViolation(violation: Violation, force: Boolean): Unit = ???
+
+  override def saveViolation(violation: Violation): Unit = ???
+
+  override def saveResource(resource: Resource): String = ???
+
+  override def getEvents(resource: Resource): util.List[Event] = ???
+
+  override def getDependencies: util.Set[Dependency] = ???
+
+  override def getIncomingDependencies(to: Resource): util.Collection[Dependency] = ???
+
+  override def index(resource: Resource): Boolean = ???
+
+  override def index(resource: Resource, parentReference: Resource): Boolean = ???
+
+  override def saveLink(link: ProjectLink): Unit = ???
+
+  override def getMeasure[G <: io.Serializable](metric: Metric[G]): Measure[G] = measures.get(metric.getKey).orNull.asInstanceOf[Measure[G]]
+
+  override def getMeasure[G <: io.Serializable](resource: Resource, metric: Metric[G]): Measure[G] = ???
+
+  override def getChildren(reference: Resource): util.Collection[Resource] = ???
+
+  override def createEvent(resource: Resource, name: String, description: String, category: String, date: Date): Event = ???
+
+  override def getResource[R <: Resource](reference: R): R = ???
+
+  override def getResource(inputPath: InputPath): Resource = ???
+
+  override def saveMeasure(measure: Measure[_ <: io.Serializable]): Measure[_ <: io.Serializable] = ???
+
+  override def saveMeasure(metric: Metric[_ <: io.Serializable], value: Double): Measure[_ <: io.Serializable] = ???
+
+  override def saveMeasure(resource: Resource, metric: Metric[_ <: io.Serializable], value: Double): Measure[_ <: io.Serializable] = ???
+
+  override def saveMeasure(resource: Resource, measure: Measure[_ <: io.Serializable]): Measure[_ <: io.Serializable] = {
     measures.put(resource.getKey, measure)
     measure
   }
 
-  def saveMeasure(x$1: Resource,x$2: Metric,x$3: java.lang.Double): Measure = ???
-  def saveMeasure(x$1: org.sonar.api.measures.Metric,x$2: java.lang.Double): org.sonar.api.measures.Measure = ???
-  def saveMeasure(x$1: org.sonar.api.measures.Measure): org.sonar.api.measures.Measure = ???
-  def saveResource(x$1: org.sonar.api.resources.Resource): String = ???
-  def saveSource(x$1: org.sonar.api.resources.Resource,x$2: String): Unit = ???
-  def saveViolation(x$1: org.sonar.api.rules.Violation): Unit = ???
-  def saveViolation(x$1: org.sonar.api.rules.Violation,x$2: Boolean): Unit = ???
-  def saveViolations(x$1: java.util.Collection[org.sonar.api.rules.Violation]): Unit = ???
-  override def saveMeasure(p1: InputFile, p2: Metric, p3: lang.Double): Measure = ???
-  override def saveMeasure(p1: InputFile, p2: Measure): Measure = ???
+  override def saveMeasure(inputFile: InputFile, metric: Metric[_ <: io.Serializable], value: Double): Measure[_ <: io.Serializable] = ???
+
+  override def saveMeasure(inputFile: InputFile, measure: Measure[_ <: io.Serializable]): Measure[_ <: io.Serializable] = ???
 }

@@ -47,8 +47,7 @@ class ScoverageSensor(settings: Settings, pathResolver: PathResolver, fileSystem
   protected val SCOVERAGE_REPORT_PATH_PROPERTY = "sonar.scoverage.reportPath"
   protected lazy val scoverageReportParser: ScoverageReportParser = XmlScoverageReportParser()
 
-  override def shouldExecuteOnProject(project: Project): Boolean =
-    project.getAnalysisType.isDynamic(true) && fileSystem.languages().contains(scala.getKey)
+  override def shouldExecuteOnProject(project: Project): Boolean = fileSystem.languages().contains(scala.getKey)
 
   override def analyse(project: Project, context: SensorContext) {
     scoverageReportPath match {
@@ -105,7 +104,7 @@ class ScoverageSensor(settings: Settings, pathResolver: PathResolver, fileSystem
       case null =>
         log.debug(LogUtil.f("Module has no statement coverage. [" + module.name + "]"))
         0
-      case moduleCoveredStatementCount: Measure =>
+      case moduleCoveredStatementCount: Measure[_] =>
         log.debug(LogUtil.f("Covered statement count for " + module.name + " module. [" +
           moduleCoveredStatementCount.getValue + "]"))
 
@@ -120,7 +119,7 @@ class ScoverageSensor(settings: Settings, pathResolver: PathResolver, fileSystem
         log.debug(LogUtil.f("Module has no number of statements. [" + module.name + "]"))
         0
 
-      case moduleStatementCount: Measure =>
+      case moduleStatementCount: Measure[_] =>
         log.debug(LogUtil.f("Statement count for " + module.name + " module. [" +
           moduleStatementCount.getValue + "]"))
 
@@ -147,8 +146,6 @@ class ScoverageSensor(settings: Settings, pathResolver: PathResolver, fileSystem
   private def processFile(fileCoverage: FileStatementCoverage, context: SensorContext, directory: String) {
     val path = appendFilePath(directory, fileCoverage.name)
     val p = fileSystem.predicates()
-    val files = fileSystem.inputFiles(p.and(p.matchesPathPattern("**/" + relativePath),
-      p.hasLanguage(scala.getKey), p.hasType(InputFile.Type.MAIN)))
 
     val pathPredicate = if (new io.File(path).isAbsolute) p.hasAbsolutePath(path) else p.matchesPathPattern("**/" + path)
     val files = fileSystem.inputFiles(p.and(
@@ -177,7 +174,8 @@ class ScoverageSensor(settings: Settings, pathResolver: PathResolver, fileSystem
 
   private def saveMeasures(context: SensorContext, resource: Resource, statementCoverage: StatementCoverage) {
     context.saveMeasure(resource, createStatementCoverage(statementCoverage.rate))
-    context.saveMeasure(resource, createStatementCount(statementCoverage.statementCount))
+    if (context.getMeasure(CoreMetrics.STATEMENTS) == null)
+      context.saveMeasure(resource, createStatementCount(statementCoverage.statementCount))
     context.saveMeasure(resource, createCoveredStatementCount(statementCoverage.coveredStatementsCount))
 
     log.debug(LogUtil.f("Save measures [" + statementCoverage.rate + ", " + statementCoverage.statementCount +
@@ -212,12 +210,14 @@ class ScoverageSensor(settings: Settings, pathResolver: PathResolver, fileSystem
     }
   }
 
-  private def createStatementCoverage(rate: Double): Measure = new Measure(ScalaMetrics.statementCoverage, rate)
+  private def createStatementCoverage[T <: Serializable](rate: Double): Measure[T] =
+    new Measure[T](ScalaMetrics.statementCoverage, rate)
 
-  private def createStatementCount(statements: Int): Measure = new Measure(CoreMetrics.STATEMENTS, statements)
+  private def createStatementCount[T <: Serializable](statements: Int): Measure[T] =
+    new Measure(CoreMetrics.STATEMENTS, statements.toDouble, 0)
 
-  private def createCoveredStatementCount(coveredStatements: Int): Measure =
-    new Measure(ScalaMetrics.coveredStatements, coveredStatements);
+  private def createCoveredStatementCount[T <: Serializable](coveredStatements: Int): Measure[T] =
+    new Measure(ScalaMetrics.coveredStatements, coveredStatements.toDouble, 0)
 
   private def appendFilePath(src: String, name: String) = {
     val result = src match {

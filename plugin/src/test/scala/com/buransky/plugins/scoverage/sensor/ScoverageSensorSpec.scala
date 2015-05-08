@@ -58,13 +58,11 @@ class ScoverageSensorSpec extends FlatSpec with Matchers with MockitoSugar {
     protected def checkShouldExecuteOnProject(languages: Iterable[String], expectedResult: Boolean) {
       // Setup
       val project = mock[Project]
-      when(project.getAnalysisType).thenReturn(AnalysisType.DYNAMIC)
       when(fileSystem.languages()).thenReturn(new util.TreeSet(languages))
 
       // Execute & asser
       shouldExecuteOnProject(project) should equal(expectedResult)
 
-      verify(project, times(1)).getAnalysisType
       verify(fileSystem, times(1)).languages
 
     }

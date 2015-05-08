@@ -28,13 +28,13 @@ object XmlReportFile1 {
       |        <package name="com.rr.test.sonar" statement-count="2" statements-invoked="1" statement-rate="50.00">
       |            <classes>
       |                <class
-      |                name="MainClass" filename="/home/rado/workspace/sonar-test/src/main/scala/com/rr/test/sonar/MainClass.scala" statement-count="2" statements-invoked="1" statement-rate="50.00" branch-rate="100.00">
+      |                name="MainClass" filename="/a1b2c3/workspace/sonar-test/src/main/scala/com/rr/test/sonar/MainClass.scala" statement-count="2" statements-invoked="1" statement-rate="50.00" branch-rate="100.00">
       |                    <methods>
       |                        <method
       |                        name="com.rr.test.sonar/MainClass/times" statement-count="1" statements-invoked="0" statement-rate="0.00" branch-rate="0.00">
       |                            <statements>
       |                                <statement
-      |                                package="com.rr.test.sonar" class="MainClass" class-type="Class" top-level-class="MainClass" source="/home/rado/workspace/sonar-test/src/main/scala/com/rr/test/sonar/MainClass.scala" method="times" start="161" end="162" line="14" branch="false" invocation-count="0">
+      |                                package="com.rr.test.sonar" class="MainClass" class-type="Class" top-level-class="MainClass" source="/a1b2c3/workspace/sonar-test/src/main/scala/com/rr/test/sonar/MainClass.scala" method="times" start="161" end="162" line="14" branch="false" invocation-count="0">
       |</statement>
       |                            </statements>
       |</method>
@@ -42,7 +42,7 @@ object XmlReportFile1 {
       |                        name="com.rr.test.sonar/MainClass/plus" statement-count="1" statements-invoked="1" statement-rate="100.00" branch-rate="100.00">
       |                            <statements>
       |                                <statement
-      |                                package="com.rr.test.sonar" class="MainClass" class-type="Class" top-level-class="MainClass" source="/home/rado/workspace/sonar-test/src/main/scala/com/rr/test/sonar/MainClass.scala" method="plus" start="132" end="133" line="12" branch="false" invocation-count="1">
+      |                                package="com.rr.test.sonar" class="MainClass" class-type="Class" top-level-class="MainClass" source="/a1b2c3/workspace/sonar-test/src/main/scala/com/rr/test/sonar/MainClass.scala" method="plus" start="132" end="133" line="12" branch="false" invocation-count="1">
       |</statement>
       |                            </statements>
       |</method>
@@ -127,7 +127,7 @@ object XmlReportFile1 {
       |                                <statement
       |                                package="aaa" class="StructuredErrorCode" method="toString" start="355" line="17" symbol="&lt;nosymbol&gt;" tree="Block" branch="true" invocation-count="1">
       |                                    {
-      |  scoverage.Invoker.invoked(8, &quot;/home/rado/workspace/aaa/target/scala-2.10/scoverage.measurement&quot;);
+      |  scoverage.Invoker.invoked(8, &quot;/a1b2c3/workspace/aaa/target/scala-2.10/scoverage.measurement&quot;);
       |  &quot;&quot;
       |}
       |</statement>
@@ -138,7 +138,7 @@ object XmlReportFile1 {
       |                                <statement
       |                                package="aaa" class="StructuredErrorCode" method="toString" start="363" line="17" symbol="&lt;nosymbol&gt;" tree="Block" branch="true" invocation-count="3">
       |                                    {
-      |  scoverage.Invoker.invoked(10, &quot;/home/rado/workspace/aaa/target/scala-2.10/scoverage.measurement&quot;);
+      |  scoverage.Invoker.invoked(10, &quot;/a1b2c3/workspace/aaa/target/scala-2.10/scoverage.measurement&quot;);
       |  p.+(&quot;-&quot;)
       |}
       |</statement>
@@ -149,25 +149,25 @@ object XmlReportFile1 {
       |                                <statement
       |                                package="aaa" class="StructuredErrorCode" method="toString" start="341" line="17" symbol="java.lang.String.+" tree="Apply" branch="false" invocation-count="4">
       |                                    if ({
-      |  scoverage.Invoker.invoked(7, &quot;/home/rado/workspace/aaa/target/scala-2.10/scoverage.measurement&quot;);
+      |  scoverage.Invoker.invoked(7, &quot;/a1b2c3/workspace/aaa/target/scala-2.10/scoverage.measurement&quot;);
       |  p.==(&quot;&quot;)
       |})
       |  {
-      |    scoverage.Invoker.invoked(9, &quot;/home/rado/workspace/aaa/target/scala-2.10/scoverage.measurement&quot;);
+      |    scoverage.Invoker.invoked(9, &quot;/a1b2c3/workspace/aaa/target/scala-2.10/scoverage.measurement&quot;);
       |    {
-      |      scoverage.Invoker.invoked(8, &quot;/home/rado/workspace/aaa/target/scala-2.10/scoverage.measurement&quot;);
+      |      scoverage.Invoker.invoked(8, &quot;/a1b2c3/workspace/aaa/target/scala-2.10/scoverage.measurement&quot;);
       |      &quot;&quot;
       |    }
       |  }
       |else
       |  {
-      |    scoverage.Invoker.invoked(11, &quot;/home/rado/workspace/aaa/target/scala-2.10/scoverage.measurement&quot;);
+      |    scoverage.Invoker.invoked(11, &quot;/a1b2c3/workspace/aaa/target/scala-2.10/scoverage.measurement&quot;);
       |    {
-      |      scoverage.Invoker.invoked(10, &quot;/home/rado/workspace/aaa/target/scala-2.10/scoverage.measurement&quot;);
+      |      scoverage.Invoker.invoked(10, &quot;/a1b2c3/workspace/aaa/target/scala-2.10/scoverage.measurement&quot;);
       |      p.+(&quot;-&quot;)
       |    }
       |  }.+({
-      |  scoverage.Invoker.invoked(12, &quot;/home/rado/workspace/aaa/target/scala-2.10/scoverage.measurement&quot;);
+      |  scoverage.Invoker.invoked(12, &quot;/a1b2c3/workspace/aaa/target/scala-2.10/scoverage.measurement&quot;);
       |  StructuredErrorCode.this.name
       |})
       |</statement>
@@ -186,7 +186,7 @@ object XmlReportFile1 {
       |                                <statement
       |                                package="aaa" class="StructuredErrorCode" method="is" start="235" line="10" symbol="&lt;nosymbol&gt;" tree="Block" branch="true" invocation-count="0">
       |                                    {
-      |  scoverage.Invoker.invoked(2, &quot;/home/rado/workspace/aaa/target/scala-2.10/scoverage.measurement&quot;);
+      |  scoverage.Invoker.invoked(2, &quot;/a1b2c3/workspace/aaa/target/scala-2.10/scoverage.measurement&quot;);
       |  true
       |}
       |</statement>
@@ -197,7 +197,7 @@ object XmlReportFile1 {
       |                                <statement
       |                                package="aaa" class="StructuredErrorCode" method="is" start="255" line="12" symbol="&lt;nosymbol&gt;" tree="Block" branch="true" invocation-count="0">
       |                                    {
-      |  scoverage.Invoker.invoked(4, &quot;/home/rado/workspace/aaa/target/scala-2.10/scoverage.measurement&quot;);
+      |  scoverage.Invoker.invoked(4, &quot;/a1b2c3/workspace/aaa/target/scala-2.10/scoverage.measurement&quot;);
       |  StructuredErrorCode.this.parent.is(errorCode)
       |}
       |</statement>
@@ -224,7 +224,7 @@ object XmlReportFile1 {
       |                                <statement
       |                                package="aaa" class="Demo" method="main" start="1926" line="68" symbol="scala.Predef.println" tree="Apply" branch="false" invocation-count="0">
       |                                    scala.this.Predef.println({
-      |  scoverage.Invoker.invoked(25, &quot;/home/rado/workspace/aaa/target/scala-2.10/scoverage.measurement&quot;);
+      |  scoverage.Invoker.invoked(25, &quot;/a1b2c3/workspace/aaa/target/scala-2.10/scoverage.measurement&quot;);
       |  ClientError.required
       |})
       |</statement>
@@ -235,7 +235,7 @@ object XmlReportFile1 {
       |                                <statement
       |                                package="aaa" class="Demo" method="main" start="1991" line="69" symbol="scala.Predef.println" tree="Apply" branch="false" invocation-count="0">
       |                                    scala.this.Predef.println({
-      |  scoverage.Invoker.invoked(27, &quot;/home/rado/workspace/aaa/target/scala-2.10/scoverage.measurement&quot;);
+      |  scoverage.Invoker.invoked(27, &quot;/a1b2c3/workspace/aaa/target/scala-2.10/scoverage.measurement&quot;);
       |  ClientError.invalid
       |})
       |</statement>
@@ -250,7 +250,7 @@ object XmlReportFile1 {
       |                                <statement
       |                                package="aaa" class="Demo" method="main" start="2117" line="71" symbol="scala.Predef.println" tree="Apply" branch="false" invocation-count="0">
       |                                    scala.this.Predef.println({
-      |  scoverage.Invoker.invoked(30, &quot;/home/rado/workspace/aaa/target/scala-2.10/scoverage.measurement&quot;);
+      |  scoverage.Invoker.invoked(30, &quot;/a1b2c3/workspace/aaa/target/scala-2.10/scoverage.measurement&quot;);
       |  MySqlError.syntax
       |})
       |</statement>
@@ -261,7 +261,7 @@ object XmlReportFile1 {
       |                                <statement
       |                                package="aaa" class="Demo" method="main" start="2186" line="72" symbol="scala.Predef.println" tree="Apply" branch="false" invocation-count="0">
       |                                    scala.this.Predef.println({
-      |  scoverage.Invoker.invoked(32, &quot;/home/rado/workspace/aaa/target/scala-2.10/scoverage.measurement&quot;);
+      |  scoverage.Invoker.invoked(32, &quot;/a1b2c3/workspace/aaa/target/scala-2.10/scoverage.measurement&quot;);
       |  MyServiceLogicError.logicFailed
       |})
       |</statement>
@@ -280,7 +280,7 @@ object XmlReportFile1 {
       |                                <statement
       |                                package="aaa" class="Demo" method="main" start="2345" line="76" symbol="&lt;nosymbol&gt;" tree="Block" branch="false" invocation-count="0">
       |                                    {
-      |  scoverage.Invoker.invoked(36, &quot;/home/rado/workspace/aaa/target/scala-2.10/scoverage.measurement&quot;);
+      |  scoverage.Invoker.invoked(36, &quot;/a1b2c3/workspace/aaa/target/scala-2.10/scoverage.measurement&quot;);
       |  scala.this.Predef.println(&quot;required&quot;)
       |}
       |</statement>
@@ -291,7 +291,7 @@ object XmlReportFile1 {
       |                                <statement
       |                                package="aaa" class="Demo" method="main" start="2399" line="77" symbol="&lt;nosymbol&gt;" tree="Block" branch="false" invocation-count="0">
       |                                    {
-      |  scoverage.Invoker.invoked(38, &quot;/home/rado/workspace/aaa/target/scala-2.10/scoverage.measurement&quot;);
+      |  scoverage.Invoker.invoked(38, &quot;/a1b2c3/workspace/aaa/target/scala-2.10/scoverage.measurement&quot;);
       |  scala.this.Predef.println(&quot;invalid&quot;)
       |}
       |</statement>
@@ -302,7 +302,7 @@ object XmlReportFile1 {
       |                                <statement
       |                                package="aaa" class="Demo" method="main" start="2431" line="78" symbol="&lt;nosymbol&gt;" tree="Block" branch="false" invocation-count="0">
       |                                    {
-      |  scoverage.Invoker.invoked(40, &quot;/home/rado/workspace/aaa/target/scala-2.10/scoverage.measurement&quot;);
+      |  scoverage.Invoker.invoked(40, &quot;/a1b2c3/workspace/aaa/target/scala-2.10/scoverage.measurement&quot;);
       |  ()
       |}
       |</statement>
@@ -317,7 +317,7 @@ object XmlReportFile1 {
       |                                <statement
       |                                package="aaa" class="Demo" method="main" start="2505" line="82" symbol="&lt;nosymbol&gt;" tree="Block" branch="true" invocation-count="0">
       |                                    {
-      |  scoverage.Invoker.invoked(43, &quot;/home/rado/workspace/aaa/target/scala-2.10/scoverage.measurement&quot;);
+      |  scoverage.Invoker.invoked(43, &quot;/a1b2c3/workspace/aaa/target/scala-2.10/scoverage.measurement&quot;);
       |  scala.this.Predef.println(&quot;This is a server error&quot;)
       |}
       |</statement>
@@ -328,7 +328,7 @@ object XmlReportFile1 {
       |                                <statement
       |                                package="aaa" class="Demo" method="main" start="2445" line="81" symbol="&lt;nosymbol&gt;" tree="Block" branch="true" invocation-count="0">
       |                                    {
-      |  scoverage.Invoker.invoked(45, &quot;/home/rado/workspace/aaa/target/scala-2.10/scoverage.measurement&quot;);
+      |  scoverage.Invoker.invoked(45, &quot;/a1b2c3/workspace/aaa/target/scala-2.10/scoverage.measurement&quot;);
       |  ()
       |}
       |</statement>
@@ -431,7 +431,7 @@ object XmlReportFile1 {
       |                                <statement
       |                                package="bbb" class="Main" method="main" start="867" line="31" symbol="scala.Predef.println" tree="Apply" branch="false" invocation-count="0">
       |                                    scala.this.Predef.println({
-      |  scoverage.Invoker.invoked(52, &quot;/home/rado/workspace/aaa/target/scala-2.10/scoverage.measurement&quot;);
+      |  scoverage.Invoker.invoked(52, &quot;/a1b2c3/workspace/aaa/target/scala-2.10/scoverage.measurement&quot;);
       |  x.isInstanceOf[Serializable]
       |})
       |</statement>
@@ -517,7 +517,7 @@ object XmlReportFile1 {
       |                                <statement
       |                                package="aaa" class="StructuredErrorCode" method="toString" start="355" line="17" symbol="&lt;nosymbol&gt;" tree="Block" branch="true" invocation-count="1">
       |                                    {
-      |  scoverage.Invoker.invoked(8, &quot;/home/rado/workspace/aaa/target/scala-2.10/scoverage.measurement&quot;);
+      |  scoverage.Invoker.invoked(8, &quot;/a1b2c3/workspace/aaa/target/scala-2.10/scoverage.measurement&quot;);
       |  &quot;&quot;
       |}
       |</statement>
@@ -528,7 +528,7 @@ object XmlReportFile1 {
       |                                <statement
       |                                package="aaa" class="StructuredErrorCode" method="toString" start="363" line="17" symbol="&lt;nosymbol&gt;" tree="Block" branch="true" invocation-count="3">
       |                                    {
-      |  scoverage.Invoker.invoked(10, &quot;/home/rado/workspace/aaa/target/scala-2.10/scoverage.measurement&quot;);
+      |  scoverage.Invoker.invoked(10, &quot;/a1b2c3/workspace/aaa/target/scala-2.10/scoverage.measurement&quot;);
       |  p.+(&quot;-&quot;)
       |}
       |</statement>
@@ -539,25 +539,25 @@ object XmlReportFile1 {
       |                                <statement
       |                                package="aaa" class="StructuredErrorCode" method="toString" start="341" line="17" symbol="java.lang.String.+" tree="Apply" branch="false" invocation-count="4">
       |                                    if ({
-      |  scoverage.Invoker.invoked(7, &quot;/home/rado/workspace/aaa/target/scala-2.10/scoverage.measurement&quot;);
+      |  scoverage.Invoker.invoked(7, &quot;/a1b2c3/workspace/aaa/target/scala-2.10/scoverage.measurement&quot;);
       |  p.==(&quot;&quot;)
       |})
       |  {
-      |    scoverage.Invoker.invoked(9, &quot;/home/rado/workspace/aaa/target/scala-2.10/scoverage.measurement&quot;);
+      |    scoverage.Invoker.invoked(9, &quot;/a1b2c3/workspace/aaa/target/scala-2.10/scoverage.measurement&quot;);
       |    {
-      |      scoverage.Invoker.invoked(8, &quot;/home/rado/workspace/aaa/target/scala-2.10/scoverage.measurement&quot;);
+      |      scoverage.Invoker.invoked(8, &quot;/a1b2c3/workspace/aaa/target/scala-2.10/scoverage.measurement&quot;);
       |      &quot;&quot;
       |    }
       |  }
       |else
       |  {
-      |    scoverage.Invoker.invoked(11, &quot;/home/rado/workspace/aaa/target/scala-2.10/scoverage.measurement&quot;);
+      |    scoverage.Invoker.invoked(11, &quot;/a1b2c3/workspace/aaa/target/scala-2.10/scoverage.measurement&quot;);
       |    {
-      |      scoverage.Invoker.invoked(10, &quot;/home/rado/workspace/aaa/target/scala-2.10/scoverage.measurement&quot;);
+      |      scoverage.Invoker.invoked(10, &quot;/a1b2c3/workspace/aaa/target/scala-2.10/scoverage.measurement&quot;);
       |      p.+(&quot;-&quot;)
       |    }
       |  }.+({
-      |  scoverage.Invoker.invoked(12, &quot;/home/rado/workspace/aaa/target/scala-2.10/scoverage.measurement&quot;);
+      |  scoverage.Invoker.invoked(12, &quot;/a1b2c3/workspace/aaa/target/scala-2.10/scoverage.measurement&quot;);
       |  StructuredErrorCode.this.name
       |})
       |</statement>
@@ -576,7 +576,7 @@ object XmlReportFile1 {
       |                                <statement
       |                                package="aaa" class="StructuredErrorCode" method="is" start="235" line="10" symbol="&lt;nosymbol&gt;" tree="Block" branch="true" invocation-count="0">
       |                                    {
-      |  scoverage.Invoker.invoked(2, &quot;/home/rado/workspace/aaa/target/scala-2.10/scoverage.measurement&quot;);
+      |  scoverage.Invoker.invoked(2, &quot;/a1b2c3/workspace/aaa/target/scala-2.10/scoverage.measurement&quot;);
       |  true
       |}
       |</statement>
@@ -587,7 +587,7 @@ object XmlReportFile1 {
       |                                <statement
       |                                package="aaa" class="StructuredErrorCode" method="is" start="255" line="12" symbol="&lt;nosymbol&gt;" tree="Block" branch="true" invocation-count="0">
       |                                    {
-      |  scoverage.Invoker.invoked(4, &quot;/home/rado/workspace/aaa/target/scala-2.10/scoverage.measurement&quot;);
+      |  scoverage.Invoker.invoked(4, &quot;/a1b2c3/workspace/aaa/target/scala-2.10/scoverage.measurement&quot;);
       |  StructuredErrorCode.this.parent.is(errorCode)
       |}
       |</statement>
@@ -614,7 +614,7 @@ object XmlReportFile1 {
       |                                <statement
       |                                package="aaa" class="Demo" method="main" start="1926" line="68" symbol="scala.Predef.println" tree="Apply" branch="false" invocation-count="0">
       |                                    scala.this.Predef.println({
-      |  scoverage.Invoker.invoked(25, &quot;/home/rado/workspace/aaa/target/scala-2.10/scoverage.measurement&quot;);
+      |  scoverage.Invoker.invoked(25, &quot;/a1b2c3/workspace/aaa/target/scala-2.10/scoverage.measurement&quot;);
       |  ClientError.required
       |})
       |</statement>
@@ -625,7 +625,7 @@ object XmlReportFile1 {
       |                                <statement
       |                                package="aaa" class="Demo" method="main" start="1991" line="69" symbol="scala.Predef.println" tree="Apply" branch="false" invocation-count="0">
       |                                    scala.this.Predef.println({
-      |  scoverage.Invoker.invoked(27, &quot;/home/rado/workspace/aaa/target/scala-2.10/scoverage.measurement&quot;);
+      |  scoverage.Invoker.invoked(27, &quot;/a1b2c3/workspace/aaa/target/scala-2.10/scoverage.measurement&quot;);
       |  ClientError.invalid
       |})
       |</statement>
@@ -640,7 +640,7 @@ object XmlReportFile1 {
       |                                <statement
       |                                package="aaa" class="Demo" method="main" start="2117" line="71" symbol="scala.Predef.println" tree="Apply" branch="false" invocation-count="0">
       |                                    scala.this.Predef.println({
-      |  scoverage.Invoker.invoked(30, &quot;/home/rado/workspace/aaa/target/scala-2.10/scoverage.measurement&quot;);
+      |  scoverage.Invoker.invoked(30, &quot;/a1b2c3/workspace/aaa/target/scala-2.10/scoverage.measurement&quot;);
       |  MySqlError.syntax
       |})
       |</statement>
@@ -651,7 +651,7 @@ object XmlReportFile1 {
       |                                <statement
       |                                package="aaa" class="Demo" method="main" start="2186" line="72" symbol="scala.Predef.println" tree="Apply" branch="false" invocation-count="0">
       |                                    scala.this.Predef.println({
-      |  scoverage.Invoker.invoked(32, &quot;/home/rado/workspace/aaa/target/scala-2.10/scoverage.measurement&quot;);
+      |  scoverage.Invoker.invoked(32, &quot;/a1b2c3/workspace/aaa/target/scala-2.10/scoverage.measurement&quot;);
       |  MyServiceLogicError.logicFailed
       |})
       |</statement>
@@ -670,7 +670,7 @@ object XmlReportFile1 {
       |                                <statement
       |                                package="aaa" class="Demo" method="main" start="2345" line="76" symbol="&lt;nosymbol&gt;" tree="Block" branch="false" invocation-count="0">
       |                                    {
-      |  scoverage.Invoker.invoked(36, &quot;/home/rado/workspace/aaa/target/scala-2.10/scoverage.measurement&quot;);
+      |  scoverage.Invoker.invoked(36, &quot;/a1b2c3/workspace/aaa/target/scala-2.10/scoverage.measurement&quot;);
       |  scala.this.Predef.println(&quot;required&quot;)
       |}
       |</statement>
@@ -681,7 +681,7 @@ object XmlReportFile1 {
       |                                <statement
       |                                package="aaa" class="Demo" method="main" start="2399" line="77" symbol="&lt;nosymbol&gt;" tree="Block" branch="false" invocation-count="0">
       |                                    {
-      |  scoverage.Invoker.invoked(38, &quot;/home/rado/workspace/aaa/target/scala-2.10/scoverage.measurement&quot;);
+      |  scoverage.Invoker.invoked(38, &quot;/a1b2c3/workspace/aaa/target/scala-2.10/scoverage.measurement&quot;);
       |  scala.this.Predef.println(&quot;invalid&quot;)
       |}
       |</statement>
@@ -692,7 +692,7 @@ object XmlReportFile1 {
       |                                <statement
       |                                package="aaa" class="Demo" method="main" start="2431" line="78" symbol="&lt;nosymbol&gt;" tree="Block" branch="false" invocation-count="0">
       |                                    {
-      |  scoverage.Invoker.invoked(40, &quot;/home/rado/workspace/aaa/target/scala-2.10/scoverage.measurement&quot;);
+      |  scoverage.Invoker.invoked(40, &quot;/a1b2c3/workspace/aaa/target/scala-2.10/scoverage.measurement&quot;);
       |  ()
       |}
       |</statement>
@@ -707,7 +707,7 @@ object XmlReportFile1 {
       |                                <statement
       |                                package="aaa" class="Demo" method="main" start="2505" line="82" symbol="&lt;nosymbol&gt;" tree="Block" branch="true" invocation-count="0">
       |                                    {
-      |  scoverage.Invoker.invoked(43, &quot;/home/rado/workspace/aaa/target/scala-2.10/scoverage.measurement&quot;);
+      |  scoverage.Invoker.invoked(43, &quot;/a1b2c3/workspace/aaa/target/scala-2.10/scoverage.measurement&quot;);
       |  scala.this.Predef.println(&quot;This is a server error&quot;)
       |}
       |</statement>
@@ -718,7 +718,7 @@ object XmlReportFile1 {
       |                                <statement
       |                                package="aaa" class="Demo" method="main" start="2445" line="81" symbol="&lt;nosymbol&gt;" tree="Block" branch="true" invocation-count="0">
       |                                    {
-      |  scoverage.Invoker.invoked(45, &quot;/home/rado/workspace/aaa/target/scala-2.10/scoverage.measurement&quot;);
+      |  scoverage.Invoker.invoked(45, &quot;/a1b2c3/workspace/aaa/target/scala-2.10/scoverage.measurement&quot;);
       |  ()
       |}
       |</statement>
@@ -821,7 +821,7 @@ object XmlReportFile1 {
       |                                <statement
       |                                package="bbb" class="Main" method="main" start="867" line="31" symbol="scala.Predef.println" tree="Apply" branch="false" invocation-count="0">
       |                                    scala.this.Predef.println({
-      |  scoverage.Invoker.invoked(52, &quot;/home/rado/workspace/aaa/target/scala-2.10/scoverage.measurement&quot;);
+      |  scoverage.Invoker.invoked(52, &quot;/a1b2c3/workspace/aaa/target/scala-2.10/scoverage.measurement&quot;);
       |  x.isInstanceOf[Serializable]
       |})
       |</statement>

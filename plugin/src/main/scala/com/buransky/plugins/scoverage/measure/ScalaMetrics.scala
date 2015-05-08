@@ -30,7 +30,7 @@ import scala.collection.mutable.ListBuffer
  * @author Rado Buransky
  */
 class ScalaMetrics extends Metrics {
-  override def getMetrics = ListBuffer(ScalaMetrics.statementCoverage, ScalaMetrics.coveredStatements)
+  override def getMetrics = ListBuffer(ScalaMetrics.statementCoverage, ScalaMetrics.coveredStatements).toList
 }
 
 object ScalaMetrics {
@@ -45,7 +45,7 @@ object ScalaMetrics {
     .setDomain(CoreMetrics.DOMAIN_TESTS)
     .setWorstValue(0.0)
     .setBestValue(100.0)
-    .create()
+    .create[java.lang.Double]()
 
   lazy val coveredStatements = new Metric.Builder(COVERED_STATEMENTS_KEY,
     "Covered statements", Metric.ValueType.INT)
@@ -54,5 +54,5 @@ object ScalaMetrics {
     .setQualitative(false)
     .setDomain(CoreMetrics.DOMAIN_SIZE)
     .setFormula(new org.sonar.api.measures.SumChildValuesFormula(false))
-    .create()
+    .create[java.lang.Integer]()
 }

@@ -41,12 +41,7 @@ class XmlScoverageReportConstructingParserSpec extends FlatSpec with Matchers {
       assert(projectCoverage.children.size.toInt === 1)
       projectCoverage.children.head match {
         case rootDir: DirectoryStatementCoverage =>
-          assert(rootDir.name == "/")
-          rootDir.children.head match {
-            case homeDir: DirectoryStatementCoverage =>
-              assert(homeDir.name == "home")
-            case other => fail(s"This is not a home statement coverage! [$other]")
-          }
+          assert(rootDir.name == "a1b2c3")
         case other => fail(s"This is not a directory statement coverage! [$other]")
       }
     }

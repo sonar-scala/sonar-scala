@@ -1,6 +1,6 @@
 organization := "com.buransky"
 
-scalaVersion := "2.10.3"
+scalaVersion := "2.11.6"
 
 lazy val root = project.in(file(".")).aggregate(module1, module2)
 

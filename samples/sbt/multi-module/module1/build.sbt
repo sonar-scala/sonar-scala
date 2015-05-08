@@ -4,10 +4,8 @@ name := Common.baseName + "-module1"
 
 version := Common.version
 
-scalaVersion := "2.10.3"
+scalaVersion := "2.11.6"
 
 libraryDependencies ++= Seq(
-  "org.scalatest" %%  "scalatest" % "2.0" % "test"
+  "org.scalatest" %%  "scalatest" % "2.2.4" % "test"
 )
-
-ScoverageSbtPlugin.instrumentSettings

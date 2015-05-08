@@ -4,7 +4,7 @@
 
   <groupId>org.codehaus.sonar-plugins</groupId>
   <artifactId>parent</artifactId>
-  <version>18</version>
+  <version>19</version>
   <packaging>pom</packaging>
 
   <name>Sonar plugins parent</name>
@@ -34,9 +34,10 @@
   </prerequisites>
 
   <scm>
-    <connection>scm:svn:http://svn.codehaus.org/sonar-plugins/tags/18</connection>
-    <developerConnection>scm:svn:https://svn.codehaus.org/sonar-plugins/tags/18</developerConnection>
-    <url>scm:svn:https://svn.codehaus.org/sonar-plugins/tags/18</url>
+    <connection>scm:git:https://github.com/SonarSource/parent-oss.git</connection>
+    <developerConnection>scm:git:git@github.com:SonarSource/parent-oss.git</developerConnection>
+    <url>https://github.com/SonarSource/parent-oss</url>
+    <tag>19</tag>
   </scm>
   <issueManagement>
     <system>jira</system>
@@ -62,8 +63,8 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <maven.min.version>2.2.1</maven.min.version>
-    <jdk.min.version>1.6</jdk.min.version>
+    <maven.min.version>3.0.5</maven.min.version>
+    <jdk.min.version>1.7</jdk.min.version>
     <timestamp>${maven.build.timestamp}</timestamp>
     <maven.build.timestamp.format>yyyy-MM-dd'T'HH:mm:ssZ</maven.build.timestamp.format>
     <sonar.snapshotRepository.id>codehaus.org</sonar.snapshotRepository.id>
@@ -72,33 +73,33 @@
     <!-- ================ -->
     <!-- Plugins versions -->
     <!-- ================ -->
-    <version.assembly.plugin>2.4</version.assembly.plugin>
-    <version.clean.plugin>2.5</version.clean.plugin>
-    <version.compiler.plugin>3.0</version.compiler.plugin>
-    <version.dependency.plugin>2.8</version.dependency.plugin>
-    <version.deploy.plugin>2.7</version.deploy.plugin>
-    <version.enforcer.plugin>1.2</version.enforcer.plugin>
-    <version.failsafe.plugin>2.12.4</version.failsafe.plugin>
-    <version.install.plugin>2.4</version.install.plugin>
-    <version.jar.plugin>2.4</version.jar.plugin>
-    <version.jarjar.plugin>1.7</version.jarjar.plugin>
-    <version.javadoc.plugin>2.9</version.javadoc.plugin>
-    <version.license.plugin>1.9.0</version.license.plugin>
-    <version.plugin.plugin>3.2</version.plugin.plugin>
-    <version.release.plugin>2.4.2</version.release.plugin>
-    <version.resources.plugin>2.6</version.resources.plugin>
-    <version.shade.plugin>1.7.1</version.shade.plugin>
-    <version.source.plugin>2.2.1</version.source.plugin>
-    <version.surefire.plugin>2.12.4</version.surefire.plugin>
-    <version.site.plugin>3.2</version.site.plugin>
-    <version.gpg.plugin>1.4</version.gpg.plugin>
+    <version.assembly.plugin>2.5.3</version.assembly.plugin>
+    <version.clean.plugin>2.6.1</version.clean.plugin>
+    <version.compiler.plugin>3.2</version.compiler.plugin>
+    <version.dependency.plugin>2.9</version.dependency.plugin>
+    <version.deploy.plugin>2.8.2</version.deploy.plugin>
+    <version.enforcer.plugin>1.3.1</version.enforcer.plugin>
+    <version.failsafe.plugin>2.18</version.failsafe.plugin>
+    <version.install.plugin>2.5.2</version.install.plugin>
+    <version.jar.plugin>2.5</version.jar.plugin>
+    <version.jarjar.plugin>1.9</version.jarjar.plugin>
+    <version.javadoc.plugin>2.10.1</version.javadoc.plugin>
+    <version.license.plugin>1.10.b1</version.license.plugin>
+    <version.plugin.plugin>3.3</version.plugin.plugin>
+    <version.release.plugin>2.5.1</version.release.plugin>
+    <version.resources.plugin>2.7</version.resources.plugin>
+    <version.shade.plugin>2.3</version.shade.plugin>
+    <version.source.plugin>2.4</version.source.plugin>
+    <version.surefire.plugin>2.18</version.surefire.plugin>
+    <version.site.plugin>3.4</version.site.plugin>
+    <version.gpg.plugin>1.5</version.gpg.plugin>
 
-    <version.animal-sniffer.plugin>1.9</version.animal-sniffer.plugin>
-    <version.buildnumber.plugin>1.2</version.buildnumber.plugin>
+    <version.animal-sniffer.plugin>1.13</version.animal-sniffer.plugin>
+    <version.buildnumber.plugin>1.3</version.buildnumber.plugin>
     <version.native2ascii.plugin>1.0-beta-1</version.native2ascii.plugin>
 
-    <version.sonar-packaging.plugin>1.5</version.sonar-packaging.plugin>
-    <version.sonar-dev.plugin>1.6</version.sonar-dev.plugin>
+    <version.sonar-packaging.plugin>1.12.1</version.sonar-packaging.plugin>
+    <version.sonar-dev.plugin>1.8</version.sonar-dev.plugin>
 
     <!-- To configure maven-license-plugin to check license headers -->
     <license.name>GNU LGPL 3</license.name>
@@ -109,8 +110,8 @@
 
     <!-- To configure animal-sniffer to check API compat -->
     <animal-sniffer.signature.groupId>org.codehaus.mojo.signature</animal-sniffer.signature.groupId>
-    <animal-sniffer.signature.artifactId>java16</animal-sniffer.signature.artifactId>
-    <animal-sniffer.signature.version>1.1</animal-sniffer.signature.version>
+    <animal-sniffer.signature.artifactId>java17</animal-sniffer.signature.artifactId>
+    <animal-sniffer.signature.version>1.0</animal-sniffer.signature.version>
   </properties>
 
   <build>
@@ -245,22 +246,6 @@
             -->
             <arguments>-Prelease</arguments>
           </configuration>
-          <dependencies>
-            <!--
-              Dependencies required to release a Git branch.
-              See http://jira.codehaus.org/browse/SONARPLUGINS-3344
-            -->
-            <dependency>
-              <groupId>org.apache.maven.scm</groupId>
-              <artifactId>maven-scm-api</artifactId>
-              <version>1.8.1</version>
-            </dependency>
-            <dependency>
-              <groupId>org.apache.maven.scm</groupId>
-              <artifactId>maven-scm-provider-gitexe</artifactId>
-              <version>1.8.1</version>
-            </dependency>
-          </dependencies>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>

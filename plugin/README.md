@@ -6,6 +6,6 @@ directory and start Sonar server again:
     <SONAR_INSTALL_DIR>/bin/linux-x86-64/sonar.sh stop
 
     mvn install
-    cp ./target/sonar-scoverage-plugin-1.0-SNAPSHOT.jar <SONAR_INSTALL_DIR>/extensions/plugins/
+    cp ./target/sonar-scoverage-plugin-5.1.0-SNAPSHOT.jar <SONAR_INSTALL_DIR>/extensions/plugins/
 
     <SONAR_INSTALL_DIR>/bin/linux-x86-64/sonar.sh start

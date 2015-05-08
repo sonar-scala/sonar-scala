@@ -1,4 +1,4 @@
-#Sonar Scoverage Plugin 1.1.0#
+#Sonar Scoverage Plugin 5.1.0#
 
 [![Build Status](https://travis-ci.org/RadoBuransky/sonar-scoverage-plugin.png)](https://travis-ci.org/RadoBuransky/sonar-scoverage-plugin)
 [![Analytics](https://ga-beacon.appspot.com/UA-55603212-2/sonar-scoverage-plugin)](https://github.com/igrigorik/ga-beacon)
@@ -23,16 +23,17 @@ just plain average of coverage rates for sub-projects.
 
 ## Requirements ##
 
-- [SonarQube] 4.2
-- [Scoverage] 0.95.7
+- [SonarQube] 5.1
+- [Scoverage] 1.1.0
 
 ## Installation ##
 
-Download and copy [sonar-scoverage-plugin-1.1.0.jar] [LatestPluginJar] to the Sonar plugins directory
+Download and copy [sonar-scoverage-plugin-5.1.0-SNAPSHOT.jar] [LatestPluginJar] to the Sonar plugins directory
 (usually <SONAR_INSTALLATION_ROOT>/extensions/plugins). Restart Sonar.
 
 ### Support for older versions of Sonar ###
 
+- SonarQube 4.2: Install version 1.1.0 [sonar-scoverage-plugin-1.1.0.jar] [Plugin110Jar].
 - SonarQube 4.0: Install version 1.0.2 [sonar-scoverage-plugin-1.0.2.jar] [Plugin102Jar].
 - SonarQube 3.5.1: Take a look into the [dedicated branch] [Plugin351] or directly [download binary JAR] [Plugin351Jar].
 
@@ -42,7 +43,7 @@ Set location of the **scoverage.xml** file in the **sonar-project.properties** l
 root directory:
 
     ...
-    sonar.scoverage.reportPath=target/scala-2.10/scoverage-report/scoverage.xml
+    sonar.scoverage.reportPath=target/scala-2.11/scoverage-report/scoverage.xml
     ...
 
 ## Run Scoverage and Sonar runner ##
@@ -89,11 +90,16 @@ Source code markup with covered and uncovered lines:
 
 ## Changelog ##
 
+### 5.1.0 - 28 Apr 2015 ###
+
+- Upgrade to SonarQube 5.1 API
+
 ### 1.1.0 - 23 Sep 2014 ###
 
 - Upgrade to SonarQube 4.2 API
 
-[LatestPluginJar]: https://github.com/RadoBuransky/sonar-scoverage-plugin/releases/download/1.1.0/sonar-scoverage-plugin-1.1.0.jar
+[LatestPluginJar]: https://github.com/RadoBuransky/sonar-scoverage-plugin/releases/download/v5.1.0-SNAPSHOT/sonar-scoverage-plugin-5.1.0-SNAPSHOT.jar
+[Plugin110Jar]: https://github.com/RadoBuransky/sonar-scoverage-plugin/releases/download/1.1.0/sonar-scoverage-plugin-1.1.0.jar
 [Plugin102Jar]: https://github.com/RadoBuransky/sonar-scoverage-plugin/releases/download/1.0.2/sonar-scoverage-plugin-1.0.2.jar
 [SonarQube]: http://www.sonarqube.org/ "SonarQube"
 [Scoverage]: https://github.com/scoverage/scalac-scoverage-plugin "Scoverage"

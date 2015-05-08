@@ -25,36 +25,56 @@ import org.scalatest.{Matchers, FlatSpec}
 import scala.io.Source
 import com.buransky.plugins.scoverage.xml.data.XmlReportFile1
 import scala._
-import com.buransky.plugins.scoverage.FileStatementCoverage
-import com.buransky.plugins.scoverage.DirectoryStatementCoverage
+import com.buransky.plugins.scoverage.{ProjectStatementCoverage, FileStatementCoverage, DirectoryStatementCoverage}
 
 @RunWith(classOf[JUnitRunner])
 class XmlScoverageReportConstructingParserSpec extends FlatSpec with Matchers {
   behavior of "parse source"
 
-  it must "parse file1 correctly" in {
-    parseFile1(XmlReportFile1.data)
+  it must "parse old broken Scoverage 0.95 file correctly" in {
+    assertReportFile(XmlReportFile1.scoverage095Data, 24.53)(assertScoverage095Data)
+  }
+
+  it must "parse new fixed Scoverage 1.0.4 file correctly" in {
+    assertReportFile(XmlReportFile1.scoverage104Data, 50.0) { projectCoverage =>
+      assert(projectCoverage.name === "")
+      assert(projectCoverage.children.size.toInt === 1)
+      projectCoverage.children.head match {
+        case rootDir: DirectoryStatementCoverage =>
+          assert(rootDir.name == "/")
+          rootDir.children.head match {
+            case homeDir: DirectoryStatementCoverage =>
+              assert(homeDir.name == "home")
+            case other => fail(s"This is not a home statement coverage! [$other]")
+          }
+        case other => fail(s"This is not a directory statement coverage! [$other]")
+      }
+    }
   }
 
   it must "parse file1 correctly even without XML declaration" in {
-    parseFile1(XmlReportFile1.dataWithoutDeclaration)
+    assertReportFile(XmlReportFile1.dataWithoutDeclaration, 24.53)(assertScoverage095Data)
   }
 
-  private def parseFile1(data: String) {
+  private def assertReportFile(data: String, expectedCoverage: Double)(f: (ProjectStatementCoverage) => Unit) {
     val parser = new XmlScoverageReportConstructingParser(Source.fromString(data))
     val projectCoverage = parser.parse()
 
     // Assert coverage
-    checkRate(24.53, projectCoverage.rate)
+    checkRate(expectedCoverage, projectCoverage.rate)
 
+    f(projectCoverage)
+  }
+
+  private def assertScoverage095Data(projectCoverage: ProjectStatementCoverage): Unit = {
     // Assert structure
     projectCoverage.name should equal("")
 
     val projectChildren = projectCoverage.children.toList
     projectChildren.length should equal(1)
-    projectChildren(0) shouldBe a [DirectoryStatementCoverage]
+    projectChildren.head shouldBe a [DirectoryStatementCoverage]
 
-    val aaa = projectChildren(0).asInstanceOf[DirectoryStatementCoverage]
+    val aaa = projectChildren.head.asInstanceOf[DirectoryStatementCoverage]
     aaa.name should equal("aaa")
     checkRate(24.53, aaa.rate)
 
@@ -67,8 +87,8 @@ class XmlScoverageReportConstructingParserSpec extends FlatSpec with Matchers {
     errorCode.statementCount should equal (46)
     errorCode.coveredStatementsCount should equal (13)
 
-    aaaChildren(0) shouldBe a [FileStatementCoverage]
-    val graph = aaaChildren(0).asInstanceOf[FileStatementCoverage]
+    aaaChildren.head shouldBe a [FileStatementCoverage]
+    val graph = aaaChildren.head.asInstanceOf[FileStatementCoverage]
     graph.name should equal("Graph.scala")
     graph.statementCount should equal (7)
     graph.coveredStatementsCount should equal (0)

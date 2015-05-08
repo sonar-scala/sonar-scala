@@ -20,7 +20,41 @@
 package com.buransky.plugins.scoverage.xml.data
 
 object XmlReportFile1 {
-  val data =
+  val scoverage104Data =
+    """<?xml version="1.0" encoding="UTF-8"?>
+      |<scoverage
+      |statement-count="2" statements-invoked="1" statement-rate="50.00" branch-rate="100.00" version="1.0" timestamp="1430644814502">
+      |    <packages>
+      |        <package name="com.rr.test.sonar" statement-count="2" statements-invoked="1" statement-rate="50.00">
+      |            <classes>
+      |                <class
+      |                name="MainClass" filename="/home/rado/workspace/sonar-test/src/main/scala/com/rr/test/sonar/MainClass.scala" statement-count="2" statements-invoked="1" statement-rate="50.00" branch-rate="100.00">
+      |                    <methods>
+      |                        <method
+      |                        name="com.rr.test.sonar/MainClass/times" statement-count="1" statements-invoked="0" statement-rate="0.00" branch-rate="0.00">
+      |                            <statements>
+      |                                <statement
+      |                                package="com.rr.test.sonar" class="MainClass" class-type="Class" top-level-class="MainClass" source="/home/rado/workspace/sonar-test/src/main/scala/com/rr/test/sonar/MainClass.scala" method="times" start="161" end="162" line="14" branch="false" invocation-count="0">
+      |</statement>
+      |                            </statements>
+      |</method>
+      |                        <method
+      |                        name="com.rr.test.sonar/MainClass/plus" statement-count="1" statements-invoked="1" statement-rate="100.00" branch-rate="100.00">
+      |                            <statements>
+      |                                <statement
+      |                                package="com.rr.test.sonar" class="MainClass" class-type="Class" top-level-class="MainClass" source="/home/rado/workspace/sonar-test/src/main/scala/com/rr/test/sonar/MainClass.scala" method="plus" start="132" end="133" line="12" branch="false" invocation-count="1">
+      |</statement>
+      |                            </statements>
+      |</method>
+      |                    </methods>
+      |</class>
+      |            </classes>
+      |        </package>
+      |    </packages>
+      |</scoverage>
+      |""".stripMargin
+
+  val scoverage095Data =
     """<?xml version="1.0" encoding="UTF-8"?>
       |<scoverage statement-rate="24.53" branch-rate="33.33" version="1.0" timestamp="1391478578154">
       |    <packages>

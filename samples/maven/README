@@ -1,0 +1,3 @@
+Run with:
+
+`mvn clean scoverage:report sonar:sonar`

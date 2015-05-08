@@ -26,16 +26,16 @@ just plain average of coverage rates for sub-projects.
 - [SonarQube] 5.1
 - [Scoverage] 1.1.0
 
-## Installation ##
-
-Download and copy [sonar-scoverage-plugin-5.1.1.jar] [PluginJar] to the Sonar plugins directory
-(usually <SONAR_INSTALLATION_ROOT>/extensions/plugins). Restart Sonar.
-
 ### Support for older versions of Sonar ###
 
 - [SonarQube 4.5] (https://github.com/RadoBuransky/sonar-scoverage-plugin/tree/sonar45)
 - [SonarQube 4.2] (https://github.com/RadoBuransky/sonar-scoverage-plugin/tree/sonar45)
 - [SonarQube 3.5] (https://github.com/RadoBuransky/sonar-scoverage-plugin/tree/sonar35)
+
+## Installation ##
+
+Download and copy [sonar-scoverage-plugin-5.1.1.jar] [PluginJar] to the Sonar plugins directory
+(usually <SONAR_INSTALLATION_ROOT>/extensions/plugins). Restart Sonar.
 
 ## Configure Sonar runner ##
 
@@ -77,16 +77,16 @@ Take a look at a sample SBT multi-module project located in this repository in t
 ## Screenshots ##
 
 Project dashboard with Scoverage plugin:
-![Project dashboard with Scoverage plugin](/doc/img/01_dashboard.png "Project dashboard with Scoverage plugin")
+![Project dashboard with Scoverage plugin](/doc/img/01.png "Project dashboard with Scoverage plugin")
 
 Multi-module project overview:
-![Multi-module project overview](/doc/img/02_detail.png "Multi-module project overview")
+![Multi-module project overview](/doc/img/02.png "Multi-module project overview")
 
 Columns with statement coverage, total number of statements and number of covered statements:
-![Columns](/doc/img/03_columns.png "Columns")
+![Columns](/doc/img/03.png "Columns")
 
 Source code markup with covered and uncovered lines:
-![Source code markup](/doc/img/04_coverage.png "Source code markup")
+![Source code markup](/doc/img/04.png "Source code markup")
 
 ## Changelog ##
 

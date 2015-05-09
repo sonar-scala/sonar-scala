@@ -29,7 +29,7 @@ just plain average of coverage rates for sub-projects.
 ### Support for older versions of Sonar ###
 
 - [SonarQube 4.5] (https://github.com/RadoBuransky/sonar-scoverage-plugin/tree/sonar45)
-- [SonarQube 4.2] (https://github.com/RadoBuransky/sonar-scoverage-plugin/tree/sonar45)
+- [SonarQube 4.2] (https://github.com/RadoBuransky/sonar-scoverage-plugin/tree/sonar42)
 - [SonarQube 3.5] (https://github.com/RadoBuransky/sonar-scoverage-plugin/tree/sonar35)
 
 ## Installation ##

@@ -14,12 +14,12 @@
 
     <properties>
         <scala.version>2.11.6</scala.version>
+        <sbt.version>0.13.8</sbt.version>
         <!--Sonar-->
         <sonar.core.codeCoveragePlugin>scoverage</sonar.core.codeCoveragePlugin>
         <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
         <sonar.junit.reportsPath>target/surefire-reports</sonar.junit.reportsPath>
         <sonar.scoverage.reportPath>target/scoverage.xml</sonar.scoverage.reportPath>
-        <sonar.scala.cobertura.reportPath>target/notthere.xml</sonar.scala.cobertura.reportPath>
         <sonar.sources>src</sonar.sources>
         <sonar.jacoco.reportPath>target/jacoco.exec</sonar.jacoco.reportPath>
         <sonar.exclusions>src/test/**</sonar.exclusions>
@@ -77,9 +77,19 @@
                 </configuration>
                 <executions>
                     <execution>
+                        <id>instrument</id>
+                        <goals>
+                            <!-- used to add instrumentation -->
+                            <goal>pre-compile</goal>
+                            <!-- used to remove instrumentation for testCompile -->
+                            <goal>post-compile</goal>
+                        </goals>
+                    </execution>
+                    <execution>
                         <id>scoverage-report</id>
                         <goals>
-                            <goal>report</goal>
+                            <!-- Needed for Sonar -->
+                            <goal>report-only</goal>
                         </goals>
                         <phase>prepare-package</phase>
                     </execution>

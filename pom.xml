@@ -32,8 +32,8 @@
         <sonar.pluginName>Scalastyle</sonar.pluginName>
         <sonar.pluginClass>com.ncredinburgh.sonar.scalastyle.ScalastylePlugin</sonar.pluginClass>
 
-        <scala.version>2.10.4</scala.version>
-        <scala.major.version>2.10</scala.major.version>
+        <scala.version>2.11.7</scala.version>
+        <scala.major.version>2.11</scala.major.version>
 
         <!-- needed? -->
         <sonar.language>scala</sonar.language>
@@ -56,8 +56,8 @@
 
         <dependency>
             <groupId>org.scalastyle</groupId>
-            <artifactId>scalastyle_2.10</artifactId>
-            <version>0.5.0</version>
+            <artifactId>scalastyle_2.11</artifactId>
+            <version>0.7.0</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.scala-lang</groupId>

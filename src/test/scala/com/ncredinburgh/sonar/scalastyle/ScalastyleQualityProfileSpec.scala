@@ -44,7 +44,7 @@ class ScalastyleQualityProfileSpec extends FlatSpec with Matchers with MockitoSu
   }
 
   "the default quality profile" should "have all the rules in default config" in new Fixture {
-    val rulesCount = 36
+    val rulesCount = 37
 
     val rulesProfile = testee.createProfile(validationMessages)
 
@@ -52,7 +52,7 @@ class ScalastyleQualityProfileSpec extends FlatSpec with Matchers with MockitoSu
   }
 
   it should "have all the parameters in default config" in new Fixture {
-    val parametersCount = 18
+    val parametersCount = 19
 
     val rulesProfile = testee.createProfile(validationMessages)
 

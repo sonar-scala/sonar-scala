@@ -4,6 +4,10 @@ Wraps up Scalastyle as a SonarQube plugin.
 
 http://www.scalastyle.org/
 
+
+[![Dependency Status](https://www.versioneye.com/user/projects/560aec945a262f00220007a1/badge.svg?style=flat)](https://www.versioneye.com/user/projects/560aec945a262f00220007a1)
+
+
 ### Instructions
 
 * Download and unzip SonarQube [4.3.2](http://dist.sonar.codehaus.org/sonarqube-4.3.2.zip) or [4.4-RC3](http://dist.sonar.codehaus.org/sonarqube-4.4-RC3.zip).

@@ -52,9 +52,11 @@ class ScalastyleRunnerSpec extends FlatSpec with Matchers with MockitoSugar with
 
     messages.length shouldEqual 5
     messages(0).toString shouldEqual "StartWork()"
-    messages(1).toString shouldEqual "StartFile(/Users/emrehantuzun/Desktop/sonar-scalastyle/src/test/resources/ScalaFile1.scala)"
+    messages(1).toString should startWith ("StartFile(/")
+    messages(1).toString should endWith ("/ScalaFile1.scala)")
     messages(2).toString shouldEqual "StyleError key=header.matches args=List() lineNumber=Some(1) column=None customMessage=None"
-    messages(3).toString shouldEqual "EndFile(/Users/emrehantuzun/Desktop/sonar-scalastyle/src/test/resources/ScalaFile1.scala)"
+    messages(3).toString should startWith ("EndFile(/")
+    messages(3).toString should endWith ("/ScalaFile1.scala)")
     messages(4).toString shouldEqual "EndWork()"
   }
 
@@ -65,8 +67,10 @@ class ScalastyleRunnerSpec extends FlatSpec with Matchers with MockitoSugar with
 
     messages.length shouldEqual 4
     messages(0).toString shouldEqual "StartWork()"
-    messages(1).toString shouldEqual "StartFile(/Users/emrehantuzun/Desktop/sonar-scalastyle/src/test/resources/ScalaFile2.scala)"
-    messages(2).toString shouldEqual "EndFile(/Users/emrehantuzun/Desktop/sonar-scalastyle/src/test/resources/ScalaFile2.scala)"
+    messages(1).toString should startWith ("StartFile(/")
+    messages(1).toString should endWith ("/ScalaFile2.scala)")
+    messages(2).toString should startWith ("EndFile(/")
+    messages(2).toString should endWith ("/ScalaFile2.scala)")
     messages(3).toString shouldEqual "EndWork()"
   }
 
@@ -77,11 +81,15 @@ class ScalastyleRunnerSpec extends FlatSpec with Matchers with MockitoSugar with
 
     messages.length shouldEqual 7
     messages(0).toString shouldEqual "StartWork()"
-    messages(1).toString shouldEqual "StartFile(/Users/emrehantuzun/Desktop/sonar-scalastyle/src/test/resources/ScalaFile1.scala)"
+    messages(1).toString should startWith ("StartFile(/")
+    messages(1).toString should endWith ("/ScalaFile1.scala)")
     messages(2).toString shouldEqual "StyleError key=header.matches args=List() lineNumber=Some(1) column=None customMessage=None"
-    messages(3).toString shouldEqual "EndFile(/Users/emrehantuzun/Desktop/sonar-scalastyle/src/test/resources/ScalaFile1.scala)"
-    messages(4).toString shouldEqual "StartFile(/Users/emrehantuzun/Desktop/sonar-scalastyle/src/test/resources/ScalaFile2.scala)"
-    messages(5).toString shouldEqual "EndFile(/Users/emrehantuzun/Desktop/sonar-scalastyle/src/test/resources/ScalaFile2.scala)"
+    messages(3).toString should startWith ("EndFile(/")
+    messages(3).toString should endWith ("/ScalaFile1.scala)")
+    messages(4).toString should startWith ("StartFile(/")
+    messages(4).toString should endWith ("/ScalaFile2.scala)")
+    messages(5).toString should startWith ("EndFile(/")
+    messages(5).toString should endWith ("/ScalaFile2.scala)")
     messages(6).toString shouldEqual "EndWork()"
   }
 

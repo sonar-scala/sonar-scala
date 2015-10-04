@@ -18,6 +18,7 @@
  */
 package com.ncredinburgh.sonar.scalastyle
 
+import com.ncredinburgh.sonar.scalastyle.testUtils.TestRuleFinder
 import org.junit.runner.RunWith
 import org.scalatest._
 import org.scalatest.junit.JUnitRunner
@@ -33,9 +34,8 @@ import scala.collection.JavaConversions._
 @RunWith(classOf[JUnitRunner])
 class ScalastyleQualityProfileSpec extends FlatSpec with Matchers with MockitoSugar {
   trait Fixture {
-    val scalastyleRepository = new ScalastyleRepository
     val validationMessages = ValidationMessages.create
-    val testee = new ScalastyleQualityProfile(scalastyleRepository)
+    val testee = new ScalastyleQualityProfile(TestRuleFinder)
   }
 
   "a scalastyle quality profile" should "create a default profile" in new Fixture {

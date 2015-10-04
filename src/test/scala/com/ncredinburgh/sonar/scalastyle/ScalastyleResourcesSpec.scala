@@ -18,12 +18,11 @@
  */
 package com.ncredinburgh.sonar.scalastyle
 
-import java.io.InputStream
-
 import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
 import org.scalatest.{FlatSpec, Inspectors, Matchers, PrivateMethodTester}
 import org.sonar.api.PropertyType
+import org.sonar.api.server.rule.RuleParamType
 
 import scala.xml.Elem
 
@@ -52,7 +51,8 @@ class ScalastyleResourcesSpec  extends FlatSpec with Matchers with Inspectors wi
   }
 
   "the configuration" should "allow access to description in documentation for a checker" in {
-    ScalastyleResources.description("line.size.limit") shouldEqual "Lines that are too long can be hard to read and horizontal scrolling is annoying."
+    ScalastyleResources.description("line.size.limit") shouldEqual
+      "<p>Lines that are too long can be hard to read and horizontal scrolling is annoying.</p>"
   }
 
   it should "return all defined checkers" in {
@@ -83,7 +83,12 @@ class ScalastyleResourcesSpec  extends FlatSpec with Matchers with Inspectors wi
   }
 
   it should "get description from configuration" in {
-    ScalastyleResources.description("magic.number") shouldEqual "Replacing a magic number with a named constant can make code easier to read and understand, and can avoid some subtle bugs."
+    ScalastyleResources.description("magic.number") shouldEqual
+      "<p>Replacing a magic number with a named constant can make code easier to read and understand," +
+        " and can avoid some subtle bugs.</p>\n" +
+        "<p>A simple assignment to a val is not considered to be a magic number, for example:</p>\n" +
+        "<p><pre>    val foo = 4</pre></p>\n<p>is not a magic number, but</p>\n" +
+        "<p><pre>    var foo = 4</pre></p>\n<p>is considered to be a magic number.</p>"
 
     // In case no long description found, return the short description
     ScalastyleResources.label("disallow.space.after.token") shouldEqual "Space after tokens"
@@ -91,7 +96,7 @@ class ScalastyleResourcesSpec  extends FlatSpec with Matchers with Inspectors wi
 
   it should "get parameter key from node" in {
     val xmlFromClassPath = PrivateMethod[Elem]('xmlFromClassPath)
-    val nodeToParameterKey = PrivateMethod[String]('nodeToParameterKey)
+    val nodeToRuleParamKey = PrivateMethod[String]('nodeToRuleParamKey)
 
     val key = "org.scalastyle.scalariform.ParameterNumberChecker"
     val definitions = ScalastyleResources invokePrivate xmlFromClassPath("/scalastyle_definition.xml")
@@ -99,17 +104,16 @@ class ScalastyleResourcesSpec  extends FlatSpec with Matchers with Inspectors wi
     val ruleNode = ruleNodes find { _ \\ "@class" exists (_.text == key) }
 
     ruleNode match {
-      case Some(node) => {
+      case Some(node) =>
         val parameter = (node \ "parameters" \ "parameter").head
-        ScalastyleResources invokePrivate nodeToParameterKey(parameter) shouldEqual "maxParameters"
-      }
+        ScalastyleResources invokePrivate nodeToRuleParamKey(parameter) shouldEqual "maxParameters"
       case _ => fail("rule with key " + key + "could not found")
     }
   }
 
   it should "get property type from node" in {
     val xmlFromClassPath = PrivateMethod[Elem]('xmlFromClassPath)
-    val nodeToPropertyType = PrivateMethod[PropertyType]('nodeToPropertyType)
+    val nodeToRuleParamType = PrivateMethod[PropertyType]('nodeToRuleParamType)
 
     val key = "org.scalastyle.scalariform.ParameterNumberChecker"
     val definitions = ScalastyleResources invokePrivate xmlFromClassPath("/scalastyle_definition.xml")
@@ -117,10 +121,9 @@ class ScalastyleResourcesSpec  extends FlatSpec with Matchers with Inspectors wi
     val ruleNode = ruleNodes find { _ \\ "@class" exists (_.text == key) }
 
     ruleNode match {
-      case Some(node) => {
+      case Some(node) =>
         val parameter = (node \ "parameters" \ "parameter").head
-        ScalastyleResources invokePrivate nodeToPropertyType(parameter) shouldEqual PropertyType.INTEGER
-      }
+        ScalastyleResources invokePrivate nodeToRuleParamType(parameter) shouldEqual RuleParamType.INTEGER
       case _ => fail("rule with key " + key + "could not found")
     }
   }
@@ -135,10 +138,9 @@ class ScalastyleResourcesSpec  extends FlatSpec with Matchers with Inspectors wi
     val ruleNode = ruleNodes find { _ \\ "@class" exists (_.text == key) }
 
     ruleNode match {
-      case Some(node) => {
+      case Some(node) =>
         val parameter = (node \ "parameters" \ "parameter").head
         ScalastyleResources invokePrivate nodeToDefaultValue(parameter) shouldEqual "8"
-      }
       case _ => fail("rule with key " + key + "could not found")
     }
   }

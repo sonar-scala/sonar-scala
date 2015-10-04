@@ -18,7 +18,6 @@
  */
 package com.ncredinburgh.sonar.scalastyle
 
-import com.ncredinburgh.sonar.scalastyle.core.Scala
 import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
 import org.scalatest.{FlatSpec, Matchers}
@@ -37,10 +36,6 @@ class ScalastylePluginSpec extends FlatSpec with Matchers {
 
   it should "provide a scalastyle repository" in {
     assert(testee.getExtensions.contains(classOf[ScalastyleRepository]))
-  }
-
-  it should "provide a scala language" in {
-    assert(testee.getExtensions.contains(classOf[Scala]))
   }
 
   it should "provide a scalastyle quality profile" in {

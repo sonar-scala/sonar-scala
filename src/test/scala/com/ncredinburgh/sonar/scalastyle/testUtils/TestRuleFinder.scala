@@ -9,11 +9,11 @@ import scala.collection.JavaConversions._
 
 object TestRuleFinder extends RuleFinder {
 
-  override def findByKey(repositoryKey: String, key: String): Rule = ???
+  override def findByKey(repositoryKey: String, key: String): Rule = findAll(RuleQuery.create()).find(r => r.getRepositoryKey == repositoryKey && r.getKey == key).orNull
 
-  override def findByKey(key: RuleKey): Rule = ???
+  override def findByKey(key: RuleKey): Rule = findAll(RuleQuery.create()).find(r => r.getRepositoryKey == key.repository() && r.getKey == key.rule()).orNull
 
-  override def findById(ruleId: Int): Rule = ???
+  override def findById(ruleId: Int): Rule = findAll(RuleQuery.create()).find(r => r.getId == ruleId).orNull
 
   override def findAll(query: RuleQuery): util.Collection[Rule] = {
     ScalastyleResources.allDefinedRules map {

@@ -46,8 +46,12 @@ class ScalastyleRepositorySpec extends FlatSpec with Matchers with Inspectors wi
     rules should not be empty
   }
 
-  it should "use the same repository key for all rules" in {
-    forAll(rules) {r: RulesDefinition.Rule => r.repository().key() shouldEqual Constants.RepositoryKey}
+  it should "use the same repository for all rules" in {
+    forAll(rules) {
+      r: RulesDefinition.Rule =>
+        r.repository().key() shouldEqual Constants.RepositoryKey
+        r.repository().name() shouldEqual Constants.RepositoryName
+    }
   }
 
   it should "set default severity to major" in {

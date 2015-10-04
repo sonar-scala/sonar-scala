@@ -18,12 +18,11 @@
  */
 package com.ncredinburgh.sonar.scalastyle
 
-import java.io.InputStream
-
 import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
 import org.scalatest.{FlatSpec, Inspectors, Matchers, PrivateMethodTester}
 import org.sonar.api.PropertyType
+import org.sonar.api.server.rule.RuleParamType
 
 import scala.xml.Elem
 
@@ -56,7 +55,7 @@ class ScalastyleResourcesSpec  extends FlatSpec with Matchers with Inspectors wi
   }
 
   it should "return all defined checkers" in {
-    ScalastyleResources.allDefinedRules.size shouldEqual 56
+    ScalastyleResources.allDefinedRules.size shouldEqual 60
   }
 
   it should "give rules a description" in {
@@ -91,7 +90,7 @@ class ScalastyleResourcesSpec  extends FlatSpec with Matchers with Inspectors wi
 
   it should "get parameter key from node" in {
     val xmlFromClassPath = PrivateMethod[Elem]('xmlFromClassPath)
-    val nodeToParameterKey = PrivateMethod[String]('nodeToParameterKey)
+    val nodeToRuleParamKey = PrivateMethod[String]('nodeToRuleParamKey)
 
     val key = "org.scalastyle.scalariform.ParameterNumberChecker"
     val definitions = ScalastyleResources invokePrivate xmlFromClassPath("/scalastyle_definition.xml")
@@ -101,7 +100,7 @@ class ScalastyleResourcesSpec  extends FlatSpec with Matchers with Inspectors wi
     ruleNode match {
       case Some(node) => {
         val parameter = (node \ "parameters" \ "parameter").head
-        ScalastyleResources invokePrivate nodeToParameterKey(parameter) shouldEqual "maxParameters"
+        ScalastyleResources invokePrivate nodeToRuleParamKey(parameter) shouldEqual "maxParameters"
       }
       case _ => fail("rule with key " + key + "could not found")
     }
@@ -109,7 +108,7 @@ class ScalastyleResourcesSpec  extends FlatSpec with Matchers with Inspectors wi
 
   it should "get property type from node" in {
     val xmlFromClassPath = PrivateMethod[Elem]('xmlFromClassPath)
-    val nodeToPropertyType = PrivateMethod[PropertyType]('nodeToPropertyType)
+    val nodeToRuleParamType = PrivateMethod[PropertyType]('nodeToRuleParamType)
 
     val key = "org.scalastyle.scalariform.ParameterNumberChecker"
     val definitions = ScalastyleResources invokePrivate xmlFromClassPath("/scalastyle_definition.xml")
@@ -119,7 +118,7 @@ class ScalastyleResourcesSpec  extends FlatSpec with Matchers with Inspectors wi
     ruleNode match {
       case Some(node) => {
         val parameter = (node \ "parameters" \ "parameter").head
-        ScalastyleResources invokePrivate nodeToPropertyType(parameter) shouldEqual PropertyType.INTEGER
+        ScalastyleResources invokePrivate nodeToRuleParamType(parameter) shouldEqual RuleParamType.INTEGER
       }
       case _ => fail("rule with key " + key + "could not found")
     }

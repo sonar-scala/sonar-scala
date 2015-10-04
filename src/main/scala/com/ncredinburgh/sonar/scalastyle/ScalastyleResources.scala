@@ -21,7 +21,8 @@ package com.ncredinburgh.sonar.scalastyle
 import java.io.InputStream
 import com.typesafe.config.ConfigFactory
 import org.scalastyle.ScalastyleError
-import org.sonar.api.PropertyType
+import org.sonar.api.server.rule.RuleParamType
+import scala.io.Source
 import scala.xml.{Elem, XML, Node}
 
 /**
@@ -47,11 +48,11 @@ object ScalastyleResources {
 
   def nodeToParams(checker: Node, id: String): List[Param] = for {
     parameter <- (checker \\ "parameter").toList
-    key = nodeToParameterKey(parameter)
-    propertyType = nodeToPropertyType(parameter)
+    ruleParamKey = nodeToRuleParamKey(parameter)
+    ruleParamType = nodeToRuleParamType(parameter)
     description = nodeToPropertyDescription(parameter, id)
     defaultValue = nodeToDefaultValue(parameter)
-  } yield Param(key, propertyType, description, defaultValue)
+  } yield Param(ruleParamKey, ruleParamType, description, defaultValue)
 
   def description(key: String): String = descriptionFromDocumentation(key) getOrElse cfg.getConfig(key).getString("description")
 
@@ -67,23 +68,23 @@ object ScalastyleResources {
     }
   }
 
-  private def nodeToParameterKey(n: Node): String = (n \ "@name").text.trim
+  private def nodeToRuleParamKey(n: Node): String = (n \ "@name").text.trim
 
-  private def nodeToPropertyType(n: Node): PropertyType = (n \ "@type").text.trim match {
+  private def nodeToRuleParamType(n: Node): RuleParamType = (n \ "@type").text.trim match {
     case "string" => if ((n \ "@name").text == "regex") {
-      PropertyType.REGULAR_EXPRESSION
+      RuleParamType.STRING
     } else if ((n \ "@name").text == "header") {
-      PropertyType.TEXT
+      RuleParamType.TEXT
     } else {
-      PropertyType.STRING
+      RuleParamType.STRING
     }
-    case "integer" => PropertyType.INTEGER
-    case "boolean" => PropertyType.BOOLEAN
-    case _ => PropertyType.STRING
+    case "integer" => RuleParamType.INTEGER
+    case "boolean" => RuleParamType.BOOLEAN
+    case _ => RuleParamType.STRING
   }
 
   private def nodeToPropertyDescription(node: Node, id: String): String = {
-    val key = nodeToParameterKey(node)
+    val key = nodeToRuleParamKey(node)
     description(s"$id.$key")
   }
 

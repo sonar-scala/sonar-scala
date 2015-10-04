@@ -18,49 +18,39 @@
  */
 package com.ncredinburgh.sonar.scalastyle
 
-import org.slf4j.LoggerFactory
-import org.sonar.api.rules._
+import org.sonar.api.rule.Severity
+import org.sonar.api.server.rule.RulesDefinition
 
-import scala.collection.JavaConversions._
 
 /**
  * Scalastyle rules repository - creates a rule for each checker shipped with Scalastyle based
  * on the scalastyle_definition.xml file that ships with the Scalastyle jar.
  */
-class ScalastyleRepository extends RuleRepository(Constants.RepositoryKey, Constants.ScalaKey) {
+class ScalastyleRepository extends RulesDefinition {
 
-  private val log = LoggerFactory.getLogger(classOf[ScalastyleRepository])
+  override def define(context: RulesDefinition.Context): Unit = {
+    val repository = context.createRepository(Constants.RepositoryKey, Constants.ScalaKey).setName("Scalastyle Rules")
+    ScalastyleResources.allDefinedRules map {
+      case repoRule =>
+        val rule = repository.createRule(repoRule.clazz)
+        rule.setName(ScalastyleResources.label(repoRule.id))
+        rule.setHtmlDescription(repoRule.description)
+        // currently all rules comes with "warning" default level so we can treat with major severity
+        rule.setSeverity(Severity.MAJOR)
 
-  override def createRules: java.util.List[Rule] = ScalastyleResources.allDefinedRules map toRule
-
-  private def toRule(repoRule : RepositoryRule) = {
-    val rule = Rule.create
-    val key = repoRule.id
-    rule.setRepositoryKey(Constants.RepositoryKey)
-    rule.setLanguage(Constants.ScalaKey)
-    rule.setKey(repoRule.clazz)
-    rule.setName(ScalastyleResources.label(key))
-    rule.setDescription(repoRule.description)
-    rule.setConfigKey(key)
-    // currently all rules comes with "warning" default level so we can treat with major severity
-    rule.setSeverity(RulePriority.MAJOR)
-
-
-    val params = repoRule.params map {
-      case param =>
-        rule
-          .createParameter
-          .setDefaultValue(param.defaultVal)
-          .setType(param.typeName)
-          .setKey(param.name)
-          .setDescription(param.desc)
+        repoRule.params map {
+          case param =>
+            rule
+              .createParam(param.name)
+              .setDefaultValue(param.defaultVal)
+              .setType(param.`type`)
+              .setDescription(param.desc)
+        }
     }
 
-    params foreach ( p => log.debug(s"Created a param for ${rule.getKey} : $p") )
-
-    log.debug(s"Created a rule: $rule")
-
-    rule
+    repository.done()
   }
 
 }
+
+

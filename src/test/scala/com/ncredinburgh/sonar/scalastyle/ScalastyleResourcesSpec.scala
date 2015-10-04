@@ -20,6 +20,8 @@ package com.ncredinburgh.sonar.scalastyle
 
 import java.io.InputStream
 
+import org.junit.runner.RunWith
+import org.scalatest.junit.JUnitRunner
 import org.scalatest.{FlatSpec, Inspectors, Matchers, PrivateMethodTester}
 import org.sonar.api.PropertyType
 
@@ -28,6 +30,7 @@ import scala.xml.Elem
 /**
  * Tests ScalastyleResources
  */
+@RunWith(classOf[JUnitRunner])
 class ScalastyleResourcesSpec  extends FlatSpec with Matchers with Inspectors with PrivateMethodTester {
 
   it should "get default_config.xml from Scalastyle jar" in {

@@ -18,7 +18,9 @@
  */
 package com.ncredinburgh.sonar.scalastyle
 
+import org.junit.runner.RunWith
 import org.scalatest._
+import org.scalatest.junit.JUnitRunner
 import org.scalatest.mock.MockitoSugar
 import org.sonar.api.profiles.RulesProfile
 import org.sonar.api.utils.ValidationMessages
@@ -28,6 +30,7 @@ import scala.collection.JavaConversions._
 /**
  * Tests ScalastyleQualityProfile
  */
+@RunWith(classOf[JUnitRunner])
 class ScalastyleQualityProfileSpec extends FlatSpec with Matchers with MockitoSugar {
   trait Fixture {
     val scalastyleRepository = new ScalastyleRepository

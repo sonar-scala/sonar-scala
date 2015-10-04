@@ -18,7 +18,9 @@
  */
 package com.ncredinburgh.sonar.scalastyle
 
+import org.junit.runner.RunWith
 import org.scalatest._
+import org.scalatest.junit.JUnitRunner
 import org.sonar.api.rules.{Rule, RulePriority}
 
 import scala.collection.JavaConversions._
@@ -26,6 +28,7 @@ import scala.collection.JavaConversions._
 /**
  * Tests ScalastyleRepository
  */
+@RunWith(classOf[JUnitRunner])
 class ScalastyleRepositorySpec extends FlatSpec with Matchers with Inspectors {
 
   val testee = new ScalastyleRepository

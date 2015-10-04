@@ -19,11 +19,14 @@
 package com.ncredinburgh.sonar.scalastyle
 
 import com.ncredinburgh.sonar.scalastyle.core.Scala
+import org.junit.runner.RunWith
+import org.scalatest.junit.JUnitRunner
 import org.scalatest.{FlatSpec, Matchers}
 
 /**
  * Tests ScalastylePlugin
  */
+@RunWith(classOf[JUnitRunner])
 class ScalastylePluginSpec extends FlatSpec with Matchers {
 
   val testee = new ScalastylePlugin

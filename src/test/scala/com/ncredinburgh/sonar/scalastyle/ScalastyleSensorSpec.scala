@@ -21,12 +21,14 @@ package com.ncredinburgh.sonar.scalastyle
 import java.io.File
 import java.nio.charset.StandardCharsets
 
+import org.junit.runner.RunWith
 import org.mockito.Matchers._
 import org.mockito.Mockito._
 import org.scalastyle._
 import org.scalastyle.file.FileLengthChecker
 import org.scalastyle.scalariform.{ForBraceChecker, IfBraceChecker}
 import org.scalatest._
+import org.scalatest.junit.JUnitRunner
 import org.scalatest.mock.MockitoSugar
 import org.sonar.api.batch.SensorContext
 import org.sonar.api.component.ResourcePerspectives
@@ -42,6 +44,7 @@ import scala.collection.JavaConversions._
 /**
  * Created by keir on 13/06/14.
  */
+@RunWith(classOf[JUnitRunner])
 class ScalastyleSensorSpec extends FlatSpec with Matchers with MockitoSugar with PrivateMethodTester {
 
   trait Fixture {

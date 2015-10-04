@@ -19,7 +19,7 @@
 package com.ncredinburgh.sonar.scalastyle
 
 import java.io.InputStream
-import java.util.Properties
+import com.typesafe.config.ConfigFactory
 import org.scalastyle.ScalastyleError
 import org.sonar.api.PropertyType
 import scala.xml.{Elem, XML, Node}
@@ -30,22 +30,20 @@ import scala.xml.{Elem, XML, Node}
  */
 object ScalastyleResources {
 
+  // accessing scalastyles definition and documentation.xml files
   private val definitions = xmlFromClassPath("/scalastyle_definition.xml")
   private val documentation = xmlFromClassPath("/scalastyle_documentation.xml")
-  private val properties = new Properties()
 
-  properties.load(fromClassPath("/scalastyle_messages.properties"))
-
-  // Scalastyle does not provide descriptions for some checkers so add our own
-  properties.load(this.getClass.getResourceAsStream("/scalastyle_override_messages.properties"))
+  // accessing scalastyles reference.conf (includes additional data such as key.label)
+  private val cfg = ConfigFactory.load(this.getClass.getClassLoader)
 
   def allDefinedRules: Seq[RepositoryRule] = for {
     checker <- definitions \\ "checker"
     clazz = (checker \ "@class").text
     id = (checker \ "@id").text
-    longDesc = longDescription(id)
+    desc = description(id)
     params = nodeToParams(checker, id)
-  } yield RepositoryRule(clazz, id, longDesc, params)
+  } yield RepositoryRule(clazz, id, desc, params)
 
   def nodeToParams(checker: Node, id: String): List[Param] = for {
     parameter <- (checker \\ "parameter").toList
@@ -55,9 +53,9 @@ object ScalastyleResources {
     defaultValue = nodeToDefaultValue(parameter)
   } yield Param(key, propertyType, description, defaultValue)
 
-  def longDescription(key: String): String = descriptionFromDocumentation(key) getOrElse shortDescription(key)
+  def description(key: String): String = descriptionFromDocumentation(key) getOrElse cfg.getConfig(key).getString("description")
 
-  def shortDescription(key: String): String = getMessage(key + ".description")
+  def label(key: String): String = cfg.getConfig(key).getString("label")
 
   private def descriptionFromDocumentation(key: String): Option[String] = {
     documentation \\ "scalastyle-documentation" \ "check" find { _ \\ "@id" exists (_.text == key) } match {
@@ -68,8 +66,6 @@ object ScalastyleResources {
       case None => None
     }
   }
-
-  private def getMessage(key: String): String = properties.getProperty(key)
 
   private def nodeToParameterKey(n: Node): String = (n \ "@name").text.trim
 
@@ -88,7 +84,7 @@ object ScalastyleResources {
 
   private def nodeToPropertyDescription(node: Node, id: String): String = {
     val key = nodeToParameterKey(node)
-    getMessage(id + "." + key + ".description")
+    description(s"$id.$key")
   }
 
   private def nodeToDefaultValue(n: Node): String = (n \ "@default").text.trim

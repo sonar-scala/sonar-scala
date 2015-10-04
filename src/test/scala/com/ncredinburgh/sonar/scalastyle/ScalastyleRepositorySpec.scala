@@ -45,15 +45,18 @@ class ScalastyleRepositorySpec extends FlatSpec with Matchers with Inspectors {
     forAll(testee.createRules) {r: Rule => r.getSeverity shouldEqual RulePriority.MAJOR}
   }
 
-  it should "name the rule after its short description" in {
-    val rule = testee.createRules.find(_.getKey == "org.scalastyle.scalariform.MagicNumberChecker")
-    rule.get.getName shouldEqual "Checks for use of magic numbers"
+  it should "give a name to every rule" in {
+    testee.createRules.filter(_.getName == null) should have size 0
   }
 
-  it should "use describe rule using long description" in {
+  it should "name the rule properly" in {
     val rule = testee.createRules.find(_.getKey == "org.scalastyle.scalariform.MagicNumberChecker")
-    rule.get.getDescription shouldEqual
-      "Replacing a magic number with a named constant can make code easier to read and understand, and can avoid some subtle bugs."
+    rule.get.getName shouldEqual "Magic Number"
+  }
+
+  it should "describe the rule properly" in {
+    val rule = testee.createRules.find(_.getKey == "org.scalastyle.scalariform.MagicNumberChecker")
+    rule.get.getDescription shouldEqual "Replacing a magic number with a named constant can make code easier to read and understand, and can avoid some subtle bugs."
   }
 
   it should "determine the parameter of a rule with a parameter" in {
@@ -79,6 +82,11 @@ class ScalastyleRepositorySpec extends FlatSpec with Matchers with Inspectors {
   it should "determine correct type of regex parameters" in {
     val rule = testee.createRules.find(_.getKey == "org.scalastyle.scalariform.ClassTypeParameterChecker")
     rule.get.getParam("regex").getType shouldEqual "REGULAR_EXPRESSION"
+  }
+
+  it should "describe the parameter properly" in {
+    val rule = testee.createRules.find(_.getKey == "org.scalastyle.scalariform.ClassTypeParameterChecker")
+    rule.get.getParam("regex").getDescription shouldEqual "Standard Scala regular expression syntax"
   }
 
   it should "provide default parameters to scalastyle preferred defaults for rules with a parameter" in {

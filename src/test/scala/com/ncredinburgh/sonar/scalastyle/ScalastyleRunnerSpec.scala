@@ -83,8 +83,8 @@ class ScalastyleRunnerSpec extends FlatSpec with Matchers with MockitoSugar with
     val rule = Rule.create
     rule.setRepositoryKey(Constants.RepositoryKey)
       .setKey(className)
-      .setName(ScalastyleResources.shortDescription(key))
-      .setDescription(ScalastyleResources.longDescription(key))
+      .setName(ScalastyleResources.label(key))
+      .setDescription(ScalastyleResources.description(key))
       .setConfigKey(key)
       .setSeverity(RulePriority.MAJOR)
     rule.createParameter

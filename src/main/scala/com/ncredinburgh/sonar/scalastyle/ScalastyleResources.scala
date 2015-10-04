@@ -31,9 +31,11 @@ import scala.xml.{Elem, XML, Node}
  */
 object ScalastyleResources {
 
+  // accessing scalastyles definition and documentation.xml files
   private val definitions = xmlFromClassPath("/scalastyle_definition.xml")
   private val documentation = xmlFromClassPath("/scalastyle_documentation.xml")
 
+  // accessing scalastyles reference.conf (includes additional data such as key.label)
   private val cfg = ConfigFactory.load(this.getClass.getClassLoader)
 
   def allDefinedRules: Seq[RepositoryRule] = for {
@@ -58,20 +60,10 @@ object ScalastyleResources {
 
   private def descriptionFromDocumentation(key: String): Option[String] = {
     documentation \\ "scalastyle-documentation" \ "check" find { _ \\ "@id" exists (_.text == key) } match {
-      case Some(node) =>
-        val justification = {
-          val text =  (node \ "justification").text
-          if (text.trim != "") Some(ScalastyleDocFormatter.format(text)) else None
-        }
-        val extraDescription = {
-          val text =  (node \ "extra-description").text
-          if (text.trim != "") Some(ScalastyleDocFormatter.format(text)) else None
-        }
-        (justification, extraDescription) match {
-          case (Some(j), Some(ed)) => Some(s"$j\n$ed")
-          case (Some(j), None) => Some(j)
-          case _ => None
-        }
+      case Some(node) => {
+        val description =  (node \ "justification").text.trim
+        if (description != "") Some(description) else None
+      }
       case None => None
     }
   }
@@ -101,54 +93,4 @@ object ScalastyleResources {
   private def xmlFromClassPath(s: String): Elem =  XML.load(fromClassPath(s))
 
   private def fromClassPath(s: String): InputStream = classOf[ScalastyleError].getResourceAsStream(s)
-}
-
-object ScalastyleDocFormatter {
-
-  private case class Out(pre: Boolean, appended: Boolean, text: String)
-  private case class LineWithLeadingSpaces(spaceCount: Int, empty: Boolean, line: String)
-  private case class DocLine(pre: Boolean, empty: Boolean, line: String)
-
-  private def empty(line: String) = line.trim == ""
-  private def countLeadingSpaces(line: String) = {
-    val count = line.takeWhile(_ == ' ').length
-    LineWithLeadingSpaces(count, empty(line), line)
-  }
-  private val margin = 2
-
-  def format(in: String): String = {
-    val linesWithLeadingSpaces = Source.fromString(in).getLines().map(countLeadingSpaces).toList
-    val docLines = linesWithLeadingSpaces.map(l => DocLine(l.spaceCount > margin, l.empty, l.line))
-
-    docLines.foldLeft(Out(pre = false, appended = false, "")) {
-      case (out @ Out(false, false, text), line) =>
-        if (line.empty) out
-        else if (line.pre) Out(pre = true, appended = true, text + s"<p><pre>${line.line}\n")
-        else Out(pre = false, appended = true, text + s"<p>${line.line.trim}\n")
-
-      case (out @ Out(false, true, text), line) =>
-        if (line.empty) out.copy(appended = false, text = text.trim + "</p>\n")
-        else if (line.pre) Out(pre = true, appended = true, text + s"</p>\n<p><pre>${line.line}\n")
-        else Out(pre = false, appended = true, text + s"${line.line.trim}\n")
-
-      case (out @ Out(true, false, text), line) =>
-        if (line.empty) out.copy(text = text + "\n")
-        else if (line.pre) Out(pre = true, appended = true, text + s"${line.line}\n")
-        else Out(pre = false, appended = true, text.trim + s"</pre></p>\n<p>${line.line.trim}\n")
-
-      case (out @ Out(true, true, text), line) =>
-        if (line.empty) out.copy(appended = false, text = text + "\n")
-        else if (line.pre) Out(pre = true, appended = true, text + s"${line.line}\n")
-        else Out(pre = false, appended = true, text + s"</pre></p>\n<p>${line.line.trim}\n")
-
-    } match {
-      case Out(true, _, text) =>
-        text.trim + "</pre></p>"
-      case Out(false, true, text) =>
-        text.trim + "</p>"
-      case Out(false, false, text) =>
-        text.trim
-    }
-  }
-
 }

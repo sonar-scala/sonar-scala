@@ -65,12 +65,7 @@ class ScalastyleRepositorySpec extends FlatSpec with Matchers with Inspectors wi
 
   it should "describe the rule properly" in {
     val rule = rules.find(_.key == "org.scalastyle.scalariform.MagicNumberChecker")
-    rule.get.htmlDescription shouldEqual
-      "<p>Replacing a magic number with a named constant can make code easier to read and understand," +
-        " and can avoid some subtle bugs.</p>\n" +
-        "<p>A simple assignment to a val is not considered to be a magic number, for example:</p>\n" +
-        "<p><pre>    val foo = 4</pre></p>\n<p>is not a magic number, but</p>\n" +
-        "<p><pre>    var foo = 4</pre></p>\n<p>is considered to be a magic number.</p>"
+    rule.get.htmlDescription() shouldEqual "Replacing a magic number with a named constant can make code easier to read and understand, and can avoid some subtle bugs."
   }
 
   it should "determine the parameter of a rule with a parameter" in {

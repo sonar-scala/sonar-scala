@@ -20,6 +20,7 @@ package com.ncredinburgh.sonar.scalastyle
 
 import org.sonar.api.rule.Severity
 import org.sonar.api.server.rule.RulesDefinition
+import org.sonar.api.server.rule.RuleParamType
 
 
 /**
@@ -32,22 +33,35 @@ class ScalastyleRepository extends RulesDefinition {
     val repository = context
       .createRepository(Constants.RepositoryKey, Constants.ScalaKey)
       .setName(Constants.RepositoryName)
-    ScalastyleResources.allDefinedRules map {
-      case resRule =>
+      
+    ScalastyleResources.allDefinedRules foreach {
+      resRule => {
+        
+        // set 
         val rule = repository.createRule(resRule.clazz)
         rule.setName(ScalastyleResources.label(resRule.id))
         rule.setHtmlDescription(resRule.description)
+        
         // currently all rules comes with "warning" default level so we can treat with major severity
         rule.setSeverity(Severity.MAJOR)
-
-        resRule.params map {
-          case param =>
+        
+        // add normal parameters
+        resRule.params foreach {
+          param => {
             rule
               .createParam(param.name)
               .setDefaultValue(param.defaultVal)
               .setType(param.`type`)
               .setDescription(param.desc)
+          }
         }
+        
+        // add synthetic parameter as reference to the class
+        rule.createParam("scalastyle-checker")
+            .setDefaultValue(resRule.clazz)
+            .setType(RuleParamType.STRING)
+            .setDescription("Scalastyle checker that validates the rule.")
+      }
     }
 
     repository.done()

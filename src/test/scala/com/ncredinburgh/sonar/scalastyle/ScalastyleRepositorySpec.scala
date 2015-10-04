@@ -79,12 +79,12 @@ class ScalastyleRepositorySpec extends FlatSpec with Matchers with Inspectors wi
 
   it should "determine the parameter of a rule with a parameter" in {
     val rule = rules.find(_.key == "org.scalastyle.scalariform.ParameterNumberChecker")
-    rule.get.params map (_.key) shouldEqual List("maxParameters")
+    rule.get.params map (_.key) shouldEqual List("maxParameters", "scalastyle-checker")
   }
 
   it should "determine parameters of a rule with multiple parameters" in {
     val rule = rules.find(_.key == "org.scalastyle.scalariform.MethodNamesChecker")
-    rule.get.params map (_.key) should contain theSameElementsAs List("regex", "ignoreRegex", "ignoreOverride")
+    rule.get.params map (_.key) should contain theSameElementsAs List("regex", "ignoreRegex", "ignoreOverride", "scalastyle-checker")
   }
 
   it should "determine correct type of integer parameters" in {

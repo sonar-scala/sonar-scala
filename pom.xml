@@ -56,7 +56,7 @@
 
         <dependency>
             <groupId>org.scalastyle</groupId>
-            <artifactId>scalastyle_2.11</artifactId>
+            <artifactId>scalastyle_${scala.major.version}</artifactId>
             <version>0.7.0</version>
             <exclusions>
                 <exclusion>

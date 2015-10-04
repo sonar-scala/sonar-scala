@@ -30,9 +30,11 @@ import scala.xml.{Elem, XML, Node}
  */
 object ScalastyleResources {
 
+  // accessing scalastyles definition and documentation.xml files
   private val definitions = xmlFromClassPath("/scalastyle_definition.xml")
   private val documentation = xmlFromClassPath("/scalastyle_documentation.xml")
 
+  // accessing scalastyles reference.conf (includes additional data such as key.label)
   private val cfg = ConfigFactory.load(this.getClass.getClassLoader)
 
   def allDefinedRules: Seq[RepositoryRule] = for {

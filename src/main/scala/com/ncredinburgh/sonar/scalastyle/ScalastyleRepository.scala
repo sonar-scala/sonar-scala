@@ -56,5 +56,3 @@ class ScalastyleRepository extends RuleRepository(Constants.RepositoryKey, Const
   }
 
 }
-
-

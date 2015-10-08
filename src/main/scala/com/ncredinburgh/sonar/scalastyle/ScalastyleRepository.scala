@@ -61,6 +61,10 @@ class ScalastyleRepository extends RulesDefinition {
             .setDefaultValue(resRule.clazz)
             .setType(RuleParamType.STRING)
             .setDescription("Scalastyle checker that validates the rule.")
+            
+  
+        // if a rule has at least one real parameter make it a template    
+        rule.setTemplate(resRule.params.size > 0)
       }
     }
 

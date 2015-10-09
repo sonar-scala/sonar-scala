@@ -112,7 +112,7 @@ class ScalastyleRunnerSpec extends FlatSpec with Matchers with MockitoSugar with
 
     val checker = testee invokePrivate ruleToChecker(activeRule)
     val expectedParameters = Map("allowed" -> "1", "ignoreRegex" -> "^&quot;&quot;$", "scalastyle-checker" -> "org.scalastyle.scalariform.MultipleStringLiteralsChecker")
-    val expectedChecker = ConfigurationChecker(className, ErrorLevel, true, expectedParameters, None, None)
+    val expectedChecker = ConfigurationChecker(className, ErrorLevel, true, expectedParameters, None, Some(className))
 
     checker shouldEqual expectedChecker
   }

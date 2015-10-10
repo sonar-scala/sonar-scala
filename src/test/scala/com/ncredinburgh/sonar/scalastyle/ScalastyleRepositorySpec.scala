@@ -61,6 +61,10 @@ class ScalastyleRepositorySpec extends FlatSpec with Matchers with Inspectors wi
   it should "give a name to every rule" in {
     rules.filter(_.name == null) should be(empty)
   }
+  
+  it should "set the ClazzParam for every rule" in {
+    rules.filter(_.param(Constants.ClazzParam) == null) should be(empty)
+  }
 
   it should "name the rule properly" in {
     val rule = rules.find(_.key == "org.scalastyle.scalariform.MagicNumberChecker")
@@ -111,7 +115,8 @@ class ScalastyleRepositorySpec extends FlatSpec with Matchers with Inspectors wi
     val rule = rules.find(_.key == "org.scalastyle.scalariform.ParameterNumberChecker")
     rule.get.param("maxParameters").defaultValue.toInt shouldEqual 8
   }
-    it should "provide default parameters to scalastyle preferred defaults for rules with multiple parameters" in {
+  
+  it should "provide default parameters to scalastyle preferred defaults for rules with multiple parameters" in {
     val rule = rules.find(_.key == "org.scalastyle.scalariform.MethodNamesChecker")
     rule.get.param("regex").defaultValue shouldEqual "^[a-z][A-Za-z0-9]*(_=)?$"
     rule.get.param("ignoreRegex").defaultValue shouldEqual "^$"

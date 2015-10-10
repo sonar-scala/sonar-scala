@@ -64,8 +64,8 @@ class ScalastyleRunner(rp: RulesProfile) {
   private def ruleToChecker(activeRule: ActiveRule): ConfigurationChecker = {
     val sonarParams = activeRule.getActiveRuleParams.map(p => (p.getKey, p.getValue)).toMap
     
-    val checkerParams = sonarParams.filterNot(keyVal => keyVal._1 == "scalastyle-checker")
-    val className = sonarParams("scalastyle-checker")
+    val checkerParams = sonarParams.filterNot(keyVal => keyVal._1 == Constants.ClazzParam)
+    val className = sonarParams(Constants.ClazzParam)
     val sonarKey = activeRule.getRuleKey
     
     ConfigurationChecker(className, ErrorLevel, true, sonarParams, None, Some(sonarKey))

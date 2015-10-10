@@ -24,6 +24,7 @@ import org.sonar.api.rules.{RuleFinder, ActiveRule}
 import org.sonar.api.utils.ValidationMessages
 import org.scalastyle.ScalastyleError
 import scala.xml.XML
+import org.sonar.api.rules.RuleQuery
 
 
 /**
@@ -37,10 +38,11 @@ class ScalastyleQualityProfile(ruleFinder: RuleFinder) extends ProfileDefinition
   override def createProfile(validation: ValidationMessages): RulesProfile = {
     val profile = RulesProfile.create(Constants.ProfileName, Constants.ScalaKey)
     val enabledRules = defaultConfigRules filter (x => (x \ "@enabled").text.equals("true"))
-    val defaultKeys = enabledRules map (x => (x \ "@class").text)
+    val defaultRuleClasses = enabledRules map (x => (x \ "@class").text)
 
-    for {ruleKey <- defaultKeys} {
-       val ruleOption = Option(ruleFinder.findByKey(Constants.RepositoryKey, ruleKey))
+    for {clazz <- defaultRuleClasses} {
+      val ruleKey = ScalastyleRepository.getStandardKey(clazz)
+      val ruleOption = Option(ruleFinder.findByKey(Constants.RepositoryKey, ruleKey))
 
        ruleOption match {
           case None => validation.addWarningText(s"Rule $ruleKey not found in ${Constants.RepositoryKey} repository! Rule won't be activated.")

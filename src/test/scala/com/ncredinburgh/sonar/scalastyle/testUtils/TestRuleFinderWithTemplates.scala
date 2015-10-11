@@ -9,7 +9,7 @@ import com.ncredinburgh.sonar.scalastyle.ScalastyleRepository
 import org.sonar.api.server.rule.RuleParamType
 import com.ncredinburgh.sonar.scalastyle.RepositoryRule
 
-object TestRuleFinder extends RuleFinder {
+object TestRuleFinderWithTemplates extends RuleFinder {
 
   override def findByKey(repositoryKey: String, key: String): Rule = findAll(RuleQuery.create()).find(r => r.getRepositoryKey == repositoryKey && r.getKey == key).orNull
 
@@ -18,7 +18,7 @@ object TestRuleFinder extends RuleFinder {
   override def findById(ruleId: Int): Rule = findAll(RuleQuery.create()).find(r => r.getId == ruleId).orNull
 
   override def findAll(query: RuleQuery): util.Collection[Rule] = {
-    ScalastyleResources.allDefinedRules.filterNot(r => isTemplate(r)) map {
+    ScalastyleResources.allDefinedRules map {
       defRule =>
         val rule = Rule.create()
         val key = defRule.id

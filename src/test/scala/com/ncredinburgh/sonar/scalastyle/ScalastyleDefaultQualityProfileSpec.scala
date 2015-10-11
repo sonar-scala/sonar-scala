@@ -18,28 +18,27 @@
  */
 package com.ncredinburgh.sonar.scalastyle
 
-import com.ncredinburgh.sonar.scalastyle.testUtils.TestRuleFinder
+import com.ncredinburgh.sonar.scalastyle.testUtils.TestRuleFinderWithTemplates
 import org.junit.runner.RunWith
 import org.scalatest._
 import org.scalatest.junit.JUnitRunner
 import org.scalatest.mock.MockitoSugar
 import org.sonar.api.profiles.RulesProfile
 import org.sonar.api.utils.ValidationMessages
-
 import scala.collection.JavaConversions._
+import com.ncredinburgh.sonar.scalastyle.testUtils.TestRuleFinder
 
 /**
- * Tests ScalastyleQualityProfile
+ * Tests the default ScalastyleQualityProfile, only rules without parameters, no templates
  */
 @RunWith(classOf[JUnitRunner])
-class ScalastyleQualityProfileSpec extends FlatSpec with Matchers with MockitoSugar {
+class ScalastyleDefaultQualityProfileSpec extends FlatSpec with Matchers with MockitoSugar {
   trait Fixture {
     val validationMessages = ValidationMessages.create
     val testee = new ScalastyleQualityProfile(TestRuleFinder)
   }
 
-  val rulesCount = 37
-  val parametersCount = 19
+  val rulesCount = 19 // rules without templates
   
   "a scalastyle quality profile" should "create a default profile" in new Fixture {
     val rulesProfile = testee.createProfile(validationMessages)
@@ -56,21 +55,10 @@ class ScalastyleQualityProfileSpec extends FlatSpec with Matchers with MockitoSu
   }
 
   it should "have all the parameters in default config" in new Fixture {
-    val totalParameters = parametersCount + (rulesCount * 1) 
+    val totalParameters = (rulesCount * 1) 
 
     val rulesProfile = testee.createProfile(validationMessages)
 
     rulesProfile.getActiveRules.flatMap(_.getActiveRuleParams).size shouldBe totalParameters
-  }
-
-  it should "have correct values for parameters" in new Fixture {
-    val ruleKey = "scalastyle-NumberOfMethodsInTypeChecker"
-
-    val rulesProfile = testee.createProfile(validationMessages)
-    val rule = rulesProfile.getActiveRule(Constants.RepositoryKey, ruleKey)
-    val param = rule.getActiveRuleParams.head
-
-    param.getKey shouldBe "maxMethods"
-    param.getValue shouldBe "30"
   }
 }

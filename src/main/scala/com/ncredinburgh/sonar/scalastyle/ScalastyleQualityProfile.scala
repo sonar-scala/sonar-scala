@@ -24,7 +24,9 @@ import org.sonar.api.rules.{RuleFinder, ActiveRule}
 import org.sonar.api.utils.ValidationMessages
 import org.scalastyle.ScalastyleError
 import scala.xml.XML
-
+import collection.JavaConversions._
+import org.sonar.api.rules.RuleQuery
+import org.sonar.api.rules.Rule
 
 /**
  * This class creates the default "Scalastyle" quality profile from Scalastyle's default_config.xml
@@ -37,29 +39,53 @@ class ScalastyleQualityProfile(ruleFinder: RuleFinder) extends ProfileDefinition
   override def createProfile(validation: ValidationMessages): RulesProfile = {
     val profile = RulesProfile.create(Constants.ProfileName, Constants.ScalaKey)
     val enabledRules = defaultConfigRules filter (x => (x \ "@enabled").text.equals("true"))
-    val defaultKeys = enabledRules map (x => (x \ "@class").text)
+    val defaultRuleClasses = enabledRules map (x => (x \ "@class").text)
 
-    val defaultRules = defaultKeys map {
-      case ruleKey =>
-        val rule = Option(ruleFinder.findByKey(Constants.RepositoryKey, ruleKey))
-        if (rule.isEmpty) validation.addWarningText(
-          s"Rule $ruleKey not found in ${Constants.RepositoryKey} repository! Rule won't be activated.")
-        rule
+    // currently findAll is buggy (sonar 4.5-5.1 https://jira.sonarsource.com/browse/SONAR-6390)
+    // will still work but won't add all possible rule to the default profile
+    val query = RuleQuery.create().withRepositoryKey(Constants.RepositoryKey)
+    val repoRules = ruleFinder.findAll(query)
+
+    for {clazz <- defaultRuleClasses} {
+      val ruleOption = repoRules.find(clazzMatch(_, clazz))
+
+      ruleOption match {
+        case None => validation.addWarningText(s"Rule for $clazz not found in ${Constants.RepositoryKey} repository! Rule won't be activated.")
+        case Some(rule) => {
+          if (!rule.isTemplate()) {
+            val activated = profile.activateRule(rule, rule.getSeverity)
+            setParameters(activated, clazz)
+          }
+        }
+      }
     }
-
-    val activeRules = defaultRules.flatten.map(rule => profile.activateRule(rule, rule.getSeverity))
-    activeRules.foreach(setParameters)
 
     profile
   }
 
-  def setParameters(activeRule: ActiveRule) {
-    defaultConfigRules.find(x => (x \ "@class").text.equals(activeRule.getRuleKey) ) match {
+  def setParameters(activeRule: ActiveRule, clazz: String) {
+    // set parameters
+    defaultConfigRules.find(x => (x \ "@class").text.equals(clazz)) match {
       case Some(rule) => {
-        val params = (rule \ "parameters" \ "parameter").map(n => ((n \ "@name").text, n.text )).toMap
+        val params = (rule \ "parameters" \ "parameter").map(n => ((n \ "@name").text, n.text)).toMap
         params foreach { case (key, value) => activeRule.setParameter(key, value) }
       }
       case _ => log.warn("Default rule with key " + activeRule.getRuleKey + " could not found in default_config.xml")
+    }
+    
+    // set synthetic parameter
+    activeRule.setParameter(Constants.ClazzParam, clazz)
+  }
+
+  private def clazzMatch(rule: Rule, clazz: String): Boolean = {
+    Option(rule.getParam(Constants.ClazzParam)) match {
+      case Some(param) => {
+        param.getDefaultValue.equals(clazz)
+      }         
+      case None => {
+        log.warn(s"Could not find required parameter ${Constants.ClazzParam}, rule for $clazz cannot be activated")
+        false
+      }
     }
   }
 

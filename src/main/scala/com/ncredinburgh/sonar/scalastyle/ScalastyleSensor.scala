@@ -100,7 +100,7 @@ class ScalastyleSensor(resourcePerspectives: ResourcePerspectives,
 
   private def findSonarRuleForError(error: StyleError[FileSpec]): Rule = {
     val key = Constants.RepositoryKey
-    val errorKey = error.clazz.getName
+    val errorKey = error.key // == scalastyle ConfigurationChecker.customId 
     log.debug("Looking for sonar rule for " + errorKey)
     ruleFinder.find(RuleQuery.create.withKey(errorKey).withRepositoryKey(key))
   }

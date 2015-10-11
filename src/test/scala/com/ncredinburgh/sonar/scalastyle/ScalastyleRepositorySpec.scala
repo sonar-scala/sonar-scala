@@ -53,6 +53,10 @@ class ScalastyleRepositorySpec extends FlatSpec with Matchers with Inspectors wi
         r.repository().name() shouldEqual Constants.RepositoryName
     }
   }
+  
+  it should "consist of 60 rules" in {
+    rules.size() shouldEqual 60
+  }
 
   it should "set default severity to major" in {
     forAll(rules) {r: RulesDefinition.Rule => r.severity() shouldEqual RulePriority.MAJOR.name()}

@@ -1,11 +1,12 @@
 package com.ncredinburgh.sonar.scalastyle.testUtils
 
 import java.util
-
 import com.ncredinburgh.sonar.scalastyle.{Constants, ScalastyleResources}
 import org.sonar.api.rule.RuleKey
 import org.sonar.api.rules.{RulePriority, Rule, RuleQuery, RuleFinder}
 import scala.collection.JavaConversions._
+import com.ncredinburgh.sonar.scalastyle.ScalastyleRepository
+import org.sonar.api.server.rule.RuleParamType
 
 object TestRuleFinder extends RuleFinder {
 
@@ -17,21 +18,22 @@ object TestRuleFinder extends RuleFinder {
 
   override def findAll(query: RuleQuery): util.Collection[Rule] = {
     ScalastyleResources.allDefinedRules map {
-      case r =>
+      defRule =>
         val rule = Rule.create()
-        val key = r.id
+        val key = defRule.id
         rule.setRepositoryKey(Constants.RepositoryKey)
         rule.setLanguage(Constants.ScalaKey)
-        rule.setKey(r.clazz)
+        rule.setKey(ScalastyleRepository.getStandardKey(defRule.clazz))
         rule.setName(ScalastyleResources.label(key))
-        rule.setDescription(r.description)
-        rule.setConfigKey(key)
+        rule.setDescription(defRule.description)
+        rule.setConfigKey(ScalastyleRepository.getStandardKey(defRule.clazz))
+
         // currently all rules comes with "warning" default level so we can treat with major severity
         rule.setSeverity(RulePriority.MAJOR)
 
-
-        val params = r.params map {
-          case param =>
+        // add parameters
+        defRule.params foreach {
+          param =>
             rule
               .createParameter
               .setDefaultValue(param.defaultVal)
@@ -39,8 +41,14 @@ object TestRuleFinder extends RuleFinder {
               .setKey(param.name)
               .setDescription(param.desc)
         }
+         
+        // add synthetic parameter as reference to the class
+        rule.createParameter(Constants.ClazzParam)
+            .setDefaultValue(defRule.clazz)
+            .setType(RuleParamType.STRING.`type`())
+            .setDescription("Scalastyle checker that validates the rule.")
+              
         rule
-
     }
   }
 

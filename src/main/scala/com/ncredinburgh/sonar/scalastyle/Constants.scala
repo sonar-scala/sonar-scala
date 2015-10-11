@@ -23,4 +23,7 @@ object Constants {
   val RepositoryKey = "Scalastyle"
   val RepositoryName = "Scalastyle Rules"
   val ProfileName = "Scalastyle"
+  
+  /** the class of the checker that should be executed by the sonar rule */
+  val ClazzParam = "scalastyle-checker"
 }

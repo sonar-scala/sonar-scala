@@ -39,16 +39,19 @@ class ScalastyleQualityProfile(ruleFinder: RuleFinder) extends ProfileDefinition
     val enabledRules = defaultConfigRules filter (x => (x \ "@enabled").text.equals("true"))
     val defaultKeys = enabledRules map (x => (x \ "@class").text)
 
-    val defaultRules = defaultKeys map {
-      case ruleKey =>
-        val rule = Option(ruleFinder.findByKey(Constants.RepositoryKey, ruleKey))
-        if (rule.isEmpty) validation.addWarningText(
-          s"Rule $ruleKey not found in ${Constants.RepositoryKey} repository! Rule won't be activated.")
-        rule
-    }
+    for {ruleKey <- defaultKeys} {
+       val ruleOption = Option(ruleFinder.findByKey(Constants.RepositoryKey, ruleKey))
 
-    val activeRules = defaultRules.flatten.map(rule => profile.activateRule(rule, rule.getSeverity))
-    activeRules.foreach(setParameters)
+       ruleOption match {
+          case None => validation.addWarningText(s"Rule $ruleKey not found in ${Constants.RepositoryKey} repository! Rule won't be activated.")
+          case Some(rule) => {
+            if (!rule.isTemplate()) {
+              val activated = profile.activateRule(rule, rule.getSeverity)
+              setParameters(activated)
+            }
+          }
+        }
+    }
 
     profile
   }

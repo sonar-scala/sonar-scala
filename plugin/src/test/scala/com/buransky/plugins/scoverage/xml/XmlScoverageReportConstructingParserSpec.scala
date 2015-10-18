@@ -27,6 +27,8 @@ import com.buransky.plugins.scoverage.xml.data.XmlReportFile1
 import scala._
 import com.buransky.plugins.scoverage.{ProjectStatementCoverage, FileStatementCoverage, DirectoryStatementCoverage}
 import com.buransky.plugins.scoverage.pathcleaner.PathSanitizer
+import com.buransky.plugins.scoverage.StatementCoverage
+import com.buransky.plugins.scoverage.NodeStatementCoverage
 
 @RunWith(classOf[JUnitRunner])
 class XmlScoverageReportConstructingParserSpec extends FlatSpec with Matchers {
@@ -52,9 +54,16 @@ class XmlScoverageReportConstructingParserSpec extends FlatSpec with Matchers {
     assertReportFile(XmlReportFile1.scoverage104Data, 50.0, sanitizer) { projectCoverage =>
       assert(projectCoverage.name === "")
       assert(projectCoverage.children.size.toInt === 1)
+
       projectCoverage.children.head match {
-        case rootDir: DirectoryStatementCoverage =>
-          assert(rootDir.name == "com")
+        case rootDir: DirectoryStatementCoverage => { 
+          val rr = checkNode(rootDir, "com", 0, 0, 0.0).head
+          val test = checkNode(rr, "rr", 0, 0, 0.0).head
+          val sonar = checkNode(test, "test", 0, 0, 0.0).head
+          val mainClass = checkNode(sonar, "sonar", 2, 1, 50.0).head
+      
+          checkNode(mainClass, "MainClass.scala", 2, 1, 50.0)
+        }
         case other => fail(s"This is not a directory statement coverage! [$other]")
       }
     }
@@ -110,5 +119,15 @@ class XmlScoverageReportConstructingParserSpec extends FlatSpec with Matchers {
 
   private def checkRate(expected: Double, real: Double) {
     BigDecimal(real).setScale(2, BigDecimal.RoundingMode.HALF_UP).should(equal(BigDecimal(expected)))
+  }
+  
+  private def checkNode(node: NodeStatementCoverage, name: String, count: Int, covered: Int, rate: Double): Iterable[NodeStatementCoverage] = {
+    node.name shouldEqual name
+    node.statementCount shouldEqual count
+    node.coveredStatementsCount shouldEqual covered
+    
+    checkRate(rate, node.rate)
+    
+    node.children
   }
 }

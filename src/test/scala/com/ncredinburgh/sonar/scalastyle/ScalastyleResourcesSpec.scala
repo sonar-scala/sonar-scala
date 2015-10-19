@@ -18,16 +18,18 @@
  */
 package com.ncredinburgh.sonar.scalastyle
 
-import java.io.InputStream
-
+import org.junit.runner.RunWith
+import org.scalatest.junit.JUnitRunner
 import org.scalatest.{FlatSpec, Inspectors, Matchers, PrivateMethodTester}
 import org.sonar.api.PropertyType
+import org.sonar.api.server.rule.RuleParamType
 
 import scala.xml.Elem
 
 /**
  * Tests ScalastyleResources
  */
+@RunWith(classOf[JUnitRunner])
 class ScalastyleResourcesSpec  extends FlatSpec with Matchers with Inspectors with PrivateMethodTester {
 
   it should "get default_config.xml from Scalastyle jar" in {
@@ -48,25 +50,21 @@ class ScalastyleResourcesSpec  extends FlatSpec with Matchers with Inspectors wi
     assert(scalastyleDocumentation.isInstanceOf[Elem])
   }
 
-  it should "get scalastyle_messages.properties and scalastyle_override_messages.properties" in {
-    val fromClassPath = PrivateMethod[InputStream]('fromClassPath)
-    val scalastyleMessages = ScalastyleResources invokePrivate fromClassPath("/scalastyle_messages.properties")
-    val overrideMessages = ScalastyleResources invokePrivate fromClassPath("/scalastyle_override_messages.properties")
-    assert(scalastyleMessages.isInstanceOf[InputStream])
-    assert(overrideMessages.isInstanceOf[InputStream])
-  }
-
   "the configuration" should "allow access to description in documentation for a checker" in {
-    ScalastyleResources.longDescription("line.size.limit") shouldEqual
-      "Lines that are too long can be hard to read and horizontal scrolling is annoying."
+    ScalastyleResources.description("line.size.limit") shouldEqual
+      "<p>Lines that are too long can be hard to read and horizontal scrolling is annoying.</p>"
   }
 
   it should "return all defined checkers" in {
-    ScalastyleResources.allDefinedRules.size shouldEqual 56
+    ScalastyleResources.allDefinedRules.size shouldEqual 60
   }
 
   it should "give rules a description" in {
     forAll(ScalastyleResources.allDefinedRules) {r: RepositoryRule => r.description.length should be > 0}
+  }
+
+  it should "give rules an id" in {
+    forAll(ScalastyleResources.allDefinedRules) {r: RepositoryRule => r.id should not be empty}
   }
 
   it should "get all parameters of rules with a parameter" in {
@@ -79,22 +77,26 @@ class ScalastyleResourcesSpec  extends FlatSpec with Matchers with Inspectors wi
     rule.get.params map (_.name) shouldEqual List("regex", "ignoreRegex", "ignoreOverride")
   }
 
-  it should "get short description from properties" in {
-    ScalastyleResources.shortDescription("disallow.space.after.token") shouldEqual "Check no spaces after token"
-    ScalastyleResources.shortDescription("no.whitespace.before.left.bracket") shouldEqual "No whitespace before left bracket ''[''"
+  it should "get labels from configuration" in {
+    ScalastyleResources.label("disallow.space.after.token") shouldEqual "Space after tokens"
+    ScalastyleResources.label("no.whitespace.before.left.bracket") shouldEqual "No whitespace before left bracket ''[''"
   }
 
-  it should "get long description from documentation" in {
-    ScalastyleResources.longDescription("magic.number") shouldEqual
-      "Replacing a magic number with a named constant can make code easier to read and understand, and can avoid some subtle bugs."
+  it should "get description from configuration" in {
+    ScalastyleResources.description("magic.number") shouldEqual
+      "<p>Replacing a magic number with a named constant can make code easier to read and understand," +
+        " and can avoid some subtle bugs.</p>\n" +
+        "<p>A simple assignment to a val is not considered to be a magic number, for example:</p>\n" +
+        "<p><pre>    val foo = 4</pre></p>\n<p>is not a magic number, but</p>\n" +
+        "<p><pre>    var foo = 4</pre></p>\n<p>is considered to be a magic number.</p>"
 
     // In case no long description found, return the short description
-    ScalastyleResources.shortDescription("disallow.space.after.token") shouldEqual "Check no spaces after token"
+    ScalastyleResources.label("disallow.space.after.token") shouldEqual "Space after tokens"
   }
 
   it should "get parameter key from node" in {
     val xmlFromClassPath = PrivateMethod[Elem]('xmlFromClassPath)
-    val nodeToParameterKey = PrivateMethod[String]('nodeToParameterKey)
+    val nodeToRuleParamKey = PrivateMethod[String]('nodeToRuleParamKey)
 
     val key = "org.scalastyle.scalariform.ParameterNumberChecker"
     val definitions = ScalastyleResources invokePrivate xmlFromClassPath("/scalastyle_definition.xml")
@@ -104,7 +106,7 @@ class ScalastyleResourcesSpec  extends FlatSpec with Matchers with Inspectors wi
     ruleNode match {
       case Some(node) => {
         val parameter = (node \ "parameters" \ "parameter").head
-        ScalastyleResources invokePrivate nodeToParameterKey(parameter) shouldEqual "maxParameters"
+        ScalastyleResources invokePrivate nodeToRuleParamKey(parameter) shouldEqual "maxParameters"
       }
       case _ => fail("rule with key " + key + "could not found")
     }
@@ -112,7 +114,7 @@ class ScalastyleResourcesSpec  extends FlatSpec with Matchers with Inspectors wi
 
   it should "get property type from node" in {
     val xmlFromClassPath = PrivateMethod[Elem]('xmlFromClassPath)
-    val nodeToPropertyType = PrivateMethod[PropertyType]('nodeToPropertyType)
+    val nodeToRuleParamType = PrivateMethod[PropertyType]('nodeToRuleParamType)
 
     val key = "org.scalastyle.scalariform.ParameterNumberChecker"
     val definitions = ScalastyleResources invokePrivate xmlFromClassPath("/scalastyle_definition.xml")
@@ -122,7 +124,7 @@ class ScalastyleResourcesSpec  extends FlatSpec with Matchers with Inspectors wi
     ruleNode match {
       case Some(node) => {
         val parameter = (node \ "parameters" \ "parameter").head
-        ScalastyleResources invokePrivate nodeToPropertyType(parameter) shouldEqual PropertyType.INTEGER
+        ScalastyleResources invokePrivate nodeToRuleParamType(parameter) shouldEqual RuleParamType.INTEGER
       }
       case _ => fail("rule with key " + key + "could not found")
     }

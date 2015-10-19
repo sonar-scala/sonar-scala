@@ -21,9 +21,11 @@ package com.ncredinburgh.sonar.scalastyle
 import java.io.File
 import java.nio.charset.StandardCharsets
 
+import org.junit.runner.RunWith
 import org.mockito.Mockito._
 import org.scalastyle._
 import org.scalastyle.StyleError
+import org.scalatest.junit.JUnitRunner
 import org.scalatest.mock.MockitoSugar
 import org.scalatest.{FlatSpec, Matchers, PrivateMethodTester}
 import org.sonar.api.profiles.RulesProfile
@@ -34,6 +36,7 @@ import scala.collection.JavaConversions._
 /**
  * Tests ScalastyleRunner
  */
+@RunWith(classOf[JUnitRunner])
 class ScalastyleRunnerSpec extends FlatSpec with Matchers with MockitoSugar with PrivateMethodTester {
 
   trait Fixture {
@@ -80,8 +83,8 @@ class ScalastyleRunnerSpec extends FlatSpec with Matchers with MockitoSugar with
     val rule = Rule.create
     rule.setRepositoryKey(Constants.RepositoryKey)
       .setKey(className)
-      .setName(ScalastyleResources.shortDescription(key))
-      .setDescription(ScalastyleResources.longDescription(key))
+      .setName(ScalastyleResources.label(key))
+      .setDescription(ScalastyleResources.description(key))
       .setConfigKey(key)
       .setSeverity(RulePriority.MAJOR)
     rule.createParameter

@@ -19,9 +19,10 @@
 package com.ncredinburgh.sonar.scalastyle
 
 import java.io.InputStream
-import java.util.Properties
+import com.typesafe.config.ConfigFactory
 import org.scalastyle.ScalastyleError
-import org.sonar.api.PropertyType
+import org.sonar.api.server.rule.RuleParamType
+import scala.io.Source
 import scala.xml.{Elem, XML, Node}
 
 /**
@@ -30,65 +31,71 @@ import scala.xml.{Elem, XML, Node}
  */
 object ScalastyleResources {
 
+  // accessing scalastyles definition and documentation.xml files
   private val definitions = xmlFromClassPath("/scalastyle_definition.xml")
   private val documentation = xmlFromClassPath("/scalastyle_documentation.xml")
-  private val properties = new Properties()
 
-  properties.load(fromClassPath("/scalastyle_messages.properties"))
-
-  // Scalastyle does not provide descriptions for some checkers so add our own
-  properties.load(this.getClass.getResourceAsStream("/scalastyle_override_messages.properties"))
+  // accessing scalastyles reference.conf (includes additional data such as key.label)
+  private val cfg = ConfigFactory.load(this.getClass.getClassLoader)
 
   def allDefinedRules: Seq[RepositoryRule] = for {
     checker <- definitions \\ "checker"
     clazz = (checker \ "@class").text
     id = (checker \ "@id").text
-    longDesc = longDescription(id)
+    desc = description(id)
     params = nodeToParams(checker, id)
-  } yield RepositoryRule(clazz, id, longDesc, params)
+  } yield RepositoryRule(clazz, id, desc, params)
 
   def nodeToParams(checker: Node, id: String): List[Param] = for {
     parameter <- (checker \\ "parameter").toList
-    key = nodeToParameterKey(parameter)
-    propertyType = nodeToPropertyType(parameter)
+    ruleParamKey = nodeToRuleParamKey(parameter)
+    ruleParamType = nodeToRuleParamType(parameter)
     description = nodeToPropertyDescription(parameter, id)
     defaultValue = nodeToDefaultValue(parameter)
-  } yield Param(key, propertyType, description, defaultValue)
+  } yield Param(ruleParamKey, ruleParamType, description, defaultValue)
 
-  def longDescription(key: String): String = descriptionFromDocumentation(key) getOrElse shortDescription(key)
+  def description(key: String): String = descriptionFromDocumentation(key) getOrElse cfg.getConfig(key).getString("description")
 
-  def shortDescription(key: String): String = getMessage(key + ".description")
+  def label(key: String): String = cfg.getConfig(key).getString("label")
 
   private def descriptionFromDocumentation(key: String): Option[String] = {
     documentation \\ "scalastyle-documentation" \ "check" find { _ \\ "@id" exists (_.text == key) } match {
-      case Some(node) => {
-        val description =  (node \ "justification").text.trim
-        if (description != "") Some(description) else None
-      }
+      case Some(node) =>
+        val justification = {
+          val text =  (node \ "justification").text
+          if (text.trim != "") Some(ScalastyleDocFormatter.format(text)) else None
+        }
+        val extraDescription = {
+          val text =  (node \ "extra-description").text
+          if (text.trim != "") Some(ScalastyleDocFormatter.format(text)) else None
+        }
+        (justification, extraDescription) match {
+          case (Some(j), Some(ed)) => Some(s"$j\n$ed")
+          case (Some(j), None) => Some(j)
+          case _ => None
+        }
       case None => None
     }
   }
 
-  private def getMessage(key: String): String = properties.getProperty(key)
+  private def nodeToRuleParamKey(n: Node): String = (n \ "@name").text.trim
 
-  private def nodeToParameterKey(n: Node): String = (n \ "@name").text.trim
-
-  private def nodeToPropertyType(n: Node): PropertyType = (n \ "@type").text.trim match {
+  private def nodeToRuleParamType(n: Node): RuleParamType = (n \ "@type").text.trim match {
     case "string" => if ((n \ "@name").text == "regex") {
-      PropertyType.REGULAR_EXPRESSION
+      RuleParamType.STRING
     } else if ((n \ "@name").text == "header") {
-      PropertyType.TEXT
+      RuleParamType.TEXT
     } else {
-      PropertyType.STRING
+      RuleParamType.STRING
     }
-    case "integer" => PropertyType.INTEGER
-    case "boolean" => PropertyType.BOOLEAN
-    case _ => PropertyType.STRING
+    case "integer" => RuleParamType.INTEGER
+    case "boolean" => RuleParamType.BOOLEAN
+    case _ => RuleParamType.STRING
   }
 
   private def nodeToPropertyDescription(node: Node, id: String): String = {
-    val key = nodeToParameterKey(node)
-    getMessage(id + "." + key + ".description")
+    val key = nodeToRuleParamKey(node)
+    description(s"$id.$key")
   }
 
   private def nodeToDefaultValue(n: Node): String = (n \ "@default").text.trim
@@ -96,4 +103,54 @@ object ScalastyleResources {
   private def xmlFromClassPath(s: String): Elem =  XML.load(fromClassPath(s))
 
   private def fromClassPath(s: String): InputStream = classOf[ScalastyleError].getResourceAsStream(s)
+}
+
+object ScalastyleDocFormatter {
+
+  private case class Out(pre: Boolean, appended: Boolean, text: String)
+  private case class LineWithLeadingSpaces(spaceCount: Int, empty: Boolean, line: String)
+  private case class DocLine(pre: Boolean, empty: Boolean, line: String)
+
+  private def empty(line: String) = line.trim == ""
+  private def countLeadingSpaces(line: String) = {
+    val count = line.takeWhile(_ == ' ').length
+    LineWithLeadingSpaces(count, empty(line), line)
+  }
+  private val margin = 2
+
+  def format(in: String): String = {
+    val linesWithLeadingSpaces = Source.fromString(in).getLines().map(countLeadingSpaces).toList
+    val docLines = linesWithLeadingSpaces.map(l => DocLine(l.spaceCount > margin, l.empty, l.line))
+
+    docLines.foldLeft(Out(pre = false, appended = false, "")) {
+      case (out @ Out(false, false, text), line) =>
+        if (line.empty) out
+        else if (line.pre) Out(pre = true, appended = true, text + s"<p><pre>${line.line}\n")
+        else Out(pre = false, appended = true, text + s"<p>${line.line.trim}\n")
+
+      case (out @ Out(false, true, text), line) =>
+        if (line.empty) out.copy(appended = false, text = text.trim + "</p>\n")
+        else if (line.pre) Out(pre = true, appended = true, text + s"</p>\n<p><pre>${line.line}\n")
+        else Out(pre = false, appended = true, text + s"${line.line.trim}\n")
+
+      case (out @ Out(true, false, text), line) =>
+        if (line.empty) out.copy(text = text + "\n")
+        else if (line.pre) Out(pre = true, appended = true, text + s"${line.line}\n")
+        else Out(pre = false, appended = true, text.trim + s"</pre></p>\n<p>${line.line.trim}\n")
+
+      case (out @ Out(true, true, text), line) =>
+        if (line.empty) out.copy(appended = false, text = text + "\n")
+        else if (line.pre) Out(pre = true, appended = true, text + s"${line.line}\n")
+        else Out(pre = false, appended = true, text + s"</pre></p>\n<p>${line.line.trim}\n")
+
+    } match {
+      case Out(true, _, text) =>
+        text.trim + "</pre></p>"
+      case Out(false, true, text) =>
+        text.trim + "</p>"
+      case Out(false, false, text) =>
+        text.trim
+    }
+  }
+
 }

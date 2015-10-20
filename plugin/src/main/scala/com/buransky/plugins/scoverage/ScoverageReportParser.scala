@@ -19,13 +19,15 @@
  */
 package com.buransky.plugins.scoverage
 
+import com.buransky.plugins.scoverage.pathcleaner.PathSanitizer
+
 /**
  * Interface for Scoverage report parser.
  *
  * @author Rado Buransky
  */
 trait ScoverageReportParser {
-  def parse(reportFilePath: String): ProjectStatementCoverage
+  def parse(reportFilePath: String, pathSanitizer: PathSanitizer): ProjectStatementCoverage
 }
 
 /**

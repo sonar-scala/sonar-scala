@@ -26,33 +26,52 @@ import scala.io.Source
 import com.buransky.plugins.scoverage.xml.data.XmlReportFile1
 import scala._
 import com.buransky.plugins.scoverage.{ProjectStatementCoverage, FileStatementCoverage, DirectoryStatementCoverage}
+import com.buransky.plugins.scoverage.pathcleaner.PathSanitizer
 
 @RunWith(classOf[JUnitRunner])
 class XmlScoverageReportConstructingParserSpec extends FlatSpec with Matchers {
   behavior of "parse source"
 
   it must "parse old broken Scoverage 0.95 file correctly" in {
-    assertReportFile(XmlReportFile1.scoverage095Data, 24.53)(assertScoverage095Data)
+    val sanitizer = new PathSanitizer() {
+      def getSourceRelativePath(path: Seq[String]): Option[Seq[String]] = {
+        // do nothing
+        Some(path)
+      }      
+    }
+    assertReportFile(XmlReportFile1.scoverage095Data, 24.53, sanitizer)(assertScoverage095Data)
   }
 
   it must "parse new fixed Scoverage 1.0.4 file correctly" in {
-    assertReportFile(XmlReportFile1.scoverage104Data, 50.0) { projectCoverage =>
+    val sanitizer = new PathSanitizer() {
+      def getSourceRelativePath(path: Seq[String]): Option[Seq[String]] = {
+        // drop first 6 = /a1b2c3/workspace/sonar-test/src/main/scala
+        Some(path.drop(6))
+      }      
+    }    
+    assertReportFile(XmlReportFile1.scoverage104Data, 50.0, sanitizer) { projectCoverage =>
       assert(projectCoverage.name === "")
       assert(projectCoverage.children.size.toInt === 1)
       projectCoverage.children.head match {
         case rootDir: DirectoryStatementCoverage =>
-          assert(rootDir.name == "a1b2c3")
+          assert(rootDir.name == "com")
         case other => fail(s"This is not a directory statement coverage! [$other]")
       }
     }
   }
 
   it must "parse file1 correctly even without XML declaration" in {
-    assertReportFile(XmlReportFile1.dataWithoutDeclaration, 24.53)(assertScoverage095Data)
+    val sanitizer = new PathSanitizer() {
+      def getSourceRelativePath(path: Seq[String]): Option[Seq[String]] = {
+        // do nothing
+        Some(path)
+      }      
+    }    
+    assertReportFile(XmlReportFile1.dataWithoutDeclaration, 24.53, sanitizer)(assertScoverage095Data)
   }
 
-  private def assertReportFile(data: String, expectedCoverage: Double)(f: (ProjectStatementCoverage) => Unit) {
-    val parser = new XmlScoverageReportConstructingParser(Source.fromString(data))
+  private def assertReportFile(data: String, expectedCoverage: Double, pathSanitizer: PathSanitizer)(f: (ProjectStatementCoverage) => Unit) {
+    val parser = new XmlScoverageReportConstructingParser(Source.fromString(data), pathSanitizer)
     val projectCoverage = parser.parse()
 
     // Assert coverage

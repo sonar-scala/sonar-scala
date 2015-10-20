@@ -17,26 +17,18 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package com.buransky.plugins.scoverage.xml
+package com.buransky.plugins.scoverage.pathcleaner
 
-import org.scalatest.{FlatSpec, Matchers}
-import org.scalatest.junit.JUnitRunner
-import org.junit.runner.RunWith
-import com.buransky.plugins.scoverage.ScoverageException
-
-@RunWith(classOf[JUnitRunner])
-class XmlScoverageReportParserSpec extends FlatSpec with Matchers {
-  behavior of "parse file path"
-
-  it must "fail for null path" in {
-    the[IllegalArgumentException] thrownBy XmlScoverageReportParser().parse(null.asInstanceOf[String], null)
-  }
-
-  it must "fail for empty path" in {
-    the[IllegalArgumentException] thrownBy XmlScoverageReportParser().parse("", null)
-  }
-
-  it must "fail for not existing path" in {
-    the[ScoverageException] thrownBy XmlScoverageReportParser().parse("/x/a/b/c/1/2/3/4.xml", null)
-  }
+/**
+  * @author Michael Zinsmaier
+  */
+trait PathSanitizer {
+  
+  /** tries to convert the given path such that it is relative to the
+   *  projects/modules source directory.
+   *  
+   *  @return Some(source folder relative path) or None if the path cannot be converted 
+   */
+  def getSourceRelativePath(path: Seq[String]): Option[Seq[String]]  
+  
 }

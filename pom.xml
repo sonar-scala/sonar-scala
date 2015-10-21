@@ -12,7 +12,7 @@
     <groupId>com.ncredinburgh</groupId>
     <artifactId>sonar-scalastyle</artifactId>
     <packaging>sonar-plugin</packaging>
-    <version>0.0.2-SNAPSHOT</version>
+    <version>0.0.3-SNAPSHOT</version>
 
     <name>Sonar Scalastyle Plugin</name>
     <description>Enables analysis of Scala projects with Scalastyle.</description>

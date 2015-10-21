@@ -53,6 +53,10 @@ class ScalastyleRepositorySpec extends FlatSpec with Matchers with Inspectors wi
         r.repository().name() shouldEqual Constants.RepositoryName
     }
   }
+  
+  it should "consist of 60 rules" in {
+    rules.size() shouldEqual 60
+  }
 
   it should "set default severity to major" in {
     forAll(rules) {r: RulesDefinition.Rule => r.severity() shouldEqual RulePriority.MAJOR.name()}
@@ -61,14 +65,18 @@ class ScalastyleRepositorySpec extends FlatSpec with Matchers with Inspectors wi
   it should "give a name to every rule" in {
     rules.filter(_.name == null) should be(empty)
   }
+  
+  it should "set the ClazzParam for every rule" in {
+    rules.filter(_.param(Constants.ClazzParam) == null) should be(empty)
+  }
 
   it should "name the rule properly" in {
-    val rule = rules.find(_.key == "org.scalastyle.scalariform.MagicNumberChecker")
+    val rule = rules.find(_.key == "scalastyle_MagicNumberChecker")
     rule.get.name shouldEqual "Magic Number"
   }
 
   it should "describe the rule properly" in {
-    val rule = rules.find(_.key == "org.scalastyle.scalariform.MagicNumberChecker")
+    val rule = rules.find(_.key == "scalastyle_MagicNumberChecker")
     rule.get.htmlDescription shouldEqual
       "<p>Replacing a magic number with a named constant can make code easier to read and understand," +
         " and can avoid some subtle bugs.</p>\n" +
@@ -78,41 +86,42 @@ class ScalastyleRepositorySpec extends FlatSpec with Matchers with Inspectors wi
   }
 
   it should "determine the parameter of a rule with a parameter" in {
-    val rule = rules.find(_.key == "org.scalastyle.scalariform.ParameterNumberChecker")
-    rule.get.params map (_.key) shouldEqual List("maxParameters")
+    val rule = rules.find(_.key == "scalastyle_ParameterNumberChecker")
+    rule.get.params map (_.key) shouldEqual List("maxParameters", Constants.ClazzParam)
   }
 
   it should "determine parameters of a rule with multiple parameters" in {
-    val rule = rules.find(_.key == "org.scalastyle.scalariform.MethodNamesChecker")
-    rule.get.params map (_.key) should contain theSameElementsAs List("regex", "ignoreRegex", "ignoreOverride")
+    val rule = rules.find(_.key == "scalastyle_MethodNamesChecker")
+    rule.get.params map (_.key) should contain theSameElementsAs List("regex", "ignoreRegex", "ignoreOverride", Constants.ClazzParam)
   }
 
   it should "determine correct type of integer parameters" in {
-    val rule = rules.find(_.key == "org.scalastyle.scalariform.ParameterNumberChecker")
+    val rule = rules.find(_.key == "scalastyle_ParameterNumberChecker")
     rule.get.param("maxParameters").`type` shouldEqual RuleParamType.INTEGER
   }
 
   it should "determine correct type of boolean parameters" in {
-    val rule = rules.find(_.key == "org.scalastyle.scalariform.MethodNamesChecker")
+    val rule = rules.find(_.key == "scalastyle_MethodNamesChecker")
     rule.get.param("ignoreOverride").`type` shouldEqual RuleParamType.BOOLEAN
   }
 
   it should "determine correct type of regex parameters" in {
-    val rule = rules.find(_.key == "org.scalastyle.scalariform.ClassTypeParameterChecker")
+    val rule = rules.find(_.key == "scalastyle_ClassTypeParameterChecker")
     rule.get.param("regex").`type` shouldEqual RuleParamType.STRING
   }
 
   it should "describe the parameter properly" in {
-    val rule = rules.find(_.key == "org.scalastyle.scalariform.ClassTypeParameterChecker")
+    val rule = rules.find(_.key == "scalastyle_ClassTypeParameterChecker")
     rule.get.param("regex").description shouldEqual "Standard Scala regular expression syntax"
   }
 
   it should "provide default parameters to scalastyle preferred defaults for rules with a parameter" in {
-    val rule = rules.find(_.key == "org.scalastyle.scalariform.ParameterNumberChecker")
+    val rule = rules.find(_.key == "scalastyle_ParameterNumberChecker")
     rule.get.param("maxParameters").defaultValue.toInt shouldEqual 8
   }
-    it should "provide default parameters to scalastyle preferred defaults for rules with multiple parameters" in {
-    val rule = rules.find(_.key == "org.scalastyle.scalariform.MethodNamesChecker")
+  
+  it should "provide default parameters to scalastyle preferred defaults for rules with multiple parameters" in {
+    val rule = rules.find(_.key == "scalastyle_MethodNamesChecker")
     rule.get.param("regex").defaultValue shouldEqual "^[a-z][A-Za-z0-9]*(_=)?$"
     rule.get.param("ignoreRegex").defaultValue shouldEqual "^$"
     rule.get.param("ignoreOverride").defaultValue.toBoolean shouldEqual false

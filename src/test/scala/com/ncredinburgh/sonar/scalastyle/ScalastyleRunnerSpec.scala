@@ -97,12 +97,22 @@ class ScalastyleRunnerSpec extends FlatSpec with Matchers with MockitoSugar with
       .setDescription("")
       .setType("integer")
       .setDefaultValue("^&quot;&quot;$")
+      
+    // add synthetic parameter as reference to the class
+    rule.createParameter
+      .setKey(Constants.ClazzParam)
+      .setDescription("Scalastyle checker that validates the rule.")
+      .setType("string")
+      .setDefaultValue("org.scalastyle.scalariform.MultipleStringLiteralsChecker")
+      
     val activeRule = profile.activateRule(rule, rule.getSeverity)
     activeRule.setParameter("allowed", "1")
     activeRule.setParameter("ignoreRegex", "^&quot;&quot;$")
+    activeRule.setParameter(Constants.ClazzParam, "org.scalastyle.scalariform.MultipleStringLiteralsChecker")
 
     val checker = testee invokePrivate ruleToChecker(activeRule)
-    val expectedChecker = ConfigurationChecker(className, ErrorLevel, true, Map("allowed" -> "1", "ignoreRegex" -> "^&quot;&quot;$"), None, None)
+    val expectedParameters = Map("allowed" -> "1", "ignoreRegex" -> "^&quot;&quot;$", Constants.ClazzParam -> "org.scalastyle.scalariform.MultipleStringLiteralsChecker")
+    val expectedChecker = ConfigurationChecker(className, ErrorLevel, true, expectedParameters, None, Some(className))
 
     checker shouldEqual expectedChecker
   }

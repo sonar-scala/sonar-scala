@@ -2,7 +2,10 @@
 
 # Sonar Scalastyle Plugin
 
-Wraps up Scalastyle as a SonarQube plugin.
+Wraps up Scalastyle as a SonarQube plugin. Currently scalastyle provides 60 different checks. They  
+are represented as 38 rules without parameters and 22 templates in SonarQube. Templates allow to instantiate
+the same check multiple times with different values. For example different regular expression rules with different
+severity levels.
 
 http://www.scalastyle.org/
 

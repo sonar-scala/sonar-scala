@@ -35,7 +35,7 @@ just plain average of coverage rates for sub-projects.
 
 ## Installation ##
 
-Download and copy [sonar-scoverage-plugin-5.1.1.jar] [PluginJar] to the Sonar plugins directory
+Download and copy [the plugin jar](https://github.com/RadoBuransky/sonar-scoverage-plugin/releases) to the Sonar plugins directory
 (usually <SONAR_INSTALLATION_ROOT>/extensions/plugins). Restart Sonar.
 
 ## Configure Sonar runner ##

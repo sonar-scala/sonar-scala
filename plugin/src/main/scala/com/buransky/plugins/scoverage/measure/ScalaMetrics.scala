@@ -53,6 +53,5 @@ object ScalaMetrics {
     .setDirection(Metric.DIRECTION_BETTER)
     .setQualitative(false)
     .setDomain(CoreMetrics.DOMAIN_SIZE)
-    .setFormula(new org.sonar.api.measures.SumChildValuesFormula(false))
     .create[java.lang.Integer]()
 }

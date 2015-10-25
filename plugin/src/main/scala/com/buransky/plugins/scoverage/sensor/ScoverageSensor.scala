@@ -25,12 +25,12 @@ import com.buransky.plugins.scoverage.language.Scala
 import com.buransky.plugins.scoverage.measure.ScalaMetrics
 import com.buransky.plugins.scoverage.util.LogUtil
 import com.buransky.plugins.scoverage.xml.XmlScoverageReportParser
-import com.buransky.plugins.scoverage.{CoveredStatement, DirectoryStatementCoverage, FileStatementCoverage, _}
-import org.sonar.api.batch.fs.{FileSystem, InputFile}
-import org.sonar.api.batch.{CoverageExtension, Sensor, SensorContext}
+import com.buransky.plugins.scoverage.{ CoveredStatement, DirectoryStatementCoverage, FileStatementCoverage, _ }
+import org.sonar.api.batch.fs.{ FileSystem, InputFile, InputDir, InputPath }
+import org.sonar.api.batch.{ CoverageExtension, Sensor, SensorContext }
 import org.sonar.api.config.Settings
-import org.sonar.api.measures.{CoreMetrics, CoverageMeasuresBuilder, Measure}
-import org.sonar.api.resources.{File, Project, Resource}
+import org.sonar.api.measures.{ CoreMetrics, CoverageMeasuresBuilder, Measure }
+import org.sonar.api.resources.{ File, Project, Directory, Resource }
 import org.sonar.api.scan.filesystem.PathResolver
 import org.sonar.api.utils.log.Loggers
 
@@ -151,33 +151,55 @@ class ScoverageSensor(settings: Settings, pathResolver: PathResolver, fileSystem
     processChildren(projectCoverage.children, context, sonarSources)
   }
 
-  private def processDirectory(directoryCoverage: DirectoryStatementCoverage, context: SensorContext,
-                               parentDirectory: String) {
+  private def processDirectory(directoryCoverage: DirectoryStatementCoverage, context: SensorContext, parentDirectory: String) {
+    // save measures if any
+    if (directoryCoverage.statementCount > 0) {
+      val path = appendFilePath(parentDirectory, directoryCoverage.name)
+
+      getResource(path, context, false) match {
+        case Some(srcDir) => {
+          // Save directory measures
+          saveMeasures(context, srcDir, directoryCoverage)
+        }
+        case None =>
+      }
+    }
     // Process children
     processChildren(directoryCoverage.children, context, appendFilePath(parentDirectory, directoryCoverage.name))
   }
 
   private def processFile(fileCoverage: FileStatementCoverage, context: SensorContext, directory: String) {
     val path = appendFilePath(directory, fileCoverage.name)
-    val p = fileSystem.predicates()
 
-    val files = fileSystem.inputFiles(p.and(
-      p.hasRelativePath(path),
-      p.hasLanguage(scala.getKey),
-      p.hasType(InputFile.Type.MAIN))).toList
-
-    files.headOption match {
-      case Some(file) =>
-        val scalaSourceFile = File.create(file.relativePath())
-
+    getResource(path, context, true) match {
+      case Some(scalaSourceFile) => {
         // Save measures
         saveMeasures(context, scalaSourceFile, fileCoverage)
-
         // Save line coverage. This is needed just for source code highlighting.
         saveLineCoverage(fileCoverage.statements, scalaSourceFile, context)
+      }
+      case None =>
+    }
+  }
 
+  private def getResource(path: String, context: SensorContext, isFile: Boolean): Option[Resource] = {
+    
+    val inputOption: Option[InputPath] = if (isFile) {
+      val p = fileSystem.predicates()
+      Option(fileSystem.inputFile(p.and(
+        p.hasRelativePath(path),
+        p.hasLanguage(scala.getKey),
+        p.hasType(InputFile.Type.MAIN))))
+    } else {
+      Option(fileSystem.inputDir(pathResolver.relativeFile(fileSystem.baseDir(), path)))
+    }
+  
+    inputOption match {
+      case Some(path: InputPath) =>
+        Some(context.getResource(path))
       case None => {
-        log.warn(s"File not found in file system! [$path]")
+        log.warn(s"File or directory not found in file system! ${path}")
+        None
       }
     }
   }

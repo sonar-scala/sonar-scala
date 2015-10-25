@@ -139,7 +139,7 @@ class XmlScoverageReportConstructingParser(source: Source, pathSanitizer: PathSa
       }
     }
 
-    def toStatementCoverage: StatementCoverage = {
+    def toStatementCoverage: NodeStatementCoverage = {
       val childNodes = children.map(_.toStatementCoverage)
 
       childNodes match {
@@ -151,7 +151,6 @@ class XmlScoverageReportConstructingParser(source: Source, pathSanitizer: PathSa
     def toProjectStatementCoverage: ProjectStatementCoverage = {
       toStatementCoverage match {
         case node: NodeStatementCoverage => ProjectStatementCoverage("", node.children)
-        case file: FileStatementCoverage => ProjectStatementCoverage("", List(file))
         case _ => throw new ScoverageException("Illegal statement coverage!")
       }
     }

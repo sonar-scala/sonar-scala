@@ -38,12 +38,12 @@ sealed trait StatementCoverage {
   /**
    * Total number of all statements within the source code unit,
    */
-  val statementCount: Int
+  def statementCount: Int
 
   /**
    * Number of statements covered by unit tests.
    */
-  val coveredStatementsCount: Int
+  def coveredStatementsCount: Int
 
   require(statementCount >= 0, "Statements count cannot be negative! [" + statementCount + "]")
   require(coveredStatementsCount >= 0, "Statements count cannot be negative! [" +
@@ -57,29 +57,43 @@ sealed trait StatementCoverage {
  * Allows to build tree structure from state coverage values.
  */
 trait NodeStatementCoverage extends StatementCoverage {
-  val children: Iterable[StatementCoverage]
-  val statementCount = children.map(_.statementCount).sum
-  val coveredStatementsCount = children.map(_.coveredStatementsCount).sum
+  def name: String
+  def children: Iterable[NodeStatementCoverage]
+  def statementSum: Int = children.map(_.statementSum).sum
+  def coveredStatementsSum: Int = children.map(_.coveredStatementsSum).sum
 }
 
 /**
  * Root node. In multi-module projects it can contain other ProjectStatementCoverage
  * elements as children.
  */
-case class ProjectStatementCoverage(name: String, children: Iterable[StatementCoverage])
-  extends NodeStatementCoverage
+case class ProjectStatementCoverage(name: String, children: Iterable[NodeStatementCoverage])
+  extends NodeStatementCoverage {
+  // projects' coverage values are defined as sums of their child values
+  val statementCount = statementSum
+  val coveredStatementsCount = coveredStatementsSum
+}
 
 /**
  * Physical directory in file system.
  */
-case class DirectoryStatementCoverage(name: String, children: Iterable[StatementCoverage])
-  extends NodeStatementCoverage
+case class DirectoryStatementCoverage(name: String, children: Iterable[NodeStatementCoverage])
+  extends NodeStatementCoverage {
+  // directories' coverage values are defined as sums of their DIRECT child values 
+  val statementCount = children.filter(_.isInstanceOf[FileStatementCoverage]).map(_.statementCount).sum
+  val coveredStatementsCount = children.filter(_.isInstanceOf[FileStatementCoverage]).map(_.coveredStatementsCount).sum
+}  
 
 /**
  * Scala source code file.
  */
 case class FileStatementCoverage(name: String, statementCount: Int, coveredStatementsCount: Int,
-                                 statements: Iterable[CoveredStatement]) extends StatementCoverage
+                                 statements: Iterable[CoveredStatement]) extends NodeStatementCoverage {
+  // leaf implementation sums==values
+  val children = List.empty[NodeStatementCoverage]
+  override val statementSum = statementCount
+  override val coveredStatementsSum = coveredStatementsCount
+}
 
 /**
  * Position a Scala source code file.

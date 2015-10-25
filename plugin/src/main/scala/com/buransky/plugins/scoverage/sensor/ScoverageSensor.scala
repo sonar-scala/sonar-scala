@@ -128,7 +128,7 @@ class ScoverageSensor(settings: Settings, pathResolver: PathResolver, fileSystem
 
   private def analyseStatementCountForModule(module: Project, context: SensorContext): Long = {
     // Aggregate modules
-    context.getMeasure(module, CoreMetrics.STATEMENTS) match {
+    context.getMeasure(module, ScalaMetrics.totalStatements) match {
       case null =>
         log.debug(LogUtil.f("Module has no number of statements. [" + module.name + "]"))
         0
@@ -206,8 +206,7 @@ class ScoverageSensor(settings: Settings, pathResolver: PathResolver, fileSystem
 
   private def saveMeasures(context: SensorContext, resource: Resource, statementCoverage: StatementCoverage) {
     context.saveMeasure(resource, createStatementCoverage(statementCoverage.rate))
-    if (context.getMeasure(CoreMetrics.STATEMENTS) == null)
-      context.saveMeasure(resource, createStatementCount(statementCoverage.statementCount))
+    context.saveMeasure(resource, createStatementCount(statementCoverage.statementCount))
     context.saveMeasure(resource, createCoveredStatementCount(statementCoverage.coveredStatementsCount))
 
     log.debug(LogUtil.f("Save measures [" + statementCoverage.rate + ", " + statementCoverage.statementCount +
@@ -221,7 +220,7 @@ class ScoverageSensor(settings: Settings, pathResolver: PathResolver, fileSystem
 
     // Set line hits
     val coverage = CoverageMeasuresBuilder.create()
-    coveredLines.foreach { coveredLine =>
+      coveredLines.foreach { coveredLine =>
       coverage.setHits(coveredLine.line, coveredLine.hitCount)
     }
 
@@ -246,7 +245,7 @@ class ScoverageSensor(settings: Settings, pathResolver: PathResolver, fileSystem
     new Measure[T](ScalaMetrics.statementCoverage, rate)
 
   private def createStatementCount[T <: Serializable](statements: Int): Measure[T] =
-    new Measure(CoreMetrics.STATEMENTS, statements.toDouble, 0)
+    new Measure(ScalaMetrics.totalStatements, statements.toDouble, 0)
 
   private def createCoveredStatementCount[T <: Serializable](coveredStatements: Int): Measure[T] =
     new Measure(ScalaMetrics.coveredStatements, coveredStatements.toDouble, 0)

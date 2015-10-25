@@ -30,12 +30,13 @@ import scala.collection.mutable.ListBuffer
  * @author Rado Buransky
  */
 class ScalaMetrics extends Metrics {
-  override def getMetrics = ListBuffer(ScalaMetrics.statementCoverage, ScalaMetrics.coveredStatements).toList
+  override def getMetrics = ListBuffer(ScalaMetrics.statementCoverage, ScalaMetrics.coveredStatements, ScalaMetrics.totalStatements).toList
 }
 
 object ScalaMetrics {
   private val STATEMENT_COVERAGE_KEY = "scoverage"
   private val COVERED_STATEMENTS_KEY = "covered_statements"
+  private val TOTAL_STATEMENTS_KEY = "total_statements"
 
   lazy val statementCoverage = new Metric.Builder(STATEMENT_COVERAGE_KEY,
     "Statement coverage", ValueType.PERCENT)
@@ -54,4 +55,12 @@ object ScalaMetrics {
     .setQualitative(false)
     .setDomain(CoreMetrics.DOMAIN_SIZE)
     .create[java.lang.Integer]()
+    
+  lazy val totalStatements = new Metric.Builder(TOTAL_STATEMENTS_KEY,
+    "Total statements", Metric.ValueType.INT)
+    .setDescription("Number of all statements covered by tests and uncovered")
+    .setDirection(Metric.DIRECTION_BETTER)
+    .setQualitative(false)
+    .setDomain(CoreMetrics.DOMAIN_SIZE)
+    .create[java.lang.Integer]()        
 }

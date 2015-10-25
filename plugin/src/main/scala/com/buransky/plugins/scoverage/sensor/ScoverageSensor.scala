@@ -35,6 +35,8 @@ import org.sonar.api.scan.filesystem.PathResolver
 import org.sonar.api.utils.log.Loggers
 
 import scala.collection.JavaConversions._
+import com.buransky.plugins.scoverage.pathcleaner.BruteForceSequenceMatcher
+import com.buransky.plugins.scoverage.pathcleaner.PathSanitizer
 
 /**
  *  Main sensor for importing Scoverage report to Sonar.
@@ -53,7 +55,16 @@ class ScoverageSensor(settings: Settings, pathResolver: PathResolver, fileSystem
     scoverageReportPath match {
       case Some(reportPath) =>
         // Single-module project
-        processProject(scoverageReportParser.parse(reportPath), project, context)
+        val srcOption = Option(settings.getString(project.getName() + ".sonar.sources"))
+        val sonarSources = srcOption match {
+          case Some(src) => src
+          case None => {
+            log.warn(s"could not find settings key ${project.getName()}.sonar.sources assuming src/main/scala.")
+            "src/main/scala"
+          }
+        }
+        val pathSanitizer = createPathSanitizer(sonarSources)
+        processProject(scoverageReportParser.parse(reportPath, pathSanitizer), project, context, sonarSources)
 
       case None =>
         // Multi-module project has report path set for each module individually
@@ -63,6 +74,9 @@ class ScoverageSensor(settings: Settings, pathResolver: PathResolver, fileSystem
 
   override val toString = getClass.getSimpleName
 
+  protected def createPathSanitizer(sonarSources: String): PathSanitizer
+    = new BruteForceSequenceMatcher(fileSystem.baseDir(), sonarSources)
+  
   private lazy val scoverageReportPath: Option[String] = {
     settings.getString(SCOVERAGE_REPORT_PATH_PROPERTY) match {
       case null => None
@@ -127,14 +141,14 @@ class ScoverageSensor(settings: Settings, pathResolver: PathResolver, fileSystem
     }
   }
 
-  private def processProject(projectCoverage: ProjectStatementCoverage, project: Project, context: SensorContext) {
+  private def processProject(projectCoverage: ProjectStatementCoverage, project: Project, context: SensorContext, sonarSources: String) {
     // Save measures
     saveMeasures(context, project, projectCoverage)
 
     log.info(LogUtil.f("Statement coverage for " + project.getKey + " is " + ("%1.2f" format projectCoverage.rate)))
 
     // Process children
-    processChildren(projectCoverage.children, context, "")
+    processChildren(projectCoverage.children, context, sonarSources)
   }
 
   private def processDirectory(directoryCoverage: DirectoryStatementCoverage, context: SensorContext,
@@ -147,9 +161,8 @@ class ScoverageSensor(settings: Settings, pathResolver: PathResolver, fileSystem
     val path = appendFilePath(directory, fileCoverage.name)
     val p = fileSystem.predicates()
 
-    val pathPredicate = if (new io.File(path).isAbsolute) p.hasAbsolutePath(path) else p.matchesPathPattern("**/" + path)
     val files = fileSystem.inputFiles(p.and(
-      pathPredicate,
+      p.hasRelativePath(path),
       p.hasLanguage(scala.getKey),
       p.hasType(InputFile.Type.MAIN))).toList
 
@@ -164,10 +177,7 @@ class ScoverageSensor(settings: Settings, pathResolver: PathResolver, fileSystem
         saveLineCoverage(fileCoverage.statements, scalaSourceFile, context)
 
       case None => {
-        fileSystem.inputFiles(p.all()).foreach { inputFile =>
-          log.debug(inputFile.absolutePath())
-        }
-        log.warn(s"File not found in file system! [$pathPredicate]")
+        log.warn(s"File not found in file system! [$path]")
       }
     }
   }

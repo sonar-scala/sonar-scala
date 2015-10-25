@@ -24,23 +24,30 @@ import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
 
 @RunWith(classOf[JUnitRunner])
-class UnixPathUtilSpec extends ParamPathUtilSpec("Unix", "/")
-
-@RunWith(classOf[JUnitRunner])
-class WindowsPathUtilSpec extends ParamPathUtilSpec("Windows", "\\")
-
-abstract class ParamPathUtilSpec(osName: String, separator: String) extends FlatSpec with Matchers {
+class PathUtilSpec extends FlatSpec with Matchers {
+  
+  val osName = System.getProperty("os.name")
+  val separator = System.getProperty("file.separator")
+  
   behavior of s"splitPath for $osName"
-
-  it should "work for empty path" in {
-    PathUtil.splitPath("", separator) should equal(List(""))
+  
+  it should "ignore the empty path" in {
+    PathUtil.splitPath("") should equal(List.empty[String])
   }
 
-  it should "work with separator at the beginning" in {
-    PathUtil.splitPath(s"${separator}a", separator) should equal(List(separator, "a"))
+  it should "ignore a separator at the beginning" in {
+    PathUtil.splitPath(s"${separator}a") should equal(List("a"))
   }
 
   it should "work with separator in the middle" in {
-    PathUtil.splitPath(s"a${separator}b", separator) should equal(List("a", "b"))
+    PathUtil.splitPath(s"a${separator}b") should equal(List("a", "b"))
+  }
+  
+  it should "work with an OS dependent absolute path" in {
+    if (osName.startsWith("Windows")) {
+      PathUtil.splitPath("C:\\test\\2") should equal(List("test", "2"))
+    } else {
+      PathUtil.splitPath("/test/2") should equal(List("test", "2"))
+    }
   }
 }

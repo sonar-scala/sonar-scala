@@ -30,13 +30,14 @@ import scala.collection.mutable
 import scala.io.Source
 import scala.xml.parsing.ConstructingParser
 import scala.xml.{MetaData, NamespaceBinding, Text}
+import com.buransky.plugins.scoverage.pathcleaner.PathSanitizer
 
 /**
  * Scoverage XML parser based on ConstructingParser provided by standard Scala library.
  *
  * @author Rado Buransky
  */
-class XmlScoverageReportConstructingParser(source: Source) extends ConstructingParser(source, false) {
+class XmlScoverageReportConstructingParser(source: Source, pathSanitizer: PathSanitizer) extends ConstructingParser(source, false) {
   private val log = Loggers.get(classOf[XmlScoverageReportConstructingParser])
 
   private val CLASS_ELEMENT = "class"
@@ -163,7 +164,7 @@ class XmlScoverageReportConstructingParser(source: Source) extends ConstructingP
     val files = fileStatementCoverage(statementsInFile)
 
     // Transform file paths to chain of case classes
-    val chained = files.map(fsc => pathToChain(fsc._1, fsc._2))
+    val chained = files.map(fsc => pathToChain(fsc._1, fsc._2)).flatten
 
     // Merge chains into one tree
     val root = DirOrFile("", Nil, None)
@@ -173,31 +174,42 @@ class XmlScoverageReportConstructingParser(source: Source) extends ConstructingP
     root.toProjectStatementCoverage
   }
 
-  private def pathToChain(filePath: String, coverage: FileStatementCoverage): DirOrFile = {
+  private def pathToChain(filePath: String, coverage: FileStatementCoverage): Option[DirOrFile] = {
+    // helper
+    def convertToDirOrFile(relPath: Seq[String]) = {
+      // Get directories
+      val dirs = for (i <- 0 to relPath.length - 2)
+        yield DirOrFile(relPath(i), Nil, None)
+
+      // Chain directories
+      for (i <- 0 to dirs.length - 2)
+        dirs(i).children = List(dirs(i + 1))
+
+      // Get file
+      val file = DirOrFile(relPath(relPath.length - 1).toString, Nil, Some(coverage))
+
+      if (dirs.isEmpty) {
+        // File in root dir
+        file
+      } else {
+        // Append file
+        dirs.last.children = List(file)
+        dirs.head
+      }
+    }
+    
+    // processing
     val path = PathUtil.splitPath(filePath)
 
     if (path.length < 1)
       throw new ScoverageException("Path cannot be empty!")
 
-    // Get directories
-    val dirs = for (i <- 0 to path.length - 2)
-      yield DirOrFile(path(i), Nil, None)
-
-    // Chain directories
-    for (i <- 0 to dirs.length - 2)
-      dirs(i).children = List(dirs(i + 1))
-
-    // Get file
-    val file = DirOrFile(path(path.length - 1).toString, Nil, Some(coverage))
-
-    if (dirs.isEmpty) {
-      // File in root dir
-      file
-    }
-    else {
-      // Append file
-      dirs.last.children = List(file)
-      dirs.head
+    pathSanitizer.getSourceRelativePath(path) match {
+      case Some(relPath) => Some(convertToDirOrFile(relPath))
+      case None => {
+        log.warn(s"skipping file coverage results for $path, was not able to retrieve the file in the configured source dir")
+        None
+      }
     }
   }
 

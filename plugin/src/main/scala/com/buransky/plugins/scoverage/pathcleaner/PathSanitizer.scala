@@ -17,27 +17,18 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package com.buransky.plugins.scoverage.util
+package com.buransky.plugins.scoverage.pathcleaner
 
-import java.io.File
-import scala.Iterator
 /**
- *  File path helper.
- *
- * @author Rado Buransky
- */
-object PathUtil {
+  * @author Michael Zinsmaier
+  */
+trait PathSanitizer {
   
-  def splitPath(filePath: String): List[String] = {
-    new FileParentIterator(new File(filePath)).toList.reverse
-  }
+  /** tries to convert the given path such that it is relative to the
+   *  projects/modules source directory.
+   *  
+   *  @return Some(source folder relative path) or None if the path cannot be converted 
+   */
+  def getSourceRelativePath(path: Seq[String]): Option[Seq[String]]  
   
-  class FileParentIterator(private var f: File) extends Iterator[String] {
-    def hasNext: Boolean = f != null && !f.getName().isEmpty()
-    def next(): String = {
-      val name = f.getName()
-      f = f.getParentFile
-      name
-    } 
-  }
 }

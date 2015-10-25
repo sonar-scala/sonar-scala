@@ -36,6 +36,8 @@ import org.sonar.api.resources.Project.AnalysisType
 import org.sonar.api.scan.filesystem.PathResolver
 
 import scala.collection.JavaConversions._
+import com.buransky.plugins.scoverage.pathcleaner.PathSanitizer
+import org.mockito.Matchers.any
 
 
 @RunWith(classOf[JUnitRunner])
@@ -94,15 +96,12 @@ class ScoverageSensorSpec extends FlatSpec with Matchers with MockitoSugar {
     when(settings.getString(SCOVERAGE_REPORT_PATH_PROPERTY)).thenReturn(pathToScoverageReport)
     when(fileSystem.baseDir).thenReturn(moduleBaseDir)
     when(fileSystem.predicates).thenReturn(filePredicates)
-    when(fileSystem.inputFiles(org.mockito.Matchers.any[FilePredicate]())).thenReturn(Nil)
+    when(fileSystem.inputFiles(any[FilePredicate]())).thenReturn(Nil)
     when(pathResolver.relativeFile(moduleBaseDir, pathToScoverageReport)).thenReturn(reportFile)
-    when(scoverageReportParser.parse(reportAbsolutePath)).thenReturn(projectStatementCoverage)
+    when(scoverageReportParser.parse(any[String](), any[PathSanitizer]())).thenReturn(projectStatementCoverage)
 
     // Execute
     analyse(project, context)
-
-    verify(filePredicates).hasAbsolutePath("/home/a.scala")
-    verify(filePredicates).matchesPathPattern("**/x/b.scala")
   }
 
   class AnalyseScoverageSensorScope extends ScoverageSensorScope {
@@ -110,6 +109,7 @@ class ScoverageSensorSpec extends FlatSpec with Matchers with MockitoSugar {
     val context = new TestSensorContext
 
     override protected lazy val scoverageReportParser = mock[ScoverageReportParser]
+    override protected def createPathSanitizer(sonarSources: String) = mock[PathSanitizer]
   }
 
   class ScoverageSensorScope extends {

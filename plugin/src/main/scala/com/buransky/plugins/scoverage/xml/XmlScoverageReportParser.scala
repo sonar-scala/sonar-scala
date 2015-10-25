@@ -24,6 +24,7 @@ import com.buransky.plugins.scoverage.{ProjectStatementCoverage, ScoverageExcept
 import org.sonar.api.utils.log.Loggers
 
 import scala.io.Source
+import com.buransky.plugins.scoverage.pathcleaner.PathSanitizer
 
 /**
  * Bridge between parser implementation and coverage provider.
@@ -33,13 +34,13 @@ import scala.io.Source
 class XmlScoverageReportParser extends ScoverageReportParser {
   private val log = Loggers.get(classOf[XmlScoverageReportParser])
 
-  def parse(reportFilePath: String): ProjectStatementCoverage = {
+  def parse(reportFilePath: String, pathSanitizer: PathSanitizer): ProjectStatementCoverage = {
     require(reportFilePath != null)
     require(!reportFilePath.trim.isEmpty)
 
     log.debug(LogUtil.f("Reading report. [" + reportFilePath + "]"))
 
-    val parser = new XmlScoverageReportConstructingParser(sourceFromFile(reportFilePath))
+    val parser = new XmlScoverageReportConstructingParser(sourceFromFile(reportFilePath), pathSanitizer)
     parser.parse()
   }
 

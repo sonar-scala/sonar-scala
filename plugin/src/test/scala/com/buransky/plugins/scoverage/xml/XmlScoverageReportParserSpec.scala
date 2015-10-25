@@ -29,14 +29,14 @@ class XmlScoverageReportParserSpec extends FlatSpec with Matchers {
   behavior of "parse file path"
 
   it must "fail for null path" in {
-    the[IllegalArgumentException] thrownBy XmlScoverageReportParser().parse(null.asInstanceOf[String])
+    the[IllegalArgumentException] thrownBy XmlScoverageReportParser().parse(null.asInstanceOf[String], null)
   }
 
   it must "fail for empty path" in {
-    the[IllegalArgumentException] thrownBy XmlScoverageReportParser().parse("")
+    the[IllegalArgumentException] thrownBy XmlScoverageReportParser().parse("", null)
   }
 
   it must "fail for not existing path" in {
-    the[ScoverageException] thrownBy XmlScoverageReportParser().parse("/x/a/b/c/1/2/3/4.xml")
+    the[ScoverageException] thrownBy XmlScoverageReportParser().parse("/x/a/b/c/1/2/3/4.xml", null)
   }
 }

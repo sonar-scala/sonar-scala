@@ -91,6 +91,10 @@ Source code markup with covered and uncovered lines:
 
 ## Changelog ##
 
+### 5.1.3 - 8 April 2016 ###
+
+- Fixed [issue #31](https://github.com/RadoBuransky/sonar-scoverage-plugin/issues/31)
+
 ### 5.1.2 - 25 October 2015 ###
 
 **[Michael Zinsmaier](https://github.com/MichaelZinsmaier) pull requests:**

@@ -19,37 +19,34 @@
  */
 package com.buransky.plugins.scoverage.sensor
 
-import java.io
-
 import com.buransky.plugins.scoverage.language.Scala
 import com.buransky.plugins.scoverage.measure.ScalaMetrics
+import com.buransky.plugins.scoverage.pathcleaner.{BruteForceSequenceMatcher, PathSanitizer}
 import com.buransky.plugins.scoverage.util.LogUtil
 import com.buransky.plugins.scoverage.xml.XmlScoverageReportParser
-import com.buransky.plugins.scoverage.{ CoveredStatement, DirectoryStatementCoverage, FileStatementCoverage, _ }
-import org.sonar.api.batch.fs.{ FileSystem, InputFile, InputDir, InputPath }
-import org.sonar.api.batch.{ CoverageExtension, Sensor, SensorContext }
+import com.buransky.plugins.scoverage.{CoveredStatement, DirectoryStatementCoverage, FileStatementCoverage, _}
+import org.sonar.api.batch.fs.{FileSystem, InputFile, InputPath}
+import org.sonar.api.batch.{CoverageExtension, Sensor, SensorContext}
 import org.sonar.api.config.Settings
-import org.sonar.api.measures.{ CoreMetrics, CoverageMeasuresBuilder, Measure }
-import org.sonar.api.resources.{ File, Project, Directory, Resource }
+import org.sonar.api.measures.{CoverageMeasuresBuilder, Measure}
+import org.sonar.api.resources.{Project, Resource}
 import org.sonar.api.scan.filesystem.PathResolver
 import org.sonar.api.utils.log.Loggers
 
 import scala.collection.JavaConversions._
-import com.buransky.plugins.scoverage.pathcleaner.BruteForceSequenceMatcher
-import com.buransky.plugins.scoverage.pathcleaner.PathSanitizer
 
 /**
  *  Main sensor for importing Scoverage report to Sonar.
  *
  * @author Rado Buransky
  */
-class ScoverageSensor(settings: Settings, pathResolver: PathResolver, fileSystem: FileSystem, scala: Scala)
+class ScoverageSensor(settings: Settings, pathResolver: PathResolver, fileSystem: FileSystem)
   extends Sensor with CoverageExtension {
   private val log = Loggers.get(classOf[ScoverageSensor])
   protected val SCOVERAGE_REPORT_PATH_PROPERTY = "sonar.scoverage.reportPath"
   protected lazy val scoverageReportParser: ScoverageReportParser = XmlScoverageReportParser()
 
-  override def shouldExecuteOnProject(project: Project): Boolean = fileSystem.languages().contains(scala.getKey)
+  override def shouldExecuteOnProject(project: Project): Boolean = fileSystem.languages().contains(Scala.key)
 
   override def analyse(project: Project, context: SensorContext) {
     scoverageReportPath match {
@@ -188,7 +185,7 @@ class ScoverageSensor(settings: Settings, pathResolver: PathResolver, fileSystem
       val p = fileSystem.predicates()
       Option(fileSystem.inputFile(p.and(
         p.hasRelativePath(path),
-        p.hasLanguage(scala.getKey),
+        p.hasLanguage(Scala.key),
         p.hasType(InputFile.Type.MAIN))))
     } else {
       Option(fileSystem.inputDir(pathResolver.relativeFile(fileSystem.baseDir(), path)))

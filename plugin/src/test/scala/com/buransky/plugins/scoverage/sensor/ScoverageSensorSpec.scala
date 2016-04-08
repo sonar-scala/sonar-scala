@@ -117,6 +117,6 @@ class ScoverageSensorSpec extends FlatSpec with Matchers with MockitoSugar {
     val settings = mock[Settings]
     val pathResolver = mock[PathResolver]
     val fileSystem = mock[FileSystem]
-  } with ScoverageSensor(settings, pathResolver, fileSystem, scala)
+  } with ScoverageSensor(settings, pathResolver, fileSystem)
 
 }

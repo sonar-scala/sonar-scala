@@ -56,7 +56,7 @@ class ScalastyleResourcesSpec  extends FlatSpec with Matchers with Inspectors wi
   }
 
   it should "return all defined checkers" in {
-    ScalastyleResources.allDefinedRules.size shouldEqual 60
+    ScalastyleResources.allDefinedRules.size shouldEqual 63
   }
 
   it should "give rules a description" in {

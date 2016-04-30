@@ -1,0 +1,9 @@
+# Launch the build of the docker image
+dependencies:
+  override:
+    - mvn dependency:resolve
+
+# Launch the test into the docker image
+test:
+  override:
+    - mvn test

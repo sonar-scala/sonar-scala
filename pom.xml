@@ -10,7 +10,7 @@
 
   <artifactId>sonar-scala-plugin</artifactId>
   <packaging>sonar-plugin</packaging>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>0.0.2-SNAPSHOT</version>
 
   <name>Sonar Scala Plugin</name>
   <description>Enables analysis of Scala projects into Sonar.</description>
@@ -108,6 +108,25 @@
     <dependency>
       <groupId>org.sonarsource.sonarqube</groupId>
       <artifactId>sonar-testing-harness</artifactId>
+      <version>${sonar.version}</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.scalastyle</groupId>
+      <artifactId>scalastyle_${scala.major.version}</artifactId>
+      <version>0.8.0</version>
+      <exclusions>
+        <exclusion>
+          <groupId>org.scala-lang</groupId>
+          <artifactId>scala-library</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+
+    <dependency>
+      <groupId>org.sonarsource.sonarqube</groupId>
+      <artifactId>sonar-core</artifactId>
       <version>${sonar.version}</version>
       <scope>test</scope>
     </dependency>

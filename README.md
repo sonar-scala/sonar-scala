@@ -39,3 +39,6 @@ Here is a list of the main ones.
 [SonarSource/sonar-examples](https://github.com/SonarSource/sonar-examples)
 
 [NCR-CoDE/sonar-scalastyle](https://github.com/NCR-CoDE/sonar-scalastyle)
+
+# Integration
+Sonar-scala integrates the latest code from the [Sonar Scalastyle Plugin](https://github.com/NCR-CoDE/sonar-scalastyle). As both project are licensed under LGPL3 this shouldn't be a problem.

@@ -9,6 +9,9 @@ import org.sonar.api.resources.AbstractLanguage
 import org.sonar.api.SonarPlugin
 import scalariform.lexer.ScalaLexer
 import scalariform.lexer.Token
+import com.ncredinburgh.sonar.scalastyle.ScalastyleRepository
+import com.ncredinburgh.sonar.scalastyle.ScalastyleQualityProfile
+import com.ncredinburgh.sonar.scalastyle.ScalastyleSensor
 
 /**
  * Defines Scala as a language for SonarQube.
@@ -34,7 +37,10 @@ class ScalaPlugin extends SonarPlugin {
   override def getExtensions: java.util.List[Class[_]] =
     ListBuffer[Class[_]] (
       classOf[Scala],
-      classOf[ScalaSensor]
+      classOf[ScalaSensor],
+      classOf[ScalastyleRepository],
+      classOf[ScalastyleQualityProfile],
+      classOf[ScalastyleSensor]
     )
 
   override val toString = getClass.getSimpleName

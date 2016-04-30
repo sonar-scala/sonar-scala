@@ -111,6 +111,25 @@
       <version>${sonar.version}</version>
       <scope>test</scope>
     </dependency>
+
+    <dependency>
+      <groupId>org.scalastyle</groupId>
+      <artifactId>scalastyle_${scala.major.version}</artifactId>
+      <version>0.8.0</version>
+      <exclusions>
+        <exclusion>
+          <groupId>org.scala-lang</groupId>
+          <artifactId>scala-library</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+
+    <dependency>
+      <groupId>org.sonarsource.sonarqube</groupId>
+      <artifactId>sonar-core</artifactId>
+      <version>${sonar.version}</version>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
 
   <build>

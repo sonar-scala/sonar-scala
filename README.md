@@ -41,4 +41,4 @@ Here is a list of the main ones.
 [NCR-CoDE/sonar-scalastyle](https://github.com/NCR-CoDE/sonar-scalastyle)
 
 # Integration
-Sonar-scala integrates the latest code from the [Sonar Scalastyle Plugin](https://github.com/NCR-CoDE/sonar-scalastyle). As both project are licensed under LGPL3 this shouldn't be a problem.
+Sonar-scala integrates the latest code from the [Sonar Scalastyle Plugin](https://github.com/NCR-CoDE/sonar-scalastyle) directly. All thise files must keep their original license. Also their history was pulled along with them. Any further change upstream should be incorporated using cherry-picks or merges.

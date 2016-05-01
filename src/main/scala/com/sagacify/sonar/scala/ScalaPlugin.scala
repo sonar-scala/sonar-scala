@@ -3,15 +3,18 @@ package com.sagacify.sonar.scala
 import scala.collection.JavaConversions._
 import scala.collection.mutable.ListBuffer
 
+import com.buransky.plugins.scoverage.measure.ScalaMetrics
+import com.buransky.plugins.scoverage.sensor.ScoverageSensor
+import com.buransky.plugins.scoverage.widget.ScoverageWidget
+import com.ncredinburgh.sonar.scalastyle.ScalastyleQualityProfile
+import com.ncredinburgh.sonar.scalastyle.ScalastyleRepository
+import com.ncredinburgh.sonar.scalastyle.ScalastyleSensor
 import org.sonar.api.config.Settings
 import org.sonar.api.Extension
 import org.sonar.api.resources.AbstractLanguage
 import org.sonar.api.SonarPlugin
 import scalariform.lexer.ScalaLexer
 import scalariform.lexer.Token
-import com.ncredinburgh.sonar.scalastyle.ScalastyleRepository
-import com.ncredinburgh.sonar.scalastyle.ScalastyleQualityProfile
-import com.ncredinburgh.sonar.scalastyle.ScalastyleSensor
 
 /**
  * Defines Scala as a language for SonarQube.
@@ -40,7 +43,10 @@ class ScalaPlugin extends SonarPlugin {
       classOf[ScalaSensor],
       classOf[ScalastyleRepository],
       classOf[ScalastyleQualityProfile],
-      classOf[ScalastyleSensor]
+      classOf[ScalastyleSensor],
+      classOf[ScalaMetrics],
+      classOf[ScoverageSensor],
+      classOf[ScoverageWidget]
     )
 
   override val toString = getClass.getSimpleName

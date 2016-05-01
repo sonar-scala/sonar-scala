@@ -33,11 +33,13 @@ This plugin is not an evolution from the legacy sonar-scala-plugin of which vers
 The previous plugin used the scala compiler to create its metrics which had the disadvantage of requiring a specific plugin per scala version.
 Instead, we are using the [scala-ide/scalariform](https://github.com/scala-ide/scalariform) library to parse the source code in a version independent way.
 
-# TODO
+# TODO (by priority)
 * Add property to sepcify scala version (currently defaults to 2.11.8)
-* Integrate coverage metrics
-* Integrate scalawarts
-* Optimize scalastyle integration (currently two seperate analysers) 
+* Add Complexity metric on file (use the one in scalastyle)
+* remove dependency on commons-io (Currently only needed by BruteForceSequenceMatcher)
+* Uncomment ScoverageSensorSpec
+* Integrate other java compatible code quality tools
+* Optimize sensors i.e. (scalastyle and base both read and parse source files.)
 ...
 
 # Credits

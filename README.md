@@ -25,7 +25,7 @@ sonar-runner -D sonar.projectKey=Sagacify:sonar-scala
 
 # Contributing
 Contributions wre accepted in the form of a pull request or a signed patch.
-Please follow the semantic changelog to format your commits [cfr]((https://github.com/Sagacify/komitet-gita-bezopasnosti).
+Please follow the semantic changelog to format your commits [cfr](https://github.com/Sagacify/komitet-gita-bezopasnosti).
 All changes are submitted to automated tests that must pass for the pull-request to be merged.
 
 # Info

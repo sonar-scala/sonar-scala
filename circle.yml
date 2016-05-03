@@ -1,9 +1,14 @@
 # Launch the build of the docker image
 dependencies:
   override:
+    - wget https://raw.githubusercontent.com/Sagacify/ci-tools/master/run-sonar.sh
+    - chmod +x run-sonar.sh
+    - ./run-sonar.sh check
+    - ./run-sonar.sh install
     - mvn dependency:resolve
 
 # Launch the test into the docker image
 test:
   override:
-    - mvn test
+    - mvn scoverage:report
+    - ./run-sonar.sh run

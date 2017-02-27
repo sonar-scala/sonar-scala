@@ -52,11 +52,11 @@ class ScoverageSensor(settings: Settings, pathResolver: PathResolver, fileSystem
     scoverageReportPath match {
       case Some(reportPath) =>
         // Single-module project
-        val srcOption = Option(settings.getString(project.getName() + ".sonar.sources"))
+        val srcOption = Option(settings.getString("sonar.sources"))
         val sonarSources = srcOption match {
           case Some(src) => src
           case None => {
-            log.warn(s"could not find settings key ${project.getName()}.sonar.sources assuming src/main/scala.")
+            log.warn(s"could not find settings key sonar.sources assuming src/main/scala.")
             "src/main/scala"
           }
         }

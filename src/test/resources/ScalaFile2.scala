@@ -7,3 +7,6 @@ class ScalaFile2 {
     println("function called.")
   }
 }
+
+object ScalaFile2 {
+}

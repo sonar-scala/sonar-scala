@@ -9,4 +9,5 @@ class ScalaFile2 {
 }
 
 object ScalaFile2 {
+  def func2 = ""
 }

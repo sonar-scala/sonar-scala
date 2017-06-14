@@ -6,14 +6,19 @@ import scalariform.lexer.Token
 import scalariform.lexer.Tokens._
 
 object Measures {
-
-  final def count_classes(tokens: List[Token], i: Int = 0): Int = {
+  def count_classes(tokens: List[Token]): Int = {
     var count = 0
     tokens.foreach(token => if (token.tokenType == CLASS || token.tokenType == OBJECT) count += 1)
 
     count
   }
 
+  final def count_methods(tokens: List[Token]): Int = {
+    var count = 0
+    tokens.foreach(token => if (token.tokenType == DEF) count += 1)
+
+    count
+  }
 
   /* applied on raw source code */
 

@@ -22,7 +22,8 @@ package com.buransky.plugins.scoverage.pathcleaner
 import java.io.File
 import org.apache.commons.io.FileUtils
 import BruteForceSequenceMatcher._
-import com.buransky.plugins.scoverage.util.PathUtil
+import com.buransky.plugins.scoverage.util.{LogUtil, PathUtil}
+
 import scala.collection.JavaConversions._
 import org.sonar.api.utils.log.Loggers
 
@@ -48,11 +49,12 @@ object BruteForceSequenceMatcher {
   */
 class BruteForceSequenceMatcher(baseDir: File, sourcePath: String) extends PathSanitizer {
 
+  private val log = Loggers.get(classOf[BruteForceSequenceMatcher])
+
   private val sourceDir = initSourceDir()
   require(sourceDir.isAbsolute)
   require(sourceDir.isDirectory)
 
-  private val log = Loggers.get(classOf[BruteForceSequenceMatcher])
   private val sourcePathLength = PathUtil.splitPath(sourceDir.getAbsolutePath).size
   private val filesMap = initFilesMap()
 
@@ -71,8 +73,13 @@ class BruteForceSequenceMatcher(baseDir: File, sourcePath: String) extends PathS
 
   private[pathcleaner] def initSourceDir(): File = {
     sourcePath.split(",").headOption.map { first =>
-      val sourceDir = new File(baseDir, first)
-      sourceDir
+      if(first.startsWith(File.separator)) {
+        log.warn("Absolute path given, trying to open:" + first)
+        new File(first)
+      } else {
+        log.warn(LogUtil.f("Relative path given, trying to open: " + first +" in dir " + baseDir ))
+        new File(baseDir, first)
+      }
     }.getOrElse(null)
   }
 

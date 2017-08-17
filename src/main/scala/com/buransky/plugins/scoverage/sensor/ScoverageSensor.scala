@@ -184,7 +184,7 @@ class ScoverageSensor(settings: Settings, pathResolver: PathResolver, fileSystem
     val inputOption: Option[InputPath] = if (isFile) {
       val p = fileSystem.predicates()
       Option(fileSystem.inputFile(p.and(
-        p.hasRelativePath(path),
+        p.or(p.hasPath(path),p.hasRelativePath(path)),
         p.hasLanguage(Scala.key),
         p.hasType(InputFile.Type.MAIN))))
     } else {

@@ -1,5 +1,6 @@
 package com.sagacify.sonar.scala
 
+import org.sonar.plugins.scala.Scala
 import org.scalatest._
 // import scalariform.lexer.ScalaLexer
 // import scalariform.lexer.Token

@@ -19,7 +19,6 @@
  */
 package com.buransky.plugins.scoverage.sensor
 
-import com.buransky.plugins.scoverage.language.Scala
 import com.buransky.plugins.scoverage.measure.ScalaMetrics
 import com.buransky.plugins.scoverage.pathcleaner.{BruteForceSequenceMatcher, PathSanitizer}
 import com.buransky.plugins.scoverage.util.LogUtil
@@ -32,6 +31,7 @@ import org.sonar.api.measures.{CoverageMeasuresBuilder, Measure}
 import org.sonar.api.resources.{Project, Resource}
 import org.sonar.api.scan.filesystem.PathResolver
 import org.sonar.api.utils.log.Loggers
+import org.sonar.plugins.scala.Scala
 
 import scala.collection.JavaConversions._
 
@@ -46,7 +46,7 @@ class ScoverageSensor(settings: Settings, pathResolver: PathResolver, fileSystem
   protected val SCOVERAGE_REPORT_PATH_PROPERTY = "sonar.scoverage.reportPath"
   protected lazy val scoverageReportParser: ScoverageReportParser = XmlScoverageReportParser()
 
-  override def shouldExecuteOnProject(project: Project): Boolean = fileSystem.languages().contains(Scala.key)
+  override def shouldExecuteOnProject(project: Project): Boolean = fileSystem.languages().contains(Scala.KEY)
 
   override def analyse(project: Project, context: SensorContext) {
     scoverageReportPath match {
@@ -185,7 +185,7 @@ class ScoverageSensor(settings: Settings, pathResolver: PathResolver, fileSystem
       val p = fileSystem.predicates()
       Option(fileSystem.inputFile(p.and(
         p.or(p.hasPath(path),p.hasRelativePath(path)),
-        p.hasLanguage(Scala.key),
+        p.hasLanguage(Scala.KEY),
         p.hasType(InputFile.Type.MAIN))))
     } else {
       Option(fileSystem.inputDir(pathResolver.relativeFile(fileSystem.baseDir(), path)))

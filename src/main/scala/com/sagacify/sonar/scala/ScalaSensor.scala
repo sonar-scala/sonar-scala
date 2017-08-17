@@ -1,5 +1,7 @@
 package com.sagacify.sonar.scala
 
+import org.sonar.plugins.scala.Scala
+
 import scala.io.Source
 import scala.collection.JavaConversions._
 

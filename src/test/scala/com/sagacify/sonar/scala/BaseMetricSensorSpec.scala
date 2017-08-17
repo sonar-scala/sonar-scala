@@ -10,6 +10,8 @@ import org.mockito.Mockito.verifyNoMoreInteractions;
 
 import java.io.IOException;
 import java.nio.file.Paths
+import org.sonar.plugins.scala.Scala
+
 import scala.collection.JavaConversions._
 
 import org.junit.Before;

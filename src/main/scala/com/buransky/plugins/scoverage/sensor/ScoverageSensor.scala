@@ -145,7 +145,7 @@ class ScoverageSensor(settings: Settings, pathResolver: PathResolver, fileSystem
     log.info(LogUtil.f("Statement coverage for " + project.getKey + " is " + ("%1.2f" format projectCoverage.rate)))
 
     // Process children
-    processChildren(projectCoverage.children, context, sonarSources)
+    sonarSources.split(",").foreach(subdir => processChildren(projectCoverage.children, context, subdir))
   }
 
   private def processDirectory(directoryCoverage: DirectoryStatementCoverage, context: SensorContext, parentDirectory: String) {

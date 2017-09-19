@@ -19,6 +19,8 @@
  */
 package com.buransky.plugins.scoverage.sensor
 
+import java.io.File
+
 import com.buransky.plugins.scoverage.language.Scala
 import com.buransky.plugins.scoverage.measure.ScalaMetrics
 import com.buransky.plugins.scoverage.pathcleaner.{BruteForceSequenceMatcher, PathSanitizer}
@@ -183,8 +185,9 @@ class ScoverageSensor(settings: Settings, pathResolver: PathResolver, fileSystem
     
     val inputOption: Option[InputPath] = if (isFile) {
       val p = fileSystem.predicates()
+      val pathPreducate = if (new File(path).isAbsolute) p.hasAbsolutePath(path) else p.hasRelativePath(path)
       Option(fileSystem.inputFile(p.and(
-        p.hasRelativePath(path),
+        pathPreducate,
         p.hasLanguage(Scala.key),
         p.hasType(InputFile.Type.MAIN))))
     } else {

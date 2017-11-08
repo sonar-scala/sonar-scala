@@ -21,7 +21,7 @@ package com.ncredinburgh.sonar.scalastyle
 import java.io.File
 import java.nio.charset.StandardCharsets
 
-import org.mockito.Matchers._
+import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
 import org.scalastyle._
 import org.scalastyle.file.FileLengthChecker

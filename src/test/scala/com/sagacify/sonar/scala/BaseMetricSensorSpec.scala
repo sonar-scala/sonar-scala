@@ -44,7 +44,7 @@ class ScalaSensorSpec extends FlatSpec with Matchers {
 
   it should "correctly measure ScalaFile1" in {
     val c = context
-    c.fs.add(TestInputFileBuilder.create("p", "ScalaFile1.scala").setLanguage("scala").build())
+    c.fs.add(TestInputFileBuilder.create("", "src/test/resources/ScalaFile1.scala").setLanguage("scala").build())
     val sensorContext = mock(classOf[SensorContext])
     c.sensor.analyse(c.project, sensorContext)
 
@@ -66,7 +66,7 @@ class ScalaSensorSpec extends FlatSpec with Matchers {
   it should "correctly measure ScalaFile2" in {
 
     val c = context
-    c.fs.add(TestInputFileBuilder.create("p", "ScalaFile2.scala").setLanguage("scala").build())
+    c.fs.add(TestInputFileBuilder.create("", "src/test/resources/ScalaFile2.scala").setLanguage("scala").build())
     val sensorContext = mock(classOf[SensorContext])
     c.sensor.analyse(c.project, sensorContext)
 

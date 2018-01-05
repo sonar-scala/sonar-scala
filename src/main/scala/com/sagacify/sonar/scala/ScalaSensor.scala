@@ -1,7 +1,5 @@
 package com.sagacify.sonar.scala
 
-import org.sonar.plugins.scala.Scala
-
 import scala.io.Source
 import scala.collection.JavaConversions._
 
@@ -31,10 +29,10 @@ class ScalaSensor(scala: Scala, fs: FileSystem) extends Sensor {
       val sourceCode = Source.fromFile(inputFile.file, charset).mkString
       val tokens = Scala.tokenize(sourceCode, version)
 
-      context.saveMeasure(inputFile, CM.COMMENT_LINES, Measures.count_comment_lines(tokens))
-      context.saveMeasure(inputFile, CM.NCLOC, Measures.count_ncloc(tokens))
-      context.saveMeasure(inputFile, CM.CLASSES, Measures.count_classes(tokens))
-      context.saveMeasure(inputFile, CM.FUNCTIONS, Measures.count_methods(tokens))
+      context.saveMeasure(inputFile, CM.COMMENT_LINES, double2Double(Measures.count_comment_lines(tokens)))
+      context.saveMeasure(inputFile, CM.NCLOC, double2Double(Measures.count_ncloc(tokens)))
+      context.saveMeasure(inputFile, CM.CLASSES, double2Double(Measures.count_classes(tokens)))
+      context.saveMeasure(inputFile, CM.FUNCTIONS, double2Double(Measures.count_methods(tokens)))
 
       // context.saveMeasure(inputFile, CM.ACCESSORS, accessors)
       // context.saveMeasure(inputFile, CM.COMPLEXITY_IN_FUNCTIONS, complexityInMethods)

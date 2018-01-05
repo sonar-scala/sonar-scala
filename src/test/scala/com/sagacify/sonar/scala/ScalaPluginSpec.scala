@@ -18,10 +18,6 @@
  */
 package com.sagacify.sonar.scala
 
-import org.sonar.plugins.scala.Scala
-import com.ncredinburgh.sonar.scalastyle.ScalastyleSensor
-import com.ncredinburgh.sonar.scalastyle.ScalastyleRepository
-import com.ncredinburgh.sonar.scalastyle.ScalastyleQualityProfile
 import org.scalatest.{FlatSpec, Matchers}
 
 /**

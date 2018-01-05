@@ -1,13 +1,6 @@
 package com.sagacify.sonar.scala
 
-import org.sonar.plugins.scala.Scala
 import org.scalatest._
-// import scalariform.lexer.ScalaLexer
-// import scalariform.lexer.Token
-// import scalariform.lexer.Tokens.LINE_COMMENT
-// import scalariform.lexer.Tokens.MULTILINE_COMMENT
-// import scalariform.lexer.Tokens.XML_COMMENT
-// import scala.annotation.tailrec
 
 class MeasurersSpec extends FlatSpec with Matchers {
 

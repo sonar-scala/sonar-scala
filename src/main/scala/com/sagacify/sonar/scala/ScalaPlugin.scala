@@ -31,19 +31,6 @@ object Scala {
  */
 class ScalaPlugin extends Plugin {
 
-//  override def getExtensions: java.util.List[Class[_]] =
-//    ListBuffer[Class[_]] (
-//      classOf[Scala],
-//      classOf[ScalaSensor],
-//      classOf[ScalastyleRepository],
-//      classOf[ScalastyleQualityProfile],
-//      classOf[ScalastyleSensor],
-//      classOf[ScalaMetrics],
-//      classOf[ScoverageSensor],
-//      classOf[ScoverageWidget]
-//    )
-//
-//  override val toString = getClass.getSimpleName
   override def define(context: Plugin.Context) = {
     context.addExtensions(
             classOf[Scala],

@@ -2,13 +2,21 @@
 dependencies:
   override:
     - wget https://raw.githubusercontent.com/Sagacify/ci-tools/master/run-sonar.sh
+    - wget https://sonarsource.bintray.com/Distribution/sonarqube/sonarqube-6.5.zip
+    - unzip sonarqube-6.5.zip
     - chmod +x run-sonar.sh
     - ./run-sonar.sh check
     - ./run-sonar.sh install
     - mvn dependency:resolve
 
+compile:
+  post:
+    - mvn package
+    - cp target/sonar-scala-plugin-*.jar sonarqube-6.5/extensions/plugins/
+
 # Launch the test into the docker image
 test:
   override:
+    - ./sonarqube-6.5/bin/linux-x86-64/sonar.sh start
     - mvn scoverage:report
     - ./run-sonar.sh run

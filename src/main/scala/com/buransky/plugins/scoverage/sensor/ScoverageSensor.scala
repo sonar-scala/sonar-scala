@@ -19,6 +19,9 @@
  */
 package com.buransky.plugins.scoverage.sensor
 
+import java.io.File
+
+import com.buransky.plugins.scoverage.language.Scala
 import com.buransky.plugins.scoverage.measure.ScalaMetrics
 import com.buransky.plugins.scoverage.pathcleaner.{BruteForceSequenceMatcher, PathSanitizer}
 import com.buransky.plugins.scoverage.util.LogUtil
@@ -31,7 +34,6 @@ import org.sonar.api.measures.{CoverageMeasuresBuilder, Measure}
 import org.sonar.api.resources.{Project, Resource}
 import org.sonar.api.scan.filesystem.PathResolver
 import org.sonar.api.utils.log.Loggers
-import org.sonar.plugins.scala.Scala
 
 import scala.collection.JavaConversions._
 
@@ -46,7 +48,7 @@ class ScoverageSensor(settings: Settings, pathResolver: PathResolver, fileSystem
   protected val SCOVERAGE_REPORT_PATH_PROPERTY = "sonar.scoverage.reportPath"
   protected lazy val scoverageReportParser: ScoverageReportParser = XmlScoverageReportParser()
 
-  override def shouldExecuteOnProject(project: Project): Boolean = fileSystem.languages().contains(Scala.KEY)
+  override def shouldExecuteOnProject(project: Project): Boolean = fileSystem.languages().contains(Scala.key)
 
   override def analyse(project: Project, context: SensorContext) {
     scoverageReportPath match {
@@ -145,7 +147,7 @@ class ScoverageSensor(settings: Settings, pathResolver: PathResolver, fileSystem
     log.info(LogUtil.f("Statement coverage for " + project.getKey + " is " + ("%1.2f" format projectCoverage.rate)))
 
     // Process children
-    sonarSources.split(",").foreach(subdir => processChildren(projectCoverage.children, context, subdir))
+    processChildren(projectCoverage.children, context, sonarSources)
   }
 
   private def processDirectory(directoryCoverage: DirectoryStatementCoverage, context: SensorContext, parentDirectory: String) {
@@ -183,9 +185,10 @@ class ScoverageSensor(settings: Settings, pathResolver: PathResolver, fileSystem
     
     val inputOption: Option[InputPath] = if (isFile) {
       val p = fileSystem.predicates()
+      val pathPredicate = if (new File(path).isAbsolute) p.hasAbsolutePath(path) else p.hasRelativePath(path)
       Option(fileSystem.inputFile(p.and(
-        p.or(p.hasPath(path),p.hasRelativePath(path)),
-        p.hasLanguage(Scala.KEY),
+        pathPredicate,
+        p.hasLanguage(Scala.key),
         p.hasType(InputFile.Type.MAIN))))
     } else {
       Option(fileSystem.inputDir(pathResolver.relativeFile(fileSystem.baseDir(), path)))

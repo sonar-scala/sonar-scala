@@ -69,6 +69,10 @@ class ScalastyleSensorSpec extends FlatSpec with Matchers with MockitoSugar with
       when(predicates.hasType(InputFile.Type.MAIN)).thenReturn(hasTypePred)
       when(predicates.hasLanguage(Constants.ScalaKey)).thenReturn(langPred)
       when(predicates.and(hasTypePred, langPred)).thenReturn(scalaFilesPred)
+      scalaFiles.foreach { sf =>
+        when(predicates.hasPath(sf.getName)).thenReturn(scalaFilesPred)
+      }
+      when(fs.inputFile(scalaFilesPred)).thenReturn(mock[InputFile])
       when(fs.files(scalaFilesPred)).thenReturn(scalaFiles)
     }
   }

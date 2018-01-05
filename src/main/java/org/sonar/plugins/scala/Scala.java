@@ -1,7 +1,7 @@
 /*
- * Sonar Scala Plugin
- * Copyright (C) 2016-2016 SonarSource SA
- * mailto:contact AT sonarsource DOT com
+ * SonarQube Scala
+ * Copyright (C) 2009-2018 SonarSource SA
+ * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -32,7 +32,6 @@ import java.util.List;
 
 /**
  * This language cover JavaServer Pages (Scala).
- *
  */
 public class Scala extends AbstractLanguage {
 

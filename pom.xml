@@ -19,7 +19,7 @@
 
   <licenses>
     <license>
-      <name>GNU LGPL 3</name>
+      <name>GNU LGPL v3</name>
       <url>http://www.gnu.org/licenses/lgpl.txt</url>
       <distribution>repo</distribution>
     </license>
@@ -51,6 +51,10 @@
   </issueManagement>
 
   <properties>
+    <license.title>SonarQube Scala</license.title>
+    <license.years>2009-2018</license.years>
+    <license.owner>SonarSource SA</license.owner>
+    <license.mailto>mailto:info AT sonarsource DOT com</license.mailto>
     <sonar.version>6.5</sonar.version>
     <sonar.pluginKey>scala</sonar.pluginKey>
     <sonar.pluginName>Scala</sonar.pluginName>

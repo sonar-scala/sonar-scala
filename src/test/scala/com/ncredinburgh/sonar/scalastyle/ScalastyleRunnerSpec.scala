@@ -40,8 +40,7 @@ class ScalastyleRunnerSpec extends FlatSpec with Matchers with MockitoSugar with
     val checker2 = ConfigurationChecker("org.scalastyle.file.HeaderMatchesChecker", ErrorLevel, true, Map("header" -> "// Expected Header Comment"), None, None)
     val configuration = ScalastyleConfiguration("sonar", true, List(checker1, checker2))
     val testeeSpy = Mockito.spy(new ScalastyleRunner(mock[RulesProfile]))
-    //Mockito.doReturn(configuration).when[ScalastyleRunner](testeeSpy).config
-    Mockito.when[ScalastyleConfiguration](testeeSpy.config).thenReturn(configuration)
+    Mockito.doReturn(configuration, List(): _*).when(testeeSpy).config
     val charset = StandardCharsets.UTF_8.name
   }
 
@@ -52,7 +51,6 @@ class ScalastyleRunnerSpec extends FlatSpec with Matchers with MockitoSugar with
     val messages = testeeSpy.run(charset, files).map(_.toString)
 
     messages should contain ("StyleError key=header.matches args=List() lineNumber=Some(1) column=None customMessage=None")
-
   }
 
   it should "not report StyleError messages if there are no violations" in new Fixture {

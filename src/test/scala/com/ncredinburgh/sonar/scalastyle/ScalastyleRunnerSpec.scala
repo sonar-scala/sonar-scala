@@ -22,10 +22,8 @@ import java.io.File
 import java.nio.charset.StandardCharsets
 
 import org.mockito.Mockito
-import org.mockito.ArgumentMatchers._
 import org.scalastyle._
-import org.scalastyle.StyleError
-import org.scalatest.mock.MockitoSugar
+import org.scalatest.mockito.MockitoSugar
 import org.scalatest.{FlatSpec, Matchers, PrivateMethodTester}
 import org.sonar.api.profiles.RulesProfile
 import org.sonar.api.rules.{Rule, RulePriority}
@@ -42,8 +40,8 @@ class ScalastyleRunnerSpec extends FlatSpec with Matchers with MockitoSugar with
     val checker2 = ConfigurationChecker("org.scalastyle.file.HeaderMatchesChecker", ErrorLevel, true, Map("header" -> "// Expected Header Comment"), None, None)
     val configuration = ScalastyleConfiguration("sonar", true, List(checker1, checker2))
     val testeeSpy = Mockito.spy(new ScalastyleRunner(mock[RulesProfile]))
-    //Mockito.doReturn(configuration).when(testeeSpy).config
-    Mockito.when(testeeSpy.config).thenReturn(configuration)
+    //Mockito.doReturn(configuration).when[ScalastyleRunner](testeeSpy).config
+    Mockito.when[ScalastyleConfiguration](testeeSpy.config).thenReturn(configuration)
     val charset = StandardCharsets.UTF_8.name
   }
 

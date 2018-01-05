@@ -35,8 +35,8 @@ class ScalastyleQualityProfileSpec extends FlatSpec with Matchers with MockitoSu
     val testee = new ScalastyleQualityProfile(TestRuleFinderWithTemplates)
   }
 
-  val rulesCount = 38
-  val parametersCount = 21
+  val rulesCount = 42
+  val parametersCount = 30
 
   "a scalastyle quality profile" should "create a default profile" in new Fixture {
     val rulesProfile = testee.createProfile(validationMessages)

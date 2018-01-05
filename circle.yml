@@ -11,7 +11,7 @@ dependencies:
 
 compile:
   post:
-    - mvn package
+    - mvn -DskipTests=true package
     - cp target/sonar-scala-plugin-*.jar sonarqube-6.5/extensions/plugins/
 
 # Launch the test into the docker image
@@ -20,3 +20,6 @@ test:
     - ./sonarqube-6.5/bin/linux-x86-64/sonar.sh start
     - mvn scoverage:report
     - ./run-sonar.sh run
+ post:
+    - mkdir -p $CIRCLE_TEST_REPORTS/junit/
+    - find . -type f -regex ".*/target/surefire-reports/.*xml" -exec cp {} $CIRCLE_TEST_REPORTS/junit/ \;

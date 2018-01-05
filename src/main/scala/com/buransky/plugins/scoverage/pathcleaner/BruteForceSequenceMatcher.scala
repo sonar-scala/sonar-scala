@@ -71,9 +71,14 @@ class BruteForceSequenceMatcher(baseDir: File, sourcePath: String) extends PathS
 
   private[pathcleaner] def initSourceDir(): File = {
     sourcePath.split(",").headOption.map { first =>
-      val sourceDir = new File(baseDir, first)
-      sourceDir
-    }.getOrElse(null)
+      val firstFile = new File(first)
+      if (firstFile.isAbsolute) {
+        firstFile
+      } else {
+        val sourceDir = new File(baseDir, first)
+        sourceDir
+      }
+    }.orNull
   }
 
   private[pathcleaner] def initFilesMap(): Map[String, Seq[PathSeq]] = {

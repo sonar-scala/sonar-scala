@@ -2,7 +2,7 @@
 Sonarqube plugin for scala analysis
 
 # Set-up
-Intended for sonarqube 6.5
+Intended for [SonarQube 6.7.1 LTS](https://www.sonarqube.org/downloads)
 
 Download the latest relase into your sonar extentions/downloads folder.
 Restart sonarqube either using the update center or manually.

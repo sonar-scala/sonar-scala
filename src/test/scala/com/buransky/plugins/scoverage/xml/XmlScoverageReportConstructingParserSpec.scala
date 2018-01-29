@@ -34,6 +34,16 @@ import com.buransky.plugins.scoverage.NodeStatementCoverage
 class XmlScoverageReportConstructingParserSpec extends FlatSpec with Matchers {
   behavior of "parse source"
 
+  it must "parse empty coverage file correctly" in {
+    val sanitizer = new PathSanitizer() {
+      def getSourceRelativePath(path: Seq[String]): Option[Seq[String]] = {
+        // do nothing
+        Some(path)
+      }
+    }
+    assertReportFile(XmlReportFile1.emptyCoverage, 0, sanitizer)(assertEmptyCoverage)
+  }
+
   it must "parse old broken Scoverage 0.95 file correctly" in {
     val sanitizer = new PathSanitizer() {
       def getSourceRelativePath(path: Seq[String]): Option[Seq[String]] = {
@@ -129,5 +139,16 @@ class XmlScoverageReportConstructingParserSpec extends FlatSpec with Matchers {
     checkRate(rate, node.rate)
     
     node.children
+  }
+
+  private def assertEmptyCoverage(projectCoverage: ProjectStatementCoverage): Unit = {
+    // Assert structure
+    projectCoverage.name should equal("")
+
+    val projectChildren = projectCoverage.children.toList
+    projectChildren.length should equal(0)
+    projectCoverage.coveredStatementsCount should equal(0)
+    projectCoverage.statementCount should equal(0)
+    projectCoverage.coveredStatementsCount should equal(0)
   }
 }

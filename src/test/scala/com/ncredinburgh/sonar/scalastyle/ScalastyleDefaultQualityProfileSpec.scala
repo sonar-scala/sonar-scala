@@ -35,7 +35,7 @@ class ScalastyleDefaultQualityProfileSpec extends FlatSpec with Matchers with Mo
     val testee = new ScalastyleQualityProfile(TestRuleFinder)
   }
 
-  val rulesCount = 19 // rules without templates
+  val rulesCount = 18 // rules without templates
 
   "a scalastyle quality profile" should "create a default profile" in new Fixture {
     val rulesProfile = testee.createProfile(validationMessages)

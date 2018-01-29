@@ -48,10 +48,10 @@ class ScalastyleRunner(rp: RulesProfile) {
     val messages = new ScalastyleChecker[FileSpec]().checkFiles(config, fileSpecs)
 
     // only errors and exceptions are of interest
-    messages.collect { _ match {
+    messages.collect {
      case e: StyleError[_] => e
      case ex: StyleException[_] => ex
-   }}
+   }
 
   }
 

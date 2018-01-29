@@ -51,8 +51,8 @@ class ScalastyleRepositorySpec extends FlatSpec with Matchers with Inspectors wi
     }
   }
 
-  it should "consist of 63 rules" in {
-    rules.size() shouldEqual 63
+  it should "consist of 69 rules" in {
+    rules.size() shouldEqual 69
   }
 
   it should "set default severity to major" in {

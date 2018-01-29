@@ -143,7 +143,10 @@ class XmlScoverageReportConstructingParser(source: Source, pathSanitizer: PathSa
       val childNodes = children.map(_.toStatementCoverage)
 
       childNodes match {
-        case Nil => coverage.get
+        case Nil => coverage match {
+          case None => FileStatementCoverage("Nothing", 0, 0, List.empty[CoveredStatement])
+          case _ => coverage.get
+        }
         case _ => DirectoryStatementCoverage(name, childNodes)
       }
     }

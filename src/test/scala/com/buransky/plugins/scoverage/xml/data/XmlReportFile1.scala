@@ -834,4 +834,10 @@ object XmlReportFile1 {
       |    </packages>
       |</scoverage>
     """.stripMargin
+
+  val emptyCoverage =
+    """<scoverage
+      |statement-count="0" statements-invoked="0" statement-rate="100.00" branch-rate="100.00" version="1.0" timestamp="1502284526688">
+      |    <packages> </packages>
+      |</scoverage>""".stripMargin
 }

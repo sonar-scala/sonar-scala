@@ -1,16 +1,24 @@
 package com.sagacify.sonar.scala
 
 import scala.annotation.tailrec
-
 import scalariform.lexer.ScalaLexer
 import scalariform.lexer.Token
-import scalariform.lexer.Tokens.LINE_COMMENT
-import scalariform.lexer.Tokens.MULTILINE_COMMENT
-import scalariform.lexer.Tokens.XML_COMMENT
-import scalariform.lexer.Tokens.WS
-import scalariform.lexer.Tokens.EOF
+import scalariform.lexer.Tokens._
 
 object Measures {
+  def count_classes(tokens: List[Token]): Int = {
+    var count = 0
+    tokens.foreach(token => if (token.tokenType == CLASS || token.tokenType == OBJECT) count += 1)
+
+    count
+  }
+
+  final def count_methods(tokens: List[Token]): Int = {
+    var count = 0
+    tokens.foreach(token => if (token.tokenType == DEF) count += 1)
+
+    count
+  }
 
   /* applied on raw source code */
 

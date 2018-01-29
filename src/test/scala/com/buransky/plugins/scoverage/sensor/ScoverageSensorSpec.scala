@@ -22,7 +22,7 @@
 // import java.io.File
 // import java.util
 
-// import com.buransky.plugins.scoverage.language.Scala
+// import org.sonar.plugins.scala.Scala
 // import com.buransky.plugins.scoverage.{FileStatementCoverage, DirectoryStatementCoverage, ProjectStatementCoverage, ScoverageReportParser}
 // import org.junit.runner.RunWith
 // import org.mockito.Mockito._

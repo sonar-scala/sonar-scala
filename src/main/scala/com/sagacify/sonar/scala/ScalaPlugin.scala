@@ -22,8 +22,7 @@ class Scala(s: Configuration) extends AbstractLanguage("scala", "Scala") {
 object Scala {
 
   def tokenize(sourceCode: String, scalaVersion: String): List[Token] =
-    ScalaLexer.createRawLexer(sourceCode, false, scalaVersion).toList
-
+    ScalaLexer.createRawLexer(sourceCode, forgiveErrors = false, scalaVersion).toList
 }
 
 /**

@@ -14,7 +14,7 @@
 
   <name>Sonar Scala Plugin</name>
   <description>Enables analysis of Scala projects into Sonar.</description>
-  <url>http://github.com/sbartram/sonar-scala</url>
+  <url>https://github.com/mwz/sonar-scala</url>
   <inceptionYear>2017</inceptionYear>
 
   <licenses>
@@ -40,14 +40,13 @@
   </developers>
 
   <scm>
-    <connection>scm:git:git@github.com:sbartram/sonar-scala.git</connection>
-    <developerConnection>scm:git:git@github.com:sbartram/sonar-scala.git</developerConnection>
-    <url>https://github.com/sbartram/sonar-scala</url>
-    <tag>HEAD</tag>
+    <connection>scm:git:git@github.com:mwz/sonar-scala.git</connection>
+    <developerConnection>scm:git:git@github.com:mwz/sonar-scala.git</developerConnection>
+    <url>https://github.com/mwz/sonar-scala</url>
   </scm>
 
   <issueManagement>
-    <url>https://github.com/sbartram/sonar-scala/issues</url>
+    <url>https://github.com/mwz/sonar-scala/issues</url>
   </issueManagement>
 
   <properties>
@@ -55,14 +54,12 @@
     <license.years>2009-2018</license.years>
     <license.owner>SonarSource SA</license.owner>
     <license.mailto>mailto:info AT sonarsource DOT com</license.mailto>
-    <sonar.version>6.5</sonar.version>
+    <sonar.version>6.7.1</sonar.version>
     <sonar.pluginKey>scala</sonar.pluginKey>
     <sonar.pluginName>Scala</sonar.pluginName>
     <sonar.pluginClass>com.sagacify.sonar.scala.ScalaPlugin</sonar.pluginClass>
-
-    <scala.version>2.10.7</scala.version>
-    <scala.major.version>2.10</scala.major.version>
-
+    <scala.version>2.11.8</scala.version>
+    <scala.major.version>2.11</scala.major.version>
   </properties>
 
   <dependencies>
@@ -72,6 +69,7 @@
       <version>${sonar.version}</version>
       <scope>provided</scope>
     </dependency>
+
     <dependency>
       <groupId>org.scala-lang</groupId>
       <artifactId>scala-library</artifactId>
@@ -89,6 +87,7 @@
         </exclusion>
       </exclusions>
     </dependency>
+
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
@@ -135,6 +134,7 @@
       <version>${sonar.version}</version>
       <scope>test</scope>
     </dependency>
+
     <dependency>
       <groupId>com.google.guava</groupId>
       <artifactId>guava</artifactId>
@@ -159,15 +159,11 @@
       <version>${sonar.version}</version>
       <scope>test</scope>
     </dependency>
-
   </dependencies>
 
   <build>
-
     <sourceDirectory>src/main/scala</sourceDirectory>
-
     <plugins>
-
       <plugin>
         <groupId>org.scoverage</groupId>
         <artifactId>scoverage-maven-plugin</artifactId>
@@ -217,9 +213,6 @@
           </execution>
         </executions>
       </plugin>
-
     </plugins>
-
   </build>
-
 </project>

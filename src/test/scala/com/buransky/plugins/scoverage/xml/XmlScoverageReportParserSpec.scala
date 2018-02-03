@@ -19,12 +19,9 @@
  */
 package com.buransky.plugins.scoverage.xml
 
-import org.scalatest.{FlatSpec, Matchers}
-import org.scalatest.junit.JUnitRunner
-import org.junit.runner.RunWith
 import com.buransky.plugins.scoverage.ScoverageException
+import org.scalatest.{FlatSpec, Matchers}
 
-@RunWith(classOf[JUnitRunner])
 class XmlScoverageReportParserSpec extends FlatSpec with Matchers {
   behavior of "parse file path"
 

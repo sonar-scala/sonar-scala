@@ -19,18 +19,13 @@
  */
 package com.buransky.plugins.scoverage.xml
 
-import org.junit.runner.RunWith
-import org.scalatest.junit.JUnitRunner
-import org.scalatest.{Matchers, FlatSpec}
-import scala.io.Source
-import com.buransky.plugins.scoverage.xml.data.XmlReportFile1
-import scala._
-import com.buransky.plugins.scoverage.{ProjectStatementCoverage, FileStatementCoverage, DirectoryStatementCoverage}
 import com.buransky.plugins.scoverage.pathcleaner.PathSanitizer
-import com.buransky.plugins.scoverage.StatementCoverage
-import com.buransky.plugins.scoverage.NodeStatementCoverage
+import com.buransky.plugins.scoverage.xml.data.XmlReportFile1
+import com.buransky.plugins.scoverage.{DirectoryStatementCoverage, FileStatementCoverage, NodeStatementCoverage, ProjectStatementCoverage}
+import org.scalatest.{FlatSpec, Matchers}
 
-@RunWith(classOf[JUnitRunner])
+import scala.io.Source
+
 class XmlScoverageReportConstructingParserSpec extends FlatSpec with Matchers {
   behavior of "parse source"
 

@@ -18,13 +18,13 @@
  */
 package com.ncredinburgh.sonar.scalastyle
 
-import com.ncredinburgh.sonar.scalastyle.testUtils.TestRuleFinderWithTemplates
+import com.ncredinburgh.sonar.scalastyle.testUtils.TestRuleFinder
 import org.scalatest._
-import org.scalatest.mock.MockitoSugar
+import org.scalatest.mockito.MockitoSugar
 import org.sonar.api.profiles.RulesProfile
 import org.sonar.api.utils.ValidationMessages
+
 import scala.collection.JavaConversions._
-import com.ncredinburgh.sonar.scalastyle.testUtils.TestRuleFinder
 
 /**
  * Tests the default ScalastyleQualityProfile, only rules without parameters, no templates

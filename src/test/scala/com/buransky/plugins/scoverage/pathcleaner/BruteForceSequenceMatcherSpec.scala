@@ -19,16 +19,13 @@
  */
 package com.buransky.plugins.scoverage.pathcleaner
 
-import org.junit.runner.RunWith
-import org.scalatest.mock.MockitoSugar
-import org.scalatest.junit.JUnitRunner
-import org.scalatest.FlatSpec
-import com.buransky.plugins.scoverage.pathcleaner.BruteForceSequenceMatcher.PathSeq
-import org.scalatest.Matchers
 import java.io.File
-import org.mockito.Mockito._
 
-@RunWith(classOf[JUnitRunner])
+import com.buransky.plugins.scoverage.pathcleaner.BruteForceSequenceMatcher.PathSeq
+import org.mockito.Mockito._
+import org.scalatest.{FlatSpec, Matchers}
+import org.scalatest.mockito.MockitoSugar
+
 class BruteForceSequenceMatcherSpec extends FlatSpec with Matchers with MockitoSugar {
    
   // file-map of all files under baseDir/sonar.sources organized by their filename

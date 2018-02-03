@@ -20,10 +20,7 @@
 package com.buransky.plugins.scoverage.util
 
 import org.scalatest.{FlatSpec, Matchers}
-import org.junit.runner.RunWith
-import org.scalatest.junit.JUnitRunner
 
-@RunWith(classOf[JUnitRunner])
 class PathUtilSpec extends FlatSpec with Matchers {
   
   val osName = System.getProperty("os.name")

@@ -27,7 +27,7 @@ import org.scalastyle._
 import org.scalastyle.file.FileLengthChecker
 import org.scalastyle.scalariform.{ForBraceChecker, IfBraceChecker}
 import org.scalatest._
-import org.scalatest.mock.MockitoSugar
+import org.scalatest.mockito.MockitoSugar
 import org.sonar.api.batch.SensorContext
 import org.sonar.api.batch.fs._
 import org.sonar.api.component.ResourcePerspectives

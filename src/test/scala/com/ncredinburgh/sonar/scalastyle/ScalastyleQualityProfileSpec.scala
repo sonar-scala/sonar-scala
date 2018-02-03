@@ -20,7 +20,7 @@ package com.ncredinburgh.sonar.scalastyle
 
 import com.ncredinburgh.sonar.scalastyle.testUtils.TestRuleFinderWithTemplates
 import org.scalatest._
-import org.scalatest.mock.MockitoSugar
+import org.scalatest.mockito.MockitoSugar
 import org.sonar.api.profiles.RulesProfile
 import org.sonar.api.utils.ValidationMessages
 

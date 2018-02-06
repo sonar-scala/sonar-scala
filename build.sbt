@@ -1,6 +1,6 @@
 import org.sonar.updatecenter.common.PluginManifest
 import sbt._
-import ReleaseTransformations._
+import sbtrelease.ReleasePlugin.autoImport.ReleaseTransformations._
 
 name := "sonar-scala"
 organization := "com.github.mwz"

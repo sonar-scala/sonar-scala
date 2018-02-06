@@ -1,10 +1,12 @@
 # sonar-scala
-Sonarqube plugin for scala analysis
+[![CircleCI](https://img.shields.io/circleci/project/github/mwz/sonar-scala/master.svg)](https://circleci.com/gh/mwz/sonar-scala)
+
+SonarQube plugin for static code analysis of Scala projects.
 
 # Set-up
 Intended for [SonarQube 6.7.1 LTS](https://www.sonarqube.org/downloads)
 
-Download the latest relase into your sonar extentions/downloads folder.
+Download the latest release into your sonar extentions/downloads folder.
 Restart sonarqube either using the update center or manually.
 
 The rules in scalastyle are almost all deactivated. They must be activated and either make scala rules inherit scalastyle rules or change the project's rules.
@@ -15,16 +17,17 @@ For more information about either scalastyle rules or scoverage results please c
 * [RadoBuransky/sonar-scoverage-plugin](https://github.com/RadoBuransky/sonar-scoverage-plugin)
 
 # Build from source
-```mvn package```
+```sbtshell
+sbt assembly
+```
 
 # Test
-```
-mvn test
-sonar-runner -D sonar.projectKey=Sagacify:sonar-scala
+```sbtshell
+sbt test
 ```
 
 # Contributing
-Contributions wre accepted in the form of a pull request or a signed patch.
+Contributions are accepted in the form of a pull request .
 Please follow the semantic changelog to format your commits [cfr](https://github.com/Sagacify/komitet-gita-bezopasnosti).
 All changes are submitted to automated tests that must pass for the pull-request to be merged.
 

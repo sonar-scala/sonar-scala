@@ -21,7 +21,7 @@ project/plugins/project/
 .cache
 
 # Intellij IDEA Specific
-.idea/*
+.idea
 *.iml
 *.iws
 *.ipr

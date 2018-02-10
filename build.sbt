@@ -1,6 +1,7 @@
 import org.sonar.updatecenter.common.PluginManifest
 import sbt._
 import sbtrelease.ReleasePlugin.autoImport.ReleaseTransformations._
+import sbtrelease.Version.Bump.Minor
 
 name := "sonar-scala"
 organization := "com.github.mwz"
@@ -19,6 +20,7 @@ scalacOptions := Seq(
   "-language:reflectiveCalls"
 )
 javacOptions := Seq("-Xlint:deprecation")
+cancelable in Global := true
 
 // Lib dependencies
 val sonarVersion = "6.7.1"
@@ -85,7 +87,9 @@ publishArtifact in Test := false
 pomIncludeRepository := { _ => false }
 
 // Release
-releaseVersionBump := sbtrelease.Version.Bump.Minor
+releaseVersionBump := Minor
+releaseTagComment := s"Releasing ${(version in ThisBuild).value} [ci skip]"
+releaseCommitMessage := s"Setting version to ${(version in ThisBuild).value} [ci skip]"
 releaseProcess := Seq[ReleaseStep](
   checkSnapshotDependencies,
   inquireVersions,

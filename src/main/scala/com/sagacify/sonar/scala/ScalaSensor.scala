@@ -12,21 +12,19 @@ import org.sonar.api.resources.Project
 
 class ScalaSensor(scala: Scala, fs: FileSystem) extends Sensor {
 
-  def shouldExecuteOnProject(project: Project): Boolean = {
-    return fs.hasFiles(fs.predicates().hasLanguage(scala.getKey()));
-  }
+  def shouldExecuteOnProject(project: Project): Boolean =
+    fs.hasFiles(fs.predicates.hasLanguage(scala.getKey))
 
   def analyse(project: Project, context: SensorContext): Unit = {
-
-    val charset = fs.encoding().toString()
+    val charset = fs.encoding.toString
     val version = "2.11.8"
 
-    val inputFiles = fs.inputFiles(fs.predicates().hasLanguage(scala.getKey()))
+    val inputFiles = fs.inputFiles(fs.predicates().hasLanguage(scala.getKey))
 
     inputFiles.foreach{ inputFile =>
-      context.saveMeasure(inputFile, CM.FILES, 1.0);
+      context.saveMeasure(inputFile, CM.FILES, 1.0)
 
-      val sourceCode = Source.fromFile(inputFile.file, charset).mkString
+      val sourceCode = Source.fromFile(inputFile.uri, charset).mkString
       val tokens = Scala.tokenize(sourceCode, version)
 
       context.saveMeasure(inputFile, CM.COMMENT_LINES, double2Double(Measures.count_comment_lines(tokens)))
@@ -45,4 +43,3 @@ class ScalaSensor(scala: Scala, fs: FileSystem) extends Sensor {
     }
   }
 }
-

@@ -1,5 +1,6 @@
 package com.sagacify.sonar.scala;
 
+import java.nio.charset.Charset
 import java.nio.file.Paths
 
 import org.mockito.Mockito.{mock, times, verify}
@@ -20,6 +21,7 @@ class ScalaSensorSpec extends FlatSpec with Matchers {
 
   def context = new {
     val fs = new DefaultFileSystem(Paths.get("./src/test/resources"))
+      .setEncoding(Charset.defaultCharset)
     val project = mock(classOf[Project])
     val sensor = new ScalaSensor(scala, fs)
   }

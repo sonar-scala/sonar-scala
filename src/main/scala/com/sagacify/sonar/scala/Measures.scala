@@ -38,6 +38,7 @@ object Measures {
               count_comment_lines(tail, i + token.rawText.count(_ == '\n') + 1)
             case XML_COMMENT =>
               new scala.NotImplementedError("XML ?!"); i
+            case _ => i // Not a comment!
           }
         }
       case _ :: tail => count_comment_lines(tail, i)

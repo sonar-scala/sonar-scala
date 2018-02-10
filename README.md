@@ -1,5 +1,6 @@
 # sonar-scala
 [![CircleCI](https://img.shields.io/circleci/project/github/mwz/sonar-scala/master.svg)](https://circleci.com/gh/mwz/sonar-scala)
+[![Download](https://api.bintray.com/packages/mwz/maven/sonar-scala/images/download.svg)](https://bintray.com/mwz/maven/sonar-scala/_latestVersion)
 
 SonarQube plugin for static code analysis of Scala projects.
 

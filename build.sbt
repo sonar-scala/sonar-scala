@@ -93,8 +93,6 @@ releaseCommitMessage := s"Setting version to ${(version in ThisBuild).value} [ci
 releaseProcess := Seq[ReleaseStep](
   checkSnapshotDependencies,
   inquireVersions,
-  runClean,
-  runTest,
   setReleaseVersion,
   commitReleaseVersion,
   tagRelease,

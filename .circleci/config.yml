@@ -35,7 +35,7 @@ jobs:
             - "3c:1a:75:b1:62:85:3b:1b:61:94:f8:1f:8d:0e:1d:a1"
       - run: git config --global user.name "CircleCI"
       - run: git config --global user.email "mwz@users.noreply.github.com"
-      - run: sbt 'release with-defaults'
+      - run: sbt 'release with-defaults skip-tests'
 workflows:
   version: 2
   scala-sonar:

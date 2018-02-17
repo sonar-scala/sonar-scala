@@ -1,6 +1,8 @@
 # sonar-scala
-[![CircleCI](https://img.shields.io/circleci/project/github/mwz/sonar-scala/master.svg)](https://circleci.com/gh/mwz/sonar-scala)
+[![CircleCI](https://img.shields.io/circleci/project/github/mwz/sonar-scala/master.svg?label=Build)](https://circleci.com/gh/mwz/sonar-scala)
 [![Download](https://api.bintray.com/packages/mwz/maven/sonar-scala/images/download.svg)](https://bintray.com/mwz/maven/sonar-scala/_latestVersion)
+[![Downloads](https://img.shields.io/badge/dynamic/json.svg?uri=https://bintray.com/statistics/packageStatistics?pkgPath=/mwz/maven/sonar-scala&query=$.totalDownloads&label=Downloads+(last 30 days)&colorB=green)](https://bintray.com/mwz/maven/sonar-scala#statistics)
+[![Insight.io](https://img.shields.io/badge/Insight.io-Ready-brightgreen.svg)](https://insight.io/github.com/mwz/sonar-scala)
 
 **SonarQube plugin for static code analysis of Scala projects.**
 
@@ -42,7 +44,7 @@ For more information about either Scalastyle rules or Scoverage results please c
 # Set-up
 Download the latest [release](https://github.com/mwz/sbt-sonar/releases) jar into your SonarQube plugins folder `/opt/sonarqube/extensions/plugins` and restart SonarQube either using the update center or manually.
 
-For an out-of-the-box setup, you can use my docker-compose recipe or a docker image with SonarQube LTS which contains bundled sonar-scala and [arthepsy/sonar-scala-extra](https://github.com/arthepsy/sonar-scala-extra) (Scapegoat) plugins. Please see [mwz/sonarqube-scala-docker](https://github.com/mwz/sonarqube-scala-docker) for more details.
+For an out-of-the-box setup, you can use my docker-compose recipe or a docker image with SonarQube LTS which contains bundled sonar-scala and [arthepsy/sonar-scala-extra](https://github.com/arthepsy/sonar-scala-extra) (Scapegoat) plugins. Please see [mwz/sonar-scala-docker](https://github.com/mwz/sonar-scala-docker) for more details.
 
 For automating the analysis of your Scala projects, check out my sbt plugin [mwz/sbt-sonar](https://github.com/mwz/sbt-sonar).
 

@@ -68,4 +68,4 @@ For ease of use, Sonar Scala directly integrates the latest code from the [Sonar
 
 
 # License
-The project is licensed under the GNU LGPL v3. See the LICENSE file for more details.
+The project is licensed under the GNU LGPL v3. See the [LICENSE file](LICENSE) file for more details.

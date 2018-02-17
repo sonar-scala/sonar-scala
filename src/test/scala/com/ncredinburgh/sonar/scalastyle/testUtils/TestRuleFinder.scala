@@ -4,18 +4,18 @@ import java.util
 import com.ncredinburgh.sonar.scalastyle.{Constants, ScalastyleResources}
 import org.sonar.api.rule.RuleKey
 import org.sonar.api.rules.{RulePriority, Rule, RuleQuery, RuleFinder}
-import scala.collection.JavaConversions._
+import scala.collection.JavaConverters._
 import com.ncredinburgh.sonar.scalastyle.ScalastyleRepository
 import org.sonar.api.server.rule.RuleParamType
 import com.ncredinburgh.sonar.scalastyle.RepositoryRule
 
 object TestRuleFinder extends RuleFinder {
 
-  override def findByKey(repositoryKey: String, key: String): Rule = findAll(RuleQuery.create()).find(r => r.getRepositoryKey == repositoryKey && r.getKey == key).orNull
+  override def findByKey(repositoryKey: String, key: String): Rule = findAll(RuleQuery.create()).asScala.find(r => r.getRepositoryKey == repositoryKey && r.getKey == key).orNull
 
-  override def findByKey(key: RuleKey): Rule = findAll(RuleQuery.create()).find(r => r.getRepositoryKey == key.repository() && r.getKey == key.rule()).orNull
+  override def findByKey(key: RuleKey): Rule = findAll(RuleQuery.create()).asScala.find(r => r.getRepositoryKey == key.repository() && r.getKey == key.rule()).orNull
 
-  override def findById(ruleId: Int): Rule = findAll(RuleQuery.create()).find(r => r.getId == ruleId).orNull
+  override def findById(ruleId: Int): Rule = findAll(RuleQuery.create()).asScala.find(r => r.getId == ruleId).orNull
 
   override def findAll(query: RuleQuery): util.Collection[Rule] = {
     ScalastyleResources.allDefinedRules.filterNot(r => isTemplate(r)) map {
@@ -51,11 +51,11 @@ object TestRuleFinder extends RuleFinder {
               
         rule
     }
-  }
+  }.asJavaCollection
 
   override def find(query: RuleQuery): Rule = ???
   
   private def isTemplate(rule: RepositoryRule): Boolean = {
-    rule.params.size() > 0
+    rule.params.nonEmpty
   }
 }

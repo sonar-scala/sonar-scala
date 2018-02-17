@@ -28,7 +28,7 @@ import org.scalatest.{FlatSpec, Matchers, PrivateMethodTester}
 import org.sonar.api.profiles.RulesProfile
 import org.sonar.api.rules.{Rule, RulePriority}
 
-import scala.collection.JavaConversions._
+import scala.collection.JavaConverters._
 
 /**
  * Tests ScalastyleRunner
@@ -46,7 +46,7 @@ class ScalastyleRunnerSpec extends FlatSpec with Matchers with MockitoSugar with
 
 
   "a scalastyle runner" should "report StyleError messages if there are rule violations" in new Fixture {
-    val files = List(new File("src/test/resources/ScalaFile1.scala"))
+    val files = List(new File("src/test/resources/ScalaFile1.scala")).asJava
 
     val messages = testeeSpy.run(charset, files).map(_.toString)
 
@@ -54,7 +54,7 @@ class ScalastyleRunnerSpec extends FlatSpec with Matchers with MockitoSugar with
   }
 
   it should "not report StyleError messages if there are no violations" in new Fixture {
-    val files = List(new File("src/test/resources/ScalaFile2.scala"))
+    val files = List(new File("src/test/resources/ScalaFile2.scala")).asJava
 
     val messages = testeeSpy.run(charset, files)
 
@@ -62,7 +62,7 @@ class ScalastyleRunnerSpec extends FlatSpec with Matchers with MockitoSugar with
   }
 
   it should "scan multiple files" in new Fixture {
-    val files = List(new File("src/test/resources/ScalaFile1.scala"), new File("src/test/resources/ScalaFile2.scala"))
+    val files = List(new File("src/test/resources/ScalaFile1.scala"), new File("src/test/resources/ScalaFile2.scala")).asJava
 
     val messages = testeeSpy.run(charset, files)
 

@@ -35,7 +35,7 @@ import org.sonar.api.resources.{Project, Resource}
 import org.sonar.api.scan.filesystem.PathResolver
 import org.sonar.api.utils.log.Loggers
 
-import scala.collection.JavaConversions._
+import scala.collection.JavaConverters._
 
 /**
  *  Main sensor for importing Scoverage report to Sonar.
@@ -96,8 +96,8 @@ class ScoverageSensor(settings: Settings, pathResolver: PathResolver, fileSystem
         project.name + "." + SCOVERAGE_REPORT_PATH_PROPERTY + "]"))
       case _ =>
         // Compute overall statement coverage from submodules
-        val totalStatementCount = project.getModules.map(analyseStatementCountForModule(_, context)).sum
-        val coveredStatementCount = project.getModules.map(analyseCoveredStatementCountForModule(_, context)).sum
+        val totalStatementCount = project.getModules.asScala.map(analyseStatementCountForModule(_, context)).sum
+        val coveredStatementCount = project.getModules.asScala.map(analyseCoveredStatementCountForModule(_, context)).sum
 
         if (totalStatementCount > 0) {
           // Convert to percentage
@@ -225,7 +225,7 @@ class ScoverageSensor(settings: Settings, pathResolver: PathResolver, fileSystem
     }
 
     // Save measures
-    coverage.createMeasures().toList.foreach(context.saveMeasure(resource, _))
+    coverage.createMeasures().asScala.toList.foreach(context.saveMeasure(resource, _))
   }
 
   private def processChildren(children: Iterable[StatementCoverage], context: SensorContext, directory: String) {

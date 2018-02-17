@@ -11,7 +11,7 @@ import org.sonar.api.config.internal.MapSettings
 import org.sonar.api.measures.{CoreMetrics => CM}
 import org.sonar.api.resources.Project
 
-import scala.collection.JavaConversions._;
+import scala.collection.JavaConverters._;
 
 class ScalaSensorSpec extends FlatSpec with Matchers {
 
@@ -52,7 +52,7 @@ class ScalaSensorSpec extends FlatSpec with Matchers {
 
     val inputFiles = c.fs.inputFiles(c.fs.predicates().hasLanguage(scala.getKey()))
 
-    inputFiles.foreach{ file =>
+    inputFiles.asScala.foreach{ file =>
       verify(sensorContext, times(1))
             .saveMeasure(file, CM.FILES, double2Double(1))
       verify(sensorContext, times(1))
@@ -74,7 +74,7 @@ class ScalaSensorSpec extends FlatSpec with Matchers {
 
     val inputFiles = c.fs.inputFiles(c.fs.predicates().hasLanguage(scala.getKey()))
 
-    inputFiles.foreach{ file =>
+    inputFiles.asScala.foreach{ file =>
       verify(sensorContext, times(1))
           .saveMeasure(file, CM.FILES, double2Double(1))
       verify(sensorContext, times(1))

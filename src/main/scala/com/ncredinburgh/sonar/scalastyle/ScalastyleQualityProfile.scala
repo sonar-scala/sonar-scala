@@ -24,7 +24,7 @@ import org.sonar.api.rules.{RuleFinder, ActiveRule}
 import org.sonar.api.utils.ValidationMessages
 import org.scalastyle.ScalastyleError
 import scala.xml.XML
-import collection.JavaConversions._
+import collection.JavaConverters._
 import org.sonar.api.rules.RuleQuery
 import org.sonar.api.rules.Rule
 
@@ -47,16 +47,15 @@ class ScalastyleQualityProfile(ruleFinder: RuleFinder) extends ProfileDefinition
     val repoRules = ruleFinder.findAll(query)
 
     for {clazz <- defaultRuleClasses} {
-      val ruleOption = repoRules.find(clazzMatch(_, clazz))
+      val ruleOption = repoRules.asScala.find(clazzMatch(_, clazz))
 
       ruleOption match {
         case None => validation.addWarningText(s"Rule for $clazz not found in ${Constants.RepositoryKey} repository! Rule won't be activated.")
-        case Some(rule) => {
-          if (!rule.isTemplate()) {
+        case Some(rule) =>
+          if (!rule.isTemplate) {
             val activated = profile.activateRule(rule, rule.getSeverity)
             setParameters(activated, clazz)
           }
-        }
       }
     }
 
@@ -66,10 +65,9 @@ class ScalastyleQualityProfile(ruleFinder: RuleFinder) extends ProfileDefinition
   def setParameters(activeRule: ActiveRule, clazz: String) {
     // set parameters
     defaultConfigRules.find(x => (x \ "@class").text.equals(clazz)) match {
-      case Some(rule) => {
+      case Some(rule) =>
         val params = (rule \ "parameters" \ "parameter").map(n => ((n \ "@name").text, n.text)).toMap
         params foreach { case (key, value) => activeRule.setParameter(key, value) }
-      }
       case _ => log.warn("Default rule with key " + activeRule.getRuleKey + " could not found in default_config.xml")
     }
     
@@ -79,13 +77,11 @@ class ScalastyleQualityProfile(ruleFinder: RuleFinder) extends ProfileDefinition
 
   private def clazzMatch(rule: Rule, clazz: String): Boolean = {
     Option(rule.getParam(Constants.ClazzParam)) match {
-      case Some(param) => {
+      case Some(param) =>
         param.getDefaultValue.equals(clazz)
-      }         
-      case None => {
+      case None =>
         log.warn(s"Could not find required parameter ${Constants.ClazzParam}, rule for $clazz cannot be activated")
         false
-      }
     }
   }
 

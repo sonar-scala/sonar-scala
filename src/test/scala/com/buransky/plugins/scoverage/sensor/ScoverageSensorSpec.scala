@@ -35,7 +35,7 @@
 // import org.sonar.api.resources.Project.AnalysisType
 // import org.sonar.api.scan.filesystem.PathResolver
 
-// import scala.collection.JavaConversions._
+// import scala.collection.JavaConverters._
 // import com.buransky.plugins.scoverage.pathcleaner.PathSanitizer
 // import org.mockito.Matchers.any
 

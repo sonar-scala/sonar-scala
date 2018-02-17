@@ -36,7 +36,7 @@ import org.sonar.api.resources.Project
 import org.sonar.api.rules.{Rule, RuleFinder, RuleQuery}
 import org.sonar.core.issue.DefaultIssueBuilder
 
-import scala.collection.JavaConversions._
+import scala.collection.JavaConverters._
 
 
 class ScalastyleSensorSpec extends FlatSpec with Matchers with MockitoSugar with PrivateMethodTester {
@@ -69,7 +69,7 @@ class ScalastyleSensorSpec extends FlatSpec with Matchers with MockitoSugar with
       when(predicates.hasType(InputFile.Type.MAIN)).thenReturn(hasTypePred)
       when(predicates.hasLanguage(Constants.ScalaKey)).thenReturn(langPred)
       when(predicates.and(hasTypePred, langPred)).thenReturn(scalaFilesPred)
-      scalaFiles.foreach { sf =>
+      scalaFiles.asScala.foreach { sf =>
         when(predicates.hasPath(sf.getName)).thenReturn(scalaFilesPred)
       }
       when(fs.inputFile(scalaFilesPred)).thenReturn(mock[InputFile])
@@ -78,13 +78,13 @@ class ScalastyleSensorSpec extends FlatSpec with Matchers with MockitoSugar with
   }
 
   "A Scalastyle Sensor" should "execute when the project have Scala files" in new Fixture {
-    mockScalaPredicate(List(new File("foo.scala"), new File("bar.scala")))
+    mockScalaPredicate(List(new File("foo.scala"), new File("bar.scala")).asJava)
 
     testee.shouldExecuteOnProject(project) shouldBe true
   }
 
   it should "not execute when there isn't any Scala files" in new Fixture {
-    mockScalaPredicate(List())
+    mockScalaPredicate(List.empty.asJava)
 
     testee.shouldExecuteOnProject(project) shouldBe false
   }
@@ -92,7 +92,7 @@ class ScalastyleSensorSpec extends FlatSpec with Matchers with MockitoSugar with
 
 
   it should "analyse all scala source files in project" in new Fixture {
-    val scalaFiles = List(new File("foo.scala"), new File("bar.scala"))
+    val scalaFiles = List(new File("foo.scala"), new File("bar.scala")).asJava
     mockScalaPredicate(scalaFiles)
 
     testee.analyse(project, context)
@@ -101,7 +101,7 @@ class ScalastyleSensorSpec extends FlatSpec with Matchers with MockitoSugar with
   }
 
   it should "not create SonarQube issues when there isn't any scalastyle errors" in new Fixture {
-    mockScalaPredicate(List(new File("foo.scala"), new File("bar.scala")))
+    mockScalaPredicate(List(new File("foo.scala"), new File("bar.scala")).asJava)
     when(runner.run(anyString, anyListOf(classOf[File]))).thenReturn(List())
 
     testee.analyse(project, context)
@@ -110,7 +110,7 @@ class ScalastyleSensorSpec extends FlatSpec with Matchers with MockitoSugar with
   }
 
   it should "report a scalastyle error as a SonarQube issue" in new Fixture {
-    mockScalaPredicate(List(new File("foo.scala"), new File("bar.scala")))
+    mockScalaPredicate(List(new File("foo.scala"), new File("bar.scala")).asJava)
 
     val error = new StyleError[FileSpec](
       new RealFileSpec("foo.scala", None),
@@ -128,7 +128,7 @@ class ScalastyleSensorSpec extends FlatSpec with Matchers with MockitoSugar with
   }
 
   it should "report scalastyle errors as SonarQube issues" in new Fixture {
-    mockScalaPredicate(List(new File("foo.scala"), new File("bar.scala")))
+    mockScalaPredicate(List(new File("foo.scala"), new File("bar.scala")).asJava)
 
     val error1 = new StyleError[FileSpec](new RealFileSpec("foo.scala", None), classOf[FileLengthChecker],
       "org.scalastyle.file.FileLengthChecker", WarningLevel, List(), None)

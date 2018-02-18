@@ -38,8 +38,6 @@
 // import scala.collection.JavaConverters._
 // import com.buransky.plugins.scoverage.pathcleaner.PathSanitizer
 // import org.mockito.Matchers.any
-
-
 // @RunWith(classOf[JUnitRunner])
 // class ScoverageSensorSpec extends FlatSpec with Matchers with MockitoSugar {
 //   behavior of "shouldExecuteOnProject"

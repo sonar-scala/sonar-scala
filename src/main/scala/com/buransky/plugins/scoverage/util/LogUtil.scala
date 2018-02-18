@@ -25,5 +25,5 @@ package com.buransky.plugins.scoverage.util
  * @author Rado Buransky
  */
 object LogUtil {
-  def f(msg: String) = "[scoverage] " + msg
+  def f(msg: String): String = "[scoverage] " + msg
 }

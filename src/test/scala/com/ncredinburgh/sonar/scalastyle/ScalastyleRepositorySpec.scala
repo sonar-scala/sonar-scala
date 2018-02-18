@@ -22,7 +22,6 @@ import org.scalatest._
 import org.sonar.api.rules.RulePriority
 import org.sonar.api.server.rule.{RuleParamType, RulesDefinition}
 
-
 import scala.collection.JavaConverters._
 
 /**
@@ -44,10 +43,9 @@ class ScalastyleRepositorySpec extends FlatSpec with Matchers with Inspectors wi
   }
 
   it should "use the same repository for all rules" in {
-    forAll(rules) {
-      r: RulesDefinition.Rule =>
-        r.repository().key() shouldEqual Constants.RepositoryKey
-        r.repository().name() shouldEqual Constants.RepositoryName
+    forAll(rules) { r: RulesDefinition.Rule =>
+      r.repository().key() shouldEqual Constants.RepositoryKey
+      r.repository().name() shouldEqual Constants.RepositoryName
     }
   }
 
@@ -56,7 +54,9 @@ class ScalastyleRepositorySpec extends FlatSpec with Matchers with Inspectors wi
   }
 
   it should "set default severity to major" in {
-    forAll(rules) {r: RulesDefinition.Rule => r.severity() shouldEqual RulePriority.MAJOR.name()}
+    forAll(rules) { r: RulesDefinition.Rule =>
+      r.severity() shouldEqual RulePriority.MAJOR.name()
+    }
   }
 
   it should "give a name to every rule" in {
@@ -75,11 +75,11 @@ class ScalastyleRepositorySpec extends FlatSpec with Matchers with Inspectors wi
   it should "describe the rule properly" in {
     val rule = rules.asScala.find(_.key == "scalastyle_MagicNumberChecker")
     rule.get.htmlDescription shouldEqual
-      "<p>Replacing a magic number with a named constant can make code easier to read and understand," +
-        " and can avoid some subtle bugs.</p>\n" +
-        "<p>A simple assignment to a val is not considered to be a magic number, for example:</p>\n" +
-        "<p><pre>    val foo = 4</pre></p>\n<p>is not a magic number, but</p>\n" +
-        "<p><pre>    var foo = 4</pre></p>\n<p>is considered to be a magic number.</p>"
+    "<p>Replacing a magic number with a named constant can make code easier to read and understand," +
+    " and can avoid some subtle bugs.</p>\n" +
+    "<p>A simple assignment to a val is not considered to be a magic number, for example:</p>\n" +
+    "<p><pre>    val foo = 4</pre></p>\n<p>is not a magic number, but</p>\n" +
+    "<p><pre>    var foo = 4</pre></p>\n<p>is considered to be a magic number.</p>"
   }
 
   it should "determine the parameter of a rule with a parameter" in {
@@ -89,7 +89,12 @@ class ScalastyleRepositorySpec extends FlatSpec with Matchers with Inspectors wi
 
   it should "determine parameters of a rule with multiple parameters" in {
     val rule = rules.asScala.find(_.key == "scalastyle_MethodNamesChecker")
-    rule.get.params.asScala map (_.key) should contain theSameElementsAs List("regex", "ignoreRegex", "ignoreOverride", Constants.ClazzParam)
+    rule.get.params.asScala map (_.key) should contain theSameElementsAs List(
+      "regex",
+      "ignoreRegex",
+      "ignoreOverride",
+      Constants.ClazzParam
+    )
   }
 
   it should "determine correct type of integer parameters" in {

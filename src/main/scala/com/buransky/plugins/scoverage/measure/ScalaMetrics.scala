@@ -33,7 +33,12 @@ import scala.collection.mutable.ListBuffer
  * @author Rado Buransky
  */
 class ScalaMetrics extends Metrics {
-  override def getMetrics: util.List[Metric[_ <: io.Serializable]] = (ListBuffer(ScalaMetrics.statementCoverage, ScalaMetrics.coveredStatements, ScalaMetrics.totalStatements): ListBuffer[Metric[_ <: java.io.Serializable]]).asJava
+  override def getMetrics: util.List[Metric[_ <: io.Serializable]] =
+    ListBuffer[Metric[_ <: java.io.Serializable]](
+      ScalaMetrics.statementCoverage,
+      ScalaMetrics.coveredStatements,
+      ScalaMetrics.totalStatements
+    ).asJava
 }
 
 object ScalaMetrics {
@@ -41,29 +46,29 @@ object ScalaMetrics {
   private val COVERED_STATEMENTS_KEY = "covered_statements"
   private val TOTAL_STATEMENTS_KEY = "total_statements"
 
-  lazy val statementCoverage: Metric[lang.Double] = new Metric.Builder(STATEMENT_COVERAGE_KEY,
-    "Statement coverage", ValueType.PERCENT)
-    .setDescription("Statement coverage by tests")
-    .setDirection(Metric.DIRECTION_BETTER)
-    .setQualitative(true)
-    .setDomain(CoreMetrics.DOMAIN_TESTS)
-    .setWorstValue(0.0)
-    .setBestValue(100.0)
-    .create[java.lang.Double]()
+  lazy val statementCoverage: Metric[lang.Double] =
+    new Metric.Builder(STATEMENT_COVERAGE_KEY, "Statement coverage", ValueType.PERCENT)
+      .setDescription("Statement coverage by tests")
+      .setDirection(Metric.DIRECTION_BETTER)
+      .setQualitative(true)
+      .setDomain(CoreMetrics.DOMAIN_TESTS)
+      .setWorstValue(0.0)
+      .setBestValue(100.0)
+      .create[java.lang.Double]()
 
-  lazy val coveredStatements: Metric[Integer] = new Metric.Builder(COVERED_STATEMENTS_KEY,
-    "Covered statements", Metric.ValueType.INT)
-    .setDescription("Number of statements covered by tests")
-    .setDirection(Metric.DIRECTION_BETTER)
-    .setQualitative(false)
-    .setDomain(CoreMetrics.DOMAIN_SIZE)
-    .create[java.lang.Integer]()
-    
-  lazy val totalStatements: Metric[Integer] = new Metric.Builder(TOTAL_STATEMENTS_KEY,
-    "Total statements", Metric.ValueType.INT)
-    .setDescription("Number of all statements covered by tests and uncovered")
-    .setDirection(Metric.DIRECTION_BETTER)
-    .setQualitative(false)
-    .setDomain(CoreMetrics.DOMAIN_SIZE)
-    .create[java.lang.Integer]()        
+  lazy val coveredStatements: Metric[Integer] =
+    new Metric.Builder(COVERED_STATEMENTS_KEY, "Covered statements", Metric.ValueType.INT)
+      .setDescription("Number of statements covered by tests")
+      .setDirection(Metric.DIRECTION_BETTER)
+      .setQualitative(false)
+      .setDomain(CoreMetrics.DOMAIN_SIZE)
+      .create[java.lang.Integer]()
+
+  lazy val totalStatements: Metric[Integer] =
+    new Metric.Builder(TOTAL_STATEMENTS_KEY, "Total statements", Metric.ValueType.INT)
+      .setDescription("Number of all statements covered by tests and uncovered")
+      .setDirection(Metric.DIRECTION_BETTER)
+      .setQualitative(false)
+      .setDomain(CoreMetrics.DOMAIN_SIZE)
+      .create[java.lang.Integer]()
 }

@@ -43,7 +43,8 @@ import scala.collection.JavaConverters._
  * @author Rado Buransky
  */
 class ScoverageSensor(settings: Settings, pathResolver: PathResolver, fileSystem: FileSystem)
-  extends Sensor with CoverageExtension {
+    extends Sensor
+    with CoverageExtension {
   private val log = Loggers.get(classOf[ScoverageSensor])
   protected val SCOVERAGE_REPORT_PATH_PROPERTY = "sonar.scoverage.reportPath"
   protected lazy val scoverageReportParser: ScoverageReportParser = XmlScoverageReportParser()
@@ -73,9 +74,9 @@ class ScoverageSensor(settings: Settings, pathResolver: PathResolver, fileSystem
 
   override val toString = getClass.getSimpleName
 
-  protected def createPathSanitizer(sonarSources: String): PathSanitizer
-    = new BruteForceSequenceMatcher(fileSystem.baseDir(), sonarSources)
-  
+  protected def createPathSanitizer(sonarSources: String): PathSanitizer =
+    new BruteForceSequenceMatcher(fileSystem.baseDir(), sonarSources)
+
   private lazy val scoverageReportPath: Option[String] = {
     settings.getString(SCOVERAGE_REPORT_PATH_PROPERTY) match {
       case null => None
@@ -91,23 +92,28 @@ class ScoverageSensor(settings: Settings, pathResolver: PathResolver, fileSystem
   }
 
   private def analyseMultiModuleProject(project: Project, context: SensorContext) {
-    project.isModule match {
-      case true => log.warn(LogUtil.f("Report path not set for " + project.name + " module! [" +
-        project.name + "." + SCOVERAGE_REPORT_PATH_PROPERTY + "]"))
-      case _ =>
-        // Compute overall statement coverage from submodules
-        val totalStatementCount = project.getModules.asScala.map(analyseStatementCountForModule(_, context)).sum
-        val coveredStatementCount = project.getModules.asScala.map(analyseCoveredStatementCountForModule(_, context)).sum
+    if (project.isModule) {
+      log.warn(
+        LogUtil.f(
+          "Report path not set for " + project.name + " module! [" +
+          project.name + "." + SCOVERAGE_REPORT_PATH_PROPERTY + "]"
+        )
+      )
+    } else {
+      val totalStatementCount =
+        project.getModules.asScala.map(analyseStatementCountForModule(_, context)).sum
+      val coveredStatementCount =
+        project.getModules.asScala.map(analyseCoveredStatementCountForModule(_, context)).sum
 
-        if (totalStatementCount > 0) {
-          // Convert to percentage
-          val overall = (coveredStatementCount.toDouble / totalStatementCount.toDouble) * 100.0
+      if (totalStatementCount > 0) {
+        // Convert to percentage
+        val overall = (coveredStatementCount.toDouble / totalStatementCount.toDouble) * 100.0
 
-            // Set overall statement coverage
-          context.saveMeasure(project, createStatementCoverage(overall))
+        // Set overall statement coverage
+        context.saveMeasure(project, createStatementCoverage(overall))
 
-          log.info(LogUtil.f("Overall statement coverage is " + ("%1.2f" format overall)))
-        }
+        log.info(LogUtil.f("Overall statement coverage is " + ("%1.2f" format overall)))
+      }
     }
   }
 
@@ -118,8 +124,12 @@ class ScoverageSensor(settings: Settings, pathResolver: PathResolver, fileSystem
         log.debug(LogUtil.f("Module has no statement coverage. [" + module.name + "]"))
         0
       case moduleCoveredStatementCount: Measure[_] =>
-        log.debug(LogUtil.f("Covered statement count for " + module.name + " module. [" +
-          moduleCoveredStatementCount.getValue + "]"))
+        log.debug(
+          LogUtil.f(
+            "Covered statement count for " + module.name + " module. [" +
+            moduleCoveredStatementCount.getValue + "]"
+          )
+        )
 
         moduleCoveredStatementCount.getValue.toLong
     }
@@ -133,72 +143,88 @@ class ScoverageSensor(settings: Settings, pathResolver: PathResolver, fileSystem
         0
 
       case moduleStatementCount: Measure[_] =>
-        log.debug(LogUtil.f("Statement count for " + module.name + " module. [" +
-          moduleStatementCount.getValue + "]"))
+        log.debug(
+          LogUtil.f(
+            "Statement count for " + module.name + " module. [" +
+            moduleStatementCount.getValue + "]"
+          )
+        )
 
         moduleStatementCount.getValue.toLong
     }
   }
 
-  private def processProject(projectCoverage: ProjectStatementCoverage, project: Project, context: SensorContext, sonarSources: String) {
+  private def processProject(
+    projectCoverage: ProjectStatementCoverage,
+    project: Project,
+    context: SensorContext,
+    sonarSources: String
+  ) {
     // Save measures
     saveMeasures(context, project, projectCoverage)
 
-    log.info(LogUtil.f("Statement coverage for " + project.getKey + " is " + ("%1.2f" format projectCoverage.rate)))
+    log.info(
+      LogUtil.f("Statement coverage for " + project.getKey + " is " + ("%1.2f" format projectCoverage.rate))
+    )
 
     // Process children
     processChildren(projectCoverage.children, context, sonarSources)
   }
 
-  private def processDirectory(directoryCoverage: DirectoryStatementCoverage, context: SensorContext, parentDirectory: String) {
+  private def processDirectory(
+    directoryCoverage: DirectoryStatementCoverage,
+    context: SensorContext,
+    parentDirectory: String
+  ) {
     // save measures if any
     if (directoryCoverage.statementCount > 0) {
       val path = appendFilePath(parentDirectory, directoryCoverage.name)
 
-      getResource(path, context, false) match {
-        case Some(srcDir) => {
+      getResource(path, context, isFile = false) match {
+        case Some(srcDir) =>
           // Save directory measures
           saveMeasures(context, srcDir, directoryCoverage)
-        }
         case None =>
       }
     }
     // Process children
-    processChildren(directoryCoverage.children, context, appendFilePath(parentDirectory, directoryCoverage.name))
+    processChildren(
+      directoryCoverage.children,
+      context,
+      appendFilePath(parentDirectory, directoryCoverage.name)
+    )
   }
 
   private def processFile(fileCoverage: FileStatementCoverage, context: SensorContext, directory: String) {
     val path = appendFilePath(directory, fileCoverage.name)
 
-    getResource(path, context, true) match {
-      case Some(scalaSourceFile) => {
+    getResource(path, context, isFile = true) match {
+      case Some(scalaSourceFile) =>
         // Save measures
         saveMeasures(context, scalaSourceFile, fileCoverage)
         // Save line coverage. This is needed just for source code highlighting.
         saveLineCoverage(fileCoverage.statements, scalaSourceFile, context)
-      }
       case None =>
     }
   }
 
   private def getResource(path: String, context: SensorContext, isFile: Boolean): Option[Resource] = {
-    
+
     val inputOption: Option[InputPath] = if (isFile) {
       val p = fileSystem.predicates()
       val pathPredicate = if (new File(path).isAbsolute) p.hasAbsolutePath(path) else p.hasRelativePath(path)
-      Option(fileSystem.inputFile(p.and(
-        pathPredicate,
-        p.hasLanguage(Scala.key),
-        p.hasType(InputFile.Type.MAIN))))
+      Option(
+        fileSystem.inputFile(p.and(pathPredicate, p.hasLanguage(Scala.key), p.hasType(InputFile.Type.MAIN)))
+      )
     } else {
       Option(fileSystem.inputDir(pathResolver.relativeFile(fileSystem.baseDir(), path)))
     }
-  
+
     inputOption match {
       case Some(path: InputPath) =>
         Some(context.getResource(path))
       case None => {
-        log.warn(s"File or directory not found in file system! ${path}")
+        log.warn(s"File or directory not found in file system! $path")
         None
       }
     }
@@ -209,18 +235,25 @@ class ScoverageSensor(settings: Settings, pathResolver: PathResolver, fileSystem
     context.saveMeasure(resource, createStatementCount(statementCoverage.statementCount))
     context.saveMeasure(resource, createCoveredStatementCount(statementCoverage.coveredStatementsCount))
 
-    log.debug(LogUtil.f("Save measures [" + statementCoverage.rate + ", " + statementCoverage.statementCount +
-      ", " + statementCoverage.coveredStatementsCount + ", " + resource.getKey + "]"))
+    log.debug(
+      LogUtil.f(
+        "Save measures [" + statementCoverage.rate + ", " + statementCoverage.statementCount +
+        ", " + statementCoverage.coveredStatementsCount + ", " + resource.getKey + "]"
+      )
+    )
   }
 
-  private def saveLineCoverage(coveredStatements: Iterable[CoveredStatement], resource: Resource,
-                               context: SensorContext) {
+  private def saveLineCoverage(
+    coveredStatements: Iterable[CoveredStatement],
+    resource: Resource,
+    context: SensorContext
+  ) {
     // Convert statements to lines
     val coveredLines = StatementCoverage.statementCoverageToLineCoverage(coveredStatements)
 
     // Set line hits
     val coverage = CoverageMeasuresBuilder.create()
-      coveredLines.foreach { coveredLine =>
+    coveredLines.foreach { coveredLine =>
       coverage.setHits(coveredLine.line, coveredLine.hitCount)
     }
 
@@ -228,16 +261,23 @@ class ScoverageSensor(settings: Settings, pathResolver: PathResolver, fileSystem
     coverage.createMeasures().asScala.toList.foreach(context.saveMeasure(resource, _))
   }
 
-  private def processChildren(children: Iterable[StatementCoverage], context: SensorContext, directory: String) {
+  private def processChildren(
+    children: Iterable[StatementCoverage],
+    context: SensorContext,
+    directory: String
+  ) {
     children.foreach(processChild(_, context, directory))
   }
 
   private def processChild(dirOrFile: StatementCoverage, context: SensorContext, directory: String) {
     dirOrFile match {
       case dir: DirectoryStatementCoverage => processDirectory(dir, context, directory)
-      case file: FileStatementCoverage => processFile(file, context, directory)
-      case _ => throw new IllegalStateException("Not a file or directory coverage! [" +
-        dirOrFile.getClass.getName + "]")
+      case file: FileStatementCoverage     => processFile(file, context, directory)
+      case _ =>
+        throw new IllegalStateException(
+          "Not a file or directory coverage! [" +
+          dirOrFile.getClass.getName + "]"
+        )
     }
   }
 
@@ -254,7 +294,7 @@ class ScoverageSensor(settings: Settings, pathResolver: PathResolver, fileSystem
     val result = src match {
       case java.io.File.separator => java.io.File.separator
       case empty if empty.isEmpty => ""
-      case other => other + java.io.File.separator
+      case other                  => other + java.io.File.separator
     }
 
     result + name

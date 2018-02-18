@@ -49,10 +49,9 @@ class ScalastyleRunner(rp: RulesProfile) {
 
     // only errors and exceptions are of interest
     messages.collect {
-     case e: StyleError[_] => e
-     case ex: StyleException[_] => ex
-   }
-
+      case e: StyleError[_]      => e
+      case ex: StyleException[_] => ex
+    }
   }
 
   def config: ScalastyleConfiguration = {
@@ -68,7 +67,7 @@ class ScalastyleRunner(rp: RulesProfile) {
     val checkerParams = sonarParams.filterNot(keyVal => keyVal._1 == Constants.ClazzParam)
     val className = sonarParams(Constants.ClazzParam)
     val sonarKey = activeRule.getRuleKey
-    
+
     ConfigurationChecker(className, ErrorLevel, enabled = true, sonarParams, None, Some(sonarKey))
   }
 }

@@ -47,8 +47,7 @@ class XmlScoverageReportParser extends ScoverageReportParser {
   private def sourceFromFile(scoverageReportPath: String) = {
     try {
       Source.fromFile(scoverageReportPath)
-    }
-    catch {
+    } catch {
       case ex: Exception => throw ScoverageException("Cannot parse file! [" + scoverageReportPath + "]", ex)
     }
   }

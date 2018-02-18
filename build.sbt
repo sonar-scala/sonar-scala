@@ -21,6 +21,7 @@ scalacOptions := Seq(
 )
 javacOptions := Seq("-Xlint:deprecation")
 cancelable in Global := true
+scalafmtOnCompile in ThisBuild := true
 
 // Lib dependencies
 val sonarVersion = "6.7.1"

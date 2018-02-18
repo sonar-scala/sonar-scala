@@ -22,12 +22,12 @@ package com.buransky.plugins.scoverage.util
 import org.scalatest.{FlatSpec, Matchers}
 
 class PathUtilSpec extends FlatSpec with Matchers {
-  
+
   val osName = System.getProperty("os.name")
   val separator = System.getProperty("file.separator")
-  
+
   behavior of s"splitPath for $osName"
-  
+
   it should "ignore the empty path" in {
     PathUtil.splitPath("") should equal(List.empty[String])
   }
@@ -39,7 +39,7 @@ class PathUtilSpec extends FlatSpec with Matchers {
   it should "work with separator in the middle" in {
     PathUtil.splitPath(s"a${separator}b") should equal(List("a", "b"))
   }
-  
+
   it should "work with an OS dependent absolute path" in {
     if (osName.startsWith("Windows")) {
       PathUtil.splitPath("C:\\test\\2") should equal(List("test", "2"))

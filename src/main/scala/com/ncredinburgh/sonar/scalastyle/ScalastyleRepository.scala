@@ -27,10 +27,9 @@ import com.ncredinburgh.sonar.scalastyle.ScalastyleRepository.getStandardKey
 import scala.annotation.tailrec
 
 object ScalastyleRepository {
-  
-  def getStandardKey(clazz: String) = {
+  def getStandardKey(clazz: String): String = {
     val simpleClazz = clazz.reverse.takeWhile(_ != '.').reverse
-    s"scalastyle_${simpleClazz}"
+    s"scalastyle_$simpleClazz"
   }
 }
 
@@ -45,41 +44,39 @@ class ScalastyleRepository extends RulesDefinition {
       .createRepository(Constants.RepositoryKey, Constants.ScalaKey)
       .setName(Constants.RepositoryName)
 
-    ScalastyleResources.allDefinedRules foreach {
-      repoRule =>
-        {
-          val ruleKey = determineFreeRuleKey(repoRule.clazz, repository)
+    ScalastyleResources.allDefinedRules foreach { repoRule =>
+      {
+        val ruleKey = determineFreeRuleKey(repoRule.clazz, repository)
 
-          // define the rule
-          val rule = repository.createRule(ruleKey)
-          rule.setName(ScalastyleResources.label(repoRule.id))
-          rule.setHtmlDescription(repoRule.description)
+        // define the rule
+        val rule = repository.createRule(ruleKey)
+        rule.setName(ScalastyleResources.label(repoRule.id))
+        rule.setHtmlDescription(repoRule.description)
 
-          // currently all rules comes with "warning" default level so we can treat with major severity
-          rule.setSeverity(Severity.MAJOR)
+        // currently all rules comes with "warning" default level so we can treat with major severity
+        rule.setSeverity(Severity.MAJOR)
 
-          // add parameters
-          repoRule.params foreach {
-            param =>
-              {
-                rule
-                  .createParam(param.name)
-                  .setDefaultValue(param.defaultVal)
-                  .setType(param.`type`)
-                  .setDescription(param.desc)
-              }
+        // add parameters
+        repoRule.params foreach { param =>
+          {
+            rule
+              .createParam(param.name)
+              .setDefaultValue(param.defaultVal)
+              .setType(param.`type`)
+              .setDescription(param.desc)
           }
-
-          // add synthetic parameter as reference to the class
-          rule.createParam(Constants.ClazzParam)
-            .setDefaultValue(repoRule.clazz)
-            .setType(RuleParamType.STRING)
-            .setDescription("Scalastyle checker that validates the rule.")
-
-          // if a rule has at least one real parameter make it a template    
-          rule.setTemplate(repoRule.params.size > 0)
-
         }
+
+        // add synthetic parameter as reference to the class
+        rule
+          .createParam(Constants.ClazzParam)
+          .setDefaultValue(repoRule.clazz)
+          .setType(RuleParamType.STRING)
+          .setDescription("Scalastyle checker that validates the rule.")
+
+        // if a rule has at least one real parameter make it a template
+        rule.setTemplate(repoRule.params.nonEmpty)
+      }
     }
 
     repository.done()
@@ -96,10 +93,10 @@ class ScalastyleRepository extends RulesDefinition {
       if (repo.rule(testee) == null) {
         testee
       } else {
-        getFreeRuleKey(key, (count + 1), repo)
+        getFreeRuleKey(key, count + 1, repo)
       }
     }
-    
+
     getFreeRuleKey(getStandardKey(clazz), 0, repo)
   }
 

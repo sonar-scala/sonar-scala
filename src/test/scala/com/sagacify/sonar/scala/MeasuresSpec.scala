@@ -4,7 +4,7 @@ import org.scalatest._
 
 class MeasurersSpec extends FlatSpec with Matchers {
 
-    val exampleSourceFile = """/*
+  val exampleSourceFile = """/*
  * Sonar Scala Plugin
  * Copyright (C) 2011-2016 SonarSource SA
  * mailto:contact AT sonarsource DOT com

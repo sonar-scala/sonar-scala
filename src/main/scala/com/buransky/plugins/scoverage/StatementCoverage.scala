@@ -26,6 +26,7 @@ package com.buransky.plugins.scoverage
  * @author Rado Buransky
  */
 sealed trait StatementCoverage {
+
   /**
    * Percentage rate ranging from 0 up to 100%.
    */
@@ -46,11 +47,15 @@ sealed trait StatementCoverage {
   def coveredStatementsCount: Int
 
   require(statementCount >= 0, "Statements count cannot be negative! [" + statementCount + "]")
-  require(coveredStatementsCount >= 0, "Statements count cannot be negative! [" +
-    coveredStatementsCount + "]")
-  require(coveredStatementsCount <= statementCount,
+  require(
+    coveredStatementsCount >= 0,
+    "Statements count cannot be negative! [" + coveredStatementsCount + "]"
+  )
+  require(
+    coveredStatementsCount <= statementCount,
     "Number of covered statements cannot be more than total number of statements! [" +
-      statementCount + ", " + coveredStatementsCount + "]")
+    statementCount + ", " + coveredStatementsCount + "]"
+  )
 }
 
 /**
@@ -68,7 +73,7 @@ trait NodeStatementCoverage extends StatementCoverage {
  * elements as children.
  */
 case class ProjectStatementCoverage(name: String, children: Iterable[NodeStatementCoverage])
-  extends NodeStatementCoverage {
+    extends NodeStatementCoverage {
   // projects' coverage values are defined as sums of their child values
   val statementCount = statementSum
   val coveredStatementsCount = coveredStatementsSum
@@ -78,17 +83,22 @@ case class ProjectStatementCoverage(name: String, children: Iterable[NodeStateme
  * Physical directory in file system.
  */
 case class DirectoryStatementCoverage(name: String, children: Iterable[NodeStatementCoverage])
-  extends NodeStatementCoverage {
-  // directories' coverage values are defined as sums of their DIRECT child values 
+    extends NodeStatementCoverage {
+  // directories' coverage values are defined as sums of their DIRECT child values
   val statementCount = children.filter(_.isInstanceOf[FileStatementCoverage]).map(_.statementCount).sum
-  val coveredStatementsCount = children.filter(_.isInstanceOf[FileStatementCoverage]).map(_.coveredStatementsCount).sum
-}  
+  val coveredStatementsCount =
+    children.filter(_.isInstanceOf[FileStatementCoverage]).map(_.coveredStatementsCount).sum
+}
 
 /**
  * Scala source code file.
  */
-case class FileStatementCoverage(name: String, statementCount: Int, coveredStatementsCount: Int,
-                                 statements: Iterable[CoveredStatement]) extends NodeStatementCoverage {
+case class FileStatementCoverage(
+  name: String,
+  statementCount: Int,
+  coveredStatementsCount: Int,
+  statements: Iterable[CoveredStatement]
+) extends NodeStatementCoverage {
   // leaf implementation sums==values
   val children = List.empty[NodeStatementCoverage]
   override val statementSum = statementCount
@@ -116,6 +126,7 @@ case class CoveredStatement(start: StatementPosition, end: StatementPosition, hi
 case class CoveredLine(line: Int, hitCount: Int)
 
 object StatementCoverage {
+
   /**
    * Utility method to transform statement coverage to line coverage. Pessimistic logic is used
    * meaning that line hit count is minimum of hit counts of all statements on the given line.
@@ -128,7 +139,9 @@ object StatementCoverage {
    */
   def statementCoverageToLineCoverage(statements: Iterable[CoveredStatement]): Iterable[CoveredLine] = {
     // Handle statements that end on a different line than start
-    val multilineStatements = statements.filter { s => s.start.line != s.end.line }
+    val multilineStatements = statements.filter { s =>
+      s.start.line != s.end.line
+    }
     val extraStatements = multilineStatements.flatMap { s =>
       for (i <- (s.start.line + 1) to s.end.line)
         yield CoveredStatement(StatementPosition(i, 0), StatementPosition(i, 0), s.hitCount)

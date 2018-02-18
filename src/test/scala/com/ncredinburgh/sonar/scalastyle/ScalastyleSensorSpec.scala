@@ -38,7 +38,6 @@ import org.sonar.core.issue.DefaultIssueBuilder
 
 import scala.collection.JavaConverters._
 
-
 class ScalastyleSensorSpec extends FlatSpec with Matchers with MockitoSugar with PrivateMethodTester {
 
   trait Fixture {
@@ -62,7 +61,7 @@ class ScalastyleSensorSpec extends FlatSpec with Matchers with MockitoSugar with
     when(issuable.newIssueBuilder()).thenReturn(issueBuilder)
     when(rf.find(any[RuleQuery])).thenReturn(aRule)
 
-    def mockScalaPredicate(scalaFiles: java.lang.Iterable[File]): Unit= {
+    def mockScalaPredicate(scalaFiles: java.lang.Iterable[File]): Unit = {
       val scalaFilesPred = mock[FilePredicate]
       val hasTypePred = mock[FilePredicate]
       val langPred = mock[FilePredicate]
@@ -88,8 +87,6 @@ class ScalastyleSensorSpec extends FlatSpec with Matchers with MockitoSugar with
 
     testee.shouldExecuteOnProject(project) shouldBe false
   }
-
-
 
   it should "analyse all scala source files in project" in new Fixture {
     val scalaFiles = List(new File("foo.scala"), new File("bar.scala")).asJava
@@ -130,10 +127,22 @@ class ScalastyleSensorSpec extends FlatSpec with Matchers with MockitoSugar with
   it should "report scalastyle errors as SonarQube issues" in new Fixture {
     mockScalaPredicate(List(new File("foo.scala"), new File("bar.scala")).asJava)
 
-    val error1 = new StyleError[FileSpec](new RealFileSpec("foo.scala", None), classOf[FileLengthChecker],
-      "org.scalastyle.file.FileLengthChecker", WarningLevel, List(), None)
-    val error2 = new StyleError[FileSpec](new RealFileSpec("bar.scala", None), classOf[IfBraceChecker],
-      "org.scalastyle.scalariform.IfBraceChecker", WarningLevel, List(), None)
+    val error1 = new StyleError[FileSpec](
+      new RealFileSpec("foo.scala", None),
+      classOf[FileLengthChecker],
+      "org.scalastyle.file.FileLengthChecker",
+      WarningLevel,
+      List(),
+      None
+    )
+    val error2 = new StyleError[FileSpec](
+      new RealFileSpec("bar.scala", None),
+      classOf[IfBraceChecker],
+      "org.scalastyle.scalariform.IfBraceChecker",
+      WarningLevel,
+      List(),
+      None
+    )
     when(runner.run(anyString, anyListOf(classOf[File]))).thenReturn(List(error1, error2))
 
     testee.analyse(project, context)
@@ -143,8 +152,14 @@ class ScalastyleSensorSpec extends FlatSpec with Matchers with MockitoSugar with
 
   it should "find sonar rule for error" in new Fixture {
     val findSonarRuleForError = PrivateMethod[Rule]('findSonarRuleForError)
-    val error = new StyleError[FileSpec](new RealFileSpec("foo.scala", None), classOf[FileLengthChecker],
-      "org.scalastyle.file.FileLengthChecker", WarningLevel, List(), None)
+    val error = new StyleError[FileSpec](
+      new RealFileSpec("foo.scala", None),
+      classOf[FileLengthChecker],
+      "org.scalastyle.file.FileLengthChecker",
+      WarningLevel,
+      List(),
+      None
+    )
 
     val rule = testee invokePrivate findSonarRuleForError(error)
 

@@ -9,7 +9,6 @@ import org.sonar.api.batch.SensorContext
 import org.sonar.api.measures.{CoreMetrics => CM}
 import org.sonar.api.resources.Project
 
-
 class ScalaSensor(scala: Scala, fs: FileSystem) extends Sensor {
 
   def shouldExecuteOnProject(project: Project): Boolean =
@@ -21,7 +20,7 @@ class ScalaSensor(scala: Scala, fs: FileSystem) extends Sensor {
 
     val inputFiles = fs.inputFiles(fs.predicates().hasLanguage(scala.getKey))
 
-    inputFiles.asScala.foreach{ inputFile =>
+    inputFiles.asScala.foreach { inputFile =>
       context.saveMeasure(inputFile, CM.FILES, 1.0)
 
       val sourceCode = Source.fromFile(inputFile.uri, charset).mkString
@@ -32,14 +31,13 @@ class ScalaSensor(scala: Scala, fs: FileSystem) extends Sensor {
       context.saveMeasure(inputFile, CM.CLASSES, double2Double(Measures.count_classes(tokens)))
       context.saveMeasure(inputFile, CM.FUNCTIONS, double2Double(Measures.count_methods(tokens)))
 
-      // context.saveMeasure(inputFile, CM.ACCESSORS, accessors)
-      // context.saveMeasure(inputFile, CM.COMPLEXITY_IN_FUNCTIONS, complexityInMethods)
-      // context.saveMeasure(inputFile, CM.COMPLEXITY_IN_CLASSES, fileComplexity)
-      // context.saveMeasure(inputFile, CM.COMPLEXITY, fileComplexity)
-      // context.saveMeasure(inputFile, CM.PUBLIC_API, publicApiChecker.getPublicApi())
-      // context.saveMeasure(inputFile, CM.PUBLIC_DOCUMENTED_API_DENSITY, publicApiChecker.getDocumentedPublicApiDensity())
-      // context.saveMeasure(inputFile, CM.PUBLIC_UNDOCUMENTED_API, publicApiChecker.getUndocumentedPublicApi())
-
+    // context.saveMeasure(inputFile, CM.ACCESSORS, accessors)
+    // context.saveMeasure(inputFile, CM.COMPLEXITY_IN_FUNCTIONS, complexityInMethods)
+    // context.saveMeasure(inputFile, CM.COMPLEXITY_IN_CLASSES, fileComplexity)
+    // context.saveMeasure(inputFile, CM.COMPLEXITY, fileComplexity)
+    // context.saveMeasure(inputFile, CM.PUBLIC_API, publicApiChecker.getPublicApi())
+    // context.saveMeasure(inputFile, CM.PUBLIC_DOCUMENTED_API_DENSITY, publicApiChecker.getDocumentedPublicApiDensity())
+    // context.saveMeasure(inputFile, CM.PUBLIC_UNDOCUMENTED_API, publicApiChecker.getUndocumentedPublicApi())
     }
   }
 }

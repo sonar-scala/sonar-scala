@@ -21,23 +21,23 @@ package com.buransky.plugins.scoverage.util
 
 import java.io.File
 import scala.Iterator
+
 /**
  *  File path helper.
  *
  * @author Rado Buransky
  */
 object PathUtil {
-  
-  def splitPath(filePath: String): List[String] = {
+
+  def splitPath(filePath: String): List[String] =
     new FileParentIterator(new File(filePath)).toList.reverse
-  }
-  
+
   class FileParentIterator(private var f: File) extends Iterator[String] {
-    def hasNext: Boolean = f != null && !f.getName().isEmpty()
+    def hasNext: Boolean = f != null && !f.getName.isEmpty
     def next(): String = {
-      val name = f.getName()
+      val name = f.getName
       f = f.getParentFile
       name
-    } 
+    }
   }
 }

@@ -36,21 +36,36 @@ import scala.collection.JavaConverters._
 class ScalastyleRunnerSpec extends FlatSpec with Matchers with MockitoSugar with PrivateMethodTester {
 
   trait Fixture {
-    val checker1 = ConfigurationChecker("org.scalastyle.scalariform.MultipleStringLiteralsChecker", ErrorLevel, true, Map(), None, None)
-    val checker2 = ConfigurationChecker("org.scalastyle.file.HeaderMatchesChecker", ErrorLevel, true, Map("header" -> "// Expected Header Comment"), None, None)
-    val configuration = ScalastyleConfiguration("sonar", true, List(checker1, checker2))
+    val checker1 = ConfigurationChecker(
+      "org.scalastyle.scalariform.MultipleStringLiteralsChecker",
+      ErrorLevel,
+      enabled = true,
+      Map(),
+      None,
+      None
+    )
+    val checker2 = ConfigurationChecker(
+      "org.scalastyle.file.HeaderMatchesChecker",
+      ErrorLevel,
+      enabled = true,
+      Map("header" -> "// Expected Header Comment"),
+      None,
+      None
+    )
+    val configuration = ScalastyleConfiguration("sonar", commentFilter = true, List(checker1, checker2))
     val testeeSpy = Mockito.spy(new ScalastyleRunner(mock[RulesProfile]))
     Mockito.doReturn(configuration, List(): _*).when(testeeSpy).config
     val charset = StandardCharsets.UTF_8.name
   }
-
 
   "a scalastyle runner" should "report StyleError messages if there are rule violations" in new Fixture {
     val files = List(new File("src/test/resources/ScalaFile1.scala")).asJava
 
     val messages = testeeSpy.run(charset, files).map(_.toString)
 
-    messages should contain ("StyleError key=header.matches args=List() lineNumber=Some(1) column=None customMessage=None")
+    messages should contain(
+      "StyleError key=header.matches args=List() lineNumber=Some(1) column=None customMessage=None"
+    )
   }
 
   it should "not report StyleError messages if there are no violations" in new Fixture {
@@ -62,7 +77,10 @@ class ScalastyleRunnerSpec extends FlatSpec with Matchers with MockitoSugar with
   }
 
   it should "scan multiple files" in new Fixture {
-    val files = List(new File("src/test/resources/ScalaFile1.scala"), new File("src/test/resources/ScalaFile2.scala")).asJava
+    val files = List(
+      new File("src/test/resources/ScalaFile1.scala"),
+      new File("src/test/resources/ScalaFile2.scala")
+    ).asJava
 
     val messages = testeeSpy.run(charset, files)
 
@@ -76,7 +94,8 @@ class ScalastyleRunnerSpec extends FlatSpec with Matchers with MockitoSugar with
     val key = "multiple.string.literals"
     val className = "org.scalastyle.scalariform.MultipleStringLiteralsChecker"
     val rule = Rule.create
-    rule.setRepositoryKey(Constants.RepositoryKey)
+    rule
+      .setRepositoryKey(Constants.RepositoryKey)
       .setKey(className)
       .setName(ScalastyleResources.label(key))
       .setDescription(ScalastyleResources.description(key))
@@ -106,8 +125,13 @@ class ScalastyleRunnerSpec extends FlatSpec with Matchers with MockitoSugar with
     activeRule.setParameter(Constants.ClazzParam, "org.scalastyle.scalariform.MultipleStringLiteralsChecker")
 
     val checker = testee invokePrivate ruleToChecker(activeRule)
-    val expectedParameters = Map("allowed" -> "1", "ignoreRegex" -> "^&quot;&quot;$", Constants.ClazzParam -> "org.scalastyle.scalariform.MultipleStringLiteralsChecker")
-    val expectedChecker = ConfigurationChecker(className, ErrorLevel, true, expectedParameters, None, Some(className))
+    val expectedParameters = Map(
+      "allowed" -> "1",
+      "ignoreRegex" -> "^&quot;&quot;$",
+      Constants.ClazzParam -> "org.scalastyle.scalariform.MultipleStringLiteralsChecker"
+    )
+    val expectedChecker =
+      ConfigurationChecker(className, ErrorLevel, enabled = true, expectedParameters, None, Some(className))
 
     checker shouldEqual expectedChecker
   }

@@ -27,80 +27,100 @@ import org.scalatest.{FlatSpec, Matchers}
 import org.scalatest.mockito.MockitoSugar
 
 class BruteForceSequenceMatcherSpec extends FlatSpec with Matchers with MockitoSugar {
-   
+
   // file-map of all files under baseDir/sonar.sources organized by their filename
-  val filesMap: Map[String, Seq[PathSeq]] = Map (
+  val filesMap: Map[String, Seq[PathSeq]] = Map(
     "rootTestFile.scala" -> List(List("testProject", "main", "rootTestFile.scala")),
     "nestedTestFile.scala" -> List(List("testProject", "main", "some", "folders", "nestedTestFile.scala")),
     "multiFile.scala" -> List(
-                              List("testProject", "main", "some", "multiFile.scala"),
-                              List("testProject", "main", "some", "folder", "multiFile.scala")
-                              )
+      List("testProject", "main", "some", "multiFile.scala"),
+      List("testProject", "main", "some", "folder", "multiFile.scala")
+    )
   )
 
   // baseDir = testProject   sonar.sources = main
   val testee = new BruteForceSequenceMatcherTestee("/testProject/main", filesMap)
-  
-  
-  
+
   behavior of "BruteForceSequenceMatcher with absolute report filenames"
-  
+
   it should "provide just the filename for top level files" in {
-    testee.getSourceRelativePath(List("testProject", "main", "rootTestFile.scala")).get shouldEqual List("rootTestFile.scala")
+    testee.getSourceRelativePath(List("testProject", "main", "rootTestFile.scala")).get shouldEqual List(
+      "rootTestFile.scala"
+    )
   }
-  
+
   it should "provide the filename and the folders for nested files" in {
-    testee.getSourceRelativePath(List("testProject", "main", "some", "folders", "nestedTestFile.scala")).get shouldEqual List("some", "folders", "nestedTestFile.scala")
+    testee
+      .getSourceRelativePath(List("testProject", "main", "some", "folders", "nestedTestFile.scala"))
+      .get shouldEqual List("some", "folders", "nestedTestFile.scala")
   }
-  
+
   it should "find the correct file if multiple files with same name exist" in {
-    testee.getSourceRelativePath(List("testProject", "main", "some", "multiFile.scala")).get shouldEqual List("some", "multiFile.scala")
-    testee.getSourceRelativePath(List("testProject", "main", "some", "folder", "multiFile.scala")).get shouldEqual List("some", "folder", "multiFile.scala")
+    testee.getSourceRelativePath(List("testProject", "main", "some", "multiFile.scala")).get shouldEqual List(
+      "some",
+      "multiFile.scala"
+    )
+    testee
+      .getSourceRelativePath(List("testProject", "main", "some", "folder", "multiFile.scala"))
+      .get shouldEqual List("some", "folder", "multiFile.scala")
   }
-  
-  
-  
-  
+
   behavior of "BruteForceSequenceMatcher with filenames relative to the base dir"
-  
+
   it should "provide just the filename for top level files" in {
-    testee.getSourceRelativePath(List("main", "rootTestFile.scala")).get shouldEqual List("rootTestFile.scala")
+    testee.getSourceRelativePath(List("main", "rootTestFile.scala")).get shouldEqual List(
+      "rootTestFile.scala"
+    )
   }
-  
+
   it should "provide the filename and the folders for nested files" in {
-    testee.getSourceRelativePath(List("main", "some", "folders", "nestedTestFile.scala")).get shouldEqual List("some", "folders", "nestedTestFile.scala")
+    testee
+      .getSourceRelativePath(List("main", "some", "folders", "nestedTestFile.scala"))
+      .get shouldEqual List("some", "folders", "nestedTestFile.scala")
   }
-  
+
   it should "find the correct file if multiple files with same name exist" in {
-    testee.getSourceRelativePath(List("main", "some", "multiFile.scala")).get shouldEqual List("some", "multiFile.scala")
-    testee.getSourceRelativePath(List("main", "some", "folder", "multiFile.scala")).get shouldEqual List("some", "folder", "multiFile.scala")
+    testee.getSourceRelativePath(List("main", "some", "multiFile.scala")).get shouldEqual List(
+      "some",
+      "multiFile.scala"
+    )
+    testee.getSourceRelativePath(List("main", "some", "folder", "multiFile.scala")).get shouldEqual List(
+      "some",
+      "folder",
+      "multiFile.scala"
+    )
   }
-  
-  
-  
-  
+
   behavior of "BruteForceSequenceMatcher with filenames relative to the src dir"
-  
+
   it should "provide just the filename for top level files" in {
     testee.getSourceRelativePath(List("rootTestFile.scala")).get shouldEqual List("rootTestFile.scala")
   }
-  
+
   it should "provide the filename and the folders for nested files" in {
-    testee.getSourceRelativePath(List("some", "folders", "nestedTestFile.scala")).get shouldEqual List("some", "folders", "nestedTestFile.scala")
+    testee.getSourceRelativePath(List("some", "folders", "nestedTestFile.scala")).get shouldEqual List(
+      "some",
+      "folders",
+      "nestedTestFile.scala"
+    )
   }
-  
+
   it should "find the correct file if multiple files with same name exist" in {
-    testee.getSourceRelativePath(List("some", "multiFile.scala")).get shouldEqual List("some", "multiFile.scala")
-    testee.getSourceRelativePath(List("some", "folder", "multiFile.scala")).get shouldEqual List("some", "folder", "multiFile.scala")
+    testee.getSourceRelativePath(List("some", "multiFile.scala")).get shouldEqual List(
+      "some",
+      "multiFile.scala"
+    )
+    testee.getSourceRelativePath(List("some", "folder", "multiFile.scala")).get shouldEqual List(
+      "some",
+      "folder",
+      "multiFile.scala"
+    )
   }
-  
-  
-  
 
   class BruteForceSequenceMatcherTestee(absoluteSrcPath: String, filesMap: Map[String, Seq[PathSeq]])
       extends BruteForceSequenceMatcher(mock[File], "") {
 
-    def srcDir = {
+    def srcDir: File = {
       val dir = mock[File]
       when(dir.isAbsolute).thenReturn(true)
       when(dir.isDirectory).thenReturn(true)

@@ -52,7 +52,7 @@ class ScalastyleDefaultQualityProfileSpec extends FlatSpec with Matchers with Mo
   }
 
   it should "have all the parameters in default config" in new Fixture {
-    val totalParameters = (rulesCount * 1)
+    val totalParameters = rulesCount * 1
 
     val rulesProfile = testee.createProfile(validationMessages)
 

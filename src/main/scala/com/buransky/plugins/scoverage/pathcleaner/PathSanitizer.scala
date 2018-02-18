@@ -20,15 +20,14 @@
 package com.buransky.plugins.scoverage.pathcleaner
 
 /**
-  * @author Michael Zinsmaier
-  */
+ * @author Michael Zinsmaier
+ */
 trait PathSanitizer {
-  
+
   /** tries to convert the given path such that it is relative to the
    *  projects/modules source directory.
-   *  
-   *  @return Some(source folder relative path) or None if the path cannot be converted 
+   *
+   *  @return Some(source folder relative path) or None if the path cannot be converted
    */
-  def getSourceRelativePath(path: Seq[String]): Option[Seq[String]]  
-  
+  def getSourceRelativePath(path: Seq[String]): Option[Seq[String]]
 }

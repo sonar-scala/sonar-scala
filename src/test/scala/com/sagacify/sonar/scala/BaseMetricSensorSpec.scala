@@ -15,7 +15,7 @@ import scala.collection.JavaConverters._;
 
 class ScalaSensorSpec extends FlatSpec with Matchers {
 
-  val NUMBER_OF_FILES = 3;
+  val NUMBER_OF_FILES = 3
 
   val scala = new Scala(new MapSettings().asConfig())
 
@@ -41,24 +41,26 @@ class ScalaSensorSpec extends FlatSpec with Matchers {
   it should "only execute on a scala project" in {
     val c = context
     c.fs.add(TestInputFileBuilder.create("p", "fake.php").setLanguage("php").build())
-    assert(! c.sensor.shouldExecuteOnProject(c.project))
+    assert(!c.sensor.shouldExecuteOnProject(c.project))
   }
 
   it should "correctly measure ScalaFile1" in {
     val c = context
-    c.fs.add(TestInputFileBuilder.create("", "src/test/resources/ScalaFile1.scala").setLanguage("scala").build())
+    c.fs.add(
+      TestInputFileBuilder.create("", "src/test/resources/ScalaFile1.scala").setLanguage("scala").build()
+    )
     val sensorContext = mock(classOf[SensorContext])
     c.sensor.analyse(c.project, sensorContext)
 
-    val inputFiles = c.fs.inputFiles(c.fs.predicates().hasLanguage(scala.getKey()))
+    val inputFiles = c.fs.inputFiles(c.fs.predicates().hasLanguage(scala.getKey))
 
-    inputFiles.asScala.foreach{ file =>
+    inputFiles.asScala.foreach { file =>
       verify(sensorContext, times(1))
-            .saveMeasure(file, CM.FILES, double2Double(1))
+        .saveMeasure(file, CM.FILES, double2Double(1))
       verify(sensorContext, times(1))
-          .saveMeasure(file, CM.COMMENT_LINES, double2Double(0))
+        .saveMeasure(file, CM.COMMENT_LINES, double2Double(0))
       verify(sensorContext, times(1))
-          .saveMeasure(file, CM.CLASSES, double2Double(1))
+        .saveMeasure(file, CM.CLASSES, double2Double(1))
       verify(sensorContext, times(1))
         .saveMeasure(file, CM.FUNCTIONS, double2Double(1))
 
@@ -68,17 +70,19 @@ class ScalaSensorSpec extends FlatSpec with Matchers {
   it should "correctly measure ScalaFile2" in {
 
     val c = context
-    c.fs.add(TestInputFileBuilder.create("", "src/test/resources/ScalaFile2.scala").setLanguage("scala").build())
+    c.fs.add(
+      TestInputFileBuilder.create("", "src/test/resources/ScalaFile2.scala").setLanguage("scala").build()
+    )
     val sensorContext = mock(classOf[SensorContext])
     c.sensor.analyse(c.project, sensorContext)
 
-    val inputFiles = c.fs.inputFiles(c.fs.predicates().hasLanguage(scala.getKey()))
+    val inputFiles = c.fs.inputFiles(c.fs.predicates().hasLanguage(scala.getKey))
 
-    inputFiles.asScala.foreach{ file =>
+    inputFiles.asScala.foreach { file =>
       verify(sensorContext, times(1))
-          .saveMeasure(file, CM.FILES, double2Double(1))
+        .saveMeasure(file, CM.FILES, double2Double(1))
       verify(sensorContext, times(1))
-          .saveMeasure(file, CM.COMMENT_LINES, double2Double(1))
+        .saveMeasure(file, CM.COMMENT_LINES, double2Double(1))
       verify(sensorContext, times(1))
         .saveMeasure(file, CM.CLASSES, double2Double(2))
       verify(sensorContext, times(1))

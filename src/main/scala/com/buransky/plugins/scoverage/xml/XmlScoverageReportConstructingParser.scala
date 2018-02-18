@@ -37,7 +37,8 @@ import com.buransky.plugins.scoverage.pathcleaner.PathSanitizer
  *
  * @author Rado Buransky
  */
-class XmlScoverageReportConstructingParser(source: Source, pathSanitizer: PathSanitizer) extends ConstructingParser(source, false) {
+class XmlScoverageReportConstructingParser(source: Source, pathSanitizer: PathSanitizer)
+    extends ConstructingParser(source, false) {
   private val log = Loggers.get(classOf[XmlScoverageReportConstructingParser])
 
   private val CLASS_ELEMENT = "class"
@@ -80,7 +81,7 @@ class XmlScoverageReportConstructingParser(source: Source, pathSanitizer: PathSa
 
             log.debug("Statement added: " + line + ", " + hits + ", " + start)
 
-          case None => throw new ScoverageException("Current file path not set!")
+          case None => throw ScoverageException("Current file path not set!")
         }
       case _ => // Nothing to do
     }
@@ -90,7 +91,7 @@ class XmlScoverageReportConstructingParser(source: Source, pathSanitizer: PathSa
 
   private def addCoveredStatement(filePath: String, coveredStatement: CoveredStatement) {
     statementsInFile.get(filePath) match {
-      case None => statementsInFile.put(filePath, List(coveredStatement))
+      case None    => statementsInFile.put(filePath, List(coveredStatement))
       case Some(s) => statementsInFile.update(filePath, coveredStatement :: s)
     }
   }
@@ -102,8 +103,7 @@ class XmlScoverageReportConstructingParser(source: Source, pathSanitizer: PathSa
   private def fixLeadingSlash(filePath: String) = {
     if (filePath.startsWith(File.separator) && !new File(filePath).exists()) {
       filePath.drop(File.separator.length)
-    }
-    else
+    } else
       filePath
   }
 
@@ -114,15 +114,18 @@ class XmlScoverageReportConstructingParser(source: Source, pathSanitizer: PathSa
       case Some(attr) =>
         attr match {
           case text: Text => text.toString()
-          case _ => throw new ScoverageException("Not a text attribute!")
+          case _          => throw ScoverageException("Not a text attribute!")
         }
-      case None =>  throw new ScoverageException("Attribute doesn't exit! [" + name + "]")
+      case None => throw ScoverageException("Attribute doesn't exit! [" + name + "]")
     }
   }
 
-  private case class DirOrFile(name: String, var children: List[DirOrFile],
-                               coverage: Option[FileStatementCoverage]) {
-    def get(name: String) = children.find(_.name == name)
+  private case class DirOrFile(
+    name: String,
+    var children: List[DirOrFile],
+    coverage: Option[FileStatementCoverage]
+  ) {
+    def get(name: String): Option[DirOrFile] = children.find(_.name == name)
 
     @tailrec
     final def add(chain: DirOrFile) {
@@ -143,30 +146,34 @@ class XmlScoverageReportConstructingParser(source: Source, pathSanitizer: PathSa
       val childNodes = children.map(_.toStatementCoverage)
 
       childNodes match {
-        case Nil => coverage match {
-          case None => FileStatementCoverage("Nothing", 0, 0, List.empty[CoveredStatement])
-          case _ => coverage.get
-        }
+        case Nil =>
+          coverage match {
+            case None => FileStatementCoverage("Nothing", 0, 0, List.empty[CoveredStatement])
+            case _    => coverage.get
+          }
         case _ => DirectoryStatementCoverage(name, childNodes)
       }
     }
 
     def toProjectStatementCoverage: ProjectStatementCoverage = {
       toStatementCoverage match {
-        case node: NodeStatementCoverage => ProjectStatementCoverage("", node.children)
-        case _ => throw new ScoverageException("Illegal statement coverage!")
+        case node: NodeStatementCoverage =>
+          ProjectStatementCoverage("", node.children)
+        case _ =>
+          throw ScoverageException("Illegal statement coverage!")
       }
     }
   }
 
-  private def projectFromMap(statementsInFile: Map[String, List[CoveredStatement]]):
-    ProjectStatementCoverage = {
+  private def projectFromMap(
+    statementsInFile: Map[String, List[CoveredStatement]]
+  ): ProjectStatementCoverage = {
 
     // Transform to file statement coverage
     val files = fileStatementCoverage(statementsInFile)
 
     // Transform file paths to chain of case classes
-    val chained = files.map(fsc => pathToChain(fsc._1, fsc._2)).flatten
+    val chained = files.flatMap(fsc => pathToChain(fsc._1, fsc._2))
 
     // Merge chains into one tree
     val root = DirOrFile("", Nil, None)
@@ -188,7 +195,7 @@ class XmlScoverageReportConstructingParser(source: Source, pathSanitizer: PathSa
         dirs(i).children = List(dirs(i + 1))
 
       // Get file
-      val file = DirOrFile(relPath(relPath.length - 1).toString, Nil, Some(coverage))
+      val file = DirOrFile(relPath.last.toString, Nil, Some(coverage))
 
       if (dirs.isEmpty) {
         // File in root dir
@@ -199,27 +206,33 @@ class XmlScoverageReportConstructingParser(source: Source, pathSanitizer: PathSa
         dirs.head
       }
     }
-    
+
     // processing
     val path = PathUtil.splitPath(filePath)
 
     if (path.length < 1)
-      throw new ScoverageException("Path cannot be empty!")
+      throw ScoverageException("Path cannot be empty!")
 
     pathSanitizer.getSourceRelativePath(path) match {
       case Some(relPath) => Some(convertToDirOrFile(relPath))
-      case None => {
-        log.warn(s"skipping file coverage results for $path, was not able to retrieve the file in the configured source dir")
+      case None =>
+        log.warn(
+          s"skipping file coverage results for $path, was not able to retrieve the file in the configured source dir"
+        )
         None
-      }
     }
   }
 
-  private def fileStatementCoverage(statementsInFile: Map[String, List[CoveredStatement]]):
-    Map[String, FileStatementCoverage] = {
+  private def fileStatementCoverage(
+    statementsInFile: Map[String, List[CoveredStatement]]
+  ): Map[String, FileStatementCoverage] = {
     statementsInFile.map { sif =>
-      val fileStatementCoverage = FileStatementCoverage(PathUtil.splitPath(sif._1).last,
-        sif._2.length, coveredStatements(sif._2), sif._2)
+      val fileStatementCoverage = FileStatementCoverage(
+        PathUtil.splitPath(sif._1).last,
+        sif._2.length,
+        coveredStatements(sif._2),
+        sif._2
+      )
 
       (sif._1, fileStatementCoverage)
     }

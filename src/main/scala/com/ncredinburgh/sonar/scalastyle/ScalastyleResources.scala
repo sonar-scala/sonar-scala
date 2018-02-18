@@ -23,7 +23,7 @@ import com.typesafe.config.ConfigFactory
 import org.scalastyle.ScalastyleError
 import org.sonar.api.server.rule.RuleParamType
 import scala.io.Source
-import scala.xml.{Elem, XML, Node}
+import scala.xml.{Elem, Node, XML}
 
 /**
  * Provides access to the various .property and XML files that Scalastyle provides
@@ -38,23 +38,26 @@ object ScalastyleResources {
   // accessing scalastyles reference.conf (includes additional data such as key.label)
   private val cfg = ConfigFactory.load(this.getClass.getClassLoader)
 
-  def allDefinedRules: Seq[RepositoryRule] = for {
-    checker <- definitions \\ "checker"
-    clazz = (checker \ "@class").text
-    id = (checker \ "@id").text
-    desc = description(id)
-    params = nodeToParams(checker, id)
-  } yield RepositoryRule(clazz, id, desc, params)
+  def allDefinedRules: Seq[RepositoryRule] =
+    for {
+      checker <- definitions \\ "checker"
+      clazz = (checker \ "@class").text
+      id = (checker \ "@id").text
+      desc = description(id)
+      params = nodeToParams(checker, id)
+    } yield RepositoryRule(clazz, id, desc, params)
 
-  def nodeToParams(checker: Node, id: String): List[Param] = for {
-    parameter <- (checker \\ "parameter").toList
-    ruleParamKey = nodeToRuleParamKey(parameter)
-    ruleParamType = nodeToRuleParamType(parameter)
-    description = nodeToPropertyDescription(parameter, id)
-    defaultValue = nodeToDefaultValue(parameter)
-  } yield Param(ruleParamKey, ruleParamType, description, defaultValue)
+  def nodeToParams(checker: Node, id: String): List[Param] =
+    for {
+      parameter <- (checker \\ "parameter").toList
+      ruleParamKey = nodeToRuleParamKey(parameter)
+      ruleParamType = nodeToRuleParamType(parameter)
+      description = nodeToPropertyDescription(parameter, id)
+      defaultValue = nodeToDefaultValue(parameter)
+    } yield Param(ruleParamKey, ruleParamType, description, defaultValue)
 
-  def description(key: String): String = descriptionFromDocumentation(key) getOrElse cfg.getConfig(key).getString("description")
+  def description(key: String): String =
+    descriptionFromDocumentation(key) getOrElse cfg.getConfig(key).getString("description")
 
   def label(key: String): String = cfg.getConfig(key).getString("label")
 
@@ -62,17 +65,17 @@ object ScalastyleResources {
     documentation \\ "scalastyle-documentation" \ "check" find { _ \\ "@id" exists (_.text == key) } match {
       case Some(node) =>
         val justification = {
-          val text =  (node \ "justification").text
+          val text = (node \ "justification").text
           if (text.trim != "") Some(ScalastyleDocFormatter.format(text)) else None
         }
         val extraDescription = {
-          val text =  (node \ "extra-description").text
+          val text = (node \ "extra-description").text
           if (text.trim != "") Some(ScalastyleDocFormatter.format(text)) else None
         }
         (justification, extraDescription) match {
           case (Some(j), Some(ed)) => Some(s"$j\n$ed")
-          case (Some(j), None) => Some(j)
-          case _ => None
+          case (Some(j), None)     => Some(j)
+          case _                   => None
         }
       case None => None
     }
@@ -81,16 +84,17 @@ object ScalastyleResources {
   private def nodeToRuleParamKey(n: Node): String = (n \ "@name").text.trim
 
   private def nodeToRuleParamType(n: Node): RuleParamType = (n \ "@type").text.trim match {
-    case "string" => if ((n \ "@name").text == "regex") {
-      RuleParamType.STRING
-    } else if ((n \ "@name").text == "header") {
-      RuleParamType.TEXT
-    } else {
-      RuleParamType.STRING
-    }
+    case "string" =>
+      if ((n \ "@name").text == "regex") {
+        RuleParamType.STRING
+      } else if ((n \ "@name").text == "header") {
+        RuleParamType.TEXT
+      } else {
+        RuleParamType.STRING
+      }
     case "integer" => RuleParamType.INTEGER
     case "boolean" => RuleParamType.BOOLEAN
-    case _ => RuleParamType.STRING
+    case _         => RuleParamType.STRING
   }
 
   private def nodeToPropertyDescription(node: Node, id: String): String = {
@@ -100,7 +104,7 @@ object ScalastyleResources {
 
   private def nodeToDefaultValue(n: Node): String = (n \ "@default").text.trim
 
-  private def xmlFromClassPath(s: String): Elem =  XML.load(fromClassPath(s))
+  private def xmlFromClassPath(s: String): Elem = XML.load(fromClassPath(s))
 
   private def fromClassPath(s: String): InputStream = classOf[ScalastyleError].getResourceAsStream(s)
 }
@@ -152,5 +156,4 @@ object ScalastyleDocFormatter {
         text.trim
     }
   }
-
 }

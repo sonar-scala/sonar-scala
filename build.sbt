@@ -1,3 +1,4 @@
+import com.sksamuel.scapegoat.sbt.ScapegoatSbtPlugin.autoImport._
 import org.sonar.updatecenter.common.PluginManifest
 import sbt._
 import sbtrelease.ReleasePlugin.autoImport.ReleaseTransformations._
@@ -19,9 +20,12 @@ scalacOptions := Seq(
   "-feature",
   "-language:reflectiveCalls"
 )
+scalacOptions in Scapegoat += "-P:scapegoat:overrideLevels:TraversableHead=Warning:OptionGet=Warning"
 javacOptions := Seq("-Xlint:deprecation")
 cancelable in Global := true
 scalafmtOnCompile in ThisBuild := true
+scapegoatVersion in ThisBuild := "1.3.3"
+scapegoatConsoleOutput := false
 
 // Lib dependencies
 val sonarVersion = "6.7.1"
@@ -55,7 +59,7 @@ packageOptions in (Compile, packageBin) += Package.ManifestAttributes(
   PluginManifest.LICENSE -> "GNU LGPL 3",
   PluginManifest.SONARLINT_SUPPORTED -> "false",
   PluginManifest.MAIN_CLASS -> "com.sagacify.sonar.scala.ScalaPlugin",
-  PluginManifest.USE_CHILD_FIRST_CLASSLOADER -> "false",
+  PluginManifest.USE_CHILD_FIRST_CLASSLOADER -> "false"
 )
 
 // Assembly
@@ -63,12 +67,12 @@ test in assembly := {}
 assemblyJarName in assembly := s"${name.value}-${version.value}.jar"
 assemblyMergeStrategy in assembly := {
   case "log4j.properties" => MergeStrategy.first
-  case "reference.conf" => MergeStrategy.concat
+  case "reference.conf"   => MergeStrategy.concat
   case "application.conf" => MergeStrategy.concat
   case PathList("META-INF", xs @ _*) =>
     xs match {
       case ("MANIFEST.MF" :: Nil) => MergeStrategy.discard
-      case _ => MergeStrategy.first
+      case _                      => MergeStrategy.first
     }
   case _ => MergeStrategy.first
 }
@@ -85,12 +89,12 @@ bintrayVcsUrl := Some("git@github.com:mwz/sonar-scala.git")
 bintrayReleaseOnPublish := true
 publishMavenStyle := true
 publishArtifact in Test := false
-pomIncludeRepository := { _ => false }
+pomIncludeRepository := (_ => false)
 
 // Release
 releaseVersionBump := Minor
-releaseTagComment := s"Releasing ${(version in ThisBuild).value} [ci skip]"
-releaseCommitMessage := s"Setting version to ${(version in ThisBuild).value} [ci skip]"
+releaseTagComment := s"Releasing ${(version in ThisBuild).value}. [ci skip]"
+releaseCommitMessage := s"Setting version to ${(version in ThisBuild).value}. [ci skip]"
 releaseProcess := Seq[ReleaseStep](
   checkSnapshotDependencies,
   inquireVersions,

@@ -1,7 +1,7 @@
 package com.sagacify.sonar.scala
 
 import scala.io.Source
-import scala.collection.JavaConversions._
+import scala.collection.JavaConverters._
 
 import org.sonar.api.batch.fs.FileSystem
 import org.sonar.api.batch.Sensor
@@ -21,7 +21,7 @@ class ScalaSensor(scala: Scala, fs: FileSystem) extends Sensor {
 
     val inputFiles = fs.inputFiles(fs.predicates().hasLanguage(scala.getKey))
 
-    inputFiles.foreach{ inputFile =>
+    inputFiles.asScala.foreach{ inputFile =>
       context.saveMeasure(inputFile, CM.FILES, 1.0)
 
       val sourceCode = Source.fromFile(inputFile.uri, charset).mkString

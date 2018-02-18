@@ -24,7 +24,7 @@ import org.scalatest.mockito.MockitoSugar
 import org.sonar.api.profiles.RulesProfile
 import org.sonar.api.utils.ValidationMessages
 
-import scala.collection.JavaConversions._
+import scala.collection.JavaConverters._
 
 /**
  * Tests an adapted ScalastyleQualityProfile, assuming the user instantiated all templates once
@@ -57,7 +57,7 @@ class ScalastyleQualityProfileSpec extends FlatSpec with Matchers with MockitoSu
 
     val rulesProfile = testee.createProfile(validationMessages)
 
-    rulesProfile.getActiveRules.flatMap(_.getActiveRuleParams).size shouldBe totalParameters
+    rulesProfile.getActiveRules.asScala.flatMap(_.getActiveRuleParams.asScala).size shouldBe totalParameters
   }
 
   it should "have correct values for parameters" in new Fixture {
@@ -65,7 +65,7 @@ class ScalastyleQualityProfileSpec extends FlatSpec with Matchers with MockitoSu
 
     val rulesProfile = testee.createProfile(validationMessages)
     val rule = rulesProfile.getActiveRule(Constants.RepositoryKey, ruleKey)
-    val param = rule.getActiveRuleParams.head
+    val param = rule.getActiveRuleParams.asScala.head
 
     param.getKey shouldBe "maxMethods"
     param.getValue shouldBe "30"

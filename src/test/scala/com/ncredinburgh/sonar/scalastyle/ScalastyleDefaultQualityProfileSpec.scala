@@ -24,7 +24,7 @@ import org.scalatest.mockito.MockitoSugar
 import org.sonar.api.profiles.RulesProfile
 import org.sonar.api.utils.ValidationMessages
 
-import scala.collection.JavaConversions._
+import scala.collection.JavaConverters._
 
 /**
  * Tests the default ScalastyleQualityProfile, only rules without parameters, no templates
@@ -56,6 +56,6 @@ class ScalastyleDefaultQualityProfileSpec extends FlatSpec with Matchers with Mo
 
     val rulesProfile = testee.createProfile(validationMessages)
 
-    rulesProfile.getActiveRules.flatMap(_.getActiveRuleParams).size shouldBe totalParameters
+    rulesProfile.getActiveRules.asScala.flatMap(_.getActiveRuleParams.asScala).size shouldBe totalParameters
   }
 }

@@ -1,1 +1,1 @@
-libraryDependencies += "org.sonarsource.update-center" % "sonar-update-center-common" % "1.18.0.487"
+libraryDependencies += "org.sonarsource.update-center" % "sonar-update-center-common" % "1.21.0.561"

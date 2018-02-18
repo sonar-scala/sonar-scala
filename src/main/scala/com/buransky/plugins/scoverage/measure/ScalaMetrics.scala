@@ -19,9 +19,12 @@
  */
 package com.buransky.plugins.scoverage.measure
 
-import org.sonar.api.measures.{CoreMetrics, Metric, Metrics}
+import java.{io, lang, util}
+
 import org.sonar.api.measures.Metric.ValueType
-import scala.collection.JavaConversions._
+import org.sonar.api.measures.{CoreMetrics, Metric, Metrics}
+
+import scala.collection.JavaConverters._
 import scala.collection.mutable.ListBuffer
 
 /**
@@ -30,7 +33,7 @@ import scala.collection.mutable.ListBuffer
  * @author Rado Buransky
  */
 class ScalaMetrics extends Metrics {
-  override def getMetrics = ListBuffer(ScalaMetrics.statementCoverage, ScalaMetrics.coveredStatements, ScalaMetrics.totalStatements).toList
+  override def getMetrics: util.List[Metric[_ <: io.Serializable]] = (ListBuffer(ScalaMetrics.statementCoverage, ScalaMetrics.coveredStatements, ScalaMetrics.totalStatements): ListBuffer[Metric[_ <: java.io.Serializable]]).asJava
 }
 
 object ScalaMetrics {
@@ -38,7 +41,7 @@ object ScalaMetrics {
   private val COVERED_STATEMENTS_KEY = "covered_statements"
   private val TOTAL_STATEMENTS_KEY = "total_statements"
 
-  lazy val statementCoverage = new Metric.Builder(STATEMENT_COVERAGE_KEY,
+  lazy val statementCoverage: Metric[lang.Double] = new Metric.Builder(STATEMENT_COVERAGE_KEY,
     "Statement coverage", ValueType.PERCENT)
     .setDescription("Statement coverage by tests")
     .setDirection(Metric.DIRECTION_BETTER)
@@ -48,7 +51,7 @@ object ScalaMetrics {
     .setBestValue(100.0)
     .create[java.lang.Double]()
 
-  lazy val coveredStatements = new Metric.Builder(COVERED_STATEMENTS_KEY,
+  lazy val coveredStatements: Metric[Integer] = new Metric.Builder(COVERED_STATEMENTS_KEY,
     "Covered statements", Metric.ValueType.INT)
     .setDescription("Number of statements covered by tests")
     .setDirection(Metric.DIRECTION_BETTER)
@@ -56,7 +59,7 @@ object ScalaMetrics {
     .setDomain(CoreMetrics.DOMAIN_SIZE)
     .create[java.lang.Integer]()
     
-  lazy val totalStatements = new Metric.Builder(TOTAL_STATEMENTS_KEY,
+  lazy val totalStatements: Metric[Integer] = new Metric.Builder(TOTAL_STATEMENTS_KEY,
     "Total statements", Metric.ValueType.INT)
     .setDescription("Number of all statements covered by tests and uncovered")
     .setDirection(Metric.DIRECTION_BETTER)

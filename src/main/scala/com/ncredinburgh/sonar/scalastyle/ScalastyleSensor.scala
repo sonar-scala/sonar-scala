@@ -30,7 +30,7 @@ import org.sonar.api.rule.RuleKey
 import org.sonar.api.rules.{Rule, RuleFinder, RuleQuery}
 
 
-import scala.collection.JavaConversions._
+import scala.collection.JavaConverters._
 
 
 /**
@@ -56,15 +56,15 @@ class ScalastyleSensor(resourcePerspectives: ResourcePerspectives,
 
 
   override def shouldExecuteOnProject(project: Project): Boolean = {
-    fileSystem.files(scalaFilesPredicate).nonEmpty
+    fileSystem.files(scalaFilesPredicate).asScala.nonEmpty
   }
 
   override def analyse(project: Project, context: SensorContext): Unit = {
     val files = fileSystem.files(scalaFilesPredicate)
     val encoding = fileSystem.encoding.name
-    val messages = runner.run(encoding, files.toList)
+    val messages = runner.run(encoding, files.asScala.toList.asJava)
 
-    messages foreach (processMessage(_))
+    messages foreach processMessage
   }
 
   private def processMessage(message: Message[FileSpec]): Unit = message match {

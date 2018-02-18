@@ -32,9 +32,9 @@ libraryDependencies ++= List(
   "com.google.code.findbugs" % "jsr305" % "3.0.2",
   "commons-io" % "commons-io" % "2.6",
   "org.scalastyle" %% "scalastyle" % "1.0.0",
-  "com.google.guava" % "guava" % "18.0",
-  "org.scalatest" %% "scalatest" % "3.0.4" % Test,
-  "org.mockito" % "mockito-core" % "2.12.0" % Test
+  "com.google.guava" % "guava" % "23.0",
+  "org.scalatest" %% "scalatest" % "3.0.5" % Test,
+  "org.mockito" % "mockito-core" % "2.15.0" % Test
 )
 
 // Manifest attributes

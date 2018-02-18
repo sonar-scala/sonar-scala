@@ -1,4 +1,4 @@
-package com.sagacify.sonar.scala;
+package com.sagacify.sonar.scala
 
 import java.nio.charset.Charset
 import java.nio.file.Paths
@@ -11,18 +11,23 @@ import org.sonar.api.config.internal.MapSettings
 import org.sonar.api.measures.{CoreMetrics => CM}
 import org.sonar.api.resources.Project
 
-import scala.collection.JavaConverters._;
+import scala.collection.JavaConverters._
 
 class ScalaSensorSpec extends FlatSpec with Matchers {
 
   val NUMBER_OF_FILES = 3
-
   val scala = new Scala(new MapSettings().asConfig())
 
-  def context = new {
-    val fs = new DefaultFileSystem(Paths.get("./src/test/resources"))
+  def context: {
+    val project: Project
+
+    val sensor: ScalaSensor
+
+    val fs: DefaultFileSystem
+  } = new {
+    val fs: DefaultFileSystem = new DefaultFileSystem(Paths.get("./src/test/resources"))
       .setEncoding(Charset.defaultCharset)
-    val project = mock(classOf[Project])
+    val project: Project = mock(classOf[Project])
     val sensor = new ScalaSensor(scala, fs)
   }
 
@@ -63,7 +68,6 @@ class ScalaSensorSpec extends FlatSpec with Matchers {
         .saveMeasure(file, CM.CLASSES, double2Double(1))
       verify(sensorContext, times(1))
         .saveMeasure(file, CM.FUNCTIONS, double2Double(1))
-
     }
   }
 

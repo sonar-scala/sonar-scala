@@ -111,10 +111,9 @@ class ScalastyleResourcesSpec extends FlatSpec with Matchers with Inspectors wit
     val ruleNode = ruleNodes find { _ \\ "@class" exists (_.text == key) }
 
     ruleNode match {
-      case Some(node) => {
+      case Some(node) =>
         val parameter = (node \ "parameters" \ "parameter").head
         ScalastyleResources invokePrivate nodeToRuleParamKey(parameter) shouldEqual "maxParameters"
-      }
       case _ => fail("rule with key " + key + "could not found")
     }
   }
@@ -129,10 +128,9 @@ class ScalastyleResourcesSpec extends FlatSpec with Matchers with Inspectors wit
     val ruleNode = ruleNodes find { _ \\ "@class" exists (_.text == key) }
 
     ruleNode match {
-      case Some(node) => {
+      case Some(node) =>
         val parameter = (node \ "parameters" \ "parameter").head
         ScalastyleResources invokePrivate nodeToRuleParamType(parameter) shouldEqual RuleParamType.INTEGER
-      }
       case _ => fail("rule with key " + key + "could not found")
     }
   }
@@ -147,10 +145,9 @@ class ScalastyleResourcesSpec extends FlatSpec with Matchers with Inspectors wit
     val ruleNode = ruleNodes find { _ \\ "@class" exists (_.text == key) }
 
     ruleNode match {
-      case Some(node) => {
+      case Some(node) =>
         val parameter = (node \ "parameters" \ "parameter").head
         ScalastyleResources invokePrivate nodeToDefaultValue(parameter) shouldEqual "8"
-      }
       case _ => fail("rule with key " + key + "could not found")
     }
   }

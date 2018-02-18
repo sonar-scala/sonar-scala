@@ -58,10 +58,9 @@ class ScoverageSensor(settings: Settings, pathResolver: PathResolver, fileSystem
         val srcOption = Option(settings.getString("sonar.sources"))
         val sonarSources = srcOption match {
           case Some(src) => src
-          case None => {
+          case None =>
             log.warn(s"could not find settings key sonar.sources assuming src/main/scala.")
             "src/main/scala"
-          }
         }
         val pathSanitizer = createPathSanitizer(sonarSources)
         processProject(scoverageReportParser.parse(reportPath, pathSanitizer), project, context, sonarSources)
@@ -223,10 +222,9 @@ class ScoverageSensor(settings: Settings, pathResolver: PathResolver, fileSystem
     inputOption match {
       case Some(path: InputPath) =>
         Some(context.getResource(path))
-      case None => {
+      case None =>
         log.warn(s"File or directory not found in file system! $path")
         None
-      }
     }
   }
 

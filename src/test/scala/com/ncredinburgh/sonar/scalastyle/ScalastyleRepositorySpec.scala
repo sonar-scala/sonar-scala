@@ -18,6 +18,8 @@
  */
 package com.ncredinburgh.sonar.scalastyle
 
+import java.util
+
 import org.scalatest._
 import org.sonar.api.rules.RulePriority
 import org.sonar.api.server.rule.{RuleParamType, RulesDefinition}
@@ -29,13 +31,13 @@ import scala.collection.JavaConverters._
  */
 class ScalastyleRepositorySpec extends FlatSpec with Matchers with Inspectors with BeforeAndAfterAll {
 
-  val testee = new ScalastyleRepository
+  val repo = new ScalastyleRepository
   val ctx = new RulesDefinition.Context()
 
-  def rules = ctx.repository(Constants.RepositoryKey).rules()
+  def rules: util.List[RulesDefinition.Rule] = ctx.repository(Constants.RepositoryKey).rules()
 
   override def beforeAll() {
-    testee.define(ctx)
+    repo.define(ctx)
   }
 
   "a scalastyle repository" should "return a list of rules" in {

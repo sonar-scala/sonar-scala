@@ -27,6 +27,9 @@ scalafmtOnCompile in ThisBuild := true
 scapegoatVersion in ThisBuild := "1.3.4"
 scapegoatConsoleOutput := false
 scapegoatReports := Seq("xml")
+coverageOutputXML := true
+coverageOutputHTML := false
+coverageOutputCobertura := false
 
 // Lib dependencies
 val sonarVersion = "6.7.1"

@@ -20,10 +20,10 @@
 package com.buransky.plugins.scoverage.pathcleaner
 
 import java.io.File
-import org.apache.commons.io.FileUtils
 import BruteForceSequenceMatcher._
 import com.buransky.plugins.scoverage.util.PathUtil
 import scala.collection.JavaConverters._
+import scala.collection.mutable
 import org.sonar.api.utils.log.Loggers
 
 object BruteForceSequenceMatcher {
@@ -85,11 +85,31 @@ class BruteForceSequenceMatcher(baseDir: File, sourcePath: String) extends PathS
   }
 
   private[pathcleaner] def initFilesMap(): Map[String, Seq[PathSeq]] = {
-    val srcFiles = FileUtils.iterateFiles(sourceDir, extensions, true)
-    val paths = srcFiles.asScala.map(file => PathUtil.splitPath(file.getAbsolutePath)).toSeq
+    val paths = listFilesRecursive(sourceDir, extensions)
 
     // group them by filename, in case multiple files have the same name
     paths.groupBy(path => path.last)
   }
 
+  /**
+   * Returns a sequence of all files in the given source directory, and all its subdirectories, that has any valid extension
+   *
+   * @author BalmungSan
+   */
+  private def listFilesRecursive(sourceDir: File, extensions: Seq[String]): Seq[PathSeq] = {
+    val buffer = mutable.ListBuffer.empty[PathSeq]
+    def recursiveSearch(sourceDir: File): Unit = {
+      sourceDir.listFiles() foreach { file =>
+        if (file.isDirectory) {
+          recursiveSearch(file)
+        } else if (file.isFile && extensions.exists(ext => file.getName().endsWith(ext))) {
+          buffer += PathUtil.splitPath(file.getAbsolutePath)
+        } else {
+          ()
+        }
+      }
+    }
+    recursiveSearch(sourceDir)
+    buffer.toList
+  }
 }

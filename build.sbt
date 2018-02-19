@@ -26,6 +26,7 @@ cancelable in Global := true
 scalafmtOnCompile in ThisBuild := true
 scapegoatVersion in ThisBuild := "1.3.4"
 scapegoatConsoleOutput := false
+scapegoatReports := Seq("xml")
 
 // Lib dependencies
 val sonarVersion = "6.7.1"

@@ -5,14 +5,18 @@ import org.sonar.api.measures.{CoreMetrics => CM}
 
 import scala.collection.JavaConverters._
 import scala.io.Source
+import scalariform.ScalaVersions
 
 class ScalaSensor(scala: Scala) extends Sensor {
 
+
+  private val ScalaVersionPropertyKey = "sonar.scala.version"
+
   override def execute(context: SensorContext): Unit = {
     val charset = context.fileSystem().encoding.toString
-    val versionProperty = context.config().get("sonar.scala.source")
+    val versionProperty = context.config().get(ScalaVersionPropertyKey)
     val version =
-      if (context.config().get("sonar.scala.source").isPresent) versionProperty.get() else "2.11.11"
+      if (context.config().get(ScalaVersionPropertyKey).isPresent) versionProperty.get() else ScalaVersions.Scala_2_11.toString()
 
     val inputFiles =
       context.fileSystem().inputFiles(context.fileSystem().predicates().hasLanguage(scala.getKey))

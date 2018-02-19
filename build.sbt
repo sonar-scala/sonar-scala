@@ -24,7 +24,7 @@ scalacOptions in Scapegoat += "-P:scapegoat:overrideLevels:TraversableHead=Warni
 javacOptions := Seq("-Xlint:deprecation")
 cancelable in Global := true
 scalafmtOnCompile in ThisBuild := true
-scapegoatVersion in ThisBuild := "1.3.3"
+scapegoatVersion in ThisBuild := "1.3.4"
 scapegoatConsoleOutput := false
 
 // Lib dependencies

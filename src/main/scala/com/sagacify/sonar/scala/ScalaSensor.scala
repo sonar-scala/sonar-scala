@@ -1,35 +1,56 @@
 package com.sagacify.sonar.scala
 
-import scala.io.Source
-import scala.collection.JavaConverters._
-
-import org.sonar.api.batch.fs.FileSystem
-import org.sonar.api.batch.Sensor
-import org.sonar.api.batch.SensorContext
+import org.sonar.api.batch.sensor.{Sensor, SensorContext, SensorDescriptor}
 import org.sonar.api.measures.{CoreMetrics => CM}
-import org.sonar.api.resources.Project
 
-class ScalaSensor(scala: Scala, fs: FileSystem) extends Sensor {
+import scala.collection.JavaConverters._
+import scala.io.Source
+import scalariform.ScalaVersions
 
-  def shouldExecuteOnProject(project: Project): Boolean =
-    fs.hasFiles(fs.predicates.hasLanguage(scala.getKey))
+class ScalaSensor(scala: Scala) extends Sensor {
 
-  def analyse(project: Project, context: SensorContext): Unit = {
-    val charset = fs.encoding.toString
-    val version = "2.11.8"
 
-    val inputFiles = fs.inputFiles(fs.predicates().hasLanguage(scala.getKey))
+  private val ScalaVersionPropertyKey = "sonar.scala.version"
+
+  override def execute(context: SensorContext): Unit = {
+    val charset = context.fileSystem().encoding.toString
+    val versionProperty = context.config().get(ScalaVersionPropertyKey)
+    val version =
+      if (context.config().get(ScalaVersionPropertyKey).isPresent) versionProperty.get() else ScalaVersions.Scala_2_11.toString()
+
+    val inputFiles =
+      context.fileSystem().inputFiles(context.fileSystem().predicates().hasLanguage(scala.getKey))
 
     inputFiles.asScala.foreach { inputFile =>
-      context.saveMeasure(inputFile, CM.FILES, 1.0)
+      context.newMeasure().on(inputFile).forMetric(CM.FILES).withValue(1).save()
 
       val sourceCode = Source.fromFile(inputFile.uri, charset).mkString
       val tokens = Scala.tokenize(sourceCode, version)
 
-      context.saveMeasure(inputFile, CM.COMMENT_LINES, double2Double(Measures.count_comment_lines(tokens)))
-      context.saveMeasure(inputFile, CM.NCLOC, double2Double(Measures.count_ncloc(tokens)))
-      context.saveMeasure(inputFile, CM.CLASSES, double2Double(Measures.count_classes(tokens)))
-      context.saveMeasure(inputFile, CM.FUNCTIONS, double2Double(Measures.count_methods(tokens)))
+      context
+        .newMeasure()
+        .on(inputFile)
+        .forMetric(CM.COMMENT_LINES)
+        .withValue(int2Integer(Measures.count_comment_lines(tokens)))
+        .save()
+      context
+        .newMeasure()
+        .on(inputFile)
+        .forMetric(CM.NCLOC)
+        .withValue(int2Integer(Measures.count_ncloc(tokens)))
+        .save()
+      context
+        .newMeasure()
+        .on(inputFile)
+        .forMetric(CM.CLASSES)
+        .withValue(int2Integer(Measures.count_classes(tokens)))
+        .save()
+      context
+        .newMeasure()
+        .on(inputFile)
+        .forMetric(CM.FUNCTIONS)
+        .withValue(int2Integer(Measures.count_methods(tokens)))
+        .save()
 
     // context.saveMeasure(inputFile, CM.ACCESSORS, accessors)
     // context.saveMeasure(inputFile, CM.COMPLEXITY_IN_FUNCTIONS, complexityInMethods)
@@ -38,6 +59,13 @@ class ScalaSensor(scala: Scala, fs: FileSystem) extends Sensor {
     // context.saveMeasure(inputFile, CM.PUBLIC_API, publicApiChecker.getPublicApi())
     // context.saveMeasure(inputFile, CM.PUBLIC_DOCUMENTED_API_DENSITY, publicApiChecker.getDocumentedPublicApiDensity())
     // context.saveMeasure(inputFile, CM.PUBLIC_UNDOCUMENTED_API, publicApiChecker.getUndocumentedPublicApi())
+
     }
   }
+
+  override def describe(descriptor: SensorDescriptor): Unit = {
+    descriptor.name("Scala Sensor")
+    descriptor.onlyOnLanguage(scala.getKey)
+  }
+
 }

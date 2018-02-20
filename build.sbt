@@ -1,4 +1,4 @@
-import com.sksamuel.scapegoat.sbt.ScapegoatSbtPlugin.autoImport._
+import com.sksamuel.scapegoat.sbt.ScapegoatSbtPlugin.autoImport.scapegoatConsoleOutput
 import org.sonar.updatecenter.common.PluginManifest
 import sbt._
 import sbtrelease.ReleasePlugin.autoImport.ReleaseTransformations._
@@ -20,12 +20,16 @@ scalacOptions := Seq(
   "-feature",
   "-language:reflectiveCalls"
 )
-scalacOptions in Scapegoat += "-P:scapegoat:overrideLevels:TraversableHead=Warning:OptionGet=Warning"
+scalacOptions in Scapegoat += "-P:scapegoat:overrideLevels:TraversableHead=Warning:OptionGet=Warning:TraversableLast=Warning"
 javacOptions := Seq("-Xlint:deprecation")
 cancelable in Global := true
 scalafmtOnCompile in ThisBuild := true
-scapegoatVersion in ThisBuild := "1.3.3"
+scapegoatVersion in ThisBuild := "1.3.4"
 scapegoatConsoleOutput := false
+scapegoatReports := Seq("xml")
+coverageOutputXML := true
+coverageOutputHTML := false
+coverageOutputCobertura := false
 
 // Lib dependencies
 val sonarVersion = "6.7.1"

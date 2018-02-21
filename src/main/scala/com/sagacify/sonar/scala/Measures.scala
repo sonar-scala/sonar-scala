@@ -12,7 +12,7 @@ object Measures {
     count
   }
 
-  final def count_methods(tokens: List[Token]): Int = {
+  def count_methods(tokens: List[Token]): Int = {
     var count = 0
     tokens.foreach(token => if (token.tokenType == DEF) count += 1)
     count
@@ -25,7 +25,7 @@ object Measures {
   /* applied on tokenised code */
 
   @tailrec
-  final def count_comment_lines(tokens: List[Token], i: Int = 0): Int = {
+  def count_comment_lines(tokens: List[Token], i: Int = 0): Int = {
     tokens match {
       case Nil => i
       case token :: tail if token.tokenType.isComment =>
@@ -43,7 +43,7 @@ object Measures {
   }
 
   @tailrec
-  final def count_ncloc(tokens: List[Token], i: Int = 0): Int = {
+  def count_ncloc(tokens: List[Token], i: Int = 0): Int = {
 
     @tailrec
     def get_next_line(tokens: List[Token]): List[Token] = {

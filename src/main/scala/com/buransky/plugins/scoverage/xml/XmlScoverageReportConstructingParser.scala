@@ -128,7 +128,7 @@ class XmlScoverageReportConstructingParser(source: Source, pathSanitizer: PathSa
     def get(name: String): Option[DirOrFile] = children.find(_.name == name)
 
     @tailrec
-    final def add(chain: DirOrFile) {
+    def add(chain: DirOrFile) {
       get(chain.name) match {
         case None => children = chain :: children
         case Some(child) =>

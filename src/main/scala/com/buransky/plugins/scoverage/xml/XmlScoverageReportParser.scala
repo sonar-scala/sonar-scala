@@ -26,6 +26,8 @@ import org.sonar.api.utils.log.Loggers
 import scala.io.Source
 import com.buransky.plugins.scoverage.pathcleaner.PathSanitizer
 
+import java.io.IOException
+
 /**
  * Bridge between parser implementation and coverage provider.
  *
@@ -48,7 +50,7 @@ class XmlScoverageReportParser extends ScoverageReportParser {
     try {
       Source.fromFile(scoverageReportPath)
     } catch {
-      case ex: Exception => throw ScoverageException("Cannot parse file! [" + scoverageReportPath + "]", ex)
+      case ex: IOException => throw ScoverageException("Cannot parse file! [" + scoverageReportPath + "]", ex)
     }
   }
 }

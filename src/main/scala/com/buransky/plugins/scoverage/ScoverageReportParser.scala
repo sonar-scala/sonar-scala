@@ -35,4 +35,5 @@ trait ScoverageReportParser {
  *
  * @author Rado Buransky
  */
-final case class ScoverageException(message: String, source: Throwable = null) extends Exception(message, source)
+final case class ScoverageException(private val message: String, private val cause: Throwable = None.orNull)
+    extends Exception(message, cause)

@@ -72,6 +72,7 @@ class ScalastyleSensor(
     case _                                   => Unit
   }
 
+  @SuppressWarnings(Array("OptionGet"))
   private def processError(error: StyleError[FileSpec]): Unit = {
     log.debug("Error message for rule " + error.clazz.getName)
 
@@ -82,6 +83,8 @@ class ScalastyleSensor(
     log.debug("Matched to sonar rule " + rule)
 
     if (issuable.isDefined) {
+      // Here the use of the 'get' method is safe,
+      // because the option was checked to be defined.
       addIssue(issuable.get, error, rule)
     } else {
       log.error("issuable is null, cannot add issue")
@@ -116,7 +119,5 @@ class ScalastyleSensor(
 
   // sonar claims to accept null or a non zero lines, however if it is passed
   // null it blows up at runtime complaining it was passed 0
-  private def sanitiseLineNum(maybeLine: Option[Int]) =
-    if ((maybeLine getOrElse 0) != 0) maybeLine.get
-    else 1
+  private def sanitiseLineNum(maybeLine: Option[Int]) = maybeLine getOrElse 1
 }

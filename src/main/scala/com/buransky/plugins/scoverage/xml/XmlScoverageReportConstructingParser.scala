@@ -63,11 +63,18 @@ class XmlScoverageReportConstructingParser(source: Source, pathSanitizer: PathSa
     projectFromMap(statementsInFile.toMap)
   }
 
-  override def elemStart(pos: Int, pre: String, label: String, attrs: MetaData, scope: NamespaceBinding) {
+  override def elemStart(
+    pos: Int,
+    pre: String,
+    label: String,
+    attrs: MetaData,
+    scope: NamespaceBinding
+  ): Unit = {
     label match {
       case CLASS_ELEMENT =>
-        currentFilePath = Some(fixLeadingSlash(getText(attrs, FILENAME_ATTRIBUTE)))
-        log.debug("Current file path: " + currentFilePath.get)
+        val filePath = fixLeadingSlash(getText(attrs, FILENAME_ATTRIBUTE))
+        currentFilePath = Some(filePath)
+        log.debug("Current file path: " + filePath)
 
       case STATEMENT_ELEMENT =>
         currentFilePath match {
@@ -84,7 +91,7 @@ class XmlScoverageReportConstructingParser(source: Source, pathSanitizer: PathSa
 
           case None => throw ScoverageException("Current file path not set!")
         }
-      case _ => // Nothing to do
+      case _ => () // Nothing to do
     }
 
     super.elemStart(pos, pre, label, attrs, scope)
@@ -147,12 +154,8 @@ class XmlScoverageReportConstructingParser(source: Source, pathSanitizer: PathSa
       val childNodes = children.map(_.toStatementCoverage)
 
       childNodes match {
-        case Nil =>
-          coverage match {
-            case None => FileStatementCoverage("Nothing", 0, 0, List.empty[CoveredStatement])
-            case _    => coverage.get
-          }
-        case _ => DirectoryStatementCoverage(name, childNodes)
+        case Nil => coverage.getOrElse(FileStatementCoverage("Nothing", 0, 0, List.empty[CoveredStatement]))
+        case _   => DirectoryStatementCoverage(name, childNodes)
       }
     }
 
@@ -203,9 +206,9 @@ class XmlScoverageReportConstructingParser(source: Source, pathSanitizer: PathSa
         // File in root dir
         file
       } else {
+        // Here the use of the 'head' and 'last' methods is safe,
+        // because the collection was checked to be non-empty.
         // Append file
-        //here the use of the 'head' and 'last' methods is safe,
-        //because the collection was checked to be non-empty
         dirs.last.children = List(file)
         dirs.head
       }

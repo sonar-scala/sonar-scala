@@ -9,14 +9,14 @@ import scalariform.ScalaVersions
 
 class ScalaSensor(scala: Scala) extends Sensor {
 
-
   private val ScalaVersionPropertyKey = "sonar.scala.version"
 
   override def execute(context: SensorContext): Unit = {
     val charset = context.fileSystem().encoding.toString
     val versionProperty = context.config().get(ScalaVersionPropertyKey)
     val version =
-      if (context.config().get(ScalaVersionPropertyKey).isPresent) versionProperty.get() else ScalaVersions.Scala_2_11.toString()
+      if (context.config().get(ScalaVersionPropertyKey).isPresent) versionProperty.get()
+      else ScalaVersions.Scala_2_11.toString()
 
     val inputFiles =
       context.fileSystem().inputFiles(context.fileSystem().predicates().hasLanguage(scala.getKey))

@@ -59,7 +59,7 @@ class BruteForceSequenceMatcher(baseDir: File, sourcePath: String) extends PathS
   def getSourceRelativePath(reportPath: PathSeq): Option[PathSeq] = {
     // match with file system map of files
     val relPathOption = for {
-      absPathCandidates <- filesMap.get(reportPath.last)
+      absPathCandidates <- filesMap.get(reportPath.lastOption.getOrElse(""))
       path              <- absPathCandidates.find(absPath => absPath.endsWith(reportPath))
     } yield path.drop(sourcePathLength)
 
@@ -89,7 +89,7 @@ class BruteForceSequenceMatcher(baseDir: File, sourcePath: String) extends PathS
     val paths = srcFiles.asScala.map(file => PathUtil.splitPath(file.getAbsolutePath)).toSeq
 
     // group them by filename, in case multiple files have the same name
-    paths.groupBy(path => path.last)
+    paths.groupBy(path => path.lastOption.getOrElse(""))
   }
 
 }

@@ -185,6 +185,7 @@ class XmlScoverageReportConstructingParser(source: Source, pathSanitizer: PathSa
 
   private def pathToChain(filePath: String, coverage: FileStatementCoverage): Option[DirOrFile] = {
     // helper
+    @SuppressWarnings(Array("TraversableHead", "TraversableLast"))
     def convertToDirOrFile(relPath: Seq[String]) = {
       // Get directories
       val dirs = for (i <- 0 to relPath.length - 2)
@@ -195,13 +196,15 @@ class XmlScoverageReportConstructingParser(source: Source, pathSanitizer: PathSa
         dirs(i).children = List(dirs(i + 1))
 
       // Get file
-      val file = DirOrFile(relPath.last.toString, Nil, Some(coverage))
+      val file = DirOrFile(relPath.lastOption.getOrElse(""), Nil, Some(coverage))
 
       if (dirs.isEmpty) {
         // File in root dir
         file
       } else {
         // Append file
+        //here the use of the 'head' and 'last' methods is safe,
+        //because the collection was checked to be non-empty
         dirs.last.children = List(file)
         dirs.head
       }
@@ -210,7 +213,7 @@ class XmlScoverageReportConstructingParser(source: Source, pathSanitizer: PathSa
     // processing
     val path = PathUtil.splitPath(filePath)
 
-    if (path.length < 1)
+    if (path.isEmpty)
       throw ScoverageException("Path cannot be empty!")
 
     pathSanitizer.getSourceRelativePath(path) match {
@@ -228,7 +231,7 @@ class XmlScoverageReportConstructingParser(source: Source, pathSanitizer: PathSa
   ): Map[String, FileStatementCoverage] = {
     statementsInFile.map { sif =>
       val fileStatementCoverage = FileStatementCoverage(
-        PathUtil.splitPath(sif._1).last,
+        PathUtil.splitPath(sif._1).lastOption.getOrElse(""),
         sif._2.length,
         coveredStatements(sif._2),
         sif._2

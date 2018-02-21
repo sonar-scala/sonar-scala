@@ -72,7 +72,7 @@ trait NodeStatementCoverage extends StatementCoverage {
  * Root node. In multi-module projects it can contain other ProjectStatementCoverage
  * elements as children.
  */
-case class ProjectStatementCoverage(name: String, children: Iterable[NodeStatementCoverage])
+final case class ProjectStatementCoverage(name: String, children: Iterable[NodeStatementCoverage])
     extends NodeStatementCoverage {
   // projects' coverage values are defined as sums of their child values
   val statementCount = statementSum
@@ -82,7 +82,7 @@ case class ProjectStatementCoverage(name: String, children: Iterable[NodeStateme
 /**
  * Physical directory in file system.
  */
-case class DirectoryStatementCoverage(name: String, children: Iterable[NodeStatementCoverage])
+final case class DirectoryStatementCoverage(name: String, children: Iterable[NodeStatementCoverage])
     extends NodeStatementCoverage {
   // directories' coverage values are defined as sums of their DIRECT child values
   val statementCount = children.filter(_.isInstanceOf[FileStatementCoverage]).map(_.statementCount).sum
@@ -93,7 +93,7 @@ case class DirectoryStatementCoverage(name: String, children: Iterable[NodeState
 /**
  * Scala source code file.
  */
-case class FileStatementCoverage(
+final case class FileStatementCoverage(
   name: String,
   statementCount: Int,
   coveredStatementsCount: Int,
@@ -108,7 +108,7 @@ case class FileStatementCoverage(
 /**
  * Position a Scala source code file.
  */
-case class StatementPosition(line: Int, pos: Int)
+final case class StatementPosition(line: Int, pos: Int)
 
 /**
  * Coverage information about the Scala statement.
@@ -118,12 +118,12 @@ case class StatementPosition(line: Int, pos: Int)
  * @param hitCount How many times has the statement been hit by unit tests. Zero means
  *                 that the statement is not covered.
  */
-case class CoveredStatement(start: StatementPosition, end: StatementPosition, hitCount: Int)
+final case class CoveredStatement(start: StatementPosition, end: StatementPosition, hitCount: Int)
 
 /**
  * Aggregated statement coverage for a given source code line.
  */
-case class CoveredLine(line: Int, hitCount: Int)
+final case class CoveredLine(line: Int, hitCount: Int)
 
 object StatementCoverage {
 

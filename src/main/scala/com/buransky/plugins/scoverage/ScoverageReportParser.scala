@@ -35,4 +35,4 @@ trait ScoverageReportParser {
  *
  * @author Rado Buransky
  */
-case class ScoverageException(message: String, source: Throwable = null) extends Exception(message, source)
+final case class ScoverageException(message: String, source: Throwable = null) extends Exception(message, source)

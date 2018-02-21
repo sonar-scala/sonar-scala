@@ -120,7 +120,7 @@ class XmlScoverageReportConstructingParser(source: Source, pathSanitizer: PathSa
     }
   }
 
-  private case class DirOrFile(
+  private final case class DirOrFile(
     name: String,
     var children: List[DirOrFile],
     coverage: Option[FileStatementCoverage]

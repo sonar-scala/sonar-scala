@@ -85,9 +85,13 @@ final case class ProjectStatementCoverage(name: String, children: Iterable[NodeS
 final case class DirectoryStatementCoverage(name: String, children: Iterable[NodeStatementCoverage])
     extends NodeStatementCoverage {
   // directories' coverage values are defined as sums of their DIRECT child values
-  val statementCount = children.filter(_.isInstanceOf[FileStatementCoverage]).map(_.statementCount).sum
-  val coveredStatementsCount =
-    children.filter(_.isInstanceOf[FileStatementCoverage]).map(_.coveredStatementsCount).sum
+  private val childValues = children collect {
+    case fsc: FileStatementCoverage => (fsc.statementCount, fsc.coveredStatementsCount)
+  }
+  val (statementCount, coveredStatementsCount) = childValues.foldLeft((0, 0)) {
+    case ((accStmtCount, accCoveredStmtCount), (stmtCount, coveredStmtCount)) =>
+      (accStmtCount + stmtCount, accCoveredStmtCount + coveredStmtCount)
+  }
 }
 
 /**

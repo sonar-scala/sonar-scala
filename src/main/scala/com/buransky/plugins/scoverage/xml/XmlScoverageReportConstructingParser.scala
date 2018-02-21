@@ -23,6 +23,7 @@ import java.io.File
 
 import com.buransky.plugins.scoverage._
 import com.buransky.plugins.scoverage.util.PathUtil
+import com.buransky.plugins.scoverage.util.PathUtil.PathSeq
 import org.sonar.api.utils.log.Loggers
 
 import scala.annotation.tailrec
@@ -186,7 +187,7 @@ class XmlScoverageReportConstructingParser(source: Source, pathSanitizer: PathSa
   private def pathToChain(filePath: String, coverage: FileStatementCoverage): Option[DirOrFile] = {
     // helper
     @SuppressWarnings(Array("TraversableHead", "TraversableLast"))
-    def convertToDirOrFile(relPath: Seq[String]) = {
+    def convertToDirOrFile(relPath: PathSeq) = {
       // Get directories
       val dirs = for (i <- 0 to relPath.length - 2)
         yield DirOrFile(relPath(i), Nil, None)

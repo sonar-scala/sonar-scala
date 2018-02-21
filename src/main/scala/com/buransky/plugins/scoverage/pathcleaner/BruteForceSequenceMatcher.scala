@@ -23,14 +23,12 @@ import java.io.File
 import org.apache.commons.io.FileUtils
 import BruteForceSequenceMatcher._
 import com.buransky.plugins.scoverage.util.PathUtil
+import com.buransky.plugins.scoverage.util.PathUtil.PathSeq
 import scala.collection.JavaConverters._
 import org.sonar.api.utils.log.Loggers
 
 object BruteForceSequenceMatcher {
-
   val extensions = Array[String]("java", "scala")
-
-  type PathSeq = Seq[String]
 }
 
 /**
@@ -47,7 +45,6 @@ object BruteForceSequenceMatcher {
  * @author Michael Zinsmaier
  */
 class BruteForceSequenceMatcher(baseDir: File, sourcePath: String) extends PathSanitizer {
-
   private val sourceDir = initSourceDir()
   require(sourceDir.isAbsolute)
   require(sourceDir.isDirectory)
@@ -91,5 +88,4 @@ class BruteForceSequenceMatcher(baseDir: File, sourcePath: String) extends PathS
     // group them by filename, in case multiple files have the same name
     paths.groupBy(path => path.lastOption.getOrElse(""))
   }
-
 }

@@ -21,7 +21,6 @@ package com.buransky.plugins.scoverage.pathcleaner
 
 import java.io.File
 import org.apache.commons.io.FileUtils
-import BruteForceSequenceMatcher._
 import com.buransky.plugins.scoverage.util.PathUtil
 import com.buransky.plugins.scoverage.util.PathUtil.PathSeq
 import scala.collection.JavaConverters._
@@ -82,7 +81,7 @@ class BruteForceSequenceMatcher(baseDir: File, sourcePath: String) extends PathS
   }
 
   private[pathcleaner] def initFilesMap(): Map[String, Seq[PathSeq]] = {
-    val srcFiles = FileUtils.iterateFiles(sourceDir, extensions, true)
+    val srcFiles = FileUtils.iterateFiles(sourceDir, BruteForceSequenceMatcher.extensions, true)
     val paths = srcFiles.asScala.map(file => PathUtil.splitPath(file.getAbsolutePath)).toSeq
 
     // group them by filename, in case multiple files have the same name

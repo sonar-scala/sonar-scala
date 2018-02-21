@@ -25,8 +25,8 @@ import org.scalatest.{FlatSpec, Matchers}
 import org.sonar.api.utils.Version
 
 /**
-  * Tests ScalaPlugin
-  */
+ * Tests ScalaPlugin
+ */
 class ScalaPluginSpec extends FlatSpec with Matchers {
 
   import org.sonar.api.{Plugin, SonarQubeSide, SonarRuntime}

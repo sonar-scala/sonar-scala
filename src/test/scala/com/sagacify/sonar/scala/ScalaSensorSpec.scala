@@ -26,7 +26,8 @@ class ScalaSensorSpec extends FlatSpec with Matchers with OptionValues {
 
   it should "correctly measure ScalaFile1" in {
     val context = SensorContextTester.create(Paths.get("./src/test/resources"))
-    val inputFile = TestInputFileBuilder.create("", "src/test/resources/ScalaFile1.scala").setLanguage("scala").build()
+    val inputFile =
+      TestInputFileBuilder.create("", "src/test/resources/ScalaFile1.scala").setLanguage("scala").build()
     context.fileSystem().add(inputFile)
     sensor.execute(context)
 
@@ -41,7 +42,8 @@ class ScalaSensorSpec extends FlatSpec with Matchers with OptionValues {
 
   it should "correctly measure ScalaFile2" in {
     val context = SensorContextTester.create(Paths.get("./src/test/resources"))
-    val inputFile = TestInputFileBuilder.create("", "src/test/resources/ScalaFile2.scala").setLanguage("scala").build()
+    val inputFile =
+      TestInputFileBuilder.create("", "src/test/resources/ScalaFile2.scala").setLanguage("scala").build()
     context.fileSystem().add(inputFile)
     sensor.execute(context)
 
@@ -53,7 +55,12 @@ class ScalaSensorSpec extends FlatSpec with Matchers with OptionValues {
     checkMetric(context, componentKey, CM.FUNCTIONS_KEY, 2)
   }
 
-  private def checkMetric(sensorContext: SensorContextTester, componentKey: String, metricKey: String, value: Int): Unit = {
+  private def checkMetric(
+    sensorContext: SensorContextTester,
+    componentKey: String,
+    metricKey: String,
+    value: Int
+  ): Unit = {
     val measure: Option[Measure[Integer]] = Option(sensorContext.measure(componentKey, metricKey))
     measure shouldBe defined
     measure.value.value() shouldBe int2Integer(value)

@@ -12,11 +12,19 @@ import scalariform.lexer.{ScalaLexer, Token}
 /**
  * Defines Scala as a language for SonarQube.
  */
-class Scala(s: Configuration) extends AbstractLanguage("scala", "Scala") {
-  override def getFileSuffixes: Array[String] = Array("scala")
+class Scala(settings: Configuration) extends AbstractLanguage(Scala.KEY, Scala.Name) {
+  override def getFileSuffixes: Array[String] = {
+    val suffixes = settings.getStringArray(Scala.FileSuffixesKey).toList
+    val filtered = suffixes.filter(_.trim.nonEmpty)
+    Some(filtered).filter(_.nonEmpty).getOrElse(Scala.DefaultFileSuffixes).toArray
+  }
 }
 
 object Scala {
+  val KEY = "scala"
+  val Name = "Scala"
+  val FileSuffixesKey = "sonar.scala.file.suffixes"
+  val DefaultFileSuffixes = List(".scala")
 
   def tokenize(sourceCode: String, scalaVersion: String): List[Token] =
     ScalaLexer.createRawLexer(sourceCode, forgiveErrors = false, scalaVersion).toList
@@ -26,7 +34,6 @@ object Scala {
  * Plugin entry point.
  */
 class ScalaPlugin extends Plugin {
-
   override def define(context: Plugin.Context): Unit = {
     context.addExtensions(
       classOf[Scala],

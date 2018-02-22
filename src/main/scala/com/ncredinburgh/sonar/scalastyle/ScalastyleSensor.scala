@@ -72,7 +72,6 @@ class ScalastyleSensor(
     case _                                   => Unit
   }
 
-  @SuppressWarnings(Array("OptionGet"))
   private def processError(error: StyleError[FileSpec]): Unit = {
     log.debug("Error message for rule " + error.clazz.getName)
 
@@ -82,13 +81,7 @@ class ScalastyleSensor(
 
     log.debug("Matched to sonar rule " + rule)
 
-    if (issuable.isDefined) {
-      // Here the use of the 'get' method is safe,
-      // because the option was checked to be defined.
-      addIssue(issuable.get, error, rule)
-    } else {
-      log.error("issuable is null, cannot add issue")
-    }
+    issuable.fold(log.error("issuable is null, cannot add issue"))(issue => addIssue(issue, error, rule))
   }
 
   private def addIssue(issuable: Issuable, error: StyleError[FileSpec], rule: Rule): Unit = {

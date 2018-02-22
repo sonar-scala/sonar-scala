@@ -89,7 +89,7 @@ class ScalastyleRepository extends RulesDefinition {
   private def determineFreeRuleKey(clazz: String, repo: NewRepository): String = {
     @tailrec
     def getFreeRuleKey(key: String, count: Int, repo: NewRepository): String = {
-      val ruleKey = if (count == 0) key else s"${key}_${count}d"
+      val ruleKey = if (count == 0) key else s"${key}_${count}"
       //if the repo.rule method returns null, then the option will be empty
       val repoRule = Option(repo.rule(ruleKey))
       if (repoRule.isEmpty) {

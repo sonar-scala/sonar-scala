@@ -28,9 +28,10 @@ import scala.Iterator
  * @author Rado Buransky
  */
 object PathUtil {
+  type PathSeq = Vector[String]
 
-  def splitPath(filePath: String): List[String] =
-    new FileParentIterator(new File(filePath)).toList.reverse
+  def splitPath(filePath: String): PathSeq =
+    new FileParentIterator(new File(filePath)).toVector.reverse
 
   class FileParentIterator(private var f: File) extends Iterator[String] {
     def hasNext: Boolean = f != null && !f.getName.isEmpty

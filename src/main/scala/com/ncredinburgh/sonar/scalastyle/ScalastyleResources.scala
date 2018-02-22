@@ -111,9 +111,9 @@ object ScalastyleResources {
 
 object ScalastyleDocFormatter {
 
-  private case class Out(pre: Boolean, appended: Boolean, text: String)
-  private case class LineWithLeadingSpaces(spaceCount: Int, empty: Boolean, line: String)
-  private case class DocLine(pre: Boolean, empty: Boolean, line: String)
+  private final case class Out(pre: Boolean, appended: Boolean, text: String)
+  private final case class LineWithLeadingSpaces(spaceCount: Int, empty: Boolean, line: String)
+  private final case class DocLine(pre: Boolean, empty: Boolean, line: String)
 
   private def empty(line: String) = line.trim == ""
   private def countLeadingSpaces(line: String) = {

@@ -9,14 +9,14 @@ import scalariform.ScalaVersions
 
 class ScalaSensor(scala: Scala) extends Sensor {
 
-
   private val ScalaVersionPropertyKey = "sonar.scala.version"
 
   override def execute(context: SensorContext): Unit = {
     val charset = context.fileSystem().encoding.toString
     val versionProperty = context.config().get(ScalaVersionPropertyKey)
     val version =
-      if (context.config().get(ScalaVersionPropertyKey).isPresent) versionProperty.get() else ScalaVersions.Scala_2_11.toString()
+      if (context.config().get(ScalaVersionPropertyKey).isPresent) versionProperty.get()
+      else ScalaVersions.Scala_2_11.toString()
 
     val inputFiles =
       context.fileSystem().inputFiles(context.fileSystem().predicates().hasLanguage(scala.getKey))
@@ -31,25 +31,25 @@ class ScalaSensor(scala: Scala) extends Sensor {
         .newMeasure()
         .on(inputFile)
         .forMetric(CM.COMMENT_LINES)
-        .withValue(int2Integer(Measures.count_comment_lines(tokens)))
+        .withValue(int2Integer(Measures.countCommentLines(tokens)))
         .save()
       context
         .newMeasure()
         .on(inputFile)
         .forMetric(CM.NCLOC)
-        .withValue(int2Integer(Measures.count_ncloc(tokens)))
+        .withValue(int2Integer(Measures.countNonCommentLines(tokens)))
         .save()
       context
         .newMeasure()
         .on(inputFile)
         .forMetric(CM.CLASSES)
-        .withValue(int2Integer(Measures.count_classes(tokens)))
+        .withValue(int2Integer(Measures.countClasses(tokens)))
         .save()
       context
         .newMeasure()
         .on(inputFile)
         .forMetric(CM.FUNCTIONS)
-        .withValue(int2Integer(Measures.count_methods(tokens)))
+        .withValue(int2Integer(Measures.countMethods(tokens)))
         .save()
 
     // context.saveMeasure(inputFile, CM.ACCESSORS, accessors)

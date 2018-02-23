@@ -27,7 +27,7 @@ import scala.annotation.tailrec
 import org.sonar.api.utils.log.Loggers
 
 object BruteForceSequenceMatcher {
-  val extensions = Array[String]("java", "scala")
+  val extensions = Seq(".java", ".scala")
 }
 
 /**

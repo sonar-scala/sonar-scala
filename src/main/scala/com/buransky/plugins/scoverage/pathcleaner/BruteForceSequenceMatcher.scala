@@ -23,7 +23,7 @@ import java.io.File
 import com.buransky.plugins.scoverage.util.PathUtil
 import com.buransky.plugins.scoverage.util.PathUtil.PathSeq
 import scala.collection.JavaConverters._
-import scala.collection.mutable
+import scala.annotation.tailrec
 import org.sonar.api.utils.log.Loggers
 
 object BruteForceSequenceMatcher {
@@ -92,20 +92,22 @@ class BruteForceSequenceMatcher(baseDir: File, sourcePath: String) extends PathS
    *
    * @author BalmungSan
    */
-  private def listFilesRecursive(sourceDir: File, extensions: Seq[String]): Seq[PathSeq] = {
-    val buffer = mutable.ListBuffer.empty[PathSeq]
-    def recursiveSearch(sourceDir: File): Unit = {
-      sourceDir.listFiles() foreach { file =>
-        if (file.isDirectory) {
-          recursiveSearch(file)
-        } else if (file.isFile && extensions.exists(ext => file.getName().endsWith(ext))) {
-          buffer += PathUtil.splitPath(file.getAbsolutePath)
-        } else {
-          ()
+  def listFilesRecursive(sourceDir: File, extensions: Seq[String]): Seq[PathSeq] = {
+    @tailrec
+    def recursiveSearch(remainingFiles: Vector[File], paths: List[PathSeq]): List[PathSeq] =
+      remainingFiles match {
+        case file +: rest => {
+          if (file.isDirectory) {
+            recursiveSearch(rest ++ file.listFiles, paths)
+          } else if (file.isFile && extensions.exists(ext => file.getName.endsWith(ext))) {
+            val path = PathUtil.splitPath(file.getAbsolutePath)
+            recursiveSearch(rest, path :: paths)
+          } else {
+            recursiveSearch(rest, paths)
+          }
         }
+        case Vector() => paths
       }
-    }
-    recursiveSearch(sourceDir)
-    buffer.toList
+    recursiveSearch(Vector(sourceDir), Nil)
   }
 }

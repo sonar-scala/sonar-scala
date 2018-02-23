@@ -19,6 +19,8 @@
  */
 package com.buransky.plugins.scoverage.pathcleaner
 
+import com.buransky.plugins.scoverage.util.PathUtil.PathSeq
+
 /**
  * @author Michael Zinsmaier
  */
@@ -29,5 +31,5 @@ trait PathSanitizer {
    *
    *  @return Some(source folder relative path) or None if the path cannot be converted
    */
-  def getSourceRelativePath(path: Seq[String]): Option[Seq[String]]
+  def getSourceRelativePath(path: PathSeq): Option[PathSeq]
 }

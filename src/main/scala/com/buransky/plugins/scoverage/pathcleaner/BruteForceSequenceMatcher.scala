@@ -20,17 +20,14 @@
 package com.buransky.plugins.scoverage.pathcleaner
 
 import java.io.File
-import BruteForceSequenceMatcher._
 import com.buransky.plugins.scoverage.util.PathUtil
+import com.buransky.plugins.scoverage.util.PathUtil.PathSeq
 import scala.collection.JavaConverters._
 import scala.collection.mutable
 import org.sonar.api.utils.log.Loggers
 
 object BruteForceSequenceMatcher {
-
   val extensions = Array[String]("java", "scala")
-
-  type PathSeq = Seq[String]
 }
 
 /**
@@ -47,7 +44,6 @@ object BruteForceSequenceMatcher {
  * @author Michael Zinsmaier
  */
 class BruteForceSequenceMatcher(baseDir: File, sourcePath: String) extends PathSanitizer {
-
   private val sourceDir = initSourceDir()
   require(sourceDir.isAbsolute)
   require(sourceDir.isDirectory)
@@ -59,7 +55,7 @@ class BruteForceSequenceMatcher(baseDir: File, sourcePath: String) extends PathS
   def getSourceRelativePath(reportPath: PathSeq): Option[PathSeq] = {
     // match with file system map of files
     val relPathOption = for {
-      absPathCandidates <- filesMap.get(reportPath.last)
+      absPathCandidates <- filesMap.get(reportPath.lastOption.getOrElse(""))
       path              <- absPathCandidates.find(absPath => absPath.endsWith(reportPath))
     } yield path.drop(sourcePathLength)
 
@@ -85,10 +81,10 @@ class BruteForceSequenceMatcher(baseDir: File, sourcePath: String) extends PathS
   }
 
   private[pathcleaner] def initFilesMap(): Map[String, Seq[PathSeq]] = {
-    val paths = listFilesRecursive(sourceDir, extensions)
+    val paths = listFilesRecursive(sourceDir, BruteForceSequenceMatcher.extensions)
 
     // group them by filename, in case multiple files have the same name
-    paths.groupBy(path => path.last)
+    paths.groupBy(path => path.lastOption.getOrElse(""))
   }
 
   /**

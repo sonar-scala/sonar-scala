@@ -81,11 +81,7 @@ class ScalastyleSensor(
 
     log.debug("Matched to sonar rule " + rule)
 
-    if (issuable.isDefined) {
-      addIssue(issuable.get, error, rule)
-    } else {
-      log.error("issuable is null, cannot add issue")
-    }
+    issuable.fold(log.error("issuable is null, cannot add issue"))(issue => addIssue(issue, error, rule))
   }
 
   private def addIssue(issuable: Issuable, error: StyleError[FileSpec], rule: Rule): Unit = {
@@ -116,7 +112,6 @@ class ScalastyleSensor(
 
   // sonar claims to accept null or a non zero lines, however if it is passed
   // null it blows up at runtime complaining it was passed 0
-  private def sanitiseLineNum(maybeLine: Option[Int]) =
-    if ((maybeLine getOrElse 0) != 0) maybeLine.get
-    else 1
+  /** Ensures that a line number is valid, if not returns 1 */
+  private def sanitiseLineNum(maybeLine: Option[Int]) = maybeLine.filter(_ > 0).getOrElse(1)
 }

@@ -1,96 +1,68 @@
 package com.sagacify.sonar.scala
 
-import java.nio.charset.Charset
 import java.nio.file.Paths
 
-import org.mockito.Mockito.{mock, times, verify}
 import org.scalatest._
-import org.sonar.api.batch.SensorContext
-import org.sonar.api.batch.fs.internal.{DefaultFileSystem, TestInputFileBuilder}
+import org.sonar.api.batch.fs.internal.TestInputFileBuilder
+import org.sonar.api.batch.sensor.internal.{DefaultSensorDescriptor, SensorContextTester}
+import org.sonar.api.batch.sensor.measure.Measure
 import org.sonar.api.config.internal.MapSettings
 import org.sonar.api.measures.{CoreMetrics => CM}
-import org.sonar.api.resources.Project
 
-import scala.collection.JavaConverters._
+class ScalaSensorSpec extends FlatSpec with Matchers with OptionValues {
 
-class ScalaSensorSpec extends FlatSpec with Matchers {
-
-  val NUMBER_OF_FILES = 3
   val scala = new Scala(new MapSettings().asConfig())
 
-  def context: {
-    val project: Project
+  val sensor = new ScalaSensor(scala)
 
-    val sensor: ScalaSensor
+  "A ScalaSensor" should "correctly set descriptor" in {
+    val descriptor = new DefaultSensorDescriptor
+    sensor.describe(descriptor)
 
-    val fs: DefaultFileSystem
-  } = new {
-    val fs: DefaultFileSystem = new DefaultFileSystem(Paths.get("./src/test/resources"))
-      .setEncoding(Charset.defaultCharset)
-    val project: Project = mock(classOf[Project])
-    val sensor = new ScalaSensor(scala, fs)
-  }
-
-  // val project = mock(classOf[Project])
-  // val sensorContext = mock(classOf[SensorContext])
-  // val sensor = new BaseMetricsSensor(new Scala(new Settings()), fs)
-
-  "A ScalaSensor" should "execute on a scala project" in {
-    val c = context
-    // use TestInputFileBuilder here?
-    //c.fs.add(new DefaultInputFile("p", "fake.scala").setLanguage("scala"));
-    c.fs.add(TestInputFileBuilder.create("p", "fake.scala").setLanguage("scala").build())
-    assert(c.sensor.shouldExecuteOnProject(c.project))
-  }
-
-  it should "only execute on a scala project" in {
-    val c = context
-    c.fs.add(TestInputFileBuilder.create("p", "fake.php").setLanguage("php").build())
-    assert(!c.sensor.shouldExecuteOnProject(c.project))
+    descriptor.name() shouldBe "Scala Sensor"
+    descriptor.languages() should have size 1
+    descriptor.languages().iterator().next() shouldBe "scala"
   }
 
   it should "correctly measure ScalaFile1" in {
-    val c = context
-    c.fs.add(
+    val context = SensorContextTester.create(Paths.get("./src/test/resources"))
+    val inputFile =
       TestInputFileBuilder.create("", "src/test/resources/ScalaFile1.scala").setLanguage("scala").build()
-    )
-    val sensorContext = mock(classOf[SensorContext])
-    c.sensor.analyse(c.project, sensorContext)
+    context.fileSystem().add(inputFile)
+    sensor.execute(context)
 
-    val inputFiles = c.fs.inputFiles(c.fs.predicates().hasLanguage(scala.getKey))
+    val componentKey = inputFile.moduleKey() + inputFile.key()
 
-    inputFiles.asScala.foreach { file =>
-      verify(sensorContext, times(1))
-        .saveMeasure(file, CM.FILES, double2Double(1))
-      verify(sensorContext, times(1))
-        .saveMeasure(file, CM.COMMENT_LINES, double2Double(0))
-      verify(sensorContext, times(1))
-        .saveMeasure(file, CM.CLASSES, double2Double(1))
-      verify(sensorContext, times(1))
-        .saveMeasure(file, CM.FUNCTIONS, double2Double(1))
-    }
+    checkMetric(context, componentKey, CM.FILES_KEY, 1)
+    checkMetric(context, componentKey, CM.COMMENT_LINES_KEY, 0)
+    checkMetric(context, componentKey, CM.CLASSES_KEY, 1)
+    checkMetric(context, componentKey, CM.FUNCTIONS_KEY, 1)
+    checkMetric(context, componentKey, CM.NCLOC_KEY, 6)
   }
 
   it should "correctly measure ScalaFile2" in {
-
-    val c = context
-    c.fs.add(
+    val context = SensorContextTester.create(Paths.get("./src/test/resources"))
+    val inputFile =
       TestInputFileBuilder.create("", "src/test/resources/ScalaFile2.scala").setLanguage("scala").build()
-    )
-    val sensorContext = mock(classOf[SensorContext])
-    c.sensor.analyse(c.project, sensorContext)
+    context.fileSystem().add(inputFile)
+    sensor.execute(context)
 
-    val inputFiles = c.fs.inputFiles(c.fs.predicates().hasLanguage(scala.getKey))
+    val componentKey = inputFile.moduleKey() + inputFile.key()
 
-    inputFiles.asScala.foreach { file =>
-      verify(sensorContext, times(1))
-        .saveMeasure(file, CM.FILES, double2Double(1))
-      verify(sensorContext, times(1))
-        .saveMeasure(file, CM.COMMENT_LINES, double2Double(1))
-      verify(sensorContext, times(1))
-        .saveMeasure(file, CM.CLASSES, double2Double(2))
-      verify(sensorContext, times(1))
-        .saveMeasure(file, CM.FUNCTIONS, double2Double(2))
-    }
+    checkMetric(context, componentKey, CM.FILES_KEY, 1)
+    checkMetric(context, componentKey, CM.COMMENT_LINES_KEY, 1)
+    checkMetric(context, componentKey, CM.CLASSES_KEY, 2)
+    checkMetric(context, componentKey, CM.FUNCTIONS_KEY, 2)
+  }
+
+  private def checkMetric(
+    sensorContext: SensorContextTester,
+    componentKey: String,
+    metricKey: String,
+    value: Int
+  ): Unit = {
+    val measure: Option[Measure[Integer]] = Option(sensorContext.measure(componentKey, metricKey))
+    measure shouldBe defined
+    measure.value.value() shouldBe int2Integer(value)
   }
 }

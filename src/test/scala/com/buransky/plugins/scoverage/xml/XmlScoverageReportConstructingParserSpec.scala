@@ -19,6 +19,7 @@
  */
 package com.buransky.plugins.scoverage.xml
 
+import com.buransky.plugins.scoverage.util.PathUtil.PathSeq
 import com.buransky.plugins.scoverage.pathcleaner.PathSanitizer
 import com.buransky.plugins.scoverage.xml.data.XmlReportFile1
 import com.buransky.plugins.scoverage.{
@@ -36,7 +37,7 @@ class XmlScoverageReportConstructingParserSpec extends FlatSpec with Matchers {
 
   it must "parse empty coverage file correctly" in {
     val sanitizer = new PathSanitizer() {
-      def getSourceRelativePath(path: Seq[String]): Option[Seq[String]] =
+      def getSourceRelativePath(path: PathSeq): Option[PathSeq] =
         // do nothing
         Some(path)
     }
@@ -45,7 +46,7 @@ class XmlScoverageReportConstructingParserSpec extends FlatSpec with Matchers {
 
   it must "parse old broken Scoverage 0.95 file correctly" in {
     val sanitizer = new PathSanitizer() {
-      def getSourceRelativePath(path: Seq[String]): Option[Seq[String]] =
+      def getSourceRelativePath(path: PathSeq): Option[PathSeq] =
         // do nothing
         Some(path)
 
@@ -55,7 +56,7 @@ class XmlScoverageReportConstructingParserSpec extends FlatSpec with Matchers {
 
   it must "parse new fixed Scoverage 1.0.4 file correctly" in {
     val sanitizer = new PathSanitizer() {
-      def getSourceRelativePath(path: Seq[String]): Option[Seq[String]] =
+      def getSourceRelativePath(path: PathSeq): Option[PathSeq] =
         // drop first 6 = /a1b2c3/workspace/sonar-test/src/main/scala
         Some(path.drop(6))
 
@@ -79,7 +80,7 @@ class XmlScoverageReportConstructingParserSpec extends FlatSpec with Matchers {
 
   it must "parse file1 correctly even without XML declaration" in {
     val sanitizer = new PathSanitizer() {
-      def getSourceRelativePath(path: Seq[String]): Option[Seq[String]] =
+      def getSourceRelativePath(path: PathSeq): Option[PathSeq] =
         // do nothing
         Some(path)
 

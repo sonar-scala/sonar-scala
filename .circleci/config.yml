@@ -1,31 +1,56 @@
 version: 2
+
+defaults: &defaults
+  docker:
+    - image: circleci/openjdk:8-jdk
+  working_directory: ~/repo
+  environment:
+    JVM_OPTS: -Xmx3200m
+    SONAR_SCANNER_VERSION: "3.0.3.778"
+
 jobs:
   test:
-    docker:
-      - image: circleci/openjdk:8-jdk
-    working_directory: ~/repo
-    environment:
-      JVM_OPTS: -Xmx3200m
+    <<: *defaults
     steps:
       - checkout
       - restore_cache:
           keys:
           - v1-dependencies-{{ checksum "build.sbt" }}
           - v1-dependencies-
-      - run: sbt test:compile
+      - run: sbt clean coverage test coverageReport scapegoat
       - save_cache:
           paths:
             - ~/.m2
           key: v1-dependencies--{{ checksum "build.sbt" }}
-      - run: sbt test
-  release:
-    docker:
-      - image: circleci/openjdk:8-jdk
-    working_directory: ~/repo
-    environment:
-      JVM_OPTS: -Xmx3200m
+      - persist_to_workspace:
+          root: ~/
+          paths: repo
+
+  sonar-scan:
+    <<: *defaults
     steps:
-      - checkout
+      - attach_workspace:
+          at: ~/
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "build.sbt" }}
+          - v1-dependencies-
+      - run:
+          name: Set up sonar-scanner
+          command: |
+            wget -O sonar-scanner.zip "https://sonarsource.bintray.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-${SONAR_SCANNER_VERSION}.zip"
+            unzip sonar-scanner.zip -d /opt
+      - run:
+          name: sbt sonarScan
+          command: |
+            export SONAR_SCANNER_HOME="/opt/sonar-scanner-${SONAR_SCANNER_VERSION}"
+            sbt -Dsonar.host.url=${SONARQUBE_URL} -Dsonar.login=${SONARQUBE_ACCESS_TOKEN} sonarScan
+
+  release:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/
       - restore_cache:
           keys:
           - v1-dependencies-{{ checksum "build.sbt" }}
@@ -33,18 +58,37 @@ jobs:
       - add_ssh_keys:
           fingerprints:
             - "3c:1a:75:b1:62:85:3b:1b:61:94:f8:1f:8d:0e:1d:a1"
-      - run: git config --global user.name "CircleCI"
-      - run: git config --global user.email "mwz@users.noreply.github.com"
-      - run: sbt 'release with-defaults skip-tests'
+      - run:
+          name: Set up git
+          command: |
+            git config --global user.name "CircleCI"
+            git config --global user.email "mwz@users.noreply.github.com"
+      - run:
+          name: Set up sonar-scanner
+          command: |
+            wget -O sonar-scanner.zip "https://sonarsource.bintray.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-${SONAR_SCANNER_VERSION}.zip"
+            unzip sonar-scanner.zip -d /opt
+      - run:
+          name: sbt release
+          command: |
+            export SONAR_SCANNER_HOME="/opt/sonar-scanner-${SONAR_SCANNER_VERSION}"
+            sbt -Dsonar.host.url=${SONARQUBE_URL} -Dsonar.login=${SONARQUBE_ACCESS_TOKEN} 'release with-defaults skip-tests'
+
 workflows:
   version: 2
   scala-sonar:
     jobs:
       - test
+      - sonar-scan:
+          requires:
+            - test
+          filters:
+            branches:
+              only: master
       - hold:
           type: approval
           requires:
-            - test
+            - sonar-scan
           filters:
             branches:
               only: master

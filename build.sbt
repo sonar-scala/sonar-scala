@@ -24,7 +24,6 @@ javacOptions := Seq("-Xlint:deprecation")
 cancelable in Global := true
 scalafmtOnCompile in ThisBuild := true
 scapegoatVersion in ThisBuild := "1.3.4"
-scapegoatConsoleOutput := false
 scapegoatReports := Seq("xml")
 coverageOutputXML := true
 coverageOutputHTML := false
@@ -102,6 +101,7 @@ releaseProcess := Seq[ReleaseStep](
   checkSnapshotDependencies,
   inquireVersions,
   setReleaseVersion,
+  releaseStepTask(sonarScan),
   commitReleaseVersion,
   tagRelease,
   publishArtifacts,

@@ -1,15 +1,13 @@
-*.class
-*.log
-
 # sbt specific
 .cache/
 .history/
 .lib/
-dist/*
+dist/
 target/
 lib_managed/
 src_managed/
 project/boot/
+project/project/
 project/plugins/project/
 
 # Scala-IDE specific
@@ -21,7 +19,12 @@ project/plugins/project/
 .cache
 
 # Intellij IDEA Specific
-.idea
-*.iml
+.idea/
 *.iws
 *.ipr
+
+# sonar-scanner
+.scannerwork/
+
+# other
+*.log

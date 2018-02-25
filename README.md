@@ -1,6 +1,7 @@
 sonar-scala
 ===
 [![circleci-badge][]][circleci]
+[![coverage-badge][]][coverage]
 [![bintray-badge][]][bintray]
 [![bintray-stats-badge][]][bintray-stats]
 [![gitter-badge][]][gitter]
@@ -8,6 +9,8 @@ sonar-scala
 
 [circleci-badge]: https://img.shields.io/circleci/project/github/mwz/sonar-scala/master.svg?label=Build
 [circleci]: https://circleci.com/gh/mwz/sonar-scala
+[coverage-badge]: https://sonar.sonar-scala.com/api/badges/measure?key=sonar-scala&metric=coverage
+[coverage]: https://sonar.sonar-scala.com/component_measures?id=sonar-scala&metric=coverage
 [bintray-badge]: https://api.bintray.com/packages/mwz/maven/sonar-scala/images/download.svg
 [bintray]: https://bintray.com/mwz/maven/sonar-scala/_latestVersion
 [bintray-stats-badge]: https://img.shields.io/badge/dynamic/json.svg?uri=https://bintray.com/statistics/packageStatistics?pkgPath=/mwz/maven/sonar-scala&query=$.totalDownloads&label=Downloads+(last+30+days)&colorB=green

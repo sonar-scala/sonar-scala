@@ -39,7 +39,7 @@ jobs:
           name: Set up sonar-scanner
           command: |
             wget -O sonar-scanner.zip "https://sonarsource.bintray.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-${SONAR_SCANNER_VERSION}.zip"
-            unzip sonar-scanner.zip -d /opt
+            sudo unzip sonar-scanner.zip -d /opt
       - run:
           name: sbt sonarScan
           command: |
@@ -67,7 +67,7 @@ jobs:
           name: Set up sonar-scanner
           command: |
             wget -O sonar-scanner.zip "https://sonarsource.bintray.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-${SONAR_SCANNER_VERSION}.zip"
-            unzip sonar-scanner.zip -d /opt
+            sudo unzip sonar-scanner.zip -d /opt
       - run:
           name: sbt release
           command: |

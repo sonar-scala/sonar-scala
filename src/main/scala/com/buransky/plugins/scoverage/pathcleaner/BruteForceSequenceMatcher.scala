@@ -28,6 +28,31 @@ import org.sonar.api.utils.log.Loggers
 
 object BruteForceSequenceMatcher {
   val extensions = Seq(".java", ".scala")
+
+  /**
+   * Returns a sequence of all files in the given source directory, and all its subdirectories, that has any valid extension
+   *
+   * @author BalmungSan
+   */
+  private[pathcleaner] def listFilesRecursive(sourceDir: File): Seq[PathSeq] = {
+    @tailrec
+    def recursiveSearch(remainingFiles: Vector[File], paths: List[PathSeq]): List[PathSeq] =
+      remainingFiles match {
+        case file +: rest => {
+          if (file.isDirectory) {
+            recursiveSearch(rest ++ file.listFiles, paths)
+          } else if (file.isFile && extensions.exists(ext => file.getName.endsWith(ext))) {
+            val path = PathUtil.splitPath(file.getAbsolutePath)
+            recursiveSearch(rest, path :: paths)
+          } else {
+            recursiveSearch(rest, paths)
+          }
+        }
+        case Vector() => paths
+      }
+
+    recursiveSearch(Vector(sourceDir), Nil)
+  }
 }
 
 /**
@@ -81,33 +106,9 @@ class BruteForceSequenceMatcher(baseDir: File, sourcePath: String) extends PathS
   }
 
   private[pathcleaner] def initFilesMap(): Map[String, Seq[PathSeq]] = {
-    val paths = listFilesRecursive(sourceDir, BruteForceSequenceMatcher.extensions)
+    val paths = BruteForceSequenceMatcher.listFilesRecursive(sourceDir)
 
     // group them by filename, in case multiple files have the same name
     paths.groupBy(path => path.lastOption.getOrElse(""))
-  }
-
-  /**
-   * Returns a sequence of all files in the given source directory, and all its subdirectories, that has any valid extension
-   *
-   * @author BalmungSan
-   */
-  def listFilesRecursive(sourceDir: File, extensions: Seq[String]): Seq[PathSeq] = {
-    @tailrec
-    def recursiveSearch(remainingFiles: Vector[File], paths: List[PathSeq]): List[PathSeq] =
-      remainingFiles match {
-        case file +: rest => {
-          if (file.isDirectory) {
-            recursiveSearch(rest ++ file.listFiles, paths)
-          } else if (file.isFile && extensions.exists(ext => file.getName.endsWith(ext))) {
-            val path = PathUtil.splitPath(file.getAbsolutePath)
-            recursiveSearch(rest, path :: paths)
-          } else {
-            recursiveSearch(rest, paths)
-          }
-        }
-        case Vector() => paths
-      }
-    recursiveSearch(Vector(sourceDir), Nil)
   }
 }

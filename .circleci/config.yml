@@ -25,6 +25,12 @@ jobs:
       - persist_to_workspace:
           root: ~/
           paths: repo
+      - store_artifacts:
+          path: /target/scala-2.12/scoverage-report/scoverage.xml
+          destination: scoverage.xml
+      - store_artifacts:
+          path: /target/scala-2.12/scapegoat-report/scapegoat.xml
+          destination: scapegoat.xml
 
   sonar-scan:
     <<: *defaults

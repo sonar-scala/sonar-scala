@@ -25,6 +25,11 @@ import scala.collection.JavaConverters._
 import scala.io.Source
 import scalariform.ScalaVersions
 
+/**
+ * SonarQube Sensor for the Scala programming language.
+ *
+ * @author mwz
+ */
 class ScalaSensor(scala: Scala) extends Sensor {
   private val ScalaVersionPropertyKey = "sonar.scala.version"
 

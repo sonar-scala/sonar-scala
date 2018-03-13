@@ -28,6 +28,8 @@ import scalariform.lexer.{ScalaLexer, Token}
 
 /**
  * Defines Scala as a language for SonarQube.
+ *
+ * @author mwz
  */
 class Scala(settings: Configuration) extends AbstractLanguage(Scala.Key, Scala.Name) {
   override def getFileSuffixes: Array[String] = {
@@ -49,6 +51,8 @@ object Scala {
 
 /**
  * Plugin entry point.
+ *
+ * @author mwz
  */
 class ScalaPlugin extends Plugin {
   override def define(context: Plugin.Context): Unit = {

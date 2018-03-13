@@ -12,40 +12,70 @@ import scala.collection.JavaConverters._
 class ScoverageMetrics extends Metrics {
   override def getMetrics: java.util.List[Metric[_ <: java.io.Serializable]] =
     List[Metric[_ <: java.io.Serializable]](
-      ScoverageMetrics.statementCoverage,
+      ScoverageMetrics.totalStatements,
       ScoverageMetrics.coveredStatements,
-      ScoverageMetrics.totalStatements
+      ScoverageMetrics.statementCoverage
     ).asJava
 }
 
 object ScoverageMetrics {
-  private val TOTAL_STATEMENTS_KEY = "total_statements"
-  private val COVERED_STATEMENTS_KEY = "covered_statements"
-  private val STATEMENT_COVERAGE_KEY = "scoverage"
+
+  /** Builds a new [[Metric]] */
+  private def BuildMetric[T <: java.io.Serializable](
+    metricKey: String,
+    metricName: String,
+    metricType: Metric.ValueType,
+    metricDescription: String,
+    metricDirection: java.lang.Integer,
+    metricDomain: String,
+    isMetricQualitative: Boolean           = false,
+    metricValues: Option[(Double, Double)] = None
+  ): Metric[T] = {
+    val metricBuilder = new Metric.Builder(metricKey, metricName, metricType)
+      .setDescription(metricDescription)
+      .setDirection(metricDirection)
+      .setDomain(metricDomain)
+      .setQualitative(isMetricQualitative)
+
+    metricValues match {
+      case Some((worstValue, bestValue)) =>
+        metricBuilder
+          .setWorstValue(worstValue)
+          .setBestValue(bestValue)
+          .create[T]()
+      case None => metricBuilder.create[T]()
+    }
+  }
 
   val totalStatements: Metric[java.lang.Integer] =
-    new Metric.Builder(TOTAL_STATEMENTS_KEY, "Total statements", Metric.ValueType.INT)
-      .setDescription("Number of all statements")
-      .setDirection(Metric.DIRECTION_BETTER)
-      .setQualitative(false)
-      .setDomain(CoreMetrics.DOMAIN_SIZE)
-      .create()
+    BuildMetric(
+      metricKey = "total_statements",
+      metricName = "Total statements",
+      metricType = Metric.ValueType.INT,
+      metricDescription = "Number of all statements",
+      metricDirection = Metric.DIRECTION_BETTER,
+      metricDomain = CoreMetrics.DOMAIN_SIZE,
+    )
 
   val coveredStatements: Metric[java.lang.Integer] =
-    new Metric.Builder(COVERED_STATEMENTS_KEY, "Covered statements", Metric.ValueType.INT)
-      .setDescription("Number of statements covered by tests")
-      .setDirection(Metric.DIRECTION_BETTER)
-      .setQualitative(false)
-      .setDomain(CoreMetrics.DOMAIN_SIZE)
-      .create()
+    BuildMetric(
+      metricKey = "covered_statements",
+      metricName = "Covered statements",
+      metricType = Metric.ValueType.INT,
+      metricDescription = "Number of statements covered by tests",
+      metricDirection = Metric.DIRECTION_BETTER,
+      metricDomain = CoreMetrics.DOMAIN_SIZE,
+    )
 
   val statementCoverage: Metric[java.lang.Double] =
-    new Metric.Builder(STATEMENT_COVERAGE_KEY, "Statement coverage", Metric.ValueType.PERCENT)
-      .setDescription("Percentage of statements covered by tests")
-      .setDirection(Metric.DIRECTION_BETTER)
-      .setQualitative(true)
-      .setDomain(CoreMetrics.DOMAIN_COVERAGE)
-      .setWorstValue(0.0)
-      .setBestValue(100.0)
-      .create()
+    BuildMetric(
+      metricKey = "stament_coverage",
+      metricName = "Statement coverage",
+      metricType = Metric.ValueType.PERCENT,
+      metricDescription = "Percentage of statements covered by tests",
+      metricDirection = Metric.DIRECTION_BETTER,
+      metricDomain = CoreMetrics.DOMAIN_COVERAGE,
+      isMetricQualitative = true,
+      metricValues = Some((0.0d, 100.0d))
+    )
 }

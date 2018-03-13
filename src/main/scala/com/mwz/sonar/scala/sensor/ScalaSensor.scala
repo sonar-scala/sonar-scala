@@ -16,18 +16,16 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-package com.mwz.sonar.scala
+package com.mwz.sonar.scala.sensor
 
-import org.sonar.api.batch.sensor.{ Sensor, SensorContext, SensorDescriptor }
-import org.sonar.api.measures.{ CoreMetrics => CM }
-
+import com.mwz.sonar.scala.Scala
+import org.sonar.api.batch.sensor.{Sensor, SensorContext, SensorDescriptor}
+import org.sonar.api.measures.{CoreMetrics => CM}
 import scala.collection.JavaConverters._
 import scala.io.Source
 import scalariform.ScalaVersions
-import com.mwz.sonar.scala.Measures
 
 class ScalaSensor(scala: Scala) extends Sensor {
-
   private val ScalaVersionPropertyKey = "sonar.scala.version"
 
   override def execute(context: SensorContext): Unit = {
@@ -70,21 +68,12 @@ class ScalaSensor(scala: Scala) extends Sensor {
         .forMetric(CM.FUNCTIONS)
         .withValue(int2Integer(Measures.countMethods(tokens)))
         .save()
-
-      // context.saveMeasure(inputFile, CM.ACCESSORS, accessors)
-      // context.saveMeasure(inputFile, CM.COMPLEXITY_IN_FUNCTIONS, complexityInMethods)
-      // context.saveMeasure(inputFile, CM.COMPLEXITY_IN_CLASSES, fileComplexity)
-      // context.saveMeasure(inputFile, CM.COMPLEXITY, fileComplexity)
-      // context.saveMeasure(inputFile, CM.PUBLIC_API, publicApiChecker.getPublicApi())
-      // context.saveMeasure(inputFile, CM.PUBLIC_DOCUMENTED_API_DENSITY, publicApiChecker.getDocumentedPublicApiDensity())
-      // context.saveMeasure(inputFile, CM.PUBLIC_UNDOCUMENTED_API, publicApiChecker.getUndocumentedPublicApi())
-
     }
   }
 
   override def describe(descriptor: SensorDescriptor): Unit = {
-    descriptor.name("Scala Sensor")
-    descriptor.onlyOnLanguage(scala.getKey)
+    descriptor
+      .onlyOnLanguage(Scala.Key)
+      .name("Scala Sensor")
   }
-
 }

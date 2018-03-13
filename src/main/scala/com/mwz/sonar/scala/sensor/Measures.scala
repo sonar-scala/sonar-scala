@@ -16,30 +16,34 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-package com.mwz.sonar.scala
+package com.mwz.sonar.scala.sensor
 
 import scala.annotation.tailrec
-import scalariform.lexer.Token
-import scalariform.lexer.Tokens._
+import scalariform.lexer.{Token, Tokens}
 
 object Measures {
   def countClasses(tokens: List[Token]): Int = {
-    var count = 0
-    tokens.foreach(token => if (token.tokenType == CLASS || token.tokenType == OBJECT) count += 1)
-    count
+    tokens.foldLeft(0) {
+      case (acc, token) =>
+        val tokenType = token.tokenType
+        if (tokenType == Tokens.CLASS || tokenType == Tokens.OBJECT) acc + 1
+        else acc
+    }
   }
 
   def countMethods(tokens: List[Token]): Int = {
-    var count = 0
-    tokens.foreach(token => if (token.tokenType == DEF) count += 1)
-    count
+    tokens.foldLeft(0) {
+      case (acc, token) =>
+        if (token.tokenType == Tokens.DEF) acc + 1
+        else acc
+    }
   }
 
   /* applied on raw source code */
 
   /* applied on lines of code */
 
-  /* applied on tokenised code */
+  /* applied on tokenized code */
 
   @tailrec
   def countCommentLines(tokens: List[Token], i: Int = 0): Int = {
@@ -47,11 +51,11 @@ object Measures {
       case Nil => i
       case token :: tail if token.tokenType.isComment =>
         token.tokenType match {
-          case LINE_COMMENT =>
+          case Tokens.LINE_COMMENT =>
             countCommentLines(tail, i + 1)
-          case MULTILINE_COMMENT =>
+          case Tokens.MULTILINE_COMMENT =>
             countCommentLines(tail, i + token.rawText.count(_ == '\n') + 1)
-          case XML_COMMENT =>
+          case Tokens.XML_COMMENT =>
             new scala.NotImplementedError("XML ?!"); i
           case _ => i // Not a comment!
         }
@@ -66,9 +70,9 @@ object Measures {
       tokens match {
         case Nil =>
           Nil
-        case token :: tail if token.tokenType == WS && token.text.contains('\n') =>
+        case token :: tail if token.tokenType == Tokens.WS && token.text.contains('\n') =>
           tail
-        case token :: tail if token.tokenType == LINE_COMMENT =>
+        case token :: tail if token.tokenType == Tokens.LINE_COMMENT =>
           tail
         case token :: tail =>
           getNextLine(tail)
@@ -77,9 +81,9 @@ object Measures {
 
     tokens match {
       case Nil => i
-      case token :: tail if token.tokenType == WS =>
+      case token :: tail if token.tokenType == Tokens.WS =>
         countNonCommentLines(tail, i)
-      case token :: tail if token.tokenType == EOF => i
+      case token :: tail if token.tokenType == Tokens.EOF => i
       case token :: tail =>
         if (!token.tokenType.isNewline & !token.tokenType.isComment)
           countNonCommentLines(getNextLine(tail), i + 1)

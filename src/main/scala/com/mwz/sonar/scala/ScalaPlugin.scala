@@ -18,14 +18,13 @@
  */
 package com.mwz.sonar.scala
 
-import com.buransky.plugins.scoverage.measure.ScalaMetrics
-import com.buransky.plugins.scoverage.sensor.ScoverageSensor
-import com.ncredinburgh.sonar.scalastyle.{ ScalastyleQualityProfile, ScalastyleRepository, ScalastyleSensor }
+import com.mwz.sonar.scala.scoverage.{ScoverageMetrics, ScoverageSensor}
+import com.mwz.sonar.scala.sensor.ScalaSensor
+import com.ncredinburgh.sonar.scalastyle.{ScalastyleQualityProfile, ScalastyleRepository, ScalastyleSensor}
 import org.sonar.api.Plugin
 import org.sonar.api.config.Configuration
 import org.sonar.api.resources.AbstractLanguage
-
-import scalariform.lexer.{ ScalaLexer, Token }
+import scalariform.lexer.{ScalaLexer, Token}
 
 /**
  * Defines Scala as a language for SonarQube.
@@ -59,7 +58,8 @@ class ScalaPlugin extends Plugin {
       classOf[ScalastyleRepository],
       classOf[ScalastyleQualityProfile],
       classOf[ScalastyleSensor],
-      classOf[ScalaMetrics],
-      classOf[ScoverageSensor])
+      classOf[ScoverageMetrics],
+      classOf[ScoverageSensor]
+    )
   }
 }

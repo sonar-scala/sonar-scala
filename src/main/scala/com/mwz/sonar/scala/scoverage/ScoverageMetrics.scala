@@ -14,7 +14,8 @@ class ScoverageMetrics extends Metrics {
     List[Metric[_ <: java.io.Serializable]](
       ScoverageMetrics.totalStatements,
       ScoverageMetrics.coveredStatements,
-      ScoverageMetrics.statementCoverage
+      ScoverageMetrics.statementCoverage,
+      ScoverageMetrics.branchCoverage
     ).asJava
 }
 
@@ -73,6 +74,18 @@ object ScoverageMetrics {
       metricName = "Statement coverage",
       metricType = Metric.ValueType.PERCENT,
       metricDescription = "Percentage of statements covered by tests",
+      metricDirection = Metric.DIRECTION_BETTER,
+      metricDomain = CoreMetrics.DOMAIN_COVERAGE,
+      isMetricQualitative = true,
+      metricValues = Some((0.0d, 100.0d))
+    )
+
+  val branchCoverage: Metric[java.lang.Double] =
+    BuildMetric(
+      metricKey = "branch_coverage",
+      metricName = "Branch coverage",
+      metricType = Metric.ValueType.PERCENT,
+      metricDescription = "Percentage of branches covered by tests",
       metricDirection = Metric.DIRECTION_BETTER,
       metricDomain = CoreMetrics.DOMAIN_COVERAGE,
       isMetricQualitative = true,

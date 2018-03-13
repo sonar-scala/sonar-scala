@@ -34,10 +34,9 @@ val sonarVersion = "6.7"
 libraryDependencies ++= List(
   "org.sonarsource.sonarqube" % "sonar-core" % sonarVersion % Provided,
   "org.sonarsource.sonarqube" % "sonar-plugin-api" % sonarVersion % Provided,
-  "org.scalariform" %% "scalariform" % "0.2.6",
   "org.slf4j" % "slf4j-api" % "1.7.25" % Provided,
+  "org.scalariform" %% "scalariform" % "0.2.6",
   "com.google.code.findbugs" % "jsr305" % "3.0.2",
-  "commons-io" % "commons-io" % "2.6",
   "org.scalastyle" %% "scalastyle" % "1.0.0",
   "com.google.guava" % "guava" % "23.0",
   "org.scalatest" %% "scalatest" % "3.0.5" % Test,

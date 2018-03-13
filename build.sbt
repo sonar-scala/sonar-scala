@@ -30,7 +30,7 @@ coverageOutputHTML := false
 coverageOutputCobertura := false
 
 // Lib dependencies
-val sonarVersion = "6.7.1"
+val sonarVersion = "6.7"
 libraryDependencies ++= List(
   "org.sonarsource.sonarqube" % "sonar-core" % sonarVersion % Provided,
   "org.sonarsource.sonarqube" % "sonar-plugin-api" % sonarVersion % Provided,
@@ -63,7 +63,7 @@ packageOptions in (Compile, packageBin) += Package.ManifestAttributes(
   PluginManifest.SONAR_VERSION -> sonarVersion,
   PluginManifest.LICENSE -> "GNU LGPL 3",
   PluginManifest.SONARLINT_SUPPORTED -> "false",
-  PluginManifest.MAIN_CLASS -> "com.sagacify.sonar.scala.ScalaPlugin",
+  PluginManifest.MAIN_CLASS -> "com.wmz.sonar.scala.ScalaPlugin",
   PluginManifest.USE_CHILD_FIRST_CLASSLOADER -> "false"
 )
 

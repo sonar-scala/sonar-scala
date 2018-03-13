@@ -1,11 +1,30 @@
-package com.sagacify.sonar.scala
+/*
+ * Sonar Scala Plugin
+ * Copyright (C) 2018 All contributors
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
+package com.mwz.sonar.scala
 
-import org.sonar.api.batch.sensor.{Sensor, SensorContext, SensorDescriptor}
-import org.sonar.api.measures.{CoreMetrics => CM}
+import org.sonar.api.batch.sensor.{ Sensor, SensorContext, SensorDescriptor }
+import org.sonar.api.measures.{ CoreMetrics => CM }
 
 import scala.collection.JavaConverters._
 import scala.io.Source
 import scalariform.ScalaVersions
+import com.mwz.sonar.scala.Measures
 
 class ScalaSensor(scala: Scala) extends Sensor {
 
@@ -52,13 +71,13 @@ class ScalaSensor(scala: Scala) extends Sensor {
         .withValue(int2Integer(Measures.countMethods(tokens)))
         .save()
 
-    // context.saveMeasure(inputFile, CM.ACCESSORS, accessors)
-    // context.saveMeasure(inputFile, CM.COMPLEXITY_IN_FUNCTIONS, complexityInMethods)
-    // context.saveMeasure(inputFile, CM.COMPLEXITY_IN_CLASSES, fileComplexity)
-    // context.saveMeasure(inputFile, CM.COMPLEXITY, fileComplexity)
-    // context.saveMeasure(inputFile, CM.PUBLIC_API, publicApiChecker.getPublicApi())
-    // context.saveMeasure(inputFile, CM.PUBLIC_DOCUMENTED_API_DENSITY, publicApiChecker.getDocumentedPublicApiDensity())
-    // context.saveMeasure(inputFile, CM.PUBLIC_UNDOCUMENTED_API, publicApiChecker.getUndocumentedPublicApi())
+      // context.saveMeasure(inputFile, CM.ACCESSORS, accessors)
+      // context.saveMeasure(inputFile, CM.COMPLEXITY_IN_FUNCTIONS, complexityInMethods)
+      // context.saveMeasure(inputFile, CM.COMPLEXITY_IN_CLASSES, fileComplexity)
+      // context.saveMeasure(inputFile, CM.COMPLEXITY, fileComplexity)
+      // context.saveMeasure(inputFile, CM.PUBLIC_API, publicApiChecker.getPublicApi())
+      // context.saveMeasure(inputFile, CM.PUBLIC_DOCUMENTED_API_DENSITY, publicApiChecker.getDocumentedPublicApiDensity())
+      // context.saveMeasure(inputFile, CM.PUBLIC_UNDOCUMENTED_API, publicApiChecker.getUndocumentedPublicApi())
 
     }
   }

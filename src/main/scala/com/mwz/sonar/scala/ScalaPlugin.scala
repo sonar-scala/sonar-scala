@@ -16,21 +16,21 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-package com.sagacify.sonar.scala
+package com.mwz.sonar.scala
 
 import com.buransky.plugins.scoverage.measure.ScalaMetrics
 import com.buransky.plugins.scoverage.sensor.ScoverageSensor
-import com.ncredinburgh.sonar.scalastyle.{ScalastyleQualityProfile, ScalastyleRepository, ScalastyleSensor}
+import com.ncredinburgh.sonar.scalastyle.{ ScalastyleQualityProfile, ScalastyleRepository, ScalastyleSensor }
 import org.sonar.api.Plugin
 import org.sonar.api.config.Configuration
 import org.sonar.api.resources.AbstractLanguage
 
-import scalariform.lexer.{ScalaLexer, Token}
+import scalariform.lexer.{ ScalaLexer, Token }
 
 /**
  * Defines Scala as a language for SonarQube.
  */
-class Scala(settings: Configuration) extends AbstractLanguage(Scala.KEY, Scala.Name) {
+class Scala(settings: Configuration) extends AbstractLanguage(Scala.Key, Scala.Name) {
   override def getFileSuffixes: Array[String] = {
     val suffixes = settings.getStringArray(Scala.FileSuffixesKey).toList
     val filtered = suffixes.filter(_.trim.nonEmpty)
@@ -39,7 +39,7 @@ class Scala(settings: Configuration) extends AbstractLanguage(Scala.KEY, Scala.N
 }
 
 object Scala {
-  val KEY = "scala"
+  val Key = "scala"
   val Name = "Scala"
   val FileSuffixesKey = "sonar.scala.file.suffixes"
   val DefaultFileSuffixes = List(".scala")
@@ -60,7 +60,6 @@ class ScalaPlugin extends Plugin {
       classOf[ScalastyleQualityProfile],
       classOf[ScalastyleSensor],
       classOf[ScalaMetrics],
-      classOf[ScoverageSensor]
-    )
+      classOf[ScoverageSensor])
   }
 }

@@ -19,7 +19,6 @@
 package com.ncredinburgh.sonar.scalastyle
 
 import org.scalatest.{FlatSpec, Inspectors, Matchers, PrivateMethodTester}
-import org.sonar.api.PropertyType
 import org.sonar.api.server.rule.RuleParamType
 
 import scala.xml.Elem
@@ -120,7 +119,7 @@ class ScalastyleResourcesSpec extends FlatSpec with Matchers with Inspectors wit
 
   it should "get property type from node" in {
     val xmlFromClassPath = PrivateMethod[Elem]('xmlFromClassPath)
-    val nodeToRuleParamType = PrivateMethod[PropertyType]('nodeToRuleParamType)
+    val nodeToRuleParamType = PrivateMethod[RuleParamType]('nodeToRuleParamType)
 
     val key = "org.scalastyle.scalariform.ParameterNumberChecker"
     val definitions = ScalastyleResources invokePrivate xmlFromClassPath("/scalastyle_definition.xml")

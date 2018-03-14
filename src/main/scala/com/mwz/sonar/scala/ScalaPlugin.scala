@@ -20,10 +20,12 @@ package com.mwz.sonar.scala
 
 import com.mwz.sonar.scala.scoverage.{ScoverageMetrics, ScoverageSensor}
 import com.mwz.sonar.scala.sensor.ScalaSensor
+import com.mwz.sonar.scala.util.JavaOptionals._
 import com.ncredinburgh.sonar.scalastyle.{ScalastyleQualityProfile, ScalastyleRepository, ScalastyleSensor}
 import org.sonar.api.Plugin
 import org.sonar.api.config.Configuration
 import org.sonar.api.resources.AbstractLanguage
+import scalariform.ScalaVersions
 import scalariform.lexer.{ScalaLexer, Token}
 
 /**
@@ -33,20 +35,25 @@ import scalariform.lexer.{ScalaLexer, Token}
  */
 class Scala(settings: Configuration) extends AbstractLanguage(Scala.Key, Scala.Name) {
   override def getFileSuffixes: Array[String] = {
-    val suffixes = settings.getStringArray(Scala.FileSuffixesKey).toList
+    val suffixes = settings.getStringArray(Scala.FileSuffixesPropertyKey)
     val filtered = suffixes.filter(_.trim.nonEmpty)
-    Some(filtered).filter(_.nonEmpty).getOrElse(Scala.DefaultFileSuffixes).toArray
+    if (filtered.nonEmpty) filtered
+    else Scala.DefaultFileSuffixes
   }
 }
 
 object Scala {
   val Key = "scala"
   val Name = "Scala"
-  val FileSuffixesKey = "sonar.scala.file.suffixes"
-  val DefaultFileSuffixes = List(".scala")
+  private val FileSuffixesPropertyKey = "sonar.scala.file.suffixes"
+  private val DefaultFileSuffixes = Array(".scala")
+  private val ScalaVersionPropertyKey = "sonar.scala.version"
 
   def tokenize(sourceCode: String, scalaVersion: String): List[Token] =
     ScalaLexer.createRawLexer(sourceCode, forgiveErrors = false, scalaVersion).toList
+
+  def getScalaVersion(settings: Configuration): String =
+    settings.get(ScalaVersionPropertyKey).toOption.getOrElse(ScalaVersions.Scala_2_11.toString())
 }
 
 /**

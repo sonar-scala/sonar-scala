@@ -28,6 +28,7 @@ import scala.io.Source
  * SonarQube Sensor for the Scala programming language.
  *
  * @author mwz
+ * @author ElfoLiNk
  */
 class ScalaSensor(scala: Scala) extends Sensor {
   override def execute(context: SensorContext): Unit = {

@@ -1,6 +1,6 @@
 /*
  * Sonar Scala Plugin
- * Copyright (C) 2014 All contributors
+ * Copyright (C) 2018 All contributors
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -16,27 +16,28 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package com.sagacify.sonar.scala
+package com.mwz.sonar.scala
 
-import com.buransky.plugins.scoverage.measure.ScalaMetrics
-import com.buransky.plugins.scoverage.sensor.ScoverageSensor
+import com.mwz.sonar.scala.scoverage.{ScoverageMetrics, ScoverageSensor}
+import com.mwz.sonar.scala.sensor.ScalaSensor
 import com.ncredinburgh.sonar.scalastyle.{ScalastyleQualityProfile, ScalastyleRepository, ScalastyleSensor}
 import org.scalatest.{FlatSpec, Matchers}
 import org.sonar.api.utils.Version
+import org.sonar.api.{Plugin, SonarQubeSide, SonarRuntime}
+import org.sonar.api.internal.SonarRuntimeImpl
 
 /**
- * Tests ScalaPlugin
+ *  Tests the Scala SonarQube plugin extension points
+ *
+ *  @author mwz
  */
 class ScalaPluginSpec extends FlatSpec with Matchers {
-
-  import org.sonar.api.{Plugin, SonarQubeSide, SonarRuntime}
-  import org.sonar.api.internal.SonarRuntimeImpl
-
   val runtime: SonarRuntime = SonarRuntimeImpl.forSonarQube(Version.create(6, 7), SonarQubeSide.SCANNER)
   val context = new Plugin.Context(runtime)
   new ScalaPlugin().define(context)
+  behavior of "the scala plugin"
 
-  "a scala plugin" should "provide a scala sensor" in {
+  it should "provide a scala sensor" in {
     assert(context.getExtensions.contains(classOf[ScalaSensor]))
   }
 
@@ -61,6 +62,6 @@ class ScalaPluginSpec extends FlatSpec with Matchers {
   }
 
   it should "provide scala metrics" in {
-    assert(context.getExtensions.contains(classOf[ScalaMetrics]))
+    assert(context.getExtensions.contains(classOf[ScoverageMetrics]))
   }
 }

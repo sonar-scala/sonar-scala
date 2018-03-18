@@ -30,12 +30,12 @@ import scala.io.Source
  * @author mwz
  * @author ElfoLiNk
  */
-class ScalaSensor(scala: Scala) extends Sensor {
+class ScalaSensor extends Sensor {
   override def execute(context: SensorContext): Unit = {
     val charset = context.fileSystem().encoding.toString
 
     val inputFiles =
-      context.fileSystem().inputFiles(context.fileSystem().predicates().hasLanguage(scala.getKey))
+      context.fileSystem().inputFiles(context.fileSystem().predicates().hasLanguage(Scala.Key))
 
     inputFiles.asScala.foreach { inputFile =>
       context.newMeasure().on(inputFile).forMetric(CM.FILES).withValue(1).save()

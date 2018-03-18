@@ -1,4 +1,22 @@
-package com.sagacify.sonar.scala
+/*
+ * Sonar Scala Plugin
+ * Copyright (C) 2018 All contributors
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
+package com.mwz.sonar.scala.sensor
 
 import java.nio.file.Paths
 
@@ -9,13 +27,16 @@ import org.sonar.api.batch.sensor.measure.Measure
 import org.sonar.api.config.internal.MapSettings
 import org.sonar.api.measures.{CoreMetrics => CM}
 
+/**
+ *  Tests the Scala Sensor
+ *
+ *  @author mwz
+ */
 class ScalaSensorSpec extends FlatSpec with Matchers with OptionValues {
+  val sensor = new ScalaSensor()
+  behavior of "A ScalaSensor"
 
-  val scala = new Scala(new MapSettings().asConfig())
-
-  val sensor = new ScalaSensor(scala)
-
-  "A ScalaSensor" should "correctly set descriptor" in {
+  it should "correctly set descriptor" in {
     val descriptor = new DefaultSensorDescriptor
     sensor.describe(descriptor)
 

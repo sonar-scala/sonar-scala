@@ -62,7 +62,7 @@ packageOptions in (Compile, packageBin) += Package.ManifestAttributes(
   PluginManifest.SONAR_VERSION -> sonarVersion,
   PluginManifest.LICENSE -> "GNU LGPL 3",
   PluginManifest.SONARLINT_SUPPORTED -> "false",
-  PluginManifest.MAIN_CLASS -> "com.wmz.sonar.scala.ScalaPlugin",
+  PluginManifest.MAIN_CLASS -> "com.mwz.sonar.scala.ScalaPlugin",
   PluginManifest.USE_CHILD_FIRST_CLASSLOADER -> "false"
 )
 

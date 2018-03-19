@@ -26,12 +26,24 @@ import scala.xml.{Elem, NodeSeq, XML}
  *  @author BalmungSan
  */
 object ScoverageReportParser {
-  //this method allows us to test the parser without reading an xml file from disk
-  /** Parses the scoverage report from an xlm Element and returns the [[ModuleCoverage]] */
-  def parse(report: Elem): ModuleCoverage =
-    ???
 
   /** Parses the scoverage report from a file and returns the [[ModuleCoverage]] */
-  def parse(reportFilename: String): ModuleCoverage =
-    parse(XML.loadFile(reportFilename))
+  def parse(scoverageReportFilename: String): ModuleCoverage = {
+    val scoverageXMLReport = XML.loadFile(scoverageReportFilename)
+
+    val moduleScoverage = extractScoverageFromNode(scoverageXMLReport)
+
+    val files = Map.empty[String, FileCoverage]
+
+    ModuleCoverage(moduleScoverage, files)
+  }
+
+  /** Extracts the scoverage metrics form a class or module node */
+  private def extractScoverageFromNode(node: Elem): Scoverage =
+    Scoverage(
+      totalStatements = (node \ "@statement-count").text.toInt,
+      coveredStatements = (node \ "@statements-invoked").text.toInt,
+      statementCoverage = (node \ "@statement-rate").text.toDouble,
+      branchCoverage = (node \ "@branch-rate").text.toDouble
+    )
 }

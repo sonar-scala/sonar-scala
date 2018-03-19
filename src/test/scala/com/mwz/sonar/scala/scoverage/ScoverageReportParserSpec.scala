@@ -120,7 +120,7 @@ class ScoverageReportParserSpec extends FlatSpec with Inside with LoneElement wi
             branchCoverage shouldBe 83.33
         }
         files should have size 2
-        val file1name = "com.mwz.sonar.scala.ScalaPlugin"
+        val file1name = "com/mwz/sonar/scala/ScalaPlugin.scala"
         files should contain key file1name
         val file1Coverage = files(file1name)
         inside(file1Coverage) {
@@ -134,7 +134,7 @@ class ScoverageReportParserSpec extends FlatSpec with Inside with LoneElement wi
             }
             lines.loneElement shouldBe (66 -> 2)
         }
-        val file2name = "com.mwz.sonar.scala.sensor.ScalaSensor"
+        val file2name = "com/mwz/sonar/scala/sensor/ScalaSensor.scala"
         files should contain key file2name
         val file2Coverage = files(file2name)
         inside(file2Coverage) {

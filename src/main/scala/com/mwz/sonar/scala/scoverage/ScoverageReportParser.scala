@@ -47,7 +47,8 @@ object ScoverageReportParser {
       classCoverage = FileCoverage(classScoverage, linesCoverage)
     } yield (filename -> classCoverage)
 
-    val files = classCoverages.toMap
+    //merge the class coverages by filename
+    val files = classCoverages.groupBy(_._1).mapValues(_.map(_._2).reduce(_ + _))
 
     ModuleCoverage(moduleScoverage, files)
   }

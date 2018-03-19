@@ -45,7 +45,15 @@ package object scoverage {
   private[scoverage] final case class FileCoverage(
     fileScoverage: Scoverage,
     linesCoverage: LinesCoverage
-  )
+  ) {
+
+    /** Merges two file coverages in one */
+    private[scoverage] def +(that: FileCoverage): FileCoverage = {
+      val mergedFileScoverage = this.fileScoverage + that.fileScoverage
+      val mergedLinesCoverage = this.linesCoverage ++ that.linesCoverage
+      FileCoverage(mergedFileScoverage, mergedLinesCoverage)
+    }
+  }
 
   /**
    *  The coverage information of the lines of a file.
@@ -59,5 +67,28 @@ package object scoverage {
     coveredStatements: Int,
     statementCoverage: Double,
     branchCoverage: Double
-  )
+  ) {
+
+    /** Merges two scoverages metrics in one */
+    private[scoverage] def +(that: Scoverage): Scoverage = {
+      val mergedTotalStatements = this.totalStatements + that.totalStatements
+      val mergedCoveredStatements = this.coveredStatements + that.coveredStatements
+      val mergedStatementCoverage = computePercentage(mergedCoveredStatements, mergedTotalStatements)
+      val mergedBranchCoverage = averagePercentages(this.branchCoverage, that.branchCoverage)
+      Scoverage(mergedTotalStatements, mergedCoveredStatements, mergedStatementCoverage, mergedBranchCoverage)
+    }
+  }
+
+  //helper methods used to aggregate scoverage metrics
+  private val two = BigDecimal(2.0)
+  private val percentage = BigDecimal(100.0)
+
+  private def averagePercentages(a: Double, b: Double): Double =
+    toFixedPrecision((BigDecimal(a) + BigDecimal(b)) / two)
+
+  private def computePercentage(hits: Double, total: Double): Double =
+    toFixedPrecision(BigDecimal(hits) / BigDecimal(total) * percentage)
+
+  private def toFixedPrecision(value: BigDecimal): Double =
+    value.setScale(2, BigDecimal.RoundingMode.HALF_EVEN).toDouble
 }

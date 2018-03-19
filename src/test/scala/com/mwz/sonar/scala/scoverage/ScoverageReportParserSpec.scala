@@ -26,11 +26,12 @@ import org.scalatest.{FlatSpec, Inside, LoneElement, Matchers}
  *  @author BalmungSan
  */
 class ScoverageReportParserSpec extends FlatSpec with Inside with LoneElement with Matchers {
-  behavior of "the Scoverage Report Parser"
+  val scoverageReportParser = new ScoverageReportParser()
+  behavior of "A Scoverage Report Parser"
 
   it should "be able to parse the report of an empty project" in {
     val reportFilename = "src/test/resources/empty-project-scoverage.xml"
-    val moduleCoverage = ScoverageReportParser.parse(reportFilename)
+    val moduleCoverage = scoverageReportParser.parse(reportFilename)
     inside(moduleCoverage) {
       case ModuleCoverage(moduleScoverage, files) =>
         inside(moduleScoverage) {
@@ -46,7 +47,7 @@ class ScoverageReportParserSpec extends FlatSpec with Inside with LoneElement wi
 
   it should "be able to parse the report of a one file project" in {
     val reportFilename = "src/test/resources/one-file-project-scoverage.xml"
-    val moduleCoverage = ScoverageReportParser.parse(reportFilename)
+    val moduleCoverage = scoverageReportParser.parse(reportFilename)
     inside(moduleCoverage) {
       case ModuleCoverage(moduleScoverage, files) =>
         inside(moduleScoverage) {
@@ -74,7 +75,7 @@ class ScoverageReportParserSpec extends FlatSpec with Inside with LoneElement wi
 
   it should "be able to merge the coverage metric of all classes of the same file" in {
     val reportFilename = "src/test/resources/multi-class-one-file-project-scoverage.xml"
-    val moduleCoverage = ScoverageReportParser.parse(reportFilename)
+    val moduleCoverage = scoverageReportParser.parse(reportFilename)
     inside(moduleCoverage) {
       case ModuleCoverage(moduleScoverage, files) =>
         inside(moduleScoverage) {
@@ -109,7 +110,7 @@ class ScoverageReportParserSpec extends FlatSpec with Inside with LoneElement wi
 
   it should "be able to parse the report of a two files project" in {
     val reportFilename = "src/test/resources/two-files-project-scoverage.xml"
-    val moduleCoverage = ScoverageReportParser.parse(reportFilename)
+    val moduleCoverage = scoverageReportParser.parse(reportFilename)
     inside(moduleCoverage) {
       case ModuleCoverage(moduleScoverage, files) =>
         inside(moduleScoverage) {

@@ -32,7 +32,7 @@ import scala.util.{Failure, Success, Try}
  *
  *  @author BalmungSan
  */
-final class ScoverageSensor extends Sensor {
+final class ScoverageSensor(scoverageReportParser: ScoverageReportParserAPI) extends Sensor {
   private[this] val logger = Loggers.get(classOf[ScoverageSensor])
 
   /** Populates the [[SensorDescriptor]] of this sensor. */
@@ -47,7 +47,7 @@ final class ScoverageSensor extends Sensor {
   override def execute(context: SensorContext): Unit = {
     logger.info("[scoverage] Initializing the scoverage sensor")
     val reportFilename = getScoverageReportFilename(context.config())
-    Try(ScoverageReportParser.parse(reportFilename)) match {
+    Try(scoverageReportParser.parse(reportFilename)) match {
       case Success(moduleCoverage) => {
         logger.info(s"[scoverage] Successfully loaded the scoverage report file: '${reportFilename}'")
 

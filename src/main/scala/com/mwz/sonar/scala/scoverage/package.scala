@@ -25,6 +25,11 @@ package com.mwz.sonar.scala
  */
 package object scoverage {
 
+  /** Used to mock the scoverage report parser in tests */
+  trait ScoverageReportParserAPI {
+    def parse(scoverageReportFilename: String): ModuleCoverage
+  }
+
   /**
    *  The coverage information of an entire module.
    *  It is composed of:

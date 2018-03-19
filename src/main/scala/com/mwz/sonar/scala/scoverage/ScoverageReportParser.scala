@@ -25,10 +25,10 @@ import scala.xml.{Node, NodeSeq, XML}
  *
  *  @author BalmungSan
  */
-object ScoverageReportParser {
+class ScoverageReportParser extends ScoverageReportParserAPI {
 
   /** Parses the scoverage report from a file and returns the [[ModuleCoverage]] */
-  def parse(scoverageReportFilename: String): ModuleCoverage = {
+  override def parse(scoverageReportFilename: String): ModuleCoverage = {
     val scoverageXMLReport = XML.loadFile(scoverageReportFilename)
 
     val moduleScoverage = extractScoverageFromNode(scoverageXMLReport)

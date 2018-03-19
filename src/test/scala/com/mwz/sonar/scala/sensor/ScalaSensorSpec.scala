@@ -20,7 +20,7 @@ package com.mwz.sonar.scala.sensor
 
 import java.nio.file.Paths
 
-import org.scalatest._
+import org.scalatest.{FlatSpec, LoneElement, Matchers, OptionValues}
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder
 import org.sonar.api.batch.sensor.internal.{DefaultSensorDescriptor, SensorContextTester}
 import org.sonar.api.batch.sensor.measure.Measure
@@ -32,7 +32,7 @@ import org.sonar.api.measures.{CoreMetrics => CM}
  *
  *  @author mwz
  */
-class ScalaSensorSpec extends FlatSpec with Matchers with OptionValues {
+class ScalaSensorSpec extends FlatSpec with LoneElement with Matchers with OptionValues {
   val sensor = new ScalaSensor()
   behavior of "A ScalaSensor"
 
@@ -41,8 +41,7 @@ class ScalaSensorSpec extends FlatSpec with Matchers with OptionValues {
     sensor.describe(descriptor)
 
     descriptor.name() shouldBe "Scala Sensor"
-    descriptor.languages() should have size 1
-    descriptor.languages().iterator().next() shouldBe "scala"
+    descriptor.languages().loneElement shouldBe "scala"
   }
 
   it should "correctly measure ScalaFile1" in {
@@ -83,7 +82,6 @@ class ScalaSensorSpec extends FlatSpec with Matchers with OptionValues {
     value: Int
   ): Unit = {
     val measure: Option[Measure[Integer]] = Option(sensorContext.measure(componentKey, metricKey))
-    measure shouldBe defined
     measure.value.value() shouldBe int2Integer(value)
   }
 }

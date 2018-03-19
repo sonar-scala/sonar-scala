@@ -18,7 +18,7 @@
  */
 package com.mwz.sonar.scala.scoverage
 
-import scala.xml.{Elem, NodeSeq, XML}
+import scala.xml.{Node, NodeSeq, XML}
 
 /**
  *  Scoverage XML reports parser.
@@ -33,13 +33,21 @@ object ScoverageReportParser {
 
     val moduleScoverage = extractScoverageFromNode(scoverageXMLReport)
 
-    val files = Map.empty[String, FileCoverage]
+    val classCoverages = for {
+      classNode <- scoverageXMLReport \\ "class"
+      filename = (classNode \ "@filename").text
+      classScoverage = extractScoverageFromNode(classNode)
+      lines = Seq.empty[(Int, Int)]
+      classCoverage = FileCoverage(classScoverage, lines)
+    } yield (filename -> classCoverage)
+
+    val files = classCoverages.toMap
 
     ModuleCoverage(moduleScoverage, files)
   }
 
   /** Extracts the scoverage metrics form a class or module node */
-  private def extractScoverageFromNode(node: Elem): Scoverage =
+  private def extractScoverageFromNode(node: Node): Scoverage =
     Scoverage(
       totalStatements = (node \ "@statement-count").text.toInt,
       coveredStatements = (node \ "@statements-invoked").text.toInt,

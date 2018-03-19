@@ -44,4 +44,21 @@ trait SensorContextMatchers {
       )
     }
   }
+
+  /** Checks that a sensor context have an expected value for some line hits */
+  def lineHits(
+    fileKey: String,
+    linenum: Int,
+    expectedValue: Int
+  ) = new HavePropertyMatcher[SensorContextTester, Int] {
+    override def apply(sensorContext: SensorContextTester) = {
+      val hits = Option(sensorContext.lineHits(fileKey, linenum))
+      HavePropertyMatchResult(
+        matches = hits.fold(false)(_ == expectedValue),
+        propertyName = "measure",
+        expectedValue = expectedValue,
+        actualValue = None.orNull.asInstanceOf[Int]
+      )
+    }
+  }
 }

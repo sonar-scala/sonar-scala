@@ -33,7 +33,7 @@ package object scoverage {
    */
   private[scoverage] final case class ModuleCoverage(
     moduleScoverage: Scoverage,
-    files: Map[String, FileCoverage]
+    filesCoverage: Map[String, FileCoverage]
   )
 
   /**
@@ -44,14 +44,14 @@ package object scoverage {
    */
   private[scoverage] final case class FileCoverage(
     fileScoverage: Scoverage,
-    lines: LinesCoverage
+    linesCoverage: LinesCoverage
   )
 
   /**
    *  The coverage information of the lines of a file.
    *  Linenum -> Line hits
    */
-  private[scoverage] type LinesCoverage = Seq[(Int, Int)]
+  private[scoverage] type LinesCoverage = Map[Int, Int]
 
   /** [[ScoverageMetrics]] of a component */
   private[scoverage] final case class Scoverage(

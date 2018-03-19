@@ -54,19 +54,21 @@ final class ScoverageSensor extends Sensor {
         logger.debug("[scoverage] Saving the overall scoverage information of the module")
         saveComponentScoverage(context, context.module(), moduleCoverage.moduleScoverage)
 
-        //save the coverage information of each module file
+        //save the coverage information of each file of the module
         for (file <- getModuleSourceFiles(context.fileSystem())) {
           val filename = file.filename()
           logger.debug(s"[scoverage] Saving the scoverage information of the file: '${filename}'")
-          moduleCoverage.files.get(filename) match {
+          moduleCoverage.filesCoverage.get(filename) match {
             case Some(fileCoverage) => {
               //save the file overall scoverage information
               saveComponentScoverage(context, file, fileCoverage.fileScoverage)
 
-              //save the coverage of each file line
+              //save the coverage of each line of the file
               val coverage = context.newCoverage()
               coverage.onFile(file)
-              for ((linenum, hits) <- fileCoverage.lines) coverage.lineHits(linenum, hits)
+              for ((linenum, hits) <- fileCoverage.linesCoverage) {
+                coverage.lineHits(linenum, hits)
+              }
               coverage.save()
             }
             case None => {

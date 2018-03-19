@@ -37,8 +37,14 @@ object ScoverageReportParser {
       classNode <- scoverageXMLReport \\ "class"
       filename = (classNode \ "@filename").text
       classScoverage = extractScoverageFromNode(classNode)
-      lines = Seq.empty[(Int, Int)]
-      classCoverage = FileCoverage(classScoverage, lines)
+      lines = for {
+        statement <- classNode \\ "statement"
+        if (!(statement \ "@ignored").text.toBoolean)
+        linenum = (statement \ "@line").text.toInt
+        count = (statement \ "@invocation-count").text.toInt
+      } yield (linenum -> count)
+      linesCoverage = lines.groupBy(_._1).mapValues(_.map(_._2).sum)
+      classCoverage = FileCoverage(classScoverage, linesCoverage)
     } yield (filename -> classCoverage)
 
     val files = classCoverages.toMap

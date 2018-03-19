@@ -20,7 +20,7 @@ package com.mwz.sonar.scala.sensor
 
 import com.mwz.sonar.scala.SensorContextMatchers
 import java.nio.file.Paths
-import org.scalatest.{FlatSpec, LoneElement, Matchers, OptionValues}
+import org.scalatest.{FlatSpec, LoneElement, Matchers}
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder
 import org.sonar.api.batch.sensor.internal.{DefaultSensorDescriptor, SensorContextTester}
 import org.sonar.api.batch.sensor.measure.Measure
@@ -32,12 +32,7 @@ import org.sonar.api.measures.{CoreMetrics => CM}
  *
  *  @author mwz
  */
-class ScalaSensorSpec
-    extends FlatSpec
-    with SensorContextMatchers
-    with LoneElement
-    with Matchers
-    with OptionValues {
+class ScalaSensorSpec extends FlatSpec with SensorContextMatchers with LoneElement with Matchers {
   val sensor = new ScalaSensor()
   behavior of "A ScalaSensor"
 

@@ -18,8 +18,11 @@
  */
 package com.mwz.sonar.scala.scoverage
 
+import com.mwz.sonar.scala.SensorContextMatchers
+import java.nio.file.Paths
 import org.scalatest.{FlatSpec, LoneElement, Matchers}
 import org.sonar.api.batch.fs.InputFile
+import org.sonar.api.batch.fs.internal.TestInputFileBuilder
 import org.sonar.api.batch.sensor.internal.{DefaultSensorDescriptor, SensorContextTester}
 
 /**
@@ -27,8 +30,8 @@ import org.sonar.api.batch.sensor.internal.{DefaultSensorDescriptor, SensorConte
  *
  *  @author BalmungSan
  */
-class ScoverageSensorSpec extends FlatSpec with LoneElement with Matchers {
-  val scoverageSensor = new ScoverageSensor()
+class ScoverageSensorSpec extends FlatSpec with SensorContextMatchers with LoneElement with Matchers {
+  val scoverageSensor = new ScoverageSensor(TestScoverageReportParser)
   behavior of "A ScoverageSensor"
 
   it should "correctly set descriptor" in {
@@ -38,5 +41,67 @@ class ScoverageSensorSpec extends FlatSpec with LoneElement with Matchers {
     descriptor.name() shouldBe "Scoverage Sensor"
     descriptor.languages().loneElement shouldBe "scala"
     descriptor.`type`() shouldBe InputFile.Type.MAIN
+  }
+
+  it should "save the coverage metrics of a one file module" in {
+    //prepare the sensor context
+    val context = SensorContextTester.create(Paths.get("./"))
+    val mainFile = TestInputFileBuilder
+      .create("./", "src/main/scala/Main.scala")
+      .setLanguage("scala")
+      .setLines(10)
+      .setType(InputFile.Type.MAIN)
+      .build()
+    context.fileSystem().add(mainFile)
+
+    //execute the sensor
+    scoverageSensor.execute(context)
+
+    //validate the module scoverage metrics
+    val moduleKey = context.module().key()
+    context should have(metric[java.lang.Integer](moduleKey, "total_statements", 5))
+    context should have(metric[java.lang.Integer](moduleKey, "covered_statements", 3))
+    context should have(metric[java.lang.Double](moduleKey, "statement_coverage", 60.0))
+    context should have(metric[java.lang.Double](moduleKey, "branch_coverage", 100.0))
+
+    //validate the file scoverage metrics
+    val mainFileKey = mainFile.key()
+    context should have(metric[java.lang.Integer](mainFileKey, "total_statements", 5))
+    context should have(metric[java.lang.Integer](mainFileKey, "covered_statements", 3))
+    context should have(metric[java.lang.Double](mainFileKey, "statement_coverage", 60.0))
+    context should have(metric[java.lang.Double](mainFileKey, "branch_coverage", 100.0))
+  }
+}
+
+/** Mock of the ScoverageReportParser */
+object TestScoverageReportParser extends ScoverageReportParserAPI {
+  override def parse(reportFilename: String): ModuleCoverage = reportFilename match {
+    case "target/scala-2.11/scoverage-report/scoverage.xml" =>
+      ModuleCoverage(
+        moduleScoverage = Scoverage(
+          totalStatements = 5,
+          coveredStatements = 3,
+          statementCoverage = 60.0,
+          branchCoverage = 100.0
+        ),
+        filesCoverage = Map(
+          "src/main/scala/Main.scala" ->
+          FileCoverage(
+            fileScoverage = Scoverage(
+              totalStatements = 5,
+              coveredStatements = 3,
+              statementCoverage = 60.0,
+              branchCoverage = 100.0
+            ),
+            linesCoverage = Map(
+              5 -> 1,
+              6 -> 1,
+              7 -> 0,
+              8 -> 0,
+              9 -> 1
+            )
+          )
+        )
+      )
   }
 }

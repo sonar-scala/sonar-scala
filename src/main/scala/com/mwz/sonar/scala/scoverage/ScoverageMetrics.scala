@@ -70,7 +70,7 @@ object ScoverageMetrics {
 
   val statementCoverage: Metric[java.lang.Double] =
     BuildMetric(
-      metricKey = "stament_coverage",
+      metricKey = "statement_coverage",
       metricName = "Statement coverage",
       metricType = Metric.ValueType.PERCENT,
       metricDescription = "Percentage of statements covered by tests",

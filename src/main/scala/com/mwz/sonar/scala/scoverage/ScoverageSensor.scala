@@ -145,6 +145,9 @@ final class ScoverageSensor(scoverageReportParser: ScoverageReportParserAPI) ext
 object ScoverageSensor {
   private val SensorName = "Scoverage Sensor"
   private val ScoverageReportPathPropertyKey = "sonar.scala.scoverage.reportPath"
-  private def getDefaultScoverageReportPath(scalaVersion: String) =
+  private def getDefaultScoverageReportPath(scalaRawVersion: String) = {
+    //remove the extra part of the scala version, e.g 2.11.0 -> 2.11
+    val scalaVersion = scalaRawVersion.take(scalaRawVersion.lastIndexOf("."))
     s"target/scala-${scalaVersion}/scoverage-report/scoverage.xml"
+  }
 }

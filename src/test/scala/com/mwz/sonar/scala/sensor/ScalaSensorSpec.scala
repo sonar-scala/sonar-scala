@@ -18,8 +18,8 @@
  */
 package com.mwz.sonar.scala.sensor
 
+import com.mwz.sonar.scala.SensorContextMatchers
 import java.nio.file.Paths
-
 import org.scalatest.{FlatSpec, LoneElement, Matchers, OptionValues}
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder
 import org.sonar.api.batch.sensor.internal.{DefaultSensorDescriptor, SensorContextTester}
@@ -32,7 +32,12 @@ import org.sonar.api.measures.{CoreMetrics => CM}
  *
  *  @author mwz
  */
-class ScalaSensorSpec extends FlatSpec with LoneElement with Matchers with OptionValues {
+class ScalaSensorSpec
+    extends FlatSpec
+    with SensorContextMatchers
+    with LoneElement
+    with Matchers
+    with OptionValues {
   val sensor = new ScalaSensor()
   behavior of "A ScalaSensor"
 
@@ -53,11 +58,11 @@ class ScalaSensorSpec extends FlatSpec with LoneElement with Matchers with Optio
 
     val componentKey = inputFile.moduleKey() + inputFile.key()
 
-    checkMetric(context, componentKey, CM.FILES_KEY, 1)
-    checkMetric(context, componentKey, CM.COMMENT_LINES_KEY, 0)
-    checkMetric(context, componentKey, CM.CLASSES_KEY, 1)
-    checkMetric(context, componentKey, CM.FUNCTIONS_KEY, 1)
-    checkMetric(context, componentKey, CM.NCLOC_KEY, 6)
+    context should have(metric[java.lang.Integer](componentKey, CM.FILES_KEY, 1))
+    context should have(metric[java.lang.Integer](componentKey, CM.COMMENT_LINES_KEY, 0))
+    context should have(metric[java.lang.Integer](componentKey, CM.CLASSES_KEY, 1))
+    context should have(metric[java.lang.Integer](componentKey, CM.FUNCTIONS_KEY, 1))
+    context should have(metric[java.lang.Integer](componentKey, CM.NCLOC_KEY, 6))
   }
 
   it should "correctly measure ScalaFile2" in {
@@ -69,19 +74,9 @@ class ScalaSensorSpec extends FlatSpec with LoneElement with Matchers with Optio
 
     val componentKey = inputFile.moduleKey() + inputFile.key()
 
-    checkMetric(context, componentKey, CM.FILES_KEY, 1)
-    checkMetric(context, componentKey, CM.COMMENT_LINES_KEY, 1)
-    checkMetric(context, componentKey, CM.CLASSES_KEY, 2)
-    checkMetric(context, componentKey, CM.FUNCTIONS_KEY, 2)
-  }
-
-  private def checkMetric(
-    sensorContext: SensorContextTester,
-    componentKey: String,
-    metricKey: String,
-    value: Int
-  ): Unit = {
-    val measure: Option[Measure[Integer]] = Option(sensorContext.measure(componentKey, metricKey))
-    measure.value.value() shouldBe int2Integer(value)
+    context should have(metric[java.lang.Integer](componentKey, CM.FILES_KEY, 1))
+    context should have(metric[java.lang.Integer](componentKey, CM.COMMENT_LINES_KEY, 1))
+    context should have(metric[java.lang.Integer](componentKey, CM.CLASSES_KEY, 2))
+    context should have(metric[java.lang.Integer](componentKey, CM.FUNCTIONS_KEY, 2))
   }
 }

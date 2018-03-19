@@ -56,7 +56,7 @@ class ScalaSensorSpec
     context.fileSystem().add(inputFile)
     sensor.execute(context)
 
-    val componentKey = inputFile.moduleKey() + inputFile.key()
+    val componentKey = inputFile.key()
 
     context should have(metric[java.lang.Integer](componentKey, CM.FILES_KEY, 1))
     context should have(metric[java.lang.Integer](componentKey, CM.COMMENT_LINES_KEY, 0))
@@ -72,7 +72,7 @@ class ScalaSensorSpec
     context.fileSystem().add(inputFile)
     sensor.execute(context)
 
-    val componentKey = inputFile.moduleKey() + inputFile.key()
+    val componentKey = inputFile.key()
 
     context should have(metric[java.lang.Integer](componentKey, CM.FILES_KEY, 1))
     context should have(metric[java.lang.Integer](componentKey, CM.COMMENT_LINES_KEY, 1))

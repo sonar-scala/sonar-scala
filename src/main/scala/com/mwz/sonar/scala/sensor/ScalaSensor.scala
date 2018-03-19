@@ -47,25 +47,25 @@ class ScalaSensor extends Sensor {
         .newMeasure()
         .on(inputFile)
         .forMetric(CM.COMMENT_LINES)
-        .withValue(int2Integer(Measures.countCommentLines(tokens)))
+        .withValue(Measures.countCommentLines(tokens))
         .save()
       context
         .newMeasure()
         .on(inputFile)
         .forMetric(CM.NCLOC)
-        .withValue(int2Integer(Measures.countNonCommentLines(tokens)))
+        .withValue(Measures.countNonCommentLines(tokens))
         .save()
       context
         .newMeasure()
         .on(inputFile)
         .forMetric(CM.CLASSES)
-        .withValue(int2Integer(Measures.countClasses(tokens)))
+        .withValue(Measures.countClasses(tokens))
         .save()
       context
         .newMeasure()
         .on(inputFile)
         .forMetric(CM.FUNCTIONS)
-        .withValue(int2Integer(Measures.countMethods(tokens)))
+        .withValue(Measures.countMethods(tokens))
         .save()
     }
   }

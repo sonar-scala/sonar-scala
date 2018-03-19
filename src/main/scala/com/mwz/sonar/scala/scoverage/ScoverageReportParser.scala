@@ -35,13 +35,13 @@ object ScoverageReportParser {
 
     val classCoverages = for {
       classNode <- scoverageXMLReport \\ "class"
-      filename = (classNode \ "@filename").text
+      filename = classNode \@ "filename"
       classScoverage = extractScoverageFromNode(classNode)
       lines = for {
         statement <- classNode \\ "statement"
-        if (!(statement \ "@ignored").text.toBoolean)
-        linenum = (statement \ "@line").text.toInt
-        count = (statement \ "@invocation-count").text.toInt
+        if (!(statement \@ "ignored").toBoolean)
+        linenum = (statement \@ "line").toInt
+        count = (statement \@ "invocation-count").toInt
       } yield (linenum -> count)
       linesCoverage = lines.groupBy(_._1).mapValues(_.map(_._2).sum)
       classCoverage = FileCoverage(classScoverage, linesCoverage)
@@ -55,9 +55,9 @@ object ScoverageReportParser {
   /** Extracts the scoverage metrics form a class or module node */
   private def extractScoverageFromNode(node: Node): Scoverage =
     Scoverage(
-      totalStatements = (node \ "@statement-count").text.toInt,
-      coveredStatements = (node \ "@statements-invoked").text.toInt,
-      statementCoverage = (node \ "@statement-rate").text.toDouble,
-      branchCoverage = (node \ "@branch-rate").text.toDouble
+      totalStatements = (node \@ "statement-count").toInt,
+      coveredStatements = (node \@ "statements-invoked").toInt,
+      statementCoverage = (node \@ "statement-rate").toDouble,
+      branchCoverage = (node \@ "branch-rate").toDouble
     )
 }

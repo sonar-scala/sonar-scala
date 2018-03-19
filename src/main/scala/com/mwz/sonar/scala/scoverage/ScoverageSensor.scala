@@ -56,7 +56,8 @@ final class ScoverageSensor(scoverageReportParser: ScoverageReportParserAPI) ext
 
         //save the coverage information of each file of the module
         for (file <- getModuleSourceFiles(context.fileSystem())) {
-          val filename = file.filename()
+          //toString returns the project relative path of the file
+          val filename = file.toString
           logger.debug(s"[scoverage] Saving the scoverage information of the file: '${filename}'")
           moduleCoverage.filesCoverage.get(filename) match {
             case Some(fileCoverage) => {

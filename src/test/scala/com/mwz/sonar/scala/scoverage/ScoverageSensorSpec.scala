@@ -61,15 +61,15 @@ class ScoverageSensorSpec extends FlatSpec with SensorContextMatchers with LoneE
     val moduleKey = context.module().key()
     context should have(metric[java.lang.Integer](moduleKey, "total_statements", 5))
     context should have(metric[java.lang.Integer](moduleKey, "covered_statements", 3))
-    context should have(metric[java.lang.Double](moduleKey, "statement_coverage", 60.0))
-    context should have(metric[java.lang.Double](moduleKey, "branch_coverage", 100.0))
+    context should have(metric[java.lang.Double](moduleKey, "scoverage", 60.0))
+    context should have(metric[java.lang.Double](moduleKey, "branch_scoverage", 100.0))
 
     //validate the main file scoverage metrics
     val mainFileKey = mainFile.key()
     context should have(metric[java.lang.Integer](mainFileKey, "total_statements", 5))
     context should have(metric[java.lang.Integer](mainFileKey, "covered_statements", 3))
-    context should have(metric[java.lang.Double](mainFileKey, "statement_coverage", 60.0))
-    context should have(metric[java.lang.Double](mainFileKey, "branch_coverage", 100.0))
+    context should have(metric[java.lang.Double](mainFileKey, "scoverage", 60.0))
+    context should have(metric[java.lang.Double](mainFileKey, "branch_scoverage", 100.0))
 
     //validate the main file line coverage
     context should have(lineHits(mainFileKey, 5, 1))

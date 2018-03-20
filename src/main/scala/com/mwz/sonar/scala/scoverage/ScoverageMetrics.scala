@@ -70,7 +70,7 @@ object ScoverageMetrics {
 
   val statementCoverage: Metric[java.lang.Double] =
     BuildMetric(
-      metricKey = "statement_coverage",
+      metricKey = "scoverage",
       metricName = "Statement coverage",
       metricType = Metric.ValueType.PERCENT,
       metricDescription = "Percentage of statements covered by tests",
@@ -82,8 +82,8 @@ object ScoverageMetrics {
 
   val branchCoverage: Metric[java.lang.Double] =
     BuildMetric(
-      metricKey = "branch_coverage",
-      metricName = "Branch coverage",
+      metricKey = "branch_scoverage",
+      metricName = "Branch coverage (reported by scoverage)",
       metricType = Metric.ValueType.PERCENT,
       metricDescription = "Percentage of branches covered by tests",
       metricDirection = Metric.DIRECTION_BETTER,

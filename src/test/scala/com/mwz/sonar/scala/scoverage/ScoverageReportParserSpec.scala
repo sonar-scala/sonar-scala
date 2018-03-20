@@ -26,7 +26,7 @@ import org.scalatest.{FlatSpec, Inside, LoneElement, Matchers}
  *  @author BalmungSan
  */
 class ScoverageReportParserSpec extends FlatSpec with Inside with LoneElement with Matchers {
-  val scoverageReportParser = new ScoverageReportParser()
+  val scoverageReportParser = new ScoverageReportParser {}
   behavior of "A Scoverage Report Parser"
 
   it should "be able to parse the report of an empty project" in {

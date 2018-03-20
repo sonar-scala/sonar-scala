@@ -31,7 +31,7 @@ import org.sonar.api.batch.sensor.internal.{DefaultSensorDescriptor, SensorConte
  *  @author BalmungSan
  */
 class ScoverageSensorSpec extends FlatSpec with SensorContextMatchers with LoneElement with Matchers {
-  val scoverageSensor = new ScoverageSensor(TestScoverageReportParser)
+  val scoverageSensor = new ScoverageSensorInternal with TestScoverageReportParser
   behavior of "A ScoverageSensor"
 
   it should "correctly set descriptor" in {
@@ -81,7 +81,7 @@ class ScoverageSensorSpec extends FlatSpec with SensorContextMatchers with LoneE
 }
 
 /** Mock of the ScoverageReportParser */
-object TestScoverageReportParser extends ScoverageReportParserAPI {
+trait TestScoverageReportParser extends ScoverageReportParserAPI {
   override def parse(reportFilename: String): ModuleCoverage = reportFilename match {
     case "target/scala-2.11/scoverage-report/scoverage.xml" =>
       ModuleCoverage(

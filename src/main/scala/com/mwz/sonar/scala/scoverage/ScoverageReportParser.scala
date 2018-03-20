@@ -25,7 +25,7 @@ import scala.xml.{Node, NodeSeq, XML}
  *
  *  @author BalmungSan
  */
-class ScoverageReportParser extends ScoverageReportParserAPI {
+trait ScoverageReportParser extends ScoverageReportParserAPI {
 
   /** Parses the scoverage report from a file and returns the [[ModuleCoverage]] */
   override def parse(scoverageReportFilename: String): ModuleCoverage = {

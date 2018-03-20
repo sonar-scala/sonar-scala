@@ -30,7 +30,7 @@ import scala.io.Source
  * @author mwz
  * @author ElfoLiNk
  */
-class ScalaSensor extends Sensor {
+final class ScalaSensor extends Sensor {
   override def execute(context: SensorContext): Unit = {
     val charset = context.fileSystem().encoding.toString
 

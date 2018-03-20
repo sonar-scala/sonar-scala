@@ -32,15 +32,21 @@ import scala.util.{Failure, Success, Try}
  *
  *  @author BalmungSan
  */
-final class ScoverageSensor(scoverageReportParser: ScoverageReportParserAPI) extends Sensor {
-  private[this] val logger = Loggers.get(classOf[ScoverageSensor])
+final class ScoverageSensor extends ScoverageSensorInternal with ScoverageReportParser
+
+/** Implementation of the sensor */
+private[scoverage] class ScoverageSensorInternal extends Sensor {
+  //cake pattern to mock the scoverage report parser in tests
+  scoverageReportParser: ScoverageReportParserAPI =>
+
+  private[this] val logger = Loggers.get(classOf[ScoverageSensorInternal])
 
   /** Populates the [[SensorDescriptor]] of this sensor. */
   override def describe(descriptor: SensorDescriptor): Unit = {
     descriptor
       .onlyOnLanguage(Scala.Key)
       .onlyOnFileType(InputFile.Type.MAIN)
-      .name(ScoverageSensor.SensorName)
+      .name(ScoverageSensorInternal.SensorName)
   }
 
   /** Saves in SonarQube the scoverage information of a module */
@@ -100,10 +106,10 @@ final class ScoverageSensor(scoverageReportParser: ScoverageReportParserAPI) ext
   /** Returns the filename of the scoverage report for this module */
   private[this] def getScoverageReportFilename(settings: Configuration): String = {
     settings
-      .get(ScoverageSensor.ScoverageReportPathPropertyKey)
+      .get(ScoverageSensorInternal.ScoverageReportPathPropertyKey)
       .toOption
       .getOrElse(
-        ScoverageSensor.getDefaultScoverageReportPath(Scala.getScalaVersion(settings))
+        ScoverageSensorInternal.getDefaultScoverageReportPath(Scala.getScalaVersion(settings))
       )
   }
 
@@ -143,7 +149,7 @@ final class ScoverageSensor(scoverageReportParser: ScoverageReportParserAPI) ext
   }
 }
 
-object ScoverageSensor {
+object ScoverageSensorInternal {
   private val SensorName = "Scoverage Sensor"
   private val ScoverageReportPathPropertyKey = "sonar.scala.scoverage.reportPath"
   private def getDefaultScoverageReportPath(scalaRawVersion: String) = {

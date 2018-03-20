@@ -47,7 +47,7 @@ class ScoverageSensorSpec extends FlatSpec with SensorContextMatchers with LoneE
     //prepare the sensor context
     val context = SensorContextTester.create(Paths.get("./"))
     val mainFile = TestInputFileBuilder
-      .create("./", "src/main/scala/Main.scala")
+      .create("", "src/main/scala/package/Main.scala")
       .setLanguage("scala")
       .setLines(10)
       .setType(InputFile.Type.MAIN)
@@ -92,7 +92,7 @@ trait TestScoverageReportParser extends ScoverageReportParserAPI {
           branchCoverage = 100.0
         ),
         filesCoverage = Map(
-          "src/main/scala/Main.scala" ->
+          "src/main/scala/package/Main.scala" ->
           FileCoverage(
             fileScoverage = Scoverage(
               totalStatements = 5,

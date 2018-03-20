@@ -35,7 +35,7 @@ trait ScoverageReportParser extends ScoverageReportParserAPI {
 
     val classCoverages = for {
       classNode <- scoverageXMLReport \\ "class"
-      filename = classNode \@ "filename"
+      filename = s"src/main/scala/${classNode \@ "filename"}"
       classScoverage = extractScoverageFromNode(classNode)
       lines = for {
         statement <- classNode \\ "statement"

@@ -33,19 +33,17 @@ package object util {
 
   /** Conversions between Scala Option and Java 8 Optional. */
   object JavaOptionals {
-    implicit def toRichOption[T](opt: Option[T]): RichOption[T] = new RichOption[T](opt)
+    implicit def toRichOption[T >: Null](opt: Option[T]): RichOption[T] = new RichOption[T](opt)
     implicit def toRichOptional[T](optional: Optional[T]): RichOptional[T] = new RichOptional[T](optional)
   }
 
-  class RichOption[T](opt: Option[T]) {
-
-    /** Transform this Option to an equivalent Java Optional */
-    def toOptional: Optional[T] = Optional.ofNullable(opt.getOrElse(null).asInstanceOf[T])
+  /** Transform this Option to an equivalent Java Optional */
+  class RichOption[T >: Null](opt: Option[T]) {
+    def toOptional: Optional[T] = Optional.ofNullable(opt.orNull)
   }
 
+  /** Transform this Optional to an equivalent Scala Option */
   class RichOptional[T](opt: Optional[T]) {
-
-    /** Transform this Optional to an equivalent Scala Option */
     def toOption: Option[T] = if (opt.isPresent) Some(opt.get()) else None
   }
 }

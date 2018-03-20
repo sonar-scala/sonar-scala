@@ -84,16 +84,16 @@ package object scoverage {
     }
   }
 
-  //helper methods used to aggregate scoverage metrics
-  private val two = BigDecimal(2.0)
-  private val percentage = BigDecimal(100.0)
+  // helper methods used to aggregate scoverage metrics
+  private val Two = BigDecimal(2.0)
+  private val Percentage = BigDecimal(100.0)
 
   private def averagePercentages(a: Double, b: Double): Double =
-    toFixedPrecision((BigDecimal(a) + BigDecimal(b)) / two)
+    toFixedPrecision((BigDecimal(a) + BigDecimal(b)) / Two)
 
   private def computePercentage(hits: Double, total: Double): Double =
-    toFixedPrecision(BigDecimal(hits) / BigDecimal(total) * percentage)
+    toFixedPrecision(BigDecimal(hits) / BigDecimal(total) * Percentage)
 
   private def toFixedPrecision(value: BigDecimal): Double =
-    value.setScale(2, BigDecimal.RoundingMode.HALF_EVEN).toDouble
+    value.setScale(scale = 2, mode = BigDecimal.RoundingMode.HALF_EVEN).toDouble
 }

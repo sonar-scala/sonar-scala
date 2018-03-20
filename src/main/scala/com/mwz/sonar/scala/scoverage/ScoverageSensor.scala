@@ -36,7 +36,7 @@ final class ScoverageSensor extends ScoverageSensorInternal with ScoverageReport
 
 /** Implementation of the sensor */
 private[scoverage] class ScoverageSensorInternal extends Sensor {
-  //cake pattern to mock the scoverage report parser in tests
+  // cake pattern to mock the scoverage report parser in tests
   scoverageReportParser: ScoverageReportParserAPI =>
 
   private[this] val logger = Loggers.get(classOf[ScoverageSensorInternal])
@@ -60,17 +60,17 @@ private[scoverage] class ScoverageSensorInternal extends Sensor {
         logger.debug("[scoverage] Saving the overall scoverage information of the module")
         saveComponentScoverage(context, context.module(), moduleCoverage.moduleScoverage)
 
-        //save the coverage information of each file of the module
+        // save the coverage information of each file of the module
         for (file <- getModuleSourceFiles(context.fileSystem())) {
-          //toString returns the project relative path of the file
+          // toString returns the project relative path of the file
           val filename = file.toString
           logger.debug(s"[scoverage] Saving the scoverage information of the file: '${filename}'")
           moduleCoverage.filesCoverage.get(filename) match {
             case Some(fileCoverage) => {
-              //save the file overall scoverage information
+              // save the file overall scoverage information
               saveComponentScoverage(context, file, fileCoverage.fileScoverage)
 
-              //save the coverage of each line of the file
+              // save the coverage of each line of the file
               val coverage = context.newCoverage()
               coverage.onFile(file)
               for ((linenum, hits) <- fileCoverage.linesCoverage) {
@@ -153,7 +153,7 @@ object ScoverageSensorInternal {
   private val SensorName = "Scoverage Sensor"
   private val ScoverageReportPathPropertyKey = "sonar.scala.scoverage.reportPath"
   private def getDefaultScoverageReportPath(scalaRawVersion: String) = {
-    //remove the extra part of the scala version, e.g 2.11.0 -> 2.11
+    // remove the extra part of the scala version, e.g 2.11.0 -> 2.11
     val scalaVersion = scalaRawVersion.take(scalaRawVersion.lastIndexOf("."))
     s"target/scala-${scalaVersion}/scoverage-report/scoverage.xml"
   }

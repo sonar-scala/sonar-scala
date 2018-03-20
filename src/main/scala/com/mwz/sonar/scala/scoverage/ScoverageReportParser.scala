@@ -47,7 +47,7 @@ trait ScoverageReportParser extends ScoverageReportParserAPI {
       classCoverage = FileCoverage(classScoverage, linesCoverage)
     } yield (filename -> classCoverage)
 
-    //merge the class coverages by filename
+    // merge the class coverages by filename
     val files = classCoverages.groupBy(_._1).mapValues(_.map(_._2).reduce(_ + _))
 
     ModuleCoverage(moduleScoverage, files)

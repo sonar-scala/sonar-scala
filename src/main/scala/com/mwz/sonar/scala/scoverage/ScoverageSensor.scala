@@ -35,7 +35,7 @@ import scala.util.{Failure, Success, Try}
 final class ScoverageSensor extends ScoverageSensorInternal with ScoverageReportParser
 
 /** Implementation of the sensor */
-private[scoverage] class ScoverageSensorInternal extends Sensor {
+private[scoverage] abstract class ScoverageSensorInternal extends Sensor {
   // cake pattern to mock the scoverage report parser in tests
   scoverageReportParser: ScoverageReportParserAPI =>
 

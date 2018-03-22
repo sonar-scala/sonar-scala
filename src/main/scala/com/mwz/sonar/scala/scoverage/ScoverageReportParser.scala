@@ -43,12 +43,22 @@ trait ScoverageReportParser extends ScoverageReportParserAPI {
         linenum = (statement \@ "line").toInt
         count = (statement \@ "invocation-count").toInt
       } yield (linenum -> count)
-      linesCoverage = lines.groupBy(_._1).mapValues(_.map(_._2).sum)
+      linesCoverage = lines groupBy {
+        case (linenum, _) => linenum
+      } mapValues { group =>
+        val countsByLine = group map { case (_, count) => count }
+        countsByLine.sum
+      }
       classCoverage = FileCoverage(classScoverage, linesCoverage)
     } yield (filename -> classCoverage)
 
     // merge the class coverages by filename
-    val files = classCoverages.groupBy(_._1).mapValues(_.map(_._2).reduce(_ + _))
+    val files = classCoverages groupBy {
+      case (filename, _) => filename
+    } mapValues { group =>
+      val classCoveragesByFilename = group map { case (_, classCoverage) => classCoverage }
+      classCoveragesByFilename.reduce(_ + _)
+    }
 
     ModuleCoverage(moduleScoverage, files)
   }

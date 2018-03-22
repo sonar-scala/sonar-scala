@@ -22,7 +22,7 @@ class ScoverageMetrics extends Metrics {
 object ScoverageMetrics {
 
   /** Builds a new [[Metric]] */
-  private def BuildMetric[T <: java.io.Serializable](
+  private def buildMetric[T <: java.io.Serializable](
     metricKey: String,
     metricName: String,
     metricType: Metric.ValueType,
@@ -49,7 +49,7 @@ object ScoverageMetrics {
   }
 
   val totalStatements: Metric[java.lang.Integer] =
-    BuildMetric(
+    buildMetric(
       metricKey = "total_statements",
       metricName = "Total statements",
       metricType = Metric.ValueType.INT,
@@ -59,7 +59,7 @@ object ScoverageMetrics {
     )
 
   val coveredStatements: Metric[java.lang.Integer] =
-    BuildMetric(
+    buildMetric(
       metricKey = "covered_statements",
       metricName = "Covered statements",
       metricType = Metric.ValueType.INT,
@@ -69,7 +69,7 @@ object ScoverageMetrics {
     )
 
   val statementCoverage: Metric[java.lang.Double] =
-    BuildMetric(
+    buildMetric(
       metricKey = "scoverage",
       metricName = "Statement coverage",
       metricType = Metric.ValueType.PERCENT,
@@ -81,7 +81,7 @@ object ScoverageMetrics {
     )
 
   val branchCoverage: Metric[java.lang.Double] =
-    BuildMetric(
+    buildMetric(
       metricKey = "branch_scoverage",
       metricName = "Branch coverage (reported by scoverage)",
       metricType = Metric.ValueType.PERCENT,

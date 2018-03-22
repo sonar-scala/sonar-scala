@@ -48,9 +48,10 @@ package object util {
   object PathUtils {
 
     /** Ensures a path can safely be prepend to other path */
-    def sanitizePath(path: String): String =
-      if (path.isEmpty) path
-      else if (path.last == '/') path
-      else path + '/'
+    def sanitizePath(path: String): String = path.lastOption match {
+      case Some('/') => path
+      case Some(_)   => path + '/'
+      case None      => ""
+    }
   }
 }

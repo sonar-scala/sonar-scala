@@ -26,11 +26,7 @@ import org.sonar.api.utils.Version
 import org.sonar.api.{Plugin, SonarQubeSide, SonarRuntime}
 import org.sonar.api.internal.SonarRuntimeImpl
 
-/**
- *  Tests the Scala SonarQube plugin extension points
- *
- *  @author mwz
- */
+/** Tests the Scala SonarQube plugin extension points */
 class ScalaPluginSpec extends FlatSpec with Matchers {
   val runtime: SonarRuntime = SonarRuntimeImpl.forSonarQube(Version.create(6, 7), SonarQubeSide.SCANNER)
   val context = new Plugin.Context(runtime)

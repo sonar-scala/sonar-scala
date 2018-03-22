@@ -27,11 +27,7 @@ import org.sonar.api.utils.log.Loggers
 import scala.collection.JavaConverters._
 import scala.util.{Failure, Success, Try}
 
-/**
- *  Main sensor for importing Scoverage reports to SonarQube.
- *
- *  @author BalmungSan
- */
+/** Main sensor for importing Scoverage reports to SonarQube */
 final class ScoverageSensor extends ScoverageSensorInternal with ScoverageReportParser
 
 /** Implementation of the sensor */

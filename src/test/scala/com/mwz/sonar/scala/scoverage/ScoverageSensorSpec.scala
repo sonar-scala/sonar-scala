@@ -25,11 +25,7 @@ import org.sonar.api.batch.fs.InputFile
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder
 import org.sonar.api.batch.sensor.internal.{DefaultSensorDescriptor, SensorContextTester}
 
-/**
- *  Tests the Scoverage Sensor
- *
- *  @author BalmungSan
- */
+/** Tests the Scoverage Sensor */
 class ScoverageSensorSpec extends FlatSpec with SensorContextMatchers with LoneElement with Matchers {
   val scoverageSensor = new ScoverageSensorInternal with TestScoverageReportParser
   behavior of "A ScoverageSensor"

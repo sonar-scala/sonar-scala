@@ -21,12 +21,7 @@ package com.mwz.sonar.scala.sensor
 import scala.annotation.tailrec
 import scalariform.lexer.{Token, Tokens}
 
-/**
- * Scala Sensor Metrics.
- *
- * @author mwz
- * @author BalmungSan
- */
+/** Scala Sensor Metrics */
 object Measures {
   def countClasses(tokens: List[Token]): Int = {
     tokens.foldLeft(0) {

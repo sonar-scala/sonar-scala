@@ -18,11 +18,6 @@
  */
 package com.mwz.sonar.scala
 
-/**
- *  Coverage data structures
- *
- *  @author BalmungSan
- */
 package object scoverage {
 
   /** Used to mock the scoverage report parser in tests */

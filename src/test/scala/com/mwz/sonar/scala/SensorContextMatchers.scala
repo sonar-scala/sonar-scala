@@ -21,11 +21,7 @@ package com.mwz.sonar.scala
 import org.scalatest.matchers.{HavePropertyMatchResult, HavePropertyMatcher}
 import org.sonar.api.batch.sensor.internal.SensorContextTester
 
-/**
- *  Custom matchers to test properties of sensor contexts
- *
- *  @author BalmungSan
- */
+/** Custom matchers to test properties of sensor contexts */
 trait SensorContextMatchers {
 
   /** Checks that a sensor context have an expected value for some metric */

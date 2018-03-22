@@ -28,11 +28,7 @@ import org.sonar.api.resources.AbstractLanguage
 import scalariform.ScalaVersions
 import scalariform.lexer.{ScalaLexer, Token}
 
-/**
- * Defines Scala as a language for SonarQube.
- *
- * @author mwz
- */
+/** Defines Scala as a language for SonarQube */
 class Scala(settings: Configuration) extends AbstractLanguage(Scala.Key, Scala.Name) {
   override def getFileSuffixes: Array[String] = {
     val suffixes = settings.getStringArray(Scala.FileSuffixesPropertyKey)
@@ -56,11 +52,7 @@ object Scala {
     settings.get(ScalaVersionPropertyKey).toOption.getOrElse(ScalaVersions.Scala_2_11.toString())
 }
 
-/**
- * Plugin entry point.
- *
- * @author mwz
- */
+/** Plugin entry point */
 class ScalaPlugin extends Plugin {
   override def define(context: Plugin.Context): Unit = {
     context.addExtensions(

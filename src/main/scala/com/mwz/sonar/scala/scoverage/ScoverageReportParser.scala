@@ -20,11 +20,7 @@ package com.mwz.sonar.scala.scoverage
 
 import scala.xml.{Node, NodeSeq, XML}
 
-/**
- *  Scoverage XML reports parser.
- *
- *  @author BalmungSan
- */
+/** Scoverage XML reports parser */
 trait ScoverageReportParser extends ScoverageReportParserAPI {
 
   /** Parses the scoverage report from a file and returns the [[ModuleCoverage]] */

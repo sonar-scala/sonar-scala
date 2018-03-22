@@ -20,11 +20,7 @@ package com.mwz.sonar.scala.scoverage
 
 import org.scalatest.{FlatSpec, Inside, LoneElement, Matchers}
 
-/**
- *  Tests the correct behavior of the Scoverage XML reports parser
- *
- *  @author BalmungSan
- */
+/** Tests the correct behavior of the Scoverage XML reports parser */
 class ScoverageReportParserSpec extends FlatSpec with Inside with LoneElement with Matchers {
   val scoverageReportParser = new ScoverageReportParser {}
   behavior of "A Scoverage Report Parser"

@@ -26,12 +26,10 @@ import scala.language.implicitConversions
  *
  *  @note The Scala.Option <-> Java.Optional conversions were taken from
  *  https://gist.github.com/julienroubieu/fbb7e1467ab44203a09f
- *
- *  @author BalmungSan
  */
 package object util {
 
-  /** Conversions between Scala Option and Java 8 Optional. */
+  /** Conversions between Scala Option and Java 8 Optional */
   object JavaOptionals {
     implicit def toRichOption[T >: Null](opt: Option[T]): RichOption[T] = new RichOption[T](opt)
     implicit def toRichOptional[T](optional: Optional[T]): RichOptional[T] = new RichOptional[T](optional)

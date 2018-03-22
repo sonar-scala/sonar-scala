@@ -27,11 +27,7 @@ import org.sonar.api.batch.sensor.measure.Measure
 import org.sonar.api.config.internal.MapSettings
 import org.sonar.api.measures.{CoreMetrics => CM}
 
-/**
- *  Tests the Scala Sensor
- *
- *  @author mwz
- */
+/** Tests the Scala Sensor */
 class ScalaSensorSpec extends FlatSpec with SensorContextMatchers with LoneElement with Matchers {
   val sensor = new ScalaSensor()
   behavior of "A ScalaSensor"

@@ -24,12 +24,7 @@ import org.sonar.api.measures.{CoreMetrics => CM}
 import scala.collection.JavaConverters._
 import scala.io.Source
 
-/**
- * SonarQube Sensor for the Scala programming language.
- *
- * @author mwz
- * @author ElfoLiNk
- */
+/** SonarQube Sensor for the Scala programming language */
 final class ScalaSensor extends Sensor {
   override def execute(context: SensorContext): Unit = {
     val charset = context.fileSystem().encoding.toString

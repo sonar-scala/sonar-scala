@@ -22,11 +22,7 @@ import com.mwz.sonar.scala.Scala
 import org.scalatest._
 import org.scalactic.source.Position.apply
 
-/**
- *  Tests the Scala Sensor Metrics
- *
- *  @author mwz
- */
+/** Tests the Scala Sensor Metrics */
 class MeasuresSpec extends FlatSpec with Matchers {
   val exampleSourceFile =
     """/*

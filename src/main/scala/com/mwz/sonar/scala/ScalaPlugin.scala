@@ -43,18 +43,18 @@ object Scala {
   val Name = "Scala"
   private val FileSuffixesPropertyKey = "sonar.scala.file.suffixes"
   private val DefaultFileSuffixes = Array(".scala")
+  private val ScalaVersionPropertyKey = "sonar.scala.version"
   private val SourcesPropertyKey = "sonar.sources"
   private val DefaultSources = "src/main/scala"
-  private val ScalaVersionPropertyKey = "sonar.scala.version"
 
-  def tokenize(sourceCode: String, scalaVersion: String): List[Token] =
-    ScalaLexer.createRawLexer(sourceCode, forgiveErrors = false, scalaVersion).toList
+  def getScalaVersion(settings: Configuration): String =
+    settings.get(ScalaVersionPropertyKey).toOption.getOrElse(ScalaVersions.Scala_2_11.toString())
 
   def getSourcesPath(settings: Configuration): String =
     settings.get(SourcesPropertyKey).toOption.getOrElse(DefaultSources)
 
-  def getScalaVersion(settings: Configuration): String =
-    settings.get(ScalaVersionPropertyKey).toOption.getOrElse(ScalaVersions.Scala_2_11.toString())
+  def tokenize(sourceCode: String, scalaVersion: String): List[Token] =
+    ScalaLexer.createRawLexer(sourceCode, forgiveErrors = false, scalaVersion).toList
 }
 
 /** Plugin entry point */

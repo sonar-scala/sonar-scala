@@ -20,6 +20,8 @@ package com.mwz.sonar.scala.scoverage
 
 import com.mwz.sonar.scala.Scala
 import com.mwz.sonar.scala.util.JavaOptionals._
+import com.mwz.sonar.scala.util.PathUtils
+import java.nio.file.Paths
 import org.sonar.api.batch.fs.{FileSystem, InputComponent, InputFile}
 import org.sonar.api.batch.sensor.{Sensor, SensorContext, SensorDescriptor}
 import org.sonar.api.config.Configuration;
@@ -49,8 +51,11 @@ private[scoverage] abstract class ScoverageSensorInternal extends Sensor {
   override def execute(context: SensorContext): Unit = {
     logger.info("[scoverage] Initializing the scoverage sensor")
     val settings = context.config()
-    val reportFilename = getScoverageReportFilename(settings)
-    val sourcesPrefix = Scala.getSourcesPath(settings)
+    val filesystem = context.fileSystem()
+
+    val modulePath = getModuleBaseDirectory(filesystem)
+    val reportFilename = modulePath + getScoverageReportFilename(settings)
+    val sourcesPrefix = PathUtils.sanitizePath(modulePath + Scala.getSourcesPath(settings))
     Try(scoverageReportParser.parse(reportFilename, sourcesPrefix)) match {
       case Success(moduleCoverage) => {
         logger.info(s"[scoverage] Successfully loaded the scoverage report file: '${reportFilename}'")
@@ -59,7 +64,7 @@ private[scoverage] abstract class ScoverageSensorInternal extends Sensor {
         saveComponentScoverage(context, context.module(), moduleCoverage.moduleScoverage)
 
         // save the coverage information of each file of the module
-        for (file <- getModuleSourceFiles(context.fileSystem())) {
+        for (file <- getModuleSourceFiles(filesystem)) {
           // toString returns the project relative path of the file
           val filename = file.toString
           logger.debug(s"[scoverage] Saving the scoverage information of the file: '${filename}'")
@@ -99,6 +104,14 @@ private[scoverage] abstract class ScoverageSensorInternal extends Sensor {
     val predicates = fs.predicates
     val predicate = predicates.and(predicates.hasLanguage(Scala.Key), predicates.hasType(InputFile.Type.MAIN))
     fs.inputFiles(predicate).asScala
+  }
+
+  /** Returns the module base path */
+  private[this] def getModuleBaseDirectory(fs: FileSystem): String = {
+    val moduleAbsolutePath = Paths.get(fs.baseDir().getAbsolutePath).normalize()
+    val currentWorkdirAbsolutePath = Paths.get("./").toAbsolutePath().normalize()
+    val moduleBasePath = currentWorkdirAbsolutePath.relativize(moduleAbsolutePath).toString
+    PathUtils.sanitizePath(moduleBasePath)
   }
 
   /** Returns the filename of the scoverage report for this module */

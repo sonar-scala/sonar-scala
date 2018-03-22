@@ -43,7 +43,7 @@ class ScoverageSensorSpec extends FlatSpec with SensorContextMatchers with LoneE
     //prepare the sensor context
     val context = SensorContextTester.create(Paths.get("./"))
     val mainFile = TestInputFileBuilder
-      .create("", "src/main/scala/package/Main.scala")
+      .create("./", "src/main/scala/package/Main.scala")
       .setLanguage("scala")
       .setLines(10)
       .setType(InputFile.Type.MAIN)

@@ -44,4 +44,13 @@ package object util {
   class RichOptional[T](opt: Optional[T]) {
     def toOption: Option[T] = if (opt.isPresent) Some(opt.get()) else None
   }
+
+  object PathUtils {
+
+    /** Ensures a path can safely be prepend to other path */
+    def sanitizePath(path: String): String =
+      if (path.isEmpty) path
+      else if (path.last == '/') path
+      else path + '/'
+  }
 }

@@ -48,8 +48,10 @@ private[scoverage] abstract class ScoverageSensorInternal extends Sensor {
   /** Saves in SonarQube the scoverage information of a module */
   override def execute(context: SensorContext): Unit = {
     logger.info("[scoverage] Initializing the scoverage sensor")
-    val reportFilename = getScoverageReportFilename(context.config())
-    Try(scoverageReportParser.parse(reportFilename)) match {
+    val settings = context.config()
+    val reportFilename = getScoverageReportFilename(settings)
+    val sourcesPrefix = Scala.getSourcesPath(settings)
+    Try(scoverageReportParser.parse(reportFilename, sourcesPrefix)) match {
       case Success(moduleCoverage) => {
         logger.info(s"[scoverage] Successfully loaded the scoverage report file: '${reportFilename}'")
 

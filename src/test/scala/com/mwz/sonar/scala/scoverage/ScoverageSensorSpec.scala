@@ -78,7 +78,7 @@ class ScoverageSensorSpec extends FlatSpec with SensorContextMatchers with LoneE
 
 /** Mock of the ScoverageReportParser */
 trait TestScoverageReportParser extends ScoverageReportParserAPI {
-  override def parse(reportFilename: String): ModuleCoverage = reportFilename match {
+  override def parse(reportFilename: String, sourcesPrefix: String): ModuleCoverage = reportFilename match {
     case "target/scala-2.11/scoverage-report/scoverage.xml" =>
       ModuleCoverage(
         moduleScoverage = Scoverage(

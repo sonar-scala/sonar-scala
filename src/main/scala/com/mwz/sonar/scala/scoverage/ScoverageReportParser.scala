@@ -24,14 +24,17 @@ import scala.xml.{Node, NodeSeq, XML}
 trait ScoverageReportParser extends ScoverageReportParserAPI {
 
   /** Parses the scoverage report from a file and returns the [[ModuleCoverage]] */
-  override def parse(scoverageReportFilename: String): ModuleCoverage = {
+  override def parse(scoverageReportFilename: String, sourcesPrefix: String): ModuleCoverage = {
+    //ensure the source prefix path ends with '/'
+    val sourcePrefixPath = if (sourcesPrefix.last == '/') sourcesPrefix else sourcesPrefix + '/'
+
     val scoverageXMLReport = XML.loadFile(scoverageReportFilename)
 
     val moduleScoverage = extractScoverageFromNode(scoverageXMLReport)
 
     val classCoverages = for {
       classNode <- scoverageXMLReport \\ "class"
-      filename = s"src/main/scala/${classNode \@ "filename"}"
+      filename = sourcePrefixPath + classNode \@ "filename"
       classScoverage = extractScoverageFromNode(classNode)
       lines = for {
         statement <- classNode \\ "statement"

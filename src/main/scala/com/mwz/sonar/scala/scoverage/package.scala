@@ -22,7 +22,7 @@ package object scoverage {
 
   /** Used to mock the scoverage report parser in tests */
   trait ScoverageReportParserAPI {
-    def parse(scoverageReportFilename: String): ModuleCoverage
+    def parse(scoverageReportFilename: String, sourcesPrefix: String): ModuleCoverage
   }
 
   /**

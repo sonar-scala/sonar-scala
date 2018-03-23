@@ -40,12 +40,6 @@ object Measures {
     }
   }
 
-  /* applied on raw source code */
-
-  /* applied on lines of code */
-
-  /* applied on tokenized code */
-
   @tailrec
   def countCommentLines(tokens: List[Token], i: Int = 0): Int = {
     tokens match {

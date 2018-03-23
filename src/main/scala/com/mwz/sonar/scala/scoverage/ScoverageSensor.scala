@@ -162,7 +162,7 @@ private[scoverage] abstract class ScoverageSensorInternal extends Sensor {
 
 object ScoverageSensorInternal {
   private val SensorName = "Scoverage Sensor"
-  private val ScoverageReportPathPropertyKey = "sonar.scala.scoverage.reportPath"
+  private val ScoverageReportPathPropertyKey = "sonar.scoverage.reportPath"
   private def getDefaultScoverageReportPath(scalaRawVersion: String) = {
     // remove the extra part of the scala version, e.g 2.11.0 -> 2.11
     val scalaVersion = scalaRawVersion.take(scalaRawVersion.lastIndexOf("."))

@@ -41,7 +41,7 @@ This plugin currently supports the following SonarQube [metrics](https://docs.so
 - 	Number of lines of code which are not covered by unit tests - [`uncovered_lines`](https://docs.sonarqube.org/display/SONAR/Metric+Definitions#MetricDefinitions-Tests)
 - Percentage of line coverage - [`line_coverage`](https://docs.sonarqube.org/display/SONAR/Metric+Definitions#MetricDefinitions-Tests)
 
-In addition to the above, the plugin reports the following custom coverage metrics:
+In addition to the above, the plugin reports the following custom metrics, which are extracted from the Scoverage report:
  - Number of all statements - [`total_statements`](https://github.com/mwz/sonar-scala/blob/3973e6a8b3857c06de7b6d996702eeb3e543e5e0/src/main/scala/com/mwz/sonar/scala/scoverage/ScoverageMetrics.scala#L64)
  - Number of statements covered by tests - [`covered_statements`](https://github.com/mwz/sonar-scala/blob/3973e6a8b3857c06de7b6d996702eeb3e543e5e0/src/main/scala/com/mwz/sonar/scala/scoverage/ScoverageMetrics.scala#L74)
  - Percentage of statement coverage - [`scoverage`](https://github.com/mwz/sonar-scala/blob/3973e6a8b3857c06de7b6d996702eeb3e543e5e0/src/main/scala/com/mwz/sonar/scala/scoverage/ScoverageMetrics.scala#L84)
@@ -85,6 +85,11 @@ sonar-scanner -Dsonar.projectName=test \
 # Development
 To build the project from sources, run the `assembly` task in sbt shell and the jar assembled with all of the dependencies required by this plugin should be created in the `target/scala-2.12` directory. 
 
+To debug the plugin, export the following environment variable before running `sonar-scanner`:
+```bash
+export SONAR_SCANNER_OPTS="-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=8000"
+```
+One you've that, `sonnar-scanner` should display the following message `Listening for transport dt_socket at address: 8000`. You can now attach your IDE to the process on port `8000`, set breakpoints and debug the code.
 
 # Credits
 The project has been originally developed by [Sagacify](https://github.com/Sagacify/sonar-scala) and integrates code from two other SonarQube plugins [Sonar Scalastyle Plugin](https://github.com/NCR-CoDE/sonar-scalastyle) and [Sonar Scoverage Plugin](https://github.com/RadoBuransky/sonar-scoverage-plugin).

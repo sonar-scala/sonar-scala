@@ -29,7 +29,7 @@ coverageOutputHTML := false
 coverageOutputCobertura := false
 
 // Lib dependencies
-val sonarVersion = "6.7.+"
+val sonarVersion = "6.7"
 libraryDependencies ++= List(
   "org.sonarsource.sonarqube" % "sonar-core" % sonarVersion % Provided,
   "org.sonarsource.sonarqube" % "sonar-plugin-api" % sonarVersion % Provided,

@@ -68,9 +68,9 @@ For automating the analysis of your Scala projects, check out my sbt plugin [mwz
 
 # Sonar-scanner properties
 The plugin exposes the following properties which can be passed to sonar-scanner when running an analysis:
-- *sonar.sources* (optional) - Scala source directory relative to the root of your project (defaults to `src/main/scala`)
+- *sonar.sources* - Scala source directory relative to the root of your project (usually `src/main/scala`)
 - *sonar.scala.version* (optional) - defines the version of Scala used in your project (defaults to `2.11.0`)
-- *sonar.scoverage.reportPath* (optional) - relative path to the scoverage report (defaults to `target/scala-${sonar.scala.version}/scoverage-report/scoverage.xml`).
+- *sonar.scoverage.reportPath* (optional) - relative path to the scoverage report (defaults to `target/scala-${sonar.scala.version}/scoverage-report/scoverage.xml`)
 
 See an example usage:
 ```bash
@@ -92,7 +92,7 @@ export SONAR_SCANNER_OPTS="-agentlib:jdwp=transport=dt_socket,server=y,suspend=y
 One you've that, `sonnar-scanner` should display the following message `Listening for transport dt_socket at address: 8000`. You can now attach your IDE to the process on port `8000`, set breakpoints and debug the code.
 
 # Credits
-The project has been originally developed by [Sagacify](https://github.com/Sagacify/sonar-scala) and integrates code from two other SonarQube plugins [Sonar Scalastyle Plugin](https://github.com/NCR-CoDE/sonar-scalastyle) and [Sonar Scoverage Plugin](https://github.com/RadoBuransky/sonar-scoverage-plugin).
+This project is a continuation of sonar-scala plugin, which was originally developed by [Sagacify](https://github.com/Sagacify/sonar-scala) and integrates code from two other SonarQube plugins [Sonar Scalastyle Plugin](https://github.com/NCR-CoDE/sonar-scalastyle) and [Sonar Scoverage Plugin](https://github.com/RadoBuransky/sonar-scoverage-plugin).
 
 Many other projects have been used as an inspiration, here is a list of the main ones:
 

@@ -44,9 +44,9 @@ jobs:
       - run:
           name: Set up sonar-scanner
           command: |
-            echo "$SONAR_SCANNER_VERSION" > sonar-scanner-version
-            wget -O sonar-scanner.zip "https://sonarsource.bintray.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-${SONAR_SCANNER_VERSION}.zip"
-            sudo unzip sonar-scanner.zip -d /opt
+            echo "$SONAR_SCANNER_VERSION" > ~/sonar-scanner-version
+            wget -O ~/sonar-scanner.zip "https://sonarsource.bintray.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-${SONAR_SCANNER_VERSION}.zip"
+            sudo unzip ~/sonar-scanner.zip -d /opt
       - restore_cache:
           keys:
             - v1-sonar-cache-{{ checksum "sonar-scanner-version" }}
@@ -80,9 +80,9 @@ jobs:
       - run:
           name: Set up sonar-scanner
           command: |
-            echo "$SONAR_SCANNER_VERSION" > sonar-scanner-version
-            wget -O sonar-scanner.zip "https://sonarsource.bintray.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-${SONAR_SCANNER_VERSION}.zip"
-            sudo unzip sonar-scanner.zip -d /opt
+            echo "$SONAR_SCANNER_VERSION" > ~/sonar-scanner-version
+            wget -O ~/sonar-scanner.zip "https://sonarsource.bintray.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-${SONAR_SCANNER_VERSION}.zip"
+            sudo unzip ~/sonar-scanner.zip -d /opt
       - restore_cache:
           keys:
             - v1-sonar-cache-{{ checksum "sonar-scanner-version" }}

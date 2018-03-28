@@ -77,6 +77,7 @@ jobs:
           command: |
             git config --global user.name "CircleCI"
             git config --global user.email "mwz@users.noreply.github.com"
+            ssh-keyscan -T 15 github.com >> ~/.ssh/known_hosts
       - run:
           name: Set up sonar-scanner
           command: |

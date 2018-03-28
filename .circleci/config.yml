@@ -49,7 +49,7 @@ jobs:
             sudo unzip ~/sonar-scanner.zip -d /opt
       - restore_cache:
           keys:
-            - v1-sonar-cache-{{ checksum "sonar-scanner-version" }}
+            - v1-sonar-cache-{{ checksum "~/sonar-scanner-version" }}
             - v1-sonar-cache-
       - run:
           name: sbt sonarScan
@@ -57,7 +57,7 @@ jobs:
             export SONAR_SCANNER_HOME="/opt/sonar-scanner-${SONAR_SCANNER_VERSION}"
             sbt -Dsonar.host.url=${SONARQUBE_URL} -Dsonar.login=${SONARQUBE_ACCESS_TOKEN} sonarScan
       - save_cache:
-          key: v1-sonar-cache-{{ checksum "sonar-scanner-version" }}
+          key: v1-sonar-cache-{{ checksum "~/sonar-scanner-version" }}
           paths: ~/.sonar/cache
 
   release:
@@ -85,7 +85,7 @@ jobs:
             sudo unzip ~/sonar-scanner.zip -d /opt
       - restore_cache:
           keys:
-            - v1-sonar-cache-{{ checksum "sonar-scanner-version" }}
+            - v1-sonar-cache-{{ checksum "~/sonar-scanner-version" }}
             - v1-sonar-cache-
       - run:
           name: sbt release
@@ -93,7 +93,7 @@ jobs:
             export SONAR_SCANNER_HOME="/opt/sonar-scanner-${SONAR_SCANNER_VERSION}"
             sbt -Dsonar.host.url=${SONARQUBE_URL} -Dsonar.login=${SONARQUBE_ACCESS_TOKEN} 'release with-defaults skip-tests'
       - save_cache:
-          key: v1-sonar-cache-{{ checksum "sonar-scanner-version" }}
+          key: v1-sonar-cache-{{ checksum "~/sonar-scanner-version" }}
           paths: ~/.sonar/cache
 
 workflows:

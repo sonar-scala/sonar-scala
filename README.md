@@ -60,7 +60,7 @@ For more information about either Scalastyle rules or Scoverage results please c
 
 
 # Set-up
-Download the latest [release](https://github.com/mwz/sbt-sonar/releases) jar into your SonarQube plugins folder `/opt/sonarqube/extensions/plugins` and restart SonarQube either using the update center or manually.
+Download the latest [release](https://github.com/mwz/sonar-scala/releases) jar into your SonarQube plugins folder `/opt/sonarqube/extensions/plugins` and restart SonarQube either using the update center or manually.
 
 For an out-of-the-box setup, you can use my docker-compose recipe or a docker image with SonarQube LTS which contains bundled sonar-scala and [arthepsy/sonar-scala-extra](https://github.com/arthepsy/sonar-scala-extra) (Scapegoat) plugins. Please see [mwz/sonar-scala-docker](https://github.com/mwz/sonar-scala-docker) for more details.
 

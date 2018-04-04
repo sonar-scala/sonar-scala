@@ -45,13 +45,13 @@ object Scala {
   private val DefaultFileSuffixes = Array(".scala")
   private val ScalaVersionPropertyKey = "sonar.scala.version"
   private val SourcesPropertyKey = "sonar.sources"
-  private val DefaultSources = "src/main/scala"
 
   def getScalaVersion(settings: Configuration): String =
     settings.get(ScalaVersionPropertyKey).toOption.getOrElse(ScalaVersions.Scala_2_11.toString())
 
+  // because the 'sonar.sources' property is guaranteed to always be present, it is safe to call get
   def getSourcesPath(settings: Configuration): String =
-    settings.get(SourcesPropertyKey).toOption.getOrElse(DefaultSources)
+    settings.get(SourcesPropertyKey).get
 
   def tokenize(sourceCode: String, scalaVersion: String): List[Token] =
     ScalaLexer.createRawLexer(sourceCode, forgiveErrors = false, scalaVersion).toList

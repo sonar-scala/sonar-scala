@@ -115,30 +115,36 @@ private[scoverage] abstract class ScoverageSensorInternal extends Sensor {
   }
 
   /** Returns the filename of the scoverage report for this module */
-  private[this] def getScoverageReportFilename(settings: Configuration): String =
-    settings.get(ScoverageSensorInternal.OldScoverageReportPathPropertyKey).toOption match {
-      case Some(path) => {
-        logger.warn(
-          s"""[scoverage] The property: '${ScoverageSensorInternal.OldScoverageReportPathPropertyKey}' is deprecated,
-             |use the new property '${ScoverageSensorInternal.NewScoverageReportPathPropertyKey}' instead""".stripMargin
-        )
-        path
-      }
-      case None => {
-        settings
-          .get(ScoverageSensorInternal.NewScoverageReportPathPropertyKey)
-          .toOption
-          .getOrElse {
-            val scalaVersion = Scala.getScalaVersion(settings)
-            val default = ScoverageSensorInternal.getDefaultScoverageReportPath(scalaVersion)
-            logger.info(
-              s"""[scoverage] Missing the property: '${ScoverageSensorInternal.NewScoverageReportPathPropertyKey}',
-                 |using the default value: '${default}'""".stripMargin
-            )
-            default
-          }
-      }
+  private[this] def getScoverageReportFilename(settings: Configuration): String = {
+    import ScoverageSensorInternal.DeprecatedScoverageReportPathPropertyKey
+    import ScoverageSensorInternal.ScoverageReportPathPropertyKey
+
+    val scalaVersion = Scala.getScalaVersion(settings)
+    val defaultScoverageReportPath = ScoverageSensorInternal.getDefaultScoverageReportPath(scalaVersion)
+
+    // logging logic
+    if (settings.hasKey(ScoverageReportPathPropertyKey)) {
+      logger.warn(
+        s"""[scoverage] The property: '${DeprecatedScoverageReportPathPropertyKey}' is deprecated,
+           |use the new property '${ScoverageReportPathPropertyKey}' instead""".stripMargin
+      )
+    } else if (!settings.hasKey(ScoverageReportPathPropertyKey)) {
+      logger.info(
+        s"""[scoverage] Missing the property: '${ScoverageReportPathPropertyKey}',
+           |using the default value: '${defaultScoverageReportPath}'""".stripMargin
+      )
     }
+
+    settings
+      .get(DeprecatedScoverageReportPathPropertyKey)
+      .toOption
+      .getOrElse(
+        settings
+          .get(ScoverageReportPathPropertyKey)
+          .toOption
+          .getOrElse(defaultScoverageReportPath)
+      )
+  }
 
   /** Saves the [[ScoverageMetrics]] of a component */
   private[this] def saveComponentScoverage(
@@ -178,8 +184,8 @@ private[scoverage] abstract class ScoverageSensorInternal extends Sensor {
 
 object ScoverageSensorInternal {
   private val SensorName = "Scoverage Sensor"
-  private val OldScoverageReportPathPropertyKey = "sonar.scoverage.reportPath"
-  private val NewScoverageReportPathPropertyKey = "sonar.scala.scoverage.reportPath"
+  private val DeprecatedScoverageReportPathPropertyKey = "sonar.scoverage.reportPath"
+  private val ScoverageReportPathPropertyKey = "sonar.scala.scoverage.reportPath"
   private def getDefaultScoverageReportPath(scalaRawVersion: String) = {
     // remove the extra part of the scala version, e.g 2.11.0 -> 2.11
     val scalaVersion = scalaRawVersion.take(scalaRawVersion.lastIndexOf("."))

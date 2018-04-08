@@ -33,7 +33,12 @@ final class ScalaSensor extends Sensor {
       context.fileSystem().inputFiles(context.fileSystem().predicates().hasLanguage(Scala.Key))
 
     inputFiles.asScala.foreach { inputFile =>
-      context.newMeasure().on(inputFile).forMetric(CM.FILES).withValue(1).save()
+      context
+        .newMeasure()
+        .on(inputFile)
+        .forMetric(CM.FILES)
+        .withValue(1) // scalastyle:ignore LiteralArguments
+        .save()
 
       val sourceCode = Source.fromFile(inputFile.uri, charset).mkString
       val tokens = Scala.tokenize(sourceCode, Scala.getScalaVersion(context.config()))

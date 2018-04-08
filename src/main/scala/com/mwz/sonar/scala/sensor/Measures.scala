@@ -21,10 +21,15 @@ package com.mwz.sonar.scala.sensor
 import scala.annotation.tailrec
 import scalariform.lexer.{Token, Tokens}
 
+import scala.util.matching.Regex
+
 /** Scala Sensor Metrics */
 object Measures {
+
+  val NewLineRegex: Regex = "(\r\n)|\r|\n".r
+
   def countClasses(tokens: List[Token]): Int = {
-    tokens.foldLeft(0) {
+    tokens.foldLeft(0) { // scalastyle:ignore LiteralArguments
       case (acc, token) =>
         val tokenType = token.tokenType
         if (tokenType == Tokens.CLASS || tokenType == Tokens.OBJECT) acc + 1
@@ -33,7 +38,7 @@ object Measures {
   }
 
   def countMethods(tokens: List[Token]): Int = {
-    tokens.foldLeft(0) {
+    tokens.foldLeft(0) { // scalastyle:ignore LiteralArguments
       case (acc, token) =>
         if (token.tokenType == Tokens.DEF) acc + 1
         else acc
@@ -65,7 +70,9 @@ object Measures {
       tokens match {
         case Nil =>
           Nil
-        case token :: tail if token.tokenType == Tokens.WS && token.text.contains('\n') =>
+        case token :: tail
+            if token.tokenType == Tokens.WS &&
+            NewLineRegex.findFirstIn(token.text).nonEmpty =>
           tail
         case token :: tail if token.tokenType == Tokens.LINE_COMMENT =>
           tail

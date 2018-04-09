@@ -65,7 +65,7 @@ class ScalastyleQualityProfile(ruleFinder: RuleFinder) extends ProfileDefinition
     profile
   }
 
-  def setParameters(activeRule: ActiveRule, clazz: String) {
+  def setParameters(activeRule: ActiveRule, clazz: String): Unit = {
     // set parameters
     defaultConfigRules.find(x => (x \ "@class").text.equals(clazz)) match {
       case Some(rule) =>

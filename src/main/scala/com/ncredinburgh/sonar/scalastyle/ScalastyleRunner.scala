@@ -57,7 +57,7 @@ class ScalastyleRunner(rp: RulesProfile) {
   def config: ScalastyleConfiguration = {
     val sonarRules = rp.getActiveRulesByRepository(Constants.RepositoryKey)
     val checkers = sonarRules.asScala.map(ruleToChecker).toList
-    new ScalastyleConfiguration("sonar", true, checkers)
+    new ScalastyleConfiguration("sonar", commentFilter = true, checkers)
   }
 
   private def ruleToChecker(activeRule: ActiveRule): ConfigurationChecker = {

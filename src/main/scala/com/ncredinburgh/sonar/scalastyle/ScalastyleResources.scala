@@ -32,15 +32,15 @@ import scala.xml.{Elem, Node, XML}
 object ScalastyleResources {
 
   // accessing scalastyles definition and documentation.xml files
-  private val definitions = xmlFromClassPath("/scalastyle_definition.xml")
-  private val documentation = xmlFromClassPath("/scalastyle_documentation.xml")
+  private val Definitions = xmlFromClassPath("/scalastyle_definition.xml")
+  private val Documentation = xmlFromClassPath("/scalastyle_documentation.xml")
 
   // accessing scalastyles reference.conf (includes additional data such as key.label)
-  private val cfg = ConfigFactory.load(this.getClass.getClassLoader)
+  private val Cfg = ConfigFactory.load(this.getClass.getClassLoader)
 
   def allDefinedRules: Seq[RepositoryRule] =
     for {
-      checker <- definitions \\ "checker"
+      checker <- Definitions \\ "checker"
       clazz = (checker \ "@class").text
       id = (checker \ "@id").text
       desc = description(id)
@@ -57,12 +57,12 @@ object ScalastyleResources {
     } yield Param(ruleParamKey, ruleParamType, description, defaultValue)
 
   def description(key: String): String =
-    descriptionFromDocumentation(key) getOrElse cfg.getConfig(key).getString("description")
+    descriptionFromDocumentation(key) getOrElse Cfg.getConfig(key).getString("description")
 
-  def label(key: String): String = cfg.getConfig(key).getString("label")
+  def label(key: String): String = Cfg.getConfig(key).getString("label")
 
   private def descriptionFromDocumentation(key: String): Option[String] = {
-    documentation \\ "scalastyle-documentation" \ "check" find { _ \\ "@id" exists (_.text == key) } match {
+    Documentation \\ "scalastyle-documentation" \ "check" find { _ \\ "@id" exists (_.text == key) } match {
       case Some(node) =>
         val justification = {
           val text = (node \ "justification").text
@@ -120,11 +120,11 @@ object ScalastyleDocFormatter {
     val count = line.takeWhile(_ == ' ').length
     LineWithLeadingSpaces(count, empty(line), line)
   }
-  private val margin = 2
+  private val Margin = 2
 
   def format(in: String): String = {
     val linesWithLeadingSpaces = Source.fromString(in).getLines().map(countLeadingSpaces).toList
-    val docLines = linesWithLeadingSpaces.map(l => DocLine(l.spaceCount > margin, l.empty, l.line))
+    val docLines = linesWithLeadingSpaces.map(l => DocLine(l.spaceCount > Margin, l.empty, l.line))
 
     docLines.foldLeft(Out(pre = false, appended = false, "")) {
       case (out @ Out(false, false, text), line) =>

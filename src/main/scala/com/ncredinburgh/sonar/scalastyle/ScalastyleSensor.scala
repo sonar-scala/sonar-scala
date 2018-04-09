@@ -113,5 +113,6 @@ class ScalastyleSensor(
   // sonar claims to accept null or a non zero lines, however if it is passed
   // null it blows up at runtime complaining it was passed 0
   /** Ensures that a line number is valid, if not returns 1 */
-  private def sanitiseLineNum(maybeLine: Option[Int]) = maybeLine.filter(_ > 0).getOrElse(1)
+  private def sanitiseLineNum(maybeLine: Option[Int]) =
+    maybeLine.filter(_ > 0).getOrElse(1) // scalastyle:ignore LiteralArguments
 }

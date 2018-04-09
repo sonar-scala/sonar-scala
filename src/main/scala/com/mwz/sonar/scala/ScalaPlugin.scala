@@ -47,7 +47,13 @@ object Scala {
   private val DefaultScalaVersion = ScalaVersions.Scala_2_11.toString()
   private val SourcesPropertyKey = "sonar.sources"
   private val DefaultSourcesFolder = "src/main/scala"
-  private val Test = Some("test").get
+  private val Test: Option[String] = Some("test")
+
+  def test() = {
+    Test.get
+    List().head
+    ()
+  }
 
   def getScalaVersion(settings: Configuration): String =
     settings.get(ScalaVersionPropertyKey).toOption.getOrElse(DefaultScalaVersion)

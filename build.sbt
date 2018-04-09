@@ -24,6 +24,7 @@ cancelable in Global := true
 scalafmtOnCompile in ThisBuild := true
 scapegoatVersion in ThisBuild := "1.3.4"
 scapegoatReports := Seq("xml")
+scalacOptions in Scapegoat += "-P:scapegoat:overrideLevels:TraversableHead=Warning:OptionGet=Warning"
 coverageOutputXML := true
 coverageOutputHTML := false
 coverageOutputCobertura := false

@@ -24,6 +24,7 @@ import org.scalatest.{FlatSpec, LoneElement, Matchers}
 import org.sonar.api.batch.fs.InputFile
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder
 import org.sonar.api.batch.sensor.internal.{DefaultSensorDescriptor, SensorContextTester}
+import org.sonar.api.config.internal.MapSettings
 
 /** Tests the Scoverage Sensor */
 class ScoverageSensorSpec extends FlatSpec with SensorContextMatchers with LoneElement with Matchers {
@@ -42,6 +43,7 @@ class ScoverageSensorSpec extends FlatSpec with SensorContextMatchers with LoneE
   it should "save the coverage metrics of a one file module" in {
     //prepare the sensor context
     val context = SensorContextTester.create(Paths.get("./"))
+    context.setSettings(new MapSettings().setProperty("sonar.sources", "src/main/scala"))
     val mainFile = TestInputFileBuilder
       .create("./", "src/main/scala/package/Main.scala")
       .setLanguage("scala")

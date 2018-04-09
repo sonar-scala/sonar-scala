@@ -18,9 +18,9 @@
  */
 package com.mwz.sonar.scala.sensor
 
-import scala.annotation.tailrec
 import scalariform.lexer.{Token, Tokens}
 
+import scala.annotation.tailrec
 import scala.util.matching.Regex
 
 /** Scala Sensor Metrics */

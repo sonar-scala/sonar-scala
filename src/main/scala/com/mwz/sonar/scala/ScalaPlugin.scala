@@ -49,10 +49,13 @@ object Scala {
   private val DefaultSourcesFolder = "src/main/scala"
   private val Test: Option[String] = Some("test")
 
-  def test() = {
+  //test
+  def test(): Unit = {
+    val TWO = 1 + 1
+    val t = if (true) true else false
     Test.get
     List().head
-    ()
+    return ()
   }
 
   def getScalaVersion(settings: Configuration): String =

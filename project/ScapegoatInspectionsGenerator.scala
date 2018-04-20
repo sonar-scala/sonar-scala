@@ -33,7 +33,7 @@ object ScapegoatInspectionsGenerator {
     log.info("Generating the scapegoat inspections file")
 
     val inspectionClass = classOf[Inspection]
-    val inspections = mutable.ListBuffer.empty[Inspection]
+    val inspections = mutable.ListBuffer.empty[(String, Inspection)]
 
     // We need to override the scanner class loader so it can find the scapegoat inspections
     log.debug("[ScapegoatInspectionsGenerator] Scanning the classpath")
@@ -44,25 +44,33 @@ object ScapegoatInspectionsGenerator {
         inspectionClass,
         new SubclassMatchProcessor[Inspection] {
           override def processMatch(matchingClass: Class[_ <: Inspection]): Unit = {
-            log.debug(s"[ScapegoatInspectionsGenerator] Found the inspection: ${matchingClass.getName}")
-            inspections += matchingClass.newInstance()
+            val inspectionClassName = matchingClass.getName
+            log.debug(s"[ScapegoatInspectionsGenerator] Found the inspection: ${inspectionClassName}")
+            inspections += (inspectionClassName -> matchingClass.newInstance())
           }
         }
       ).scan()
 
-    val AllScapegoatInspections = inspections.toList.zipWithIndex map {
-      case (inspection, idx) =>
-        s"""ScapegoatInspection(id = ${idx}, name = "${inspection.text}", description = "${inspection.explanation.getOrElse("No Explanation")}", defaultLevel = ${inspection.defaultLevel}),"""
+    val AllScapegoatInspections = inspections.toList map {
+      case (inspectionClassName, inspection) =>
+        s"""ScapegoatInspection(
+           |  id = "${inspectionClassName}",
+           |  name = "${inspection.text}",
+           |  description = "${inspection.explanation.getOrElse("No Explanation")}",
+           |  defaultLevel = Level.${inspection.defaultLevel}
+           |),""".stripMargin
     }
 
     val lines = List(
-      "package com.mwz.sonar.scala.scapegoat",
-      "package object inspections {",
+      "package com.mwz.sonar.scala.scapegoat.inspections",
       "sealed trait Level",
+      "object Level {",
       "case object Error extends Level",
       "case object Warning extends Level",
       "case object Info extends Level",
-      "final case class ScapegoatInspection (id: Int, name: String, description: String, defaultLevel: Level)",
+      "}",
+      "final case class ScapegoatInspection (id: String, name: String, description: String, defaultLevel: Level)",
+      "object ScapegoatInspection {",
       "val AllScapegoatInspections: List[ScapegoatInspection] = List("
     ) ++ AllScapegoatInspections ++ List(")", "}")
 

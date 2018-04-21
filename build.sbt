@@ -1,3 +1,4 @@
+import com.mwz.sonar.scala.scapegoat.ScapegoatInspectionsGenerator
 import org.sonar.updatecenter.common.PluginManifest
 import sbt._
 import sbtrelease.ReleasePlugin.autoImport.ReleaseTransformations._
@@ -27,6 +28,9 @@ scapegoatReports := Seq("xml")
 coverageOutputXML := true
 coverageOutputHTML := false
 coverageOutputCobertura := false
+
+// Add the Scpegoat inspections generator task to the compile source generators
+sourceGenerators in Compile += ScapegoatInspectionsGenerator.generatorTask.taskValue
 
 // Lib dependencies
 val sonarVersion = "6.7"

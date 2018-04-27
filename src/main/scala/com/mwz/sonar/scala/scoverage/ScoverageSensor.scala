@@ -66,7 +66,7 @@ private[scoverage] abstract class ScoverageSensorInternal extends Sensor {
         logger.info(s"[scoverage] Successfully loaded the scoverage report file: '$reportPath'.")
 
         logger.debug(
-          s"[scoverage] Saving the overall scoverage information about the module, " +
+          "[scoverage] Saving the overall scoverage information about the module, " +
           s"the statement coverage is ${moduleCoverage.moduleScoverage.statementCoverage}%."
         )
         saveComponentScoverage(context, context.module(), moduleCoverage.moduleScoverage)

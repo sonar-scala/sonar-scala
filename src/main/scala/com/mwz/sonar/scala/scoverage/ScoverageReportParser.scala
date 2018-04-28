@@ -28,17 +28,18 @@ import scala.xml.{Node, XML}
 /** Scoverage XML reports parser */
 trait ScoverageReportParser extends ScoverageReportParserAPI {
 
-  /** Parses the scoverage report from a file and returns the [[ModuleCoverage]] */
+  /** Parses the scoverage report from a file and returns the ModuleCoverage. */
   override def parse(scoverageReportPath: Path, sourcePrefixes: List[Path]): ModuleCoverage = {
     val scoverageXMLReport = XML.loadFile(scoverageReportPath.toFile)
     val moduleScoverage = extractScoverageFromNode(scoverageXMLReport)
 
     val classCoverages = for {
       classNode <- scoverageXMLReport \\ "class"
-      sourcesPrefix <- sourcePrefixes
-        .filter(cwd.resolve(_).resolve(classNode \@ "filename").toFile.exists)
-        .take(1)
-      filename = sourcesPrefix.resolve(classNode \@ "filename")
+      scoverageFilename = classNode \@ "filename"
+      filename <- sourcePrefixes.collectFirst {
+        case prefix if cwd.resolve(prefix).resolve(scoverageFilename).toFile.exists =>
+          prefix.resolve(scoverageFilename)
+      }
       classScoverage = extractScoverageFromNode(classNode)
 
       lines = for {

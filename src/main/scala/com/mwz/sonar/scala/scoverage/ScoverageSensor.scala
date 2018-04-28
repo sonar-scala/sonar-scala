@@ -42,7 +42,7 @@ private[scoverage] abstract class ScoverageSensorInternal extends Sensor {
 
   private[this] val logger = Loggers.get(classOf[ScoverageSensorInternal])
 
-  /** Populates the [[SensorDescriptor]] of this sensor. */
+  /** Populates the SensorDescriptor of this sensor. */
   override def describe(descriptor: SensorDescriptor): Unit = {
     descriptor
       .onlyOnLanguage(Scala.Key)
@@ -105,28 +105,28 @@ private[scoverage] abstract class ScoverageSensorInternal extends Sensor {
   }
 
   /** Returns all scala main files from this module */
-  private[this] def getModuleSourceFiles(fs: FileSystem): Iterable[InputFile] = {
+  private[scoverage] def getModuleSourceFiles(fs: FileSystem): Iterable[InputFile] = {
     val predicates = fs.predicates
     val predicate = predicates.and(predicates.hasLanguage(Scala.Key), predicates.hasType(InputFile.Type.MAIN))
     fs.inputFiles(predicate).asScala
   }
 
   /** Returns the module base path */
-  private[this] def getModuleBaseDirectory(fs: FileSystem): Path = {
+  private[scoverage] def getModuleBaseDirectory(fs: FileSystem): Path = {
     val moduleAbsolutePath = Paths.get(fs.baseDir().getAbsolutePath).normalize
     val currentWorkdirAbsolutePath = PathUtils.cwd
     currentWorkdirAbsolutePath.relativize(moduleAbsolutePath)
   }
 
   /** Returns the filename of the scoverage report for this module */
-  private[this] def getScoverageReportPath(settings: Configuration): String = {
+  private[scoverage] def getScoverageReportPath(settings: Configuration): Path = {
     val scalaVersion = Scala.getScalaVersion(settings)
     val defaultScoverageReportPath = ScoverageSensorInternal.getDefaultScoverageReportPath(scalaVersion)
 
     if (settings.hasKey(DeprecatedScoverageReportPathPropertyKey)) {
       logger.warn(
         s"[scoverage] The property: '$DeprecatedScoverageReportPathPropertyKey' is deprecated, " +
-        "use the new property '$ScoverageReportPathPropertyKey' instead."
+        s"use the new property '$ScoverageReportPathPropertyKey' instead."
       )
     } else if (!settings.hasKey(ScoverageReportPathPropertyKey)) {
       logger.info(
@@ -135,15 +135,17 @@ private[scoverage] abstract class ScoverageSensorInternal extends Sensor {
       )
     }
 
-    settings
-      .get(DeprecatedScoverageReportPathPropertyKey)
-      .toOption
-      .getOrElse(
-        settings
-          .get(ScoverageReportPathPropertyKey)
-          .toOption
-          .getOrElse(defaultScoverageReportPath.toString)
-      )
+    Paths.get(
+      settings
+        .get(DeprecatedScoverageReportPathPropertyKey)
+        .toOption
+        .getOrElse(
+          settings
+            .get(ScoverageReportPathPropertyKey)
+            .toOption
+            .getOrElse(defaultScoverageReportPath.toString)
+        )
+    )
   }
 
   /** Saves the [[ScoverageMetrics]] of a component */

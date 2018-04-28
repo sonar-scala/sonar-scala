@@ -24,7 +24,7 @@ import java.nio.file.{Path, Paths}
 import com.mwz.sonar.scala.util.PathUtils
 import org.scalatest.{FlatSpec, LoneElement, Matchers}
 import org.sonar.api.batch.fs.InputFile
-import org.sonar.api.batch.fs.internal.TestInputFileBuilder
+import org.sonar.api.batch.fs.internal.{DefaultFileSystem, TestInputFileBuilder}
 import org.sonar.api.batch.sensor.internal.{DefaultSensorDescriptor, SensorContextTester}
 import org.sonar.api.config.internal.MapSettings
 
@@ -41,6 +41,75 @@ class ScoverageSensorSpec extends FlatSpec with SensorContextMatchers with LoneE
     descriptor.name shouldBe "Scoverage Sensor"
     descriptor.languages.loneElement shouldBe "scala"
     descriptor.`type` shouldBe InputFile.Type.MAIN
+  }
+
+  it should "return all scala files from the module" in {
+    val cwd = PathUtils.cwd
+    val context = SensorContextTester.create(cwd)
+
+    context.setSettings(new MapSettings().setProperty("sonar.sources", "src/main/scala"))
+    val mainFile = TestInputFileBuilder
+      .create("", "src/main/scala/package/Main.scala")
+      .setLanguage("scala")
+      .setLines(10)
+      .setType(InputFile.Type.MAIN)
+      .build()
+    val otherFile = TestInputFileBuilder
+      .create("", "src/main/scala/Other.scala")
+      .setLanguage("scala")
+      .setLines(10)
+      .setType(InputFile.Type.MAIN)
+      .build()
+    val testFile = TestInputFileBuilder
+      .create("", "src/test/scala/Test.scala")
+      .setLanguage("scala")
+      .setLines(10)
+      .setType(InputFile.Type.TEST)
+      .build()
+    val javaFile = TestInputFileBuilder
+      .create("", "src/main/java/Other.java")
+      .setLanguage("java")
+      .setLines(10)
+      .setType(InputFile.Type.MAIN)
+      .build()
+    context.fileSystem.add(mainFile)
+    context.fileSystem.add(otherFile)
+    context.fileSystem.add(testFile)
+    context.fileSystem.add(javaFile)
+
+    val files = scoverageSensor.getModuleSourceFiles(context.fileSystem)
+    files.toSeq should contain theSameElementsAs Seq(mainFile, otherFile)
+  }
+
+  it should "get module base directory" in {
+    val cwd = PathUtils.cwd
+
+    scoverageSensor.getModuleBaseDirectory(new DefaultFileSystem(cwd)) shouldBe Paths.get("")
+    scoverageSensor.getModuleBaseDirectory(
+      new DefaultFileSystem(cwd.resolve("module"))
+    ) shouldBe Paths.get("module")
+  }
+
+  it should "get default scoverage report path" in {
+    val path = scoverageSensor.getScoverageReportPath(new MapSettings().asConfig())
+    path shouldBe Paths.get(s"target/scala-2.11/scoverage-report/scoverage.xml")
+
+    val path2 = scoverageSensor.getScoverageReportPath(
+      new MapSettings().setProperty("sonar.scala.version", "2.12.6").asConfig()
+    )
+    path2 shouldBe Paths.get(s"target/scala-2.12/scoverage-report/scoverage.xml")
+  }
+
+  it should "get scoverage report path set in sonar properties" in {
+    val deprecated = scoverageSensor.getScoverageReportPath(
+      new MapSettings().setProperty("sonar.scoverage.reportPath", "target/report-path").asConfig()
+    )
+    deprecated shouldBe Paths.get(s"target/report-path")
+
+    val current = scoverageSensor.getScoverageReportPath(
+      new MapSettings().setProperty("sonar.scala.scoverage.reportPath", "target/report-path").asConfig()
+    )
+    current shouldBe Paths.get(s"target/report-path")
   }
 
   it should "save the coverage metrics of a one file module" in {

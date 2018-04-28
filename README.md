@@ -53,10 +53,7 @@ This plugin integrates 75 quality checks from [Scalastyle](http://www.scalastyle
 
 The rules in the Scalastyle quality profile, created by this plugin, are almost all deactivated. In order to use all of the rules, you should clone the quality profile and you should be able to activate more rules, change rule severity and create more custom rules from the existing templates.
 
-For more information about either Scalastyle rules or Scoverage results please consult their upstream documentation first.
-
-- [NCR-CoDE/sonar-scalastyle](https://github.com/NCR-CoDE/sonar-scalastyle)
-- [RadoBuransky/sonar-scoverage-plugin](https://github.com/RadoBuransky/sonar-scoverage-plugin)
+For more information about Scalastyle rules, please consult the [upstream documentation](http://www.scalastyle.org/rules-1.0.0.html).
 
 
 # Set-up
@@ -70,7 +67,7 @@ For automating the analysis of your Scala projects, check out my sbt plugin [mwz
 The plugin exposes the following properties which can be passed to sonar-scanner when running an analysis:
 - *sonar.sources* - Scala source directory relative to the root of your project (usually `src/main/scala`)
 - *sonar.scala.version* (optional) - defines the version of Scala used in your project (defaults to `2.11.0`)
-- *sonar.scoverage.reportPath* (optional) - relative path to the scoverage report (defaults to `target/scala-${sonar.scala.version}/scoverage-report/scoverage.xml`)
+- *sonar.scala.scoverage.reportPath* (optional) - relative path to the scoverage report (defaults to `target/scala-${sonar.scala.version}/scoverage-report/scoverage.xml`)
 
 See an example usage:
 ```bash
@@ -99,10 +96,6 @@ Many other projects have been used as an inspiration, here is a list of the main
 - [1and1/sonar-scala](https://github.com/1and1/sonar-scala)
 - [SonarSource/sonar-java](https://github.com/SonarSource/sonar-java)
 - [SonarSource/sonar-examples](https://github.com/SonarSource/sonar-examples)
-
-
-# Integration
-For ease of use, Sonar Scala directly integrates the latest code from the [Sonar Scalastyle Plugin](https://github.com/NCR-CoDE/sonar-scalastyle) and [Sonar Scoverage Plugin](https://github.com/RadoBuransky/sonar-scoverage-plugin). This is possible as all three projects are released under the GNU LGPL v3 license. Nevertheless, all merged files are to keep their original copyright, classpath, and commit history. Any further change upstream should be incorporated using cherry-picks or merges.
 
 
 # Changelog

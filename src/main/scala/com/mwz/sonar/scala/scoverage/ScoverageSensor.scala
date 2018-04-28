@@ -72,7 +72,7 @@ private[scoverage] abstract class ScoverageSensorInternal extends Sensor {
         saveComponentScoverage(context, context.module(), moduleCoverage.moduleScoverage)
 
         // save the coverage information of each file of the module
-        for (file <- getModuleSourceFiles(filesystem)) {
+        getModuleSourceFiles(filesystem).foreach { file =>
           // toString returns the project relative path of the file
           val filename = file.toString
           logger.debug(s"[scoverage] Saving the scoverage information of the file: '$filename'")
@@ -84,15 +84,14 @@ private[scoverage] abstract class ScoverageSensorInternal extends Sensor {
               // save the coverage of each line of the file
               val coverage = context.newCoverage()
               coverage.onFile(file)
-              for ((lineNum, hits) <- fileCoverage.linesCoverage) {
-                coverage.lineHits(lineNum, hits)
+              fileCoverage.linesCoverage.foreach {
+                case (lineNum, hits) => coverage.lineHits(lineNum, hits)
               }
               coverage.save()
-            case None => {
+            case None =>
               logger.warn(
                 s"[scoverage] The file: '$filename' has no scoverage information associated with it."
               )
-            }
           }
         }
       case Failure(ex) =>

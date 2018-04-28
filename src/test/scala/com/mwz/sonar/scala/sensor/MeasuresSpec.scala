@@ -16,11 +16,10 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-package com.mwz.sonar.scala.sensor
+package com.mwz.sonar.scala
+package sensor
 
-import com.mwz.sonar.scala.Scala
 import org.scalatest._
-import org.scalactic.source.Position.apply
 
 /** Tests the Scala Sensor Metrics */
 class MeasuresSpec extends FlatSpec with Matchers {
@@ -97,7 +96,6 @@ class ScalaSensorSpec extends FlatSpec with Matchers {
 
   "A Non-Comment lines counter" should "count non-comment lines of codes" in {
     val tokens = Scala.tokenize("package com.example", scala211)
-    println(tokens)
     val count = Measures.countNonCommentLines(tokens)
     assert(count == 1)
   }

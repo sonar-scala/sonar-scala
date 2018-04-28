@@ -18,6 +18,8 @@
  */
 package com.mwz.sonar.scala
 
+import java.nio.file.{Path, Paths}
+
 import com.mwz.sonar.scala.scoverage.{ScoverageMetrics, ScoverageSensor}
 import com.mwz.sonar.scala.sensor.ScalaSensor
 import com.mwz.sonar.scala.util.JavaOptionals._
@@ -53,8 +55,16 @@ object Scala {
 
   // even if the 'sonar.sources' property is mandatory,
   // we add a default value to ensure a safe access to it
-  def getSourcesPath(settings: Configuration): String =
-    settings.get(SourcesPropertyKey).toOption.filter(_.nonEmpty).getOrElse(DefaultSourcesFolder)
+  def getSourcesPaths(settings: Configuration): List[Path] = {
+    settings
+      .get(SourcesPropertyKey)
+      .toOption
+      .filter(_.nonEmpty)
+      .getOrElse(DefaultSourcesFolder)
+      .split(',')
+      .map(p => Paths.get(p.trim))
+      .toList
+  }
 
   def tokenize(sourceCode: String, scalaVersion: String): List[Token] =
     ScalaLexer.createRawLexer(sourceCode, forgiveErrors = false, scalaVersion).toList

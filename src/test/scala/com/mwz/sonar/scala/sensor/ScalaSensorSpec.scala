@@ -16,15 +16,14 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-package com.mwz.sonar.scala.sensor
+package com.mwz.sonar.scala
+package sensor
 
-import com.mwz.sonar.scala.SensorContextMatchers
 import java.nio.file.Paths
+
 import org.scalatest.{FlatSpec, LoneElement, Matchers}
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder
 import org.sonar.api.batch.sensor.internal.{DefaultSensorDescriptor, SensorContextTester}
-import org.sonar.api.batch.sensor.measure.Measure
-import org.sonar.api.config.internal.MapSettings
 import org.sonar.api.measures.{CoreMetrics => CM}
 
 /** Tests the Scala Sensor */

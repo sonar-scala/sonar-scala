@@ -16,41 +16,52 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-package com.mwz.sonar.scala.scoverage
+package com.mwz.sonar.scala
+package scoverage
 
-import scala.xml.{Node, NodeSeq, XML}
+import java.nio.file.Path
+
+import com.mwz.sonar.scala.util.PathUtils._
+
+import scala.xml.{Node, XML}
 
 /** Scoverage XML reports parser */
 trait ScoverageReportParser extends ScoverageReportParserAPI {
 
-  /** Parses the scoverage report from a file and returns the [[ModuleCoverage]] */
-  override def parse(scoverageReportFilename: String, sourcesPrefix: String): ModuleCoverage = {
-    val scoverageXMLReport = XML.loadFile(scoverageReportFilename)
-
+  /** Parses the scoverage report from a file and returns the ModuleCoverage. */
+  override def parse(scoverageReportPath: Path, sourcePrefixes: List[Path]): ModuleCoverage = {
+    val scoverageXMLReport = XML.loadFile(scoverageReportPath.toFile)
     val moduleScoverage = extractScoverageFromNode(scoverageXMLReport)
 
     val classCoverages = for {
       classNode <- scoverageXMLReport \\ "class"
-      filename = sourcesPrefix + classNode \@ "filename"
+      scoverageFilename = classNode \@ "filename"
+      filename <- sourcePrefixes.collectFirst {
+        case prefix if cwd.resolve(prefix).resolve(scoverageFilename).toFile.exists =>
+          prefix.resolve(scoverageFilename)
+      }
       classScoverage = extractScoverageFromNode(classNode)
+
       lines = for {
         statement <- classNode \\ "statement"
-        if (!(statement \@ "ignored").toBoolean)
-        linenum = (statement \@ "line").toInt
+        if !(statement \@ "ignored").toBoolean
+        lineNum = (statement \@ "line").toInt
         count = (statement \@ "invocation-count").toInt
-      } yield (linenum -> count)
+      } yield lineNum -> count
+
       linesCoverage = lines groupBy {
-        case (linenum, _) => linenum
+        case (lineNum, _) => lineNum
       } mapValues { group =>
         val countsByLine = group map { case (_, count) => count }
         countsByLine.sum
       }
+
       classCoverage = FileCoverage(classScoverage, linesCoverage)
-    } yield (filename -> classCoverage)
+    } yield filename.toString -> classCoverage
 
     // merge the class coverages by filename
     val files = classCoverages groupBy {
-      case (filename, _) => filename
+      case (fileName, _) => fileName
     } mapValues { group =>
       val classCoveragesByFilename = group map { case (_, classCoverage) => classCoverage }
       classCoveragesByFilename.reduce(_ + _)

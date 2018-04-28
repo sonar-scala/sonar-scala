@@ -61,7 +61,7 @@ object Scala {
       .toOption
       .filter(_.nonEmpty)
       .getOrElse(DefaultSourcesFolder)
-      .split(',')
+      .split(',') // scalastyle:ignore LiteralArguments
       .map(p => Paths.get(p.trim))
       .toList
   }

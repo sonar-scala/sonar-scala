@@ -8,15 +8,15 @@ import org.sonar.api.config.internal.MapSettings
 class ScalaTest extends FlatSpec with Matchers {
   "getScalaVersion" should "return the available version" in {
     val conf = new MapSettings()
-      .setProperty("sonar.scala.version", "123")
+      .setProperty("sonar.scala.version", "2.11.11")
       .asConfig()
 
-    Scala.getScalaVersion(conf) shouldBe "123"
+    Scala.getScalaVersion(conf).toString shouldBe "2.11.11"
   }
 
   it should "return the default value if not set" in {
     val conf = new MapSettings().asConfig()
-    Scala.getScalaVersion(conf) shouldBe "2.11.0"
+    Scala.getScalaVersion(conf).toString shouldBe "2.11.0"
   }
 
   "getSourcesPaths" should "return the available sources" in {

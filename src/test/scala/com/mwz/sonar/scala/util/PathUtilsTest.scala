@@ -36,7 +36,14 @@ class PathUtilsTest extends FlatSpec with Matchers {
   }
 
   "stripOutPrefix" should "successfully strip out the prefix" in {
-    PathUtils.stripOutPrefix(Paths.get("a/b"), Paths.get("a/b/c")) shouldBe Paths.get("c")
-    PathUtils.stripOutPrefix(Paths.get("x/y"), Paths.get("a/b/c")) shouldBe Paths.get("a/b/c")
+    PathUtils.stripOutPrefix(
+      prefix = Paths.get("a/b"),
+      path = Paths.get("a/b/c")
+    ) shouldBe Paths.get("c")
+
+    PathUtils.stripOutPrefix(
+      prefix = Paths.get("x/y"),
+      path = Paths.get("a/b/c")
+    ) shouldBe Paths.get("a/b/c")
   }
 }

@@ -4,6 +4,7 @@ import java.nio.file.Paths
 
 import org.scalatest.{FlatSpec, Matchers}
 import org.sonar.api.config.internal.MapSettings
+import scalariform.{ScalaVersion, ScalaVersions}
 
 class ScalaTest extends FlatSpec with Matchers {
   "getScalaVersion" should "return the available version, if properly set" in {
@@ -11,12 +12,7 @@ class ScalaTest extends FlatSpec with Matchers {
       .setProperty("sonar.scala.version", "2.11.11")
       .asConfig()
 
-    Scala.getScalaVersion(conf).toString shouldBe "2.11.11"
-  }
-
-  it should "return the default version, if the property is not set" in {
-    val conf = new MapSettings().asConfig()
-    Scala.getScalaVersion(conf).toString shouldBe "2.11.0"
+    Scala.getScalaVersion(conf) shouldBe ScalaVersion(2, 11)
   }
 
   it should "be able to parse a milestone version" in {
@@ -24,15 +20,7 @@ class ScalaTest extends FlatSpec with Matchers {
       .setProperty("sonar.scala.version", "2.13.0-M3")
       .asConfig()
 
-    Scala.getScalaVersion(conf).toString shouldBe "2.13.0-M3"
-  }
-
-  it should "be able to parse a version with an empty patch" in {
-    val conf = new MapSettings()
-      .setProperty("sonar.scala.version", "2.12.")
-      .asConfig()
-
-    Scala.getScalaVersion(conf).toString shouldBe "2.12."
+    Scala.getScalaVersion(conf) shouldBe ScalaVersion(2, 13)
   }
 
   it should "be able to parse a version without patch" in {
@@ -40,7 +28,20 @@ class ScalaTest extends FlatSpec with Matchers {
       .setProperty("sonar.scala.version", "2.12")
       .asConfig()
 
-    Scala.getScalaVersion(conf).toString shouldBe "2.12"
+    Scala.getScalaVersion(conf) shouldBe ScalaVersion(2, 12)
+  }
+
+  it should "return the default version, if the property is not set" in {
+    val conf = new MapSettings().asConfig()
+    Scala.getScalaVersion(conf) shouldBe ScalaVersions.Scala_2_11
+  }
+
+  it should "return the default version, if the version property has an empty patch" in {
+    val conf = new MapSettings()
+      .setProperty("sonar.scala.version", "2.12.")
+      .asConfig()
+
+    Scala.getScalaVersion(conf) shouldBe ScalaVersions.Scala_2_11
   }
 
   it should "return the default version, if the version property only contains the major version" in {
@@ -48,7 +49,7 @@ class ScalaTest extends FlatSpec with Matchers {
       .setProperty("sonar.scala.version", "2")
       .asConfig()
 
-    Scala.getScalaVersion(conf).toString shouldBe "2.11.0"
+    Scala.getScalaVersion(conf) shouldBe ScalaVersions.Scala_2_11
   }
 
   "getSourcesPaths" should "return the available sources" in {

@@ -1,0 +1,18 @@
+<scoverage statement-count="2" statements-invoked="2" statement-rate="100.00" branch-rate="100.00" version="1.0" timestamp="1521408468011">
+  <packages>
+    <package name="com.mwz.sonar.scala" statement-count="2" statements-invoked="2" statement-rate="100.00">
+      <classes>
+        <class name="com.mwz.sonar.scala.ScalaPlugin" filename="src/main/scala/com/mwz/sonar/scala/ScalaPlugin.scala" statement-count="2" statements-invoked="2" statement-rate="100.00" branch-rate="100.00">
+          <methods>
+            <method name="com.mwz.sonar.scala/ScalaPlugin/define" statement-count="2" statements-invoked="2" statement-rate="100.00" branch-rate="100.00">
+              <statements>
+                <statement package="com.mwz.sonar.scala" class="ScalaPlugin" class-type="Class" full-class-name="com.mwz.sonar.scala.ScalaPlugin" source="~/sonar-scala/src/main/scala/com/mwz/sonar/scala/ScalaPlugin.scala" method="define" start="2445" end="2445" line="66" branch="false" invocation-count="1" ignored="false"></statement>
+                <statement package="com.mwz.sonar.scala" class="ScalaPlugin" class-type="Class" full-class-name="com.mwz.sonar.scala.ScalaPlugin" source="~/sonar-scala/src/main/scala/com/mwz/sonar/scala/ScalaPlugin.scala" method="define" start="2424" end="2677" line="66" branch="false" invocation-count="1" ignored="false"></statement>
+              </statements>
+            </method>
+          </methods>
+        </class>
+      </classes>
+    </package>
+  </packages>
+</scoverage >

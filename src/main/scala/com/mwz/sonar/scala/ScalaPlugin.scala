@@ -20,6 +20,8 @@ package com.mwz.sonar.scala
 
 import java.nio.file.{Path, Paths}
 
+import cats.kernel.Eq
+import cats.syntax.eq._
 import com.mwz.sonar.scala.scoverage.{ScoverageMetrics, ScoverageSensor}
 import com.mwz.sonar.scala.sensor.ScalaSensor
 import com.mwz.sonar.scala.util.JavaOptionals._
@@ -28,9 +30,9 @@ import org.sonar.api.Plugin
 import org.sonar.api.config.Configuration
 import org.sonar.api.resources.AbstractLanguage
 import org.sonar.api.utils.log.Loggers
-import scalariform.{ScalaVersion, ScalaVersions}
 import scalariform.lexer.{ScalaLexer, Token}
 import scalariform.utils.Utils._
+import scalariform.{ScalaVersion, ScalaVersions}
 
 /** Defines Scala as a language for SonarQube */
 class Scala(settings: Configuration) extends AbstractLanguage(Scala.Key, Scala.Name) {
@@ -54,6 +56,7 @@ object Scala {
   private val DefaultSourcesFolder = "src/main/scala"
 
   private val logger = Loggers.get(classOf[Scala])
+  implicit val eqScalaVersion: Eq[ScalaVersion] = Eq.fromUniversalEquals
 
   def getScalaVersion(settings: Configuration): ScalaVersion = {
     def parseVersion(s: String): Option[ScalaVersion] = s match {
@@ -73,9 +76,10 @@ object Scala {
       .getOrElse(DefaultScalaVersion)
 
     // log a warning if using the default scala version
-    if (scalaVersion == DefaultScalaVersion)
+    if (scalaVersion === DefaultScalaVersion)
       logger.warn(
-        s"[sonar-scala] The '$ScalaVersionPropertyKey' is not properly set or is missing, using the default value: '$DefaultScalaVersion'"
+        s"[sonar-scala] The '$ScalaVersionPropertyKey' is not properly set or is missing, " +
+        s"using the default value: '$DefaultScalaVersion'"
       )
 
     scalaVersion
@@ -93,9 +97,9 @@ object Scala {
       .map(p => Paths.get(p.trim))
       .toList
 
-  def tokenize(sourceCode: String, settings: Configuration): List[Token] =
+  def tokenize(sourceCode: String, scalaVersion: ScalaVersion): List[Token] =
     ScalaLexer
-      .createRawLexer(sourceCode, forgiveErrors = false, getScalaVersion(settings).toString)
+      .createRawLexer(sourceCode, forgiveErrors = false, scalaVersion.toString)
       .toList
 }
 

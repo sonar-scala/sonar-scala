@@ -62,7 +62,7 @@ object Scala {
           major <- major.toIntOpt
           minor <- minor.toIntOpt
         } yield ScalaVersion(major, minor)
-      case _ ⇒
+      case _ =>
         None
     }
 
@@ -75,7 +75,7 @@ object Scala {
     // log a warning if using the default scala version
     if (scalaVersion == DefaultScalaVersion)
       logger.warn(
-        s"[sonar-scala] The '$ScalaVersionPropertyKey' is not properly set or is missing, using the default value: 's$DefaultScalaVersion'"
+        s"[sonar-scala] The '$ScalaVersionPropertyKey' is not properly set or is missing, using the default value: '$DefaultScalaVersion'"
       )
 
     scalaVersion

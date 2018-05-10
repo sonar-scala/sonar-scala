@@ -27,8 +27,10 @@ import com.ncredinburgh.sonar.scalastyle.{ScalastyleQualityProfile, ScalastyleRe
 import org.sonar.api.Plugin
 import org.sonar.api.config.Configuration
 import org.sonar.api.resources.AbstractLanguage
-import scalariform.ScalaVersions
+import org.sonar.api.utils.log.Loggers
+import scalariform.{ScalaVersion, ScalaVersions}
 import scalariform.lexer.{ScalaLexer, Token}
+import scalariform.utils.Utils._
 
 /** Defines Scala as a language for SonarQube */
 class Scala(settings: Configuration) extends AbstractLanguage(Scala.Key, Scala.Name) {
@@ -46,16 +48,42 @@ object Scala {
   private val FileSuffixesPropertyKey = "sonar.scala.file.suffixes"
   private val DefaultFileSuffixes = Array(".scala")
   private val ScalaVersionPropertyKey = "sonar.scala.version"
-  private val DefaultScalaVersion = ScalaVersions.Scala_2_11.toString()
+  private val DefaultScalaVersion = ScalaVersions.Scala_2_11
+  private val ScalaVersionPattern = """(\d+)\.(\d+)(?:\..+)?""".r
   private val SourcesPropertyKey = "sonar.sources"
   private val DefaultSourcesFolder = "src/main/scala"
 
-  def getScalaVersion(settings: Configuration): String =
-    settings.get(ScalaVersionPropertyKey).toOption.getOrElse(DefaultScalaVersion)
+  private val logger = Loggers.get(classOf[Scala])
+
+  def getScalaVersion(settings: Configuration): ScalaVersion = {
+    def parseVersion(s: String): Option[ScalaVersion] = s match {
+      case ScalaVersionPattern(major, minor) =>
+        for {
+          major <- major.toIntOpt
+          minor <- minor.toIntOpt
+        } yield ScalaVersion(major, minor)
+      case _ =>
+        None
+    }
+
+    val scalaVersion = settings
+      .get(ScalaVersionPropertyKey)
+      .toOption
+      .flatMap(parseVersion)
+      .getOrElse(DefaultScalaVersion)
+
+    // log a warning if using the default scala version
+    if (scalaVersion == DefaultScalaVersion)
+      logger.warn(
+        s"[sonar-scala] The '$ScalaVersionPropertyKey' is not properly set or is missing, using the default value: '$DefaultScalaVersion'"
+      )
+
+    scalaVersion
+  }
 
   // even if the 'sonar.sources' property is mandatory,
   // we add a default value to ensure a safe access to it
-  def getSourcesPaths(settings: Configuration): List[Path] = {
+  def getSourcesPaths(settings: Configuration): List[Path] =
     settings
       .get(SourcesPropertyKey)
       .toOption
@@ -64,10 +92,11 @@ object Scala {
       .split(',') // scalastyle:ignore LiteralArguments
       .map(p => Paths.get(p.trim))
       .toList
-  }
 
-  def tokenize(sourceCode: String, scalaVersion: String): List[Token] =
-    ScalaLexer.createRawLexer(sourceCode, forgiveErrors = false, scalaVersion).toList
+  def tokenize(sourceCode: String, settings: Configuration): List[Token] =
+    ScalaLexer
+      .createRawLexer(sourceCode, forgiveErrors = false, getScalaVersion(settings).toString)
+      .toList
 }
 
 /** Plugin entry point */

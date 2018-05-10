@@ -11,7 +11,7 @@ licenses := Seq("LGPL-3.0" -> url("https://opensource.org/licenses/lgpl-3.0.html
 description := "Enables analysis of Scala projects with SonarQube."
 
 // Compile options
-scalaVersion := "2.12.5"
+scalaVersion := "2.12.6"
 scalacOptions := Seq(
   "-unchecked",
   "-deprecation",

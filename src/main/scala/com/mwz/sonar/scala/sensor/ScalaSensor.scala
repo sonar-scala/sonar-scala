@@ -42,7 +42,7 @@ final class ScalaSensor extends Sensor {
         .save()
 
       val sourceCode = Source.fromFile(inputFile.uri, charset).mkString
-      val tokens = Scala.tokenize(sourceCode, Scala.getScalaVersion(context.config()))
+      val tokens = Scala.tokenize(sourceCode, context.config())
 
       context
         .newMeasure()

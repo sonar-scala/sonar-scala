@@ -28,6 +28,7 @@ import org.sonar.api.batch.fs.{FileSystem, InputComponent, InputFile}
 import org.sonar.api.batch.sensor.{Sensor, SensorContext, SensorDescriptor}
 import org.sonar.api.config.Configuration
 import org.sonar.api.utils.log.Loggers
+import scalariform.ScalaVersion
 
 import scala.collection.JavaConverters._
 import scala.util.{Failure, Success, Try}
@@ -188,10 +189,6 @@ private[scoverage] object ScoverageSensorInternal {
   val DeprecatedScoverageReportPathPropertyKey = "sonar.scoverage.reportPath"
   val ScoverageReportPathPropertyKey = "sonar.scala.scoverage.reportPath"
 
-  def getDefaultScoverageReportPath(scalaRawVersion: String): Path = {
-    // remove the extra part of the scala version, e.g 2.11.0 -> 2.11
-    // TODO: We could use a sem ver parsing here in case someone e.g. skips the patch version.
-    val scalaVersion = scalaRawVersion.take(scalaRawVersion.lastIndexOf("."))
-    Paths.get(s"target/scala-$scalaVersion/scoverage-report/scoverage.xml")
-  }
+  def getDefaultScoverageReportPath(scalaVersion: ScalaVersion): Path =
+    Paths.get(s"target/scala-${scalaVersion.major}.${scalaVersion.minor}/scoverage-report/scoverage.xml")
 }

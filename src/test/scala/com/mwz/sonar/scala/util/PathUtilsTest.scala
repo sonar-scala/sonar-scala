@@ -1,6 +1,5 @@
 package com.mwz.sonar.scala.util
 
-import java.io.File
 import java.nio.file.{Path, Paths}
 
 import org.scalatest.{FlatSpec, Matchers}
@@ -19,13 +18,13 @@ class PathUtilsTest extends FlatSpec with Matchers {
       base = Paths.get("."),
       next = Paths.get("next"),
       fullOrSuffix = Paths.get("suffix")
-    ) shouldBe Paths.get(s"next${File.separator}suffix")
+    ) shouldBe Paths.get(s"next/suffix")
 
     PathUtils.relativize(
       base = cwd,
       next = Paths.get("next"),
       fullOrSuffix = Paths.get("suffix/test")
-    ) shouldBe Paths.get(s"next${File.separator}suffix/test")
+    ) shouldBe Paths.get(s"next/suffix/test")
   }
 
   it should "construct a relative path between the 'base' path and an absolute suffix" in {
@@ -34,5 +33,17 @@ class PathUtilsTest extends FlatSpec with Matchers {
       next = Paths.get(""),
       fullOrSuffix = cwd.resolve("suffix/test")
     ) shouldBe Paths.get("suffix/test")
+  }
+
+  "stripOutPrefix" should "successfully strip out the prefix" in {
+    PathUtils.stripOutPrefix(
+      prefix = Paths.get("a/b"),
+      path = Paths.get("a/b/c")
+    ) shouldBe Paths.get("c")
+
+    PathUtils.stripOutPrefix(
+      prefix = Paths.get("x/y"),
+      path = Paths.get("a/b/c")
+    ) shouldBe Paths.get("a/b/c")
   }
 }

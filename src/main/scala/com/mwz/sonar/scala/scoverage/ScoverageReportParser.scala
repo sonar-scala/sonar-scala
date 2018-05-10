@@ -19,7 +19,7 @@
 package com.mwz.sonar.scala
 package scoverage
 
-import java.nio.file.Path
+import java.nio.file.{Path, Paths}
 
 import com.mwz.sonar.scala.util.PathUtils._
 
@@ -35,10 +35,15 @@ trait ScoverageReportParser extends ScoverageReportParserAPI {
 
     val classCoverages = for {
       classNode <- scoverageXMLReport \\ "class"
-      scoverageFilename = classNode \@ "filename"
+      scoverageFilename = Paths.get(classNode \@ "filename")
       filename <- sourcePrefixes.collectFirst {
-        case prefix if cwd.resolve(prefix).resolve(scoverageFilename).toFile.exists =>
-          prefix.resolve(scoverageFilename)
+        case prefix
+            if cwd
+              .resolve(prefix)
+              .resolve(stripOutPrefix(prefix, scoverageFilename))
+              .toFile
+              .exists =>
+          prefix.resolve(stripOutPrefix(prefix, scoverageFilename))
       }
       classScoverage = extractScoverageFromNode(classNode)
 

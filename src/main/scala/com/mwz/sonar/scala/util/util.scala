@@ -55,10 +55,14 @@ object PathUtils {
    * Construct a relative path between the base path and the suffix if the suffix is absolute,
    * otherwise resolve the relative suffix path against the 'next' path.
    */
-  def relativize(base: Path, next: Path, fullOrSuffix: Path): Path = {
-    if (fullOrSuffix.isAbsolute)
-      base.relativize(fullOrSuffix)
-    else
-      next.resolve(fullOrSuffix)
-  }
+  def relativize(base: Path, next: Path, fullOrSuffix: Path): Path =
+    if (fullOrSuffix.isAbsolute) base.relativize(fullOrSuffix)
+    else next.resolve(fullOrSuffix)
+
+  /**
+   * Strips out prefix from the path if it starts with the prefix.
+   */
+  def stripOutPrefix(prefix: Path, path: Path): Path =
+    if (path.startsWith(prefix)) prefix.relativize(path)
+    else path
 }

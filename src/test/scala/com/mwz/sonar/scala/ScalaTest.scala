@@ -31,7 +31,7 @@ class ScalaTest extends FlatSpec with Matchers {
     Scala.getScalaVersion(conf) shouldBe ScalaVersion(2, 12)
   }
 
-  it should "not return the default version if the property is setted to '2.11.0'" in {
+  it should "not return the default version if the property is set to '2.11.0'" in {
     val conf = new MapSettings()
       .setProperty("sonar.scala.version", "2.11.0")
       .asConfig()

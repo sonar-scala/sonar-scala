@@ -19,9 +19,10 @@
 package com.mwz.sonar.scala
 package sensor
 
-import com.mwz.sonar.scala.Scala
 import org.sonar.api.batch.sensor.{Sensor, SensorContext, SensorDescriptor}
 import org.sonar.api.measures.{CoreMetrics => CM}
+import scalariform.ScalaVersion
+
 import scala.collection.JavaConverters._
 import scala.io.Source
 
@@ -30,8 +31,12 @@ final class ScalaSensor extends Sensor {
   override def execute(context: SensorContext): Unit = {
     val charset = context.fileSystem().encoding.toString
 
-    val inputFiles =
-      context.fileSystem().inputFiles(context.fileSystem().predicates().hasLanguage(Scala.Key))
+    val inputFiles = context
+      .fileSystem()
+      .inputFiles(context.fileSystem().predicates().hasLanguage(Scala.Key))
+
+    val scalaVersion: ScalaVersion =
+      Scala.getScalaVersion(context.config())
 
     inputFiles.asScala.foreach { inputFile =>
       context
@@ -42,7 +47,7 @@ final class ScalaSensor extends Sensor {
         .save()
 
       val sourceCode = Source.fromFile(inputFile.uri, charset).mkString
-      val tokens = Scala.tokenize(sourceCode, context.config())
+      val tokens = Scala.tokenize(sourceCode, scalaVersion)
 
       context
         .newMeasure()

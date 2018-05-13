@@ -33,7 +33,7 @@ final class ScalaSensor extends Sensor {
 
     val inputFiles = context
       .fileSystem()
-      .inputFiles(context.fileSystem().predicates().hasLanguage(Scala.Key))
+      .inputFiles(context.fileSystem().predicates().hasLanguage(Scala.LanguageKey))
 
     val scalaVersion: ScalaVersion =
       Scala.getScalaVersion(context.config())
@@ -78,7 +78,7 @@ final class ScalaSensor extends Sensor {
 
   override def describe(descriptor: SensorDescriptor): Unit = {
     descriptor
-      .onlyOnLanguage(Scala.Key)
+      .onlyOnLanguage(Scala.LanguageKey)
       .name("Scala Sensor")
   }
 }

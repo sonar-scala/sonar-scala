@@ -46,7 +46,7 @@ private[scoverage] abstract class ScoverageSensorInternal extends Sensor {
   /** Populates the SensorDescriptor of this sensor. */
   override def describe(descriptor: SensorDescriptor): Unit = {
     descriptor
-      .onlyOnLanguage(Scala.Key)
+      .onlyOnLanguage(Scala.LanguageKey)
       .onlyOnFileType(InputFile.Type.MAIN)
       .name(ScoverageSensorInternal.SensorName)
   }
@@ -68,7 +68,7 @@ private[scoverage] abstract class ScoverageSensorInternal extends Sensor {
 
         logger.debug(
           "[scoverage] Saving the overall scoverage information about the module, " +
-          s"the statement coverage is ${moduleCoverage.moduleScoverage.statementCoverage}%."
+            s"the statement coverage is ${moduleCoverage.moduleScoverage.statementCoverage}%."
         )
         saveComponentScoverage(context, context.module(), moduleCoverage.moduleScoverage)
 
@@ -107,7 +107,12 @@ private[scoverage] abstract class ScoverageSensorInternal extends Sensor {
   /** Returns all scala main files from this module */
   private[scoverage] def getModuleSourceFiles(fs: FileSystem): Iterable[InputFile] = {
     val predicates = fs.predicates
-    val predicate = predicates.and(predicates.hasLanguage(Scala.Key), predicates.hasType(InputFile.Type.MAIN))
+    val predicate =
+      predicates.and(
+        predicates.hasLanguage(Scala.LanguageKey),
+        predicates.hasType(InputFile.Type.MAIN)
+      )
+
     fs.inputFiles(predicate).asScala
   }
 
@@ -126,12 +131,12 @@ private[scoverage] abstract class ScoverageSensorInternal extends Sensor {
     if (settings.hasKey(DeprecatedScoverageReportPathPropertyKey)) {
       logger.warn(
         s"[scoverage] The property: '$DeprecatedScoverageReportPathPropertyKey' is deprecated, " +
-        s"use the new property '$ScoverageReportPathPropertyKey' instead."
+          s"use the new property '$ScoverageReportPathPropertyKey' instead."
       )
     } else if (!settings.hasKey(ScoverageReportPathPropertyKey)) {
       logger.info(
         s"[scoverage] Missing the property: '$ScoverageReportPathPropertyKey', " +
-        s"using the default value: '$defaultScoverageReportPath'."
+          s"using the default value: '$defaultScoverageReportPath'."
       )
     }
 
@@ -150,9 +155,9 @@ private[scoverage] abstract class ScoverageSensorInternal extends Sensor {
 
   /** Saves the [[ScoverageMetrics]] of a component */
   private[this] def saveComponentScoverage(
-    context: SensorContext,
-    component: InputComponent,
-    scoverage: Scoverage
+      context:   SensorContext,
+      component: InputComponent,
+      scoverage: Scoverage
   ): Unit = {
     context
       .newMeasure[java.lang.Integer]()

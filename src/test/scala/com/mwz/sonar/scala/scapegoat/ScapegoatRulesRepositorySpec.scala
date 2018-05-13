@@ -44,6 +44,7 @@ class ScapegoatRulesRepositorySpec extends FlatSpec with LoneElement with Matche
     val scapegoatRepository = context.repositories.loneElement
     val anyUseRule = scapegoatRepository.rule("com.sksamuel.scapegoat.inspections.AnyUse")
 
+    anyUseRule.internalKey shouldBe "com.sksamuel.scapegoat.inspections.AnyUse"
     anyUseRule.name shouldBe "AnyUse"
     anyUseRule.markdownDescription shouldBe "No Explanation"
     anyUseRule.activatedByDefault shouldBe false

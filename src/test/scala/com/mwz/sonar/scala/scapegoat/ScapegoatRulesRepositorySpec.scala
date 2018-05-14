@@ -10,7 +10,7 @@ import org.sonar.api.rules.RuleType
 
 /** Tests the correct behavior of the Scapegoat Rules Repository */
 class ScapegoatRulesRepositorySpec extends FlatSpec with Inspectors with LoneElement with Matchers {
-  //tests about properties of the scapegoat repository
+  // tests about properties of the scapegoat repository
   val context = new Context()
   new ScapegoatRulesRepository().define(context)
   behavior of "the Scapegoat Rules Repository"
@@ -47,7 +47,7 @@ class ScapegoatRulesRepositorySpec extends FlatSpec with Inspectors with LoneEle
     anyUseRule.`type` shouldBe RuleType.CODE_SMELL
   }
 
-  //tests about properties of the scapegoat repository rules
+  // tests about properties of the scapegoat repository rules
   val scapegoatRepository = context.repository("ScapegoatRepository")
   val rules = scapegoatRepository.rules
   behavior of "all Scapegoat Rules"

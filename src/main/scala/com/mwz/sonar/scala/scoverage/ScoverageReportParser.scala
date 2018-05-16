@@ -21,7 +21,7 @@ package scoverage
 
 import java.nio.file.{Path, Paths}
 
-import com.mwz.sonar.scala.util.PathUtils._
+import com.mwz.sonar.scala.util.PathUtils
 
 import scala.xml.{Node, XML}
 
@@ -38,12 +38,12 @@ trait ScoverageReportParser extends ScoverageReportParserAPI {
       scoverageFilename = Paths.get(classNode \@ "filename")
       filename <- sourcePrefixes.collectFirst {
         case prefix
-            if cwd
+            if PathUtils.cwd
               .resolve(prefix)
-              .resolve(stripOutPrefix(prefix, scoverageFilename))
+              .resolve(PathUtils.stripOutPrefix(prefix, scoverageFilename))
               .toFile
               .exists =>
-          prefix.resolve(stripOutPrefix(prefix, scoverageFilename))
+          prefix.resolve(PathUtils.stripOutPrefix(prefix, scoverageFilename)).toString
       }
       classScoverage = extractScoverageFromNode(classNode)
 
@@ -62,7 +62,7 @@ trait ScoverageReportParser extends ScoverageReportParserAPI {
       }
 
       classCoverage = FileCoverage(classScoverage, linesCoverage)
-    } yield filename.toString -> classCoverage
+    } yield filename -> classCoverage
 
     // merge the class coverages by filename
     val files = classCoverages groupBy {

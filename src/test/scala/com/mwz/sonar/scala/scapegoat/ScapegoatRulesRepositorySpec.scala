@@ -57,7 +57,7 @@ class ScapegoatRulesRepositorySpec extends FlatSpec with Inspectors with LoneEle
     val anyUseRule = scapegoatRepository.rule("com.sksamuel.scapegoat.inspections.AnyUse")
 
     anyUseRule.internalKey shouldBe "com.sksamuel.scapegoat.inspections.AnyUse"
-    anyUseRule.name shouldBe "scala:scalastyle:AnyUse"
+    anyUseRule.name shouldBe "AnyUse"
     anyUseRule.markdownDescription shouldBe "No Explanation"
     anyUseRule.activatedByDefault shouldBe true
     anyUseRule.status shouldBe RuleStatus.READY
@@ -76,9 +76,9 @@ class ScapegoatRulesRepositorySpec extends FlatSpec with Inspectors with LoneEle
     }
   }
 
-  it should "have a valid name" in {
+  it should "have a non-empty name" in {
     forEvery(rules) { rule =>
-      rule.name should startWith("scala:scalastyle:")
+      rule.name should not be empty
     }
   }
 

@@ -43,7 +43,7 @@ class ScapegoatRulesRepository extends RulesDefinition {
       val ruleSeverity = ScapegoatRulesRepository.scapegoatLevelToRuleSeverity(inspection.defaultLevel)
 
       rule.setInternalKey(inspection.id)
-      rule.setName(s"scala:scalastyle:${inspection.name}")
+      rule.setName(inspection.name)
       rule.setMarkdownDescription(inspection.description)
       rule.setActivatedByDefault(true) // scalastyle:ignore LiteralArguments
       rule.setStatus(RuleStatus.READY)

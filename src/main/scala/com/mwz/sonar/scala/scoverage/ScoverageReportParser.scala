@@ -29,21 +29,29 @@ import scala.xml.{Node, XML}
 trait ScoverageReportParser extends ScoverageReportParserAPI {
 
   /** Parses the scoverage report from a file and returns the ModuleCoverage. */
-  override def parse(scoverageReportPath: Path, sourcePrefixes: List[Path]): ModuleCoverage = {
+  override def parse(
+    scoverageReportPath: Path,
+    modulePath: Path,
+    sourcePrefixes: List[Path]
+  ): ModuleCoverage = {
     val scoverageXMLReport = XML.loadFile(scoverageReportPath.toFile)
     val moduleScoverage = extractScoverageFromNode(scoverageXMLReport)
 
     val classCoverages = for {
       classNode <- scoverageXMLReport \\ "class"
       scoverageFilename = Paths.get(classNode \@ "filename")
-      filename <- sourcePrefixes.collectFirst {
-        case prefix
-            if PathUtils.cwd
-              .resolve(prefix)
-              .resolve(PathUtils.stripOutPrefix(prefix, scoverageFilename))
-              .toFile
-              .exists =>
-          prefix.resolve(PathUtils.stripOutPrefix(prefix, scoverageFilename)).toString
+      filename <- sourcePrefixes map { prefix =>
+        // We call stripOutPrefix twice here to get the full path to the filenames from Scoverage report,
+        // relative to the current module and the sources prefix.
+        // E.g. both module1/sources/File.scala as well as sources/File.scala will return File.scala as a result.
+        val filename = PathUtils.stripOutPrefix(
+          PathUtils.stripOutPrefix(modulePath, prefix),
+          scoverageFilename
+        )
+        (prefix, filename)
+      } collectFirst {
+        case (prefix, filename) if PathUtils.cwd.resolve(prefix).resolve(filename).toFile.exists =>
+          prefix.resolve(filename).toString
       }
       classScoverage = extractScoverageFromNode(classNode)
 

@@ -129,24 +129,24 @@ class ScoverageSensorSpec extends FlatSpec with SensorContextMatchers with LoneE
 
     // validate the module scoverage metrics
     val moduleKey = context.module.key
-    context should have(metric[java.lang.Integer](moduleKey, "total_statements", 5))
-    context should have(metric[java.lang.Integer](moduleKey, "covered_statements", 3))
-    context should have(metric[java.lang.Double](moduleKey, "scoverage", 60.0))
-    context should have(metric[java.lang.Double](moduleKey, "branch_scoverage", 100.0))
+    context should have(metric[java.lang.Integer](moduleKey, "sonar-scala-scoverage-total-statements", 5))
+    context should have(metric[java.lang.Integer](moduleKey, "sonar-scala-scoverage-covered-statements", 3))
+    context should have(metric[java.lang.Double](moduleKey, "sonar-scala-scoverage-statement-coverage", 60.0))
+    context should have(metric[java.lang.Double](moduleKey, "sonar-scala-scoverage-branch-scoverage", 100.0))
 
     // validate the main file scoverage metrics
-    val mainFileKey = mainFile.key
-    context should have(metric[java.lang.Integer](mainFileKey, "total_statements", 5))
-    context should have(metric[java.lang.Integer](mainFileKey, "covered_statements", 3))
-    context should have(metric[java.lang.Double](mainFileKey, "scoverage", 60.0))
-    context should have(metric[java.lang.Double](mainFileKey, "branch_scoverage", 100.0))
+    val fileKey = mainFile.key
+    context should have(metric[java.lang.Integer](fileKey, "sonar-scala-scoverage-total-statements", 5))
+    context should have(metric[java.lang.Integer](fileKey, "sonar-scala-scoverage-covered-statements", 3))
+    context should have(metric[java.lang.Double](fileKey, "sonar-scala-scoverage-statement-coverage", 60.0))
+    context should have(metric[java.lang.Double](fileKey, "sonar-scala-scoverage-branch-scoverage", 100.0))
 
     // validate the main file line coverage
-    context should have(lineHits(mainFileKey, 5, 1))
-    context should have(lineHits(mainFileKey, 6, 1))
-    context should have(lineHits(mainFileKey, 7, 0))
-    context should have(lineHits(mainFileKey, 8, 0))
-    context should have(lineHits(mainFileKey, 9, 1))
+    context should have(lineHits(fileKey, 5, 1))
+    context should have(lineHits(fileKey, 6, 1))
+    context should have(lineHits(fileKey, 7, 0))
+    context should have(lineHits(fileKey, 8, 0))
+    context should have(lineHits(fileKey, 9, 1))
   }
 
   it should "handle correctly absolute source paths" in {
@@ -172,10 +172,10 @@ class ScoverageSensorSpec extends FlatSpec with SensorContextMatchers with LoneE
 
     //validate the module scoverage metrics
     val moduleKey = context.module.key
-    context should have(metric[java.lang.Integer](moduleKey, "total_statements", 5))
-    context should have(metric[java.lang.Integer](moduleKey, "covered_statements", 3))
-    context should have(metric[java.lang.Double](moduleKey, "scoverage", 60.0))
-    context should have(metric[java.lang.Double](moduleKey, "branch_scoverage", 100.0))
+    context should have(metric[java.lang.Integer](moduleKey, "sonar-scala-scoverage-total-statements", 5))
+    context should have(metric[java.lang.Integer](moduleKey, "sonar-scala-scoverage-covered-statements", 3))
+    context should have(metric[java.lang.Double](moduleKey, "sonar-scala-scoverage-statement-coverage", 60.0))
+    context should have(metric[java.lang.Double](moduleKey, "sonar-scala-scoverage-branch-scoverage", 100.0))
   }
 }
 

@@ -62,7 +62,7 @@ private[scoverage] abstract class ScoverageSensorInternal extends Sensor {
     val sources = Scala.getSourcesPaths(settings)
     val sourcePrefixes = sources.map(PathUtils.relativize(PathUtils.cwd, modulePath, _))
 
-    Try(scoverageReportParser.parse(reportPath, sourcePrefixes)) match {
+    Try(scoverageReportParser.parse(reportPath, modulePath, sourcePrefixes)) match {
       case Success(moduleCoverage) =>
         logger.info(s"[scoverage] Successfully loaded the scoverage report file: '$reportPath'.")
 

@@ -29,21 +29,26 @@ import scala.xml.{Node, XML}
 trait ScoverageReportParser extends ScoverageReportParserAPI {
 
   /** Parses the scoverage report from a file and returns the ModuleCoverage. */
-  override def parse(scoverageReportPath: Path, sourcePrefixes: List[Path]): ModuleCoverage = {
+  override def parse(
+    scoverageReportPath: Path,
+    modulePath: Path,
+    sourcePrefixes: List[Path]
+  ): ModuleCoverage = {
     val scoverageXMLReport = XML.loadFile(scoverageReportPath.toFile)
     val moduleScoverage = extractScoverageFromNode(scoverageXMLReport)
 
     val classCoverages = for {
       classNode <- scoverageXMLReport \\ "class"
       scoverageFilename = Paths.get(classNode \@ "filename")
-      filename <- sourcePrefixes.collectFirst {
-        case prefix
-            if cwd
-              .resolve(prefix)
-              .resolve(stripOutPrefix(prefix, scoverageFilename))
-              .toFile
-              .exists =>
-          prefix.resolve(stripOutPrefix(prefix, scoverageFilename))
+      filename <- sourcePrefixes map { prefix =>
+        // We call stripOutPrefix twice here to remove the original sources prefix along with the current
+        // module path (if exists), which happens to be prepended to the prefix by the gradle-scoverage plugin.
+        // E.g. both module1/sources/File.scala as well as sources/File.scala will return File.scala as a result.
+        val filename = stripOutPrefix(stripOutPrefix(modulePath, prefix), scoverageFilename)
+        (prefix, filename)
+      } collectFirst {
+        case (prefix, filename) if cwd.resolve(prefix).resolve(filename).toFile.exists =>
+          prefix.resolve(filename)
       }
       classScoverage = extractScoverageFromNode(classNode)
 

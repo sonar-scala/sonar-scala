@@ -19,20 +19,21 @@
 package com.mwz.sonar.scala
 package scoverage
 
-import java.nio.file.Paths
+import java.nio.file.{Path, Paths}
 
 import org.scalatest.{FlatSpec, Inside, LoneElement, Matchers}
 
 /** Tests the correct behavior of the Scoverage XML reports parser */
 class ScoverageReportParserSpec extends FlatSpec with Inside with LoneElement with Matchers {
+  val modulePath: Path = Paths.get("")
   val scalaSources = List(Paths.get("src/main/scala"))
   val scoverageReportParser: ScoverageReportParser = new ScoverageReportParser {}
 
   behavior of "A Scoverage Report Parser"
 
   it should "be able to parse the report of an empty project" in {
-    val reportFilename = Paths.get("src/test/resources/empty-project-scoverage.xml")
-    val moduleCoverage = scoverageReportParser.parse(reportFilename, scalaSources)
+    val reportFilename = Paths.get("src/test/resources/scoverage/empty-project.xml")
+    val moduleCoverage = scoverageReportParser.parse(reportFilename, modulePath, scalaSources)
 
     val scoverage = Scoverage(
       totalStatements = 0,
@@ -49,8 +50,8 @@ class ScoverageReportParserSpec extends FlatSpec with Inside with LoneElement wi
   }
 
   it should "be able to parse the report of a one file project" in {
-    val reportFilename = Paths.get("src/test/resources/one-file-project-scoverage.xml")
-    val moduleCoverage = scoverageReportParser.parse(reportFilename, scalaSources)
+    val reportFilename = Paths.get("src/test/resources/scoverage/one-file-project.xml")
+    val moduleCoverage = scoverageReportParser.parse(reportFilename, modulePath, scalaSources)
 
     val scoverage = Scoverage(
       totalStatements = 2,
@@ -72,13 +73,13 @@ class ScoverageReportParserSpec extends FlatSpec with Inside with LoneElement wi
   }
 
   it should "be able to handle multiple source prefixes" in {
-    val reportFilename = Paths.get("src/test/resources/one-file-project-scoverage.xml")
+    val reportFilename = Paths.get("src/test/resources/scoverage/one-file-project.xml")
     val sourcePrefixes = List(
       Paths.get("src/main/java"),
       Paths.get("src/main/scala"),
       Paths.get("imaginary/sources")
     )
-    val moduleCoverage = scoverageReportParser.parse(reportFilename, sourcePrefixes)
+    val moduleCoverage = scoverageReportParser.parse(reportFilename, modulePath, sourcePrefixes)
 
     val scoverage = Scoverage(
       totalStatements = 2,
@@ -100,13 +101,45 @@ class ScoverageReportParserSpec extends FlatSpec with Inside with LoneElement wi
   }
 
   it should "be able to handle correctly file names with source prefixes" in {
-    val reportFilename = Paths.get("src/test/resources/filenames-with-source-prefixes-scoverage.xml")
+    val reportFilename =
+      Paths.get("src/test/resources/scoverage/filenames-with-source-prefixes.xml")
     val sourcePrefixes = List(
       Paths.get("src/main/java"),
       Paths.get("src/main/scala"),
       Paths.get("imaginary/sources")
     )
-    val moduleCoverage = scoverageReportParser.parse(reportFilename, sourcePrefixes)
+    val moduleCoverage = scoverageReportParser.parse(reportFilename, modulePath, sourcePrefixes)
+
+    val scoverage = Scoverage(
+      totalStatements = 2,
+      coveredStatements = 2,
+      statementCoverage = 100.0,
+      branchCoverage = 100.0
+    )
+    val expected = ModuleCoverage(
+      moduleScoverage = scoverage,
+      filesCoverage = Map(
+        "src/main/scala/com/mwz/sonar/scala/ScalaPlugin.scala" -> FileCoverage(
+          fileScoverage = scoverage,
+          linesCoverage = Map(66 -> 2)
+        )
+      )
+    )
+
+    moduleCoverage shouldBe expected
+  }
+
+  it should "be able to handle correctly module files with a sources prefix" in {
+    val reportFilename =
+      Paths.get("src/test/resources/scoverage/filenames-with-source-prefixes2.xml")
+
+    // I'm going to pretend here for convenience that src is a module path
+    // and src/main/scala is sources prefix, which doesn't include the module path
+    // in the scoverage report: main/scala/com/mwz/sonar/scala/ScalaPlugin.scala.
+    val modulePath = Paths.get("src")
+    val scalaSources = List(Paths.get("src/main/scala"))
+
+    val moduleCoverage = scoverageReportParser.parse(reportFilename, modulePath, scalaSources)
 
     val scoverage = Scoverage(
       totalStatements = 2,
@@ -128,8 +161,8 @@ class ScoverageReportParserSpec extends FlatSpec with Inside with LoneElement wi
   }
 
   it should "be able to merge the coverage metric of all classes of the same file" in {
-    val reportFilename = Paths.get("src/test/resources/multi-class-one-file-project-scoverage.xml")
-    val moduleCoverage = scoverageReportParser.parse(reportFilename, scalaSources)
+    val reportFilename = Paths.get("src/test/resources/scoverage/multi-class-one-file-project.xml")
+    val moduleCoverage = scoverageReportParser.parse(reportFilename, modulePath, scalaSources)
 
     val scoverage = Scoverage(
       totalStatements = 7,
@@ -151,8 +184,8 @@ class ScoverageReportParserSpec extends FlatSpec with Inside with LoneElement wi
   }
 
   it should "be able to parse the report of a two files project" in {
-    val reportFilename = Paths.get("src/test/resources/two-files-project-scoverage.xml")
-    val moduleCoverage = scoverageReportParser.parse(reportFilename, scalaSources)
+    val reportFilename = Paths.get("src/test/resources/scoverage/two-files-project.xml")
+    val moduleCoverage = scoverageReportParser.parse(reportFilename, modulePath, scalaSources)
 
     val scoverageTotal = Scoverage(
       totalStatements = 6,

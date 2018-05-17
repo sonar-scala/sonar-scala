@@ -45,7 +45,7 @@ private[scoverage] abstract class ScoverageSensorInternal extends Sensor {
   /** Populates the SensorDescriptor of this sensor. */
   override def describe(descriptor: SensorDescriptor): Unit = {
     descriptor
-      .onlyOnLanguage(Scala.Key)
+      .onlyOnLanguage(Scala.LanguageKey)
       .onlyOnFileType(InputFile.Type.MAIN)
       .name(ScoverageSensorInternal.SensorName)
   }
@@ -107,7 +107,12 @@ private[scoverage] abstract class ScoverageSensorInternal extends Sensor {
   /** Returns all scala main files from this module */
   private[scoverage] def getModuleSourceFiles(fs: FileSystem): Iterable[InputFile] = {
     val predicates = fs.predicates
-    val predicate = predicates.and(predicates.hasLanguage(Scala.Key), predicates.hasType(InputFile.Type.MAIN))
+    val predicate =
+      predicates.and(
+        predicates.hasLanguage(Scala.LanguageKey),
+        predicates.hasType(InputFile.Type.MAIN)
+      )
+
     fs.inputFiles(predicate).asScala
   }
 

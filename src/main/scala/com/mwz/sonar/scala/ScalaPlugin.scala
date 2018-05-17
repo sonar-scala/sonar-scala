@@ -35,7 +35,7 @@ import scalariform.utils.Utils._
 import scalariform.{ScalaVersion, ScalaVersions}
 
 /** Defines Scala as a language for SonarQube */
-class Scala(settings: Configuration) extends AbstractLanguage(Scala.Key, Scala.Name) {
+class Scala(settings: Configuration) extends AbstractLanguage(Scala.LanguageKey, Scala.LanguageName) {
   override def getFileSuffixes: Array[String] = {
     val suffixes = settings.getStringArray(Scala.FileSuffixesPropertyKey)
     val filtered = suffixes.filter(_.trim.nonEmpty)
@@ -45,8 +45,9 @@ class Scala(settings: Configuration) extends AbstractLanguage(Scala.Key, Scala.N
 }
 
 object Scala {
-  val Key = "scala"
-  val Name = "Scala"
+  val LanguageKey = "scala"
+  val LanguageName = "Scala"
+
   private val FileSuffixesPropertyKey = "sonar.scala.file.suffixes"
   private val DefaultFileSuffixes = Array(".scala")
   private val ScalaVersionPropertyKey = "sonar.scala.version"

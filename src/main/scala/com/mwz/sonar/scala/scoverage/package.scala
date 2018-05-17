@@ -24,7 +24,7 @@ package object scoverage {
 
   /** Used to mock the scoverage report parser in tests */
   trait ScoverageReportParserAPI {
-    def parse(scoverageReportPath: Path, sourcePrefixes: List[Path]): ModuleCoverage
+    def parse(scoverageReportPath: Path, modulePath: Path, sourcePrefixes: List[Path]): ModuleCoverage
   }
 
   /**

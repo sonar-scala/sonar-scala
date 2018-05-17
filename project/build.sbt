@@ -2,7 +2,7 @@ scalaVersion := "2.12.6"
 libraryDependencies ++= Seq(
   "org.sonarsource.update-center" % "sonar-update-center-common" % "1.21.0.561",
   // Scapegoat inspections generator task dependencies
-  "com.sksamuel.scapegoat" %% "scalac-scapegoat-plugin" % "1.3.4",
+  "com.sksamuel.scapegoat" %% "scalac-scapegoat-plugin" % "1.3.5",
   "io.github.lukehutch" % "fast-classpath-scanner" % "2.21"
 )
 

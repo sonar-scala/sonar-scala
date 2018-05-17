@@ -1,0 +1,50 @@
+version '1.0-SNAPSHOT'
+
+buildscript {
+    repositories {
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath "gradle.plugin.org.scoverage:gradle-scoverage:2.3.0"
+        classpath "gradle.plugin.com.github.maiflai:gradle-scalatest:0.22"
+        classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.6.2"
+    }
+}
+
+apply plugin: 'org.sonarqube'
+
+// Example global configuration settings
+sonarqube {
+    properties {
+        property "sonar.sourceEncoding", "UTF-8"
+    }
+}
+
+allprojects {
+    apply plugin: 'scala'
+    apply plugin: 'org.scoverage'
+    apply plugin: 'com.github.maiflai.scalatest'
+
+    // Example shared configuration settings
+    sonarqube {
+        properties {
+            property "sonar.sources", "src/main/scala"
+            property "sonar.scala.version", "2.12"
+            property "sonar.scala.scoverage.reportPath", "build/reports/scoverage/scoverage.xml"
+        }
+    }
+
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        compile 'org.scala-lang:scala-library:2.12.6'
+        scoverage 'org.scoverage:scalac-scoverage-plugin_2.12:1.3.1',
+                'org.scoverage:scalac-scoverage-runtime_2.12:1.3.1'
+        testCompile 'org.scalatest:scalatest_2.12:3.0.4'
+        testRuntime 'org.pegdown:pegdown:1.4.2'
+    }
+}

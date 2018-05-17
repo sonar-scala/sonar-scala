@@ -21,7 +21,7 @@ package scoverage
 
 import java.nio.file.{Path, Paths}
 
-import com.mwz.sonar.scala.util.PathUtils._
+import com.mwz.sonar.scala.util.PathUtils
 
 import scala.xml.{Node, XML}
 
@@ -44,11 +44,12 @@ trait ScoverageReportParser extends ScoverageReportParserAPI {
         // We call stripOutPrefix twice here to remove the original sources prefix along with the current
         // module path (if exists), which happens to be prepended to the prefix by the gradle-scoverage plugin.
         // E.g. both module1/sources/File.scala as well as sources/File.scala will return File.scala as a result.
-        val filename = stripOutPrefix(stripOutPrefix(modulePath, prefix), scoverageFilename)
+        val filename =
+          PathUtils.stripOutPrefix(PathUtils.stripOutPrefix(modulePath, prefix), scoverageFilename)
         (prefix, filename)
       } collectFirst {
-        case (prefix, filename) if cwd.resolve(prefix).resolve(filename).toFile.exists =>
-          prefix.resolve(filename)
+        case (prefix, filename) if PathUtils.cwd.resolve(prefix).resolve(filename).toFile.exists =>
+          prefix.resolve(filename).toString
       }
       classScoverage = extractScoverageFromNode(classNode)
 
@@ -67,7 +68,7 @@ trait ScoverageReportParser extends ScoverageReportParserAPI {
       }
 
       classCoverage = FileCoverage(classScoverage, linesCoverage)
-    } yield filename.toString -> classCoverage
+    } yield filename -> classCoverage
 
     // merge the class coverages by filename
     val files = classCoverages groupBy {

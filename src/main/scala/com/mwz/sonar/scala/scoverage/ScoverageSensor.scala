@@ -54,6 +54,7 @@ private[scoverage] abstract class ScoverageSensorInternal extends Sensor {
   /** Saves in SonarQube the scoverage information of a module */
   override def execute(context: SensorContext): Unit = {
     logger.info("[scoverage] Initializing the scoverage sensor.")
+    logger.debug(s"[scoverage] The current working directory (CWD) is: '${PathUtils.cwd}'")
     val settings = context.config
     val filesystem = context.fileSystem
 
@@ -61,31 +62,35 @@ private[scoverage] abstract class ScoverageSensorInternal extends Sensor {
     val reportPath = modulePath.resolve(getScoverageReportPath(settings))
     val sources = Scala.getSourcesPaths(settings)
     val sourcePrefixes = sources.map(PathUtils.relativize(PathUtils.cwd, modulePath, _))
+    logger.debug(s"[scoverage] The source prefixes are: ${sourcePrefixes.mkString("[", ",", "]")}")
+    logger.info(s"[scoverage] Loading the scoverage report file: '$reportPath'.")
 
     Try(scoverageReportParser.parse(reportPath, modulePath, sourcePrefixes)) match {
       case Success(moduleCoverage) =>
-        logger.info(s"[scoverage] Successfully loaded the scoverage report file: '$reportPath'.")
-
-        logger.debug(
-          "[scoverage] Saving the overall scoverage information about the module, " +
-          s"the statement coverage is ${moduleCoverage.moduleScoverage.statementCoverage}%."
+        logger.info(
+          "[scoverage] Successfully loaded the scoverage report file, " +
+          "proceeding to save the module scoverage information"
         )
+        logger.debug(s"[scoverage] Module scoverage information: $moduleCoverage")
+
         saveComponentScoverage(context, context.module(), moduleCoverage.moduleScoverage)
 
         // save the coverage information of each file of the module
-        getModuleSourceFiles(filesystem).foreach { file =>
+        getModuleSourceFiles(filesystem) foreach { file =>
           // toString returns the project relative path of the file
           val filename = file.toString
           logger.debug(s"[scoverage] Saving the scoverage information of the file: '$filename'")
           moduleCoverage.filesCoverage.get(filename) match {
             case Some(fileCoverage) =>
+              logger.debug(s"[scoverage] File scoverage information: $fileCoverage")
+
               // save the file overall scoverage information
               saveComponentScoverage(context, file, fileCoverage.fileScoverage)
 
               // save the coverage of each line of the file
               val coverage = context.newCoverage()
               coverage.onFile(file)
-              fileCoverage.linesCoverage.foreach {
+              fileCoverage.linesCoverage foreach {
                 case (lineNum, hits) => coverage.lineHits(lineNum, hits)
               }
               coverage.save()
@@ -97,9 +102,9 @@ private[scoverage] abstract class ScoverageSensorInternal extends Sensor {
         }
       case Failure(ex) =>
         logger.error(
-          s"""[scoverage] Aborting the scoverage sensor execution,
-             |cause: an error occurred while reading the scoverage report file: '$reportPath',
-             |the error was: ${ex.getMessage}.""".stripMargin
+          "[scoverage] Aborting the scoverage sensor execution, " +
+          s"cause: an error occurred while reading the scoverage report file: '$reportPath', " +
+          s"the error was: ${ex.getMessage}."
         )
     }
   }

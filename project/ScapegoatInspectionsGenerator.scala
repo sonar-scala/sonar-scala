@@ -28,6 +28,12 @@ import Keys._
 
 /** SBT Task that generates a managed file with all scapegoat inspections */
 object ScapegoatInspectionsGenerator {
+  /** Scapegoat inspections that won't be included in the generated file */
+  val BlacklistedInspections = Set(
+    "com.sksamuel.scapegoat.inspections.collections.FilterDotSizeComparison", // Not implemented yet
+    "com.sksamuel.scapegoat.inspections.collections.ListTail" // Not implemented yet
+  )
+
   val generatorTask = Def.task {
     val log = streams.value.log
     log.info("Generating the scapegoat inspections file")
@@ -51,8 +57,8 @@ object ScapegoatInspectionsGenerator {
         }
       ).scan()
 
-    val AllScapegoatInspections = inspections.toList map {
-      case (inspectionClassName, inspection) =>
+    val AllScapegoatInspections = inspections.toList collect {
+      case (inspectionClassName, inspection) if !BlacklistedInspections.contains(inspectionClassName) =>
         s"""ScapegoatInspection(
            |  id = "${inspectionClassName}",
            |  name = "${inspection.text}",

@@ -41,11 +41,13 @@ trait ScoverageReportParser extends ScoverageReportParserAPI {
       classNode <- scoverageXMLReport \\ "class"
       scoverageFilename = Paths.get(classNode \@ "filename")
       filename <- sourcePrefixes map { prefix =>
-        // We call stripOutPrefix twice here to remove the original sources prefix along with the current
-        // module path (if exists), which happens to be prepended to the prefix by the gradle-scoverage plugin.
+        // We call stripOutPrefix twice here to get the full path to the filenames from Scoverage report,
+        // relative to the current module and the sources prefix.
         // E.g. both module1/sources/File.scala as well as sources/File.scala will return File.scala as a result.
-        val filename =
-          PathUtils.stripOutPrefix(PathUtils.stripOutPrefix(modulePath, prefix), scoverageFilename)
+        val filename = PathUtils.stripOutPrefix(
+          PathUtils.stripOutPrefix(modulePath, prefix),
+          scoverageFilename
+        )
         (prefix, filename)
       } collectFirst {
         case (prefix, filename) if PathUtils.cwd.resolve(prefix).resolve(filename).toFile.exists =>

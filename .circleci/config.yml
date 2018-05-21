@@ -2,11 +2,10 @@ version: 2
 
 defaults: &defaults
   docker:
-    - image: circleci/openjdk:8-jdk
+    - image: mwizner/sonar-scala-circleci
   working_directory: ~/repo
   environment:
     JVM_OPTS: -Xmx3200m
-    SONAR_SCANNER_VERSION: "3.0.3.778"
 
 jobs:
   test:
@@ -41,21 +40,13 @@ jobs:
           keys:
           - v1-dependencies-{{ checksum "build.sbt" }}
           - v1-dependencies-
-      - run:
-          name: Set up sonar-scanner
-          command: |
-            echo "$SONAR_SCANNER_VERSION" > ~/sonar-scanner-version
-            wget -O ~/sonar-scanner.zip "https://sonarsource.bintray.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-${SONAR_SCANNER_VERSION}.zip"
-            sudo unzip ~/sonar-scanner.zip -d /opt
       - restore_cache:
           keys:
             - v1-sonar-cache-{{ checksum "~/sonar-scanner-version" }}
             - v1-sonar-cache-
       - run:
           name: sbt sonarScan
-          command: |
-            export SONAR_SCANNER_HOME="/opt/sonar-scanner-${SONAR_SCANNER_VERSION}"
-            sbt -Dsonar.host.url=${SONARQUBE_URL} -Dsonar.login=${SONARQUBE_ACCESS_TOKEN} sonarScan
+          command: sbt -Dsonar.host.url=${SONARQUBE_URL} -Dsonar.login=${SONARQUBE_ACCESS_TOKEN} sonarScan
       - save_cache:
           key: v1-sonar-cache-{{ checksum "~/sonar-scanner-version" }}
           paths: ~/.sonar/cache
@@ -78,21 +69,13 @@ jobs:
             git config --global user.name "CircleCI"
             git config --global user.email "mwz@users.noreply.github.com"
             ssh-keyscan -T 15 github.com >> ~/.ssh/known_hosts
-      - run:
-          name: Set up sonar-scanner
-          command: |
-            echo "$SONAR_SCANNER_VERSION" > ~/sonar-scanner-version
-            wget -O ~/sonar-scanner.zip "https://sonarsource.bintray.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-${SONAR_SCANNER_VERSION}.zip"
-            sudo unzip ~/sonar-scanner.zip -d /opt
       - restore_cache:
           keys:
             - v1-sonar-cache-{{ checksum "~/sonar-scanner-version" }}
             - v1-sonar-cache-
       - run:
           name: sbt release
-          command: |
-            export SONAR_SCANNER_HOME="/opt/sonar-scanner-${SONAR_SCANNER_VERSION}"
-            sbt -Dsonar.host.url=${SONARQUBE_URL} -Dsonar.login=${SONARQUBE_ACCESS_TOKEN} 'release with-defaults skip-tests'
+          command: sbt -Dsonar.host.url=${SONARQUBE_URL} -Dsonar.login=${SONARQUBE_ACCESS_TOKEN} 'release with-defaults skip-tests'
       - save_cache:
           key: v1-sonar-cache-{{ checksum "~/sonar-scanner-version" }}
           paths: ~/.sonar/cache

@@ -12,6 +12,6 @@ sbt clean coverage test coverageReport
 sonar-scanner -Dsonar.host.url=http://localhost
 ```
 
-For more configuration options please refer to SonarQube Scanner [documentation](https://docs.sonarqube.org/display/SCAN/Analyzing+with+SonarQube+Scanner+for+Gradle).
+For more configuration options please refer to SonarQube Scanner [documentation](https://docs.sonarqube.org/display/SCAN/Analyzing+with+SonarQube+Scanner).
 
 To trigger sonar-scanner analysis from within sbt, one can use the [sbt-sonar](https://github.com/mwz/sbt-sonar) plugin, see the examples [here](https://github.com/mwz/sbt-sonar/tree/master/src/sbt-test/sbt-sonar).

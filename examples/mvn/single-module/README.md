@@ -11,4 +11,4 @@ To run the analysis execute the following command setting the `sonar.host.url` p
 mvn -Dsonar.host.url=http://localhost scoverage:report sonar:sonar
 ```
 
-For more configuration options please refer to SonarQube Scanner [documentation](https://docs.sonarqube.org/display/SCAN/Analyzing+with+SonarQube+Scanner+for+Gradle).
+For more configuration options please refer to SonarQube Maven Scanner [documentation](https://docs.sonarqube.org/display/SCAN/Analyzing+with+SonarQube+Scanner+for+Maven).

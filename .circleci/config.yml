@@ -14,13 +14,13 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-          - v1-dependencies-{{ checksum "build.sbt" }}
+          - v1-dependencies-{{ checksum "~/repo/build.sbt" }}
           - v1-dependencies-
       - run: sbt clean coverage test coverageReport scapegoat
       - save_cache:
           paths:
             - ~/.m2
-          key: v1-dependencies--{{ checksum "build.sbt" }}
+          key: v1-dependencies--{{ checksum "~/repo/build.sbt" }}
       - persist_to_workspace:
           root: ~/
           paths: repo
@@ -38,7 +38,7 @@ jobs:
           at: ~/
       - restore_cache:
           keys:
-          - v1-dependencies-{{ checksum "build.sbt" }}
+          - v1-dependencies-{{ checksum "~/repo/build.sbt" }}
           - v1-dependencies-
       - run:
           name: Set up sonar-scanner
@@ -62,7 +62,7 @@ jobs:
           at: ~/repo/examples
       - restore_cache:
           keys:
-          - v1-dependencies-{{ checksum "build.sbt" }}
+          - v1-dependencies-{{ checksum "~/repo/build.sbt" }}
           - v1-dependencies-
       - run:
           name: Set up sonar-scanner
@@ -73,6 +73,7 @@ jobs:
             - v1-sonar-cache-
       - run:
           name: Scan example projects
+          working_directory: ~/repo/examples
           command: ./scan.sh
       - save_cache:
           key: v1-sonar-cache-{{ checksum "~/sonar-scanner-version" }}
@@ -85,7 +86,7 @@ jobs:
           at: ~/
       - restore_cache:
           keys:
-          - v1-dependencies-{{ checksum "build.sbt" }}
+          - v1-dependencies-{{ checksum "~/repo/build.sbt" }}
           - v1-dependencies-
       - add_ssh_keys:
           fingerprints:
@@ -112,22 +113,22 @@ workflows:
   scala-sonar:
     jobs:
       - test
-      - sonar-scan:
+      - sonar-scan-examples:
           requires:
             - test
           filters:
             branches:
               only: master
-      - sonar-scan-examples:
+      - sonar-scan:
           requires:
-            - sonar-scan
+            - sonar-scan-examples
           filters:
             branches:
               only: master
       - hold:
           type: approval
           requires:
-            - sonar-scan-examples
+            - sonar-scan
           filters:
             branches:
               only: master

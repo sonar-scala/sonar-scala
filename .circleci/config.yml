@@ -59,7 +59,7 @@ jobs:
     working_directory: ~/repo/examples
     steps:
       - attach_workspace:
-          at: ~/repo/examples
+          at: ~/
       - restore_cache:
           keys:
           - v1-dependencies-{{ checksum "~/repo/build.sbt" }}
@@ -74,7 +74,9 @@ jobs:
       - run:
           name: Scan example projects
           working_directory: ~/repo/examples
-          command: ./scan.sh
+          command: |
+            pwd
+            ./scan.sh
       - save_cache:
           key: v1-sonar-cache-{{ checksum "~/sonar-scanner-version" }}
           paths: ~/.sonar/cache

@@ -59,7 +59,7 @@ jobs:
     working_directory: ~/repo/examples
     steps:
       - attach_workspace:
-          at: ~/
+          at: ~/repo/examples
       - restore_cache:
           keys:
           - v1-dependencies-{{ checksum "build.sbt" }}

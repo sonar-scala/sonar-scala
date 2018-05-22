@@ -5,7 +5,6 @@
 dist/
 target/
 lib_managed/
-src_managed/
 project/boot/
 project/project/
 project/plugins/project/
@@ -22,6 +21,7 @@ project/plugins/project/
 .idea/
 *.iws
 *.ipr
+*.iml
 
 # sonar-scanner
 .scannerwork/

@@ -40,6 +40,9 @@ jobs:
           keys:
           - v1-dependencies-{{ checksum "build.sbt" }}
           - v1-dependencies-
+      - run:
+          name: Set up sonar-scanner
+          command: echo "$SONAR_SCANNER_VERSION" > ~/sonar-scanner-version
       - restore_cache:
           keys:
             - v1-sonar-cache-{{ checksum "~/sonar-scanner-version" }}
@@ -47,6 +50,30 @@ jobs:
       - run:
           name: sbt sonarScan
           command: sbt -Dsonar.host.url=${SONARQUBE_URL} -Dsonar.login=${SONARQUBE_ACCESS_TOKEN} sonarScan
+      - save_cache:
+          key: v1-sonar-cache-{{ checksum "~/sonar-scanner-version" }}
+          paths: ~/.sonar/cache
+
+  sonar-scan-examples:
+    <<: *defaults
+    working_directory: ~/repo/examples
+    steps:
+      - attach_workspace:
+          at: ~/
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "build.sbt" }}
+          - v1-dependencies-
+      - run:
+          name: Set up sonar-scanner
+          command: echo "$SONAR_SCANNER_VERSION" > ~/sonar-scanner-version
+      - restore_cache:
+          keys:
+            - v1-sonar-cache-{{ checksum "~/sonar-scanner-version" }}
+            - v1-sonar-cache-
+      - run:
+          name: Scan example projects
+          command: ./scan.sh
       - save_cache:
           key: v1-sonar-cache-{{ checksum "~/sonar-scanner-version" }}
           paths: ~/.sonar/cache
@@ -91,10 +118,16 @@ workflows:
           filters:
             branches:
               only: master
+      - sonar-scan-examples:
+          requires:
+            - sonar-scan
+          filters:
+            branches:
+              only: master
       - hold:
           type: approval
           requires:
-            - sonar-scan
+            - sonar-scan-examples
           filters:
             branches:
               only: master

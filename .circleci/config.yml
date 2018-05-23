@@ -99,6 +99,9 @@ jobs:
             git config --global user.name "CircleCI"
             git config --global user.email "mwz@users.noreply.github.com"
             ssh-keyscan -T 15 github.com >> ~/.ssh/known_hosts
+      - run:
+          name: Set up sonar-scanner
+          command: echo "$SONAR_SCANNER_VERSION" > ~/sonar-scanner-version
       - restore_cache:
           keys:
             - v1-sonar-cache-{{ checksum "~/sonar-scanner-version" }}

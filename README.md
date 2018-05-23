@@ -57,16 +57,18 @@ For more information about Scalastyle rules, please consult the [upstream docume
 
 
 # Set-up
-Download the latest [release](https://github.com/mwz/sonar-scala/releases) jar into your SonarQube plugins folder `/opt/sonarqube/extensions/plugins` and restart SonarQube either using the update center or manually.
+Download the latest [release](https://github.com/mwz/sonar-scala/releases) jar into your SonarQube plugins folder `/opt/sonarqube/extensions/plugins` and restart SonarQube either manually or using the update center.
 
 For an out-of-the-box setup, you can use my docker-compose recipe or a docker image with SonarQube LTS which contains bundled sonar-scala and [arthepsy/sonar-scala-extra](https://github.com/arthepsy/sonar-scala-extra) (Scapegoat) plugins. Please see [mwz/sonar-scala-docker](https://github.com/mwz/sonar-scala-docker) for more details.
 
 For automating the analysis of your Scala projects, check out my sbt plugin [mwz/sbt-sonar](https://github.com/mwz/sbt-sonar).
 
+Also, see the [examples](https://github.com/mwz/sonar-scala/tree/master/examples) directory, which includes sample projects for sbt, Gradle and Maven along with basic instructions on how to execute SonarQube analysis for each of those projects.
+
 # Sonar-scanner properties
 The plugin exposes the following properties which can be passed to sonar-scanner when running an analysis:
 - *sonar.sources* - Scala source directory relative to the root of your project (usually `src/main/scala`)
-- *sonar.scala.version* (optional) - defines the version of Scala used in your project (defaults to `2.11.0`)
+- *sonar.scala.version* (optional) - defines the version of Scala used in your project (requires the `{major}.{minor}` versions and the patch version is ignored, defaults to `2.11.0`)
 - *sonar.scala.scoverage.reportPath* (optional) - relative path to the scoverage report (defaults to `target/scala-${sonar.scala.version}/scoverage-report/scoverage.xml`)
 
 See an example usage:
@@ -75,14 +77,14 @@ sonar-scanner -Dsonar.projectName=test \
               -Dsonar.projectKey=test \
               -Dsonar.sources=src/main/scala \
               -Dsonar.sourceEncoding=UTF-8 \
-              -Dsonar.scala.version=2.12.5 \
+              -Dsonar.scala.version=2.12 \
               -Dsonar.scoverage.reportPath=target/scala-2.12/scoverage-report/scoverage.xml
 ```
 
 # Development
 To build the project from sources, run the `assembly` task in sbt shell and the jar assembled with all of the dependencies required by this plugin should be created in the `target/scala-2.12` directory. 
 
-To debug the plugin, export the following environment variable before running `sonar-scanner`:
+To debug the plugin, export the following environment variable before running `sonar-scanner` for your project:
 ```bash
 export SONAR_SCANNER_OPTS="-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=8000"
 ```

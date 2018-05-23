@@ -16,7 +16,7 @@ jobs:
           keys:
           - v1-dependencies-{{ checksum "~/repo/build.sbt" }}
           - v1-dependencies-
-      - run: sbt clean coverage test coverageReport scapegoat
+      - run: sbt clean coverage test coverageReport scapegoat < /dev/null
       - save_cache:
           paths:
             - ~/.iv2/cache
@@ -49,7 +49,7 @@ jobs:
             - v1-sonar-cache-
       - run:
           name: sbt sonarScan
-          command: sbt -Dsonar.host.url=${SONARQUBE_URL} -Dsonar.login=${SONARQUBE_ACCESS_TOKEN} sonarScan
+          command: sbt -Dsonar.host.url=${SONARQUBE_URL} -Dsonar.login=${SONARQUBE_ACCESS_TOKEN} sonarScan < /dev/null
       - save_cache:
           key: v1-sonar-cache-{{ checksum "~/sonar-scanner-version" }}
           paths: ~/.sonar/cache
@@ -108,7 +108,7 @@ jobs:
             - v1-sonar-cache-
       - run:
           name: sbt release
-          command: sbt -Dsonar.host.url=${SONARQUBE_URL} -Dsonar.login=${SONARQUBE_ACCESS_TOKEN} 'release with-defaults skip-tests'
+          command: sbt -Dsonar.host.url=${SONARQUBE_URL} -Dsonar.login=${SONARQUBE_ACCESS_TOKEN} 'release with-defaults skip-tests' < /dev/null
       - save_cache:
           key: v1-sonar-cache-{{ checksum "~/sonar-scanner-version" }}
           paths: ~/.sonar/cache

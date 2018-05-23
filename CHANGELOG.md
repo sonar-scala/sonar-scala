@@ -1,6 +1,10 @@
 Changelog
 ===
 
+## [6.4.0](https://github.com/mwz/sonar-scala/releases/tag/v6.4.0) - 23.05.2018
+- Improved logging in the Scoverage sensor. (#61 - @BalmungSan)
+- Fixed Scoverage issues with multi-module Gradle projects. Please see the [examples](https://github.com/mwz/sonar-scala/tree/master/examples) for a reference on how to configure Gradle projects and how to execute SonarQube analysis. (#63 - @mwz)
+
 ## [6.3.0](https://github.com/mwz/sonar-scala/releases/tag/v6.3.0) - 12.05.2018
 - Use semantic versioning scheme to parse the `sonar.scala.version` property. The patch version is now ignored and `2.11` and `2.12` are valid version numbers. In case of a missing value or an incorrect version the property defaults to `2.11.0`. (#53 - @BalmungSan)
 - Fixed an issue which affected Gradle users and caused the sonar sources prefix `sonar.sources` to be appended twice to filenames in the Scoverage report. (#56 - @mwz)

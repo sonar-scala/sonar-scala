@@ -22,7 +22,7 @@ jobs:
             - ~/.iv2/cache
             - ~/.m2
             - ~/.sbt
-          key: v1-dependencies
+          key: v1-dependencies-{{ checksum "~/repo/build.sbt" }}
       - persist_to_workspace:
           root: ~/
           paths: repo
@@ -39,7 +39,9 @@ jobs:
       - attach_workspace:
           at: ~/
       - restore_cache:
-          keys: v1-dependencies
+          keys:
+            - v1-dependencies-{{ checksum "~/repo/build.sbt" }}
+            - v1-dependencies-
       - run:
           name: Set up sonar-scanner
           command: echo "$SONAR_SCANNER_VERSION" > ~/sonar-scanner-version
@@ -61,7 +63,9 @@ jobs:
       - attach_workspace:
           at: ~/
       - restore_cache:
-          keys: v1-dependencies
+          keys:
+            - v1-dependencies-{{ checksum "~/repo/build.sbt" }}
+            - v1-dependencies-
       - run:
           name: Set up sonar-scanner
           command: echo "$SONAR_SCANNER_VERSION" > ~/sonar-scanner-version
@@ -78,7 +82,7 @@ jobs:
             - ~/.iv2/cache
             - ~/.m2
             - ~/.sbt
-          key: v1-dependencies
+          key: v1-dependencies-{{ checksum "~/repo/build.sbt" }}
       - save_cache:
           key: v1-sonar-cache-{{ checksum "~/sonar-scanner-version" }}
           paths: ~/.sonar/cache

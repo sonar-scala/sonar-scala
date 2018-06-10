@@ -24,7 +24,7 @@ import org.sonar.api.measures.{CoreMetrics, Metric, Metrics}
 import scala.collection.JavaConverters._
 
 /** Statement coverage metric definition. */
-class ScoverageMetrics extends Metrics {
+final class ScoverageMetrics extends Metrics {
   override def getMetrics: java.util.List[Metric[_ <: java.io.Serializable]] =
     List[Metric[_ <: java.io.Serializable]](
       ScoverageMetrics.totalStatements,

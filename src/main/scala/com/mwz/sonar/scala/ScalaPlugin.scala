@@ -35,7 +35,7 @@ import scalariform.utils.Utils._
 import scalariform.{ScalaVersion, ScalaVersions}
 
 /** Defines Scala as a language for SonarQube */
-class Scala(settings: Configuration) extends AbstractLanguage(Scala.LanguageKey, Scala.LanguageName) {
+final class Scala(settings: Configuration) extends AbstractLanguage(Scala.LanguageKey, Scala.LanguageName) {
   override def getFileSuffixes: Array[String] = {
     val suffixes = settings.getStringArray(Scala.FileSuffixesPropertyKey)
     val filtered = suffixes.filter(_.trim.nonEmpty)
@@ -105,7 +105,7 @@ object Scala {
 }
 
 /** Plugin entry point */
-class ScalaPlugin extends Plugin {
+final class ScalaPlugin extends Plugin {
   override def define(context: Plugin.Context): Unit = {
     context.addExtensions(
       classOf[Scala],

@@ -27,7 +27,7 @@ import org.sonar.api.rule.Severity
 import org.sonar.api.rules.RuleType
 
 /** Defines a rules repository for the Scapegoat inspections */
-class ScapegoatRulesRepository extends RulesDefinition {
+final class ScapegoatRulesRepository extends RulesDefinition {
 
   /** Defines the rules in the repository */
   override def define(context: RulesDefinition.Context): Unit = {

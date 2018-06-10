@@ -31,7 +31,7 @@ import org.sonar.api.rules.Rule
 /**
  * This class creates the default "Scalastyle" quality profile from Scalastyle's default_config.xml
  */
-class ScalastyleQualityProfile(ruleFinder: RuleFinder) extends ProfileDefinition {
+final class ScalastyleQualityProfile(ruleFinder: RuleFinder) extends ProfileDefinition {
 
   private val log = LoggerFactory.getLogger(classOf[ScalastyleQualityProfile])
   private val defaultConfigRules = xmlFromClassPath("/default_config.xml") \\ "scalastyle" \ "check"

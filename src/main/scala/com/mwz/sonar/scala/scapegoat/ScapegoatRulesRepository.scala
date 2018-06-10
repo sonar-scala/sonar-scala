@@ -57,7 +57,7 @@ final class ScapegoatRulesRepository extends RulesDefinition {
 }
 
 object ScapegoatRulesRepository {
-  private val RepositoryKey = "sonar-scala-scoverage-scapegoat-repository"
+  private val RepositoryKey = "sonar-scala-scapegoat-repository"
   private val RepositoryName = "Scapegoat"
 
   private def scapegoatLevelToRuleSeverity(level: Level): String = level match {

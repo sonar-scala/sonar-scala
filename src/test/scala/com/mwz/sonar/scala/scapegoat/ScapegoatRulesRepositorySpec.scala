@@ -40,7 +40,7 @@ class ScapegoatRulesRepositorySpec extends FlatSpec with Inspectors with LoneEle
   it should "properly define the properties of the repository" in {
     val scapegoatRepository = context.repositories.loneElement
 
-    scapegoatRepository.key shouldBe "sonar-scala-scoverage-scapegoat-repository"
+    scapegoatRepository.key shouldBe "sonar-scala-scapegoat-repository"
     scapegoatRepository.name shouldBe "Scapegoat"
     scapegoatRepository.language shouldBe "scala"
   }
@@ -66,7 +66,7 @@ class ScapegoatRulesRepositorySpec extends FlatSpec with Inspectors with LoneEle
   }
 
   // tests about properties of the scapegoat repository rules
-  val scapegoatRepository = context.repository("sonar-scala-scoverage-scapegoat-repository")
+  val scapegoatRepository = context.repository("sonar-scala-scapegoat-repository")
   val rules = scapegoatRepository.rules
   behavior of "all Scapegoat Rules"
 

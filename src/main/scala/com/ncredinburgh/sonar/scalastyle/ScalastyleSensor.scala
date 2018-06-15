@@ -34,7 +34,7 @@ import scala.collection.JavaConverters._
 /**
  * Main sensor for return Scalastyle issues to Sonar.
  */
-class ScalastyleSensor(
+final class ScalastyleSensor(
   resourcePerspectives: ResourcePerspectives,
   runner: ScalastyleRunner,
   fileSystem: FileSystem,

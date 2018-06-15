@@ -37,7 +37,7 @@ object ScalastyleRepository {
  * Scalastyle rules repository - creates a rule for each checker shipped with Scalastyle based
  * on the scalastyle_definition.xml file that ships with the Scalastyle jar.
  */
-class ScalastyleRepository extends RulesDefinition {
+final class ScalastyleRepository extends RulesDefinition {
 
   override def define(context: RulesDefinition.Context): Unit = {
     val repository = context

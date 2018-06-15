@@ -27,11 +27,11 @@ import org.sonar.api.rule.Severity
 import org.sonar.api.rules.RuleType
 
 /** Defines a rules repository for the Scapegoat inspections */
-class ScapegoatRulesRepository extends RulesDefinition {
+final class ScapegoatRulesRepository extends RulesDefinition {
 
   /** Defines the rules in the repository */
   override def define(context: RulesDefinition.Context): Unit = {
-    // crete an empty repository
+    // create an empty repository
     val repository =
       context
         .createRepository(ScapegoatRulesRepository.RepositoryKey, Scala.LanguageKey)
@@ -57,8 +57,8 @@ class ScapegoatRulesRepository extends RulesDefinition {
 }
 
 object ScapegoatRulesRepository {
-  private val RepositoryKey = "sonar-scala-scoverage-scapegoat-repository"
-  private val RepositoryName = "Scapegoat"
+  private[scapegoat] val RepositoryKey = "sonar-scala-scapegoat-repository"
+  private[scapegoat] val RepositoryName = "Scapegoat"
 
   private def scapegoatLevelToRuleSeverity(level: Level): String = level match {
     case Level.Info    => Severity.INFO

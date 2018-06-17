@@ -23,7 +23,6 @@ import inspections.{Level, ScapegoatInspection}
 
 import org.sonar.api.server.rule.RulesDefinition
 import org.sonar.api.rule.RuleStatus
-import org.sonar.api.rule.Severity
 import org.sonar.api.rules.RuleType
 
 /** Defines a rules repository for the Scapegoat inspections */
@@ -46,7 +45,7 @@ final class ScapegoatRulesRepository extends RulesDefinition {
       rule.setMarkdownDescription(inspection.description)
       rule.setActivatedByDefault(true) // scalastyle:ignore LiteralArguments
       rule.setStatus(RuleStatus.READY)
-      rule.setSeverity(inspection.defaultLevel.toRuleSeverity)
+      rule.setSeverity(inspection.defaultLevel.toRuleSeverity.name)
       rule.setType(RuleType.CODE_SMELL)
     }
 

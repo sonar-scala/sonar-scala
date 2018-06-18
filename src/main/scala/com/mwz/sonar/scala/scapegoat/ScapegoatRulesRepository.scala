@@ -19,8 +19,8 @@
 package com.mwz.sonar.scala
 package scapegoat
 
-import inspections.{Level, ScapegoatInspection}
-
+import inspections.Level
+import inspections.ScapegoatInspection.AllScapegoatInspections
 import org.sonar.api.server.rule.RulesDefinition
 import org.sonar.api.rule.RuleStatus
 import org.sonar.api.rules.RuleType
@@ -37,7 +37,7 @@ final class ScapegoatRulesRepository extends RulesDefinition {
         .setName(ScapegoatRulesRepository.RepositoryName)
 
     // register each scapegoat inspection as a repository rule
-    ScapegoatInspection.AllScapegoatInspections foreach { inspection =>
+    AllScapegoatInspections foreach { inspection =>
       val rule = repository.createRule(inspection.id)
 
       rule.setInternalKey(inspection.id)

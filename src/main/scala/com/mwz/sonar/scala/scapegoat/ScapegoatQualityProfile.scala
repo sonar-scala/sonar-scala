@@ -19,8 +19,7 @@
 package com.mwz.sonar.scala
 package scapegoat
 
-import inspections.ScapegoatInspection
-
+import inspections.ScapegoatInspection.AllScapegoatInspections
 import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition
 
 /** Defines a quality profile that activates all Scapegoat rules/inspections */
@@ -35,7 +34,7 @@ final class ScapegoatQualityProfile extends BuiltInQualityProfilesDefinition {
     profile.setDefault(false)
 
     // activate each rule in the Scapegoat Rules Repository
-    ScapegoatInspection.AllScapegoatInspections foreach { inspection =>
+    AllScapegoatInspections foreach { inspection =>
       profile.activateRule(ScapegoatRulesRepository.RepositoryKey, inspection.id)
     }
 

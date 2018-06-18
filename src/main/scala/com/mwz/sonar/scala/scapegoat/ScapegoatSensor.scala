@@ -127,11 +127,11 @@ private[scapegoat] abstract class ScapegoatSensorInternal extends Sensor {
     val predicate = predicates.and(
       predicates.hasLanguage(Scala.LanguageKey),
       predicates.hasType(InputFile.Type.MAIN),
-      predicates.matchesPathPattern(s"**/$filename")
+      predicates.matchesPathPattern(s"**/$filename") // scalastyle:ignore LiteralArguments
     )
 
     // catch both exceptions and null values
-    Try(fs.inputFile(predicate)).map(file => Option(file)).toOption.flatten
+    Try(fs.inputFile(predicate)).fold(_ => None, file => Option(file))
   }
 
   /** Saves a new issue for a scapegoat warning */

@@ -35,7 +35,7 @@ import java.nio.file.{Path, Paths}
 import scala.util.{Failure, Success, Try}
 
 /** Main sensor for importing Scapegoat reports to SonarQube */
-final class ScoverageSensor extends ScapegoatSensorInternal with ScapegoatReportParser
+final class ScapegoatSensor extends ScapegoatSensorInternal with ScapegoatReportParser
 
 /** Implementation of the sensor */
 private[scapegoat] abstract class ScapegoatSensorInternal extends Sensor {

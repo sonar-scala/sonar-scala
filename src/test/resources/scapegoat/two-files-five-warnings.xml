@@ -1,0 +1,7 @@
+<scapegoat count="5" warns="0" errors="2" infos="3">
+  <warning line="15" text="Empty case class" snippet="Empty case class can be rewritten as a case object" level="Info" file="com.mwz.sonar.scala.scapegoat.TestFileA.scala" inspection="com.sksamuel.scapegoat.inspections.EmptyCaseClass"/>
+  <warning line="20" text="Array passed to String.format" snippet="scala.Predef.augmentString(&quot;data is: %s&quot;).format(scala.Array.apply(1, 2, 3))" level="Error" file="com.mwz.sonar.scala.scapegoat.TestFileA.scala" inspection="com.sksamuel.scapegoat.inspections.string.ArraysInFormat"/>
+  <warning line="30" text="Lonely sealed trait" snippet="Sealed trait NotUsed has no implementing classes" level="Error" file="com.mwz.sonar.scala.scapegoat.TestFileB.scala" inspection="com.sksamuel.scapegoat.inspections.LonelySealedTrait"/>
+  <warning line="45" text="Redundant final modifier on method" snippet="com.mwz.sonar.scala.scapegoat.TestFileB.testMethod cannot be overridden, final modifier is redundant" level="Info" file="com.mwz.sonar.scala.scapegoat.TestFileB.scala" inspection="com.sksamuel.scapegoat.inspections.RedundantFinalModifierOnMethod"/>
+  <warning line="50" text="Empty case class" snippet="Empty case class can be rewritten as a case object" level="Info" file="com.mwz.sonar.scala.scapegoat.TestFileB.scala" inspection="com.sksamuel.scapegoat.inspections.EmptyCaseClass"/>
+</scapegoat>

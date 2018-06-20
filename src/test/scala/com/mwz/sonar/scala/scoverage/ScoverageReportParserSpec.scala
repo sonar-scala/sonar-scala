@@ -19,17 +19,17 @@
 package com.mwz.sonar.scala
 package scoverage
 
-import java.nio.file.{Path, Paths}
+import org.scalatest.{FlatSpec, Matchers}
 
-import org.scalatest.{FlatSpec, Inside, LoneElement, Matchers}
+import java.nio.file.Paths
 
 /** Tests the correct behavior of the Scoverage XML reports parser */
-class ScoverageReportParserSpec extends FlatSpec with Inside with LoneElement with Matchers {
-  val modulePath: Path = Paths.get("")
+class ScoverageReportParserSpec extends FlatSpec with Matchers {
+  val modulePath = Paths.get("")
   val scalaSources = List(Paths.get("src/main/scala"))
-  val scoverageReportParser: ScoverageReportParser = new ScoverageReportParser {}
+  val scoverageReportParser = new ScoverageReportParser {}
 
-  behavior of "A Scoverage Report Parser"
+  behavior of "the Scoverage XML Report Parser"
 
   it should "be able to parse the report of an empty project" in {
     val reportFilename = Paths.get("src/test/resources/scoverage/empty-project.xml")

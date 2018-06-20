@@ -40,10 +40,16 @@ private[scapegoat] trait ScapegoatReportParser extends ScapegoatReportParserAPI 
       text = warning \@ "text"
       snippet = warning \@ "snippet"
       level = Level.fromName(warning \@ "level")
-      file = (warning \@ "file").replace(".", "/") // scalastyle:ignore LiteralArguments
+      file = ScapegoatReportParser.replaceAllDotsButLastWithSlash(warning \@ "file")
       inspectionId = warning \@ "inspection"
     } yield ScapegoatWarning(line, text, snippet, level, file, inspectionId)
 
     scapegoatWarnings.groupBy(warning => warning.file)
   }
+}
+
+private[scapegoat] object ScapegoatReportParser {
+  private val AllDotsButLastRegex = raw"\.(?=.*\.)".r
+  private def replaceAllDotsButLastWithSlash(path: String): String =
+    AllDotsButLastRegex.replaceAllIn(target = path, replacement = "/")
 }

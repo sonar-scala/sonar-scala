@@ -38,7 +38,7 @@ private[scoverage] abstract class ScoverageSensorInternal extends Sensor {
   // cake pattern to mock the scoverage report parser in tests
   scoverageReportParser: ScoverageReportParserAPI =>
 
-  import ScoverageSensorInternal._
+  import ScoverageSensorInternal._ // scalastyle:ignore Group imports
 
   private[this] val log = Log(classOf[ScoverageSensorInternal], "scoverage")
 

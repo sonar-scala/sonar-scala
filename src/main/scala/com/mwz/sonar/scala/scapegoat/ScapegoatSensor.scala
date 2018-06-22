@@ -42,7 +42,7 @@ private[scapegoat] abstract class ScapegoatSensorInternal extends Sensor {
   // cake pattern to mock the scapegoat report parser in tests
   scapegoatReportParser: ScapegoatReportParserAPI =>
 
-  import ScapegoatSensorInternal._
+  import ScapegoatSensorInternal._ // scalastyle:ignore Group imports
 
   private[this] val log = Log(classOf[ScapegoatSensorInternal], "scapegoat")
 

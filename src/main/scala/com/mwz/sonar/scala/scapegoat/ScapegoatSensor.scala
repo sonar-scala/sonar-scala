@@ -118,7 +118,17 @@ private[scapegoat] abstract class ScapegoatSensorInternal extends Sensor {
             ) match {
               case Some(rule) =>
                 // if the rule was found, create a new issue
-                saveIssue(context.newIssue(), rule, file, warning)
+                val issue = context.newIssue().forRule(rule.ruleKey)
+
+                issue.at(
+                  issue
+                    .newLocation()
+                    .on(file)
+                    .at(file.selectLine(warning.line))
+                    .message(warning.message)
+                )
+
+                issue.save()
               case None =>
                 // if the rule was not found, log a warning
                 if (AllScapegoatInspections.exists(inspection => inspection.id === warning.inspectionId))
@@ -150,37 +160,6 @@ private[scapegoat] abstract class ScapegoatSensorInternal extends Sensor {
 
     // catch both exceptions and null values
     Try(fs.inputFile(predicate)).fold(_ => None, file => Option(file))
-  }
-
-  /** Saves a new issue for a scapegoat warning */
-  private[this] def saveIssue(
-    issue: NewIssue,
-    rule: ActiveRule,
-    file: InputFile,
-    warning: ScapegoatWarning
-  ): Unit = {
-    issue.forRule(rule.ruleKey)
-
-    issue.at(
-      issue
-        .newLocation()
-        .on(file)
-        .at(file.selectLine(warning.line))
-        .message(warning.message)
-    )
-
-    // if the warning uses a different severity from the SonarQube rule,
-    // use the one in the scapegoat report, but log the event
-    val warningSeverity = warning.level.toRuleSeverity
-    if (rule.severity =!= warningSeverity.name) {
-      log.info(
-        s"the severity of warning: ${rule.internalKey}, " +
-        s"was overriden from ${rule.severity} to $warningSeverity."
-      )
-      issue.overrideSeverity(warningSeverity)
-    }
-
-    issue.save()
   }
 }
 

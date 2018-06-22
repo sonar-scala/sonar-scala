@@ -18,7 +18,6 @@
  */
 package com.mwz.sonar.scala.scapegoat
 
-import inspections.Level
 import java.nio.file.Path
 import scala.xml.XML
 
@@ -39,10 +38,9 @@ private[scapegoat] trait ScapegoatReportParser extends ScapegoatReportParserAPI 
       line = (warning \@ "line").toInt
       text = warning \@ "text"
       snippet = warning \@ "snippet"
-      level = Level.fromName(warning \@ "level")
       file = ScapegoatReportParser.replaceAllDotsButLastWithSlash(warning \@ "file")
       inspectionId = warning \@ "inspection"
-    } yield ScapegoatWarning(line, text, snippet, level, file, inspectionId)
+    } yield ScapegoatWarning(line, text, snippet, file, inspectionId)
 
     scapegoatWarnings.groupBy(warning => warning.file)
   }

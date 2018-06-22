@@ -18,7 +18,6 @@
  */
 package com.mwz.sonar.scala.scapegoat
 
-import inspections.Level
 import org.scalatest.{FlatSpec, Matchers}
 
 import java.nio.file.Paths
@@ -46,7 +45,6 @@ class ScapegoatReportParserSpec extends FlatSpec with Matchers {
           line = 15,
           text = "Empty case class",
           snippet = "Empty case class can be rewritten as a case object",
-          level = Level.Info,
           file = "com/mwz/sonar/scala/scapegoat/TestFileA.scala",
           inspectionId = "com.sksamuel.scapegoat.inspections.EmptyCaseClass"
         )
@@ -65,7 +63,6 @@ class ScapegoatReportParserSpec extends FlatSpec with Matchers {
           line = 15,
           text = "Empty case class",
           snippet = "Empty case class can be rewritten as a case object",
-          level = Level.Info,
           file = "com/mwz/sonar/scala/scapegoat/TestFileA.scala",
           inspectionId = "com.sksamuel.scapegoat.inspections.EmptyCaseClass"
         ),
@@ -73,7 +70,6 @@ class ScapegoatReportParserSpec extends FlatSpec with Matchers {
           line = 20,
           text = "Array passed to String.format",
           snippet = "scala.Predef.augmentString(\"data is: %s\").format(scala.Array.apply(1, 2, 3))",
-          level = Level.Error,
           file = "com/mwz/sonar/scala/scapegoat/TestFileA.scala",
           inspectionId = "com.sksamuel.scapegoat.inspections.string.ArraysInFormat"
         ),
@@ -93,7 +89,6 @@ class ScapegoatReportParserSpec extends FlatSpec with Matchers {
           line = 15,
           text = "Empty case class",
           snippet = "Empty case class can be rewritten as a case object",
-          level = Level.Info,
           file = "com/mwz/sonar/scala/scapegoat/TestFileA.scala",
           inspectionId = "com.sksamuel.scapegoat.inspections.EmptyCaseClass"
         ),
@@ -101,7 +96,6 @@ class ScapegoatReportParserSpec extends FlatSpec with Matchers {
           line = 20,
           text = "Array passed to String.format",
           snippet = "scala.Predef.augmentString(\"data is: %s\").format(scala.Array.apply(1, 2, 3))",
-          level = Level.Error,
           file = "com/mwz/sonar/scala/scapegoat/TestFileA.scala",
           inspectionId = "com.sksamuel.scapegoat.inspections.string.ArraysInFormat"
         ),
@@ -112,7 +106,6 @@ class ScapegoatReportParserSpec extends FlatSpec with Matchers {
           line = 30,
           text = "Lonely sealed trait",
           snippet = "Sealed trait NotUsed has no implementing classes",
-          level = Level.Error,
           file = "com/mwz/sonar/scala/scapegoat/TestFileB.scala",
           inspectionId = "com.sksamuel.scapegoat.inspections.LonelySealedTrait"
         ),
@@ -121,7 +114,6 @@ class ScapegoatReportParserSpec extends FlatSpec with Matchers {
           text = "Redundant final modifier on method",
           snippet =
             "com.mwz.sonar.scala.scapegoat.TestFileB.testMethod cannot be overridden, final modifier is redundant",
-          level = Level.Info,
           file = "com/mwz/sonar/scala/scapegoat/TestFileB.scala",
           inspectionId = "com.sksamuel.scapegoat.inspections.RedundantFinalModifierOnMethod"
         ),
@@ -129,7 +121,6 @@ class ScapegoatReportParserSpec extends FlatSpec with Matchers {
           line = 50,
           text = "Empty case class",
           snippet = "Empty case class can be rewritten as a case object",
-          level = Level.Info,
           file = "com/mwz/sonar/scala/scapegoat/TestFileB.scala",
           inspectionId = "com.sksamuel.scapegoat.inspections.EmptyCaseClass"
         ),

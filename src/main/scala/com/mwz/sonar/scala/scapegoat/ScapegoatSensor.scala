@@ -117,7 +117,7 @@ private[scapegoat] abstract class ScapegoatSensorInternal extends Sensor {
               )
             ) match {
               case Some(rule) =>
-                // if the rule was found, create a new issue
+                // if the rule was found, create a new issue for it
                 val issue = context.newIssue().forRule(rule.ruleKey)
 
                 issue.at(
@@ -130,9 +130,11 @@ private[scapegoat] abstract class ScapegoatSensorInternal extends Sensor {
 
                 issue.save()
               case None =>
-                // if the rule was not found, log a warning
+                // if the rule was not found,
+                // check if it is because it is not activated in the current quality profile,
+                // or if it does not exist in the scapegoat rules repository
                 if (AllScapegoatInspections.exists(inspection => inspection.id === warning.inspectionId))
-                  log.warn(
+                  log.debug(
                     s"The warning: ${warning.inspectionId}, " +
                     "was not activated in the current quality profile."
                   )

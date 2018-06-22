@@ -95,7 +95,7 @@ private[scapegoat] abstract class ScapegoatSensorInternal extends Sensor {
   /** Process all scapegoat warnings */
   private[this] def processScapegoatWarnings(
     context: SensorContext,
-    scapegoatWarnings: Map[String, Seq[ScapegoatWarning]]
+    scapegoatWarnings: Map[String, Seq[ScapegoatIssue]]
   ): Unit = {
     val activeRules = context.activeRules
     val filesystem = context.fileSystem

@@ -25,12 +25,12 @@ import scala.xml.XML
 private[scapegoat] trait ScapegoatReportParserAPI {
 
   /** Parses the scapegoat xml report and returns all scapegoat warnings by filename */
-  def parse(scapegoatReportPath: Path): Map[String, Seq[ScapegoatWarning]]
+  def parse(scapegoatReportPath: Path): Map[String, Seq[ScapegoatIssue]]
 }
 
 /** Scapegoat XML reports parser */
 private[scapegoat] trait ScapegoatReportParser extends ScapegoatReportParserAPI {
-  override final def parse(scapegoatReportPath: Path): Map[String, Seq[ScapegoatWarning]] = {
+  override final def parse(scapegoatReportPath: Path): Map[String, Seq[ScapegoatIssue]] = {
     val scapegoatXMLReport = XML.loadFile(scapegoatReportPath.toFile)
 
     val scapegoatWarnings = for {
@@ -40,7 +40,7 @@ private[scapegoat] trait ScapegoatReportParser extends ScapegoatReportParserAPI 
       snippet = warning \@ "snippet"
       file = ScapegoatReportParser.replaceAllDotsButLastWithSlash(warning \@ "file")
       inspectionId = warning \@ "inspection"
-    } yield ScapegoatWarning(line, text, snippet, file, inspectionId)
+    } yield ScapegoatIssue(line, text, snippet, file, inspectionId)
 
     scapegoatWarnings.groupBy(warning => warning.file)
   }

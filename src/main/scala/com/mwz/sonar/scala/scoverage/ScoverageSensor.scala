@@ -35,7 +35,7 @@ import scala.util.{Failure, Success, Try}
 final class ScoverageSensor(scoverageReportParser: ScoverageReportParserAPI) extends Sensor {
   import ScoverageSensor._ // scalastyle:ignore scalastyle_ImportGroupingChecker
 
-  private val log = Log(classOf[ScoverageSensor], "scoverage")
+  private[this] val log = Log(classOf[ScoverageSensor], "scoverage")
 
   /** Populates the SensorDescriptor of this sensor. */
   override def describe(descriptor: SensorDescriptor): Unit = {
@@ -149,7 +149,7 @@ final class ScoverageSensor(scoverageReportParser: ScoverageReportParserAPI) ext
   }
 
   /** Saves the [[ScoverageMetrics]] of a component */
-  private def saveComponentScoverage(
+  private[scoverage] def saveComponentScoverage(
     context: SensorContext,
     component: InputComponent,
     scoverage: Scoverage

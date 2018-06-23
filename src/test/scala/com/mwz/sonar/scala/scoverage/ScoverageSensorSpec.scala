@@ -33,7 +33,7 @@ class ScoverageSensorSpec extends FlatSpec with SensorContextMatchers with LoneE
   val scoverageReportParser = new TestScoverageReportParser()
   val scoverageSensor = new ScoverageSensor(scoverageReportParser)
 
-  behavior of "A ScoverageSensor"
+  behavior of "ScoverageSensor"
 
   it should "correctly set descriptor" in {
     val descriptor = new DefaultSensorDescriptor
@@ -42,6 +42,28 @@ class ScoverageSensorSpec extends FlatSpec with SensorContextMatchers with LoneE
     descriptor.name shouldBe "Scoverage Sensor"
     descriptor.languages.loneElement shouldBe "scala"
     descriptor.`type` shouldBe InputFile.Type.MAIN
+  }
+
+  it should "correctly save component scoverage" in {
+    val cwd = PathUtils.cwd
+    val context = SensorContextTester.create(cwd)
+    val scoverage = Scoverage(123, 15, 88.72, 14.17)
+    val mainFile = TestInputFileBuilder
+      .create("", "src/main/scala/package/Main.scala")
+      .setLanguage("scala")
+      .setLines(10)
+      .setType(InputFile.Type.MAIN)
+      .build()
+
+    context.fileSystem.add(mainFile)
+    scoverageSensor.saveComponentScoverage(context, mainFile, scoverage)
+
+    // validate the module scoverage metrics
+    val fileKey = mainFile.key
+    context should have(metric[java.lang.Integer](fileKey, "sonar-scala-scoverage-total-statements", 123))
+    context should have(metric[java.lang.Integer](fileKey, "sonar-scala-scoverage-covered-statements", 15))
+    context should have(metric[java.lang.Double](fileKey, "sonar-scala-scoverage-statement-coverage", 88.72))
+    context should have(metric[java.lang.Double](fileKey, "sonar-scala-scoverage-branch-scoverage", 14.17))
   }
 
   it should "return all scala files from the module" in {

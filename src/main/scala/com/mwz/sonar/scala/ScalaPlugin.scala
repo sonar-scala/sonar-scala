@@ -108,11 +108,14 @@ object Scala {
 final class ScalaPlugin extends Plugin {
   override def define(context: Plugin.Context): Unit = {
     context.addExtensions(
+      // Scala
       classOf[Scala],
       classOf[ScalaSensor],
+      // Scalastyle
       classOf[ScalastyleRepository],
       classOf[ScalastyleQualityProfile],
       classOf[ScalastyleSensor],
+      // Scoverage
       classOf[ScoverageMetrics],
       classOf[ScoverageReportParser],
       classOf[ScoverageSensor]

@@ -26,12 +26,12 @@ import org.sonar.api.batch.ScannerSide
 
 import scala.xml.{Node, XML}
 
-@ScannerSide
 trait ScoverageReportParserAPI {
   def parse(scoverageReportPath: Path, modulePath: Path, sourcePrefixes: List[Path]): ModuleCoverage
 }
 
 /** Scoverage XML reports parser */
+@ScannerSide
 final class ScoverageReportParser extends ScoverageReportParserAPI {
 
   /** Parses the scoverage report from a file and returns the ModuleCoverage. */

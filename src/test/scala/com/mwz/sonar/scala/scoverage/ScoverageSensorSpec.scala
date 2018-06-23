@@ -30,7 +30,8 @@ import org.sonar.api.config.internal.MapSettings
 
 /** Tests the Scoverage Sensor */
 class ScoverageSensorSpec extends FlatSpec with SensorContextMatchers with LoneElement with Matchers {
-  val scoverageSensor = new ScoverageSensorInternal with TestScoverageReportParser
+  val scoverageReportParser = new TestScoverageReportParser()
+  val scoverageSensor = new ScoverageSensor(scoverageReportParser)
 
   behavior of "A ScoverageSensor"
 
@@ -180,7 +181,7 @@ class ScoverageSensorSpec extends FlatSpec with SensorContextMatchers with LoneE
 }
 
 /** Mock of the ScoverageReportParser */
-trait TestScoverageReportParser extends ScoverageReportParserAPI {
+final class TestScoverageReportParser extends ScoverageReportParserAPI {
   override def parse(reportPath: Path, modulePath: Path, sourcePrefixes: List[Path]): ModuleCoverage =
     reportPath.toString match {
       case "target/scala-2.11/scoverage-report/scoverage.xml"

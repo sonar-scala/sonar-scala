@@ -27,7 +27,7 @@ import org.scalatest.{FlatSpec, Inside, LoneElement, Matchers}
 class ScoverageReportParserSpec extends FlatSpec with Inside with LoneElement with Matchers {
   val modulePath: Path = Paths.get("")
   val scalaSources = List(Paths.get("src/main/scala"))
-  val scoverageReportParser: ScoverageReportParser = new ScoverageReportParser {}
+  val scoverageReportParser = new ScoverageReportParser()
 
   behavior of "A Scoverage Report Parser"
 

@@ -22,11 +22,17 @@ package scoverage
 import java.nio.file.{Path, Paths}
 
 import com.mwz.sonar.scala.util.PathUtils
+import org.sonar.api.batch.ScannerSide
 
 import scala.xml.{Node, XML}
 
+@ScannerSide
+trait ScoverageReportParserAPI {
+  def parse(scoverageReportPath: Path, modulePath: Path, sourcePrefixes: List[Path]): ModuleCoverage
+}
+
 /** Scoverage XML reports parser */
-trait ScoverageReportParser extends ScoverageReportParserAPI {
+final class ScoverageReportParser extends ScoverageReportParserAPI {
 
   /** Parses the scoverage report from a file and returns the ModuleCoverage. */
   override def parse(
@@ -84,7 +90,7 @@ trait ScoverageReportParser extends ScoverageReportParserAPI {
   }
 
   /** Extracts the scoverage metrics form a class or module node */
-  private def extractScoverageFromNode(node: Node): Scoverage =
+  private[scoverage] def extractScoverageFromNode(node: Node): Scoverage =
     Scoverage(
       totalStatements = (node \@ "statement-count").toInt,
       coveredStatements = (node \@ "statements-invoked").toInt,

@@ -31,6 +31,18 @@ class ScoverageReportParserSpec extends FlatSpec with Inside with LoneElement wi
 
   behavior of "A Scoverage Report Parser"
 
+  it should "be able to extract scoverage data from XML" in {
+    val node = <node
+      statement-count="123"
+      statements-invoked="15"
+      statement-rate="88.72"
+      branch-rate="14.17">
+    </node>
+    val expected = Scoverage(123, 15, 88.72, 14.17)
+
+    scoverageReportParser.extractScoverageFromNode(node) shouldBe expected
+  }
+
   it should "be able to parse the report of an empty project" in {
     val reportFilename = Paths.get("src/test/resources/scoverage/empty-project.xml")
     val moduleCoverage = scoverageReportParser.parse(reportFilename, modulePath, scalaSources)

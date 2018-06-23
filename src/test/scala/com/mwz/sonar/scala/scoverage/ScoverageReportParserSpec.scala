@@ -19,13 +19,13 @@
 package com.mwz.sonar.scala
 package scoverage
 
-import java.nio.file.{Path, Paths}
+import java.nio.file.Paths
 
 import org.scalatest.{FlatSpec, Inside, LoneElement, Matchers}
 
 /** Tests the correct behavior of the Scoverage XML reports parser */
 class ScoverageReportParserSpec extends FlatSpec with Inside with LoneElement with Matchers {
-  val modulePath: Path = Paths.get("")
+  val modulePath = Paths.get("")
   val scalaSources = List(Paths.get("src/main/scala"))
   val scoverageReportParser = new ScoverageReportParser()
 

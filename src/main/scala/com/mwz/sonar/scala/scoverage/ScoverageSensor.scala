@@ -21,7 +21,6 @@ package scoverage
 
 import java.nio.file.{Path, Paths}
 
-import com.mwz.sonar.scala.scoverage.ScoverageSensor._
 import com.mwz.sonar.scala.util.JavaOptionals._
 import com.mwz.sonar.scala.util.{Log, PathUtils}
 import org.sonar.api.batch.fs.{FileSystem, InputComponent, InputFile}
@@ -32,8 +31,9 @@ import scalariform.ScalaVersion
 import scala.collection.JavaConverters._
 import scala.util.{Failure, Success, Try}
 
-/** Implementation of the sensor */
+/** Main sensor for importing Scoverage reports into SonarQube. */
 final class ScoverageSensor(scoverageReportParser: ScoverageReportParserAPI) extends Sensor {
+  import ScoverageSensor._ // scalastyle:ignore scalastyle_ImportGroupingChecker
 
   private val log = Log(classOf[ScoverageSensor], "scoverage")
 

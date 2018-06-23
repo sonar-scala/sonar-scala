@@ -18,13 +18,13 @@
  */
 package com.mwz.sonar.scala
 
-import com.mwz.sonar.scala.scoverage.{ScoverageMetrics, ScoverageSensor}
+import com.mwz.sonar.scala.scoverage.{ScoverageMetrics, ScoverageReportParser, ScoverageSensor}
 import com.mwz.sonar.scala.sensor.ScalaSensor
 import com.ncredinburgh.sonar.scalastyle.{ScalastyleQualityProfile, ScalastyleRepository, ScalastyleSensor}
 import org.scalatest.{FlatSpec, Matchers}
+import org.sonar.api.internal.SonarRuntimeImpl
 import org.sonar.api.utils.Version
 import org.sonar.api.{Plugin, SonarQubeSide, SonarRuntime}
-import org.sonar.api.internal.SonarRuntimeImpl
 
 /** Tests the Scala SonarQube plugin extension points */
 class ScalaPluginSpec extends FlatSpec with Matchers {
@@ -33,31 +33,20 @@ class ScalaPluginSpec extends FlatSpec with Matchers {
   new ScalaPlugin().define(context)
   behavior of "the scala plugin"
 
-  it should "provide a scala sensor" in {
+  it should "provide scala sensor" in {
+    assert(context.getExtensions.contains(classOf[Scala]))
     assert(context.getExtensions.contains(classOf[ScalaSensor]))
   }
 
-  it should "provide a scalastyle sensor" in {
+  it should "provide scalastyle sensor" in {
+    assert(context.getExtensions.contains(classOf[ScalastyleRepository]))
+    assert(context.getExtensions.contains(classOf[ScalastyleQualityProfile]))
     assert(context.getExtensions.contains(classOf[ScalastyleSensor]))
   }
 
-  it should "provide a scalastyle repository" in {
-    assert(context.getExtensions.contains(classOf[ScalastyleRepository]))
-  }
-
-  it should "provide a scala language" in {
-    assert(context.getExtensions.contains(classOf[Scala]))
-  }
-
-  it should "provide a scalastyle quality profile" in {
-    assert(context.getExtensions.contains(classOf[ScalastyleQualityProfile]))
-  }
-
-  it should "provide a scoverage sensor" in {
-    assert(context.getExtensions.contains(classOf[ScoverageSensor]))
-  }
-
-  it should "provide scala metrics" in {
+  it should "provide scoverage sensor" in {
     assert(context.getExtensions.contains(classOf[ScoverageMetrics]))
+    assert(context.getExtensions.contains(classOf[ScoverageReportParser]))
+    assert(context.getExtensions.contains(classOf[ScoverageSensor]))
   }
 }

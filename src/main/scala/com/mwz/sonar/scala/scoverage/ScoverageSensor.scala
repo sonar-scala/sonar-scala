@@ -21,7 +21,6 @@ package scoverage
 
 import java.nio.file.{Path, Paths}
 
-import com.mwz.sonar.scala.scoverage.ScoverageSensorInternal._
 import com.mwz.sonar.scala.util.JavaOptionals._
 import com.mwz.sonar.scala.util.{Log, PathUtils}
 import org.sonar.api.batch.fs.{FileSystem, InputComponent, InputFile}
@@ -32,22 +31,18 @@ import scalariform.ScalaVersion
 import scala.collection.JavaConverters._
 import scala.util.{Failure, Success, Try}
 
-/** Main sensor for importing Scoverage reports to SonarQube */
-final class ScoverageSensor extends ScoverageSensorInternal with ScoverageReportParser
+/** Main sensor for importing Scoverage reports into SonarQube. */
+final class ScoverageSensor(scoverageReportParser: ScoverageReportParserAPI) extends Sensor {
+  import ScoverageSensor._ // scalastyle:ignore scalastyle_ImportGroupingChecker
 
-/** Implementation of the sensor */
-private[scoverage] abstract class ScoverageSensorInternal extends Sensor {
-  // cake pattern to mock the scoverage report parser in tests
-  scoverageReportParser: ScoverageReportParserAPI =>
-
-  private[this] val log = Log(classOf[ScoverageSensorInternal], "scoverage")
+  private[this] val log = Log(classOf[ScoverageSensor], "scoverage")
 
   /** Populates the SensorDescriptor of this sensor. */
   override def describe(descriptor: SensorDescriptor): Unit = {
     descriptor
       .onlyOnLanguage(Scala.LanguageKey)
       .onlyOnFileType(InputFile.Type.MAIN)
-      .name(ScoverageSensorInternal.SensorName)
+      .name(SensorName)
   }
 
   /** Saves in SonarQube the scoverage information of a module */
@@ -126,7 +121,7 @@ private[scoverage] abstract class ScoverageSensorInternal extends Sensor {
   /** Returns the filename of the scoverage report for this module */
   private[scoverage] def getScoverageReportPath(settings: Configuration): Path = {
     val scalaVersion = Scala.getScalaVersion(settings)
-    val defaultScoverageReportPath = ScoverageSensorInternal.getDefaultScoverageReportPath(scalaVersion)
+    val defaultScoverageReportPath = getDefaultScoverageReportPath(scalaVersion)
 
     if (settings.hasKey(DeprecatedScoverageReportPathPropertyKey)) {
       log.warn(
@@ -154,7 +149,7 @@ private[scoverage] abstract class ScoverageSensorInternal extends Sensor {
   }
 
   /** Saves the [[ScoverageMetrics]] of a component */
-  private[this] def saveComponentScoverage(
+  private[scoverage] def saveComponentScoverage(
     context: SensorContext,
     component: InputComponent,
     scoverage: Scoverage
@@ -189,7 +184,7 @@ private[scoverage] abstract class ScoverageSensorInternal extends Sensor {
   }
 }
 
-private[scoverage] object ScoverageSensorInternal {
+private[scoverage] object ScoverageSensor {
   val SensorName = "Scoverage Sensor"
   val DeprecatedScoverageReportPathPropertyKey = "sonar.scoverage.reportPath"
   val ScoverageReportPathPropertyKey = "sonar.scala.scoverage.reportPath"

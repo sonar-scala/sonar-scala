@@ -18,14 +18,7 @@
  */
 package com.mwz.sonar.scala
 
-import java.nio.file.Path
-
 package object scoverage {
-
-  /** Used to mock the scoverage report parser in tests */
-  trait ScoverageReportParserAPI {
-    def parse(scoverageReportPath: Path, modulePath: Path, sourcePrefixes: List[Path]): ModuleCoverage
-  }
 
   /**
    *  The coverage information of an entire module.

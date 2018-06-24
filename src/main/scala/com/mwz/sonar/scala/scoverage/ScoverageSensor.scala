@@ -30,17 +30,11 @@ import java.nio.file.{Path, Paths}
 import scala.collection.JavaConverters._
 import scala.util.{Failure, Success, Try}
 
-/** Main sensor for importing Scoverage reports to SonarQube */
-final class ScoverageSensor extends ScoverageSensorInternal with ScoverageReportParser
+/** Main sensor for importing Scoverage reports into SonarQube. */
+final class ScoverageSensor(scoverageReportParser: ScoverageReportParserAPI) extends Sensor {
+  import ScoverageSensor._ // scalastyle:ignore scalastyle_ImportGroupingChecker
 
-/** Implementation of the sensor */
-private[scoverage] abstract class ScoverageSensorInternal extends Sensor {
-  // cake pattern to mock the scoverage report parser in tests
-  scoverageReportParser: ScoverageReportParserAPI =>
-
-  import ScoverageSensorInternal._ // scalastyle:ignore Group imports
-
-  private[this] val log = Log(classOf[ScoverageSensorInternal], "scoverage")
+  private[this] val log = Log(classOf[ScoverageSensor], "scoverage")
 
   /** Populates the SensorDescriptor of this sensor. */
   override def describe(descriptor: SensorDescriptor): Unit = {
@@ -154,7 +148,7 @@ private[scoverage] abstract class ScoverageSensorInternal extends Sensor {
   }
 
   /** Saves the [[ScoverageMetrics]] of a component */
-  private[this] def saveComponentScoverage(
+  private[scoverage] def saveComponentScoverage(
     context: SensorContext,
     component: InputComponent,
     scoverage: Scoverage
@@ -189,7 +183,7 @@ private[scoverage] abstract class ScoverageSensorInternal extends Sensor {
   }
 }
 
-private[scoverage] object ScoverageSensorInternal {
+private[scoverage] object ScoverageSensor {
   val SensorName = "Scoverage Sensor"
   val DeprecatedScoverageReportPathPropertyKey = "sonar.scoverage.reportPath"
   val ScoverageReportPathPropertyKey = "sonar.scala.scoverage.reportPath"

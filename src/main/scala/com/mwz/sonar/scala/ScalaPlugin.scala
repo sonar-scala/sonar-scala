@@ -22,7 +22,7 @@ import java.nio.file.{Path, Paths}
 
 import cats.kernel.Eq
 import cats.syntax.eq._
-import com.mwz.sonar.scala.scoverage.{ScoverageMetrics, ScoverageSensor}
+import com.mwz.sonar.scala.scoverage.{ScoverageMetrics, ScoverageReportParser, ScoverageSensor}
 import com.mwz.sonar.scala.sensor.ScalaSensor
 import com.mwz.sonar.scala.util.JavaOptionals._
 import com.ncredinburgh.sonar.scalastyle.{ScalastyleQualityProfile, ScalastyleRepository, ScalastyleSensor}
@@ -108,12 +108,16 @@ object Scala {
 final class ScalaPlugin extends Plugin {
   override def define(context: Plugin.Context): Unit = {
     context.addExtensions(
+      // Scala
       classOf[Scala],
       classOf[ScalaSensor],
+      // Scalastyle
       classOf[ScalastyleRepository],
       classOf[ScalastyleQualityProfile],
       classOf[ScalastyleSensor],
+      // Scoverage
       classOf[ScoverageMetrics],
+      classOf[ScoverageReportParser],
       classOf[ScoverageSensor]
     )
   }

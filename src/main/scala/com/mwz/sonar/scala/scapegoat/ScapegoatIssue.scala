@@ -18,7 +18,7 @@
  */
 package com.mwz.sonar.scala.scapegoat
 
-/** Represents a warning in the scapegoat report */
+/** Represents a warning/issue in the scapegoat report */
 private[scapegoat] final case class ScapegoatIssue(
   line: Int,
   text: String,

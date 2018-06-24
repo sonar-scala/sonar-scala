@@ -24,8 +24,16 @@ import java.nio.file.Paths
 
 /** Tests the correct behavior of the Scapegoat XML reports parser */
 class ScapegoatReportParserSpec extends FlatSpec with Matchers {
-  val scapegoatReportParser = new ScapegoatReportParser {}
+  val scapegoatReportParser = new ScapegoatReportParser()
+
   behavior of "the Scapegoat XML Report Parser"
+
+  it should "replace all dots (.) except the last one in a scaegoat path with slashes (/)" in {
+    val scapegoatPath = "com.mwz.sonar.scala.scapegoat.TestFile.scala"
+    val linuxPath = scapegoatReportParser.replaceAllDotsButLastWithSlashes(scapegoatPath)
+
+    linuxPath shouldBe "com/mwz/sonar/scala/scapegoat/TestFile.scala"
+  }
 
   it should "be able to parse an empty report" in {
     val scapegoatReportPath = Paths.get("src", "test", "resources", "scapegoat", "no-warnings.xml")

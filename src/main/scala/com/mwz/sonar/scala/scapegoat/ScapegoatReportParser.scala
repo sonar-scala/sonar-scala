@@ -18,36 +18,37 @@
  */
 package com.mwz.sonar.scala.scapegoat
 
+import org.sonar.api.batch.ScannerSide
+
 import java.nio.file.Path
 import scala.xml.XML
 
-/** Used to mock the scoverage report parser in tests */
-private[scapegoat] trait ScapegoatReportParserAPI {
-
-  /** Parses the scapegoat xml report and returns all scapegoat warnings by filename */
+trait ScapegoatReportParserAPI {
   def parse(scapegoatReportPath: Path): Map[String, Seq[ScapegoatIssue]]
 }
 
 /** Scapegoat XML reports parser */
-private[scapegoat] trait ScapegoatReportParser extends ScapegoatReportParserAPI {
-  override final def parse(scapegoatReportPath: Path): Map[String, Seq[ScapegoatIssue]] = {
+@ScannerSide
+final class ScapegoatReportParser extends ScapegoatReportParserAPI {
+  private[this] val AllDotsButLastRegex = raw"\.(?=.*\.)".r
+
+  /** Replaces all dots (.) except the last one in a scapegoat path with slashes (/) */
+  private[scapegoat] def replaceAllDotsButLastWithSlashes(path: String): String =
+    AllDotsButLastRegex.replaceAllIn(target = path, replacement = "/")
+
+  /** Parses the scapegoat xml report and returns all scapegoat issues by filename */
+  override def parse(scapegoatReportPath: Path): Map[String, Seq[ScapegoatIssue]] = {
     val scapegoatXMLReport = XML.loadFile(scapegoatReportPath.toFile)
 
-    val scapegoatWarnings = for {
-      warning <- scapegoatXMLReport \\ "warning"
-      line = (warning \@ "line").toInt
-      text = warning \@ "text"
-      snippet = warning \@ "snippet"
-      file = ScapegoatReportParser.replaceAllDotsButLastWithSlash(warning \@ "file")
-      inspectionId = warning \@ "inspection"
+    val scapegoatIssues = for {
+      issue <- scapegoatXMLReport \\ "warning"
+      line = (issue \@ "line").toInt
+      text = issue \@ "text"
+      snippet = issue \@ "snippet"
+      file = replaceAllDotsButLastWithSlashes(issue \@ "file")
+      inspectionId = issue \@ "inspection"
     } yield ScapegoatIssue(line, text, snippet, file, inspectionId)
 
-    scapegoatWarnings.groupBy(warning => warning.file)
+    scapegoatIssues.groupBy(issue => issue.file)
   }
-}
-
-private[scapegoat] object ScapegoatReportParser {
-  private val AllDotsButLastRegex = raw"\.(?=.*\.)".r
-  private def replaceAllDotsButLastWithSlash(path: String): String =
-    AllDotsButLastRegex.replaceAllIn(target = path, replacement = "/")
 }

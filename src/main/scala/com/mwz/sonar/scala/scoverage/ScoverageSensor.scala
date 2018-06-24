@@ -184,9 +184,9 @@ final class ScoverageSensor(scoverageReportParser: ScoverageReportParserAPI) ext
 }
 
 private[scoverage] object ScoverageSensor {
-  val SensorName = "Scoverage Sensor"
-  val DeprecatedScoverageReportPathPropertyKey = "sonar.scoverage.reportPath"
-  val ScoverageReportPathPropertyKey = "sonar.scala.scoverage.reportPath"
+  final val SensorName = "Scoverage Sensor"
+  final val DeprecatedScoverageReportPathPropertyKey = "sonar.scoverage.reportPath"
+  final val ScoverageReportPathPropertyKey = "sonar.scala.scoverage.reportPath"
 
   def getDefaultScoverageReportPath(scalaVersion: ScalaVersion): Path =
     Paths.get(s"target/scala-${scalaVersion.major}.${scalaVersion.minor}/scoverage-report/scoverage.xml")

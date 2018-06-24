@@ -35,16 +35,10 @@ import java.nio.file.{Path, Paths}
 import scala.util.{Failure, Success, Try}
 
 /** Main sensor for importing Scapegoat reports to SonarQube */
-final class ScapegoatSensor extends ScapegoatSensorInternal with ScapegoatReportParser
-
-/** Implementation of the sensor */
-private[scapegoat] abstract class ScapegoatSensorInternal extends Sensor {
-  // cake pattern to mock the scapegoat report parser in tests
-  scapegoatReportParser: ScapegoatReportParserAPI =>
-
+final class ScapegoatSensor(scapegoatReportParser: ScapegoatReportParserAPI) extends Sensor {
   import ScapegoatSensorInternal._ // scalastyle:ignore scalastyle_ImportGroupingChecker
 
-  private[this] val log = Log(classOf[ScapegoatSensorInternal], "scapegoat")
+  private[this] val log = Log(classOf[ScapegoatSensor], "scapegoat")
 
   /** Populates the descriptor of this sensor */
   override def describe(descriptor: SensorDescriptor): Unit =
@@ -61,9 +55,9 @@ private[scapegoat] abstract class ScapegoatSensorInternal extends Sensor {
     val reportPath = getScapegoatReportPath(context.config)
     log.info(s"Loading the scapegoat report file: '$reportPath'.")
     Try(scapegoatReportParser.parse(reportPath)) match {
-      case Success(scapegoatWarnings) =>
+      case Success(scapegoatIssuesByFilename) =>
         log.info("Successfully loaded the scapegoat report file.")
-        processScapegoatWarnings(context, scapegoatWarnings)
+        processScapegoatWarnings(context, scapegoatIssuesByFilename)
       case Failure(ex) =>
         log.error(
           "Aborting the scapegoat sensor execution, " +
@@ -74,7 +68,7 @@ private[scapegoat] abstract class ScapegoatSensorInternal extends Sensor {
   }
 
   /** Returns the path to the scapegoat report for this module */
-  private[this] def getScapegoatReportPath(settings: Configuration): Path = {
+  private[scapegoat] def getScapegoatReportPath(settings: Configuration): Path = {
     val scalaVersion = Scala.getScalaVersion(settings)
     val defaultScapegoatReportPath = getDefaultScapegoatReportPath(scalaVersion)
 
@@ -95,52 +89,56 @@ private[scapegoat] abstract class ScapegoatSensorInternal extends Sensor {
   /** Process all scapegoat warnings */
   private[this] def processScapegoatWarnings(
     context: SensorContext,
-    scapegoatWarnings: Map[String, Seq[ScapegoatIssue]]
+    scapegoatIssuesByFilename: Map[String, Seq[ScapegoatIssue]]
   ): Unit = {
     val activeRules = context.activeRules
     val filesystem = context.fileSystem
 
-    scapegoatWarnings foreach { tuple =>
-      val (filename, warnings) = tuple
+    scapegoatIssuesByFilename foreach { tuple =>
+      val (filename, scapegoatIssues) = tuple
       log.info(s"Saving the scapegoat warnings of the file: '$filename'.")
 
       getModuleFile(filename, filesystem) match {
         case Some(file) =>
-          warnings foreach { warning =>
-            log.debug(s"Saving the warning: $warning.")
+          scapegoatIssues foreach { scapegoatIssue =>
+            log.debug(s"Saving the scapegoat issue: $scapegoatIssue.")
 
-            // try to retrieve the SonarQube rule for this warning
+            // try to retrieve the SonarQube rule for this scapegoat issue
             Option(
               activeRules.findByInternalKey(
                 ScapegoatRulesRepository.RepositoryKey,
-                warning.inspectionId
+                scapegoatIssue.inspectionId
               )
             ) match {
               case Some(rule) =>
-                // if the rule was found, create a new issue for it
-                val issue = context.newIssue().forRule(rule.ruleKey)
+                // if the rule was found, create a new sonarqube issue for it
+                val sonarqubeIssue = context.newIssue().forRule(rule.ruleKey)
 
-                issue.at(
-                  issue
+                sonarqubeIssue.at(
+                  sonarqubeIssue
                     .newLocation()
                     .on(file)
-                    .at(file.selectLine(warning.line))
-                    .message(warning.message)
+                    .at(file.selectLine(scapegoatIssue.line))
+                    .message(scapegoatIssue.message)
                 )
 
-                issue.save()
+                sonarqubeIssue.save()
               case None =>
                 // if the rule was not found,
-                // check if it is because it is not activated in the current quality profile,
-                // or if it does not exist in the scapegoat rules repository
-                if (AllScapegoatInspections.exists(inspection => inspection.id === warning.inspectionId))
+                // check if it is because the rule is not activated in the current quality profile,
+                // or if it is because the inspection does not exist in the scapegoat rules repository
+                val inspectionExists =
+                  AllScapegoatInspections.exists(
+                    inspection => inspection.id === scapegoatIssue.inspectionId
+                  )
+                if (inspectionExists)
                   log.debug(
-                    s"The warning: ${warning.inspectionId}, " +
+                    s"The rule: ${scapegoatIssue.inspectionId}, " +
                     "was not activated in the current quality profile."
                   )
                 else
                   log.warn(
-                    s"The warning: ${warning.inspectionId}, " +
+                    s"The inspection: ${scapegoatIssue.inspectionId}, " +
                     "does not exist in the scapegoat rules repository."
                   )
             }
@@ -152,7 +150,7 @@ private[scapegoat] abstract class ScapegoatSensorInternal extends Sensor {
   }
 
   /** Returns the module input file with the given filename */
-  private[this] def getModuleFile(filename: String, fs: FileSystem): Option[InputFile] = {
+  private[scapegoat] def getModuleFile(filename: String, fs: FileSystem): Option[InputFile] = {
     val predicates = fs.predicates
     val predicate = predicates.and(
       predicates.hasLanguage(Scala.LanguageKey),
@@ -166,9 +164,9 @@ private[scapegoat] abstract class ScapegoatSensorInternal extends Sensor {
 }
 
 private[scapegoat] object ScapegoatSensorInternal {
-  private[scapegoat] val SensorName = "Scapegoat Sensor"
-  private[scapegoat] val ScapegoatReportPathPropertyKey = "sonar.scala.scapegoat.reportPath"
+  final val SensorName = "Scapegoat Sensor"
+  final val ScapegoatReportPathPropertyKey = "sonar.scala.scapegoat.reportPath"
 
-  private[scapegoat] def getDefaultScapegoatReportPath(scalaVersion: ScalaVersion): Path =
+  def getDefaultScapegoatReportPath(scalaVersion: ScalaVersion): Path =
     Paths.get(s"target/scala-${scalaVersion.major}.${scalaVersion.minor}/scapegoat-report/scapegoat.xml")
 }

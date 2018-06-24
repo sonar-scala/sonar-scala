@@ -43,6 +43,6 @@ final class ScapegoatQualityProfile extends BuiltInQualityProfilesDefinition {
   }
 }
 
-object ScapegoatQualityProfile {
-  private[scapegoat] val ProfileName = "Scapegoat"
+private[scapegoat] object ScapegoatQualityProfile {
+  final val ProfileName = "Scapegoat"
 }

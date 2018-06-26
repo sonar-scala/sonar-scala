@@ -47,8 +47,7 @@ class ScapegoatReportParserSpec extends FlatSpec with Matchers {
     val scapegoatWarnings = scapegoatReportParser.parse(scapegoatReportPath)
 
     scapegoatWarnings shouldBe Map(
-      "com/mwz/sonar/scala/scapegoat/TestFileA.scala" ->
-      Seq(
+      "com/mwz/sonar/scala/scapegoat/TestFileA.scala" -> Seq(
         ScapegoatIssue(
           line = 15,
           text = "Empty case class",
@@ -65,8 +64,7 @@ class ScapegoatReportParserSpec extends FlatSpec with Matchers {
     val scapegoatWarnings = scapegoatReportParser.parse(scapegoatReportPath)
 
     scapegoatWarnings shouldBe Map(
-      "com/mwz/sonar/scala/scapegoat/TestFileA.scala" ->
-      Seq(
+      "com/mwz/sonar/scala/scapegoat/TestFileA.scala" -> Seq(
         ScapegoatIssue(
           line = 15,
           text = "Empty case class",
@@ -80,7 +78,7 @@ class ScapegoatReportParserSpec extends FlatSpec with Matchers {
           snippet = "scala.Predef.augmentString(\"data is: %s\").format(scala.Array.apply(1, 2, 3))",
           file = "com/mwz/sonar/scala/scapegoat/TestFileA.scala",
           inspectionId = "com.sksamuel.scapegoat.inspections.string.ArraysInFormat"
-        ),
+        )
       )
     )
   }
@@ -91,8 +89,7 @@ class ScapegoatReportParserSpec extends FlatSpec with Matchers {
     val scapegoatWarnings = scapegoatReportParser.parse(scapegoatReportPath)
 
     scapegoatWarnings shouldBe Map(
-      "com/mwz/sonar/scala/scapegoat/TestFileA.scala" ->
-      Seq(
+      "com/mwz/sonar/scala/scapegoat/TestFileA.scala" -> Seq(
         ScapegoatIssue(
           line = 15,
           text = "Empty case class",
@@ -108,8 +105,7 @@ class ScapegoatReportParserSpec extends FlatSpec with Matchers {
           inspectionId = "com.sksamuel.scapegoat.inspections.string.ArraysInFormat"
         ),
       ),
-      "com/mwz/sonar/scala/scapegoat/TestFileB.scala" ->
-      Seq(
+      "com/mwz/sonar/scala/scapegoat/TestFileB.scala" -> Seq(
         ScapegoatIssue(
           line = 30,
           text = "Lonely sealed trait",
@@ -131,7 +127,7 @@ class ScapegoatReportParserSpec extends FlatSpec with Matchers {
           snippet = "Empty case class can be rewritten as a case object",
           file = "com/mwz/sonar/scala/scapegoat/TestFileB.scala",
           inspectionId = "com.sksamuel.scapegoat.inspections.EmptyCaseClass"
-        ),
+        )
       )
     )
   }

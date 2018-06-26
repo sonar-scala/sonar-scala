@@ -29,7 +29,7 @@ import org.sonar.api.batch.sensor.internal.{DefaultSensorDescriptor, SensorConte
 import org.sonar.api.config.internal.MapSettings
 
 /** Tests the Scoverage Sensor */
-class ScoverageSensorSpec extends FlatSpec with SensorContextMatchers with LoneElement with Matchers {
+class ScoverageSensorSpec extends FlatSpec with SensorContextMatchers with LoneElement {
   val scoverageReportParser = new TestScoverageReportParser()
   val scoverageSensor = new ScoverageSensor(scoverageReportParser)
 
@@ -39,6 +39,7 @@ class ScoverageSensorSpec extends FlatSpec with SensorContextMatchers with LoneE
     val descriptor = new DefaultSensorDescriptor
     scoverageSensor.describe(descriptor)
 
+    descriptor should not be 'global
     descriptor.name shouldBe "Scoverage Sensor"
     descriptor.languages.loneElement shouldBe "scala"
     descriptor.`type` shouldBe InputFile.Type.MAIN

@@ -168,5 +168,10 @@ private[scapegoat] object ScapegoatSensorInternal {
   final val ScapegoatReportPathPropertyKey = "sonar.scala.scapegoat.reportPath"
 
   def getDefaultScapegoatReportPath(scalaVersion: ScalaVersion): Path =
-    Paths.get(s"target/scala-${scalaVersion.major}.${scalaVersion.minor}/scapegoat-report/scapegoat.xml")
+    Paths.get(
+      "target",
+      s"scala-${scalaVersion.major}.${scalaVersion.minor}",
+      "scapegoat-report",
+      "scapegoat.xml"
+    )
 }

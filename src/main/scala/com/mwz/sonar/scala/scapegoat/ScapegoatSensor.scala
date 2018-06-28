@@ -36,7 +36,7 @@ import scala.util.{Failure, Success, Try}
 
 /** Main sensor for importing Scapegoat reports to SonarQube */
 final class ScapegoatSensor(scapegoatReportParser: ScapegoatReportParserAPI) extends Sensor {
-  import ScapegoatSensorInternal._ // scalastyle:ignore scalastyle_ImportGroupingChecker
+  import ScapegoatSensor._ // scalastyle:ignore scalastyle_ImportGroupingChecker
 
   private[this] val log = Log(classOf[ScapegoatSensor], "scapegoat")
 
@@ -163,7 +163,7 @@ final class ScapegoatSensor(scapegoatReportParser: ScapegoatReportParserAPI) ext
   }
 }
 
-private[scapegoat] object ScapegoatSensorInternal {
+private[scapegoat] object ScapegoatSensor {
   final val SensorName = "Scapegoat Sensor"
   final val ScapegoatReportPathPropertyKey = "sonar.scala.scapegoat.reportPath"
 

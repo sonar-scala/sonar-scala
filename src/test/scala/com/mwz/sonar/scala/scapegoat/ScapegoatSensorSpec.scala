@@ -77,12 +77,14 @@ class ScapegoatSensorSpec extends FlatSpec with SensorContextMatchers with LoneE
 
   it should "get a module file using the filename extracted from the scapegoat report" in {
     val filesystem = new DefaultFileSystem(Paths.get("./"))
+
     val testFileA = TestInputFileBuilder
       .create("", "src/main/scala/com/mwz/sonar/scala/scapegoat/TestFileA.scala")
       .setLanguage("scala")
       .setType(InputFile.Type.MAIN)
       .build()
     filesystem.add(testFileA)
+
     val moduleFile =
       scapegoatSensor.getModuleFile("com/mwz/sonar/scala/scapegoat/TestFileA.scala", filesystem)
 
@@ -91,8 +93,32 @@ class ScapegoatSensorSpec extends FlatSpec with SensorContextMatchers with LoneE
 
   it should "not get a module file if its filename does not match any file" in {
     val filesystem = new DefaultFileSystem(Paths.get("./"))
+
     val moduleFile =
       scapegoatSensor.getModuleFile("com/mwz/sonar/scala/scapegoat/TestFileA.scala", filesystem)
+
+    moduleFile shouldBe None
+  }
+
+  it should "not get a module file if its filename match two or more files" in {
+    val filesystem = new DefaultFileSystem(Paths.get("./"))
+
+    val testFileA = TestInputFileBuilder
+      .create("", "src/main/scala/moduleA/com/mwz/sonar/scala/scapegoat/TestFile.scala")
+      .setLanguage("scala")
+      .setType(InputFile.Type.MAIN)
+      .build()
+    filesystem.add(testFileA)
+
+    val testFileB = TestInputFileBuilder
+      .create("", "src/main/scala/moduleB/com/mwz/sonar/scala/scapegoat/TestFile.scala")
+      .setLanguage("scala")
+      .setType(InputFile.Type.MAIN)
+      .build()
+    filesystem.add(testFileB)
+
+    val moduleFile =
+      scapegoatSensor.getModuleFile("com/mwz/sonar/scala/scapegoat/TestFile.scala", filesystem)
 
     moduleFile shouldBe None
   }

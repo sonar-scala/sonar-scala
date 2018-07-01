@@ -55,6 +55,11 @@ The rules in the Scalastyle quality profile, created by this plugin, are almost 
 
 For more information about Scalastyle rules, please consult the [upstream documentation](http://www.scalastyle.org/rules-1.0.0.html).
 
+# Build
+Sonar plugins execute from the sonar-scanner, but are also loaded by the sonar server. We cannot rely on the sonar server's jvm to have scala dependencies, so we must include them by building a "Fat jar" using sbt.
+```bash
+sbt assembly
+```
 
 # Set-up
 Download the latest [release](https://github.com/mwz/sonar-scala/releases) jar into your SonarQube plugins folder `/opt/sonarqube/extensions/plugins` and restart SonarQube either manually or using the update center.

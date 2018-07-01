@@ -100,29 +100,6 @@ class ScapegoatSensorSpec extends FlatSpec with SensorContextMatchers with LoneE
     moduleFile shouldBe None
   }
 
-  it should "not get a module file if its filename match two or more files" in {
-    val filesystem = new DefaultFileSystem(Paths.get("./"))
-
-    val testFileA = TestInputFileBuilder
-      .create("", "src/main/scala/moduleA/com/mwz/sonar/scala/scapegoat/TestFile.scala")
-      .setLanguage("scala")
-      .setType(InputFile.Type.MAIN)
-      .build()
-    filesystem.add(testFileA)
-
-    val testFileB = TestInputFileBuilder
-      .create("", "src/main/scala/moduleB/com/mwz/sonar/scala/scapegoat/TestFile.scala")
-      .setLanguage("scala")
-      .setType(InputFile.Type.MAIN)
-      .build()
-    filesystem.add(testFileB)
-
-    val moduleFile =
-      scapegoatSensor.getModuleFile("com/mwz/sonar/scala/scapegoat/TestFile.scala", filesystem)
-
-    moduleFile shouldBe None
-  }
-
   it should "create an issue for each scapegoat report's warning" in {
     // create the sensor context
     val sensorContext = SensorContextTester.create(Paths.get("./"))

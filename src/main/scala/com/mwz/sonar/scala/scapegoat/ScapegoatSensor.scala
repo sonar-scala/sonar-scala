@@ -19,19 +19,17 @@
 package com.mwz.sonar.scala
 package scapegoat
 
-import inspections.ScapegoatInspection.AllScapegoatInspections
+import java.nio.file.{Path, Paths}
 
 import cats.implicits._
+import com.mwz.sonar.scala.scapegoat.inspections.ScapegoatInspection.AllScapegoatInspections
 import com.mwz.sonar.scala.util.JavaOptionals._
 import com.mwz.sonar.scala.util.Log
 import org.sonar.api.batch.fs.{FileSystem, InputFile}
-import org.sonar.api.batch.rule.ActiveRule
 import org.sonar.api.batch.sensor.{Sensor, SensorContext, SensorDescriptor}
-import org.sonar.api.batch.sensor.issue.NewIssue
 import org.sonar.api.config.Configuration
 import scalariform.ScalaVersion
 
-import java.nio.file.{Path, Paths}
 import scala.util.{Failure, Success, Try}
 
 /** Main sensor for importing Scapegoat reports to SonarQube */
@@ -50,20 +48,26 @@ final class ScapegoatSensor(scapegoatReportParser: ScapegoatReportParserAPI) ext
 
   /** Saves the Scapegoat information of a module */
   override def execute(context: SensorContext): Unit = {
-    log.info("Initializing the scapegoat sensor.")
+    val settings = context.config()
 
-    val reportPath = getScapegoatReportPath(context.config)
-    log.info(s"Loading the scapegoat report file: '$reportPath'.")
-    Try(scapegoatReportParser.parse(reportPath)) match {
-      case Success(scapegoatIssuesByFilename) =>
-        log.info("Successfully loaded the scapegoat report file.")
-        processScapegoatWarnings(context, scapegoatIssuesByFilename)
-      case Failure(ex) =>
-        log.error(
-          "Aborting the scapegoat sensor execution, " +
-          s"cause: an error occurred while reading the scapegoat report file: '$reportPath', " +
-          s"the error was: ${ex.getMessage}."
-        )
+    if (shouldDisableSensor(settings)) {
+      log.info("The Scapegoat sensor was disabled in the configuration - skipping scapegoat analysis.")
+    } else {
+      val reportPath = getScapegoatReportPath(settings)
+
+      log.info("Initializing the Scapegoat sensor.")
+      log.info(s"Loading the scapegoat report file: '$reportPath'.")
+      Try(scapegoatReportParser.parse(reportPath)) match {
+        case Success(scapegoatIssuesByFilename) =>
+          log.info("Successfully loaded the scapegoat report file.")
+          processScapegoatWarnings(context, scapegoatIssuesByFilename)
+        case Failure(ex) =>
+          log.error(
+            "Aborting the scapegoat sensor execution, " +
+            s"cause: an error occurred while reading the scapegoat report file: '$reportPath', " +
+            s"the error was: ${ex.getMessage}."
+          )
+      }
     }
   }
 
@@ -165,7 +169,11 @@ final class ScapegoatSensor(scapegoatReportParser: ScapegoatReportParserAPI) ext
 
 private[scapegoat] object ScapegoatSensor {
   final val SensorName = "Scapegoat Sensor"
+  final val ScapegoatDisablePropertyKey = "sonar.scala.scapegoat.disable"
   final val ScapegoatReportPathPropertyKey = "sonar.scala.scapegoat.reportPath"
+
+  def shouldDisableSensor(settings: Configuration): Boolean =
+    settings.get(ScapegoatDisablePropertyKey).toOption.exists(s => s.toLowerCase == "true")
 
   def getDefaultScapegoatReportPath(scalaVersion: ScalaVersion): Path =
     Paths.get(

@@ -19,11 +19,10 @@
 package com.mwz.sonar.scala
 package scapegoat
 
-import inspections.Level
-import inspections.ScapegoatInspection.AllScapegoatInspections
-import org.sonar.api.server.rule.RulesDefinition
+import com.mwz.sonar.scala.scapegoat.inspections.ScapegoatInspection.AllScapegoatInspections
 import org.sonar.api.rule.RuleStatus
 import org.sonar.api.rules.RuleType
+import org.sonar.api.server.rule.RulesDefinition
 
 /** Defines a rules repository for the Scapegoat inspections */
 final class ScapegoatRulesRepository extends RulesDefinition {

@@ -19,6 +19,13 @@
 package com.mwz.sonar.scala
 package scapegoat
 
+import java.nio.file.{Path, Paths}
+
+import com.mwz.sonar.scala.util.PathUtils.cwd
+import org.mockito.ArgumentMatchers
+import org.mockito.ArgumentMatchers._
+import org.mockito.Mockito._
+import org.scalatest.mockito.MockitoSugar
 import org.scalatest.{FlatSpec, LoneElement, OptionValues}
 import org.sonar.api.batch.fs.InputFile
 import org.sonar.api.batch.fs.internal.{
@@ -32,15 +39,63 @@ import org.sonar.api.batch.sensor.internal.{DefaultSensorDescriptor, SensorConte
 import org.sonar.api.batch.sensor.issue.internal.DefaultIssue
 import org.sonar.api.config.internal.MapSettings
 import org.sonar.api.rule.RuleKey
-
-import java.nio.file.{Path, Paths}
+import scalariform.ScalaVersion
 
 /** Tests the Scapegoat Sensor */
-class ScapegoatSensorSpec extends FlatSpec with SensorContextMatchers with LoneElement with OptionValues {
+class ScapegoatSensorSpec
+    extends FlatSpec
+    with MockitoSugar
+    with SensorContextMatchers
+    with LoneElement
+    with OptionValues {
   val scapegoatReportParser = new TestScapegoatReportParser()
   val scapegoatSensor = new ScapegoatSensor(scapegoatReportParser)
 
-  behavior of "Scapegoat Sensor"
+  it should "read the 'disable' config property" in {
+    val context = SensorContextTester.create(cwd)
+    ScapegoatSensor.shouldDisableSensor(context.config) shouldBe false
+
+    val context2 = SensorContextTester.create(cwd)
+    context2.setSettings(new MapSettings().setProperty("sonar.scala.scapegoat.disable", "maybe"))
+    ScapegoatSensor.shouldDisableSensor(context2.config) shouldBe false
+
+    val context3 = SensorContextTester.create(cwd)
+    context3.setSettings(new MapSettings().setProperty("sonar.scala.scapegoat.disable", "true"))
+    ScapegoatSensor.shouldDisableSensor(context3.config) shouldBe true
+  }
+
+  it should "execute the sensor if the 'disable' flag wasn't set" in {
+    val context = SensorContextTester.create(cwd)
+    val scapegoatReportParser = mock[ScapegoatReportParserAPI]
+    val scapegoatSensor = new ScapegoatSensor(scapegoatReportParser)
+
+    when(scapegoatReportParser.parse(any()))
+      .thenReturn(Map.empty[String, Seq[ScapegoatIssue]])
+
+    scapegoatSensor.execute(context)
+    verify(scapegoatReportParser).parse(any())
+  }
+
+  it should "respect the 'disable' config property and skip scapegoat analysis if set to true" in {
+    val context = SensorContextTester.create(cwd)
+    context.setSettings(new MapSettings().setProperty("sonar.scala.scapegoat.disable", "true"))
+
+    val scapegoatReportParser = mock[ScapegoatReportParserAPI]
+    val scapegoatSensor = new ScapegoatSensor(scapegoatReportParser)
+
+    scapegoatSensor.execute(context)
+    verifyZeroInteractions(scapegoatReportParser)
+  }
+
+  it should "construct the default report path" in {
+    val scalaVersion = ScalaVersion(2, 12, "6")
+    ScapegoatSensor.getDefaultScapegoatReportPath(scalaVersion) shouldBe Paths.get(
+      "target",
+      "scala-2.12",
+      "scapegoat-report",
+      "scapegoat.xml"
+    )
+  }
 
   it should "correctly set descriptor" in {
     val descriptor = new DefaultSensorDescriptor

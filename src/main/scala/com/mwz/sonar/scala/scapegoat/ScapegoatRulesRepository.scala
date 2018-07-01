@@ -19,11 +19,10 @@
 package com.mwz.sonar.scala
 package scapegoat
 
-import inspections.{Level, ScapegoatInspection}
-
+import inspections.Level
+import inspections.ScapegoatInspection.AllScapegoatInspections
 import org.sonar.api.server.rule.RulesDefinition
 import org.sonar.api.rule.RuleStatus
-import org.sonar.api.rule.Severity
 import org.sonar.api.rules.RuleType
 
 /** Defines a rules repository for the Scapegoat inspections */
@@ -38,16 +37,15 @@ final class ScapegoatRulesRepository extends RulesDefinition {
         .setName(ScapegoatRulesRepository.RepositoryName)
 
     // register each scapegoat inspection as a repository rule
-    ScapegoatInspection.AllScapegoatInspections foreach { inspection =>
+    AllScapegoatInspections foreach { inspection =>
       val rule = repository.createRule(inspection.id)
-      val ruleSeverity = ScapegoatRulesRepository.scapegoatLevelToRuleSeverity(inspection.defaultLevel)
 
       rule.setInternalKey(inspection.id)
       rule.setName(inspection.name)
       rule.setMarkdownDescription(inspection.description)
       rule.setActivatedByDefault(true) // scalastyle:ignore LiteralArguments
       rule.setStatus(RuleStatus.READY)
-      rule.setSeverity(ruleSeverity)
+      rule.setSeverity(inspection.defaultLevel.toRuleSeverity.name)
       rule.setType(RuleType.CODE_SMELL)
     }
 
@@ -56,13 +54,7 @@ final class ScapegoatRulesRepository extends RulesDefinition {
   }
 }
 
-object ScapegoatRulesRepository {
-  private[scapegoat] val RepositoryKey = "sonar-scala-scapegoat-repository"
-  private[scapegoat] val RepositoryName = "Scapegoat"
-
-  private def scapegoatLevelToRuleSeverity(level: Level): String = level match {
-    case Level.Info    => Severity.INFO
-    case Level.Warning => Severity.MINOR
-    case Level.Error   => Severity.MAJOR
-  }
+private[scapegoat] object ScapegoatRulesRepository {
+  final val RepositoryKey = "sonar-scala-scapegoat-repository"
+  final val RepositoryName = "Scapegoat"
 }

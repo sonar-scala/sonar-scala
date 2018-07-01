@@ -18,11 +18,14 @@
  */
 package com.mwz.sonar.scala
 
+import org.scalactic.Equality
+import org.scalatest.Matchers
 import org.scalatest.matchers.{HavePropertyMatchResult, HavePropertyMatcher}
 import org.sonar.api.batch.sensor.internal.SensorContextTester
+import org.sonar.api.batch.sensor.issue.{Issue, IssueLocation}
 
 /** Custom matchers to test properties of sensor contexts */
-trait SensorContextMatchers {
+trait SensorContextMatchers extends Matchers {
 
   /** Checks that a sensor context have an expected value for some metric */
   def metric[T <: java.io.Serializable](
@@ -53,4 +56,30 @@ trait SensorContextMatchers {
       actualValue = None.orNull.asInstanceOf[Int]
     )
   }
+
+  /** Custom equality for comparing issueLocations */
+  implicit val issueLocationEq =
+    new Equality[IssueLocation] {
+      override def areEqual(a: IssueLocation, b: Any): Boolean =
+        b match {
+          case b: IssueLocation =>
+            a.inputComponent === b.inputComponent &&
+            a.message === b.message &&
+            a.textRange === b.textRange
+          case _ => false
+        }
+    }
+
+  /** Custom equality for comparing issues */
+  implicit val issueEq =
+    new Equality[Issue] {
+      override def areEqual(a: Issue, b: Any): Boolean =
+        b match {
+          case b: Issue =>
+            a.ruleKey === b.ruleKey &&
+            a.primaryLocation === b.primaryLocation &&
+            a.overriddenSeverity === b.overriddenSeverity
+          case _ => false
+        }
+    }
 }

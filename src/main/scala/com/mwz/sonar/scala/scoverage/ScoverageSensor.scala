@@ -19,8 +19,6 @@
 package com.mwz.sonar.scala
 package scoverage
 
-import java.nio.file.{Path, Paths}
-
 import com.mwz.sonar.scala.util.JavaOptionals._
 import com.mwz.sonar.scala.util.{Log, PathUtils}
 import org.sonar.api.batch.fs.{FileSystem, InputComponent, InputFile}
@@ -28,6 +26,7 @@ import org.sonar.api.batch.sensor.{Sensor, SensorContext, SensorDescriptor}
 import org.sonar.api.config.Configuration
 import scalariform.ScalaVersion
 
+import java.nio.file.{Path, Paths}
 import scala.collection.JavaConverters._
 import scala.util.{Failure, Success, Try}
 
@@ -185,9 +184,9 @@ final class ScoverageSensor(scoverageReportParser: ScoverageReportParserAPI) ext
 }
 
 private[scoverage] object ScoverageSensor {
-  val SensorName = "Scoverage Sensor"
-  val DeprecatedScoverageReportPathPropertyKey = "sonar.scoverage.reportPath"
-  val ScoverageReportPathPropertyKey = "sonar.scala.scoverage.reportPath"
+  final val SensorName = "Scoverage Sensor"
+  final val DeprecatedScoverageReportPathPropertyKey = "sonar.scoverage.reportPath"
+  final val ScoverageReportPathPropertyKey = "sonar.scala.scoverage.reportPath"
 
   def getDefaultScoverageReportPath(scalaVersion: ScalaVersion): Path =
     Paths.get(s"target/scala-${scalaVersion.major}.${scalaVersion.minor}/scoverage-report/scoverage.xml")

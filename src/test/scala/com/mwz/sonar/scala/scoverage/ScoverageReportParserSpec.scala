@@ -19,25 +19,20 @@
 package com.mwz.sonar.scala
 package scoverage
 
+import org.scalatest.{FlatSpec, Matchers}
 import java.nio.file.Paths
 
-import org.scalatest.{FlatSpec, Inside, LoneElement, Matchers}
-
 /** Tests the correct behavior of the Scoverage XML reports parser */
-class ScoverageReportParserSpec extends FlatSpec with Inside with LoneElement with Matchers {
+class ScoverageReportParserSpec extends FlatSpec with Matchers {
   val modulePath = Paths.get("")
   val scalaSources = List(Paths.get("src/main/scala"))
   val scoverageReportParser = new ScoverageReportParser()
 
-  behavior of "A Scoverage Report Parser"
+  behavior of "A Scoverage XML Report Parser"
 
   it should "be able to extract scoverage data from XML" in {
-    val node = <node
-      statement-count="123"
-      statements-invoked="15"
-      statement-rate="88.72"
-      branch-rate="14.17">
-    </node>
+    val node = <node statement-count="123" statements-invoked="15" statement-rate="88.72" branch-rate="14.17">
+               </node>
     val expected = Scoverage(123, 15, 88.72, 14.17)
 
     scoverageReportParser.extractScoverageFromNode(node) shouldBe expected

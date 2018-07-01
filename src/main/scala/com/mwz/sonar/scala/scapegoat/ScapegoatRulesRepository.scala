@@ -54,6 +54,6 @@ final class ScapegoatRulesRepository extends RulesDefinition {
 }
 
 private[scapegoat] object ScapegoatRulesRepository {
-  final val RepositoryKey = "sonar-scala-scapegoat-repository"
+  final val RepositoryKey = "sonar-scala-scapegoat"
   final val RepositoryName = "Scapegoat"
 }

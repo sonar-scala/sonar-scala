@@ -105,7 +105,7 @@ class ScapegoatSensorSpec
     descriptor.name shouldBe "Scapegoat Sensor"
     descriptor.`type` shouldBe InputFile.Type.MAIN
     descriptor.languages.loneElement shouldBe "scala"
-    descriptor.ruleRepositories.loneElement shouldBe "sonar-scala-scapegoat-repository"
+    descriptor.ruleRepositories.loneElement shouldBe "sonar-scala-scapegoat"
   }
 
   it should "get default scapegoat report path, when the scala version property is missing" in {
@@ -184,28 +184,28 @@ class ScapegoatSensorSpec
     val activeRulesBuilder = new ActiveRulesBuilder()
 
     val emptyClassRuleKey =
-      RuleKey.of("sonar-scala-scapegoat-repository", "Empty case class")
+      RuleKey.of("sonar-scala-scapegoat", "Empty case class")
     activeRulesBuilder
       .create(emptyClassRuleKey)
       .setInternalKey("com.sksamuel.scapegoat.inspections.EmptyCaseClass")
       .activate()
 
     val arrayPassedToStringFormatRuleKey =
-      RuleKey.of("sonar-scala-scapegoat-repository", "Array passed to String.forma")
+      RuleKey.of("sonar-scala-scapegoat", "Array passed to String.forma")
     activeRulesBuilder
       .create(arrayPassedToStringFormatRuleKey)
       .setInternalKey("com.sksamuel.scapegoat.inspections.string.ArraysInFormat")
       .activate()
 
     val lonelySealedTraitRuleKey =
-      RuleKey.of("sonar-scala-scapegoat-repository", "Lonely sealed trait")
+      RuleKey.of("sonar-scala-scapegoat", "Lonely sealed trait")
     activeRulesBuilder
       .create(lonelySealedTraitRuleKey)
       .setInternalKey("com.sksamuel.scapegoat.inspections.LonelySealedTrait")
       .activate()
 
     val redundantFinalModifierOnMethodRuleKey =
-      RuleKey.of("sonar-scala-scapegoat-repository", "Redundant final modifier on method")
+      RuleKey.of("sonar-scala-scapegoat", "Redundant final modifier on method")
     activeRulesBuilder
       .create(redundantFinalModifierOnMethodRuleKey)
       .setInternalKey("com.sksamuel.scapegoat.inspections.RedundantFinalModifierOnMethod")
@@ -311,7 +311,7 @@ class ScapegoatSensorSpec
     val activeRulesBuilder = new ActiveRulesBuilder()
 
     val emptyClassRuleKey =
-      RuleKey.of("sonar-scala-scapegoat-repository", "Empty case class")
+      RuleKey.of("sonar-scala-scapegoat", "Empty case class")
     activeRulesBuilder
       .create(emptyClassRuleKey)
       .setInternalKey("com.sksamuel.scapegoat.inspections.EmptyCaseClass")

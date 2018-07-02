@@ -16,7 +16,8 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-package com.mwz.sonar.scala.scapegoat
+package com.mwz.sonar.scala
+package scapegoat
 
 /** Represents a warning/issue in the scapegoat report */
 private[scapegoat] final case class ScapegoatIssue(

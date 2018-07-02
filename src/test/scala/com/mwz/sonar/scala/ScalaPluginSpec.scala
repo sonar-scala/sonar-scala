@@ -18,6 +18,12 @@
  */
 package com.mwz.sonar.scala
 
+import com.mwz.sonar.scala.scapegoat.{
+  ScapegoatQualityProfile,
+  ScapegoatReportParser,
+  ScapegoatRulesRepository,
+  ScapegoatSensor
+}
 import com.mwz.sonar.scala.scoverage.{ScoverageMetrics, ScoverageReportParser, ScoverageSensor}
 import com.mwz.sonar.scala.sensor.ScalaSensor
 import com.ncredinburgh.sonar.scalastyle.{ScalastyleQualityProfile, ScalastyleRepository, ScalastyleSensor}
@@ -48,5 +54,12 @@ class ScalaPluginSpec extends FlatSpec with Matchers {
     assert(context.getExtensions.contains(classOf[ScoverageMetrics]))
     assert(context.getExtensions.contains(classOf[ScoverageReportParser]))
     assert(context.getExtensions.contains(classOf[ScoverageSensor]))
+  }
+
+  it should "provide scapegoat sensor" in {
+    assert(context.getExtensions.contains(classOf[ScapegoatRulesRepository]))
+    assert(context.getExtensions.contains(classOf[ScapegoatQualityProfile]))
+    assert(context.getExtensions.contains(classOf[ScapegoatReportParser]))
+    assert(context.getExtensions.contains(classOf[ScapegoatSensor]))
   }
 }

@@ -19,6 +19,12 @@
 package com.mwz.sonar.scala
 package scapegoat
 
+import java.nio.file.{Path, Paths}
+
+import com.mwz.sonar.scala.util.PathUtils.cwd
+import org.mockito.ArgumentMatchers._
+import org.mockito.Mockito._
+import org.scalatest.mockito.MockitoSugar
 import org.scalatest.{FlatSpec, LoneElement, OptionValues}
 import org.sonar.api.batch.fs.InputFile
 import org.sonar.api.batch.fs.internal.{
@@ -32,15 +38,68 @@ import org.sonar.api.batch.sensor.internal.{DefaultSensorDescriptor, SensorConte
 import org.sonar.api.batch.sensor.issue.internal.DefaultIssue
 import org.sonar.api.config.internal.MapSettings
 import org.sonar.api.rule.RuleKey
-
-import java.nio.file.{Path, Paths}
+import scalariform.ScalaVersion
 
 /** Tests the Scapegoat Sensor */
-class ScapegoatSensorSpec extends FlatSpec with SensorContextMatchers with LoneElement with OptionValues {
+class ScapegoatSensorSpec
+    extends FlatSpec
+    with MockitoSugar
+    with SensorContextMatchers
+    with LoneElement
+    with OptionValues {
   val scapegoatReportParser = new TestScapegoatReportParser()
   val scapegoatSensor = new ScapegoatSensor(scapegoatReportParser)
 
-  behavior of "Scapegoat Sensor"
+  it should "read the 'disable' config property" in {
+    val context = SensorContextTester.create(cwd)
+    ScapegoatSensor.shouldEnableSensor(context.config) shouldBe true
+
+    val context2 = SensorContextTester.create(cwd)
+    context2.setSettings(new MapSettings().setProperty("sonar.scala.scapegoat.disable", "maybe"))
+    ScapegoatSensor.shouldEnableSensor(context2.config) shouldBe true
+
+    val context3 = SensorContextTester.create(cwd)
+    context3.setSettings(new MapSettings().setProperty("sonar.scala.scapegoat.disable", "true"))
+    ScapegoatSensor.shouldEnableSensor(context3.config) shouldBe false
+  }
+
+  it should "execute the sensor if the 'disable' flag wasn't set" in {
+    val context = SensorContextTester.create(cwd)
+    val scapegoatReportParser = mock[ScapegoatReportParserAPI]
+    val scapegoatSensor = new ScapegoatSensor(scapegoatReportParser)
+
+    val descriptor = new DefaultSensorDescriptor
+    scapegoatSensor.describe(descriptor)
+    descriptor.configurationPredicate.test(context.config) shouldBe true
+
+    when(scapegoatReportParser.parse(any()))
+      .thenReturn(Map.empty[String, Seq[ScapegoatIssue]])
+
+    scapegoatSensor.execute(context)
+    verify(scapegoatReportParser).parse(any())
+  }
+
+  it should "respect the 'disable' config property and skip scapegoat analysis if set to true" in {
+    val context = SensorContextTester.create(cwd)
+    context.setSettings(new MapSettings().setProperty("sonar.scala.scapegoat.disable", "true"))
+
+    val scapegoatReportParser = mock[ScapegoatReportParserAPI]
+    val scapegoatSensor = new ScapegoatSensor(scapegoatReportParser)
+
+    val descriptor = new DefaultSensorDescriptor
+    scapegoatSensor.describe(descriptor)
+    descriptor.configurationPredicate.test(context.config) shouldBe false
+  }
+
+  it should "construct the default report path" in {
+    val scalaVersion = ScalaVersion(2, 12, "6")
+    ScapegoatSensor.getDefaultScapegoatReportPath(scalaVersion) shouldBe Paths.get(
+      "target",
+      "scala-2.12",
+      "scapegoat-report",
+      "scapegoat.xml"
+    )
+  }
 
   it should "correctly set descriptor" in {
     val descriptor = new DefaultSensorDescriptor
@@ -50,7 +109,7 @@ class ScapegoatSensorSpec extends FlatSpec with SensorContextMatchers with LoneE
     descriptor.name shouldBe "Scapegoat Sensor"
     descriptor.`type` shouldBe InputFile.Type.MAIN
     descriptor.languages.loneElement shouldBe "scala"
-    descriptor.ruleRepositories.loneElement shouldBe "sonar-scala-scapegoat-repository"
+    descriptor.ruleRepositories.loneElement shouldBe "sonar-scala-scapegoat"
   }
 
   it should "get default scapegoat report path, when the scala version property is missing" in {
@@ -129,28 +188,28 @@ class ScapegoatSensorSpec extends FlatSpec with SensorContextMatchers with LoneE
     val activeRulesBuilder = new ActiveRulesBuilder()
 
     val emptyClassRuleKey =
-      RuleKey.of("sonar-scala-scapegoat-repository", "Empty case class")
+      RuleKey.of("sonar-scala-scapegoat", "Empty case class")
     activeRulesBuilder
       .create(emptyClassRuleKey)
       .setInternalKey("com.sksamuel.scapegoat.inspections.EmptyCaseClass")
       .activate()
 
     val arrayPassedToStringFormatRuleKey =
-      RuleKey.of("sonar-scala-scapegoat-repository", "Array passed to String.forma")
+      RuleKey.of("sonar-scala-scapegoat", "Array passed to String.forma")
     activeRulesBuilder
       .create(arrayPassedToStringFormatRuleKey)
       .setInternalKey("com.sksamuel.scapegoat.inspections.string.ArraysInFormat")
       .activate()
 
     val lonelySealedTraitRuleKey =
-      RuleKey.of("sonar-scala-scapegoat-repository", "Lonely sealed trait")
+      RuleKey.of("sonar-scala-scapegoat", "Lonely sealed trait")
     activeRulesBuilder
       .create(lonelySealedTraitRuleKey)
       .setInternalKey("com.sksamuel.scapegoat.inspections.LonelySealedTrait")
       .activate()
 
     val redundantFinalModifierOnMethodRuleKey =
-      RuleKey.of("sonar-scala-scapegoat-repository", "Redundant final modifier on method")
+      RuleKey.of("sonar-scala-scapegoat", "Redundant final modifier on method")
     activeRulesBuilder
       .create(redundantFinalModifierOnMethodRuleKey)
       .setInternalKey("com.sksamuel.scapegoat.inspections.RedundantFinalModifierOnMethod")
@@ -256,7 +315,7 @@ class ScapegoatSensorSpec extends FlatSpec with SensorContextMatchers with LoneE
     val activeRulesBuilder = new ActiveRulesBuilder()
 
     val emptyClassRuleKey =
-      RuleKey.of("sonar-scala-scapegoat-repository", "Empty case class")
+      RuleKey.of("sonar-scala-scapegoat", "Empty case class")
     activeRulesBuilder
       .create(emptyClassRuleKey)
       .setInternalKey("com.sksamuel.scapegoat.inspections.EmptyCaseClass")

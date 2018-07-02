@@ -22,6 +22,12 @@ import java.nio.file.{Path, Paths}
 
 import cats.kernel.Eq
 import cats.syntax.eq._
+import com.mwz.sonar.scala.scapegoat.{
+  ScapegoatQualityProfile,
+  ScapegoatReportParser,
+  ScapegoatRulesRepository,
+  ScapegoatSensor
+}
 import com.mwz.sonar.scala.scoverage.{ScoverageMetrics, ScoverageReportParser, ScoverageSensor}
 import com.mwz.sonar.scala.sensor.ScalaSensor
 import com.mwz.sonar.scala.util.JavaOptionals._
@@ -104,7 +110,7 @@ object Scala {
       .toList
 }
 
-/** Plugin entry point */
+/** Sonar Scala plugin entry point */
 final class ScalaPlugin extends Plugin {
   override def define(context: Plugin.Context): Unit = {
     context.addExtensions(
@@ -118,7 +124,12 @@ final class ScalaPlugin extends Plugin {
       // Scoverage
       classOf[ScoverageMetrics],
       classOf[ScoverageReportParser],
-      classOf[ScoverageSensor]
+      classOf[ScoverageSensor],
+      // Scapegoat
+      classOf[ScapegoatRulesRepository],
+      classOf[ScapegoatQualityProfile],
+      classOf[ScapegoatReportParser],
+      classOf[ScapegoatSensor]
     )
   }
 }

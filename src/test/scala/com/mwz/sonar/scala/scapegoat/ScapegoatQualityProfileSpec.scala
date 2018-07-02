@@ -62,7 +62,7 @@ class ScapegoatQualityProfileSpec extends FlatSpec with Inspectors with LoneElem
 
   it should "be from the Scapegaot Rules Repository" in {
     forEvery(rules) { rule =>
-      rule.repoKey shouldBe "sonar-scala-scapegoat-repository"
+      rule.repoKey shouldBe "sonar-scala-scapegoat"
     }
   }
 }

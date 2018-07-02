@@ -33,7 +33,6 @@ import com.mwz.sonar.scala.sensor.ScalaSensor
 import com.mwz.sonar.scala.util.JavaOptionals._
 import com.ncredinburgh.sonar.scalastyle.{ScalastyleQualityProfile, ScalastyleRepository, ScalastyleSensor}
 import org.sonar.api.Plugin
-import org.sonar.api.Plugin.Context
 import org.sonar.api.config.Configuration
 import org.sonar.api.resources.AbstractLanguage
 import org.sonar.api.utils.log.Loggers
@@ -113,7 +112,7 @@ object Scala {
 
 /** Sonar Scala plugin entry point */
 final class ScalaPlugin extends Plugin {
-  override def define(context: Context): Unit = {
+  override def define(context: Plugin.Context): Unit = {
     context.addExtensions(
       // Scala
       classOf[Scala],

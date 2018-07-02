@@ -22,7 +22,6 @@ package scapegoat
 import java.nio.file.{Path, Paths}
 
 import com.mwz.sonar.scala.util.PathUtils.cwd
-import org.mockito.ArgumentMatchers
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
 import org.scalatest.mockito.MockitoSugar
@@ -53,21 +52,25 @@ class ScapegoatSensorSpec
 
   it should "read the 'disable' config property" in {
     val context = SensorContextTester.create(cwd)
-    ScapegoatSensor.shouldDisableSensor(context.config) shouldBe false
+    ScapegoatSensor.shouldEnableSensor(context.config) shouldBe true
 
     val context2 = SensorContextTester.create(cwd)
     context2.setSettings(new MapSettings().setProperty("sonar.scala.scapegoat.disable", "maybe"))
-    ScapegoatSensor.shouldDisableSensor(context2.config) shouldBe false
+    ScapegoatSensor.shouldEnableSensor(context2.config) shouldBe true
 
     val context3 = SensorContextTester.create(cwd)
     context3.setSettings(new MapSettings().setProperty("sonar.scala.scapegoat.disable", "true"))
-    ScapegoatSensor.shouldDisableSensor(context3.config) shouldBe true
+    ScapegoatSensor.shouldEnableSensor(context3.config) shouldBe false
   }
 
   it should "execute the sensor if the 'disable' flag wasn't set" in {
     val context = SensorContextTester.create(cwd)
     val scapegoatReportParser = mock[ScapegoatReportParserAPI]
     val scapegoatSensor = new ScapegoatSensor(scapegoatReportParser)
+
+    val descriptor = new DefaultSensorDescriptor
+    scapegoatSensor.describe(descriptor)
+    descriptor.configurationPredicate.test(context.config) shouldBe true
 
     when(scapegoatReportParser.parse(any()))
       .thenReturn(Map.empty[String, Seq[ScapegoatIssue]])
@@ -83,8 +86,9 @@ class ScapegoatSensorSpec
     val scapegoatReportParser = mock[ScapegoatReportParserAPI]
     val scapegoatSensor = new ScapegoatSensor(scapegoatReportParser)
 
-    scapegoatSensor.execute(context)
-    verifyZeroInteractions(scapegoatReportParser)
+    val descriptor = new DefaultSensorDescriptor
+    scapegoatSensor.describe(descriptor)
+    descriptor.configurationPredicate.test(context.config) shouldBe false
   }
 
   it should "construct the default report path" in {

@@ -45,29 +45,26 @@ final class ScapegoatSensor(scapegoatReportParser: ScapegoatReportParserAPI) ext
       .name(SensorName)
       .onlyOnFileType(InputFile.Type.MAIN)
       .onlyOnLanguage(Scala.LanguageKey)
+      .onlyWhenConfiguration(shouldEnableSensor)
 
   /** Saves the Scapegoat information of a module */
   override def execute(context: SensorContext): Unit = {
     val settings = context.config()
+    val reportPath = getScapegoatReportPath(settings)
 
-    if (shouldDisableSensor(settings)) {
-      log.info("The Scapegoat sensor was disabled in the configuration - skipping scapegoat analysis.")
-    } else {
-      val reportPath = getScapegoatReportPath(settings)
+    log.info("Initializing the Scapegoat sensor.")
+    log.info(s"Loading the scapegoat report file: '$reportPath'.")
 
-      log.info("Initializing the Scapegoat sensor.")
-      log.info(s"Loading the scapegoat report file: '$reportPath'.")
-      Try(scapegoatReportParser.parse(reportPath)) match {
-        case Success(scapegoatIssuesByFilename) =>
-          log.info("Successfully loaded the scapegoat report file.")
-          processScapegoatWarnings(context, scapegoatIssuesByFilename)
-        case Failure(ex) =>
-          log.error(
-            "Aborting the scapegoat sensor execution, " +
-            s"cause: an error occurred while reading the scapegoat report file: '$reportPath', " +
-            s"the error was: ${ex.getMessage}."
-          )
-      }
+    Try(scapegoatReportParser.parse(reportPath)) match {
+      case Success(scapegoatIssuesByFilename) =>
+        log.info("Successfully loaded the scapegoat report file.")
+        processScapegoatWarnings(context, scapegoatIssuesByFilename)
+      case Failure(ex) =>
+        log.error(
+          "Aborting the scapegoat sensor execution, " +
+          s"cause: an error occurred while reading the scapegoat report file: '$reportPath', " +
+          s"the error was: ${ex.getMessage}."
+        )
     }
   }
 
@@ -172,8 +169,11 @@ private[scapegoat] object ScapegoatSensor {
   final val ScapegoatDisablePropertyKey = "sonar.scala.scapegoat.disable"
   final val ScapegoatReportPathPropertyKey = "sonar.scala.scapegoat.reportPath"
 
-  def shouldDisableSensor(settings: Configuration): Boolean =
-    settings.get(ScapegoatDisablePropertyKey).toOption.exists(s => s.toLowerCase == "true")
+  def shouldEnableSensor(conf: Configuration): Boolean =
+    conf
+      .get(ScapegoatDisablePropertyKey)
+      .toOption
+      .forall(s => s.toLowerCase != "true")
 
   def getDefaultScapegoatReportPath(scalaVersion: ScalaVersion): Path =
     Paths.get(

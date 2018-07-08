@@ -6,7 +6,7 @@ Changelog
   - `sonar.scala.scapegoat.reportPath` - relative path to the scapegoat report (defaults to `target/scala-${sonar.scala.version}/scapegoat-report/scapegoat.xml`) and
   - `sonar.scala.scapegoat.disable` - which allows you to disable the Scapegoat sensor from being executed on your sources (defaults to `false`)
 
-  Massive thanks to @BalmungSan for implementing this feature! (#8 - @BalmungSan, @mwz)
+  A massive thanks to @BalmungSan for implementing this feature! (#8 - @BalmungSan, @mwz)
 
 ## [6.4.0](https://github.com/mwz/sonar-scala/releases/tag/v6.4.0) - 23.05.2018
 - Improved logging in the Scoverage sensor. (#61 - @BalmungSan)

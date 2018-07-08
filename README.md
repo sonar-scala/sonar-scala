@@ -24,7 +24,7 @@ sonar-scala
 **SonarQube plugin for static code analysis of Scala projects.**
 
 Intended for [SonarQube 6.7+ LTS](https://www.sonarqube.org/downloads) and Scala 2.11/2.12.  
-It does not support Windows.
+Running analysis from a Windows machine is currently not supported, please use Linux or other Unix-like operating system.
 
 This plugin is not an evolution from the legacy sonar-scala-plugin of which versions can be found laying around such as [1and1/sonar-scala](https://github.com/1and1/sonar-scala).
 The previous plugin used the scala compiler to create its metrics which had the disadvantage of requiring a specific plugin per each major version of Scala.
@@ -63,6 +63,7 @@ For more information about Scalastyle and Scapegoat rules, please consult the up
 - Scalastyle - http://www.scalastyle.org/rules-1.0.0.html
 - Scapegoat - https://github.com/sksamuel/scapegoat/tree/v1.3.5
 
+
 # Set-up
 Download the latest [release](https://github.com/mwz/sonar-scala/releases) jar into your SonarQube plugins folder `/opt/sonarqube/extensions/plugins` and restart SonarQube either manually or using the update center.
 
@@ -71,6 +72,7 @@ For an out-of-the-box setup, you can use my docker-compose recipe or a docker im
 For automating the analysis of your Scala projects, check out my sbt plugin [mwz/sbt-sonar](https://github.com/mwz/sbt-sonar).
 
 Also, see the [examples](https://github.com/mwz/sonar-scala/tree/master/examples) directory, which includes sample projects for sbt, Gradle and Maven along with basic instructions on how to execute SonarQube analysis for each of those projects.
+
 
 # Sonar-scanner properties
 The plugin exposes the following properties which can be passed to sonar-scanner when running an analysis:
@@ -91,6 +93,7 @@ sonar-scanner -Dsonar.projectName=test \
               -Dsonar.scapegoat.reportPath=target/scala-2.12/scapegoat-report/scapegoat.xml
 ```
 
+
 # Development
 To build the project from sources, run the `assembly` task in sbt shell and the jar assembled with all of the dependencies required by this plugin should be created in the `target/scala-2.12` directory. 
 
@@ -100,12 +103,14 @@ export SONAR_SCANNER_OPTS="-agentlib:jdwp=transport=dt_socket,server=y,suspend=y
 ```
 Once you've done that, `sonnar-scanner` should display the following message `Listening for transport dt_socket at address: 8000`. You can now attach your IDE to the process on port `8000`, set breakpoints and debug the code.
 
+
 # Credits
 This project is a continuation of sonar-scala plugin, which was originally developed by [Sagacify](https://github.com/Sagacify/sonar-scala) and integrates code from [Sonar Scalastyle Plugin](https://github.com/NCR-CoDE/sonar-scalastyle).
 
 Many other projects have been used as an inspiration, here is a list of the main ones:
 
 - [RadoBuransky/sonar-scoverage-plugin](https://github.com/RadoBuransky/sonar-scoverage-plugin)
+- [arthepsy/sonar-scala-extra](https://github.com/arthepsy/sonar-scala-extra)
 - [1and1/sonar-scala](https://github.com/1and1/sonar-scala)
 - [SonarSource/sonar-java](https://github.com/SonarSource/sonar-java)
 - [SonarSource/sonar-examples](https://github.com/SonarSource/sonar-examples)

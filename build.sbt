@@ -119,4 +119,10 @@ releaseProcess := Seq[ReleaseStep](
 // Test
 parallelExecution in Test := false
 logBuffered in Test := false
+
+// ScalaTest reporter config:
+// -o - standard output,
+// D - show all durations,
+// T - show reminder of failed and cancelled tests with short stack traces,
+// F - show full stack traces.
 testOptions in Test += Tests.Argument(TestFrameworks.ScalaTest, "-oDTF")

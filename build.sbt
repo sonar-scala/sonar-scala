@@ -60,7 +60,7 @@ packageOptions in (Compile, packageBin) += Package.ManifestAttributes(
   PluginManifest.ISSUE_TRACKER_URL -> "https://github.com/mwz/sonar-scala/issues",
   PluginManifest.ORGANIZATION -> "Michael Wizner",
   PluginManifest.ORGANIZATION_URL -> "https://github.com/mwz",
-  PluginManifest.DEVELOPERS -> "Augustin Borsu, Michael Wizner",
+  PluginManifest.DEVELOPERS -> "Michael Wizner, Luis Miguel Mejía Suárez",
   PluginManifest.VERSION -> version.value,
   PluginManifest.DISPLAY_VERSION -> version.value,
   PluginManifest.SONAR_VERSION -> sonarVersion,
@@ -119,4 +119,10 @@ releaseProcess := Seq[ReleaseStep](
 // Test
 parallelExecution in Test := false
 logBuffered in Test := false
-testOptions in Test += Tests.Argument(TestFrameworks.ScalaTest, "-oDF")
+
+// ScalaTest reporter config:
+// -o - standard output,
+// D - show all durations,
+// T - show reminder of failed and cancelled tests with short stack traces,
+// F - show full stack traces.
+testOptions in Test += Tests.Argument(TestFrameworks.ScalaTest, "-oDTF")

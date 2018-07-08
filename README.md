@@ -23,7 +23,8 @@ sonar-scala
 
 **SonarQube plugin for static code analysis of Scala projects.**
 
-Intended for [SonarQube 6.7+ LTS](https://www.sonarqube.org/downloads) and Scala 2.11/2.12.
+Intended for [SonarQube 6.7+ LTS](https://www.sonarqube.org/downloads) and Scala 2.11/2.12.  
+Running analysis from a Windows machine is currently not supported, please use Linux or other Unix-like operating system.
 
 This plugin is not an evolution from the legacy sonar-scala-plugin of which versions can be found laying around such as [1and1/sonar-scala](https://github.com/1and1/sonar-scala).
 The previous plugin used the scala compiler to create its metrics which had the disadvantage of requiring a specific plugin per each major version of Scala.
@@ -49,11 +50,18 @@ In addition to the above, the plugin reports the following custom metrics, which
 
 
 # Quality Rules and Profiles
-This plugin integrates 75 quality checks from [Scalastyle](http://www.scalastyle.org/rules-1.0.0.html). 46 of them are quality rules without parameters which work out of the box and the remaining 29 are rule templates that allow you to set up custom rules which can be configured by various parameters.
+This plugin integrates 69 quality checks from [Scalastyle](http://www.scalastyle.org/rules-1.0.0.html) and 125 from [Scapegoat](https://github.com/sksamuel/scapegoat/tree/v1.3.5). 40 of the Scalastyle rules are defined without parameters and work out of the box and the remaining 29 are rule templates that allow you to set up custom rules by specifying the parameters yourself. Scapegoat rules don't contain any templates.
 
-The rules in the Scalastyle quality profile, created by this plugin, are almost all deactivated. In order to use all of the rules, you should clone the quality profile and you should be able to activate more rules, change rule severity and create more custom rules from the existing templates.
+Sonar-scala creates two rule repositories and two built-in quality profiles called Scalastyle and Scapegoat.
 
-For more information about Scalastyle rules, please consult the [upstream documentation](http://www.scalastyle.org/rules-1.0.0.html).
+The rules in the Scalastyle quality profile are almost all deactivated. In order to use all of the rules, you should clone the quality profile and then you should be able to activate more rules, change rule severity and create more custom rules from the existing templates.
+The Scapegoat quality profile has all of the rules activated by default, so there is no need to clone the profile unless you want to deactivate some of the rules or change their severity.
+
+To combine rules from both Scalastyle and Scapegoat repositories, you can create your own quality profile and activate rules from both repositories using SonarQube rule filtering and bulk-change features available on the Rules page. In the future, sonar-scala will provide this combined quality profile along with a recommended profile, so you won't have to set this up yourself.
+
+For more information about Scalastyle and Scapegoat rules, please consult the upstream documentation:
+- Scalastyle - http://www.scalastyle.org/rules-1.0.0.html
+- Scapegoat - https://github.com/sksamuel/scapegoat/tree/v1.3.5
 
 
 # Set-up
@@ -65,11 +73,14 @@ For automating the analysis of your Scala projects, check out my sbt plugin [mwz
 
 Also, see the [examples](https://github.com/mwz/sonar-scala/tree/master/examples) directory, which includes sample projects for sbt, Gradle and Maven along with basic instructions on how to execute SonarQube analysis for each of those projects.
 
+
 # Sonar-scanner properties
 The plugin exposes the following properties which can be passed to sonar-scanner when running an analysis:
-- *sonar.sources* - Scala source directory relative to the root of your project (usually `src/main/scala`)
-- *sonar.scala.version* (optional) - defines the version of Scala used in your project (requires the `{major}.{minor}` versions and the patch version is ignored, defaults to `2.11.0`)
-- *sonar.scala.scoverage.reportPath* (optional) - relative path to the scoverage report (defaults to `target/scala-${sonar.scala.version}/scoverage-report/scoverage.xml`)
+- **sonar.sources** - Scala source directory relative to the root of your project (usually `src/main/scala`)
+- **sonar.scala.version** (optional) - defines the version of Scala used in your project (requires the `{major}.{minor}` versions and the patch version is ignored, defaults to `2.11.0`)
+- **sonar.scala.scoverage.reportPath** (optional) - relative path to the scoverage report (defaults to `target/scala-${sonar.scala.version}/scoverage-report/scoverage.xml`)
+- **sonar.scala.scapegoat.reportPath** (optional) - relative path to the scapegoat report (defaults to `target/scala-${sonar.scala.version}/scapegoat-report/scapegoat.xml`)
+- **sonar.scala.scapegoat.disable** (optional) - disables the Scapegoat sensor from being executed on your sources (defaults to `false`)
 
 See an example usage:
 ```bash
@@ -78,8 +89,10 @@ sonar-scanner -Dsonar.projectName=test \
               -Dsonar.sources=src/main/scala \
               -Dsonar.sourceEncoding=UTF-8 \
               -Dsonar.scala.version=2.12 \
-              -Dsonar.scoverage.reportPath=target/scala-2.12/scoverage-report/scoverage.xml
+              -Dsonar.scoverage.reportPath=target/scala-2.12/scoverage-report/scoverage.xml \
+              -Dsonar.scapegoat.reportPath=target/scala-2.12/scapegoat-report/scapegoat.xml
 ```
+
 
 # Development
 To build the project from sources, run the `assembly` task in sbt shell and the jar assembled with all of the dependencies required by this plugin should be created in the `target/scala-2.12` directory. 
@@ -90,11 +103,14 @@ export SONAR_SCANNER_OPTS="-agentlib:jdwp=transport=dt_socket,server=y,suspend=y
 ```
 Once you've done that, `sonnar-scanner` should display the following message `Listening for transport dt_socket at address: 8000`. You can now attach your IDE to the process on port `8000`, set breakpoints and debug the code.
 
+
 # Credits
-This project is a continuation of sonar-scala plugin, which was originally developed by [Sagacify](https://github.com/Sagacify/sonar-scala) and integrates code from two other SonarQube plugins [Sonar Scalastyle Plugin](https://github.com/NCR-CoDE/sonar-scalastyle) and [Sonar Scoverage Plugin](https://github.com/RadoBuransky/sonar-scoverage-plugin).
+This project is a continuation of sonar-scala plugin, which was originally developed by [Sagacify](https://github.com/Sagacify/sonar-scala) and integrates code from [Sonar Scalastyle Plugin](https://github.com/NCR-CoDE/sonar-scalastyle).
 
 Many other projects have been used as an inspiration, here is a list of the main ones:
 
+- [RadoBuransky/sonar-scoverage-plugin](https://github.com/RadoBuransky/sonar-scoverage-plugin)
+- [arthepsy/sonar-scala-extra](https://github.com/arthepsy/sonar-scala-extra)
 - [1and1/sonar-scala](https://github.com/1and1/sonar-scala)
 - [SonarSource/sonar-java](https://github.com/SonarSource/sonar-java)
 - [SonarSource/sonar-examples](https://github.com/SonarSource/sonar-examples)

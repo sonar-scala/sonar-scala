@@ -7,13 +7,13 @@ export SONAR_SCANNER_DEFAULTS="-Dsonar.host.url=${SONARQUBE_URL} -Dsonar.login=$
 # SBT single-module
 echo "Scanning SBT single-module project."
 cd $CWD/sbt/single-module
-sbt clean coverage test coverageReport < /dev/null
+sbt clean coverage test coverageReport scapegoat < /dev/null
 sonar-scanner ${SONAR_SCANNER_DEFAULTS}
 
 # SBT multi-module
 echo -e "\nScanning SBT multi-module project."
 cd $CWD/sbt/multi-module
-sbt clean coverage test coverageReport < /dev/null
+sbt clean coverage test coverageReport scapegoat < /dev/null
 sonar-scanner ${SONAR_SCANNER_DEFAULTS}
 
 # Gradle single-module

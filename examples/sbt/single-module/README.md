@@ -9,6 +9,7 @@ To run the analysis execute the following command setting the `sonar.host.url` p
 
 ```bash
 sbt clean coverage test coverageReport scapegoat
+sonar-scanner -Dsonar.host.url=http://localhost
 ```
 
 To see the result of an example analysis of this project, please go to [https://sonar.sonar-scala.com](https://sonar.sonar-scala.com/dashboard?id=example-sbt-single-module).

@@ -21,8 +21,8 @@ package scoverage
 
 import java.nio.file.{Path, Paths}
 
-import com.mwz.sonar.scala.util.PathUtils
-import org.scalatest.{FlatSpec, LoneElement, Matchers}
+import com.mwz.sonar.scala.util.PathUtils._
+import org.scalatest.{FlatSpec, LoneElement}
 import org.sonar.api.batch.fs.InputFile
 import org.sonar.api.batch.fs.internal.{DefaultFileSystem, TestInputFileBuilder}
 import org.sonar.api.batch.sensor.internal.{DefaultSensorDescriptor, SensorContextTester}
@@ -46,7 +46,6 @@ class ScoverageSensorSpec extends FlatSpec with SensorContextMatchers with LoneE
   }
 
   it should "correctly save component scoverage" in {
-    val cwd = PathUtils.cwd
     val context = SensorContextTester.create(cwd)
     val scoverage = Scoverage(123, 15, 88.72, 14.17)
     val mainFile = TestInputFileBuilder
@@ -68,7 +67,6 @@ class ScoverageSensorSpec extends FlatSpec with SensorContextMatchers with LoneE
   }
 
   it should "return all scala files from the module" in {
-    val cwd = PathUtils.cwd
     val context = SensorContextTester.create(cwd)
 
     context.setSettings(new MapSettings().setProperty("sonar.sources", "src/main/scala"))
@@ -103,15 +101,6 @@ class ScoverageSensorSpec extends FlatSpec with SensorContextMatchers with LoneE
 
     val files = scoverageSensor.getModuleSourceFiles(context.fileSystem)
     files.toSeq should contain theSameElementsAs Seq(mainFile, otherFile)
-  }
-
-  it should "get module base directory" in {
-    val cwd = PathUtils.cwd
-
-    scoverageSensor.getModuleBaseDirectory(new DefaultFileSystem(cwd)) shouldBe Paths.get("")
-    scoverageSensor.getModuleBaseDirectory(
-      new DefaultFileSystem(cwd.resolve("module"))
-    ) shouldBe Paths.get("module")
   }
 
   it should "get default scoverage report path" in {
@@ -175,7 +164,6 @@ class ScoverageSensorSpec extends FlatSpec with SensorContextMatchers with LoneE
 
   it should "handle correctly absolute source paths" in {
     // prepare the sensor context
-    val cwd = PathUtils.cwd
     val context = SensorContextTester.create(cwd)
     context.setSettings(
       new MapSettings().setProperty(

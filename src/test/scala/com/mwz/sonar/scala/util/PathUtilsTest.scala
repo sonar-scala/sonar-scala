@@ -1,12 +1,12 @@
 package com.mwz.sonar.scala.util
 
-import java.nio.file.{Path, Paths}
+import java.nio.file.Paths
 
+import com.mwz.sonar.scala.util.PathUtils._
 import org.scalatest.{FlatSpec, Matchers}
+import org.sonar.api.batch.fs.internal.DefaultFileSystem
 
 class PathUtilsTest extends FlatSpec with Matchers {
-  val cwd: Path = PathUtils.cwd
-
   "relativize" should "successfully resolve a relative suffix path against a 'next' path" in {
     PathUtils.relativize(
       base = Paths.get("."),
@@ -45,5 +45,12 @@ class PathUtilsTest extends FlatSpec with Matchers {
       prefix = Paths.get("x/y"),
       path = Paths.get("a/b/c")
     ) shouldBe Paths.get("a/b/c")
+  }
+
+  "getModuleBaseDirectory" should "get module base directory" in {
+    getModuleBaseDirectory(new DefaultFileSystem(cwd)) shouldBe Paths.get("")
+    getModuleBaseDirectory(
+      new DefaultFileSystem(cwd.resolve("module"))
+    ) shouldBe Paths.get("module")
   }
 }

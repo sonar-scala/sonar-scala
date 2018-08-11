@@ -86,7 +86,7 @@ object Scala {
     if (scalaVersion === DefaultScalaVersion)
       logger.warn(
         s"[sonar-scala] The '$ScalaVersionPropertyKey' is not properly set or is missing, " +
-        s"using the default value: '$DefaultScalaVersion'"
+        s"using the default value: '$DefaultScalaVersion'."
       )
 
     scalaVersion

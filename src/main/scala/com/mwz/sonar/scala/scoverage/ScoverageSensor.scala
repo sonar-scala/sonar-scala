@@ -19,14 +19,16 @@
 package com.mwz.sonar.scala
 package scoverage
 
+import java.nio.file.{Path, Paths}
+
 import com.mwz.sonar.scala.util.JavaOptionals._
+import com.mwz.sonar.scala.util.PathUtils._
 import com.mwz.sonar.scala.util.{Log, PathUtils}
 import org.sonar.api.batch.fs.{FileSystem, InputComponent, InputFile}
 import org.sonar.api.batch.sensor.{Sensor, SensorContext, SensorDescriptor}
 import org.sonar.api.config.Configuration
 import scalariform.ScalaVersion
 
-import java.nio.file.{Path, Paths}
 import scala.collection.JavaConverters._
 import scala.util.{Failure, Success, Try}
 
@@ -47,7 +49,7 @@ final class ScoverageSensor(scoverageReportParser: ScoverageReportParserAPI) ext
   /** Saves in SonarQube the scoverage information of a module */
   override def execute(context: SensorContext): Unit = {
     log.info("Initializing the scoverage sensor.")
-    log.debug(s"The current working directory (CWD) is: '${PathUtils.cwd}'.")
+    log.debug(s"The current working directory is: '${PathUtils.cwd}'.")
     val settings = context.config
     val filesystem = context.fileSystem
 
@@ -108,13 +110,6 @@ final class ScoverageSensor(scoverageReportParser: ScoverageReportParserAPI) ext
       )
 
     fs.inputFiles(predicate).asScala
-  }
-
-  /** Returns the module base path */
-  private[scoverage] def getModuleBaseDirectory(fs: FileSystem): Path = {
-    val moduleAbsolutePath = Paths.get(fs.baseDir().getAbsolutePath).normalize
-    val currentWorkdirAbsolutePath = PathUtils.cwd
-    currentWorkdirAbsolutePath.relativize(moduleAbsolutePath)
   }
 
   /** Returns the filename of the scoverage report for this module */

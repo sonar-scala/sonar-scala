@@ -380,7 +380,7 @@ class ScapegoatSensorSpec
     sensorContext.allIssues shouldBe empty
   }
 
-  it should "not report module issues" in {
+  it should "report module issues" in {
     // create the sensor context
     val sensorContext = SensorContextTester.create(Paths.get("./"))
     val filesystem = new DefaultFileSystem(Paths.get("./module1"))

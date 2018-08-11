@@ -25,6 +25,7 @@ import cats.implicits._
 import com.mwz.sonar.scala.scapegoat.inspections.ScapegoatInspection.AllScapegoatInspections
 import com.mwz.sonar.scala.util.JavaOptionals._
 import com.mwz.sonar.scala.util.Log
+import com.mwz.sonar.scala.util.PathUtils._
 import org.sonar.api.batch.fs.{FileSystem, InputFile}
 import org.sonar.api.batch.sensor.{Sensor, SensorContext, SensorDescriptor}
 import org.sonar.api.config.Configuration
@@ -49,11 +50,12 @@ final class ScapegoatSensor(scapegoatReportParser: ScapegoatReportParserAPI) ext
 
   /** Saves the Scapegoat information of a module */
   override def execute(context: SensorContext): Unit = {
-    val settings = context.config()
-    val reportPath = getScapegoatReportPath(settings)
+    val modulePath = getModuleBaseDirectory(context.fileSystem)
+    val reportPath = modulePath.resolve(getScapegoatReportPath(context.config))
 
     log.info("Initializing the Scapegoat sensor.")
     log.info(s"Loading the scapegoat report file: '$reportPath'.")
+    log.debug(s"The current working directory is: '$cwd'.")
 
     Try(scapegoatReportParser.parse(reportPath)) match {
       case Success(scapegoatIssuesByFilename) =>
@@ -97,7 +99,7 @@ final class ScapegoatSensor(scapegoatReportParser: ScapegoatReportParserAPI) ext
 
     scapegoatIssuesByFilename foreach { tuple =>
       val (filename, scapegoatIssues) = tuple
-      log.info(s"Saving the scapegoat warnings of the file: '$filename'.")
+      log.info(s"Saving the scapegoat issues for file '$filename'.")
 
       getModuleFile(filename, filesystem) match {
         case Some(file) =>
@@ -145,7 +147,7 @@ final class ScapegoatSensor(scapegoatReportParser: ScapegoatReportParserAPI) ext
             }
           }
         case None =>
-          log.error(s"The file: '$filename', couldn't be found.")
+          log.error(s"The file '$filename' couldn't be found.")
       }
     }
   }

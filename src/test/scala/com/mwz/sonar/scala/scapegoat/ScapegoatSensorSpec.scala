@@ -134,11 +134,27 @@ class ScapegoatSensorSpec
     reportPath shouldBe Paths.get("target", "report-path")
   }
 
-  it should "get a module file using the filename extracted from the scapegoat report" in {
+  it should "get a root module file using the filename extracted from the scapegoat report" in {
     val filesystem = new DefaultFileSystem(Paths.get("./"))
 
     val testFileA = TestInputFileBuilder
       .create("", "src/main/scala/com/mwz/sonar/scala/scapegoat/TestFileA.scala")
+      .setLanguage("scala")
+      .setType(InputFile.Type.MAIN)
+      .build()
+    filesystem.add(testFileA)
+
+    val moduleFile =
+      scapegoatSensor.getModuleFile("com/mwz/sonar/scala/scapegoat/TestFileA.scala", filesystem)
+
+    moduleFile.value shouldBe testFileA
+  }
+
+  it should "get a module file using the filename extracted from the scapegoat report" in {
+    val filesystem = new DefaultFileSystem(Paths.get("./module1"))
+
+    val testFileA = TestInputFileBuilder
+      .create("module1", "src/main/scala/com/mwz/sonar/scala/scapegoat/TestFileA.scala")
       .setLanguage("scala")
       .setType(InputFile.Type.MAIN)
       .build()
@@ -195,7 +211,7 @@ class ScapegoatSensorSpec
       .activate()
 
     val arrayPassedToStringFormatRuleKey =
-      RuleKey.of("sonar-scala-scapegoat", "Array passed to String.forma")
+      RuleKey.of("sonar-scala-scapegoat", "Array passed to String.format")
     activeRulesBuilder
       .create(arrayPassedToStringFormatRuleKey)
       .setInternalKey("com.sksamuel.scapegoat.inspections.string.ArraysInFormat")
@@ -363,6 +379,62 @@ class ScapegoatSensorSpec
     // validate the sensor behavior
     sensorContext.allIssues shouldBe empty
   }
+
+  it should "report module issues" in {
+    // create the sensor context
+    val sensorContext = SensorContextTester.create(Paths.get("./"))
+    val filesystem = new DefaultFileSystem(Paths.get("./module1"))
+    sensorContext.setFileSystem(filesystem)
+
+    // setup the filesystem
+    val testFileA = TestInputFileBuilder
+      .create("module1", "src/main/scala/com/mwz/sonar/scala/scapegoat/TestFileA.scala")
+      .setLanguage("scala")
+      .setType(InputFile.Type.MAIN)
+      .setLines(2)
+      .setOriginalLineOffsets(Array(0, 51)) // line 1 -> 50 chars, line 2 -> 80 chars
+      .setLastValidOffset(131)
+      .build()
+    sensorContext.fileSystem.add(testFileA)
+
+    // setup the active rules
+    val activeRulesBuilder = new ActiveRulesBuilder()
+
+    val emptyClassRuleKey =
+      RuleKey.of("sonar-scala-scapegoat", "Empty case class")
+    activeRulesBuilder
+      .create(emptyClassRuleKey)
+      .setInternalKey("com.sksamuel.scapegoat.inspections.EmptyCaseClass")
+      .activate()
+
+    sensorContext.setActiveRules(activeRulesBuilder.build())
+
+    // set the scapegoat report path property
+    sensorContext.setSettings(
+      new MapSettings()
+        .setProperty("sonar.scala.scapegoat.reportPath", "scapegoat-report/one-file-one-warning.xml")
+    )
+
+    // execute the sensor
+    scapegoatSensor.execute(sensorContext)
+
+    // validate the sensor behavior
+    val testFileAIssueEmptyCaseClass =
+      new DefaultIssue().forRule(emptyClassRuleKey)
+    testFileAIssueEmptyCaseClass.at(
+      testFileAIssueEmptyCaseClass
+        .newLocation()
+        .on(testFileA)
+        .at(new DefaultTextRange(new DefaultTextPointer(1, 0), new DefaultTextPointer(1, 50)))
+        .message(
+          "Empty case class\nEmpty case class can be rewritten as a case object"
+        )
+    )
+
+    sensorContext.allIssues should contain theSameElementsAs Seq(
+      testFileAIssueEmptyCaseClass
+    )
+  }
 }
 
 /** Mock of the ScapegoatReportParser */
@@ -371,6 +443,18 @@ final class TestScapegoatReportParser extends ScapegoatReportParserAPI {
     case "scapegoat-report/no-warnings.xml" =>
       Map()
     case "scapegoat-report/one-file-one-warning.xml" =>
+      Map(
+        "com/mwz/sonar/scala/scapegoat/TestFileA.scala" -> Seq(
+          ScapegoatIssue(
+            line = 1,
+            text = "Empty case class",
+            snippet = "Empty case class can be rewritten as a case object",
+            file = "com/mwz/sonar/scala/scapegoat/TestFileA.scala",
+            inspectionId = "com.sksamuel.scapegoat.inspections.EmptyCaseClass"
+          )
+        )
+      )
+    case "module1/scapegoat-report/one-file-one-warning.xml" =>
       Map(
         "com/mwz/sonar/scala/scapegoat/TestFileA.scala" -> Seq(
           ScapegoatIssue(

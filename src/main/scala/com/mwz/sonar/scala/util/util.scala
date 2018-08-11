@@ -22,6 +22,8 @@ package util
 import java.nio.file.{Path, Paths}
 import java.util.Optional
 
+import org.sonar.api.batch.fs.FileSystem
+
 import scala.language.implicitConversions
 
 /**
@@ -65,4 +67,13 @@ object PathUtils {
   def stripOutPrefix(prefix: Path, path: Path): Path =
     if (path.startsWith(prefix)) prefix.relativize(path)
     else path
+
+  /**
+   * Returns the module base path relative to the current working directory
+   * */
+  def getModuleBaseDirectory(fs: FileSystem): Path = {
+    val moduleAbsolutePath = Paths.get(fs.baseDir().getAbsolutePath).normalize
+    val currentWorkdirAbsolutePath = PathUtils.cwd
+    currentWorkdirAbsolutePath.relativize(moduleAbsolutePath)
+  }
 }

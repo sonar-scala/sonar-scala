@@ -2,7 +2,7 @@
 set -eu
 
 export CWD=`pwd`
-export SONAR_SCANNER_DEFAULTS="-Dsonar.host.url=${SONARQUBE_URL} -Dsonar.login=${SONARQUBE_ACCESS_TOKEN}"
+export SONAR_SCANNER_DEFAULTS="-X -Dsonar.host.url=${SONARQUBE_URL} -Dsonar.login=${SONARQUBE_ACCESS_TOKEN}"
 
 # SBT single-module
 echo "Scanning SBT single-module project."

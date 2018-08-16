@@ -19,15 +19,16 @@
 package com.mwz.sonar.scala.scapegoat
 
 import com.sksamuel.scapegoat.Inspection
-import com.sksamuel.scapegoat.Levels
 import io.github.lukehutch.fastclasspathscanner.FastClasspathScanner
 import io.github.lukehutch.fastclasspathscanner.matchprocessor.SubclassMatchProcessor
-import scala.collection.mutable
+import sbt.Keys._
 import sbt._
-import Keys._
+
+import scala.collection.mutable
 
 /** SBT Task that generates a managed file with all scapegoat inspections */
 object ScapegoatInspectionsGenerator {
+
   /** Scapegoat inspections that won't be included in the generated file */
   val BlacklistedInspections = Set(
     "com.sksamuel.scapegoat.inspections.collections.FilterDotSizeComparison", // Not implemented yet
@@ -51,16 +52,17 @@ object ScapegoatInspectionsGenerator {
         new SubclassMatchProcessor[Inspection] {
           override def processMatch(matchingClass: Class[_ <: Inspection]): Unit = {
             val inspectionClassName = matchingClass.getName
-            log.debug(s"[ScapegoatInspectionsGenerator] Found the inspection: ${inspectionClassName}")
+            log.debug(s"[ScapegoatInspectionsGenerator] Found the inspection: $inspectionClassName")
             inspections += (inspectionClassName -> matchingClass.newInstance())
           }
         }
-      ).scan()
+      )
+      .scan()
 
     val AllScapegoatInspections = inspections.toList collect {
       case (inspectionClassName, inspection) if !BlacklistedInspections.contains(inspectionClassName) =>
         s"""ScapegoatInspection(
-           |  id = "${inspectionClassName}",
+           |  id = "$inspectionClassName",
            |  name = "${inspection.text}",
            |  description = "${inspection.explanation.getOrElse("No Explanation")}",
            |  defaultLevel = Level.${inspection.defaultLevel}

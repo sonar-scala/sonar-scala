@@ -5,7 +5,7 @@ defaults: &defaults
     - image: mwizner/sonar-scala-circleci
   working_directory: ~/repo
   environment:
-    JVM_OPTS: -Xmx3200m
+    JVM_OPTS: -Xmx3200m -XX:MaxMetaspaceSize=1G
 
 jobs:
   test:

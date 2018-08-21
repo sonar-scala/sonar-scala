@@ -31,24 +31,48 @@ import scala.xml.{Node, NodeSeq, XML}
 
 /**
  * An SBT task that generates a managed source file with all Scalastyle inspections.
- * */
+ */
 object ScalastyleInspectionsGenerator {
 
   val generatorTask = Def.task {
     val log = streams.value.log
-    log.info("Generating scalastyle inspections file.")
+    log.info("Generating Scalastyle inspections file.")
 
     val c = classOf[MainConfig]
     val definitionStream: InputStream = c.getResourceAsStream("/scalastyle_definition.xml")
     val documentationStream: InputStream = c.getResourceAsStream("/scalastyle_documentation.xml")
-    val config: Config = ConfigFactory.load(c.getClassLoader)
-
     val inspections: NodeSeq = XML.load(definitionStream) \\ "checker"
     val docs: NodeSeq = XML.load(documentationStream) \\ "scalastyle-documentation" \ "check"
-    val docsMap: Map[String, Node] = docs.map(node => node \@ "id" -> node).toMap
+    val config: Config = ConfigFactory.load(c.getClassLoader)
 
     // Collect Scalastyle inspections from config files.
-    val generatedInspections: Seq[ScalastyleInspection] = for {
+    val generatedInspections: Seq[ScalastyleInspection] = extractInspections(inspections, docs, config)
+
+    // Load the template file from ./project/ScalastyleInspections.scala.
+    val projectDir = new File(baseDirectory.value, "project")
+    val templateFile = new File(projectDir, "ScalastyleInspections.scala")
+
+    // Substitute AllInspections with generated inspections.
+    val source: Source = templateFile.parse[Source].get
+    val transformed = transform(source, generatedInspections)
+
+    // Save the new file to the managed sources dir.
+    val scalastyleInspectionsFile = (sourceManaged in Compile).value / "scalastyle" / "inspections.scala"
+    IO.write(scalastyleInspectionsFile, transformed.syntax)
+
+    Seq(scalastyleInspectionsFile)
+  }
+
+  /**
+   * Extract Scalastyle inspections from config files.
+   */
+  private[scalastyle] def extractInspections(
+    inspections: NodeSeq,
+    docs: NodeSeq,
+    config: Config
+  ): Seq[ScalastyleInspection] = {
+    val docsMap: Map[String, Node] = docs.map(node => node \@ "id" -> node).toMap
+    for {
       inspection <- inspections
       clazz = (inspection \ "@class").text
       id = inspection \@ "id"
@@ -59,21 +83,25 @@ object ScalastyleInspectionsGenerator {
       extraDescription = doc.flatMap(node => (node \ "extra-description").map(_.text.trim).headOption)
       justification = doc.map(node => (node \ "justification").text.trim)
       defaultLevel = Level(inspection \@ "defaultLevel")
-      // TODO: Add parameters
+      // TODO: Add template parameters.
     } yield ScalastyleInspection(clazz, id, label, description, extraDescription, justification, defaultLevel)
+  }
 
-    // Load the template file from ./project/ScalastyleInspections.scala.
-    val projectDir = new File(baseDirectory.value, "project")
-    val templateFile = new File(projectDir, "ScalastyleInspections.scala")
-    val source: Source = templateFile.parse[Source].get
-
-    // TODO: Substitute the AllInspections list with generatedInspections.
-    val stringified: Seq[String] = generatedInspections.collect {
+  /**
+   * Fill the template with generated inspections.
+   */
+  private[scalastyle] def transform(source: Tree, inspections: Seq[ScalastyleInspection]): Tree = {
+    val stringified: Seq[String] = inspections.collect {
       case inspection =>
         // TODO: Do we want to format the text with code examples?
+        // TODO: Is there a better way of embedding multi-line text?
         val extraDescription = inspection.extraDescription.map(s => "\"\"\"" + s + "\"\"\"")
         val justification = inspection.justification.map(s => "\"\"\"" + s + "\"\"\"")
 
+        // It doesn't seem to be straightforward to automatically convert a collection
+        // into a tree using scalameta, so I'm turning it into a String so it can be parsed,
+        // which is easier than constructing the tree manually.
+        // Totally doable with shapeless though, but it would be a bit of an overkill in this case.
         s"""
            |ScalastyleInspection(
            |  clazz = "${inspection.clazz}",
@@ -89,15 +117,9 @@ object ScalastyleInspectionsGenerator {
 
     // Transform the template file.
     val term: Term = stringified.toString.parse[Term].get
-    val transformed: Tree = source.transform {
+    source.transform {
       case q"val AllInspections: $tpe = $expr" =>
         q"val AllInspections: $tpe = $term"
     }
-
-    // Save the new file to the managed sources dir.
-    val scalastyleInspectionsFile = (sourceManaged in Compile).value / "scalastyle" / "inspections.scala"
-    IO.write(scalastyleInspectionsFile, transformed.syntax)
-
-    Seq(scalastyleInspectionsFile)
   }
 }

@@ -74,7 +74,7 @@ object ScalastyleInspectionsGenerator {
     val docsMap: Map[String, Node] = docs.map(node => node \@ "id" -> node).toMap
     for {
       inspection <- inspections
-      clazz = (inspection \ "@class").text
+      clazz = inspection \@ "class"
       id = inspection \@ "id"
       cfg = config.getConfig(id)
       label = cfg.getString("label")
@@ -83,8 +83,23 @@ object ScalastyleInspectionsGenerator {
       extraDescription = doc.flatMap(node => (node \ "extra-description").map(_.text.trim).headOption)
       justification = doc.map(node => (node \ "justification").text.trim)
       defaultLevel = Level(inspection \@ "defaultLevel")
-      // TODO: Add template parameters.
-    } yield ScalastyleInspection(clazz, id, label, description, extraDescription, justification, defaultLevel)
+      params = (inspection \\ "parameter").map { param =>
+        val name = param \@ "name"
+        val typ = ParameterType(param \@ "type")
+        val default = param \@ "default"
+        Param(name, typ, default)
+      }
+    } yield
+      ScalastyleInspection(
+        clazz,
+        id,
+        label,
+        description,
+        extraDescription,
+        justification,
+        defaultLevel,
+        params
+      )
   }
 
   /**
@@ -97,6 +112,15 @@ object ScalastyleInspectionsGenerator {
         // TODO: Is there a better way of embedding multi-line text?
         val extraDescription = inspection.extraDescription.map(s => "\"\"\"" + s + "\"\"\"")
         val justification = inspection.justification.map(s => "\"\"\"" + s + "\"\"\"")
+        val params = inspection.params.map { p =>
+          s"""
+             |Param(
+             |  name = "${p.name}",
+             |  typ = ${p.typ},
+             |  default = \"\"\"${p.default}\"\"\"
+             |)
+           """.stripMargin
+        }
 
         // It doesn't seem to be straightforward to automatically convert a collection
         // into a tree using scalameta, so I'm turning it into a String so it can be parsed,
@@ -110,7 +134,8 @@ object ScalastyleInspectionsGenerator {
            |  description = "${inspection.description}",
            |  extraDescription = $extraDescription,
            |  justification = $justification,
-           |  defaultLevel = ${inspection.defaultLevel}
+           |  defaultLevel = ${inspection.defaultLevel},
+           |  params = ${params.toString.parse[Term].get.syntax}
            |)
          """.stripMargin
     }

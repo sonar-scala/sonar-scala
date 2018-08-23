@@ -28,8 +28,11 @@ case class ScalastyleInspection(
   description: String,
   extraDescription: Option[String],
   justification: Option[String],
-  defaultLevel: Level
+  defaultLevel: Level,
+  params: Seq[Param]
 )
+
+case class Param(name: String, typ: ParameterType, default: String)
 
 object ScalastyleInspections {
   val AllInspections: List[ScalastyleInspection] = ???

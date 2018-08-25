@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scalastyle-documentation>
+    <check id="line.contains.tab">
+        <justification>Some say that tabs are evil.</justification>
+        <example-configuration>
+            <![CDATA[
+              <check level="warning" class="org.scalastyle.file.FileTabChecker" enabled="true" />
+            ]]>
+        </example-configuration>
+    </check>
+    <check id="file.size.limit">
+        <justification>
+            Files which are too long can be hard to read and understand.
+        </justification>
+        <example-configuration>
+            <![CDATA[
+              <check level="warning" class="org.scalastyle.file.FileLengthChecker" enabled="true">
+                <parameters>
+                  <parameter name="maxFileLength">800</parameter>
+                </parameters>
+              </check>
+            ]]>
+        </example-configuration>
+    </check>
+    <check id="multiple.string.literals">
+        <justification>
+            Code duplication makes maintenance more difficult, so it can be better to replace the multiple occurrences with a constant.
+        </justification>
+        <example-configuration>
+            <![CDATA[
+              <check level="warning" class="org.scalastyle.scalariform.MultipleStringLiteralsChecker" enabled="true">
+                <parameters>
+                  <parameter name="allowed">1</parameter>
+                  <parameter name="ignoreRegex">^\"\"$</parameter>
+                </parameters>
+              </check>
+            ]]>
+        </example-configuration>
+    </check>
+    <check id="scaladoc">
+        <justification>
+            Scaladoc is generally considered a good thing. Within reason.
+        </justification>
+        <extra-description>
+            Ignore tokens is a comma separated string that may include the following : PatDefOrDcl (variables), TmplDef (classes, traits), TypeDefOrDcl (type definitions), FunDefOrDcl (functions)
+            Supported indentation styles are "scaladoc" (for ScalaDoc-style comments, with two spaces before the asterisk), "javadoc" (for JavaDoc-style comments, with a single space before the asterisk) or "anydoc" to support any style (any number of spaces before the asterisk). For backwards compatibility, if left empty, "anydoc" will be assumed.
+        </extra-description>
+        <example-configuration>
+            <![CDATA[
+              <check level="warning" class="org.scalastyle.scalariform.ScalaDocChecker" enabled="true">
+                <parameters>
+                  <parameter name="ignoreRegex">(.*Spec$)|(.*SpecIT$)</parameter>
+                  <parameter name="ignoreTokenTypes">PatDefOrDcl,TypeDefOrDcl,FunDefOrDcl,TmplDef</parameter>
+                  <parameter name="ignoreOverride">false</parameter>
+                  <parameter name="indentStyle">anydoc</parameter>
+                </parameters>
+              </check>
+            ]]>
+        </example-configuration>
+    </check>
+</scalastyle-documentation>

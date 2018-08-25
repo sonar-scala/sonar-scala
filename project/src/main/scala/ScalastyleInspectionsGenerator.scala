@@ -16,10 +16,8 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-package com.mwz.sonar.scala
-package scalastyle
-
 import java.io.InputStream
+import java.nio.file.Paths
 
 import com.typesafe.config.{Config, ConfigFactory}
 import org.scalastyle.{Level, _}
@@ -48,9 +46,17 @@ object ScalastyleInspectionsGenerator {
     // Collect Scalastyle inspections from config files.
     val generatedInspections: Seq[ScalastyleInspection] = extractInspections(inspections, docs, config)
 
-    // Load the template file from ./project/ScalastyleInspections.scala.
-    val projectDir = new File(baseDirectory.value, "project")
-    val templateFile = new File(projectDir, "ScalastyleInspections.scala")
+    // Load the template file from ./project/src/main/scala/ScalastyleInspections.scala.
+    val templateFile = Paths
+      .get(
+        baseDirectory.value.toString,
+        "project",
+        "src",
+        "main",
+        "scala",
+        "ScalastyleInspections.scala"
+      )
+      .toFile
 
     // Substitute AllInspections with generated inspections.
     val source: Source = templateFile.parse[Source].get
@@ -66,7 +72,7 @@ object ScalastyleInspectionsGenerator {
   /**
    * Extract Scalastyle inspections from config files.
    */
-  private[scalastyle] def extractInspections(
+  def extractInspections(
     inspections: NodeSeq,
     docs: NodeSeq,
     config: Config
@@ -105,7 +111,7 @@ object ScalastyleInspectionsGenerator {
   /**
    * Fill the template with generated inspections.
    */
-  private[scalastyle] def transform(source: Tree, inspections: Seq[ScalastyleInspection]): Tree = {
+  def transform(source: Tree, inspections: Seq[ScalastyleInspection]): Tree = {
     val stringified: Seq[String] = inspections.collect {
       case inspection =>
         // TODO: Do we want to format the text with code examples?

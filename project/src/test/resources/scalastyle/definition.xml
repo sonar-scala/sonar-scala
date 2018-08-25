@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scalastyle-definition>
+    <checker class="org.scalastyle.file.FileTabChecker" id="line.contains.tab" defaultLevel="warning"/>
+    <checker class="org.scalastyle.file.FileLengthChecker" id="file.size.limit" defaultLevel="warning">
+        <parameters>
+            <parameter name="maxFileLength" type="integer" default="1500"/>
+        </parameters>
+    </checker>
+    <checker class="org.scalastyle.scalariform.MultipleStringLiteralsChecker" id="multiple.string.literals" defaultLevel="warning" >
+        <parameters>
+            <parameter name="allowed" type="integer" default="1" />
+            <parameter name="ignoreRegex" type="string" default="^&quot;&quot;$" />
+        </parameters>
+    </checker>
+    <checker class="org.scalastyle.scalariform.ScalaDocChecker" id="scaladoc" defaultLevel="warning">
+        <parameters>
+            <parameter name="ignoreRegex" type="string" default="^$"/>
+            <parameter name="ignoreTokenTypes" type="string" default="^$"/>
+            <parameter name="ignoreOverride" type="boolean" default="false"/>
+            <parameter name="indentStyle" type="string" default="anydoc"/>
+        </parameters>
+    </checker>
+</scalastyle-definition>

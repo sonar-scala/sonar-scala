@@ -17,7 +17,7 @@ jobs:
           keys:
           - v1-dependencies-{{ checksum "~/repo/build.sbt" }}
           - v1-dependencies-
-      - run: sbt clean coverage test coverageReport scapegoat < /dev/null
+      - run: sbt ';clean ;coverage ;test ;coverageReport ;scapegoat ;reload plugins ;test' < /dev/null
       - save_cache:
           paths:
             - ~/.iv2/cache

@@ -2,17 +2,15 @@ import com.typesafe.config.ConfigFactory
 import org.scalastyle._
 import org.scalatest._
 
-import scala.io.Source._
+import scala.io.Source.fromResource
 import scala.meta._
 import scala.xml._
 
 class ScalastyleInspectionsGeneratorTest extends FlatSpec with Matchers {
 
   "extractInspections" should "successfully extract the inspections" in {
-    val inspections = XML.load(fromResource("scalastyle/definition.xml").bufferedReader) \\ "checker"
-    //XML.load(this.getClass.getResourceAsStream("scalastyle/definition.xml")) \\ "checker"
-    val docs = XML.load(fromResource("scalastyle/documentation.xml").bufferedReader) \\ "check"
-    // XML.load(this.getClass.getResourceAsStream("scalastyle/documentation.xml")) \\ "check"
+    val inspections = XML.load(fromResource("scalastyle/definition.xml").bufferedReader()) \\ "checker"
+    val docs = XML.load(fromResource("scalastyle/documentation.xml").bufferedReader()) \\ "check"
     val conf = ConfigFactory.parseResources("scalastyle/config.conf")
 
     val expected = List(

@@ -19,6 +19,7 @@
 import java.io.InputStream
 import java.nio.file.Paths
 
+import com.mwz.sonar.scala.scalastyle._
 import com.typesafe.config.{Config, ConfigFactory}
 import org.scalastyle.{Level, _}
 import sbt.Keys._

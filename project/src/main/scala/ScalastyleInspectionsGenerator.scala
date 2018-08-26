@@ -93,8 +93,10 @@ object ScalastyleInspectionsGenerator {
       params = (inspection \\ "parameter").map { param =>
         val name = param \@ "name"
         val typ = ParameterType(param \@ "type")
+        val label = cfg.getString(s"$name.label")
+        val description = cfg.getString(s"$name.description")
         val default = param \@ "default"
-        Param(name, typ, default)
+        Param(name, typ, label, description, default)
       }
     } yield
       ScalastyleInspection(
@@ -124,6 +126,8 @@ object ScalastyleInspectionsGenerator {
              |Param(
              |  name = "${p.name}",
              |  typ = ${p.typ},
+             |  label = "${p.label}",
+             |  description = "${p.description}",
              |  default = \"\"\"${p.default}\"\"\"
              |)
            """.stripMargin

@@ -51,7 +51,15 @@ class ScalastyleInspectionsGeneratorTest extends FlatSpec with Matchers {
         None,
         Some("Files which are too long can be hard to read and understand."),
         WarningLevel,
-        List(Param("maxFileLength", IntegerType, "1500"))
+        List(
+          Param(
+            "maxFileLength",
+            IntegerType,
+            "Maximum file length",
+            "Maximum number of lines in a file",
+            "1500"
+          )
+        )
       ),
       ScalastyleInspection(
         "org.scalastyle.scalariform.MultipleStringLiteralsChecker",
@@ -63,7 +71,22 @@ class ScalastyleInspectionsGeneratorTest extends FlatSpec with Matchers {
           "Code duplication makes maintenance more difficult, so it can be better to replace the multiple occurrences with a constant."
         ),
         WarningLevel,
-        List(Param("allowed", IntegerType, "1"), Param("ignoreRegex", StringType, "^\"\"$"))
+        List(
+          Param(
+            "allowed",
+            IntegerType,
+            "Maximum occurences allowed",
+            "Maximum number of occurences allowed",
+            "1"
+          ),
+          Param(
+            "ignoreRegex",
+            StringType,
+            "Ignore regular expression",
+            "Regular expression to ignore",
+            "^\"\"$"
+          )
+        )
       ),
       ScalastyleInspection(
         "org.scalastyle.scalariform.ScalaDocChecker",
@@ -77,10 +100,34 @@ class ScalastyleInspectionsGeneratorTest extends FlatSpec with Matchers {
         Some("Scaladoc is generally considered a good thing. Within reason."),
         WarningLevel,
         List(
-          Param("ignoreRegex", StringType, "^$"),
-          Param("ignoreTokenTypes", StringType, "^$"),
-          Param("ignoreOverride", BooleanType, "false"),
-          Param("indentStyle", StringType, "anydoc")
+          Param(
+            "ignoreRegex",
+            StringType,
+            "Regular expression",
+            "Class names matching this regular expression will be ignored",
+            "^$"
+          ),
+          Param(
+            "ignoreTokenTypes",
+            StringType,
+            "Comma Separated String",
+            "Include the following to ignore : PatDefOrDcl (variables), TmplDef (classes, traits), TypeDefOrDcl (type definitions), FunDefOrDcl (functions)",
+            "^$"
+          ),
+          Param(
+            "ignoreOverride",
+            BooleanType,
+            "Ignore override",
+            "If set to true, methods which have the override modifier are ignored",
+            "false"
+          ),
+          Param(
+            "indentStyle",
+            StringType,
+            "Force indent style",
+            "Possible values: scaladoc - 2 spaces before *, javadoc - 1 space before *",
+            "anydoc"
+          )
         )
       )
     )
@@ -119,7 +166,15 @@ class ScalastyleInspectionsGeneratorTest extends FlatSpec with Matchers {
         None,
         Some("Files which are too long can be hard to read and understand."),
         WarningLevel,
-        List(Param("maxFileLength", IntegerType, "1500"))
+        List(
+          Param(
+            "maxFileLength",
+            IntegerType,
+            "Maximum file length",
+            "Maximum number of lines in a file",
+            "1500"
+          )
+        )
       )
     )
 
@@ -145,7 +200,15 @@ class ScalastyleInspectionsGeneratorTest extends FlatSpec with Matchers {
         |   extraDescription = None,
         |   justification = Some("Files which are too long can be hard to read and understand."),
         |   defaultLevel = WarningLevel,
-        |   params = List(Param(name = "maxFileLength", typ = IntegerType, default = "1500"))
+        |   params = List(
+        |     Param(
+        |       name = "maxFileLength",
+        |       typ = IntegerType,
+        |       label = "Maximum file length",
+        |       description = "Maximum number of lines in a file",
+        |       default = "1500"
+        |     )
+        |   )
         | )
         |)
         |}

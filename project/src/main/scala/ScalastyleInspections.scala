@@ -32,7 +32,13 @@ case class ScalastyleInspection(
   params: Seq[Param]
 )
 
-case class Param(name: String, typ: ParameterType, default: String)
+case class Param(
+  name: String,
+  typ: ParameterType,
+  label: String,
+  description: String,
+  default: String
+)
 
 object ScalastyleInspections {
   val AllInspections: List[ScalastyleInspection] = ???

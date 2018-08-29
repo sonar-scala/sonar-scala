@@ -21,7 +21,7 @@ package scalastyle
 
 import org.scalastyle._
 
-case class ScalastyleInspection(
+final case class ScalastyleInspection(
   clazz: String,
   id: String,
   label: String,
@@ -32,7 +32,7 @@ case class ScalastyleInspection(
   params: Seq[Param]
 )
 
-case class Param(
+final case class Param(
   name: String,
   typ: ParameterType,
   label: String,

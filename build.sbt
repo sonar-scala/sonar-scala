@@ -30,8 +30,11 @@ coverageOutputXML := true
 coverageOutputHTML := false
 coverageOutputCobertura := false
 
-// Add the Scpegoat inspections generator task to the compile source generators
-sourceGenerators in Compile += ScapegoatInspectionsGenerator.generatorTask.taskValue
+// Add Scalastyle and Scapegoat inspections generators.
+sourceGenerators in Compile ++= Seq(
+  ScapegoatInspectionsGenerator.generatorTask.taskValue,
+  ScalastyleInspectionsGenerator.generatorTask.taskValue
+)
 
 // Lib dependencies
 val sonarVersion = "6.7"

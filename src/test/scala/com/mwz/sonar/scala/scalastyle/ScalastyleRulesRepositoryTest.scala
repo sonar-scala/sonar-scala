@@ -19,9 +19,12 @@
 package com.mwz.sonar.scala
 package scalastyle
 
+import org.scalastyle._
 import org.scalatest.{FlatSpec, Inspectors, LoneElement, Matchers}
+import org.sonar.api.batch.rule.Severity
 import org.sonar.api.rule.RuleStatus
 import org.sonar.api.rules.RuleType
+import org.sonar.api.server.rule.RuleParamType
 import org.sonar.api.server.rule.RulesDefinition.{Context, Repository}
 
 class ScalastyleRulesRepositoryTest extends FlatSpec with Matchers with Inspectors with LoneElement {
@@ -43,6 +46,7 @@ class ScalastyleRulesRepositoryTest extends FlatSpec with Matchers with Inspecto
   }
 
   it should "include all Scalastyle inspections" in new Ctx {
+    repository.rules.size should be > 0
     repository.rules.size shouldBe ScalastyleInspections.AllInspections.size
   }
 
@@ -78,5 +82,148 @@ class ScalastyleRulesRepositoryTest extends FlatSpec with Matchers with Inspecto
     forEvery(repository.rules) { rule =>
       rule.`type` shouldBe RuleType.CODE_SMELL
     }
+  }
+
+  it should "convert Scalastyle inspection level to SonarQube Severity" in {
+    ScalastyleRulesRepository.levelToSeverity(InfoLevel) shouldBe Severity.INFO
+    ScalastyleRulesRepository.levelToSeverity(WarningLevel) shouldBe Severity.MINOR
+    ScalastyleRulesRepository.levelToSeverity(ErrorLevel) shouldBe Severity.MAJOR
+  }
+
+  it should "convert Scalastyle parameter type to SonarQube parameter type" in {
+    ScalastyleRulesRepository.parameterTypeToRuleParamType(StringType) shouldBe RuleParamType.STRING
+    ScalastyleRulesRepository.parameterTypeToRuleParamType(IntegerType) shouldBe RuleParamType.INTEGER
+    ScalastyleRulesRepository.parameterTypeToRuleParamType(BooleanType) shouldBe RuleParamType.BOOLEAN
+  }
+
+  it should "compose the full description from description, justification and extraDescription fields" in {
+    val inspection1 = ScalastyleInspection(
+      clazz = "class",
+      id = "id",
+      label = "label",
+      description = "description",
+      extraDescription = None,
+      justification = None,
+      defaultLevel = InfoLevel,
+      params = Seq.empty
+    )
+
+    val inspection2 = ScalastyleInspection(
+      clazz = "class",
+      id = "id",
+      label = "label",
+      description = "description",
+      extraDescription = Some("extraDescription"),
+      justification = None,
+      defaultLevel = InfoLevel,
+      params = Seq.empty
+    )
+
+    val inspection3 = ScalastyleInspection(
+      clazz = "class",
+      id = "id",
+      label = "label",
+      description = "description",
+      extraDescription = Some("extraDescription"),
+      justification = Some("justification"),
+      defaultLevel = InfoLevel,
+      params = Seq.empty
+    )
+
+    ScalastyleRulesRepository.formatDescription(inspection1) shouldBe "*description*"
+    ScalastyleRulesRepository.formatDescription(inspection2) shouldBe "*description*\n\nextraDescription"
+    ScalastyleRulesRepository.formatDescription(inspection3) shouldBe "*description*\n\njustification\n\nextraDescription"
+  }
+
+  it should "correctly reformat simple text " in {
+    val text =
+      """
+        |line1. next
+        |line2
+        |
+        |another line
+        |""".stripMargin.stripPrefix("\n").stripLineEnd
+
+    val expected =
+      """
+        |line1. next
+        |line2
+        |another line
+        |""".stripMargin.stripPrefix("\n").stripLineEnd
+
+    ScalastyleRulesRepository.format(text) shouldBe expected
+  }
+
+  it should "correctly reformat text with some inline code blocks" in {
+    val text =
+      """
+        |line1. next
+        |line2
+        |
+        |line3 `code` next `code 2`
+        |""".stripMargin.stripPrefix("\n").stripLineEnd
+
+    val expected =
+      """
+        |line1. next
+        |line2
+        |line3 ``code`` next ``code 2``
+        |""".stripMargin.stripPrefix("\n").stripLineEnd
+
+    ScalastyleRulesRepository.format(text) shouldBe expected
+  }
+
+  it should "correctly reformat text with some code blocks" in {
+    val text =
+      """
+        |line1. next
+        |line 2.
+        |   code block 1
+        |
+        |line 3.
+        |
+        |   code block 2
+        |   code block 2
+        |line 4.
+        |
+        |   code block 3
+        |
+        |   code block 4
+        |""".stripMargin.stripPrefix("\n").stripLineEnd
+
+    val expected =
+      """
+        |line1. next
+        |line 2.
+        |``
+        |   code block 1
+        |`` line 3.
+        |``
+        |   code block 2
+        |   code block 2
+        |`` line 4.
+        |``
+        |   code block 3
+        |   code block 4
+        |``
+        |""".stripMargin.stripPrefix("\n").stripLineEnd
+
+    ScalastyleRulesRepository.format(text) shouldBe expected
+  }
+
+  it should "strip out backslashes from the text" in {
+    val text =
+      """
+        |line1. \_
+        |line2 \[T\]
+        |""".stripMargin.stripPrefix("\n").stripLineEnd
+
+    val expected =
+      """
+        |line1. _
+        |line2 [T]
+        |""".stripMargin.stripPrefix("\n").stripLineEnd
+
+    ScalastyleRulesRepository.format(text) shouldBe expected
   }
 }

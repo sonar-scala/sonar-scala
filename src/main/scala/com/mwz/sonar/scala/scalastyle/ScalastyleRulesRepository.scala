@@ -103,7 +103,7 @@ private[scalastyle] object ScalastyleRulesRepository {
   }
 
   /**
-   * Reformat the text into a markdown format.
+   * Reformat the text from Scalastyle docs into a markdown format.
    */
   def format(s: String): String = {
     s.lines.foldLeft(Acc(indent = false, isEmpty = true, "")) {
@@ -129,9 +129,10 @@ private[scalastyle] object ScalastyleRulesRepository {
           // Previous line not indented.
           case Acc(false, isEmpty, text) =>
             if (trailingSpaces <= 2)
-              if (isEmpty)
-                Acc(indent = false, isEmpty = false, s"$trimmed")
-              else
+              if (isEmpty) {
+                val space = if (text.isEmpty) "" else "\n"
+                Acc(indent = false, isEmpty = false, s"$text$space$trimmed")
+              } else
                 Acc(indent = false, isEmpty = false, s"$text\n$trimmed")
             else
               Acc(indent = true, isEmpty = false, s"$text\n``\n$line")

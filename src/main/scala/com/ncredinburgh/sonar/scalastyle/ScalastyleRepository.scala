@@ -78,7 +78,7 @@ final class ScalastyleRepository extends RulesDefinition {
         // if a rule has at least one real parameter make it a template
         rule.setTemplate(repoRule.params.nonEmpty)
 
-        // TODO: Set the status of those rules as deprecated3?
+        // TODO: Set the status of those rules as deprecated?
         // rule.setStatus(RuleStatus.DEPRECATED)
       }
     }

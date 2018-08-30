@@ -123,7 +123,7 @@ final class ScalaPlugin extends Plugin {
       classOf[oldscalastyle.ScalastyleQualityProfile],
       classOf[oldscalastyle.ScalastyleSensor],
       // Scalastyle
-      classOf[ScalastyleRulesRepository],
+      // classOf[ScalastyleRulesRepository],
       // Scoverage
       classOf[ScoverageMetrics],
       classOf[ScoverageReportParser],

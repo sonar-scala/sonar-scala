@@ -18,12 +18,13 @@
  */
 package com.ncredinburgh.sonar.scalastyle
 
-import org.sonar.api.rule.Severity
+import org.sonar.api.rule.{RuleStatus, Severity}
 import org.sonar.api.server.rule.RulesDefinition
 import org.sonar.api.server.rule.RuleParamType
 import org.slf4j.LoggerFactory
 import org.sonar.api.server.rule.RulesDefinition.NewRepository
 import com.ncredinburgh.sonar.scalastyle.ScalastyleRepository.getStandardKey
+
 import scala.annotation.tailrec
 
 object ScalastyleRepository {
@@ -76,6 +77,9 @@ final class ScalastyleRepository extends RulesDefinition {
 
         // if a rule has at least one real parameter make it a template
         rule.setTemplate(repoRule.params.nonEmpty)
+
+        // TODO: Set the status of those rules as deprecated3?
+        // rule.setStatus(RuleStatus.DEPRECATED)
       }
     }
 

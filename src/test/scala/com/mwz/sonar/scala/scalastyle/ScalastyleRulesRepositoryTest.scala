@@ -40,9 +40,9 @@ class ScalastyleRulesRepositoryTest extends FlatSpec with Matchers with Inspecto
   }
 
   it should "correctly define repository properties" in new Ctx {
-    repository.key shouldBe ScalastyleRulesRepository.RepositoryKey
-    repository.name shouldBe ScalastyleRulesRepository.RepositoryName
-    repository.language shouldBe Scala.LanguageKey
+    repository.key shouldBe "sonar-scala-scalastyle"
+    repository.name shouldBe "Scalastyle"
+    repository.language shouldBe "scala"
   }
 
   it should "include all Scalastyle inspections" in new Ctx {

@@ -24,8 +24,10 @@ import org.scalatest.{FlatSpec, Inspectors, LoneElement, Matchers}
 import org.sonar.api.batch.rule.Severity
 import org.sonar.api.rule.RuleStatus
 import org.sonar.api.rules.RuleType
-import org.sonar.api.server.rule.RuleParamType
-import org.sonar.api.server.rule.RulesDefinition.{Context, Repository}
+import org.sonar.api.server.rule.RulesDefinition.{Context, Repository, Rule}
+import org.sonar.api.server.rule.{RuleParamType, RulesDefinition}
+
+import scala.collection.JavaConverters._
 
 class ScalastyleRulesRepositoryTest extends FlatSpec with Matchers with Inspectors with LoneElement {
 
@@ -82,6 +84,37 @@ class ScalastyleRulesRepositoryTest extends FlatSpec with Matchers with Inspecto
     forEvery(repository.rules) { rule =>
       rule.`type` shouldBe RuleType.CODE_SMELL
     }
+  }
+
+  it should "have rules with parameters" in new Ctx {
+    forAtLeast(1, repository.rules) { rule =>
+      rule.params should not be empty
+    }
+  }
+
+  it should "not have rules with empty parameters" in new Ctx {
+    val params: Seq[RulesDefinition.Param] =
+      repository.rules.asScala
+        .filter(r => !r.params.isEmpty)
+        .flatMap(_.params.asScala)
+
+    forAll(params) { param =>
+      param.name should not be empty
+      param.description should not be empty
+    }
+  }
+
+  it should "create rules with correct parameters" in new Ctx {
+    val rule: Rule = repository.rule("org.scalastyle.file.FileLineLengthChecker")
+    val params: Seq[(String, RuleParamType, String)] =
+      rule.params().asScala.map(p => (p.name, p.`type`, p.defaultValue))
+    val expected = Seq(
+      ("maxLineLength", RuleParamType.INTEGER, "160"),
+      ("tabSize", RuleParamType.INTEGER, "4"),
+      ("ignoreImports", RuleParamType.BOOLEAN, "false")
+    )
+
+    params should contain theSameElementsAs expected
   }
 
   it should "convert Scalastyle inspection level to SonarQube Severity" in {

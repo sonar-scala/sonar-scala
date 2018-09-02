@@ -48,7 +48,7 @@ class ScalastyleRulesRepositoryTest extends FlatSpec with Matchers with Inspecto
   }
 
   it should "include all Scalastyle inspections" in new Ctx {
-    repository.rules.size should be > 0
+    ScalastyleInspections.AllInspections.size shouldBe 69
     repository.rules.size shouldBe ScalastyleInspections.AllInspections.size
   }
 
@@ -124,9 +124,14 @@ class ScalastyleRulesRepositoryTest extends FlatSpec with Matchers with Inspecto
   }
 
   it should "convert Scalastyle parameter type to SonarQube parameter type" in {
-    ScalastyleRulesRepository.parameterTypeToRuleParamType(StringType) shouldBe RuleParamType.STRING
-    ScalastyleRulesRepository.parameterTypeToRuleParamType(IntegerType) shouldBe RuleParamType.INTEGER
-    ScalastyleRulesRepository.parameterTypeToRuleParamType(BooleanType) shouldBe RuleParamType.BOOLEAN
+    ScalastyleRulesRepository.parameterTypeToRuleParamType(
+      "org.scalastyle.file.HeaderMatchesChecker",
+      "header",
+      StringType
+    ) shouldBe RuleParamType.TEXT
+    ScalastyleRulesRepository.parameterTypeToRuleParamType("", "", StringType) shouldBe RuleParamType.STRING
+    ScalastyleRulesRepository.parameterTypeToRuleParamType("", "", IntegerType) shouldBe RuleParamType.INTEGER
+    ScalastyleRulesRepository.parameterTypeToRuleParamType("", "", BooleanType) shouldBe RuleParamType.BOOLEAN
   }
 
   it should "compose the full description from description, justification and extraDescription fields" in {

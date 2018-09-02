@@ -54,7 +54,7 @@ final class ScalastyleRulesRepository extends RulesDefinition {
       inspection.params.foreach { param =>
         rule
           .createParam(param.name)
-          .setType(parameterTypeToRuleParamType(param.typ))
+          .setType(parameterTypeToRuleParamType(inspection.clazz, param.name, param.typ))
           .setDescription(s"${param.label}: ${param.description}")
           .setDefaultValue(param.default)
       }
@@ -86,12 +86,20 @@ private[scalastyle] object ScalastyleRulesRepository {
   /**
    * Convert Scalastyle inspection parameter type to SonarQube rule parameter type.
    */
-  def parameterTypeToRuleParamType(typ: ParameterType): RuleParamType = typ match {
-    case StringType  => RuleParamType.STRING
-    case IntegerType => RuleParamType.INTEGER
-    case BooleanType => RuleParamType.BOOLEAN
-    // TODO: RuleParamType.TEXT is used for header parameter of the HeaderMatchesChecker inspection - is this necessary?
-  }
+  def parameterTypeToRuleParamType(ruleClass: String, name: String, typ: ParameterType): RuleParamType =
+    typ match {
+      // RuleParamType.TEXT is used for header parameter of the HeaderMatchesChecker inspection.
+      case StringType
+          if ruleClass == "org.scalastyle.file.HeaderMatchesChecker" &&
+          name == "header" =>
+        RuleParamType.TEXT
+      case StringType =>
+        RuleParamType.STRING
+      case IntegerType =>
+        RuleParamType.INTEGER
+      case BooleanType =>
+        RuleParamType.BOOLEAN
+    }
 
   /**
    * Create a full description for a Scalastyle inspection.

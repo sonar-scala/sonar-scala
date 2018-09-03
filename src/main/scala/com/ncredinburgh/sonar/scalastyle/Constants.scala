@@ -21,8 +21,8 @@ package com.ncredinburgh.sonar.scalastyle
 object Constants {
   val ScalaKey = "scala"
   val RepositoryKey = "Scalastyle"
-  val RepositoryName = "Scalastyle Rules"
-  val ProfileName = "Scalastyle"
+  val RepositoryName = "Scalastyle (deprecated)"
+  val ProfileName = "Scalastyle (deprecated)"
 
   /** the class of the checker that should be executed by the sonar rule */
   val ClazzParam = "scalastyle-checker"

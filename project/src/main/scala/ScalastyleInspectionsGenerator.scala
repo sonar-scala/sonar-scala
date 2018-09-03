@@ -117,8 +117,7 @@ object ScalastyleInspectionsGenerator {
   def transform(source: Tree, inspections: Seq[ScalastyleInspection]): Tree = {
     val stringified: Seq[String] = inspections.collect {
       case inspection =>
-        // TODO: Do we want to format the text with code examples?
-        // TODO: Is there a better way of embedding multi-line text?
+        // Is there a better way of embedding multi-line text?
         val extraDescription = inspection.extraDescription.map(s => "\"\"\"" + s + "\"\"\"")
         val justification = inspection.justification.map(s => "\"\"\"" + s + "\"\"\"")
         val params = inspection.params.map { p =>

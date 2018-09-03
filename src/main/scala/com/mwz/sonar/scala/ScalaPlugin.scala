@@ -22,16 +22,8 @@ import java.nio.file.{Path, Paths}
 
 import cats.kernel.Eq
 import cats.syntax.eq._
-import com.mwz.sonar.scala.scapegoat.{
-  ScapegoatQualityProfile,
-  ScapegoatReportParser,
-  ScapegoatRulesRepository,
-  ScapegoatSensor
-}
-import com.mwz.sonar.scala.scoverage.{ScoverageMetrics, ScoverageReportParser, ScoverageSensor}
-import com.mwz.sonar.scala.sensor.ScalaSensor
 import com.mwz.sonar.scala.util.JavaOptionals._
-import com.ncredinburgh.sonar.scalastyle.{ScalastyleQualityProfile, ScalastyleRepository, ScalastyleSensor}
+import com.ncredinburgh.sonar.{scalastyle => oldscalastyle}
 import org.sonar.api.Plugin
 import org.sonar.api.config.Configuration
 import org.sonar.api.resources.AbstractLanguage
@@ -116,20 +108,22 @@ final class ScalaPlugin extends Plugin {
     context.addExtensions(
       // Scala
       classOf[Scala],
-      classOf[ScalaSensor],
+      classOf[sensor.ScalaSensor],
+      // Old Scalastyle (ncredinburgh)
+      classOf[oldscalastyle.ScalastyleRepository],
+      classOf[oldscalastyle.ScalastyleQualityProfile],
+      classOf[oldscalastyle.ScalastyleSensor],
       // Scalastyle
-      classOf[ScalastyleRepository],
-      classOf[ScalastyleQualityProfile],
-      classOf[ScalastyleSensor],
+      // classOf[scalastyle.ScalastyleRulesRepository],
       // Scoverage
-      classOf[ScoverageMetrics],
-      classOf[ScoverageReportParser],
-      classOf[ScoverageSensor],
+      classOf[scoverage.ScoverageMetrics],
+      classOf[scoverage.ScoverageReportParser],
+      classOf[scoverage.ScoverageSensor],
       // Scapegoat
-      classOf[ScapegoatRulesRepository],
-      classOf[ScapegoatQualityProfile],
-      classOf[ScapegoatReportParser],
-      classOf[ScapegoatSensor]
+      classOf[scapegoat.ScapegoatRulesRepository],
+      classOf[scapegoat.ScapegoatQualityProfile],
+      classOf[scapegoat.ScapegoatReportParser],
+      classOf[scapegoat.ScapegoatSensor]
     )
   }
 }

@@ -16,14 +16,14 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-package com.mwz.sonar.scala.scapegoat
-
+import java.nio.file.{Path, Paths}
 import com.sksamuel.scapegoat.Inspection
 import io.github.lukehutch.fastclasspathscanner.FastClasspathScanner
 import io.github.lukehutch.fastclasspathscanner.matchprocessor.SubclassMatchProcessor
 import sbt.Keys._
 import sbt._
 
+import scala.meta._
 import scala.collection.mutable
 
 /** SBT Task that generates a managed file with all scapegoat inspections */
@@ -37,13 +37,35 @@ object ScapegoatInspectionsGenerator {
 
   val generatorTask = Def.task {
     val log = streams.value.log
-    log.info("Generating the scapegoat inspections file")
+    log.info("Generating the scapegoat inspections file.")
 
+    // Load the template file.
+    val templateFile = Paths
+      .get(
+        baseDirectory.value.toString,
+        "project",
+        "src",
+        "main",
+        "resources",
+        "ScapegoatInspections.scala"
+      )
+
+    val allScapegoatInspections = extractInspections()
+    val stringifiedScapegoatIsnpections = stringifyInspections(allScapegoatInspections)
+    val transformed = fillTemplate(templateFile, stringifiedScapegoatIsnpections)
+
+    val scapegoatInspectionsFile = (sourceManaged in Compile).value / "scapegoat" / "inspections.scala"
+    IO.write(scapegoatInspectionsFile, transformed)
+
+    Seq(scapegoatInspectionsFile)
+  }
+
+  /** Returns all scapegoat inspections, except the ones that should be ignored */
+  def extractInspections(): List[(String, Inspection)] = {
     val inspectionClass = classOf[Inspection]
     val inspections = mutable.ListBuffer.empty[(String, Inspection)]
 
     // We need to override the scanner class loader so it can find the scapegoat inspections
-    log.debug("[ScapegoatInspectionsGenerator] Scanning the classpath")
     val fastCPScanner = new FastClasspathScanner(inspectionClass.getPackage.getName)
     fastCPScanner
       .overrideClassLoaders(inspectionClass.getClassLoader)
@@ -52,43 +74,36 @@ object ScapegoatInspectionsGenerator {
         new SubclassMatchProcessor[Inspection] {
           override def processMatch(matchingClass: Class[_ <: Inspection]): Unit = {
             val inspectionClassName = matchingClass.getName
-            log.debug(s"[ScapegoatInspectionsGenerator] Found the inspection: $inspectionClassName")
             inspections += (inspectionClassName -> matchingClass.newInstance())
           }
         }
-      )
-      .scan()
+      ).scan()
 
-    val AllScapegoatInspections = inspections.toList collect {
-      case (inspectionClassName, inspection) if !BlacklistedInspections.contains(inspectionClassName) =>
+    inspections.toList.filter {
+      case (inspectionClassName, _) => !BlacklistedInspections.contains(inspectionClassName)
+    }
+  }
+
+  /** Stringifies a list of scapegoat inspections */
+  def stringifyInspections(scapegoatInspections: List[(String, Inspection)]): List[String] =
+    scapegoatInspections map {
+      case (inspectionClassName, inspection) =>
         s"""ScapegoatInspection(
            |  id = "$inspectionClassName",
            |  name = "${inspection.text}",
            |  description = "${inspection.explanation.getOrElse("No Explanation")}",
            |  defaultLevel = Level.${inspection.defaultLevel}
-           |),""".stripMargin
+           |)""".stripMargin
     }
 
-    val lines = List(
-      "package com.mwz.sonar.scala.scapegoat.inspections",
-      "import org.sonar.api.batch.rule.Severity",
-      "sealed trait Level {",
-      "/** Returns the SonarQube rule severity associated with this Level */",
-      "def toRuleSeverity: Severity",
-      "}",
-      "object Level {",
-      "case object Error extends Level { override def toRuleSeverity: Severity = Severity.MAJOR }",
-      "case object Warning extends Level { override def toRuleSeverity: Severity = Severity.MINOR }",
-      "case object Info extends Level { override def toRuleSeverity: Severity = Severity.INFO }",
-      "}",
-      "final case class ScapegoatInspection (id: String, name: String, description: String, defaultLevel: Level)",
-      "object ScapegoatInspection {",
-      "val AllScapegoatInspections: List[ScapegoatInspection] = List("
-    ) ++ AllScapegoatInspections ++ List(")", "}")
-
-    log.debug("[ScapegoatInspectionsGenerator] Saving the scapegoat inspections file")
-    val scapegoatInspectionsFile = (sourceManaged in Compile).value / "scapegoat" / "inspections.scala"
-    IO.writeLines(scapegoatInspectionsFile, lines)
-    Seq(scapegoatInspectionsFile)
+  /** Fill the template file */
+  def fillTemplate(templateFile: Path, stringified: List[String]): String = {
+    val term: Term = stringified.toString.parse[Term].get
+    val source: Source = templateFile.parse[Source].get
+    val transformed: Tree = source.transform {
+      case q"val AllInspections: $tpe = $expr" =>
+        q"val AllInspections: $tpe = $term"
+    }
+    transformed.syntax
   }
 }

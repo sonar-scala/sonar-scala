@@ -18,8 +18,6 @@
  */
 package com.mwz.sonar.scala.scapegoat
 
-import inspections.{Level, ScapegoatInspection}
-
 import org.scalatest.{FlatSpec, Inspectors, LoneElement, Matchers}
 import org.sonar.api.server.rule.RulesDefinition.Context
 import org.sonar.api.rule.RuleStatus
@@ -47,7 +45,7 @@ class ScapegoatRulesRepositorySpec extends FlatSpec with Inspectors with LoneEle
 
   it should "define one rule for each scapegoat inspection" in {
     val scapegoatRepository = context.repositories.loneElement
-    val totalInspections = ScapegoatInspection.AllScapegoatInspections.length
+    val totalInspections = ScapegoatInspections.AllInspections.length
 
     scapegoatRepository.rules should have length totalInspections
   }

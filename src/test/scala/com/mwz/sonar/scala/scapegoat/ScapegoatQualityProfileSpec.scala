@@ -18,8 +18,6 @@
  */
 package com.mwz.sonar.scala.scapegoat
 
-import inspections.ScapegoatInspection
-
 import org.scalatest.{FlatSpec, Inspectors, LoneElement, Matchers}
 import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition.Context
 
@@ -50,7 +48,7 @@ class ScapegoatQualityProfileSpec extends FlatSpec with Inspectors with LoneElem
 
   it should "activate one rule for each scapegoat inspection" in {
     val scapegoatQualityProfile = context.profilesByLanguageAndName.loneElement.value.loneElement.value
-    val totalInspections = ScapegoatInspection.AllScapegoatInspections.length
+    val totalInspections = ScapegoatInspections.AllInspections.length
 
     scapegoatQualityProfile.rules should have length totalInspections
   }

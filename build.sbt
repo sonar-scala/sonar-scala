@@ -1,4 +1,3 @@
-import com.mwz.sonar.scala.scapegoat.ScapegoatInspectionsGenerator
 import org.sonar.updatecenter.common.PluginManifest
 import sbt._
 import sbtrelease.ReleasePlugin.autoImport.ReleaseTransformations._

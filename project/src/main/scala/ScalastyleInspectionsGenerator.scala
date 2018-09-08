@@ -47,7 +47,7 @@ object ScalastyleInspectionsGenerator {
     // Collect Scalastyle inspections from config files.
     val generatedInspections: Seq[ScalastyleInspection] = extractInspections(inspections, docs, config)
 
-    // Load the template file from ./project/src/main/scala/ScalastyleInspections.scala.
+    // Load the template file.
     val templateFile = Paths
       .get(
         baseDirectory.value.toString,
@@ -57,7 +57,6 @@ object ScalastyleInspectionsGenerator {
         "scala",
         "ScalastyleInspections.scala"
       )
-      .toFile
 
     // Substitute AllInspections with generated inspections.
     val source: Source = templateFile.parse[Source].get

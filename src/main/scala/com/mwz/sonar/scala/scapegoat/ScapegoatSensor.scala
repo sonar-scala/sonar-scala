@@ -22,7 +22,6 @@ package scapegoat
 import java.nio.file.{Path, Paths}
 
 import cats.implicits._
-import com.mwz.sonar.scala.scapegoat.inspections.ScapegoatInspection.AllScapegoatInspections
 import com.mwz.sonar.scala.util.JavaOptionals._
 import com.mwz.sonar.scala.util.Log
 import com.mwz.sonar.scala.util.PathUtils._
@@ -131,7 +130,7 @@ final class ScapegoatSensor(scapegoatReportParser: ScapegoatReportParserAPI) ext
                 // check if it is because the rule is not activated in the current quality profile,
                 // or if it is because the inspection does not exist in the scapegoat rules repository
                 val inspectionExists =
-                  AllScapegoatInspections.exists(
+                  ScapegoatInspections.AllInspections.exists(
                     inspection => inspection.id === scapegoatIssue.inspectionId
                   )
                 if (inspectionExists)

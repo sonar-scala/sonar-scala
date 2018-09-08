@@ -18,13 +18,12 @@
  */
 import java.nio.file.{Path, Paths}
 import com.sksamuel.scapegoat.Inspection
-import io.github.lukehutch.fastclasspathscanner.FastClasspathScanner
-import io.github.lukehutch.fastclasspathscanner.matchprocessor.SubclassMatchProcessor
+import io.github.classgraph.ClassGraph
 import sbt.Keys._
 import sbt._
 
 import scala.meta._
-import scala.collection.mutable
+import scala.collection.JavaConverters._
 
 /** SBT Task that generates a managed file with all scapegoat inspections */
 object ScapegoatInspectionsGenerator {
@@ -61,28 +60,22 @@ object ScapegoatInspectionsGenerator {
   }
 
   /** Returns all scapegoat inspections, except the ones that should be ignored */
-  def extractInspections(): List[(String, Inspection)] = {
-    val inspectionClass = classOf[Inspection]
-    val inspections = mutable.ListBuffer.empty[(String, Inspection)]
-
-    // We need to override the scanner class loader so it can find the scapegoat inspections
-    val fastCPScanner = new FastClasspathScanner(inspectionClass.getPackage.getName)
-    fastCPScanner
-      .overrideClassLoaders(inspectionClass.getClassLoader)
-      .matchSubclassesOf(
-        inspectionClass,
-        new SubclassMatchProcessor[Inspection] {
-          override def processMatch(matchingClass: Class[_ <: Inspection]): Unit = {
-            val inspectionClassName = matchingClass.getName
-            inspections += (inspectionClassName -> matchingClass.newInstance())
-          }
-        }
-      ).scan()
-
-    inspections.toList.filter {
-      case (inspectionClassName, _) => !BlacklistedInspections.contains(inspectionClassName)
-    }
-  }
+  def extractInspections(): List[(String, Inspection)] =
+    // We need to override the scanner class loader,
+    // so it can cast the loaded classes
+    // from class[_] to class[Inspection]
+    new ClassGraph()
+      .overrideClassLoaders(classOf[Inspection].getClassLoader)
+      .whitelistPackages("com.sksamuel.scapegoat.inspections")
+      .scan()
+      .getSubclasses("com.sksamuel.scapegoat.Inspection")
+      .loadClasses(classOf[Inspection])
+      .asScala
+      .toList
+      .collect {
+        case clazz if !BlacklistedInspections.contains(clazz.getName) =>
+          (clazz.getName, clazz.newInstance())
+      }
 
   /** Stringifies a list of scapegoat inspections */
   def stringifyInspections(scapegoatInspections: List[(String, Inspection)]): List[String] =

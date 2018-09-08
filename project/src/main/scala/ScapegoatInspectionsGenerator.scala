@@ -16,7 +16,7 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-import java.nio.file.{Path, Paths}
+import java.nio.file.Paths
 import com.sksamuel.scapegoat.Inspection
 import io.github.classgraph.ClassGraph
 import sbt.Keys._
@@ -51,10 +51,10 @@ object ScapegoatInspectionsGenerator {
 
     val allScapegoatInspections = extractInspections()
     val stringifiedScapegoatIsnpections = stringifyInspections(allScapegoatInspections)
-    val transformed = fillTemplate(templateFile, stringifiedScapegoatIsnpections)
+    val transformed = fillTemplate(templateFile.parse[Source].get, stringifiedScapegoatIsnpections)
 
     val scapegoatInspectionsFile = (sourceManaged in Compile).value / "scapegoat" / "inspections.scala"
-    IO.write(scapegoatInspectionsFile, transformed)
+    IO.write(scapegoatInspectionsFile, transformed.syntax)
 
     Seq(scapegoatInspectionsFile)
   }
@@ -90,13 +90,11 @@ object ScapegoatInspectionsGenerator {
     }
 
   /** Fill the template file */
-  def fillTemplate(templateFile: Path, stringified: List[String]): String = {
+  def fillTemplate(template: Source, stringified: List[String]): Tree = {
     val term: Term = stringified.toString.parse[Term].get
-    val source: Source = templateFile.parse[Source].get
-    val transformed: Tree = source.transform {
+    template.transform {
       case q"val AllInspections: $tpe = $expr" =>
         q"val AllInspections: $tpe = $term"
     }
-    transformed.syntax
   }
 }

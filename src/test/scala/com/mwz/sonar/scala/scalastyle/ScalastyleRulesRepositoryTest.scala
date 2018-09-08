@@ -38,7 +38,7 @@ class ScalastyleRulesRepositoryTest extends FlatSpec with Matchers with Inspecto
   }
 
   "ScalastyleRulesRepository" should "define rules repository" in new Ctx {
-    context.repositories().size shouldBe 1
+    context.repositories should have size 1
   }
 
   it should "correctly define repository properties" in new Ctx {
@@ -48,8 +48,8 @@ class ScalastyleRulesRepositoryTest extends FlatSpec with Matchers with Inspecto
   }
 
   it should "include all Scalastyle inspections" in new Ctx {
-    ScalastyleInspections.AllInspections.size shouldBe 69
-    repository.rules.size shouldBe ScalastyleInspections.AllInspections.size
+    ScalastyleInspections.AllInspections should have size 69
+    repository.rules should have size ScalastyleInspections.AllInspections.size
   }
 
   it should "have all rules with non-empty properties" in new Ctx {

@@ -24,8 +24,8 @@ import org.sonar.api.batch.rule.Severity
 /** Tests the generated scapegoat inspections file */
 class ScapegoatInspectionsSpec extends FlatSpec with Inspectors with Matchers {
   "The Scapegoat Inspections object" should "define all scapegoat inspections" in {
-    ScapegoatInspections.AllInspections.length shouldBe 126
-    ScapegoatInspections.AllInspections.distinct.length shouldBe 126
+    ScapegoatInspections.AllInspections should have size 126
+    ScapegoatInspections.AllInspections.distinct should have size 126
   }
 
   it should "not define the blacklisted scapegoat inspections" in {

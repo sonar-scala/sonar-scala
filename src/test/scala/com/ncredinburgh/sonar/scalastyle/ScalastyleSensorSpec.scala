@@ -1,4 +1,5 @@
 /*
+/*
  * Sonar Scalastyle Plugin
  * Copyright (C) 2014 All contributors
  *
@@ -28,8 +29,9 @@ import org.scalastyle.file.FileLengthChecker
 import org.scalastyle.scalariform.{ForBraceChecker, IfBraceChecker}
 import org.scalatest._
 import org.scalatest.mockito.MockitoSugar
-import org.sonar.api.batch.SensorContext
 import org.sonar.api.batch.fs._
+import org.sonar.api.batch.sensor.SensorContext
+import org.sonar.api.batch.sensor.issue.NewIssue
 import org.sonar.api.component.ResourcePerspectives
 import org.sonar.api.issue.{Issuable, Issue}
 import org.sonar.api.resources.Project
@@ -43,15 +45,13 @@ class ScalastyleSensorSpec extends FlatSpec with Matchers with MockitoSugar with
   trait Fixture {
     val fs = mock[FileSystem]
     val predicates = mock[FilePredicates]
-    val project = mock[Project]
     val runner = mock[ScalastyleRunner]
-    val perspective = mock[ResourcePerspectives]
-    val issuable = mock[Issuable]
+    val issuable = mock[NewIssue]
     val issueBuilder = new DefaultIssueBuilder().componentKey("foo").projectKey("bar")
     val rf = mock[RuleFinder]
     val aRule = Rule.create("repo", "key")
 
-    val testee = new ScalastyleSensor(perspective, runner, fs, rf)
+    val testee = new ScalastyleSensor(runner, fs, rf)
     val context = mock[SensorContext]
 
     when(runner.run(anyString, anyListOf(classOf[File]))).thenReturn(List())
@@ -76,23 +76,11 @@ class ScalastyleSensorSpec extends FlatSpec with Matchers with MockitoSugar with
     }
   }
 
-  "A Scalastyle Sensor" should "execute when the project have Scala files" in new Fixture {
-    mockScalaPredicate(List(new File("foo.scala"), new File("bar.scala")).asJava)
-
-    testee.shouldExecuteOnProject(project) shouldBe true
-  }
-
-  it should "not execute when there isn't any Scala files" in new Fixture {
-    mockScalaPredicate(List.empty.asJava)
-
-    testee.shouldExecuteOnProject(project) shouldBe false
-  }
-
   it should "analyse all scala source files in project" in new Fixture {
     val scalaFiles = List(new File("foo.scala"), new File("bar.scala")).asJava
     mockScalaPredicate(scalaFiles)
 
-    testee.analyse(project, context)
+    testee.execute(context)
 
     verify(runner).run(StandardCharsets.UTF_8.name(), scalaFiles)
   }
@@ -101,7 +89,7 @@ class ScalastyleSensorSpec extends FlatSpec with Matchers with MockitoSugar with
     mockScalaPredicate(List(new File("foo.scala"), new File("bar.scala")).asJava)
     when(runner.run(anyString, anyListOf(classOf[File]))).thenReturn(List())
 
-    testee.analyse(project, context)
+    testee.execute(context)
 
     verify(issuable, never).addIssue(any[Issue])
   }
@@ -119,7 +107,7 @@ class ScalastyleSensorSpec extends FlatSpec with Matchers with MockitoSugar with
     )
     when(runner.run(anyString, anyListOf(classOf[File]))).thenReturn(List(error))
 
-    testee.analyse(project, context)
+    testee.execute(context)
 
     verify(issuable, times(1)).addIssue(any[Issue])
   }
@@ -145,7 +133,7 @@ class ScalastyleSensorSpec extends FlatSpec with Matchers with MockitoSugar with
     )
     when(runner.run(anyString, anyListOf(classOf[File]))).thenReturn(List(error1, error2))
 
-    testee.analyse(project, context)
+    testee.execute(context)
 
     verify(issuable, times(2)).addIssue(any[Issue])
   }
@@ -166,3 +154,4 @@ class ScalastyleSensorSpec extends FlatSpec with Matchers with MockitoSugar with
     rule.getKey shouldEqual "key"
   }
 }
+ */

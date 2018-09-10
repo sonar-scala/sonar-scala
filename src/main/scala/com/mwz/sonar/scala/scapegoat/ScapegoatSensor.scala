@@ -162,7 +162,11 @@ final class ScapegoatSensor(scapegoatReportParser: ScapegoatReportParserAPI) ext
     )
 
     // catch both exceptions and null values
-    Try(fs.inputFile(predicate)).fold(_ => None, file => Option(file))
+    Try(fs.inputFile(predicate))
+      .fold(ex => {
+        log.error(s"Exception occurred on file `$filename` reading, ex: ${ex.getStackTrace}")
+        None
+      }, file => Option(file))
   }
 }
 

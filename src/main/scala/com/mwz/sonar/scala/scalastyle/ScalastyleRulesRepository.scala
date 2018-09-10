@@ -81,7 +81,7 @@ private[scalastyle] object ScalastyleRulesRepository {
     rule.setType(RuleType.CODE_SMELL)
 
     // Create parameters.
-    inspection.params.foreach(createParam(inspection.clazz, rule, _))
+    inspection.params.foreach(param => createParam(inspection.clazz, rule, param))
 
     // Set the rule as a template.
     rule.setTemplate(template)

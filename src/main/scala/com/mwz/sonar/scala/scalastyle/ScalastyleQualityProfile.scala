@@ -26,7 +26,7 @@ import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition.NewBuiltInQ
 /**
  * Defines a Scalastyle quality profile.
  */
-class ScalastyleQualityProfile extends BuiltInQualityProfilesDefinition {
+final class ScalastyleQualityProfile extends BuiltInQualityProfilesDefinition {
   import ScalastyleQualityProfile._
 
   override def define(context: BuiltInQualityProfilesDefinition.Context): Unit = {

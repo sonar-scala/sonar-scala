@@ -82,4 +82,10 @@ class ScalastyleQualityProfileSpec extends FlatSpec with Matchers with LoneEleme
       rule.repoKey shouldBe "sonar-scala-scalastyle"
     }
   }
+
+  it should "not have overridden any of the default params" in new Ctx {
+    forEvery(rules) { rule =>
+      rule.overriddenParams shouldBe empty
+    }
+  }
 }

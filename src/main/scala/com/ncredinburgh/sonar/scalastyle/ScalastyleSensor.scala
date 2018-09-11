@@ -19,6 +19,7 @@
 package com.ncredinburgh.sonar.scalastyle
 
 import com.mwz.sonar.scala.Scala
+import com.mwz.sonar.scala.util.PathUtils.cwd
 import org.scalastyle._
 import org.slf4j.LoggerFactory
 import org.sonar.api.batch.fs.FileSystem
@@ -69,6 +70,9 @@ final class ScalastyleSensor(
     val encoding = fileSystem.encoding.name
     val messages = runner.run(encoding, files.asScala.toList.asJava)
 
+    log.info("Initializing the Scalastyle sensor.")
+    log.info(s"The current working directory is: '$cwd'.")
+
     messages.foreach(msg => processMessage(msg, context))
   }
 
@@ -79,7 +83,7 @@ final class ScalastyleSensor(
   }
 
   private def processError(error: StyleError[FileSpec], context: SensorContext): Unit = {
-    log.debug("Error message for rule " + error.clazz.getName)
+    log.info("Error message for rule " + error.clazz.getName)
 
     val inputFile: InputFile = fileSystem.inputFile(predicates.hasPath(error.fileSpec.name))
     val rule = findSonarRuleForError(error)

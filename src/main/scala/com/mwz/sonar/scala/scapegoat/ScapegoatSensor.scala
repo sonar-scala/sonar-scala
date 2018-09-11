@@ -26,6 +26,7 @@ import com.mwz.sonar.scala.scapegoat.inspections.ScapegoatInspection.AllScapegoa
 import com.mwz.sonar.scala.util.JavaOptionals._
 import com.mwz.sonar.scala.util.Log
 import com.mwz.sonar.scala.util.PathUtils._
+import org.sonar.api.batch.fs.FilePredicate
 import org.sonar.api.batch.fs.{FileSystem, InputFile}
 import org.sonar.api.batch.sensor.{Sensor, SensorContext, SensorDescriptor}
 import org.sonar.api.config.Configuration
@@ -104,7 +105,7 @@ final class ScapegoatSensor(scapegoatReportParser: ScapegoatReportParserAPI) ext
       getModuleFile(filename, filesystem) match {
         case Some(file) =>
           scapegoatIssues foreach { scapegoatIssue =>
-            log.debug(s"Saving the scapegoat issue: $scapegoatIssue.")
+            log.debug(s"Try saving the scapegoat ${scapegoatIssue.inspectionId} issues for file '$filename'")
 
             // try to retrieve the SonarQube rule for this scapegoat issue
             Option(
@@ -155,18 +156,21 @@ final class ScapegoatSensor(scapegoatReportParser: ScapegoatReportParserAPI) ext
   /** Returns the module input file with the given filename */
   private[scapegoat] def getModuleFile(filename: String, fs: FileSystem): Option[InputFile] = {
     val predicates = fs.predicates
-    val predicate = predicates.and(
+    val predicate: FilePredicate = predicates.and(
       predicates.hasLanguage(Scala.LanguageKey),
       predicates.hasType(InputFile.Type.MAIN),
-      predicates.matchesPathPattern(s"**/$filename") // scalastyle:ignore LiteralArguments
+      predicates.hasAbsolutePath(filename)
     )
 
     // catch both exceptions and null values
     Try(fs.inputFile(predicate))
-      .fold(ex => {
-        log.error(s"Exception occurred on file `$filename` reading, ex: ${ex.getStackTrace}")
-        None
-      }, file => Option(file))
+      .fold(
+        ex => {
+          log.error(s"Exception occurred on file `$filename` extracting, ex: ${ex.getStackTrace}")
+          None
+        },
+        file => Option(file)
+      )
   }
 }
 

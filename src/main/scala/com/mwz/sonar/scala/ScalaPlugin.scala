@@ -110,12 +110,15 @@ final class ScalaPlugin extends Plugin {
       classOf[Scala],
       classOf[sensor.ScalaSensor],
       // Old Scalastyle (ncredinburgh)
-      classOf[oldscalastyle.ScalastyleRepository],
-      classOf[oldscalastyle.ScalastyleQualityProfile],
-      classOf[oldscalastyle.ScalastyleSensor],
+      //classOf[oldscalastyle.ScalastyleRepository],
+      //classOf[oldscalastyle.ScalastyleQualityProfile],
+      //classOf[oldscalastyle.ScalastyleSensor],
+      // Checkstyle
+      classOf[checkstyle.CheckstyleReportParser],
       // Scalastyle
-      // classOf[scalastyle.ScalastyleRulesRepository],
-      // classOf[scalastyle.ScalastyleQualityProfile],
+      classOf[scalastyle.ScalastyleRulesRepository],
+      classOf[scalastyle.ScalastyleQualityProfile],
+      classOf[scalastyle.ScalastyleSensor],
       // Scoverage
       classOf[scoverage.ScoverageMetrics],
       classOf[scoverage.ScoverageReportParser],

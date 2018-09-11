@@ -21,13 +21,16 @@ package com.ncredinburgh.sonar.scalastyle
 import com.mwz.sonar.scala.Scala
 import org.scalastyle._
 import org.slf4j.LoggerFactory
-import org.sonar.api.batch.fs.{FileSystem, InputFile}
+import org.sonar.api.batch.fs.FileSystem
+import org.sonar.api.batch.fs.InputFile
 import org.sonar.api.batch.sensor.Sensor
 import org.sonar.api.batch.sensor.SensorContext
 import org.sonar.api.batch.sensor.SensorDescriptor
 import org.sonar.api.batch.sensor.issue.NewIssue
 import org.sonar.api.profiles.RulesProfile
-import org.sonar.api.rules.{Rule, RuleFinder, RuleQuery}
+import org.sonar.api.rules.Rule
+import org.sonar.api.rules.RuleFinder
+import org.sonar.api.rules.RuleQuery
 
 import scala.collection.JavaConverters._
 
@@ -103,6 +106,7 @@ final class ScalastyleSensor(
         .at(file.selectLine(lineNum))
         .message(messageStr)
     )
+    log.info(s"Add issue $issue for error $error")
 
     issue.save()
   }

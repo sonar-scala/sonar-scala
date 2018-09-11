@@ -115,6 +115,7 @@ final class ScalaPlugin extends Plugin {
       classOf[oldscalastyle.ScalastyleSensor],
       // Scalastyle
       // classOf[scalastyle.ScalastyleRulesRepository],
+      // classOf[scalastyle.ScalastyleQualityProfile],
       // Scoverage
       classOf[scoverage.ScoverageMetrics],
       classOf[scoverage.ScoverageReportParser],

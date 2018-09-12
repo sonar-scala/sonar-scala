@@ -76,7 +76,7 @@ abstract class IssueReportSensor extends Sensor {
         getModuleFile(filename, filesystem) match {
           case Some(file) =>
             issues.foreach { issue =>
-              log.debug(s"Try saving the $name ${issue.snippet} issues for file '$filename'")
+              log.debug(s"Try saving the $name ${issue.inspectionClass} issues for file '$filename'")
 
               // try to retrieve the SonarQube rule for this scapegoat issue
               findSonarRule(activeRules, issue) match {

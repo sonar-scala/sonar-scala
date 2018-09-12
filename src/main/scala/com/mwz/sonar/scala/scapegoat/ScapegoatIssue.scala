@@ -25,14 +25,14 @@ import com.mwz.sonar.scala.sensor.ReportIssue
 private[scapegoat] final case class ScapegoatIssue(
   line: Int,
   text: String,
-  snippet: String,
+  inspectionClass: String,
   file: String,
   inspectionId: String
 ) extends ReportIssue {
 
   def message: String =
-    if (snippet.isEmpty) text
-    else s"$text\n$snippet"
+    if (inspectionClass.isEmpty) text
+    else s"$text\n$inspectionClass"
 
   override def internalKey: String = inspectionId
 }

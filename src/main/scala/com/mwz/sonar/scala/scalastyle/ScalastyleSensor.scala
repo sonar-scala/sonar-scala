@@ -32,16 +32,16 @@ final class ScalastyleSensor(checkstyleReportParser: CheckstyleReportParserAPI) 
   override def sonarRuleNotFound(issue: ReportIssue): Unit = {
     val inspectionExists =
       ScalastyleInspections.AllInspections.exists(
-        inspection => inspection.id == issue.snippet
+        inspection => inspection.id == issue.inspectionClass
       )
     if (inspectionExists)
       log.debug(
-        s"The rule: ${issue.snippet}, " +
+        s"The rule: ${issue.inspectionClass}, " +
         "was not activated in the current quality profile."
       )
     else
       log.warn(
-        s"The inspection: ${issue.snippet}, " +
+        s"The inspection: ${issue.inspectionClass}, " +
         "does not exist in the scapegoat rules repository."
       )
   }

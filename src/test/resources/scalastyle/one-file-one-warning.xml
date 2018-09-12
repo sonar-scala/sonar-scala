@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="5.0">
+  <file name="com/mwz/sonar/scala/scalastyle/TestFileA.scala">
+    <error column="15" line="15" source="org.scalastyle.scalariform.CyclomaticComplexityChecker" severity="warning"
+           message="Cyclomatic complexity of 11 exceeds max of 10"/>
+  </file>
+</checkstyle>

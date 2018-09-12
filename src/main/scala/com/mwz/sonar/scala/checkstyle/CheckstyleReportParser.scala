@@ -36,7 +36,7 @@ object CheckstyleReportParserAPI {
 
 /** Checkstyle XML reports parser */
 @ScannerSide
-final class CheckstyleReportParser extends CheckstyleReportParserAPI {
+class CheckstyleReportParser extends CheckstyleReportParserAPI {
 
   /** Parses the checkstyle *.xml report and returns all checkstyle issues by filename */
   override def parse(scapegoatReportPath: Path): Map[String, Seq[CheckstyleIssue]] = {
@@ -47,7 +47,7 @@ final class CheckstyleReportParser extends CheckstyleReportParserAPI {
         CheckstyleIssue(
           line = (error \@ "line").toInt,
           column = Option(error \@ "column").filterNot(_.isEmpty).map(_.toInt),
-          snippet = error \@ "source",
+          inspectionClass = error \@ "source",
           severity = error \@ "severity",
           message = error \@ "message"
         )

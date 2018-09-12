@@ -4,7 +4,7 @@ trait ReportIssue {
 
   def line: Int
 
-  def snippet: String
+  def inspectionClass: String
 
   def message: String
 

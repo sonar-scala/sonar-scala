@@ -5,9 +5,9 @@ import com.mwz.sonar.scala.sensor.ReportIssue
 final case class CheckstyleIssue(
   line: Int,
   column: Option[Int],
-  snippet: String,
+  inspectionClass: String,
   severity: String,
   message: String
 ) extends ReportIssue {
-  override def internalKey: String = snippet
+  override def internalKey: String = inspectionClass
 }

@@ -18,49 +18,38 @@
  */
 package com.mwz.sonar.scala.scapegoat
 
-import inspections.ScapegoatInspection
-
 import org.scalatest.{FlatSpec, Inspectors, LoneElement, Matchers}
 import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition.Context
 
 /** Tests the correct behavior of the Scapegoat Quality Profile */
 class ScapegoatQualityProfileSpec extends FlatSpec with Inspectors with LoneElement with Matchers {
-  // tests about properties of the scapegoat quality profile
-  val context = new Context()
-  new ScapegoatQualityProfile().define(context)
-  behavior of "the Scapegoat Quality Profile"
 
-  it should "define only one quality profile" in {
+  trait Ctx {
+    val context = new Context()
+    new ScapegoatQualityProfile().define(context)
+    val qualityProfile = context.profilesByLanguageAndName.loneElement.value.loneElement.value
+    val rules = qualityProfile.rules
+  }
+
+  "ScapegoatQualityProfile" should "define only one quality profile" in new Ctx {
     context.profilesByLanguageAndName should have size 1 // by language
     context.profilesByLanguageAndName.loneElement.value should have size 1 // by language and name
   }
 
-  it should "properly define the properties of the quality profile" in {
-    val scapegoatQualityProfile = context.profilesByLanguageAndName.loneElement.value.loneElement.value
-
-    scapegoatQualityProfile.name shouldBe "Scapegoat"
-    scapegoatQualityProfile.language shouldBe "scala"
+  it should "properly define the properties of the quality profile" in new Ctx {
+    qualityProfile.name shouldBe "Scapegoat"
+    qualityProfile.language shouldBe "scala"
   }
 
-  it should "not be the default quality profile" in {
-    val scapegoatQualityProfile = context.profilesByLanguageAndName.loneElement.value.loneElement.value
-
-    scapegoatQualityProfile should not be 'default
+  it should "not be the default quality profile" in new Ctx {
+    qualityProfile should not be 'default
   }
 
-  it should "activate one rule for each scapegoat inspection" in {
-    val scapegoatQualityProfile = context.profilesByLanguageAndName.loneElement.value.loneElement.value
-    val totalInspections = ScapegoatInspection.AllScapegoatInspections.length
-
-    scapegoatQualityProfile.rules should have length totalInspections
+  it should "activate one rule for each scapegoat inspection" in new Ctx {
+    qualityProfile.rules should have size ScapegoatInspections.AllInspections.size
   }
 
-  // tests about properties of the scapegoat quality profile
-  val scapegoatQualityProfile = context.profile("scala", "Scapegoat")
-  val rules = scapegoatQualityProfile.rules
-  behavior of "all Scapegoat active Rules"
-
-  it should "be from the Scapegaot Rules Repository" in {
+  "All Scapegoat Active Rules" should "be from the Scapegaot Rules Repository" in new Ctx {
     forEvery(rules) { rule =>
       rule.repoKey shouldBe "sonar-scala-scapegoat"
     }

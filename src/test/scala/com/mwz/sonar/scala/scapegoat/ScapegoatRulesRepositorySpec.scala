@@ -18,8 +18,6 @@
  */
 package com.mwz.sonar.scala.scapegoat
 
-import inspections.{Level, ScapegoatInspection}
-
 import org.scalatest.{FlatSpec, Inspectors, LoneElement, Matchers}
 import org.sonar.api.server.rule.RulesDefinition.Context
 import org.sonar.api.rule.RuleStatus
@@ -28,79 +26,71 @@ import org.sonar.api.rules.RuleType
 
 /** Tests the correct behavior of the Scapegoat Rules Repository */
 class ScapegoatRulesRepositorySpec extends FlatSpec with Inspectors with LoneElement with Matchers {
-  // tests about properties of the scapegoat repository
-  val context = new Context()
-  new ScapegoatRulesRepository().define(context)
-  behavior of "the Scapegoat Rules Repository"
 
-  it should "define only one repository" in {
-    context.repositories should have length 1
+  trait Ctx {
+    val context = new Context()
+    new ScapegoatRulesRepository().define(context)
+    val repository = context.repositories.loneElement
+    val rules = repository.rules
   }
 
-  it should "properly define the properties of the repository" in {
-    val scapegoatRepository = context.repositories.loneElement
-
-    scapegoatRepository.key shouldBe "sonar-scala-scapegoat"
-    scapegoatRepository.name shouldBe "Scapegoat"
-    scapegoatRepository.language shouldBe "scala"
+  "ScapegoatRulesRepository" should "define only one repository" in new Ctx {
+    context.repositories should have size 1
   }
 
-  it should "define one rule for each scapegoat inspection" in {
-    val scapegoatRepository = context.repositories.loneElement
-    val totalInspections = ScapegoatInspection.AllScapegoatInspections.length
-
-    scapegoatRepository.rules should have length totalInspections
+  it should "properly define the properties of the repository" in new Ctx {
+    repository.key shouldBe "sonar-scala-scapegoat"
+    repository.name shouldBe "Scapegoat"
+    repository.language shouldBe "scala"
   }
 
-  it should "properly define the properties of the AnyUse rule" in {
-    val scapegoatRepository = context.repositories.loneElement
-    val anyUseRule = scapegoatRepository.rule("com.sksamuel.scapegoat.inspections.AnyUse")
+  it should "define one rule for each scapegoat inspection" in new Ctx {
+    rules should have size ScapegoatInspections.AllInspections.size
+  }
+
+  it should "properly define the properties of the AnyUse rule" in new Ctx {
+    val anyUseRule = repository.rule("com.sksamuel.scapegoat.inspections.AnyUse")
 
     anyUseRule.internalKey shouldBe "com.sksamuel.scapegoat.inspections.AnyUse"
     anyUseRule.name shouldBe "AnyUse"
-    anyUseRule.markdownDescription shouldBe "No Explanation"
+    anyUseRule.markdownDescription shouldBe "No description"
     anyUseRule.activatedByDefault shouldBe true
     anyUseRule.status shouldBe RuleStatus.READY
     anyUseRule.severity shouldBe Severity.INFO
     anyUseRule.`type` shouldBe RuleType.CODE_SMELL
   }
 
-  // tests about properties of the scapegoat repository rules
-  val scapegoatRepository = context.repository("sonar-scala-scapegoat")
-  val rules = scapegoatRepository.rules
-  behavior of "all Scapegoat Rules"
-
-  it should "have a valid internal key" in {
+  "All Scapegoat Rules" should "have a valid internal key" in new Ctx {
     forEvery(rules) { rule =>
       rule.internalKey should startWith("com.sksamuel.scapegoat.inspections")
     }
   }
 
-  it should "have a non-empty name" in {
+  it should "have a non-empty name" in new Ctx {
     forEvery(rules) { rule =>
       rule.name should not be empty
     }
   }
 
-  it should "have a non-empty description" in {
+  it should "have a non-empty description" in new Ctx {
     forEvery(rules) { rule =>
       rule.markdownDescription should not be empty
     }
   }
 
-  it should "be activated by default" in {
+  it should "be activated by default" in new Ctx {
     forEvery(rules) { rule =>
       rule.activatedByDefault shouldBe true
     }
   }
 
-  it should "have a READY status" in {
+  it should "have a READY status" in new Ctx {
     forEvery(rules) { rule =>
       rule.status shouldBe RuleStatus.READY
     }
   }
 
-  it should "have a valid severity" in {
+  it should "have a valid severity" in new Ctx {
     forEvery(rules) { rule =>
       val ruleSeverity = rule.severity
       forExactly(1, Severity.ALL) { severity =>
@@ -109,7 +99,7 @@ class ScapegoatRulesRepositorySpec extends FlatSpec with Inspectors with LoneEle
     }
   }
 
-  it should "be a CODE_SMELL" in {
+  it should "be a CODE_SMELL" in new Ctx {
     forEvery(rules) { rule =>
       rule.`type` shouldBe RuleType.CODE_SMELL
     }

@@ -47,7 +47,7 @@ final class CheckstyleReportParser extends CheckstyleReportParserAPI {
         CheckstyleIssue(
           line = (error \@ "line").toInt,
           column = Option(error \@ "column").filterNot(_.isEmpty).map(_.toInt),
-          source = error \@ "source",
+          snippet = error \@ "source",
           severity = error \@ "severity",
           message = error \@ "message"
         )

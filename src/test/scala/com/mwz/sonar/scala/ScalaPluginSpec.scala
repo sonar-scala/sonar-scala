@@ -18,6 +18,10 @@
  */
 package com.mwz.sonar.scala
 
+import com.mwz.sonar.scala.checkstyle.CheckstyleReportParser
+import com.mwz.sonar.scala.scalastyle.ScalastyleQualityProfile
+import com.mwz.sonar.scala.scalastyle.ScalastyleRulesRepository
+import com.mwz.sonar.scala.scalastyle.ScalastyleSensor
 import com.mwz.sonar.scala.scapegoat.{
   ScapegoatQualityProfile,
   ScapegoatReportParser,
@@ -26,7 +30,6 @@ import com.mwz.sonar.scala.scapegoat.{
 }
 import com.mwz.sonar.scala.scoverage.{ScoverageMetrics, ScoverageReportParser, ScoverageSensor}
 import com.mwz.sonar.scala.sensor.ScalaSensor
-import com.ncredinburgh.sonar.scalastyle.{ScalastyleQualityProfile, ScalastyleRepository, ScalastyleSensor}
 import org.scalatest.{FlatSpec, Matchers}
 import org.sonar.api.internal.SonarRuntimeImpl
 import org.sonar.api.utils.Version
@@ -44,8 +47,12 @@ class ScalaPluginSpec extends FlatSpec with Matchers {
     assert(context.getExtensions.contains(classOf[ScalaSensor]))
   }
 
+  it should "provide base checkstyle parser" in {
+    assert(context.getExtensions.contains(classOf[CheckstyleReportParser]))
+  }
+
   it should "provide scalastyle sensor" in {
-    assert(context.getExtensions.contains(classOf[ScalastyleRepository]))
+    assert(context.getExtensions.contains(classOf[ScalastyleRulesRepository]))
     assert(context.getExtensions.contains(classOf[ScalastyleQualityProfile]))
     assert(context.getExtensions.contains(classOf[ScalastyleSensor]))
   }

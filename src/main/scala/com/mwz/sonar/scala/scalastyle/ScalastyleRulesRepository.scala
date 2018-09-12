@@ -46,6 +46,7 @@ final class ScalastyleRulesRepository extends RulesDefinition {
 
       // For each template create a rule with default parameter values.
       // (except for the rules listed in the SkipTemplateInstances set)
+      // TODO: why we create rule twice
       if (inspection.params.nonEmpty && !SkipTemplateInstances.contains(inspection.id))
         createRule(repository, inspection, template = false)
     }

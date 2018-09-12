@@ -19,6 +19,8 @@
 package com.mwz.sonar.scala
 package scapegoat
 
+import com.mwz.sonar.scala.sensor.ReportIssue
+
 /** Represents a warning/issue in the scapegoat report */
 private[scapegoat] final case class ScapegoatIssue(
   line: Int,
@@ -26,8 +28,11 @@ private[scapegoat] final case class ScapegoatIssue(
   snippet: String,
   file: String,
   inspectionId: String
-) {
+) extends ReportIssue {
+
   def message: String =
     if (snippet.isEmpty) text
     else s"$text\n$snippet"
+
+  override def internalKey: String = inspectionId
 }

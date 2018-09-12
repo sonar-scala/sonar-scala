@@ -19,159 +19,82 @@
 package com.mwz.sonar.scala
 package scapegoat
 
-import java.nio.file.{Path, Paths}
+import java.nio.file.Path
+import java.nio.file.Paths
 
 import cats.implicits._
 import com.mwz.sonar.scala.scapegoat.inspections.ScapegoatInspection.AllScapegoatInspections
+import com.mwz.sonar.scala.sensor.IssueReportSensor
+import com.mwz.sonar.scala.sensor.ReportIssue
 import com.mwz.sonar.scala.util.JavaOptionals._
-import com.mwz.sonar.scala.util.Log
-import com.mwz.sonar.scala.util.PathUtils._
-import org.sonar.api.batch.fs.FilePredicate
-import org.sonar.api.batch.fs.{FileSystem, InputFile}
-import org.sonar.api.batch.sensor.{Sensor, SensorContext, SensorDescriptor}
+import org.sonar.api.batch.fs.InputFile
+import org.sonar.api.batch.rule.ActiveRule
+import org.sonar.api.batch.rule.ActiveRules
+import org.sonar.api.batch.sensor.SensorDescriptor
 import org.sonar.api.config.Configuration
 import scalariform.ScalaVersion
 
-import scala.util.{Failure, Success, Try}
-
 /** Main sensor for importing Scapegoat reports to SonarQube */
-final class ScapegoatSensor(scapegoatReportParser: ScapegoatReportParserAPI) extends Sensor {
+final class ScapegoatSensor(scapegoatReportParser: ScapegoatReportParserAPI) extends IssueReportSensor {
   import ScapegoatSensor._ // scalastyle:ignore scalastyle_ImportGroupingChecker
 
-  private[this] val log = Log(classOf[ScapegoatSensor], "scapegoat")
+  override val name: String = "scapegoat"
+
+  override val reportPathPropertyKey: String = ScapegoatReportPathPropertyKey
+
+  override val repositoryKey: String = ScapegoatRulesRepository.RepositoryKey
+
+  override def parseReport(reportPath: Path): Map[String, Seq[ReportIssue]] =
+    scapegoatReportParser.parse(reportPath)
+
+  override def defaultReportPath(settings: Configuration): Path = {
+    val scalaVersion = Scala.getScalaVersion(settings)
+    Paths.get(
+      "target",
+      s"scala-${scalaVersion.major}.${scalaVersion.minor}",
+      "scapegoat-report",
+      "scapegoat.xml"
+    )
+  }
+
+  override def findSonarRule(activeRules: ActiveRules, issue: ReportIssue): Option[ActiveRule] =
+    Option(
+      activeRules.findByInternalKey(
+        ScapegoatRulesRepository.RepositoryKey,
+        issue.internalKey
+      )
+    )
+
+  //TODO
+  override def sonarRuleNotFound(scapegoatIssue: ReportIssue): Unit = {
+    // if the rule was not found,
+    // check if it is because the rule is not activated in the current quality profile,
+    // or if it is because the inspection does not exist in the scapegoat rules repository
+    val inspectionExists =
+      AllScapegoatInspections.exists(
+        inspection => inspection.id === scapegoatIssue.internalKey
+      )
+    if (inspectionExists)
+      log.debug(
+        s"The rule: ${scapegoatIssue.internalKey}, " +
+        "was not activated in the current quality profile."
+      )
+    else
+      log.warn(
+        s"The inspection: ${scapegoatIssue.internalKey}, " +
+        "does not exist in the scapegoat rules repository."
+      )
+  }
 
   /** Populates the descriptor of this sensor */
   override def describe(descriptor: SensorDescriptor): Unit =
     descriptor
-      .createIssuesForRuleRepository(ScapegoatRulesRepository.RepositoryKey)
+      .createIssuesForRuleRepository(repositoryKey)
       .name(SensorName)
       .onlyOnFileType(InputFile.Type.MAIN)
       .onlyOnLanguage(Scala.LanguageKey)
       .onlyWhenConfiguration(shouldEnableSensor)
 
-  /** Saves the Scapegoat information of a module */
-  override def execute(context: SensorContext): Unit = {
-    val modulePath = getModuleBaseDirectory(context.fileSystem)
-    val reportPath = modulePath.resolve(getScapegoatReportPath(context.config))
-
-    log.info("Initializing the Scapegoat sensor.")
-    log.info(s"Loading the scapegoat report file: '$reportPath'.")
-    log.debug(s"The current working directory is: '$cwd'.")
-
-    Try(scapegoatReportParser.parse(reportPath)) match {
-      case Success(scapegoatIssuesByFilename) =>
-        log.info("Successfully loaded the scapegoat report file.")
-        processScapegoatWarnings(context, scapegoatIssuesByFilename)
-      case Failure(ex) =>
-        log.error(
-          "Aborting the scapegoat sensor execution, " +
-          s"cause: an error occurred while reading the scapegoat report file: '$reportPath', " +
-          s"the error was: ${ex.getMessage}."
-        )
-    }
-  }
-
-  /** Returns the path to the scapegoat report for this module */
-  private[scapegoat] def getScapegoatReportPath(settings: Configuration): Path = {
-    val scalaVersion = Scala.getScalaVersion(settings)
-    val defaultScapegoatReportPath = getDefaultScapegoatReportPath(scalaVersion)
-
-    if (!settings.hasKey(ScapegoatReportPathPropertyKey)) {
-      log.info(
-        s"Missing the property: '$ScapegoatReportPathPropertyKey', " +
-        s"using the default value: '$defaultScapegoatReportPath'."
-      )
-    }
-
-    settings
-      .get(ScapegoatReportPathPropertyKey)
-      .toOption
-      .map(path => Paths.get(path))
-      .getOrElse(defaultScapegoatReportPath)
-  }
-
-  /** Process all scapegoat warnings */
-  private[this] def processScapegoatWarnings(
-    context: SensorContext,
-    scapegoatIssuesByFilename: Map[String, Seq[ScapegoatIssue]]
-  ): Unit = {
-    val activeRules = context.activeRules
-    val filesystem = context.fileSystem
-
-    scapegoatIssuesByFilename foreach { tuple =>
-      val (filename, scapegoatIssues) = tuple
-      log.info(s"Saving the scapegoat issues for file '$filename'.")
-
-      getModuleFile(filename, filesystem) match {
-        case Some(file) =>
-          scapegoatIssues foreach { scapegoatIssue =>
-            log.debug(s"Try saving the scapegoat ${scapegoatIssue.inspectionId} issues for file '$filename'")
-
-            // try to retrieve the SonarQube rule for this scapegoat issue
-            Option(
-              activeRules.findByInternalKey(
-                ScapegoatRulesRepository.RepositoryKey,
-                scapegoatIssue.inspectionId
-              )
-            ) match {
-              case Some(rule) =>
-                // if the rule was found, create a new sonarqube issue for it
-                val sonarqubeIssue = context.newIssue().forRule(rule.ruleKey)
-
-                sonarqubeIssue.at(
-                  sonarqubeIssue
-                    .newLocation()
-                    .on(file)
-                    .at(file.selectLine(scapegoatIssue.line))
-                    .message(scapegoatIssue.message)
-                )
-
-                sonarqubeIssue.save()
-              case None =>
-                // if the rule was not found,
-                // check if it is because the rule is not activated in the current quality profile,
-                // or if it is because the inspection does not exist in the scapegoat rules repository
-                val inspectionExists =
-                  AllScapegoatInspections.exists(
-                    inspection => inspection.id === scapegoatIssue.inspectionId
-                  )
-                if (inspectionExists)
-                  log.debug(
-                    s"The rule: ${scapegoatIssue.inspectionId}, " +
-                    "was not activated in the current quality profile."
-                  )
-                else
-                  log.warn(
-                    s"The inspection: ${scapegoatIssue.inspectionId}, " +
-                    "does not exist in the scapegoat rules repository."
-                  )
-            }
-          }
-        case None =>
-          log.error(s"The file '$filename' couldn't be found.")
-      }
-    }
-  }
-
-  /** Returns the module input file with the given filename */
-  private[scapegoat] def getModuleFile(filename: String, fs: FileSystem): Option[InputFile] = {
-    val predicates = fs.predicates
-    val predicate: FilePredicate = predicates.and(
-      predicates.hasLanguage(Scala.LanguageKey),
-      predicates.hasType(InputFile.Type.MAIN),
-      predicates.hasAbsolutePath(filename)
-    )
-
-    // catch both exceptions and null values
-    Try(fs.inputFile(predicate))
-      .fold(
-        ex => {
-          log.error(s"Exception occurred on file `$filename` extracting, ex: ${ex.getStackTrace}")
-          None
-        },
-        file => Option(file)
-      )
-  }
 }
 
 private[scapegoat] object ScapegoatSensor {

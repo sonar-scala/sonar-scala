@@ -113,13 +113,13 @@ class ScapegoatSensorSpec
   }
 
   it should "get default scapegoat report path, when the scala version property is missing" in {
-    val reportPath = scapegoatSensor.getScapegoatReportPath(new MapSettings().asConfig())
+    val reportPath = scapegoatSensor.getReportPath(new MapSettings().asConfig())
 
     reportPath shouldBe Paths.get("target", "scala-2.11", "scapegoat-report", "scapegoat.xml")
   }
 
   it should "get default scapegoat report path, when the scala version property is set" in {
-    val reportPath = scapegoatSensor.getScapegoatReportPath(
+    val reportPath = scapegoatSensor.getReportPath(
       new MapSettings().setProperty("sonar.scala.version", "2.12.6").asConfig()
     )
 
@@ -127,7 +127,7 @@ class ScapegoatSensorSpec
   }
 
   it should "get scapegoat report path set in sonar properties" in {
-    val reportPath = scapegoatSensor.getScapegoatReportPath(
+    val reportPath = scapegoatSensor.getReportPath(
       new MapSettings().setProperty("sonar.scala.scapegoat.reportPath", "target/report-path").asConfig()
     )
 

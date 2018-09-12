@@ -23,7 +23,6 @@ import java.nio.file.{Path, Paths}
 import cats.kernel.Eq
 import cats.syntax.eq._
 import com.mwz.sonar.scala.util.JavaOptionals._
-import com.ncredinburgh.sonar.{scalastyle => oldscalastyle}
 import org.sonar.api.Plugin
 import org.sonar.api.config.Configuration
 import org.sonar.api.resources.AbstractLanguage
@@ -109,10 +108,6 @@ final class ScalaPlugin extends Plugin {
       // Scala
       classOf[Scala],
       classOf[sensor.ScalaSensor],
-      // Old Scalastyle (ncredinburgh)
-      //classOf[oldscalastyle.ScalastyleRepository],
-      //classOf[oldscalastyle.ScalastyleQualityProfile],
-      //classOf[oldscalastyle.ScalastyleSensor],
       // Checkstyle
       classOf[checkstyle.CheckstyleReportParser],
       // Scalastyle

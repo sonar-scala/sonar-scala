@@ -31,8 +31,8 @@ jobs:
           path: target/scala-2.12/scoverage-report/scoverage.xml
           destination: scoverage.xml
       - store_artifacts:
-          path: target/scala-2.12/scapegoat-report/scapegoat.xml
-          destination: scapegoat.xml
+          path: target/scala-2.12/scapegoat-report/scapegoat-scalastyle.xml
+          destination: scapegoat-scalastyle.xml
 
   sonar-scan:
     <<: *defaults

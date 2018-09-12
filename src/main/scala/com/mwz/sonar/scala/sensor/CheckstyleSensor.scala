@@ -23,13 +23,8 @@ import scala.util.Failure
 import scala.util.Success
 import scala.util.Try
 
-abstract class CheckstyleSensor extends Sensor {
-
-  val name: String
-
-  val reportPathPropertyKey: String
-
-  val repositoryKey: String
+abstract class CheckstyleSensor(name: String, reportPathPropertyKey: String, val repositoryKey: String)
+    extends Sensor {
 
   protected val log = Log(this.getClass, name)
 

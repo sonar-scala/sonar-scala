@@ -79,7 +79,7 @@ The plugin exposes the following properties which can be passed to sonar-scanner
 - **sonar.sources** - Scala source directory relative to the root of your project (usually `src/main/scala`)
 - **sonar.scala.version** (optional) - defines the version of Scala used in your project (requires the `{major}.{minor}` versions and the patch version is ignored, defaults to `2.11.0`)
 - **sonar.scala.scoverage.reportPath** (optional) - relative path to the scoverage report (defaults to `target/scala-${sonar.scala.version}/scoverage-report/scoverage.xml`)
-- **sonar.scala.scapegoat.reportPath** (optional) - relative path to the scapegoat report (defaults to `target/scala-${sonar.scala.version}/scapegoat-report/scapegoat.xml`)
+- **sonar.scala.scapegoat.reportPath** (optional) - relative path to the scapegoat report (defaults to `target/scala-${sonar.scala.version}/scapegoat-report/scapegoat-scalastyle.xml`)
 - **sonar.scala.scapegoat.disable** (optional) - disables the Scapegoat sensor from being executed on your sources (defaults to `false`)
 
 See an example usage:
@@ -90,7 +90,8 @@ sonar-scanner -Dsonar.projectName=test \
               -Dsonar.sourceEncoding=UTF-8 \
               -Dsonar.scala.version=2.12 \
               -Dsonar.scoverage.reportPath=target/scala-2.12/scoverage-report/scoverage.xml \
-              -Dsonar.scapegoat.reportPath=target/scala-2.12/scapegoat-report/scapegoat.xml
+              -Dsonar.scapegoat.reportPath=target/scala-2.12/scapegoat-report/scapegoat-scalastyle.xml \
+              -Dsonar.scalastyle.reportPath=target/scalastyle-result.xml
 ```
 
 

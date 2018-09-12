@@ -25,6 +25,7 @@ import java.nio.file.Paths
 import cats.implicits._
 import com.mwz.sonar.scala.checkstyle.CheckstyleIssue
 import com.mwz.sonar.scala.checkstyle.CheckstyleReportParserAPI
+import com.mwz.sonar.scala.scapegoat.ScapegoatSensor.ScapegoatReportPathPropertyKey
 import com.mwz.sonar.scala.scapegoat.inspections.ScapegoatInspection.AllScapegoatInspections
 import com.mwz.sonar.scala.sensor.CheckstyleSensor
 import com.mwz.sonar.scala.util.JavaOptionals._
@@ -33,17 +34,16 @@ import org.sonar.api.batch.rule.ActiveRule
 import org.sonar.api.batch.rule.ActiveRules
 import org.sonar.api.batch.sensor.SensorDescriptor
 import org.sonar.api.config.Configuration
-import scalariform.ScalaVersion
 
 /** Main sensor for importing Scapegoat reports to SonarQube */
-final class ScapegoatSensor(checkstyleReportParser: CheckstyleReportParserAPI) extends CheckstyleSensor {
+final class ScapegoatSensor(checkstyleReportParser: CheckstyleReportParserAPI)
+    extends CheckstyleSensor(
+      "scapegoat",
+      ScapegoatReportPathPropertyKey,
+      ScapegoatRulesRepository.RepositoryKey
+    ) {
+
   import ScapegoatSensor._ // scalastyle:ignore scalastyle_ImportGroupingChecker
-
-  override val name: String = "scapegoat"
-
-  override val reportPathPropertyKey: String = ScapegoatReportPathPropertyKey
-
-  override val repositoryKey: String = ScapegoatRulesRepository.RepositoryKey
 
   override def parseReport(reportPath: Path): Map[String, Seq[CheckstyleIssue]] =
     checkstyleReportParser.parse(reportPath)
@@ -66,7 +66,6 @@ final class ScapegoatSensor(checkstyleReportParser: CheckstyleReportParserAPI) e
       )
     )
 
-  //TODO
   override def sonarRuleNotFound(scapegoatIssue: CheckstyleIssue): Unit = {
     // if the rule was not found,
     // check if it is because the rule is not activated in the current quality profile,

@@ -14,12 +14,12 @@ import org.sonar.api.batch.rule.ActiveRules
 import org.sonar.api.batch.sensor.SensorDescriptor
 import org.sonar.api.config.Configuration
 
-final class ScalastyleSensor(checkstyleReportParser: CheckstyleReportParserAPI) extends CheckstyleSensor {
-
-  override val name: String = "scalastyle"
-  override val reportPathPropertyKey: String = ScalastyleReportPathPropertyKey
-
-  override val repositoryKey: String = ScalastyleRulesRepository.RepositoryKey
+final class ScalastyleSensor(checkstyleReportParser: CheckstyleReportParserAPI)
+    extends CheckstyleSensor(
+      "scalastyle",
+      ScalastyleReportPathPropertyKey,
+      ScalastyleRulesRepository.RepositoryKey
+    ) {
 
   override def parseReport(reportPath: Path): Map[String, Seq[CheckstyleIssue]] =
     checkstyleReportParser.parse(reportPath)

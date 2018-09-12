@@ -1,4 +1,0 @@
-<scapegoat count="2" warns="0" errors="1" infos="1">
-  <warning line="15" text="Empty case class" snippet="Empty case class can be rewritten as a case object" level="Info" file="com.mwz.sonar.scala.scapegoat.TestFileA.scala" inspection="com.sksamuel.scapegoat.inspections.EmptyCaseClass"/>
-  <warning line="20" text="Array passed to String.format" snippet="scala.Predef.augmentString(&quot;data is: %s&quot;).format(scala.Array.apply(1, 2, 3))" level="Error" file="com.mwz.sonar.scala.scapegoat.TestFileA.scala" inspection="com.sksamuel.scapegoat.inspections.string.ArraysInFormat"/>
-</scapegoat>

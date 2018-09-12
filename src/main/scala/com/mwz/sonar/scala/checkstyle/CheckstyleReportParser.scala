@@ -39,7 +39,7 @@ object CheckstyleReportParserAPI {
 class CheckstyleReportParser extends CheckstyleReportParserAPI {
 
   /** Parses the checkstyle *.xml report and returns all checkstyle issues by filename */
-  override def parse(checkstyleReportPath: Path): Map[String, Seq[CheckstyleIssue]] = {
+  override def parse(checkstyleReportPath: Path): Map[FILEPATH, Seq[CheckstyleIssue]] = {
     val checkstyleXMLReport = XML.loadFile(checkstyleReportPath.toFile)
 
     (checkstyleXMLReport \ "file").map { fileNode =>

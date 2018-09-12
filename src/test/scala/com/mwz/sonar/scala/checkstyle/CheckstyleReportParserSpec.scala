@@ -30,14 +30,14 @@ class CheckstyleReportParserSpec extends FlatSpec with Matchers {
   behavior of "the Checkstyle XML Report Parser"
 
   it should "be able to parse an empty report" in {
-    val checkstyleReportPath = Paths.get("src", "test", "resources", "scalastyle", "no-warnings.xml")
+    val checkstyleReportPath = Paths.get("src", "test", "resources", "checkstyle", "no-warnings.xml")
     val checkstyleErrors = checkstyleReportParser.parse(checkstyleReportPath)
 
     checkstyleErrors shouldBe empty
   }
 
   it should "be able to parse a report with only one warning" in {
-    val scapegoatReportPath = Paths.get("src", "test", "resources", "scalastyle", "one-file-one-warning.xml")
+    val scapegoatReportPath = Paths.get("src", "test", "resources", "checkstyle", "one-file-one-warning.xml")
     val scapegoatWarnings = checkstyleReportParser.parse(scapegoatReportPath)
 
     scapegoatWarnings shouldBe Map(
@@ -56,7 +56,7 @@ class CheckstyleReportParserSpec extends FlatSpec with Matchers {
 
   it should "be able to parse a report with five warnings in two different files" in {
     val checkstyleReportPath =
-      Paths.get("src", "test", "resources", "scalastyle", "two-files-five-warnings.xml")
+      Paths.get("src", "test", "resources", "checkstyle", "two-files-five-warnings.xml")
     val checkstyleErrors = checkstyleReportParser.parse(checkstyleReportPath)
 
     checkstyleErrors shouldBe Map(

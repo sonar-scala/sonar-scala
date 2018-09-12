@@ -25,6 +25,7 @@ import org.scalastyle._
 import org.sonar.api.batch.rule.Severity
 import org.sonar.api.rule.RuleStatus
 import org.sonar.api.rules.RuleType
+import org.sonar.api.server.rule.RulesDefinition.{NewParam, NewRepository, NewRule}
 import org.sonar.api.server.rule.{RuleParamType, RulesDefinition}
 
 /**
@@ -41,26 +42,12 @@ final class ScalastyleRulesRepository extends RulesDefinition {
 
     // Register each Scalastyle inspection as a repository rule.
     ScalastyleInspections.AllInspections.foreach { inspection =>
-      val rule = repository.createRule(inspection.clazz)
-      rule.setInternalKey(inspection.clazz)
-      rule.setName(inspection.label)
-      rule.setMarkdownDescription(formatDescription(inspection))
-      rule.setActivatedByDefault(true) // scalastyle:ignore LiteralArguments
-      rule.setStatus(RuleStatus.READY)
-      rule.setSeverity(levelToSeverity(inspection.defaultLevel).name)
-      rule.setType(RuleType.CODE_SMELL)
+      createRule(repository, inspection, template = inspection.params.nonEmpty)
 
-      // Create parameters.
-      inspection.params.foreach { param =>
-        rule
-          .createParam(param.name)
-          .setType(parameterTypeToRuleParamType(inspection.clazz, param.name, param.typ))
-          .setDescription(s"${param.label}: ${param.description}")
-          .setDefaultValue(param.default)
-      }
-
-      // Set the rule as a template if it contains parameters.
-      rule.setTemplate(inspection.params.nonEmpty)
+      // For each template create a rule with default parameter values.
+      // (except for the rules listed in the SkipTemplateInstances set)
+      if (inspection.params.nonEmpty && !SkipTemplateInstances.contains(inspection.id))
+        createRule(repository, inspection, template = false)
     }
 
     // Save the repository.
@@ -73,6 +60,43 @@ private[scalastyle] object ScalastyleRulesRepository {
 
   final val RepositoryKey = "sonar-scala-scalastyle"
   final val RepositoryName = "Scalastyle"
+
+  // Skip creating template instances for the following inspections:
+  // header.matches - this rule wouldn't work with a default parameter value.
+  // regex - no default regex provided.
+  final val SkipTemplateInstances = Set("header.matches", "regex")
+
+  /**
+   * Create a new rule from the given inspection.
+   */
+  def createRule(repository: NewRepository, inspection: ScalastyleInspection, template: Boolean): NewRule = {
+    val key = if (template) s"${inspection.clazz}-template" else inspection.clazz
+    val rule = repository.createRule(key)
+    rule.setInternalKey(key)
+    rule.setName(inspection.label)
+    rule.setMarkdownDescription(formatDescription(inspection))
+    rule.setActivatedByDefault(true) // scalastyle:ignore LiteralArguments
+    rule.setStatus(RuleStatus.READY)
+    rule.setSeverity(levelToSeverity(inspection.defaultLevel).name)
+    rule.setType(RuleType.CODE_SMELL)
+
+    // Create parameters.
+    inspection.params.foreach(param => createParam(inspection.clazz, rule, param))
+
+    // Set the rule as a template.
+    rule.setTemplate(template)
+  }
+
+  /**
+   * Create the parameter for the given rule.
+   */
+  def createParam(inspectionId: String, rule: NewRule, param: Param): NewParam = {
+    rule
+      .createParam(param.name)
+      .setType(parameterTypeToRuleParamType(inspectionId, param.name, param.typ))
+      .setDescription(s"${param.label}: ${param.description}")
+      .setDefaultValue(param.default)
+  }
 
   /**
    * Convert Scalastyle inspection level to SonarQube rule severity.

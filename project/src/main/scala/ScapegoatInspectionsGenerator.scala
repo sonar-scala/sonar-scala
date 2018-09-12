@@ -36,7 +36,7 @@ object ScapegoatInspectionsGenerator {
 
   val generatorTask = Def.task {
     val log = streams.value.log
-    log.info("Generating the scapegoat inspections file.")
+    log.info("Generating Scapegoat inspections file.")
 
     // Load the template file.
     val templateFile = Paths
@@ -84,7 +84,7 @@ object ScapegoatInspectionsGenerator {
         s"""ScapegoatInspection(
            |  id = "$inspectionClassName",
            |  name = "${inspection.text}",
-           |  description = "${inspection.explanation.getOrElse("No Explanation")}",
+           |  description = ${inspection.explanation.map(text => s""""$text"""")},
            |  defaultLevel = Level.${inspection.defaultLevel}
            |)""".stripMargin
     }

@@ -39,7 +39,6 @@ class ScapegoatInspectionsSpec extends FlatSpec with Inspectors with Matchers {
     forEvery(ScapegoatInspections.AllInspections) { inspection =>
       inspection.id should not be empty
       inspection.name should not be empty
-      inspection.description should not be empty
     }
   }
 
@@ -53,7 +52,7 @@ class ScapegoatInspectionsSpec extends FlatSpec with Inspectors with Matchers {
     val anyUseInspection = ScapegoatInspection(
       id = "com.sksamuel.scapegoat.inspections.AnyUse",
       name = "AnyUse",
-      description = "No Explanation",
+      description = None,
       defaultLevel = Level.Info
     )
 

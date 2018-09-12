@@ -38,7 +38,7 @@ private[scapegoat] object Level {
 private[scapegoat] final case class ScapegoatInspection(
   id: String,
   name: String,
-  description: String,
+  description: Option[String],
   defaultLevel: Level
 )
 

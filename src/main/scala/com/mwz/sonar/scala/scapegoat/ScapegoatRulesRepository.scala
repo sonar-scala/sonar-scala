@@ -40,7 +40,7 @@ final class ScapegoatRulesRepository extends RulesDefinition {
 
       rule.setInternalKey(inspection.id)
       rule.setName(inspection.name)
-      rule.setMarkdownDescription(inspection.description)
+      rule.setMarkdownDescription(inspection.description.getOrElse("No description"))
       rule.setActivatedByDefault(true) // scalastyle:ignore LiteralArguments
       rule.setStatus(RuleStatus.READY)
       rule.setSeverity(inspection.defaultLevel.toRuleSeverity.name)

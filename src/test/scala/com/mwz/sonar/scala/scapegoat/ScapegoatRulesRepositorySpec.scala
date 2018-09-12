@@ -53,7 +53,7 @@ class ScapegoatRulesRepositorySpec extends FlatSpec with Inspectors with LoneEle
 
     anyUseRule.internalKey shouldBe "com.sksamuel.scapegoat.inspections.AnyUse"
     anyUseRule.name shouldBe "AnyUse"
-    anyUseRule.markdownDescription shouldBe "No Explanation"
+    anyUseRule.markdownDescription shouldBe "No description"
     anyUseRule.activatedByDefault shouldBe true
     anyUseRule.status shouldBe RuleStatus.READY
     anyUseRule.severity shouldBe Severity.INFO

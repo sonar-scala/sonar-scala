@@ -30,7 +30,7 @@ class ScapegoatInspectionsGeneratorSpec extends FlatSpec with LoneElement with M
       """ScapegoatInspection(
         |  id = "com.sksamuel.scapegoat.inspections.AnyUse",
         |  name = "AnyUse",
-        |  description = "No Explanation",
+        |  description = None,
         |  defaultLevel = Level.Info
         |)""".stripMargin
 
@@ -49,19 +49,19 @@ class ScapegoatInspectionsGeneratorSpec extends FlatSpec with LoneElement with M
         """ScapegoatInspection(
           |  id = "com.sksamuel.scapegoat.inspections.AnyUse",
           |  name = "AnyUse",
-          |  description = "No Explanation",
+          |  description = None,
           |  defaultLevel = Level.Info
           |)""".stripMargin,
         """ScapegoatInspection(
           |  id = "com.sksamuel.scapegoat.inspections.EmptyCaseClass",
           |  name = "Empty case class",
-          |  description = "Empty case class can be rewritten as a case object",
+          |  description = Some("Empty case class can be rewritten as a case object"),
           |  defaultLevel = Level.Info
           |)""".stripMargin,
         """ScapegoatInspection(
           |  id = "com.sksamuel.scapegoat.inspections.string.ArraysInFormat",
           |  name = "Array passed to String.format",
-          |  description = "No Explanation",
+          |  description = None,
           |  defaultLevel = Level.Error
           |)""".stripMargin
       )
@@ -84,19 +84,19 @@ class ScapegoatInspectionsGeneratorSpec extends FlatSpec with LoneElement with M
         |    ScapegoatInspection(
         |      id = "com.sksamuel.scapegoat.inspections.AnyUse",
         |      name = "AnyUse",
-        |      description = "No Explanation",
+        |      description = None,
         |      defaultLevel = Level.Info
         |    ),
         |    ScapegoatInspection(
         |      id = "com.sksamuel.scapegoat.inspections.EmptyCaseClass",
         |      name = "Empty case class",
-        |      description = "Empty case class can be rewritten as a case object",
+        |      description = Some("Empty case class can be rewritten as a case object"),
         |      defaultLevel = Level.Info
         |    ),
         |    ScapegoatInspection(
         |      id = "com.sksamuel.scapegoat.inspections.string.ArraysInFormat",
         |      name = "Array passed to String.format",
-        |      description = "No Explanation",
+        |      description = None,
         |      defaultLevel = Level.Error
         |    )
         |  )
@@ -107,19 +107,19 @@ class ScapegoatInspectionsGeneratorSpec extends FlatSpec with LoneElement with M
         """ScapegoatInspection(
           |  id = "com.sksamuel.scapegoat.inspections.AnyUse",
           |  name = "AnyUse",
-          |  description = "No Explanation",
+          |  description = None,
           |  defaultLevel = Level.Info
           |)""".stripMargin,
         """ScapegoatInspection(
           |  id = "com.sksamuel.scapegoat.inspections.EmptyCaseClass",
           |  name = "Empty case class",
-          |  description = "Empty case class can be rewritten as a case object",
+          |  description = Some("Empty case class can be rewritten as a case object"),
           |  defaultLevel = Level.Info
           |)""".stripMargin,
         """ScapegoatInspection(
           |  id = "com.sksamuel.scapegoat.inspections.string.ArraysInFormat",
           |  name = "Array passed to String.format",
-          |  description = "No Explanation",
+          |  description = None,
           |  defaultLevel = Level.Error
           |)""".stripMargin
       )

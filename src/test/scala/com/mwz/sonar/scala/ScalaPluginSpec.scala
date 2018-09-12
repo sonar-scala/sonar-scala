@@ -22,18 +22,20 @@ import com.mwz.sonar.scala.checkstyle.CheckstyleReportParser
 import com.mwz.sonar.scala.scalastyle.ScalastyleQualityProfile
 import com.mwz.sonar.scala.scalastyle.ScalastyleRulesRepository
 import com.mwz.sonar.scala.scalastyle.ScalastyleSensor
-import com.mwz.sonar.scala.scapegoat.{
-  ScapegoatQualityProfile,
-  ScapegoatReportParser,
-  ScapegoatRulesRepository,
-  ScapegoatSensor
-}
-import com.mwz.sonar.scala.scoverage.{ScoverageMetrics, ScoverageReportParser, ScoverageSensor}
+import com.mwz.sonar.scala.scapegoat.ScapegoatQualityProfile
+import com.mwz.sonar.scala.scapegoat.ScapegoatRulesRepository
+import com.mwz.sonar.scala.scapegoat.ScapegoatSensor
+import com.mwz.sonar.scala.scoverage.ScoverageMetrics
+import com.mwz.sonar.scala.scoverage.ScoverageReportParser
+import com.mwz.sonar.scala.scoverage.ScoverageSensor
 import com.mwz.sonar.scala.sensor.ScalaSensor
-import org.scalatest.{FlatSpec, Matchers}
+import org.scalatest.FlatSpec
+import org.scalatest.Matchers
 import org.sonar.api.internal.SonarRuntimeImpl
 import org.sonar.api.utils.Version
-import org.sonar.api.{Plugin, SonarQubeSide, SonarRuntime}
+import org.sonar.api.Plugin
+import org.sonar.api.SonarQubeSide
+import org.sonar.api.SonarRuntime
 
 /** Tests the Scala SonarQube plugin extension points */
 class ScalaPluginSpec extends FlatSpec with Matchers {
@@ -66,7 +68,6 @@ class ScalaPluginSpec extends FlatSpec with Matchers {
   it should "provide scapegoat sensor" in {
     assert(context.getExtensions.contains(classOf[ScapegoatRulesRepository]))
     assert(context.getExtensions.contains(classOf[ScapegoatQualityProfile]))
-    assert(context.getExtensions.contains(classOf[ScapegoatReportParser]))
     assert(context.getExtensions.contains(classOf[ScapegoatSensor]))
   }
 }

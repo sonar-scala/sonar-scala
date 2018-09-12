@@ -4,6 +4,7 @@ import java.nio.file.Path
 import java.nio.file.Paths
 
 import com.mwz.sonar.scala.Scala
+import com.mwz.sonar.scala.checkstyle.CheckstyleIssue
 import com.mwz.sonar.scala.checkstyle.CheckstyleReportParserAPI.FILEPATH
 import com.mwz.sonar.scala.util.JavaOptionals._
 import com.mwz.sonar.scala.util.Log
@@ -22,7 +23,7 @@ import scala.util.Failure
 import scala.util.Success
 import scala.util.Try
 
-abstract class IssueReportSensor extends Sensor {
+abstract class CheckstyleSensor extends Sensor {
 
   val name: String
 
@@ -32,13 +33,13 @@ abstract class IssueReportSensor extends Sensor {
 
   protected val log = Log(this.getClass, name)
 
-  def parseReport(reportPath: Path): Map[FILEPATH, Seq[ReportIssue]]
+  def parseReport(reportPath: Path): Map[FILEPATH, Seq[CheckstyleIssue]]
 
   def defaultReportPath(settings: Configuration): Path
 
-  def sonarRuleNotFound(issue: ReportIssue)
+  def sonarRuleNotFound(issue: CheckstyleIssue)
 
-  def findSonarRule(activeRules: ActiveRules, issue: ReportIssue): Option[ActiveRule]
+  def findSonarRule(activeRules: ActiveRules, issue: CheckstyleIssue): Option[ActiveRule]
 
   /** Saves the Scapegoat information of a module */
   override def execute(context: SensorContext): Unit = {
@@ -64,7 +65,7 @@ abstract class IssueReportSensor extends Sensor {
 
   def processIssues(
     context: SensorContext,
-    issuesByFilename: Map[FILEPATH, Seq[ReportIssue]]
+    issuesByFilename: Map[FILEPATH, Seq[CheckstyleIssue]]
   ): Unit = {
     val activeRules: ActiveRules = context.activeRules
     val filesystem = context.fileSystem

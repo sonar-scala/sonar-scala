@@ -4,24 +4,24 @@ import java.nio.file.Path
 import java.nio.file.Paths
 
 import com.mwz.sonar.scala.Scala
+import com.mwz.sonar.scala.checkstyle.CheckstyleIssue
 import com.mwz.sonar.scala.checkstyle.CheckstyleReportParserAPI
 import com.mwz.sonar.scala.scalastyle.ScalastyleSensor._
-import com.mwz.sonar.scala.sensor.IssueReportSensor
-import com.mwz.sonar.scala.sensor.ReportIssue
+import com.mwz.sonar.scala.sensor.CheckstyleSensor
 import org.sonar.api.batch.fs.InputFile
 import org.sonar.api.batch.rule.ActiveRule
 import org.sonar.api.batch.rule.ActiveRules
 import org.sonar.api.batch.sensor.SensorDescriptor
 import org.sonar.api.config.Configuration
 
-final class ScalastyleSensor(checkstyleReportParser: CheckstyleReportParserAPI) extends IssueReportSensor {
+final class ScalastyleSensor(checkstyleReportParser: CheckstyleReportParserAPI) extends CheckstyleSensor {
 
   override val name: String = "scalastyle"
   override val reportPathPropertyKey: String = ScalastyleReportPathPropertyKey
 
   override val repositoryKey: String = ScalastyleRulesRepository.RepositoryKey
 
-  override def parseReport(reportPath: Path): Map[String, Seq[ReportIssue]] =
+  override def parseReport(reportPath: Path): Map[String, Seq[CheckstyleIssue]] =
     checkstyleReportParser.parse(reportPath)
 
   override def defaultReportPath(settings: Configuration): Path = Paths.get(
@@ -29,7 +29,7 @@ final class ScalastyleSensor(checkstyleReportParser: CheckstyleReportParserAPI) 
     "scalastyle-result.xml"
   )
 
-  override def sonarRuleNotFound(issue: ReportIssue): Unit = {
+  override def sonarRuleNotFound(issue: CheckstyleIssue): Unit = {
     val inspectionExists =
       ScalastyleInspections.AllInspections.exists(
         inspection => inspection.id == issue.inspectionClass
@@ -46,11 +46,11 @@ final class ScalastyleSensor(checkstyleReportParser: CheckstyleReportParserAPI) 
       )
   }
 
-  def findSonarRule(activeRules: ActiveRules, issue: ReportIssue): Option[ActiveRule] = {
+  def findSonarRule(activeRules: ActiveRules, issue: CheckstyleIssue): Option[ActiveRule] = {
     Option(
       activeRules.findByInternalKey(
         repositoryKey,
-        issue.internalKey
+        issue.inspectionClass
       )
     )
   }

@@ -23,9 +23,10 @@ import java.nio.file.Path
 import java.nio.file.Paths
 
 import cats.implicits._
+import com.mwz.sonar.scala.checkstyle.CheckstyleIssue
+import com.mwz.sonar.scala.checkstyle.CheckstyleReportParserAPI
 import com.mwz.sonar.scala.scapegoat.inspections.ScapegoatInspection.AllScapegoatInspections
-import com.mwz.sonar.scala.sensor.IssueReportSensor
-import com.mwz.sonar.scala.sensor.ReportIssue
+import com.mwz.sonar.scala.sensor.CheckstyleSensor
 import com.mwz.sonar.scala.util.JavaOptionals._
 import org.sonar.api.batch.fs.InputFile
 import org.sonar.api.batch.rule.ActiveRule
@@ -35,7 +36,7 @@ import org.sonar.api.config.Configuration
 import scalariform.ScalaVersion
 
 /** Main sensor for importing Scapegoat reports to SonarQube */
-final class ScapegoatSensor(scapegoatReportParser: ScapegoatReportParserAPI) extends IssueReportSensor {
+final class ScapegoatSensor(checkstyleReportParser: CheckstyleReportParserAPI) extends CheckstyleSensor {
   import ScapegoatSensor._ // scalastyle:ignore scalastyle_ImportGroupingChecker
 
   override val name: String = "scapegoat"
@@ -44,8 +45,8 @@ final class ScapegoatSensor(scapegoatReportParser: ScapegoatReportParserAPI) ext
 
   override val repositoryKey: String = ScapegoatRulesRepository.RepositoryKey
 
-  override def parseReport(reportPath: Path): Map[String, Seq[ReportIssue]] =
-    scapegoatReportParser.parse(reportPath)
+  override def parseReport(reportPath: Path): Map[String, Seq[CheckstyleIssue]] =
+    checkstyleReportParser.parse(reportPath)
 
   override def defaultReportPath(settings: Configuration): Path = {
     val scalaVersion = Scala.getScalaVersion(settings)
@@ -53,35 +54,35 @@ final class ScapegoatSensor(scapegoatReportParser: ScapegoatReportParserAPI) ext
       "target",
       s"scala-${scalaVersion.major}.${scalaVersion.minor}",
       "scapegoat-report",
-      "scapegoat.xml"
+      "scapegoat-scalastyle.xml"
     )
   }
 
-  override def findSonarRule(activeRules: ActiveRules, issue: ReportIssue): Option[ActiveRule] =
+  override def findSonarRule(activeRules: ActiveRules, issue: CheckstyleIssue): Option[ActiveRule] =
     Option(
       activeRules.findByInternalKey(
         ScapegoatRulesRepository.RepositoryKey,
-        issue.internalKey
+        issue.inspectionClass
       )
     )
 
   //TODO
-  override def sonarRuleNotFound(scapegoatIssue: ReportIssue): Unit = {
+  override def sonarRuleNotFound(scapegoatIssue: CheckstyleIssue): Unit = {
     // if the rule was not found,
     // check if it is because the rule is not activated in the current quality profile,
     // or if it is because the inspection does not exist in the scapegoat rules repository
     val inspectionExists =
       AllScapegoatInspections.exists(
-        inspection => inspection.id === scapegoatIssue.internalKey
+        inspection => inspection.id === scapegoatIssue.inspectionClass
       )
     if (inspectionExists)
       log.debug(
-        s"The rule: ${scapegoatIssue.internalKey}, " +
+        s"The rule: ${scapegoatIssue.inspectionClass}, " +
         "was not activated in the current quality profile."
       )
     else
       log.warn(
-        s"The inspection: ${scapegoatIssue.internalKey}, " +
+        s"The inspection: ${scapegoatIssue.inspectionClass}, " +
         "does not exist in the scapegoat rules repository."
       )
   }
@@ -108,11 +109,4 @@ private[scapegoat] object ScapegoatSensor {
       .toOption
       .forall(s => s.toLowerCase != "true")
 
-  def getDefaultScapegoatReportPath(scalaVersion: ScalaVersion): Path =
-    Paths.get(
-      "target",
-      s"scala-${scalaVersion.major}.${scalaVersion.minor}",
-      "scapegoat-report",
-      "scapegoat.xml"
-    )
 }

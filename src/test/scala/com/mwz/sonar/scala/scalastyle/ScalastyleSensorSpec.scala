@@ -24,10 +24,7 @@ import java.nio.file.Paths
 import com.mwz.sonar.scala.SensorContextMatchers
 import com.mwz.sonar.scala.checkstyle.CheckstyleIssue
 import com.mwz.sonar.scala.checkstyle.CheckstyleReportParser
-import com.mwz.sonar.scala.checkstyle.CheckstyleReportParserAPI
 import com.mwz.sonar.scala.util.PathUtils.cwd
-import org.mockito.ArgumentMatchers._
-import org.mockito.Mockito._
 import org.scalatest.FlatSpec
 import org.scalatest.LoneElement
 import org.scalatest.OptionValues
@@ -427,7 +424,8 @@ final class TestScalastyleReportParser extends CheckstyleReportParser {
             column = None,
             inspectionClass = "org.scalastyle.scalariform.CyclomaticComplexityChecker",
             severity = "warning",
-            message = "Cyclomatic complexity of 11 exceeds max of 10"
+            text = "Cyclomatic complexity of 11 exceeds max of 10",
+            snippet = ""
           )
         )
       )
@@ -439,7 +437,8 @@ final class TestScalastyleReportParser extends CheckstyleReportParser {
             column = Some(15),
             inspectionClass = "org.scalastyle.scalariform.CyclomaticComplexityChecker",
             severity = "warning",
-            message = "Cyclomatic complexity of 11 exceeds max of 10"
+            text = "Cyclomatic complexity of 11 exceeds max of 10",
+            snippet = ""
           )
         )
       )
@@ -451,14 +450,16 @@ final class TestScalastyleReportParser extends CheckstyleReportParser {
             column = Some(37),
             inspectionClass = "org.scalastyle.scalariform.MagicNumberChecker",
             severity = "warning",
-            message = "Magic Number"
+            text = "Magic Number",
+            snippet = ""
           ),
           CheckstyleIssue(
             line = 77,
             column = None,
             inspectionClass = "org.scalastyle.file.FileLineLengthChecker",
             severity = "warning",
-            message = "File line length exceeds 160 characters"
+            text = "File line length exceeds 160 characters",
+            snippet = ""
           )
         ),
         "com/mwz/sonar/scala/scalastyle/TestFileB.scala" -> Seq(
@@ -467,21 +468,24 @@ final class TestScalastyleReportParser extends CheckstyleReportParser {
             column = None,
             inspectionClass = "org.scalastyle.file.HeaderMatchesChecker",
             severity = "warning",
-            message = "Header does not match expected text"
+            text = "Header does not match expected text",
+            snippet = ""
           ),
           CheckstyleIssue(
             line = 20,
             column = Some(8),
             inspectionClass = "org.scalastyle.scalariform.PublicMethodsHaveTypeChecker",
             severity = "warning",
-            message = "Public method must have explicit type"
+            text = "Public method must have explicit type",
+            snippet = ""
           ),
           CheckstyleIssue(
             line = 22,
             column = Some(16),
             inspectionClass = "org.scalastyle.scalariform.FieldNamesChecker",
             severity = "warning",
-            message = "Field name does not match the regular expression '^[A-Z][A-Za-z]*$'"
+            text = "Field name does not match the regular expression '^[A-Z][A-Za-z]*$'",
+            snippet = ""
           )
         )
       )

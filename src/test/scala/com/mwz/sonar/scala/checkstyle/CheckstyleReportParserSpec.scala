@@ -46,7 +46,8 @@ class CheckstyleReportParserSpec extends FlatSpec with Matchers {
           line = 15,
           column = Some(15),
           severity = "warning",
-          message = "Cyclomatic complexity of 11 exceeds max of 10",
+          text = "Cyclomatic complexity of 11 exceeds max of 10",
+          snippet = "",
           inspectionClass = "org.scalastyle.scalariform.CyclomaticComplexityChecker"
         )
       )
@@ -64,14 +65,16 @@ class CheckstyleReportParserSpec extends FlatSpec with Matchers {
           line = 39,
           column = Some(37),
           severity = "warning",
-          message = "Magic Number",
+          text = "Magic Number",
+          snippet = "",
           inspectionClass = "org.scalastyle.scalariform.MagicNumberChecker"
         ),
         CheckstyleIssue(
           line = 77,
           column = None,
           severity = "warning",
-          message = "File line length exceeds 160 characters",
+          text = "File line length exceeds 160 characters",
+          snippet = "",
           inspectionClass = "org.scalastyle.file.FileLineLengthChecker"
         )
       ),
@@ -80,21 +83,24 @@ class CheckstyleReportParserSpec extends FlatSpec with Matchers {
           line = 1,
           column = None,
           severity = "warning",
-          message = "Header does not match expected text",
+          text = "Header does not match expected text",
+          snippet = "",
           inspectionClass = "org.scalastyle.file.HeaderMatchesChecker"
         ),
         CheckstyleIssue(
           line = 20,
           column = Some(8),
           severity = "warning",
-          message = "Public method must have explicit type",
+          text = "Public method must have explicit type",
+          snippet = "",
           inspectionClass = "org.scalastyle.scalariform.PublicMethodsHaveTypeChecker"
         ),
         CheckstyleIssue(
           line = 22,
           column = Some(16),
           severity = "warning",
-          message = "Field name does not match the regular expression '^[A-Z][A-Za-z]*$'",
+          text = "Field name does not match the regular expression '^[A-Z][A-Za-z]*$'",
+          snippet = "",
           inspectionClass = "org.scalastyle.scalariform.FieldNamesChecker"
         )
       )

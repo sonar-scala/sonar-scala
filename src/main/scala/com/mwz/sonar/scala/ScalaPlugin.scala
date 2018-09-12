@@ -121,7 +121,6 @@ final class ScalaPlugin extends Plugin {
       // Scapegoat
       classOf[scapegoat.ScapegoatRulesRepository],
       classOf[scapegoat.ScapegoatQualityProfile],
-      classOf[scapegoat.ScapegoatReportParser],
       classOf[scapegoat.ScapegoatSensor]
     )
   }

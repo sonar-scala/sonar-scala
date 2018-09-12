@@ -39,17 +39,18 @@ object CheckstyleReportParserAPI {
 class CheckstyleReportParser extends CheckstyleReportParserAPI {
 
   /** Parses the checkstyle *.xml report and returns all checkstyle issues by filename */
-  override def parse(scapegoatReportPath: Path): Map[String, Seq[CheckstyleIssue]] = {
-    val checkstyleXMLReport = XML.loadFile(scapegoatReportPath.toFile)
+  override def parse(checkstyleReportPath: Path): Map[String, Seq[CheckstyleIssue]] = {
+    val checkstyleXMLReport = XML.loadFile(checkstyleReportPath.toFile)
 
     (checkstyleXMLReport \ "file").map { fileNode =>
       val errors: immutable.Seq[CheckstyleIssue] = (fileNode \ "error").map { error =>
         CheckstyleIssue(
           line = (error \@ "line").toInt,
           column = Option(error \@ "column").filterNot(_.isEmpty).map(_.toInt),
-          inspectionClass = error \@ "source",
           severity = error \@ "severity",
-          message = error \@ "message"
+          text = error \@ "message",
+          snippet = error \@ "snippet",
+          inspectionClass = error \@ "source"
         )
       }
 

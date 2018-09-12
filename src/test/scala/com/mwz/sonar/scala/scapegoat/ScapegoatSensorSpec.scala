@@ -21,6 +21,8 @@ package scapegoat
 
 import java.nio.file.{Path, Paths}
 
+import com.mwz.sonar.scala.checkstyle.CheckstyleIssue
+import com.mwz.sonar.scala.checkstyle.CheckstyleReportParserAPI
 import com.mwz.sonar.scala.util.PathUtils.cwd
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
@@ -65,7 +67,7 @@ class ScapegoatSensorSpec
 
   it should "execute the sensor if the 'disable' flag wasn't set" in {
     val context = SensorContextTester.create(cwd)
-    val scapegoatReportParser = mock[ScapegoatReportParserAPI]
+    val scapegoatReportParser = mock[CheckstyleReportParserAPI]
     val scapegoatSensor = new ScapegoatSensor(scapegoatReportParser)
 
     val descriptor = new DefaultSensorDescriptor
@@ -73,7 +75,7 @@ class ScapegoatSensorSpec
     descriptor.configurationPredicate.test(context.config) shouldBe true
 
     when(scapegoatReportParser.parse(any()))
-      .thenReturn(Map.empty[String, Seq[ScapegoatIssue]])
+      .thenReturn(Map.empty[String, Seq[CheckstyleIssue]])
 
     scapegoatSensor.execute(context)
     verify(scapegoatReportParser).parse(any())
@@ -83,7 +85,7 @@ class ScapegoatSensorSpec
     val context = SensorContextTester.create(cwd)
     context.setSettings(new MapSettings().setProperty("sonar.scala.scapegoat.disable", "true"))
 
-    val scapegoatReportParser = mock[ScapegoatReportParserAPI]
+    val scapegoatReportParser = mock[CheckstyleReportParserAPI]
     val scapegoatSensor = new ScapegoatSensor(scapegoatReportParser)
 
     val descriptor = new DefaultSensorDescriptor
@@ -92,12 +94,14 @@ class ScapegoatSensorSpec
   }
 
   it should "construct the default report path" in {
-    val scalaVersion = ScalaVersion(2, 12, "6")
-    ScapegoatSensor.getDefaultScapegoatReportPath(scalaVersion) shouldBe Paths.get(
+    val context = SensorContextTester.create(cwd)
+    context.setSettings(new MapSettings().setProperty("sonar.scala.version", "2.12.6"))
+
+    scapegoatSensor.defaultReportPath(context.config()) shouldBe Paths.get(
       "target",
       "scala-2.12",
       "scapegoat-report",
-      "scapegoat.xml"
+      "scapegoat-scalastyle.xml"
     )
   }
 
@@ -115,7 +119,7 @@ class ScapegoatSensorSpec
   it should "get default scapegoat report path, when the scala version property is missing" in {
     val reportPath = scapegoatSensor.getReportPath(new MapSettings().asConfig())
 
-    reportPath shouldBe Paths.get("target", "scala-2.11", "scapegoat-report", "scapegoat.xml")
+    reportPath shouldBe Paths.get("target", "scala-2.11", "scapegoat-report", "scapegoat-scalastyle.xml")
   }
 
   it should "get default scapegoat report path, when the scala version property is set" in {
@@ -123,7 +127,7 @@ class ScapegoatSensorSpec
       new MapSettings().setProperty("sonar.scala.version", "2.12.6").asConfig()
     )
 
-    reportPath shouldBe Paths.get("target", "scala-2.12", "scapegoat-report", "scapegoat.xml")
+    reportPath shouldBe Paths.get("target", "scala-2.12", "scapegoat-report", "scapegoat-scalastyle.xml")
   }
 
   it should "get scapegoat report path set in sonar properties" in {
@@ -439,74 +443,74 @@ class ScapegoatSensorSpec
 }
 
 /** Mock of the ScapegoatReportParser */
-final class TestScapegoatReportParser extends ScapegoatReportParserAPI {
-  override def parse(reportPath: Path): Map[String, Seq[ScapegoatIssue]] = reportPath.toString match {
+final class TestScapegoatReportParser extends CheckstyleReportParserAPI {
+  override def parse(reportPath: Path): Map[String, Seq[CheckstyleIssue]] = reportPath.toString match {
     case "scapegoat-report/no-warnings.xml" =>
       Map()
     case "scapegoat-report/one-file-one-warning.xml" =>
       Map(
         "com/mwz/sonar/scala/scapegoat/TestFileA.scala" -> Seq(
-          ScapegoatIssue(
+          CheckstyleIssue(
             line = 1,
             text = "Empty case class",
-            inspectionClass = "Empty case class can be rewritten as a case object",
-            file = "com/mwz/sonar/scala/scapegoat/TestFileA.scala",
-            inspectionId = "com.sksamuel.scapegoat.inspections.EmptyCaseClass"
+            snippet = "Empty case class can be rewritten as a case object",
+            severity = "Info",
+            inspectionClass = "com.sksamuel.scapegoat.inspections.EmptyCaseClass"
           )
         )
       )
     case "module1/scapegoat-report/one-file-one-warning.xml" =>
       Map(
         "com/mwz/sonar/scala/scapegoat/TestFileA.scala" -> Seq(
-          ScapegoatIssue(
+          CheckstyleIssue(
             line = 1,
             text = "Empty case class",
-            inspectionClass = "Empty case class can be rewritten as a case object",
-            file = "com/mwz/sonar/scala/scapegoat/TestFileA.scala",
-            inspectionId = "com.sksamuel.scapegoat.inspections.EmptyCaseClass"
+            snippet = "Empty case class can be rewritten as a case object",
+            severity = "Info",
+            inspectionClass = "com.sksamuel.scapegoat.inspections.EmptyCaseClass"
           )
         )
       )
     case "scapegoat-report/two-files-five-warnings.xml" =>
       Map(
         "com/mwz/sonar/scala/scapegoat/TestFileA.scala" -> Seq(
-          ScapegoatIssue(
+          CheckstyleIssue(
             line = 1,
             text = "Empty case class",
-            inspectionClass = "Empty case class can be rewritten as a case object",
-            file = "com/mwz/sonar/scala/scapegoat/TestFileA.scala",
-            inspectionId = "com.sksamuel.scapegoat.inspections.EmptyCaseClass"
+            snippet = "Empty case class can be rewritten as a case object",
+            severity = "Info",
+            inspectionClass = "com.sksamuel.scapegoat.inspections.EmptyCaseClass"
           ),
-          ScapegoatIssue(
+          CheckstyleIssue(
             line = 2,
             text = "Array passed to String.format",
-            inspectionClass = "scala.Predef.augmentString(\"data is: %s\").format(scala.Array.apply(1, 2, 3))",
-            file = "com/mwz/sonar/scala/scapegoat/TestFileA.scala",
-            inspectionId = "com.sksamuel.scapegoat.inspections.string.ArraysInFormat"
+            snippet = "scala.Predef.augmentString(\"data is: %s\").format(scala.Array.apply(1, 2, 3))",
+            severity = "Info",
+            inspectionClass = "com.sksamuel.scapegoat.inspections.string.ArraysInFormat"
           )
         ),
         "com/mwz/sonar/scala/scapegoat/TestFileB.scala" -> Seq(
-          ScapegoatIssue(
+          CheckstyleIssue(
             line = 1,
             text = "Lonely sealed trait",
-            inspectionClass = "Sealed trait NotUsed has no implementing classes",
-            file = "com/mwz/sonar/scala/scapegoat/TestFileB.scala",
-            inspectionId = "com.sksamuel.scapegoat.inspections.LonelySealedTrait"
+            snippet = "Sealed trait NotUsed has no implementing classes",
+            severity = "Info",
+            inspectionClass = "com.sksamuel.scapegoat.inspections.LonelySealedTrait"
           ),
-          ScapegoatIssue(
+          CheckstyleIssue(
             line = 2,
             text = "Redundant final modifier on method",
-            inspectionClass =
+            snippet =
               "com.mwz.sonar.scala.scapegoat.TestFileB.testMethod cannot be overridden, final modifier is redundant",
-            file = "com/mwz/sonar/scala/scapegoat/TestFileB.scala",
-            inspectionId = "com.sksamuel.scapegoat.inspections.RedundantFinalModifierOnMethod"
+            severity = "Info",
+            inspectionClass = "com.sksamuel.scapegoat.inspections.RedundantFinalModifierOnMethod"
           ),
-          ScapegoatIssue(
+          CheckstyleIssue(
             line = 3,
             text = "Empty case class",
-            inspectionClass = "Empty case class can be rewritten as a case object",
-            file = "com/mwz/sonar/scala/scapegoat/TestFileB.scala",
-            inspectionId = "com.sksamuel.scapegoat.inspections.EmptyCaseClass"
+            snippet = "Empty case class can be rewritten as a case object",
+            severity = "Info",
+            inspectionClass = "com.sksamuel.scapegoat.inspections.EmptyCaseClass"
           )
         )
       )

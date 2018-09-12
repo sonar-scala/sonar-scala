@@ -1,13 +1,14 @@
 package com.mwz.sonar.scala.checkstyle
 
-import com.mwz.sonar.scala.sensor.ReportIssue
-
 final case class CheckstyleIssue(
   line: Int,
-  column: Option[Int],
-  inspectionClass: String,
+  column: Option[Int] = None,
   severity: String,
-  message: String
-) extends ReportIssue {
-  override def internalKey: String = inspectionClass
+  text: String,
+  snippet: String,
+  inspectionClass: String
+) {
+
+  def message: String = if (snippet.isEmpty) text else s"$text\n$snippet"
+
 }

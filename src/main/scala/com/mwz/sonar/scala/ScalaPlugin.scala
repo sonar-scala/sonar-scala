@@ -106,25 +106,27 @@ object Scala {
 final class ScalaPlugin extends Plugin {
   override def define(context: Plugin.Context): Unit = {
     context.addExtensions(
-      // Scala
+      // Scala.
       classOf[Scala],
       classOf[sensor.ScalaSensor],
-      // Old Scalastyle (ncredinburgh)
+      // Old Scalastyle (ncredinburgh).
       classOf[oldscalastyle.ScalastyleRepository],
       classOf[oldscalastyle.ScalastyleQualityProfile],
       classOf[oldscalastyle.ScalastyleSensor],
-      // Scalastyle
+      // Scalastyle.
       // classOf[scalastyle.ScalastyleRulesRepository],
       // classOf[scalastyle.ScalastyleQualityProfile],
-      // Scoverage
-      classOf[scoverage.ScoverageMetrics],
-      classOf[scoverage.ScoverageReportParser],
-      classOf[scoverage.ScoverageSensor],
-      // Scapegoat
+      // Scapegoat.
       classOf[scapegoat.ScapegoatRulesRepository],
       classOf[scapegoat.ScapegoatQualityProfile],
       classOf[scapegoat.ScapegoatReportParser],
-      classOf[scapegoat.ScapegoatSensor]
+      classOf[scapegoat.ScapegoatSensor],
+      // Built-in quality profiles.
+      // classOf[qualityprofiles.ScalastyleScapegoatQualityProfile],
+      // Scoverage.
+      classOf[scoverage.ScoverageMetrics],
+      classOf[scoverage.ScoverageReportParser],
+      classOf[scoverage.ScoverageSensor],
     )
   }
 }

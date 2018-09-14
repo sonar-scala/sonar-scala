@@ -16,28 +16,28 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-package com.mwz.sonar.scala.scapegoat
+package com.mwz.sonar.scala.qualityprofiles
 
 import org.scalatest.{FlatSpec, Inspectors, LoneElement, Matchers}
 import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition.Context
 
-/** Tests the correct behavior of the Scapegoat Quality Profile */
-class ScapegoatQualityProfileSpec extends FlatSpec with Inspectors with LoneElement with Matchers {
+/** Tests the correct behavior of the Scalastyle+Scapegoat Quality Profile */
+class ScalastyleScapegoatQualityProfileSpec extends FlatSpec with Inspectors with LoneElement with Matchers {
 
   trait Ctx {
     val context = new Context()
-    new ScapegoatQualityProfile().define(context)
+    new ScalastyleScapegoatQualityProfile().define(context)
     val qualityProfile = context.profilesByLanguageAndName.loneElement.value.loneElement.value
     val rules = qualityProfile.rules
   }
 
-  "ScapegoatQualityProfile" should "define only one quality profile" in new Ctx {
+  "Scalastyle+ScapegoatQualityProfile" should "define only one quality profile" in new Ctx {
     context.profilesByLanguageAndName should have size 1 // by language
     context.profilesByLanguageAndName.loneElement.value should have size 1 // by language and name
   }
 
   it should "properly define the properties of the quality profile" in new Ctx {
-    qualityProfile.name shouldBe "Scapegoat"
+    qualityProfile.name shouldBe "Scalastyle+Scapegoat"
     qualityProfile.language shouldBe "scala"
   }
 
@@ -45,13 +45,13 @@ class ScapegoatQualityProfileSpec extends FlatSpec with Inspectors with LoneElem
     qualityProfile should not be 'default
   }
 
-  it should "activate one rule for each scapegoat inspection" in new Ctx {
-    qualityProfile.rules should have size ScapegoatInspections.AllInspections.size
+  it should "define all Scalastyle + Scapegoat rules" in new Ctx {
+    qualityProfile.rules should have size 193 // 67 from Scalastyle, 126 from Scapegoat
   }
 
-  it should "have all rules come from the Scapegaot rules repository" in new Ctx {
+  it should "have all rules come from either the Scalastyle or the Scapegaot rules repositories" in new Ctx {
     forEvery(rules) { rule =>
-      rule.repoKey shouldBe "sonar-scala-scapegoat"
+      rule.repoKey should (be("sonar-scala-scalastyle") or be("sonar-scala-scapegoat"))
     }
   }
 

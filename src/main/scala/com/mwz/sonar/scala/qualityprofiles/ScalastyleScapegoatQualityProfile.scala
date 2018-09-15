@@ -19,8 +19,8 @@
 package com.mwz.sonar.scala
 package qualityprofiles
 
-//import com.mwz.sonar.scala.scalastyle.ScalastyleQualityProfile
-//import com.mwz.sonar.scala.scapegoat.ScapegoatQualityProfile
+import com.mwz.sonar.scala.scalastyle.ScalastyleQualityProfile
+import com.mwz.sonar.scala.scapegoat.ScapegoatQualityProfile
 import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition
 
 /**
@@ -36,12 +36,10 @@ final class ScalastyleScapegoatQualityProfile extends BuiltInQualityProfilesDefi
     profile.setDefault(false)
 
     // Activate all rules in the Scalastyle rules repository.
-    //ScalastyleQualityProfile.activateAllRules(profile)
-    scalastyle.ScalastyleQualityProfile.activateAllRules(profile)
+    ScalastyleQualityProfile.activateAllRules(profile)
 
     // Activate all rules in the Scapegoat rules repository.
-    //ScapegoatQualityProfile.activateAllRules(profile)
-    scapegoat.ScapegoatQualityProfile.activateAllRules(profile)
+    ScapegoatQualityProfile.activateAllRules(profile)
 
     // Save the profile.
     profile.done()

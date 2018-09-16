@@ -112,21 +112,21 @@ final class ScalaPlugin extends Plugin {
       // Old Scalastyle (ncredinburgh).
       classOf[oldscalastyle.ScalastyleRepository],
       classOf[oldscalastyle.ScalastyleQualityProfile],
-      classOf[oldscalastyle.ScalastyleSensor],
       // Scalastyle.
-      // classOf[scalastyle.ScalastyleRulesRepository],
-      // classOf[scalastyle.ScalastyleQualityProfile],
+      classOf[scalastyle.ScalastyleRulesRepository],
+      classOf[scalastyle.ScalastyleQualityProfile],
+      classOf[scalastyle.ScalastyleSensor],
       // Scapegoat.
       classOf[scapegoat.ScapegoatRulesRepository],
       classOf[scapegoat.ScapegoatQualityProfile],
       classOf[scapegoat.ScapegoatReportParser],
       classOf[scapegoat.ScapegoatSensor],
       // Built-in quality profiles.
-      // classOf[qualityprofiles.ScalastyleScapegoatQualityProfile],
+      classOf[qualityprofiles.ScalastyleScapegoatQualityProfile],
       // Scoverage.
       classOf[scoverage.ScoverageMetrics],
       classOf[scoverage.ScoverageReportParser],
-      classOf[scoverage.ScoverageSensor],
+      classOf[scoverage.ScoverageSensor]
     )
   }
 }

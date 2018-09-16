@@ -104,6 +104,13 @@ class ScalastyleRulesRepositoryTest extends FlatSpec with Matchers with Inspecto
     }
   }
 
+  it should "have all rules contain ruleClass parameter" in new Ctx {
+    val rules: Seq[Rule] = repository.rules.asScala.filter(r => !r.params.isEmpty)
+    forEvery(rules) { rule =>
+      rule.params.asScala.exists(p => p.key == "ruleClass" && p.defaultValue.startsWith("org.scalastyle"))
+    }
+  }
+
   it should "create rules with correct parameters" in new Ctx {
     val rule: Rule = repository.rule("org.scalastyle.file.FileLineLengthChecker")
     val params: Seq[(String, RuleParamType, String)] =
@@ -111,7 +118,8 @@ class ScalastyleRulesRepositoryTest extends FlatSpec with Matchers with Inspecto
     val expected = Seq(
       ("maxLineLength", RuleParamType.INTEGER, "160"),
       ("tabSize", RuleParamType.INTEGER, "4"),
-      ("ignoreImports", RuleParamType.BOOLEAN, "false")
+      ("ignoreImports", RuleParamType.BOOLEAN, "false"),
+      ("ruleClass", RuleParamType.STRING, "org.scalastyle.file.FileLineLengthChecker")
     )
 
     params should contain theSameElementsAs expected

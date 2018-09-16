@@ -60,6 +60,7 @@ private[scalastyle] object ScalastyleRulesRepository {
 
   final val RepositoryKey = "sonar-scala-scalastyle"
   final val RepositoryName = "Scalastyle"
+  final val RuleClassParam = "ruleClass"
 
   // Skip creating template instances for the following inspections:
   // header.matches - this rule wouldn't work with a default parameter value.
@@ -82,6 +83,13 @@ private[scalastyle] object ScalastyleRulesRepository {
 
     // Create parameters.
     inspection.params.foreach(param => createParam(inspection.clazz, rule, param))
+
+    // Create Scalastyle checker parameter, which refers to the class name.
+    rule
+      .createParam(RuleClassParam)
+      .setType(RuleParamType.STRING)
+      .setDescription("Scalastyle's rule (checker) class name.")
+      .setDefaultValue(inspection.clazz)
 
     // Set the rule as a template.
     rule.setTemplate(template)

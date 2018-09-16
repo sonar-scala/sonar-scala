@@ -67,6 +67,8 @@ private[scalastyle] object ScalastyleRulesRepository {
   // regex - no default regex provided.
   final val SkipTemplateInstances = Set("header.matches", "regex", "scaladoc")
 
+  // TODO: Blacklist "no.newline.at.eof" as it contradicts with "newline.at.eof".
+
   /**
    * Create a new rule from the given inspection.
    */

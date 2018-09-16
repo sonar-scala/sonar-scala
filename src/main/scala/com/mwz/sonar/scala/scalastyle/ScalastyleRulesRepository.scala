@@ -116,6 +116,17 @@ private[scalastyle] object ScalastyleRulesRepository {
   }
 
   /**
+   * Convert SonarQube rule severity to Scalastyle inspection level.
+   */
+  def severityToLevel(severity: Severity): Level = severity match {
+    case Severity.INFO     => InfoLevel
+    case Severity.MINOR    => WarningLevel
+    case Severity.MAJOR    => ErrorLevel
+    case Severity.CRITICAL => ErrorLevel
+    case Severity.BLOCKER  => ErrorLevel
+  }
+
+  /**
    * Convert Scalastyle inspection parameter type to SonarQube rule parameter type.
    */
   def parameterTypeToRuleParamType(ruleClass: String, name: String, typ: ParameterType): RuleParamType =

@@ -65,7 +65,7 @@ private[scalastyle] object ScalastyleRulesRepository {
   // Skip creating template instances for the following inspections:
   // header.matches - this rule wouldn't work with a default parameter value.
   // regex - no default regex provided.
-  final val SkipTemplateInstances = Set("header.matches", "regex")
+  final val SkipTemplateInstances = Set("header.matches", "regex", "scaladoc")
 
   /**
    * Create a new rule from the given inspection.

@@ -17,20 +17,26 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 package com.mwz.sonar.scala
-package scapegoat
+package qualityprofiles
 
+import com.mwz.sonar.scala.scalastyle.ScalastyleQualityProfile
+import com.mwz.sonar.scala.scapegoat.ScapegoatQualityProfile
 import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition
 
-/** Defines a quality profile that activates all Scapegoat rules/inspections */
-final class ScapegoatQualityProfile extends BuiltInQualityProfilesDefinition {
+/**
+ * Defines a Scalastyle+Scapegoat quality profile.
+ */
+final class ScalastyleScapegoatQualityProfile extends BuiltInQualityProfilesDefinition {
   override def define(context: BuiltInQualityProfilesDefinition.Context): Unit = {
     // Create an empty profile.
     val profile =
-      context
-        .createBuiltInQualityProfile(ScapegoatQualityProfile.ProfileName, Scala.LanguageKey)
+      context.createBuiltInQualityProfile(ScalastyleScapegoatQualityProfile.ProfileName, Scala.LanguageKey)
 
     // Ensure this is not the default profile.
     profile.setDefault(false)
+
+    // Activate all rules in the Scalastyle rules repository.
+    ScalastyleQualityProfile.activateAllRules(profile)
 
     // Activate all rules in the Scapegoat rules repository.
     ScapegoatQualityProfile.activateAllRules(profile)
@@ -40,13 +46,6 @@ final class ScapegoatQualityProfile extends BuiltInQualityProfilesDefinition {
   }
 }
 
-object ScapegoatQualityProfile {
-  private[scapegoat] final val ProfileName = "Scapegoat"
-
-  /** Activates all rules in the Scapegoat rules repository in the given quality profile */
-  def activateAllRules(profile: BuiltInQualityProfilesDefinition.NewBuiltInQualityProfile): Unit = {
-    ScapegoatInspections.AllInspections.foreach { inspection =>
-      profile.activateRule(ScapegoatRulesRepository.RepositoryKey, inspection.id)
-    }
-  }
+private[qualityprofiles] object ScalastyleScapegoatQualityProfile {
+  final val ProfileName = "Scalastyle+Scapegoat"
 }

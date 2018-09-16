@@ -27,29 +27,29 @@ import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition.NewBuiltInQ
  * Defines a Scalastyle quality profile.
  */
 final class ScalastyleQualityProfile extends BuiltInQualityProfilesDefinition {
-  import ScalastyleQualityProfile._
-
   override def define(context: BuiltInQualityProfilesDefinition.Context): Unit = {
     // Create an empty profile.
-    val profile = context.createBuiltInQualityProfile(ProfileName, Scala.LanguageKey)
+    val profile = context.createBuiltInQualityProfile(ScalastyleQualityProfile.ProfileName, Scala.LanguageKey)
 
     // Ensure this is not the default profile.
     profile.setDefault(false)
 
     // Activate all rules in the Scalastyle rules repository.
     // (except for those which were not included in the repository)
-    ScalastyleInspections.AllInspections
-      .filterNot(i => ScalastyleRulesRepository.SkipTemplateInstances.contains(i.id))
-      .foreach(i => activate(profile, i.clazz))
+    ScalastyleQualityProfile.activateAllRules(profile)
 
     // Save the profile.
     profile.done()
   }
-
-  private[scalastyle] def activate(profile: NewBuiltInQualityProfile, name: String): Unit =
-    profile.activateRule(ScalastyleRulesRepository.RepositoryKey, name)
 }
 
-private[scalastyle] object ScalastyleQualityProfile {
-  final val ProfileName = "Scalastyle"
+object ScalastyleQualityProfile {
+  private[scalastyle] final val ProfileName = "Scalastyle"
+
+  /** Activates all rules in the Scalastyle rules repository in the given profile */
+  def activateAllRules(profile: BuiltInQualityProfilesDefinition.NewBuiltInQualityProfile): Unit = {
+    ScalastyleInspections.AllInspections
+      .filterNot(i => ScalastyleRulesRepository.SkipTemplateInstances.contains(i.id))
+      .foreach(i => profile.activateRule(ScalastyleRulesRepository.RepositoryKey, i.clazz))
+  }
 }

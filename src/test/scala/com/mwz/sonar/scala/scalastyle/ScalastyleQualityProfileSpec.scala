@@ -53,7 +53,7 @@ class ScalastyleQualityProfileSpec extends FlatSpec with Matchers with LoneEleme
   }
 
   it should "have 67 rules" in new Ctx {
-    rules should have size 67
+    rules should have size 67 // 40 default rules + 27 template instances
   }
 
   it should "not activate templates" in new Ctx {

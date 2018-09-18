@@ -49,11 +49,13 @@ class ScalastyleQualityProfileSpec extends FlatSpec with Matchers with LoneEleme
 
   it should "activate all default (non-template) rules" in new Ctx {
     rules.map(_.ruleKey) should contain allElementsOf
-    ScalastyleInspections.AllInspections.filter(_.params.isEmpty).map(_.clazz)
+    ScalastyleInspections.AllInspections
+      .filter(i => i.params.isEmpty && !ScalastyleRulesRepository.BlacklistRules.contains(i.id))
+      .map(_.clazz)
   }
 
-  it should "have 67 rules" in new Ctx {
-    rules should have size 66 // 40 default rules + 26 template instances
+  it should "have 65 rules" in new Ctx {
+    rules should have size 65 // 39 default rules + 26 template instances
   }
 
   it should "not activate templates" in new Ctx {

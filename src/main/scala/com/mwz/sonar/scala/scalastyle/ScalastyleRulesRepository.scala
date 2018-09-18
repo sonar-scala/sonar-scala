@@ -62,12 +62,15 @@ private[scalastyle] object ScalastyleRulesRepository {
   final val RepositoryName = "Scalastyle"
   final val RuleClassParam = "ruleClass"
 
-  // Skip creating template instances for the following inspections:
-  // header.matches - this rule wouldn't work with a default parameter value.
-  // regex - no default regex provided.
-  final val SkipTemplateInstances = Set("header.matches", "regex", "scaladoc")
+  // Blacklist the following rules:
+  // - "no.newline.at.eof" - it is the opposite to "newline.at.eof".
+  final val BlacklistRules = Set("no.newline.at.eof")
 
-  // TODO: Blacklist "no.newline.at.eof" as it contradicts with "newline.at.eof".
+  // Skip creating template instances for the following inspections:
+  // - header.matches - this rule wouldn't work with a default parameter value.
+  // - regex - no default regex provided.
+  // - scaladoc - incorrect default value of the ignoreRegex parameter.
+  final val SkipTemplateInstances = Set("header.matches", "regex", "scaladoc")
 
   /**
    * Create a new rule from the given inspection.

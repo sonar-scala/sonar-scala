@@ -47,6 +47,7 @@ final class ScalastyleSensor(qualityProfile: QualityProfile) extends Sensor {
   }
 
   override def execute(context: SensorContext): Unit = {
+    implicit val sensorContext: SensorContext = context
     log.info("Initializing the Scalastyle sensor.")
 
     val inspections: Map[String, ScalastyleInspection] =
@@ -58,9 +59,11 @@ final class ScalastyleSensor(qualityProfile: QualityProfile) extends Sensor {
       .asScala
       .toIndexedSeq
 
-    val checks: Map[String, Option[ConfigurationChecker]] =
-      activeRules.map(r => r.ruleKey.rule -> ScalastyleSensor.ruleToConfigurationChecker(r)).toMap
+    val checks: Map[String, Option[ConfigurationChecker]] = activeRules
+      .map(r => r.ruleKey.rule -> ScalastyleSensor.ruleToConfigurationChecker(r))
+      .toMap
 
+    // Log a warning for invalid rules.
     checks.filter { case (_, conf) => conf.isEmpty } foreach {
       case (ruleKey, _) =>
         log.warn(
@@ -74,59 +77,31 @@ final class ScalastyleSensor(qualityProfile: QualityProfile) extends Sensor {
       commentFilter = true,
       checks.collect { case (_, Some(conf)) => conf }.toList // unNone
     )
+    val fileSpecs: Seq[FileSpec] = ScalastyleSensor.fileSpecs
 
-    val fileSpecs: Seq[FileSpec] = ScalastyleSensor.fileSpecs(context)
-
+    // Run Scalastyle analysis.
     val messages: Seq[Message[FileSpec]] = new ScalastyleChecker()
       .checkFiles(config, fileSpecs)
 
     messages foreach {
       // Process each Scalastyle result.
-      case e: StyleError[_] =>
-        process(context, inspections, e)
+      case styleError: StyleError[_] =>
+        log.debug(s"Processing ${styleError.clazz} for file ${styleError.fileSpec}.")
+
+        // Look up an active rule from the Scalastyle style error.
+        val rule = ScalastyleSensor.ruleFromStyleError(styleError)
+        rule.foreach(rule => ScalastyleSensor.openIssue(inspections, styleError, rule))
+
+        // Log a warning if for some reason the rule was not found.
+        if (rule.isEmpty)
+          log.warn(
+            s"Scalastyle rule with key ${styleError.key} was not found" +
+            s"in the ${qualityProfile.getName} quality profile."
+          )
       case e: StyleException[_] =>
         log.error(s"Scalastyle exception (checker: ${e.clazz}, file: ${e.fileSpec.name}): ${e.message}.")
       case _ =>
-        Unit
-    }
-  }
-
-  def process(
-    context: SensorContext,
-    inspections: Map[String, ScalastyleInspection],
-    styleError: StyleError[FileSpec]
-  ): Unit = {
-    log.debug(s"Processing ${styleError.clazz} for file ${styleError.fileSpec}.")
-    val activeRule = Option(
-      context
-        .activeRules()
-        .findByInternalKey(ScalastyleRulesRepository.RepositoryKey, styleError.key)
-    )
-
-    activeRule match {
-      case Some(rule) =>
-        val predicates = context.fileSystem.predicates
-        val file: InputFile = context.fileSystem.inputFile(predicates.hasPath(styleError.fileSpec.name))
-        val newIssue: NewIssue = context.newIssue().forRule(rule.ruleKey)
-        val line: Int = styleError.lineNumber.filter(_ > 0).getOrElse(1) // scalastyle:ignore
-        val message: Option[String] = styleError.customMessage orElse inspections
-          .get(styleError.clazz.getName)
-          .map(_.label)
-
-        newIssue
-          .at(
-            newIssue
-              .newLocation()
-              .on(file)
-              .at(file.selectLine(line))
-              .message(message.getOrElse(""))
-          )
-          .save()
-      case None =>
-        log.warn(
-          s"Scalastyle rule with key ${styleError.key} was not found" +
-          s"in the ${qualityProfile.getName} quality profile."
-        )
+        ()
     }
   }
 }
@@ -134,10 +109,12 @@ final class ScalastyleSensor(qualityProfile: QualityProfile) extends Sensor {
 private[scalastyle] object ScalastyleSensor {
   final val SensorName = "Scalastyle Sensor"
 
+  /**
+   * Convert an active SonarQube rule to Scalastyle checker configuration.
+   */
   def ruleToConfigurationChecker(rule: ActiveRule): Option[ConfigurationChecker] = {
     val params = rule.params.asScala.map { case (k, v) => k -> v.trim }.toMap
     val className: Option[String] = params.get(ScalastyleRulesRepository.RuleClassParam).filter(_.nonEmpty)
-
     className.map { className =>
       ConfigurationChecker(
         className,
@@ -150,7 +127,10 @@ private[scalastyle] object ScalastyleSensor {
     }
   }
 
-  def fileSpecs(context: SensorContext): Seq[FileSpec] = {
+  /**
+   * Get a list of files for analysis.
+   */
+  def fileSpecs(implicit context: SensorContext): Seq[FileSpec] = {
     val predicates: FilePredicates = context.fileSystem.predicates
     val files: Iterable[File] = context.fileSystem
       .inputFiles(
@@ -163,5 +143,45 @@ private[scalastyle] object ScalastyleSensor {
       .map(f => new File(f.uri)) // Avoiding here to use InputFile.file, which is deprecated.
 
     Directory.getFiles(Some(context.fileSystem.encoding.name), files)
+  }
+
+  /**
+   *  Look up an active rule from the Scalastyle style error.
+   */
+  def ruleFromStyleError(styleError: StyleError[FileSpec])(
+    implicit context: SensorContext
+  ): Option[ActiveRule] =
+    Option(
+      context
+        .activeRules()
+        .findByInternalKey(ScalastyleRulesRepository.RepositoryKey, styleError.key)
+    )
+
+  /**
+   * Open and new SonarQube issue for the given style error.
+   */
+  def openIssue(
+    inspections: Map[String, ScalastyleInspection],
+    styleError: StyleError[FileSpec],
+    rule: ActiveRule
+  )(implicit context: SensorContext): Unit = {
+    val predicates = context.fileSystem.predicates
+    val file: InputFile = context.fileSystem.inputFile(predicates.hasPath(styleError.fileSpec.name))
+    val newIssue: NewIssue = context.newIssue().forRule(rule.ruleKey)
+    val line: Int = styleError.lineNumber.filter(_ > 0).getOrElse(1) // scalastyle:ignore
+    val message: Option[String] = styleError.customMessage orElse inspections
+      .get(styleError.clazz.getName)
+      .map(_.label)
+
+    // Open a new issue.
+    newIssue
+      .at(
+        newIssue
+          .newLocation()
+          .on(file)
+          .at(file.selectLine(line))
+          .message(message.getOrElse(""))
+      )
+      .save()
   }
 }

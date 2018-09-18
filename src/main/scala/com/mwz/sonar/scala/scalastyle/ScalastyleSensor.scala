@@ -50,9 +50,6 @@ final class ScalastyleSensor(qualityProfile: QualityProfile) extends Sensor {
     implicit val sensorContext: SensorContext = context
     log.info("Initializing the Scalastyle sensor.")
 
-    val inspections: Map[String, ScalastyleInspection] =
-      ScalastyleInspections.AllInspections.map(i => i.clazz -> i).toMap
-
     val activeRules: Seq[ActiveRule] = context
       .activeRules()
       .findByRepository(ScalastyleRulesRepository.RepositoryKey)
@@ -90,7 +87,9 @@ final class ScalastyleSensor(qualityProfile: QualityProfile) extends Sensor {
 
         // Look up an active rule from the Scalastyle style error.
         val rule = ScalastyleSensor.ruleFromStyleError(styleError)
-        rule.foreach(rule => ScalastyleSensor.openIssue(inspections, styleError, rule))
+        rule.foreach { rule =>
+          ScalastyleSensor.openIssue(ScalastyleInspections.AllInspectionsByClass, styleError, rule)
+        }
 
         // Log a warning if for some reason the rule was not found.
         if (rule.isEmpty)

@@ -42,4 +42,6 @@ final case class Param(
 
 object ScalastyleInspections {
   val AllInspections: List[ScalastyleInspection] = ???
+  val AllInspectionsByClass: Map[String, ScalastyleInspection] =
+    AllInspections.map(i => i.clazz -> i).toMap
 }

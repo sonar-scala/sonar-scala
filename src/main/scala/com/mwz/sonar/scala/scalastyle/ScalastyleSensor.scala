@@ -44,6 +44,7 @@ final class ScalastyleSensor(qualityProfile: QualityProfile) extends Sensor {
       .name(ScalastyleSensor.SensorName)
       .onlyOnFileType(InputFile.Type.MAIN)
       .onlyOnLanguage(Scala.LanguageKey)
+      .onlyWhenConfiguration(ScalastyleSensor.shouldEnableSensor)
   }
 
   override def execute(context: SensorContext): Unit = {
@@ -107,6 +108,16 @@ final class ScalastyleSensor(qualityProfile: QualityProfile) extends Sensor {
 
 private[scalastyle] object ScalastyleSensor {
   final val SensorName = "Scalastyle Sensor"
+  final val ScalastyleDisablePropertyKey = "sonar.scala.scalastyle.disable"
+
+  /**
+   * Returns a bool flag indicating whether the sensor should be enabled.
+   */
+  def shouldEnableSensor(conf: Configuration): Boolean =
+    conf
+      .get(ScalastyleDisablePropertyKey)
+      .toOption
+      .forall(s => s.toLowerCase != "true")
 
   /**
    * Convert an active SonarQube rule to Scalastyle checker configuration.

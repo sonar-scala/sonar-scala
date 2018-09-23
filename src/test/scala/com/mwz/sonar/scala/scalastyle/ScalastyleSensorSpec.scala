@@ -24,7 +24,7 @@ import java.util
 import com.mwz.sonar.scala.util.PathUtils.cwd
 import org.scalactic._
 import org.scalastyle.scalariform.EmptyClassChecker
-import org.scalastyle.{ConfigurationChecker, ErrorLevel, FileSpec, StyleError}
+import org.scalastyle.{ConfigurationChecker, ErrorLevel, FileSpec, InfoLevel, StyleError, WarningLevel}
 import org.scalatest._
 import org.scalatest.mockito.MockitoSugar
 import org.sonar.api.batch.fs.InputFile
@@ -91,6 +91,14 @@ class ScalastyleSensorSpec
     descriptor.`type` shouldBe InputFile.Type.MAIN
     descriptor.languages.loneElement shouldBe "scala"
     descriptor.ruleRepositories.loneElement shouldBe "sonar-scala-scalastyle"
+  }
+
+  it should "convert rule severity to inspection level" in {
+    ScalastyleSensor.severityToLevel(Severity.INFO) shouldBe InfoLevel
+    ScalastyleSensor.severityToLevel(Severity.MINOR) shouldBe WarningLevel
+    ScalastyleSensor.severityToLevel(Severity.MAJOR) shouldBe ErrorLevel
+    ScalastyleSensor.severityToLevel(Severity.CRITICAL) shouldBe ErrorLevel
+    ScalastyleSensor.severityToLevel(Severity.BLOCKER) shouldBe ErrorLevel
   }
 
   it should "convert a rule to a configuration checker" in {

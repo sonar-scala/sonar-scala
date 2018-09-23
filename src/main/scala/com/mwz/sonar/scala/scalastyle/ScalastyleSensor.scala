@@ -123,6 +123,17 @@ private[scalastyle] object ScalastyleSensor {
       .forall(s => s.toLowerCase != "true")
 
   /**
+   * Convert SonarQube rule severity to Scalastyle inspection level.
+   */
+  def severityToLevel(severity: Severity): Level = severity match {
+    case Severity.INFO     => InfoLevel
+    case Severity.MINOR    => WarningLevel
+    case Severity.MAJOR    => ErrorLevel
+    case Severity.CRITICAL => ErrorLevel
+    case Severity.BLOCKER  => ErrorLevel
+  }
+
+  /**
    * Convert an active SonarQube rule to Scalastyle checker configuration.
    */
   def ruleToConfigurationChecker(rule: ActiveRule): Option[ConfigurationChecker] = {
@@ -131,7 +142,7 @@ private[scalastyle] object ScalastyleSensor {
     className.map { className =>
       ConfigurationChecker(
         className,
-        ScalastyleRulesRepository.severityToLevel(Severity.valueOf(rule.severity)),
+        severityToLevel(Severity.valueOf(rule.severity)),
         enabled = true,
         params,
         customMessage = None,

@@ -21,12 +21,14 @@ package scalastyle
 
 import java.io.File
 
+import com.mwz.sonar.scala.util.JavaOptionals._
 import com.mwz.sonar.scala.util.Log
 import org.scalastyle._
 import org.sonar.api.batch.fs.{FilePredicates, InputFile}
 import org.sonar.api.batch.rule.{ActiveRule, Severity}
 import org.sonar.api.batch.sensor.issue.NewIssue
 import org.sonar.api.batch.sensor.{Sensor, SensorContext, SensorDescriptor}
+import org.sonar.api.config.Configuration
 import org.sonar.api.profiles.{RulesProfile => QualityProfile}
 
 import scala.collection.JavaConverters._
@@ -48,18 +50,19 @@ final class ScalastyleSensor(qualityProfile: QualityProfile) extends Sensor {
   }
 
   override def execute(context: SensorContext): Unit = {
-    implicit val sensorContext: SensorContext = context
     log.info("Initializing the Scalastyle sensor.")
 
-    val activeRules: Seq[ActiveRule] = context
-      .activeRules()
-      .findByRepository(ScalastyleRulesRepository.RepositoryKey)
-      .asScala
-      .toIndexedSeq
+    val activeRules: Seq[ActiveRule] =
+      context
+        .activeRules()
+        .findByRepository(ScalastyleRulesRepository.RepositoryKey)
+        .asScala
+        .toIndexedSeq
 
-    val checks: Map[String, Option[ConfigurationChecker]] = activeRules
-      .map(r => r.ruleKey.rule -> ScalastyleSensor.ruleToConfigurationChecker(r))
-      .toMap
+    val checks: Map[String, Option[ConfigurationChecker]] =
+      activeRules
+        .map(r => r.ruleKey.rule -> ScalastyleSensor.ruleToConfigurationChecker(r))
+        .toMap
 
     // Log a warning for invalid rules.
     checks.filter { case (_, conf) => conf.isEmpty } foreach {
@@ -75,7 +78,7 @@ final class ScalastyleSensor(qualityProfile: QualityProfile) extends Sensor {
       commentFilter = true,
       checks.collect { case (_, Some(conf)) => conf }.toList // unNone
     )
-    val fileSpecs: Seq[FileSpec] = ScalastyleSensor.fileSpecs
+    val fileSpecs: Seq[FileSpec] = ScalastyleSensor.fileSpecs(context)
 
     // Run Scalastyle analysis.
     val messages: Seq[Message[FileSpec]] = new ScalastyleChecker()
@@ -87,17 +90,17 @@ final class ScalastyleSensor(qualityProfile: QualityProfile) extends Sensor {
         log.debug(s"Processing ${styleError.clazz} for file ${styleError.fileSpec}.")
 
         // Look up an active rule from the Scalastyle style error.
-        val rule = ScalastyleSensor.ruleFromStyleError(styleError)
-        rule.foreach { rule =>
-          ScalastyleSensor.openIssue(ScalastyleInspections.AllInspectionsByClass, styleError, rule)
-        }
+        val rule = ScalastyleSensor.ruleFromStyleError(context, styleError)
 
-        // Log a warning if for some reason the rule was not found.
-        if (rule.isEmpty)
+        rule.fold(
           log.warn(
             s"Scalastyle rule with key ${styleError.key} was not found" +
             s"in the ${qualityProfile.getName} quality profile."
           )
+        ) { rule =>
+          ScalastyleSensor.openIssue(context, ScalastyleInspections.AllInspectionsByClass, styleError, rule)
+        }
+
       case e: StyleException[_] =>
         log.error(s"Scalastyle exception (checker: ${e.clazz}, file: ${e.fileSpec.name}): ${e.message}.")
       case _ =>
@@ -140,7 +143,7 @@ private[scalastyle] object ScalastyleSensor {
   /**
    * Get a list of files for analysis.
    */
-  def fileSpecs(implicit context: SensorContext): Seq[FileSpec] = {
+  def fileSpecs(context: SensorContext): Seq[FileSpec] = {
     val predicates: FilePredicates = context.fileSystem.predicates
     val files: Iterable[File] = context.fileSystem
       .inputFiles(
@@ -158,9 +161,7 @@ private[scalastyle] object ScalastyleSensor {
   /**
    *  Look up an active rule from the Scalastyle style error.
    */
-  def ruleFromStyleError(styleError: StyleError[FileSpec])(
-    implicit context: SensorContext
-  ): Option[ActiveRule] =
+  def ruleFromStyleError(context: SensorContext, styleError: StyleError[FileSpec]): Option[ActiveRule] =
     Option(
       context
         .activeRules()
@@ -171,10 +172,11 @@ private[scalastyle] object ScalastyleSensor {
    * Open and new SonarQube issue for the given style error.
    */
   def openIssue(
+    context: SensorContext,
     inspections: Map[String, ScalastyleInspection],
     styleError: StyleError[FileSpec],
     rule: ActiveRule
-  )(implicit context: SensorContext): Unit = {
+  ): Unit = {
     val predicates = context.fileSystem.predicates
     val file: InputFile = context.fileSystem.inputFile(predicates.hasPath(styleError.fileSpec.name))
     val newIssue: NewIssue = context.newIssue().forRule(rule.ruleKey)

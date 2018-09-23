@@ -203,4 +203,10 @@ class ScalastyleSensorSpec
     result.severity === ErrorLevel.toString
     result.params.asScala === Map("param1" -> "value1")
   }
+
+  it should "not open any issues if there are no active rules" in {}
+
+  it should "not open any issues if there are no style errors reported" in {}
+
+  it should "open an issue for each style error" in {}
 }

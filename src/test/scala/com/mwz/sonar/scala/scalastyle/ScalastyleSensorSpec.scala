@@ -24,8 +24,6 @@ import java.nio.file.Paths
 import java.util
 
 import com.mwz.sonar.scala.util.PathUtils.cwd
-import org.mockito.ArgumentMatchers._
-import org.mockito.Mockito._
 import org.scalactic._
 import org.scalastyle.scalariform.EmptyClassChecker
 import org.scalastyle.{
@@ -33,9 +31,11 @@ import org.scalastyle.{
   ErrorLevel,
   FileSpec,
   InfoLevel,
-  ScalastyleChecker,
+  Message,
+  ScalastyleConfiguration,
   StyleError,
-  WarningLevel
+  WarningLevel,
+  ScalastyleChecker => Checker
 }
 import org.scalatest._
 import org.scalatest.mockito.MockitoSugar
@@ -67,8 +67,13 @@ class ScalastyleSensorSpec
   trait Ctx {
     val context = SensorContextTester.create(Paths.get("./"))
     val rulesProfile = mock[RulesProfile]
-    val scalastyleChecker = mock[ScalastyleChecker[FileSpec]]
-    when(scalastyleChecker.checkFiles(any(), any())).thenReturn(List.empty)
+    val scalastyleChecker = new ScalastyleCheckerAPI {
+      private[scalastyle] def checkFiles(
+        checker: Checker[FileSpec],
+        configuration: ScalastyleConfiguration,
+        files: scala.Seq[FileSpec]
+      ): List[Message[FileSpec]] = List.empty
+    }
 
     val scalastyleSensor = new ScalastyleSensor(rulesProfile, scalastyleChecker)
     val descriptor = new DefaultSensorDescriptor
@@ -271,8 +276,13 @@ class ScalastyleSensorSpec
       customMessage = None
     )
 
-    val checker = mock[ScalastyleChecker[FileSpec]]
-    when(checker.checkFiles(any(), any())).thenReturn(List(styleError))
+    val checker = new ScalastyleCheckerAPI {
+      private[scalastyle] def checkFiles(
+        checker: Checker[FileSpec],
+        configuration: ScalastyleConfiguration,
+        files: scala.Seq[FileSpec]
+      ): List[Message[FileSpec]] = List(styleError)
+    }
 
     val testFile = TestInputFileBuilder
       .create("", "TestFile.scala")
@@ -332,8 +342,13 @@ class ScalastyleSensorSpec
       customMessage = None
     )
 
-    val checker = mock[ScalastyleChecker[FileSpec]]
-    when(checker.checkFiles(any(), any())).thenReturn(List(styleError))
+    val checker = new ScalastyleCheckerAPI {
+      private[scalastyle] def checkFiles(
+        checker: Checker[FileSpec],
+        configuration: ScalastyleConfiguration,
+        files: scala.Seq[FileSpec]
+      ): List[Message[FileSpec]] = List(styleError)
+    }
 
     val testFile = TestInputFileBuilder
       .create("module1", "TestFile.scala")

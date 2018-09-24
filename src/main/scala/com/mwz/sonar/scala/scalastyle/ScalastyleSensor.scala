@@ -24,7 +24,20 @@ import java.nio.file.Paths
 
 import com.mwz.sonar.scala.util.JavaOptionals._
 import com.mwz.sonar.scala.util.Log
-import org.scalastyle._
+import org.scalastyle.{
+  ConfigurationChecker,
+  Directory,
+  ErrorLevel,
+  FileSpec,
+  InfoLevel,
+  Level,
+  Message,
+  ScalastyleConfiguration,
+  StyleError,
+  StyleException,
+  WarningLevel,
+  ScalastyleChecker => Checker
+}
 import org.sonar.api.batch.fs.{FilePredicates, InputFile}
 import org.sonar.api.batch.rule.{ActiveRule, Severity}
 import org.sonar.api.batch.sensor.issue.NewIssue
@@ -40,7 +53,7 @@ import scala.collection.immutable.Seq
  */
 final class ScalastyleSensor(
   qualityProfile: QualityProfile,
-  scalastyleChecker: ScalastyleChecker[FileSpec]
+  scalastyleChecker: ScalastyleCheckerAPI
 ) extends Sensor {
   private[this] val log = Log(classOf[ScalastyleSensor], "scalastyle")
 
@@ -86,7 +99,7 @@ final class ScalastyleSensor(
 
     // Run Scalastyle analysis.
     val messages: Seq[Message[FileSpec]] = scalastyleChecker
-      .checkFiles(config, fileSpecs)
+      .checkFiles(new Checker(), config, fileSpecs)
 
     messages foreach {
       // Process each Scalastyle result.

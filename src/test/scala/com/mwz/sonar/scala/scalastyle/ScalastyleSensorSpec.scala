@@ -19,19 +19,37 @@
 package com.mwz.sonar.scala
 package scalastyle
 
+import java.nio.charset.Charset
+import java.nio.file.Paths
 import java.util
 
 import com.mwz.sonar.scala.util.PathUtils.cwd
+import org.mockito.ArgumentMatchers._
+import org.mockito.Mockito._
 import org.scalactic._
 import org.scalastyle.scalariform.EmptyClassChecker
-import org.scalastyle.{ConfigurationChecker, ErrorLevel, FileSpec, InfoLevel, StyleError, WarningLevel}
+import org.scalastyle.{
+  ConfigurationChecker,
+  ErrorLevel,
+  FileSpec,
+  InfoLevel,
+  ScalastyleChecker,
+  StyleError,
+  WarningLevel
+}
 import org.scalatest._
 import org.scalatest.mockito.MockitoSugar
 import org.sonar.api.batch.fs.InputFile
-import org.sonar.api.batch.fs.internal.TestInputFileBuilder
+import org.sonar.api.batch.fs.internal.{
+  DefaultFileSystem,
+  DefaultTextPointer,
+  DefaultTextRange,
+  TestInputFileBuilder
+}
 import org.sonar.api.batch.rule.internal.ActiveRulesBuilder
 import org.sonar.api.batch.rule.{ActiveRule, ActiveRules, Severity}
 import org.sonar.api.batch.sensor.internal.{DefaultSensorDescriptor, SensorContextTester}
+import org.sonar.api.batch.sensor.issue.internal.DefaultIssue
 import org.sonar.api.config.internal.MapSettings
 import org.sonar.api.profiles.RulesProfile
 import org.sonar.api.rule.RuleKey
@@ -41,14 +59,18 @@ import scala.collection.JavaConverters._
 class ScalastyleSensorSpec
     extends FlatSpec
     with Matchers
+    with SensorContextMatchers
     with LoneElement
     with OptionValues
     with MockitoSugar {
 
   trait Ctx {
-    val context = SensorContextTester.create(cwd)
+    val context = SensorContextTester.create(Paths.get("./"))
     val rulesProfile = mock[RulesProfile]
-    val scalastyleSensor = new ScalastyleSensor(rulesProfile)
+    val scalastyleChecker = mock[ScalastyleChecker[FileSpec]]
+    when(scalastyleChecker.checkFiles(any(), any())).thenReturn(List.empty)
+
+    val scalastyleSensor = new ScalastyleSensor(rulesProfile, scalastyleChecker)
     val descriptor = new DefaultSensorDescriptor
   }
 
@@ -212,9 +234,152 @@ class ScalastyleSensorSpec
     result.params.asScala === Map("param1" -> "value1")
   }
 
-  it should "not open any issues if there are no active rules" in {}
+  it should "not open any issues if there are no active rules" in new Ctx {
+    scalastyleSensor.execute(context)
+    context.allIssues shouldBe empty
+  }
 
-  it should "not open any issues if there are no style errors reported" in {}
+  it should "not open any issues if there are no style errors reported" in new Ctx {
+    val activeRules: ActiveRules =
+      new ActiveRulesBuilder()
+        .create(RuleKey.of("sonar-scala-scalastyle", "rule1"))
+        .setInternalKey("rule1")
+        .setSeverity(Severity.MAJOR.toString)
+        .setParam("param1", "value1")
+        .activate()
+        .build()
 
-  it should "open an issue for each style error" in {}
+    val fileSpec: FileSpec = new FileSpec {
+      def name: String = cwd.resolve("TestFile.scala").toString
+    }
+
+    context.setActiveRules(activeRules)
+    scalastyleSensor.execute(context)
+
+    context.allIssues shouldBe empty
+  }
+
+  it should "open an issue for each style error" in new Ctx {
+    val fileSpec: FileSpec = new FileSpec {
+      def name: String = Paths.get("./").resolve("TestFile.scala").toString
+    }
+
+    val styleError = StyleError(
+      fileSpec,
+      (new EmptyClassChecker).getClass,
+      "org.scalastyle.scalariform.EmptyClassChecker",
+      ErrorLevel,
+      List.empty,
+      lineNumber = Some(1),
+      column = Some(5),
+      customMessage = None
+    )
+
+    val checker = mock[ScalastyleChecker[FileSpec]]
+    when(checker.checkFiles(any(), any())).thenReturn(List(styleError))
+
+    val testFile = TestInputFileBuilder
+      .create("", "TestFile.scala")
+      .setLanguage("scala")
+      .setType(InputFile.Type.MAIN)
+      .setLines(2)
+      .setOriginalLineOffsets(Array(0, 16))
+      .build()
+
+    val ruleKey = RuleKey.of("sonar-scala-scalastyle", "org.scalastyle.scalariform.EmptyClassChecker")
+
+    val activeRules: ActiveRules =
+      new ActiveRulesBuilder()
+        .create(ruleKey)
+        .setInternalKey("org.scalastyle.scalariform.EmptyClassChecker")
+        .setSeverity(Severity.MAJOR.toString)
+        .setParam("ruleClass", "org.scalastyle.scalariform.EmptyClassChecker")
+        .activate()
+        .build()
+
+    val issue = new DefaultIssue().forRule(ruleKey)
+    val expected = Seq(
+      issue.at(
+        issue
+          .newLocation()
+          .on(testFile)
+          .at(
+            new DefaultTextRange(
+              new DefaultTextPointer(1, 0),
+              new DefaultTextPointer(1, 15)
+            )
+          )
+          .message("Redundant braces in class definition")
+      )
+    )
+
+    context.fileSystem().add(testFile)
+    context.setActiveRules(activeRules)
+    new ScalastyleSensor(rulesProfile, checker).execute(context)
+
+    context.allIssues should contain theSameElementsAs expected
+  }
+
+  it should "open an issue for each style error in a module" in new Ctx {
+    val fileSpec: FileSpec = new FileSpec {
+      def name: String = Paths.get("./module1").resolve("TestFile.scala").toString
+    }
+
+    val styleError = StyleError(
+      fileSpec,
+      (new EmptyClassChecker).getClass,
+      "org.scalastyle.scalariform.EmptyClassChecker",
+      ErrorLevel,
+      List.empty,
+      lineNumber = Some(1),
+      column = Some(5),
+      customMessage = None
+    )
+
+    val checker = mock[ScalastyleChecker[FileSpec]]
+    when(checker.checkFiles(any(), any())).thenReturn(List(styleError))
+
+    val testFile = TestInputFileBuilder
+      .create("module1", "TestFile.scala")
+      .setLanguage("scala")
+      .setType(InputFile.Type.MAIN)
+      .setLines(2)
+      .setOriginalLineOffsets(Array(0, 16))
+      .build()
+
+    val ruleKey = RuleKey.of("sonar-scala-scalastyle", "org.scalastyle.scalariform.EmptyClassChecker")
+
+    val activeRules: ActiveRules =
+      new ActiveRulesBuilder()
+        .create(ruleKey)
+        .setInternalKey("org.scalastyle.scalariform.EmptyClassChecker")
+        .setSeverity(Severity.MAJOR.toString)
+        .setParam("ruleClass", "org.scalastyle.scalariform.EmptyClassChecker")
+        .activate()
+        .build()
+
+    val issue = new DefaultIssue().forRule(ruleKey)
+    val expected = Seq(
+      issue.at(
+        issue
+          .newLocation()
+          .on(testFile)
+          .at(
+            new DefaultTextRange(
+              new DefaultTextPointer(1, 0),
+              new DefaultTextPointer(1, 15)
+            )
+          )
+          .message("Redundant braces in class definition")
+      )
+    )
+
+    val fs = new DefaultFileSystem(Paths.get("./module1")).setEncoding(Charset.defaultCharset)
+    context.setFileSystem(fs)
+    context.fileSystem().add(testFile)
+    context.setActiveRules(activeRules)
+    new ScalastyleSensor(rulesProfile, checker).execute(context)
+
+    context.allIssues should contain theSameElementsAs expected
+  }
 }

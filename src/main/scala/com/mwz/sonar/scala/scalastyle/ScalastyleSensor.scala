@@ -20,6 +20,7 @@ package com.mwz.sonar.scala
 package scalastyle
 
 import java.io.File
+import java.nio.file.Paths
 
 import com.mwz.sonar.scala.util.JavaOptionals._
 import com.mwz.sonar.scala.util.Log
@@ -37,7 +38,10 @@ import scala.collection.immutable.Seq
 /**
  * Main sensor for executing Scalastyle analysis.
  */
-final class ScalastyleSensor(qualityProfile: QualityProfile) extends Sensor {
+final class ScalastyleSensor(
+  qualityProfile: QualityProfile,
+  scalastyleChecker: ScalastyleChecker[FileSpec]
+) extends Sensor {
   private[this] val log = Log(classOf[ScalastyleSensor], "scalastyle")
 
   override def describe(descriptor: SensorDescriptor): Unit = {
@@ -81,7 +85,7 @@ final class ScalastyleSensor(qualityProfile: QualityProfile) extends Sensor {
     val fileSpecs: Seq[FileSpec] = ScalastyleSensor.fileSpecs(context)
 
     // Run Scalastyle analysis.
-    val messages: Seq[Message[FileSpec]] = new ScalastyleChecker()
+    val messages: Seq[Message[FileSpec]] = scalastyleChecker
       .checkFiles(config, fileSpecs)
 
     messages foreach {
@@ -189,7 +193,8 @@ private[scalastyle] object ScalastyleSensor {
     rule: ActiveRule
   ): Unit = {
     val predicates = context.fileSystem.predicates
-    val file: InputFile = context.fileSystem.inputFile(predicates.hasPath(styleError.fileSpec.name))
+    val relativized = context.fileSystem.baseDir.toPath.relativize(Paths.get(styleError.fileSpec.name))
+    val file: InputFile = context.fileSystem.inputFile(predicates.hasPath(relativized.toString))
     val newIssue: NewIssue = context.newIssue().forRule(rule.ruleKey)
     val line: Int = styleError.lineNumber.filter(_ > 0).getOrElse(1) // scalastyle:ignore
     val message: Option[String] = styleError.customMessage orElse inspections

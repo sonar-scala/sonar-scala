@@ -249,10 +249,6 @@ class ScalastyleSensorSpec
         .activate()
         .build()
 
-    val fileSpec: FileSpec = new FileSpec {
-      def name: String = cwd.resolve("TestFile.scala").toString
-    }
-
     context.setActiveRules(activeRules)
     scalastyleSensor.execute(context)
 

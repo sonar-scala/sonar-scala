@@ -16,23 +16,31 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-package com.mwz.sonar.scala.scapegoat
+package com.mwz.sonar.scala
+package scapegoat
 
-import org.scalatest.{FlatSpec, Matchers}
-
+import java.io.File
 import java.nio.file.Paths
+
+import com.mwz.sonar.scala.util.PathUtils.cwd
+import org.scalatest.{FlatSpec, Matchers}
 
 /** Tests the correct behavior of the Scapegoat XML reports parser */
 class ScapegoatReportParserSpec extends FlatSpec with Matchers {
   val scapegoatReportParser = new ScapegoatReportParser()
 
-  behavior of "the Scapegoat XML Report Parser"
-
-  it should "replace all dots (.) except the last one in a scaegoat path with slashes (/)" in {
+  it should "replace all dots (.) with slashes (/) in a scapegoat path except for the file extension" in {
     val scapegoatPath = "com.mwz.sonar.scala.scapegoat.TestFile.scala"
     val linuxPath = scapegoatReportParser.replaceAllDotsButLastWithSlashes(scapegoatPath)
 
     linuxPath shouldBe "com/mwz/sonar/scala/scapegoat/TestFile.scala"
+  }
+
+  it should "replace all dots (.) with slashes (/) in a scapegoat absolute path except for the file extension" in {
+    val scapegoatPath = cwd.resolve("ScapegoatReportParserSpec.scala").toString.replace("/", ".")
+    val linuxPath = scapegoatReportParser.replaceAllDotsButLastWithSlashes(scapegoatPath)
+
+    linuxPath shouldBe cwd.resolve("ScapegoatReportParserSpec.scala").toString
   }
 
   it should "be able to parse an empty report" in {

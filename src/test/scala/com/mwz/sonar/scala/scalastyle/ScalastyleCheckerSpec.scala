@@ -19,29 +19,26 @@
 package com.mwz.sonar.scala
 package scalastyle
 
-import org.scalastyle._
+import org.mockito.ArgumentMatchers._
+import org.mockito.Mockito._
+import org.scalastyle.{FileSpec, ScalastyleConfiguration, ScalastyleChecker => Checker}
+import org.scalatest.FlatSpec
+import org.scalatest.mockito.MockitoSugar
 
-final case class ScalastyleInspection(
-  clazz: String,
-  id: String,
-  label: String,
-  description: String,
-  extraDescription: Option[String],
-  justification: Option[String],
-  defaultLevel: Level,
-  params: Seq[Param]
-)
+class ScalastyleCheckerSpec extends FlatSpec with MockitoSugar {
+  "ScalastyleChecker" should "checkFiles" in {
+    val checker = mock[Checker[FileSpec]]
+    when(checker.checkFiles(any(), any()))
+      .thenReturn(List.empty)
 
-final case class Param(
-  name: String,
-  typ: ParameterType,
-  label: String,
-  description: String,
-  default: String
-)
+    val config: ScalastyleConfiguration = new ScalastyleConfiguration(
+      "SonarQube",
+      commentFilter = true,
+      List.empty
+    )
 
-object ScalastyleInspections {
-  val AllInspections: List[ScalastyleInspection] = ???
-  val AllInspectionsByClass: Map[String, ScalastyleInspection] =
-    AllInspections.map(i => i.clazz -> i).toMap
+    new ScalastyleChecker().checkFiles(checker, config, Seq.empty)
+
+    verify(checker).checkFiles(any(), any())
+  }
 }

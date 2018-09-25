@@ -24,6 +24,7 @@ import cats.kernel.Eq
 import cats.syntax.eq._
 import com.mwz.sonar.scala.util.JavaOptionals._
 import com.ncredinburgh.sonar.{scalastyle => oldscalastyle}
+import org.scalastyle.{FileSpec, ScalastyleChecker}
 import org.sonar.api.Plugin
 import org.sonar.api.config.Configuration
 import org.sonar.api.resources.AbstractLanguage
@@ -112,21 +113,22 @@ final class ScalaPlugin extends Plugin {
       // Old Scalastyle (ncredinburgh).
       classOf[oldscalastyle.ScalastyleRepository],
       classOf[oldscalastyle.ScalastyleQualityProfile],
-      classOf[oldscalastyle.ScalastyleSensor],
       // Scalastyle.
-      // classOf[scalastyle.ScalastyleRulesRepository],
-      // classOf[scalastyle.ScalastyleQualityProfile],
+      classOf[scalastyle.ScalastyleRulesRepository],
+      classOf[scalastyle.ScalastyleQualityProfile],
+      classOf[scalastyle.ScalastyleChecker],
+      classOf[scalastyle.ScalastyleSensor],
       // Scapegoat.
       classOf[scapegoat.ScapegoatRulesRepository],
       classOf[scapegoat.ScapegoatQualityProfile],
       classOf[scapegoat.ScapegoatReportParser],
       classOf[scapegoat.ScapegoatSensor],
       // Built-in quality profiles.
-      // classOf[qualityprofiles.ScalastyleScapegoatQualityProfile],
+      classOf[qualityprofiles.ScalastyleScapegoatQualityProfile],
       // Scoverage.
       classOf[scoverage.ScoverageMetrics],
       classOf[scoverage.ScoverageReportParser],
-      classOf[scoverage.ScoverageSensor],
+      classOf[scoverage.ScoverageSensor]
     )
   }
 }

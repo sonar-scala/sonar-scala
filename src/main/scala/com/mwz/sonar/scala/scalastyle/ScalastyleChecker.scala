@@ -19,29 +19,26 @@
 package com.mwz.sonar.scala
 package scalastyle
 
-import org.scalastyle._
+import org.scalastyle.{FileSpec, Message, ScalastyleConfiguration, ScalastyleChecker => Checker}
+import org.sonar.api.batch.ScannerSide
 
-final case class ScalastyleInspection(
-  clazz: String,
-  id: String,
-  label: String,
-  description: String,
-  extraDescription: Option[String],
-  justification: Option[String],
-  defaultLevel: Level,
-  params: Seq[Param]
-)
+trait ScalastyleCheckerAPI {
+  private[scalastyle] def checkFiles(
+    checker: Checker[FileSpec],
+    configuration: ScalastyleConfiguration,
+    files: Seq[FileSpec]
+  ): List[Message[FileSpec]]
+}
 
-final case class Param(
-  name: String,
-  typ: ParameterType,
-  label: String,
-  description: String,
-  default: String
-)
-
-object ScalastyleInspections {
-  val AllInspections: List[ScalastyleInspection] = ???
-  val AllInspectionsByClass: Map[String, ScalastyleInspection] =
-    AllInspections.map(i => i.clazz -> i).toMap
+/**
+ * A wrapper around ScalastyleChecker so we can inject it into the sensor.
+ */
+@ScannerSide
+final class ScalastyleChecker extends ScalastyleCheckerAPI {
+  private[scalastyle] def checkFiles(
+    checker: Checker[FileSpec],
+    configuration: ScalastyleConfiguration,
+    files: Seq[FileSpec]
+  ): List[Message[FileSpec]] =
+    checker.checkFiles(configuration, files)
 }

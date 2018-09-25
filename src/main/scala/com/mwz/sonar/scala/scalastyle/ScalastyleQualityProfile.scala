@@ -49,7 +49,10 @@ object ScalastyleQualityProfile {
   /** Activates all rules in the Scalastyle rules repository in the given profile */
   def activateAllRules(profile: BuiltInQualityProfilesDefinition.NewBuiltInQualityProfile): Unit = {
     ScalastyleInspections.AllInspections
-      .filterNot(i => ScalastyleRulesRepository.SkipTemplateInstances.contains(i.id))
+      .filterNot { i =>
+        ScalastyleRulesRepository.SkipTemplateInstances.contains(i.id) ||
+        ScalastyleRulesRepository.BlacklistRules.contains(i.id)
+      }
       .foreach(i => profile.activateRule(ScalastyleRulesRepository.RepositoryKey, i.clazz))
   }
 }

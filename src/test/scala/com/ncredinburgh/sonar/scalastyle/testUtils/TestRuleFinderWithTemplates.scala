@@ -59,7 +59,4 @@ object TestRuleFinderWithTemplates extends RuleFinder {
   }.asJavaCollection
 
   override def find(query: RuleQuery): Rule = ???
-
-  private def isTemplate(rule: RepositoryRule): Boolean =
-    rule.params.nonEmpty
 }

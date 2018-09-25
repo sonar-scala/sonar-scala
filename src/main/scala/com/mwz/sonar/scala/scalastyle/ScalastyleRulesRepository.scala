@@ -60,11 +60,17 @@ private[scalastyle] object ScalastyleRulesRepository {
 
   final val RepositoryKey = "sonar-scala-scalastyle"
   final val RepositoryName = "Scalastyle"
+  final val RuleClassParam = "ruleClass"
+
+  // Blacklist the following rules:
+  // - "no.newline.at.eof" - it is the opposite to "newline.at.eof".
+  final val BlacklistRules = Set("no.newline.at.eof")
 
   // Skip creating template instances for the following inspections:
-  // header.matches - this rule wouldn't work with a default parameter value.
-  // regex - no default regex provided.
-  final val SkipTemplateInstances = Set("header.matches", "regex")
+  // - header.matches - this rule wouldn't work with a default parameter value.
+  // - regex - no default regex provided.
+  // - scaladoc - incorrect default value of the ignoreRegex parameter.
+  final val SkipTemplateInstances = Set("header.matches", "regex", "scaladoc")
 
   /**
    * Create a new rule from the given inspection.
@@ -82,6 +88,13 @@ private[scalastyle] object ScalastyleRulesRepository {
 
     // Create parameters.
     inspection.params.foreach(param => createParam(inspection.clazz, rule, param))
+
+    // Create Scalastyle checker parameter, which refers to the class name.
+    rule
+      .createParam(RuleClassParam)
+      .setType(RuleParamType.STRING)
+      .setDescription("Scalastyle's rule (checker) class name.")
+      .setDefaultValue(inspection.clazz)
 
     // Set the rule as a template.
     rule.setTemplate(template)

@@ -18,48 +18,50 @@
  */
 package com.mwz.sonar.scala
 
-import com.mwz.sonar.scala.scapegoat.{
-  ScapegoatQualityProfile,
-  ScapegoatReportParser,
-  ScapegoatRulesRepository,
-  ScapegoatSensor
-}
-import com.mwz.sonar.scala.scoverage.{ScoverageMetrics, ScoverageReportParser, ScoverageSensor}
-import com.mwz.sonar.scala.sensor.ScalaSensor
-import com.ncredinburgh.sonar.scalastyle.{ScalastyleQualityProfile, ScalastyleRepository, ScalastyleSensor}
+import com.ncredinburgh.sonar.{scalastyle => oldscalastyle}
 import org.scalatest.{FlatSpec, Matchers}
 import org.sonar.api.internal.SonarRuntimeImpl
 import org.sonar.api.utils.Version
 import org.sonar.api.{Plugin, SonarQubeSide, SonarRuntime}
 
-/** Tests the Scala SonarQube plugin extension points */
 class ScalaPluginSpec extends FlatSpec with Matchers {
-  val runtime: SonarRuntime = SonarRuntimeImpl.forSonarQube(Version.create(6, 7), SonarQubeSide.SCANNER)
+  val runtime: SonarRuntime = SonarRuntimeImpl.forSonarQube(
+    Version.create(6, 7),
+    SonarQubeSide.SCANNER
+  )
   val context = new Plugin.Context(runtime)
   new ScalaPlugin().define(context)
-  behavior of "the scala plugin"
 
-  it should "provide scala sensor" in {
+  "Scala plugin" should "provide scala sensor" in {
     assert(context.getExtensions.contains(classOf[Scala]))
-    assert(context.getExtensions.contains(classOf[ScalaSensor]))
+    assert(context.getExtensions.contains(classOf[sensor.ScalaSensor]))
   }
 
-  it should "provide scalastyle sensor" in {
-    assert(context.getExtensions.contains(classOf[ScalastyleRepository]))
-    assert(context.getExtensions.contains(classOf[ScalastyleQualityProfile]))
-    assert(context.getExtensions.contains(classOf[ScalastyleSensor]))
+  it should "provide Old Scalastyle (ncredinburgh) repository and quality profile" in {
+    assert(context.getExtensions.contains(classOf[oldscalastyle.ScalastyleRepository]))
+    assert(context.getExtensions.contains(classOf[oldscalastyle.ScalastyleQualityProfile]))
+  }
+
+  it should "provide Scalastyle repository, quality profile & sensor" in {
+    assert(context.getExtensions.contains(classOf[scalastyle.ScalastyleRulesRepository]))
+    assert(context.getExtensions.contains(classOf[scalastyle.ScalastyleQualityProfile]))
+    assert(context.getExtensions.contains(classOf[scalastyle.ScalastyleSensor]))
+  }
+
+  it should "provide scapegoat repository, quality profile & sensor" in {
+    assert(context.getExtensions.contains(classOf[scapegoat.ScapegoatRulesRepository]))
+    assert(context.getExtensions.contains(classOf[scapegoat.ScapegoatQualityProfile]))
+    assert(context.getExtensions.contains(classOf[scapegoat.ScapegoatReportParser]))
+    assert(context.getExtensions.contains(classOf[scapegoat.ScapegoatSensor]))
+  }
+
+  it should "provide additional built-in quality profiles" in {
+    assert(context.getExtensions.contains(classOf[qualityprofiles.ScalastyleScapegoatQualityProfile]))
   }
 
   it should "provide scoverage sensor" in {
-    assert(context.getExtensions.contains(classOf[ScoverageMetrics]))
-    assert(context.getExtensions.contains(classOf[ScoverageReportParser]))
-    assert(context.getExtensions.contains(classOf[ScoverageSensor]))
-  }
-
-  it should "provide scapegoat sensor" in {
-    assert(context.getExtensions.contains(classOf[ScapegoatRulesRepository]))
-    assert(context.getExtensions.contains(classOf[ScapegoatQualityProfile]))
-    assert(context.getExtensions.contains(classOf[ScapegoatReportParser]))
-    assert(context.getExtensions.contains(classOf[ScapegoatSensor]))
+    assert(context.getExtensions.contains(classOf[scoverage.ScoverageMetrics]))
+    assert(context.getExtensions.contains(classOf[scoverage.ScoverageReportParser]))
+    assert(context.getExtensions.contains(classOf[scoverage.ScoverageSensor]))
   }
 }

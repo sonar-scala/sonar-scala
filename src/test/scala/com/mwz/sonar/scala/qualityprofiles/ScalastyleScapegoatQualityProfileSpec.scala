@@ -46,7 +46,7 @@ class ScalastyleScapegoatQualityProfileSpec extends FlatSpec with Inspectors wit
   }
 
   it should "define all Scalastyle + Scapegoat rules" in new Ctx {
-    qualityProfile.rules should have size 193 // 67 from Scalastyle + 126 from Scapegoat
+    qualityProfile.rules should have size 191 // 65 from Scalastyle + 126 from Scapegoat
   }
 
   it should "have all rules come from either the Scalastyle or the Scapegaot rules repositories" in new Ctx {

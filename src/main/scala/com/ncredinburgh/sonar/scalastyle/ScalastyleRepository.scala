@@ -78,8 +78,8 @@ final class ScalastyleRepository extends RulesDefinition {
         // if a rule has at least one real parameter make it a template
         rule.setTemplate(repoRule.params.nonEmpty)
 
-        // TODO: Set the status of those rules as deprecated upon release of the new module.
-        // rule.setStatus(RuleStatus.DEPRECATED)
+        // Deprecated & replaced by the mwz.sonar.scala.scalastyle module.
+        rule.setStatus(RuleStatus.DEPRECATED)
       }
     }
 

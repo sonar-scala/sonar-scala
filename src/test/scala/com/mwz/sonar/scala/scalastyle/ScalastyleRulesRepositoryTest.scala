@@ -49,7 +49,8 @@ class ScalastyleRulesRepositoryTest extends FlatSpec with Matchers with Inspecto
 
   it should "include all Scalastyle inspections" in new Ctx {
     ScalastyleInspections.AllInspections should have size 69 // 29 templates + 40 default rules
-    repository.rules should have size 96 // 29 templates + 40 default rules + 27 template instances
+    ScalastyleInspections.AllInspectionsByClass.size shouldBe ScalastyleInspections.AllInspections.size
+    repository.rules should have size 95 // 29 templates + 40 default rules + 26 template instances
   }
 
   it should "have all rules with non-empty properties" in new Ctx {
@@ -104,6 +105,13 @@ class ScalastyleRulesRepositoryTest extends FlatSpec with Matchers with Inspecto
     }
   }
 
+  it should "have all rules contain ruleClass parameter" in new Ctx {
+    val rules: Seq[Rule] = repository.rules.asScala.filter(r => !r.params.isEmpty)
+    forEvery(rules) { rule =>
+      rule.params.asScala.exists(p => p.key == "ruleClass" && p.defaultValue.startsWith("org.scalastyle"))
+    }
+  }
+
   it should "create rules with correct parameters" in new Ctx {
     val rule: Rule = repository.rule("org.scalastyle.file.FileLineLengthChecker")
     val params: Seq[(String, RuleParamType, String)] =
@@ -111,7 +119,8 @@ class ScalastyleRulesRepositoryTest extends FlatSpec with Matchers with Inspecto
     val expected = Seq(
       ("maxLineLength", RuleParamType.INTEGER, "160"),
       ("tabSize", RuleParamType.INTEGER, "4"),
-      ("ignoreImports", RuleParamType.BOOLEAN, "false")
+      ("ignoreImports", RuleParamType.BOOLEAN, "false"),
+      ("ruleClass", RuleParamType.STRING, "org.scalastyle.file.FileLineLengthChecker")
     )
 
     params should contain theSameElementsAs expected

@@ -44,7 +44,7 @@ final class ScapegoatReportParser extends ScapegoatReportParserAPI {
           val a = Option(acc).filter(_.nonEmpty).getOrElse("/")
           if (Paths.get(a).toFile.exists)
             Paths.get(a).resolve(s).toString
-          else s"$a.$s"
+          else s"$a.$str"
       }
     } else AllDotsButLastRegex.replaceAllIn(target = path, replacement = "/")
 

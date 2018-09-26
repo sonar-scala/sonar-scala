@@ -19,28 +19,41 @@
 package com.mwz.sonar.scala
 package scapegoat
 
-import java.io.File
 import java.nio.file.Paths
 
 import com.mwz.sonar.scala.util.PathUtils.cwd
 import org.scalatest.{FlatSpec, Matchers}
 
 /** Tests the correct behavior of the Scapegoat XML reports parser */
-class ScapegoatReportParserSpec extends FlatSpec with Matchers {
+class ScapegoatReportParserSpec extends FlatSpec with Matchers with WithFile {
   val scapegoatReportParser = new ScapegoatReportParser()
 
-  it should "replace all dots (.) with slashes (/) in a scapegoat path except for the file extension" in {
+  "replaceAllDotsButLastWithSlashes" should "work with relative paths" in {
     val scapegoatPath = "com.mwz.sonar.scala.scapegoat.TestFile.scala"
     val linuxPath = scapegoatReportParser.replaceAllDotsButLastWithSlashes(scapegoatPath)
 
     linuxPath shouldBe "com/mwz/sonar/scala/scapegoat/TestFile.scala"
   }
 
-  it should "replace all dots (.) with slashes (/) in a scapegoat absolute path except for the file extension" in {
+  it should "work with absolute paths" in {
     val scapegoatPath = cwd.resolve("ScapegoatReportParserSpec.scala").toString.replace("/", ".")
     val linuxPath = scapegoatReportParser.replaceAllDotsButLastWithSlashes(scapegoatPath)
 
     linuxPath shouldBe cwd.resolve("ScapegoatReportParserSpec.scala").toString
+  }
+
+  it should "handle correctly dots in the path" in withFile(cwd.resolve("example.file.scala")) { file =>
+    val scapegoatPath = file.toString.replace("/", ".")
+    val linuxPath = scapegoatReportParser.replaceAllDotsButLastWithSlashes(scapegoatPath)
+
+    linuxPath shouldBe file.toString
+  }
+
+  it should "handle correctly multiple dots in path" in withFile(cwd.resolve("example.file.scala")) { file =>
+    val scapegoatPath = file.toString.replace("/", ".")
+    val linuxPath = scapegoatReportParser.replaceAllDotsButLastWithSlashes(scapegoatPath)
+
+    linuxPath shouldBe file.toString
   }
 
   it should "be able to parse an empty report" in {

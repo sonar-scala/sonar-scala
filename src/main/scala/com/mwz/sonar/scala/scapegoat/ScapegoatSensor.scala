@@ -98,9 +98,13 @@ final class ScapegoatSensor(scapegoatReportParser: ScapegoatReportParserAPI) ext
 
     scapegoatIssuesByFilename foreach { tuple =>
       val (filename, scapegoatIssues) = tuple
-      log.info(s"Saving the scapegoat issues for file '$filename'.")
+      val relativeFile =
+        if (Paths.get(filename).isAbsolute)
+          context.fileSystem.baseDir.toPath.relativize(Paths.get(filename)).toString
+        else filename
+      log.info(s"Saving the scapegoat issues for file '$relativeFile'.")
 
-      getModuleFile(filename, filesystem) match {
+      getModuleFile(relativeFile, filesystem) match {
         case Some(file) =>
           scapegoatIssues foreach { scapegoatIssue =>
             log.debug(s"Saving the scapegoat issue: $scapegoatIssue.")
@@ -146,7 +150,7 @@ final class ScapegoatSensor(scapegoatReportParser: ScapegoatReportParserAPI) ext
             }
           }
         case None =>
-          log.error(s"The file '$filename' couldn't be found.")
+          log.error(s"The file '$relativeFile' couldn't be found.")
       }
     }
   }

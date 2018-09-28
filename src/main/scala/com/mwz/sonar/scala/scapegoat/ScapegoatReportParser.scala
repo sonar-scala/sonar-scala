@@ -19,8 +19,8 @@
 package com.mwz.sonar.scala.scapegoat
 
 import org.sonar.api.batch.ScannerSide
+import java.nio.file.{Path, Paths}
 
-import java.nio.file.Path
 import scala.xml.XML
 
 trait ScapegoatReportParserAPI {
@@ -32,9 +32,21 @@ trait ScapegoatReportParserAPI {
 final class ScapegoatReportParser extends ScapegoatReportParserAPI {
   private[this] val AllDotsButLastRegex = raw"\.(?=.*\.)".r
 
-  /** Replaces all dots (.) except the last one in a scapegoat path with slashes (/) */
+  /**
+   * Replaces all dots '.' except the last one in a scapegoat path with slashes '/'
+   * while keeping valid directories which contain '.' in their name.
+   */
   private[scapegoat] def replaceAllDotsButLastWithSlashes(path: String): String =
-    AllDotsButLastRegex.replaceAllIn(target = path, replacement = "/")
+    if (path.startsWith(".")) {
+      path.split('.').reduceLeft[String] {
+        case (acc, str) =>
+          val s = Option(str).filter(_.nonEmpty).getOrElse("/")
+          val a = Option(acc).filter(_.nonEmpty).getOrElse("/")
+          if (Paths.get(a).toFile.exists)
+            Paths.get(a).resolve(s).toString
+          else s"$a.$str"
+      }
+    } else AllDotsButLastRegex.replaceAllIn(target = path, replacement = "/")
 
   /** Parses the scapegoat xml report and returns all scapegoat issues by filename */
   override def parse(scapegoatReportPath: Path): Map[String, Seq[ScapegoatIssue]] = {

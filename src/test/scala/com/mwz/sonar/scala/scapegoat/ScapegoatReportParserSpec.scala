@@ -16,26 +16,48 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-package com.mwz.sonar.scala.scapegoat
-
-import org.scalatest.{FlatSpec, Matchers}
+package com.mwz.sonar.scala
+package scapegoat
 
 import java.nio.file.Paths
 
+import com.mwz.sonar.scala.util.PathUtils.cwd
+import org.scalatest.{FlatSpec, Matchers}
+
 /** Tests the correct behavior of the Scapegoat XML reports parser */
-class ScapegoatReportParserSpec extends FlatSpec with Matchers {
+class ScapegoatReportParserSpec extends FlatSpec with Matchers with WithFile {
   val scapegoatReportParser = new ScapegoatReportParser()
 
-  behavior of "the Scapegoat XML Report Parser"
-
-  it should "replace all dots (.) except the last one in a scaegoat path with slashes (/)" in {
+  "replaceAllDotsButLastWithSlashes" should "work with relative paths" in {
     val scapegoatPath = "com.mwz.sonar.scala.scapegoat.TestFile.scala"
     val linuxPath = scapegoatReportParser.replaceAllDotsButLastWithSlashes(scapegoatPath)
 
     linuxPath shouldBe "com/mwz/sonar/scala/scapegoat/TestFile.scala"
   }
 
-  it should "be able to parse an empty report" in {
+  it should "work with absolute paths" in {
+    val scapegoatPath = cwd.resolve("ScapegoatReportParserSpec.scala").toString.replace("/", ".")
+    val linuxPath = scapegoatReportParser.replaceAllDotsButLastWithSlashes(scapegoatPath)
+
+    linuxPath shouldBe cwd.resolve("ScapegoatReportParserSpec.scala").toString
+  }
+
+  it should "handle correctly dots in the path" in withFile(cwd.resolve("example.file.scala")) { file =>
+    val scapegoatPath = file.toString.replace("/", ".")
+    val linuxPath = scapegoatReportParser.replaceAllDotsButLastWithSlashes(scapegoatPath)
+
+    linuxPath shouldBe file.toString
+  }
+
+  it should "handle correctly multiple dots in the path" in withFile(cwd.resolve("example..file.scala")) {
+    file =>
+      val scapegoatPath = file.toString.replace("/", ".")
+      val linuxPath = scapegoatReportParser.replaceAllDotsButLastWithSlashes(scapegoatPath)
+
+      linuxPath shouldBe file.toString
+  }
+
+  "ScapegoatReportParser" should "be able to parse an empty report" in {
     val scapegoatReportPath = Paths.get("src", "test", "resources", "scapegoat", "no-warnings.xml")
     val scapegoatWarnings = scapegoatReportParser.parse(scapegoatReportPath)
 

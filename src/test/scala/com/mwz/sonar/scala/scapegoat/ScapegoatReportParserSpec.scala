@@ -49,14 +49,15 @@ class ScapegoatReportParserSpec extends FlatSpec with Matchers with WithFile {
     linuxPath shouldBe file.toString
   }
 
-  it should "handle correctly multiple dots in path" in withFile(cwd.resolve("example.file.scala")) { file =>
-    val scapegoatPath = file.toString.replace("/", ".")
-    val linuxPath = scapegoatReportParser.replaceAllDotsButLastWithSlashes(scapegoatPath)
+  it should "handle correctly multiple dots in the path" in withFile(cwd.resolve("example..file.scala")) {
+    file =>
+      val scapegoatPath = file.toString.replace("/", ".")
+      val linuxPath = scapegoatReportParser.replaceAllDotsButLastWithSlashes(scapegoatPath)
 
-    linuxPath shouldBe file.toString
+      linuxPath shouldBe file.toString
   }
 
-  it should "be able to parse an empty report" in {
+  "ScapegoatReportParser" should "be able to parse an empty report" in {
     val scapegoatReportPath = Paths.get("src", "test", "resources", "scapegoat", "no-warnings.xml")
     val scapegoatWarnings = scapegoatReportParser.parse(scapegoatReportPath)
 

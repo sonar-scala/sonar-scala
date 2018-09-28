@@ -50,7 +50,7 @@ In addition to the above, the plugin reports the following custom metrics, which
 
 
 # Quality Rules and Profiles
-This plugin integrates 69 quality checks from [Scalastyle](http://www.scalastyle.org/rules-1.0.0.html) and 126 from [Scapegoat](https://github.com/sksamuel/scapegoat/tree/v1.3.5). 40 of the Scalastyle rules are defined without parameters and the remaining 29 are rule templates, which allow you to set up custom rules by specifying the parameters yourself. Most of those are are already activated for you with default values recommended by Scalastyle. Scapegoat rules don't contain any templates.
+This plugin integrates 69 quality checks from [Scalastyle](http://www.scalastyle.org/rules-1.0.0.html) and 126 from [Scapegoat](https://github.com/sksamuel/scapegoat/tree/v1.3.7). 40 of the Scalastyle rules are defined without parameters and the remaining 29 are rule templates, which allow you to set up custom rules by specifying the parameters yourself. Most of those are are already activated for you with default values recommended by Scalastyle. Scapegoat rules don't contain any templates.
 
 Sonar-scala creates two rule repositories and three built-in quality profiles: `Scalastyle`, `Scapegoat` and a combination of those two `Scalastyle+Scapegoat`. The rules in the quality profiles are almost all activated, except for those which are broken in the upstream projects and had to be blacklisted.
 
@@ -58,7 +58,7 @@ In order to make changes to any of the rules you can clone the quality profile o
 
 For more information about Scalastyle and Scapegoat rules, please consult the upstream documentation:
 - Scalastyle - http://www.scalastyle.org/rules-1.0.0.html
-- Scapegoat - https://github.com/sksamuel/scapegoat/tree/v1.3.5
+- Scapegoat - https://github.com/sksamuel/scapegoat/tree/v1.3.7
 
 
 # Set-up

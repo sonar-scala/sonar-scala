@@ -45,6 +45,7 @@ class ScalaPluginSpec extends FlatSpec with Matchers {
   it should "provide Scalastyle repository, quality profile & sensor" in {
     assert(context.getExtensions.contains(classOf[scalastyle.ScalastyleRulesRepository]))
     assert(context.getExtensions.contains(classOf[scalastyle.ScalastyleQualityProfile]))
+    assert(context.getExtensions.contains(classOf[scalastyle.ScalastyleChecker]))
     assert(context.getExtensions.contains(classOf[scalastyle.ScalastyleSensor]))
   }
 

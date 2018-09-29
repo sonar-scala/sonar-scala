@@ -6,7 +6,7 @@ import org.scalatest.{FlatSpec, Matchers}
 import org.sonar.api.config.internal.MapSettings
 import scalariform.{ScalaVersion, ScalaVersions}
 
-class ScalaTest extends FlatSpec with Matchers {
+class ScalaSpec extends FlatSpec with Matchers {
   "getScalaVersion" should "return the available version, if properly set" in {
     val conf = new MapSettings()
       .setProperty("sonar.scala.version", "2.11.11")

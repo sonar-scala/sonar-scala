@@ -6,7 +6,7 @@ import com.mwz.sonar.scala.util.PathUtils._
 import org.scalatest.{FlatSpec, Matchers}
 import org.sonar.api.batch.fs.internal.DefaultFileSystem
 
-class PathUtilsTest extends FlatSpec with Matchers {
+class PathUtilsSpec extends FlatSpec with Matchers {
   "relativize" should "successfully resolve a relative suffix path against a 'next' path" in {
     PathUtils.relativize(
       base = Paths.get("."),

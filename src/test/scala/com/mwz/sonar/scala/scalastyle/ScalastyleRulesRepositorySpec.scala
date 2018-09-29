@@ -29,7 +29,7 @@ import org.sonar.api.server.rule.{RuleParamType, RulesDefinition}
 
 import scala.collection.JavaConverters._
 
-class ScalastyleRulesRepositoryTest extends FlatSpec with Matchers with Inspectors with LoneElement {
+class ScalastyleRulesRepositorySpec extends FlatSpec with Matchers with Inspectors with LoneElement {
 
   trait Ctx {
     val context = new Context()

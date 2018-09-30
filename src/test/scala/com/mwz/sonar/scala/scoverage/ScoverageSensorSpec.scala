@@ -24,7 +24,7 @@ import java.nio.file.{Path, Paths}
 import com.mwz.sonar.scala.util.PathUtils._
 import org.scalatest.{FlatSpec, LoneElement}
 import org.sonar.api.batch.fs.InputFile
-import org.sonar.api.batch.fs.internal.{DefaultFileSystem, TestInputFileBuilder}
+import org.sonar.api.batch.fs.internal.TestInputFileBuilder
 import org.sonar.api.batch.sensor.internal.{DefaultSensorDescriptor, SensorContextTester}
 import org.sonar.api.config.internal.MapSettings
 
@@ -114,15 +114,10 @@ class ScoverageSensorSpec extends FlatSpec with SensorContextMatchers with LoneE
   }
 
   it should "get scoverage report path set in sonar properties" in {
-    val deprecated = scoverageSensor.getScoverageReportPath(
-      new MapSettings().setProperty("sonar.scoverage.reportPath", "target/report-path").asConfig()
-    )
-    deprecated shouldBe Paths.get(s"target/report-path")
-
-    val current = scoverageSensor.getScoverageReportPath(
+    val path = scoverageSensor.getScoverageReportPath(
       new MapSettings().setProperty("sonar.scala.scoverage.reportPath", "target/report-path").asConfig()
     )
-    current shouldBe Paths.get(s"target/report-path")
+    path shouldBe Paths.get(s"target/report-path")
   }
 
   it should "save the coverage metrics of a one file module" in {

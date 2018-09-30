@@ -50,18 +50,15 @@ In addition to the above, the plugin reports the following custom metrics, which
 
 
 # Quality Rules and Profiles
-This plugin integrates 69 quality checks from [Scalastyle](http://www.scalastyle.org/rules-1.0.0.html) and 125 from [Scapegoat](https://github.com/sksamuel/scapegoat/tree/v1.3.5). 40 of the Scalastyle rules are defined without parameters and work out of the box and the remaining 29 are rule templates that allow you to set up custom rules by specifying the parameters yourself. Scapegoat rules don't contain any templates.
+This plugin integrates 69 quality checks from [Scalastyle](http://www.scalastyle.org/rules-1.0.0.html) and 126 from [Scapegoat](https://github.com/sksamuel/scapegoat/tree/v1.3.7). 40 of the Scalastyle rules are defined without parameters and the remaining 29 are rule templates, which allow you to set up custom rules by specifying the parameters yourself. Most of those are are already activated for you with default values recommended by Scalastyle. Scapegoat rules don't contain any templates.
 
-Sonar-scala creates two rule repositories and two built-in quality profiles called Scalastyle and Scapegoat.
+Sonar-scala creates two rule repositories and three built-in quality profiles: `Scalastyle`, `Scapegoat` and a combination of those two `Scalastyle+Scapegoat`. The rules in the quality profiles are almost all activated, except for those which are broken in the upstream projects and had to be blacklisted.
 
-The rules in the Scalastyle quality profile are almost all deactivated. In order to use all of the rules, you should clone the quality profile and then you should be able to activate more rules, change rule severity and create more custom rules from the existing templates.
-The Scapegoat quality profile has all of the rules activated by default, so there is no need to clone the profile unless you want to deactivate some of the rules or change their severity.
-
-To combine rules from both Scalastyle and Scapegoat repositories, you can create your own quality profile and activate rules from both repositories using SonarQube rule filtering and bulk-change features available on the Rules page. In the future, sonar-scala will provide this combined quality profile along with a recommended profile, so you won't have to set this up yourself.
+In order to make changes to any of the rules you can clone the quality profile of your choice and then you should be able to activate or deactivate rules, change rule severity and create more custom rules from the existing templates. Alternatively, you can create your own quality profile and activate rules from any of the repositories using SonarQube rule filtering and bulk-change features available on the Rules page. In the future, sonar-scala will also provide a recommended profile which should fit most of the use cases for majority of the users, so hopefully any tweaks to the profile won't be necessary.
 
 For more information about Scalastyle and Scapegoat rules, please consult the upstream documentation:
 - Scalastyle - http://www.scalastyle.org/rules-1.0.0.html
-- Scapegoat - https://github.com/sksamuel/scapegoat/tree/v1.3.5
+- Scapegoat - https://github.com/sksamuel/scapegoat/tree/v1.3.7
 
 
 # Set-up
@@ -80,6 +77,7 @@ The plugin exposes the following properties which can be passed to sonar-scanner
 - **sonar.scala.version** (optional) - defines the version of Scala used in your project (requires the `{major}.{minor}` versions and the patch version is ignored, defaults to `2.11.0`)
 - **sonar.scala.scoverage.reportPath** (optional) - relative path to the scoverage report (defaults to `target/scala-${sonar.scala.version}/scoverage-report/scoverage.xml`)
 - **sonar.scala.scapegoat.reportPath** (optional) - relative path to the scapegoat report (defaults to `target/scala-${sonar.scala.version}/scapegoat-report/scapegoat.xml`)
+- **sonar.scala.scalastyle.disable** (optional) - disables the Scalastyle sensor from being executed on your sources (defaults to `false`)
 - **sonar.scala.scapegoat.disable** (optional) - disables the Scapegoat sensor from being executed on your sources (defaults to `false`)
 
 See an example usage:

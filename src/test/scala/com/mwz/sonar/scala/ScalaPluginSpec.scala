@@ -18,7 +18,6 @@
  */
 package com.mwz.sonar.scala
 
-import com.ncredinburgh.sonar.{scalastyle => oldscalastyle}
 import org.scalatest.{FlatSpec, Matchers}
 import org.sonar.api.internal.SonarRuntimeImpl
 import org.sonar.api.utils.Version
@@ -35,11 +34,6 @@ class ScalaPluginSpec extends FlatSpec with Matchers {
   "Scala plugin" should "provide scala sensor" in {
     assert(context.getExtensions.contains(classOf[Scala]))
     assert(context.getExtensions.contains(classOf[sensor.ScalaSensor]))
-  }
-
-  it should "provide Old Scalastyle (ncredinburgh) repository and quality profile" in {
-    assert(context.getExtensions.contains(classOf[oldscalastyle.ScalastyleRepository]))
-    assert(context.getExtensions.contains(classOf[oldscalastyle.ScalastyleQualityProfile]))
   }
 
   it should "provide Scalastyle repository, quality profile & sensor" in {

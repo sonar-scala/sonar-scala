@@ -36,7 +36,7 @@ sourceGenerators in Compile ++= Seq(
 )
 
 // Lib dependencies
-val sonarVersion = "6.7"
+val sonarVersion = "7.3"
 libraryDependencies ++= List(
   "org.sonarsource.sonarqube" % "sonar-core" % sonarVersion % Provided,
   "org.sonarsource.sonarqube" % "sonar-plugin-api" % sonarVersion % Provided,

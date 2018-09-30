@@ -15,8 +15,8 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-          - v1-dependencies-{{ checksum "~/repo/build.sbt" }}
-          - v1-dependencies-
+            - v1-dependencies-{{ checksum "~/repo/build.sbt" }}
+            - v1-dependencies-
       - run: sbt ';clean ;coverage ;test ;coverageReport ;scapegoat ;reload plugins ;test' < /dev/null
       - save_cache:
           paths:
@@ -120,31 +120,31 @@ jobs:
 
 workflows:
   version: 2
-  scala-sonar:
+  sonar-scala:
     jobs:
-      - test
+      - test:
+          filters:
+            branches:
+              ignore:
+                - /sonar-.*-lts/
       - sonar-scan-examples:
-          requires:
-            - test
+          requires: test
           filters:
             branches:
               only: master
       - sonar-scan:
-          requires:
-            - sonar-scan-examples
+          requires: sonar-scan-examples
           filters:
             branches:
               only: master
       - hold:
           type: approval
-          requires:
-            - sonar-scan
+          requires: sonar-scan
           filters:
             branches:
               only: master
       - release:
-          requires:
-            - hold
+          requires: hold
           filters:
             branches:
               only: master

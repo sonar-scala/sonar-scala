@@ -2,6 +2,7 @@ import org.sonar.updatecenter.common.PluginManifest
 import sbt._
 import sbtrelease.ReleasePlugin.autoImport.ReleaseTransformations._
 import sbtrelease.Version.Bump.Minor
+import sbtsonar.SonarPlugin.autoImport.sonarProperties
 
 name := "sonar-scala"
 organization := "com.github.mwz"
@@ -28,6 +29,12 @@ scapegoatReports := Seq("xml")
 coverageOutputXML := true
 coverageOutputHTML := false
 coverageOutputCobertura := false
+
+// Overwrite sonar properties for the lts branch.
+sonarProperties ++= Map(
+  "sonar.projectName" -> "sonar-scala-lts",
+  "sonar.projectKey" -> "sonar-scala-lts",
+)
 
 // Add Scalastyle and Scapegoat inspections generators.
 sourceGenerators in Compile ++= Seq(

@@ -120,31 +120,25 @@ jobs:
 
 workflows:
   version: 2
-  scala-sonar:
+  sonar-scala:
     jobs:
       - test
-      - sonar-scan-examples:
+      - sonar-scan:
           requires:
             - test
           filters:
             branches:
-              only: master
-      - sonar-scan:
-          requires:
-            - sonar-scan-examples
-          filters:
-            branches:
-              only: master
+              only: sonar-6.7-lts
       - hold:
           type: approval
           requires:
             - sonar-scan
           filters:
             branches:
-              only: master
+              only: sonar-6.7-lts
       - release:
           requires:
             - hold
           filters:
             branches:
-              only: master
+              only: sonar-6.7-lts

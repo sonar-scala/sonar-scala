@@ -94,9 +94,9 @@ sonar-scanner -Dsonar.projectName=test \
 
 # Compatibility with SonarQube
 SonarQube | sonar-scala
-------------|----------
-7.3         | [7.0](https://github.com/mwz/sonar-scala/releases/tag/v7.0.0)
-6.7 LTS     | 6.x (*latest [6.6.0](https://github.com/mwz/sonar-scala/releases/tag/v6.6.0)*)
+----------|----------
+7.3       | [7.0](https://github.com/mwz/sonar-scala/releases/tag/v7.0.0)
+6.7 LTS   | 6.x (*latest [6.6.0](https://github.com/mwz/sonar-scala/releases/tag/v6.6.0)*)
 
 
 # Development

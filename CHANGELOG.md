@@ -5,6 +5,7 @@ Changelog
 - Removed the following:
   - `sonar.scoverage.reportPath` property which was deprecated in [6.2.0](https://github.com/mwz/sonar-scala/releases/tag/v6.2.0) - please use `sonar.scala.scoverage.reportPath` instead;
   - the old Scalastyle quality profile and rule registry which were deprecated in [6.6.0](https://github.com/mwz/sonar-scala/releases/tag/v6.6.0); (#120 - @mwz)
+- Bumped up the default value of the `sonar.scala.version` property to `2.12`. (#120 - @mwz)
 
 ## [6.6.0](https://github.com/mwz/sonar-scala/releases/tag/v6.6.0) - 30.09.2018
 - Refactored Scalastyle module and introduced new Scalastyle rules repository along with a new quality profile, which now in addition to the latest Scalastyle rules also consists of rule templates which are activated by default. The existing Scalastyle quality profile and rule registry have been deprecated and will be removed in the next major version of the plugin (7.x). The new module also exposes the following optional property `sonar.scala.scalastyle.disable`, which allows you to disable the Scalastyle sensor. (#35 - @mwz)

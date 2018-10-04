@@ -74,7 +74,7 @@ Also, see the [examples](https://github.com/mwz/sonar-scala/tree/master/examples
 # Sonar-scanner properties
 The plugin exposes the following properties which can be passed to sonar-scanner when running an analysis:
 - **sonar.sources** - Scala source directory relative to the root of your project (usually `src/main/scala`)
-- **sonar.scala.version** (optional) - defines the version of Scala used in your project (requires the `{major}.{minor}` versions and the patch version is ignored, defaults to `2.11.0`)
+- **sonar.scala.version** (optional) - defines the version of Scala used in your project (requires the `{major}.{minor}` versions and the patch version is ignored, defaults to `2.12`)
 - **sonar.scala.scoverage.reportPath** (optional) - relative path to the scoverage report (defaults to `target/scala-${sonar.scala.version}/scoverage-report/scoverage.xml`)
 - **sonar.scala.scalastyle.disable** (optional) - disables the Scalastyle sensor from being executed on your sources (defaults to `false`)
 - **sonar.scala.scapegoat.reportPath** (optional) - relative path to the scapegoat report (defaults to `target/scala-${sonar.scala.version}/scapegoat-report/scapegoat.xml`)

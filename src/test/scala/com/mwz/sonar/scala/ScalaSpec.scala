@@ -37,13 +37,13 @@ class ScalaSpec extends FlatSpec with Matchers {
       .asConfig()
 
     val parsedVersion = Scala.getScalaVersion(conf)
-    parsedVersion should not be ScalaVersions.Scala_2_11
+    parsedVersion should not be ScalaVersion(2, 12)
     parsedVersion shouldBe ScalaVersion(2, 11)
   }
 
   it should "return the default version, if the property is not set" in {
     val conf = new MapSettings().asConfig()
-    Scala.getScalaVersion(conf) shouldBe ScalaVersions.Scala_2_11
+    Scala.getScalaVersion(conf) shouldBe ScalaVersion(2, 12)
   }
 
   it should "return the default version, if the version property has an empty patch" in {
@@ -51,7 +51,7 @@ class ScalaSpec extends FlatSpec with Matchers {
       .setProperty("sonar.scala.version", "2.12.")
       .asConfig()
 
-    Scala.getScalaVersion(conf) shouldBe ScalaVersions.Scala_2_11
+    Scala.getScalaVersion(conf) shouldBe ScalaVersion(2, 12)
   }
 
   it should "return the default version, if the version property only contains the major version" in {
@@ -59,7 +59,7 @@ class ScalaSpec extends FlatSpec with Matchers {
       .setProperty("sonar.scala.version", "2")
       .asConfig()
 
-    Scala.getScalaVersion(conf) shouldBe ScalaVersions.Scala_2_11
+    Scala.getScalaVersion(conf) shouldBe ScalaVersion(2, 12)
   }
 
   "getSourcesPaths" should "return the available sources" in {

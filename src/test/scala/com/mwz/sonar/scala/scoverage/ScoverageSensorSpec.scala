@@ -105,12 +105,12 @@ class ScoverageSensorSpec extends FlatSpec with SensorContextMatchers with LoneE
 
   it should "get default scoverage report path" in {
     val path = scoverageSensor.getScoverageReportPath(new MapSettings().asConfig())
-    path shouldBe Paths.get(s"target/scala-2.11/scoverage-report/scoverage.xml")
+    path shouldBe Paths.get(s"target/scala-2.12/scoverage-report/scoverage.xml")
 
     val path2 = scoverageSensor.getScoverageReportPath(
-      new MapSettings().setProperty("sonar.scala.version", "2.12.6").asConfig()
+      new MapSettings().setProperty("sonar.scala.version", "2.11.12").asConfig()
     )
-    path2 shouldBe Paths.get(s"target/scala-2.12/scoverage-report/scoverage.xml")
+    path2 shouldBe Paths.get(s"target/scala-2.11/scoverage-report/scoverage.xml")
   }
 
   it should "get scoverage report path set in sonar properties" in {
@@ -190,7 +190,7 @@ class ScoverageSensorSpec extends FlatSpec with SensorContextMatchers with LoneE
 final class TestScoverageReportParser extends ScoverageReportParserAPI {
   override def parse(reportPath: Path, modulePath: Path, sourcePrefixes: List[Path]): ModuleCoverage =
     reportPath.toString match {
-      case "target/scala-2.11/scoverage-report/scoverage.xml"
+      case "target/scala-2.12/scoverage-report/scoverage.xml"
           if sourcePrefixes.contains(Paths.get("src/main/scala")) =>
         ModuleCoverage(
           moduleScoverage = Scoverage(

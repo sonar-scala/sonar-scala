@@ -23,7 +23,7 @@ sonar-scala
 
 **SonarQube plugin for static code analysis of Scala projects.**
 
-Intended for [SonarQube 6.7+ LTS](https://www.sonarqube.org/downloads) and Scala 2.11/2.12.  
+Intended for [SonarQube 6.7 LTS](https://www.sonarqube.org/sonarqube-6-7-lts), [SonarQube 7.3](https://www.sonarqube.org/sonarqube-7-3) and Scala 2.11/2.12.
 Running analysis from a Windows machine is currently not supported, please use Linux or other Unix-like operating system.
 
 This plugin is not an evolution from the legacy sonar-scala-plugin of which versions can be found laying around such as [1and1/sonar-scala](https://github.com/1and1/sonar-scala).
@@ -64,7 +64,7 @@ For more information about Scalastyle and Scapegoat rules, please consult the up
 # Set-up
 Download the latest [release](https://github.com/mwz/sonar-scala/releases) jar into your SonarQube plugins folder `/opt/sonarqube/extensions/plugins` and restart SonarQube either manually or using the update center.
 
-For an out-of-the-box setup, you can use my docker-compose recipe or a docker image with SonarQube LTS which contains bundled sonar-scala plugin. Please see [mwz/sonar-scala-docker](https://github.com/mwz/sonar-scala-docker) for more details.
+For an out-of-the-box setup, you can use my docker-compose recipe or a docker image with SonarQube which contains bundled sonar-scala plugin. Please see [mwz/sonar-scala-docker](https://github.com/mwz/sonar-scala-docker) for more details.
 
 For automating the analysis of your Scala projects, check out my sbt plugin [mwz/sbt-sonar](https://github.com/mwz/sbt-sonar).
 
@@ -74,10 +74,10 @@ Also, see the [examples](https://github.com/mwz/sonar-scala/tree/master/examples
 # Sonar-scanner properties
 The plugin exposes the following properties which can be passed to sonar-scanner when running an analysis:
 - **sonar.sources** - Scala source directory relative to the root of your project (usually `src/main/scala`)
-- **sonar.scala.version** (optional) - defines the version of Scala used in your project (requires the `{major}.{minor}` versions and the patch version is ignored, defaults to `2.11.0`)
+- **sonar.scala.version** (optional) - defines the version of Scala used in your project (requires the `{major}.{minor}` versions and the patch version is ignored, defaults to `2.12`)
 - **sonar.scala.scoverage.reportPath** (optional) - relative path to the scoverage report (defaults to `target/scala-${sonar.scala.version}/scoverage-report/scoverage.xml`)
-- **sonar.scala.scapegoat.reportPath** (optional) - relative path to the scapegoat report (defaults to `target/scala-${sonar.scala.version}/scapegoat-report/scapegoat.xml`)
 - **sonar.scala.scalastyle.disable** (optional) - disables the Scalastyle sensor from being executed on your sources (defaults to `false`)
+- **sonar.scala.scapegoat.reportPath** (optional) - relative path to the scapegoat report (defaults to `target/scala-${sonar.scala.version}/scapegoat-report/scapegoat.xml`)
 - **sonar.scala.scapegoat.disable** (optional) - disables the Scapegoat sensor from being executed on your sources (defaults to `false`)
 
 See an example usage:
@@ -92,6 +92,13 @@ sonar-scanner -Dsonar.projectName=test \
 ```
 
 
+# Compatibility with SonarQube
+SonarQube | sonar-scala
+----------|----------
+7.3       | [7.0](https://github.com/mwz/sonar-scala/releases/tag/v7.0.0)
+6.7 LTS   | 6.x (*latest [6.6.0](https://github.com/mwz/sonar-scala/releases/tag/v6.6.0)*)
+
+
 # Development
 To build the project from sources, run the `assembly` task in sbt shell and the jar assembled with all of the dependencies required by this plugin should be created in the `target/scala-2.12` directory. 
 
@@ -103,7 +110,7 @@ Once you've done that, `sonnar-scanner` should display the following message `Li
 
 
 # Credits
-This project is a continuation of sonar-scala plugin, which was originally developed by [Sagacify](https://github.com/Sagacify/sonar-scala) and integrates code from [Sonar Scalastyle Plugin](https://github.com/NCR-CoDE/sonar-scalastyle).
+This project is a continuation of sonar-scala plugin, which was originally developed by [Sagacify](https://github.com/Sagacify/sonar-scala).
 
 Many other projects have been used as an inspiration, here is a list of the main ones:
 

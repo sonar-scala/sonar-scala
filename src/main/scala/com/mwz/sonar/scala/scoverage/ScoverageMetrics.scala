@@ -70,7 +70,7 @@ object ScoverageMetrics {
       metricType = Metric.ValueType.INT,
       metricDescription = "Number of all statements",
       metricDirection = Metric.DIRECTION_BETTER,
-      metricDomain = CoreMetrics.DOMAIN_SIZE,
+      metricDomain = CoreMetrics.DOMAIN_SIZE
     )
 
   val coveredStatements: Metric[java.lang.Integer] =
@@ -80,7 +80,7 @@ object ScoverageMetrics {
       metricType = Metric.ValueType.INT,
       metricDescription = "Number of statements covered by tests",
       metricDirection = Metric.DIRECTION_BETTER,
-      metricDomain = CoreMetrics.DOMAIN_SIZE,
+      metricDomain = CoreMetrics.DOMAIN_SIZE
     )
 
   val statementCoverage: Metric[java.lang.Double] =

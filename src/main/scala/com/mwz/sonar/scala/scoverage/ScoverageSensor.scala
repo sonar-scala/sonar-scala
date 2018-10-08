@@ -117,28 +117,11 @@ final class ScoverageSensor(scoverageReportParser: ScoverageReportParserAPI) ext
     val scalaVersion = Scala.getScalaVersion(settings)
     val defaultScoverageReportPath = getDefaultScoverageReportPath(scalaVersion)
 
-    if (settings.hasKey(DeprecatedScoverageReportPathPropertyKey)) {
-      log.warn(
-        s"The property: '$DeprecatedScoverageReportPathPropertyKey' is deprecated, " +
-        s"use the new property '$ScoverageReportPathPropertyKey' instead."
-      )
-    } else if (!settings.hasKey(ScoverageReportPathPropertyKey)) {
-      log.info(
-        s"Missing the property: '$ScoverageReportPathPropertyKey', " +
-        s"using the default value: '$defaultScoverageReportPath'."
-      )
-    }
-
     Paths.get(
       settings
-        .get(DeprecatedScoverageReportPathPropertyKey)
+        .get(ScoverageReportPathPropertyKey)
         .toOption
-        .getOrElse(
-          settings
-            .get(ScoverageReportPathPropertyKey)
-            .toOption
-            .getOrElse(defaultScoverageReportPath.toString)
-        )
+        .getOrElse(defaultScoverageReportPath.toString)
     )
   }
 
@@ -180,7 +163,6 @@ final class ScoverageSensor(scoverageReportParser: ScoverageReportParserAPI) ext
 
 private[scoverage] object ScoverageSensor {
   final val SensorName = "Scoverage Sensor"
-  final val DeprecatedScoverageReportPathPropertyKey = "sonar.scoverage.reportPath"
   final val ScoverageReportPathPropertyKey = "sonar.scala.scoverage.reportPath"
 
   def getDefaultScoverageReportPath(scalaVersion: ScalaVersion): Path =

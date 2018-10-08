@@ -23,8 +23,6 @@ import java.nio.file.{Path, Paths}
 import cats.kernel.Eq
 import cats.syntax.eq._
 import com.mwz.sonar.scala.util.JavaOptionals._
-import com.ncredinburgh.sonar.{scalastyle => oldscalastyle}
-import org.scalastyle.{FileSpec, ScalastyleChecker}
 import org.sonar.api.Plugin
 import org.sonar.api.config.Configuration
 import org.sonar.api.resources.AbstractLanguage
@@ -50,7 +48,7 @@ object Scala {
   private val FileSuffixesPropertyKey = "sonar.scala.file.suffixes"
   private val DefaultFileSuffixes = Array(".scala")
   private val ScalaVersionPropertyKey = "sonar.scala.version"
-  private val DefaultScalaVersion = ScalaVersions.Scala_2_11
+  private val DefaultScalaVersion = ScalaVersion(2, 12)
   private val ScalaVersionPattern = """(\d+)\.(\d+)(?:\..+)?""".r
   private val SourcesPropertyKey = "sonar.sources"
   private val DefaultSourcesFolder = "src/main/scala"
@@ -110,9 +108,6 @@ final class ScalaPlugin extends Plugin {
       // Scala.
       classOf[Scala],
       classOf[sensor.ScalaSensor],
-      // Old Scalastyle (ncredinburgh).
-      classOf[oldscalastyle.ScalastyleRepository],
-      classOf[oldscalastyle.ScalastyleQualityProfile],
       // Scalastyle.
       classOf[scalastyle.ScalastyleRulesRepository],
       classOf[scalastyle.ScalastyleQualityProfile],

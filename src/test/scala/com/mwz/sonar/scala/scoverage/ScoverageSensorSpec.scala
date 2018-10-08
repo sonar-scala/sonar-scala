@@ -24,7 +24,7 @@ import java.nio.file.{Path, Paths}
 import com.mwz.sonar.scala.util.PathUtils._
 import org.scalatest.{FlatSpec, LoneElement}
 import org.sonar.api.batch.fs.InputFile
-import org.sonar.api.batch.fs.internal.{DefaultFileSystem, TestInputFileBuilder}
+import org.sonar.api.batch.fs.internal.TestInputFileBuilder
 import org.sonar.api.batch.sensor.internal.{DefaultSensorDescriptor, SensorContextTester}
 import org.sonar.api.config.internal.MapSettings
 
@@ -105,24 +105,19 @@ class ScoverageSensorSpec extends FlatSpec with SensorContextMatchers with LoneE
 
   it should "get default scoverage report path" in {
     val path = scoverageSensor.getScoverageReportPath(new MapSettings().asConfig())
-    path shouldBe Paths.get(s"target/scala-2.11/scoverage-report/scoverage.xml")
+    path shouldBe Paths.get(s"target/scala-2.12/scoverage-report/scoverage.xml")
 
     val path2 = scoverageSensor.getScoverageReportPath(
-      new MapSettings().setProperty("sonar.scala.version", "2.12.6").asConfig()
+      new MapSettings().setProperty("sonar.scala.version", "2.11.12").asConfig()
     )
-    path2 shouldBe Paths.get(s"target/scala-2.12/scoverage-report/scoverage.xml")
+    path2 shouldBe Paths.get(s"target/scala-2.11/scoverage-report/scoverage.xml")
   }
 
   it should "get scoverage report path set in sonar properties" in {
-    val deprecated = scoverageSensor.getScoverageReportPath(
-      new MapSettings().setProperty("sonar.scoverage.reportPath", "target/report-path").asConfig()
-    )
-    deprecated shouldBe Paths.get(s"target/report-path")
-
-    val current = scoverageSensor.getScoverageReportPath(
+    val path = scoverageSensor.getScoverageReportPath(
       new MapSettings().setProperty("sonar.scala.scoverage.reportPath", "target/report-path").asConfig()
     )
-    current shouldBe Paths.get(s"target/report-path")
+    path shouldBe Paths.get(s"target/report-path")
   }
 
   it should "save the coverage metrics of a one file module" in {
@@ -195,7 +190,7 @@ class ScoverageSensorSpec extends FlatSpec with SensorContextMatchers with LoneE
 final class TestScoverageReportParser extends ScoverageReportParserAPI {
   override def parse(reportPath: Path, modulePath: Path, sourcePrefixes: List[Path]): ModuleCoverage =
     reportPath.toString match {
-      case "target/scala-2.11/scoverage-report/scoverage.xml"
+      case "target/scala-2.12/scoverage-report/scoverage.xml"
           if sourcePrefixes.contains(Paths.get("src/main/scala")) =>
         ModuleCoverage(
           moduleScoverage = Scoverage(

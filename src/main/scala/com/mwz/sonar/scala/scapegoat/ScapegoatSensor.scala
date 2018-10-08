@@ -34,7 +34,7 @@ import scala.util.{Failure, Success, Try}
 
 /** Main sensor for importing Scapegoat reports to SonarQube */
 final class ScapegoatSensor(scapegoatReportParser: ScapegoatReportParserAPI) extends Sensor {
-  import ScapegoatSensor._ // scalastyle:ignore scalastyle_ImportGroupingChecker
+  import ScapegoatSensor._ // scalastyle:ignore
 
   private[this] val log = Log(classOf[ScapegoatSensor], "scapegoat")
 
@@ -161,7 +161,7 @@ final class ScapegoatSensor(scapegoatReportParser: ScapegoatReportParserAPI) ext
     val predicate = predicates.and(
       predicates.hasLanguage(Scala.LanguageKey),
       predicates.hasType(InputFile.Type.MAIN),
-      predicates.matchesPathPattern(s"**/$filename") // scalastyle:ignore LiteralArguments
+      predicates.matchesPathPattern(s"**/$filename") // scalastyle:ignore
     )
 
     // catch both exceptions and null values

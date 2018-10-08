@@ -16,10 +16,12 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-package com.mwz.sonar.scala.scapegoat
+package com.mwz.sonar.scala
+package scapegoat
+
+import java.nio.file.{Path, Paths}
 
 import org.sonar.api.batch.ScannerSide
-import java.nio.file.{Path, Paths}
 
 import scala.xml.XML
 
@@ -30,7 +32,7 @@ trait ScapegoatReportParserAPI {
 /** Scapegoat XML reports parser */
 @ScannerSide
 final class ScapegoatReportParser extends ScapegoatReportParserAPI {
-  private[this] val AllDotsButLastRegex = raw"\.(?=.*\.)".r
+  private[this] val allDotsButLastRegex = raw"\.(?=.*\.)".r
 
   /**
    * Replaces all dots '.' except the last one in a scapegoat path with slashes '/'
@@ -46,7 +48,7 @@ final class ScapegoatReportParser extends ScapegoatReportParserAPI {
             Paths.get(a).resolve(s).toString
           else s"$a.$str"
       }
-    } else AllDotsButLastRegex.replaceAllIn(target = path, replacement = "/")
+    } else allDotsButLastRegex.replaceAllIn(target = path, replacement = "/")
 
   /** Parses the scapegoat xml report and returns all scapegoat issues by filename */
   override def parse(scapegoatReportPath: Path): Map[String, Seq[ScapegoatIssue]] = {

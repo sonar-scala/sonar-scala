@@ -10,7 +10,7 @@ licenses := Seq("LGPL-3.0" -> url("https://opensource.org/licenses/lgpl-3.0.html
 description := "Enables analysis of Scala projects with SonarQube."
 
 // Compile options
-scalaVersion := "2.12.6"
+scalaVersion := "2.12.7"
 scalacOptions := Seq(
   "-unchecked",
   "-deprecation",
@@ -23,7 +23,7 @@ javacOptions := Seq("-Xlint:deprecation")
 cancelable in Global := true
 scalafmtOnCompile in ThisBuild := true
 scalafmtVersion in ThisBuild := "1.4.0"
-scapegoatVersion in ThisBuild := "1.3.7"
+scapegoatVersion in ThisBuild := "1.3.8"
 scapegoatReports := Seq("xml")
 coverageOutputXML := true
 coverageOutputHTML := false
@@ -45,7 +45,7 @@ libraryDependencies ++= List(
   "org.scalastyle" %% "scalastyle" % "1.0.0",
   "org.scala-lang.modules" %% "scala-xml" % "1.1.1",
   "org.scalatest" %% "scalatest" % "3.0.5" % Test,
-  "org.mockito" % "mockito-core" % "2.22.0" % Test
+  "org.mockito" % "mockito-core" % "2.23.0" % Test
 )
 
 // Adding a resolver to the Artima maven repo, so sbt can download the Artima SuperSafe Scala compiler

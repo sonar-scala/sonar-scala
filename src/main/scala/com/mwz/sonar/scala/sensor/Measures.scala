@@ -30,7 +30,7 @@ object Measures {
   val NewLineRegex: Regex = "(\r\n)|\r|\n".r
 
   def countClasses(tokens: List[Token]): Int = {
-    tokens.foldLeft(0) { // scalastyle:ignore
+    tokens.foldLeft(0) { // scalastyle:ignore LiteralArguments org.scalastyle.scalariform.NamedArgumentChecker
       case (acc, token) =>
         val tokenType = token.tokenType
         if (tokenType == Tokens.CLASS || tokenType == Tokens.OBJECT) acc + 1
@@ -39,7 +39,7 @@ object Measures {
   }
 
   def countMethods(tokens: List[Token]): Int = {
-    tokens.foldLeft(0) { // scalastyle:ignore
+    tokens.foldLeft(0) { // scalastyle:ignore LiteralArguments org.scalastyle.scalariform.NamedArgumentChecker
       case (acc, token) =>
         if (token.tokenType == Tokens.DEF) acc + 1
         else acc

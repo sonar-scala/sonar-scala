@@ -48,7 +48,7 @@ object Scala {
   private val FileSuffixesPropertyKey = "sonar.scala.file.suffixes"
   private val DefaultFileSuffixes = Array(".scala")
   private val ScalaVersionPropertyKey = "sonar.scala.version"
-  private val DefaultScalaVersion = ScalaVersion(2, 12)
+  private val DefaultScalaVersion = ScalaVersion(2, 12) // scalastyle:ignore LiteralArguments org.scalastyle.scalariform.NamedArgumentChecker
   private val ScalaVersionPattern = """(\d+)\.(\d+)(?:\..+)?""".r
   private val SourcesPropertyKey = "sonar.sources"
   private val DefaultSourcesFolder = "src/main/scala"
@@ -91,7 +91,7 @@ object Scala {
       .toOption
       .filter(_.nonEmpty)
       .getOrElse(DefaultSourcesFolder)
-      .split(',') // scalastyle:ignore LiteralArguments
+      .split(',') // scalastyle:ignore LiteralArguments org.scalastyle.scalariform.NamedArgumentChecker
       .map(p => Paths.get(p.trim))
       .toList
 

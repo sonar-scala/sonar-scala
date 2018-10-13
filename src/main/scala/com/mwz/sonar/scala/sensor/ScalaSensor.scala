@@ -43,7 +43,7 @@ final class ScalaSensor extends Sensor {
         .newMeasure()
         .on(inputFile)
         .forMetric(CM.FILES)
-        .withValue(1) // scalastyle:ignore LiteralArguments
+        .withValue(1) // scalastyle:ignore LiteralArguments org.scalastyle.scalariform.NamedArgumentChecker
         .save()
 
       val sourceCode = Source.fromFile(inputFile.uri, charset).mkString

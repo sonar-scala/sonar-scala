@@ -32,7 +32,7 @@ import org.sonar.api.server.rule.{RuleParamType, RulesDefinition}
  * Defines a repository for the Scalastyle inspections.
  */
 final class ScalastyleRulesRepository extends RulesDefinition {
-  import ScalastyleRulesRepository._
+  import ScalastyleRulesRepository._ // scalastyle:ignore scalastyle_ImportGroupingChecker org.scalastyle.scalariform.ImportGroupingChecker
 
   override def define(context: RulesDefinition.Context): Unit = {
     // Create an empty repository.
@@ -81,7 +81,7 @@ private[scalastyle] object ScalastyleRulesRepository {
     rule.setInternalKey(key)
     rule.setName(inspection.label)
     rule.setMarkdownDescription(formatDescription(inspection))
-    rule.setActivatedByDefault(true) // scalastyle:ignore LiteralArguments
+    rule.setActivatedByDefault(true) // scalastyle:ignore LiteralArguments org.scalastyle.scalariform.NamedArgumentChecker
     rule.setStatus(RuleStatus.READY)
     rule.setSeverity(levelToSeverity(inspection.defaultLevel).name)
     rule.setType(RuleType.CODE_SMELL)

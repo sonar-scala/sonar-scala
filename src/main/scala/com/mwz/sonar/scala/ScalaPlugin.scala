@@ -18,18 +18,21 @@
  */
 package com.mwz.sonar.scala
 
-import com.mwz.sonar.scala.scoverage.{ScoverageMetrics, ScoverageSensor}
-import com.mwz.sonar.scala.sensor.ScalaSensor
+import java.nio.file.{Path, Paths}
+
+import cats.kernel.Eq
+import cats.syntax.eq._
 import com.mwz.sonar.scala.util.JavaOptionals._
-import com.ncredinburgh.sonar.scalastyle.{ScalastyleQualityProfile, ScalastyleRepository, ScalastyleSensor}
 import org.sonar.api.Plugin
 import org.sonar.api.config.Configuration
 import org.sonar.api.resources.AbstractLanguage
-import scalariform.ScalaVersions
+import org.sonar.api.utils.log.Loggers
 import scalariform.lexer.{ScalaLexer, Token}
+import scalariform.utils.Utils._
+import scalariform.{ScalaVersion, ScalaVersions}
 
 /** Defines Scala as a language for SonarQube */
-class Scala(settings: Configuration) extends AbstractLanguage(Scala.Key, Scala.Name) {
+final class Scala(settings: Configuration) extends AbstractLanguage(Scala.LanguageKey, Scala.LanguageName) {
   override def getFileSuffixes: Array[String] = {
     val suffixes = settings.getStringArray(Scala.FileSuffixesPropertyKey)
     val filtered = suffixes.filter(_.trim.nonEmpty)
@@ -39,12 +42,14 @@ class Scala(settings: Configuration) extends AbstractLanguage(Scala.Key, Scala.N
 }
 
 object Scala {
-  val Key = "scala"
-  val Name = "Scala"
+  val LanguageKey = "scala"
+  val LanguageName = "Scala"
+
   private val FileSuffixesPropertyKey = "sonar.scala.file.suffixes"
   private val DefaultFileSuffixes = Array(".scala")
   private val ScalaVersionPropertyKey = "sonar.scala.version"
-  private val DefaultScalaVersion = ScalaVersions.Scala_2_11.toString()
+  private val DefaultScalaVersion = ScalaVersion(2, 12) // scalastyle:ignore LiteralArguments org.scalastyle.scalariform.NamedArgumentChecker
+  private val ScalaVersionPattern = """(\d+)\.(\d+)(?:\..+)?""".r
   private val SourcesPropertyKey = "sonar.sources"
   private val DefaultSourcesFolder = "src/main/scala"
   private val Test: Option[String] = Some("test")
@@ -58,29 +63,77 @@ object Scala {
     return ()
   }
 
-  def getScalaVersion(settings: Configuration): String =
-    settings.get(ScalaVersionPropertyKey).toOption.getOrElse(DefaultScalaVersion)
+  private val logger = Loggers.get(classOf[Scala])
+  implicit val eqScalaVersion: Eq[ScalaVersion] = Eq.fromUniversalEquals
+
+  def getScalaVersion(settings: Configuration): ScalaVersion = {
+    def parseVersion(s: String): Option[ScalaVersion] = s match {
+      case ScalaVersionPattern(major, minor) =>
+        for {
+          major <- major.toIntOpt
+          minor <- minor.toIntOpt
+        } yield ScalaVersion(major, minor)
+      case _ =>
+        None
+    }
+
+    val scalaVersion = settings
+      .get(ScalaVersionPropertyKey)
+      .toOption
+      .flatMap(parseVersion)
+      .getOrElse(DefaultScalaVersion)
+
+    // log a warning if using the default scala version
+    if (scalaVersion === DefaultScalaVersion)
+      logger.warn(
+        s"[sonar-scala] The '$ScalaVersionPropertyKey' is not properly set or is missing, " +
+        s"using the default value: '$DefaultScalaVersion'."
+      )
+
+    scalaVersion
+  }
 
   // even if the 'sonar.sources' property is mandatory,
   // we add a default value to ensure a safe access to it
-  def getSourcesPath(settings: Configuration): String =
-    settings.get(SourcesPropertyKey).toOption.filter(_.nonEmpty).getOrElse(DefaultSourcesFolder)
+  def getSourcesPaths(settings: Configuration): List[Path] =
+    settings
+      .get(SourcesPropertyKey)
+      .toOption
+      .filter(_.nonEmpty)
+      .getOrElse(DefaultSourcesFolder)
+      .split(',') // scalastyle:ignore LiteralArguments org.scalastyle.scalariform.NamedArgumentChecker
+      .map(p => Paths.get(p.trim))
+      .toList
 
-  def tokenize(sourceCode: String, scalaVersion: String): List[Token] =
-    ScalaLexer.createRawLexer(sourceCode, forgiveErrors = false, scalaVersion).toList
+  def tokenize(sourceCode: String, scalaVersion: ScalaVersion): List[Token] =
+    ScalaLexer
+      .createRawLexer(sourceCode, forgiveErrors = false, scalaVersion.toString)
+      .toList
 }
 
-/** Plugin entry point */
-class ScalaPlugin extends Plugin {
+/** Sonar Scala plugin entry point */
+final class ScalaPlugin extends Plugin {
   override def define(context: Plugin.Context): Unit = {
     context.addExtensions(
+      // Scala.
       classOf[Scala],
-      classOf[ScalaSensor],
-      classOf[ScalastyleRepository],
-      classOf[ScalastyleQualityProfile],
-      classOf[ScalastyleSensor],
-      classOf[ScoverageMetrics],
-      classOf[ScoverageSensor]
+      classOf[sensor.ScalaSensor],
+      // Scalastyle.
+      classOf[scalastyle.ScalastyleRulesRepository],
+      classOf[scalastyle.ScalastyleQualityProfile],
+      classOf[scalastyle.ScalastyleChecker],
+      classOf[scalastyle.ScalastyleSensor],
+      // Scapegoat.
+      classOf[scapegoat.ScapegoatRulesRepository],
+      classOf[scapegoat.ScapegoatQualityProfile],
+      classOf[scapegoat.ScapegoatReportParser],
+      classOf[scapegoat.ScapegoatSensor],
+      // Built-in quality profiles.
+      classOf[qualityprofiles.ScalastyleScapegoatQualityProfile],
+      // Scoverage.
+      classOf[scoverage.ScoverageMetrics],
+      classOf[scoverage.ScoverageReportParser],
+      classOf[scoverage.ScoverageSensor]
     )
   }
 }

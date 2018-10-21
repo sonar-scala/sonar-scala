@@ -16,11 +16,13 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-package com.mwz.sonar.scala.sensor
+package com.mwz.sonar.scala
+package sensor
 
-import com.mwz.sonar.scala.Scala
 import org.sonar.api.batch.sensor.{Sensor, SensorContext, SensorDescriptor}
 import org.sonar.api.measures.{CoreMetrics => CM}
+import scalariform.ScalaVersion
+
 import scala.collection.JavaConverters._
 import scala.io.Source
 
@@ -29,19 +31,23 @@ final class ScalaSensor extends Sensor {
   override def execute(context: SensorContext): Unit = {
     val charset = context.fileSystem().encoding.toString
 
-    val inputFiles =
-      context.fileSystem().inputFiles(context.fileSystem().predicates().hasLanguage(Scala.Key))
+    val inputFiles = context
+      .fileSystem()
+      .inputFiles(context.fileSystem().predicates().hasLanguage(Scala.LanguageKey))
+
+    val scalaVersion: ScalaVersion =
+      Scala.getScalaVersion(context.config())
 
     inputFiles.asScala.foreach { inputFile =>
       context
         .newMeasure()
         .on(inputFile)
         .forMetric(CM.FILES)
-        .withValue(1) // scalastyle:ignore LiteralArguments
+        .withValue(1) // scalastyle:ignore LiteralArguments org.scalastyle.scalariform.NamedArgumentChecker
         .save()
 
       val sourceCode = Source.fromFile(inputFile.uri, charset).mkString
-      val tokens = Scala.tokenize(sourceCode, Scala.getScalaVersion(context.config()))
+      val tokens = Scala.tokenize(sourceCode, scalaVersion)
 
       context
         .newMeasure()
@@ -72,7 +78,7 @@ final class ScalaSensor extends Sensor {
 
   override def describe(descriptor: SensorDescriptor): Unit = {
     descriptor
-      .onlyOnLanguage(Scala.Key)
+      .onlyOnLanguage(Scala.LanguageKey)
       .name("Scala Sensor")
   }
 }

@@ -16,11 +16,11 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-package com.mwz.sonar.scala.sensor
+package com.mwz.sonar.scala
+package sensor
 
-import com.mwz.sonar.scala.Scala
-import org.scalatest._
-import org.scalactic.source.Position.apply
+import org.scalatest.{FlatSpec, Matchers}
+import scalariform.ScalaVersions
 
 /** Tests the Scala Sensor Metrics */
 class MeasuresSpec extends FlatSpec with Matchers {
@@ -69,53 +69,52 @@ class ScalaSensorSpec extends FlatSpec with Matchers {
 }
 """
 
-  private val scala211 = "2.11.11"
+  private val scalaVersion = ScalaVersions.Scala_2_11
 
   "A Comment lines counter" should "count line comments" in {
-    val tokens = Scala.tokenize("// this is a test", scala211)
+    val tokens = Scala.tokenize("// this is a test", scalaVersion)
     val count = Measures.countCommentLines(tokens)
     assert(count == 1)
   }
 
   it should "count multiline comments" in {
-    val tokens = Scala.tokenize("/* this\n *is\n *a\n *test*/", scala211)
+    val tokens = Scala.tokenize("/* this\n *is\n *a\n *test*/", scalaVersion)
     val count = Measures.countCommentLines(tokens)
     assert(count == 4)
   }
 
   it should "count trailing comments." in {
-    val tokens = Scala.tokenize("case class Test() // this is a test", scala211)
+    val tokens = Scala.tokenize("case class Test() // this is a test", scalaVersion)
     val count = Measures.countCommentLines(tokens)
     assert(count == 1)
   }
 
   it should "count the correct number of comments" in {
-    val tokens = Scala.tokenize(exampleSourceFile, scala211)
+    val tokens = Scala.tokenize(exampleSourceFile, scalaVersion)
     val count = Measures.countCommentLines(tokens)
     assert(count == 23)
   }
 
   "A Non-Comment lines counter" should "count non-comment lines of codes" in {
-    val tokens = Scala.tokenize("package com.example", scala211)
-    println(tokens)
+    val tokens = Scala.tokenize("package com.example", scalaVersion)
     val count = Measures.countNonCommentLines(tokens)
     assert(count == 1)
   }
 
   it should "count lines of code with a trailing comment" in {
-    val tokens = Scala.tokenize("case class Test() /*\n * test\n */", scala211)
+    val tokens = Scala.tokenize("case class Test() /*\n * test\n */", scalaVersion)
     val count = Measures.countNonCommentLines(tokens)
     assert(count == 1)
   }
 
   it should "count trailing code." in {
-    val tokens = Scala.tokenize("/* this is a test */ case class Test()", scala211)
+    val tokens = Scala.tokenize("/* this is a test */ case class Test()", scalaVersion)
     val count = Measures.countNonCommentLines(tokens)
     assert(count == 1)
   }
 
   it should "count the correct number of comments" in {
-    val tokens = Scala.tokenize(exampleSourceFile, scala211)
+    val tokens = Scala.tokenize(exampleSourceFile, scalaVersion)
     val count = Measures.countNonCommentLines(tokens)
     assert(count == 18)
   }

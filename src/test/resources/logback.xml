@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <appender name="FILE" class="ch.qos.logback.core.FileAppender">
+        <file>test.log</file>
+        <append>false</append>
+        <encoder>
+            <Pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level - %msg%n%mdc%n</Pattern>
+        </encoder>
+    </appender>
+
+    <logger name="com.mwz.sonar.scala" level="DEBUG"/>
+    <root level="WARN">
+        <appender-ref ref="FILE"/>
+    </root>
+
+    <statusListener class="ch.qos.logback.core.status.NopStatusListener"/>
+</configuration>

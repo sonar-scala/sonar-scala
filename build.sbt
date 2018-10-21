@@ -10,7 +10,7 @@ licenses := Seq("LGPL-3.0" -> url("https://opensource.org/licenses/lgpl-3.0.html
 description := "Enables analysis of Scala projects with SonarQube."
 
 // Compile options
-scalaVersion := "2.12.5"
+scalaVersion := "2.12.7"
 scalacOptions := Seq(
   "-unchecked",
   "-deprecation",
@@ -22,24 +22,31 @@ scalacOptions := Seq(
 javacOptions := Seq("-Xlint:deprecation")
 cancelable in Global := true
 scalafmtOnCompile in ThisBuild := true
-scapegoatVersion in ThisBuild := "1.3.4"
+scalafmtVersion in ThisBuild := "1.4.0"
+scapegoatVersion in ThisBuild := "1.3.8"
 scapegoatReports := Seq("xml")
 scalacOptions in Scapegoat += "-P:scapegoat:overrideLevels:TraversableHead=Warning:OptionGet=Warning"
 coverageOutputXML := true
 coverageOutputHTML := false
 coverageOutputCobertura := false
 
+// Add Scalastyle and Scapegoat inspections generators.
+sourceGenerators in Compile ++= Seq(
+  ScapegoatInspectionsGenerator.generatorTask.taskValue,
+  ScalastyleInspectionsGenerator.generatorTask.taskValue
+)
+
 // Lib dependencies
-val sonarVersion = "6.7"
+val sonarVersion = "7.3"
 libraryDependencies ++= List(
-  "org.sonarsource.sonarqube" % "sonar-core" % sonarVersion % Provided,
   "org.sonarsource.sonarqube" % "sonar-plugin-api" % sonarVersion % Provided,
   "org.slf4j" % "slf4j-api" % "1.7.25" % Provided,
+  "org.typelevel" %% "cats-core" % "1.4.0",
   "org.scalariform" %% "scalariform" % "0.2.6",
   "org.scalastyle" %% "scalastyle" % "1.0.0",
-  "com.google.guava" % "guava" % "23.0",
+  "org.scala-lang.modules" %% "scala-xml" % "1.1.1",
   "org.scalatest" %% "scalatest" % "3.0.5" % Test,
-  "org.mockito" % "mockito-core" % "2.16.0" % Test
+  "org.mockito" % "mockito-core" % "2.23.0" % Test
 )
 
 // Adding a resolver to the Artima maven repo, so sbt can download the Artima SuperSafe Scala compiler
@@ -55,7 +62,7 @@ packageOptions in (Compile, packageBin) += Package.ManifestAttributes(
   PluginManifest.ISSUE_TRACKER_URL -> "https://github.com/mwz/sonar-scala/issues",
   PluginManifest.ORGANIZATION -> "Michael Wizner",
   PluginManifest.ORGANIZATION_URL -> "https://github.com/mwz",
-  PluginManifest.DEVELOPERS -> "Augustin Borsu, Michael Wizner",
+  PluginManifest.DEVELOPERS -> "Michael Wizner, Luis Miguel Mejía Suárez",
   PluginManifest.VERSION -> version.value,
   PluginManifest.DISPLAY_VERSION -> version.value,
   PluginManifest.SONAR_VERSION -> sonarVersion,
@@ -114,4 +121,10 @@ releaseProcess := Seq[ReleaseStep](
 // Test
 parallelExecution in Test := false
 logBuffered in Test := false
-testOptions in Test += Tests.Argument(TestFrameworks.ScalaTest, "-oDF")
+
+// ScalaTest reporter config:
+// -o - standard output,
+// D - show all durations,
+// T - show reminder of failed and cancelled tests with short stack traces,
+// F - show full stack traces.
+testOptions in Test += Tests.Argument(TestFrameworks.ScalaTest, "-oDTF")

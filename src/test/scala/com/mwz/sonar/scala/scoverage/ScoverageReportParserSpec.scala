@@ -16,140 +16,217 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-package com.mwz.sonar.scala.scoverage
+package com.mwz.sonar.scala
+package scoverage
 
-import org.scalatest.{FlatSpec, Inside, LoneElement, Matchers}
+import org.scalatest.{FlatSpec, Matchers}
+import java.nio.file.Paths
 
 /** Tests the correct behavior of the Scoverage XML reports parser */
-class ScoverageReportParserSpec extends FlatSpec with Inside with LoneElement with Matchers {
-  val scoverageReportParser = new ScoverageReportParser {}
-  behavior of "A Scoverage Report Parser"
+class ScoverageReportParserSpec extends FlatSpec with Matchers {
+  val modulePath = Paths.get("")
+  val scalaSources = List(Paths.get("src/main/scala"))
+  val scoverageReportParser = new ScoverageReportParser()
+
+  behavior of "A Scoverage XML Report Parser"
+
+  it should "be able to extract scoverage data from XML" in {
+    val node = <node statement-count="123" statements-invoked="15" statement-rate="88.72" branch-rate="14.17">
+               </node>
+    val expected = Scoverage(123, 15, 88.72, 14.17)
+
+    scoverageReportParser.extractScoverageFromNode(node) shouldBe expected
+  }
 
   it should "be able to parse the report of an empty project" in {
-    val reportFilename = "src/test/resources/empty-project-scoverage.xml"
-    val moduleCoverage = scoverageReportParser.parse(reportFilename, "src/main/scala/")
-    inside(moduleCoverage) {
-      case ModuleCoverage(moduleScoverage, files) =>
-        inside(moduleScoverage) {
-          case Scoverage(totalStatements, coveredStatements, statementCoverage, branchCoverage) =>
-            totalStatements shouldBe 0
-            coveredStatements shouldBe 0
-            statementCoverage shouldBe 0.0
-            branchCoverage shouldBe 0.0
-        }
-        files shouldBe empty
-    }
+    val reportFilename = Paths.get("src/test/resources/scoverage/empty-project.xml")
+    val moduleCoverage = scoverageReportParser.parse(reportFilename, modulePath, scalaSources)
+
+    val scoverage = Scoverage(
+      totalStatements = 0,
+      coveredStatements = 0,
+      statementCoverage = 0.0,
+      branchCoverage = 0.0
+    )
+    val expected = ModuleCoverage(
+      moduleScoverage = scoverage,
+      filesCoverage = Map.empty
+    )
+
+    moduleCoverage shouldBe expected
   }
 
   it should "be able to parse the report of a one file project" in {
-    val reportFilename = "src/test/resources/one-file-project-scoverage.xml"
-    val moduleCoverage = scoverageReportParser.parse(reportFilename, "src/main/scala/")
-    inside(moduleCoverage) {
-      case ModuleCoverage(moduleScoverage, files) =>
-        inside(moduleScoverage) {
-          case Scoverage(totalStatements, coveredStatements, statementCoverage, branchCoverage) =>
-            totalStatements shouldBe 2
-            coveredStatements shouldBe 2
-            statementCoverage shouldBe 100.0
-            branchCoverage shouldBe 100.0
-        }
-        val (filename, fileCoverage) = files.loneElement
-        filename shouldBe "src/main/scala/com/mwz/sonar/scala/ScalaPlugin.scala"
-        inside(fileCoverage) {
-          case FileCoverage(fileScoverage, lines) =>
-            inside(fileScoverage) {
-              case Scoverage(totalStatements, coveredStatements, statementCoverage, branchCoverage) =>
-                totalStatements shouldBe 2
-                coveredStatements shouldBe 2
-                statementCoverage shouldBe 100.0
-                branchCoverage shouldBe 100.0
-            }
-            lines.loneElement shouldBe (66 -> 2)
-        }
-    }
+    val reportFilename = Paths.get("src/test/resources/scoverage/one-file-project.xml")
+    val moduleCoverage = scoverageReportParser.parse(reportFilename, modulePath, scalaSources)
+
+    val scoverage = Scoverage(
+      totalStatements = 2,
+      coveredStatements = 2,
+      statementCoverage = 100.0,
+      branchCoverage = 100.0
+    )
+    val expected = ModuleCoverage(
+      moduleScoverage = scoverage,
+      filesCoverage = Map(
+        "src/main/scala/com/mwz/sonar/scala/ScalaPlugin.scala" -> FileCoverage(
+          fileScoverage = scoverage,
+          linesCoverage = Map(66 -> 2)
+        )
+      )
+    )
+
+    moduleCoverage shouldBe expected
+  }
+
+  it should "be able to handle multiple source prefixes" in {
+    val reportFilename = Paths.get("src/test/resources/scoverage/one-file-project.xml")
+    val sourcePrefixes = List(
+      Paths.get("src/main/java"),
+      Paths.get("src/main/scala"),
+      Paths.get("imaginary/sources")
+    )
+    val moduleCoverage = scoverageReportParser.parse(reportFilename, modulePath, sourcePrefixes)
+
+    val scoverage = Scoverage(
+      totalStatements = 2,
+      coveredStatements = 2,
+      statementCoverage = 100.0,
+      branchCoverage = 100.0
+    )
+    val expected = ModuleCoverage(
+      moduleScoverage = scoverage,
+      filesCoverage = Map(
+        "src/main/scala/com/mwz/sonar/scala/ScalaPlugin.scala" -> FileCoverage(
+          fileScoverage = scoverage,
+          linesCoverage = Map(66 -> 2)
+        )
+      )
+    )
+
+    moduleCoverage shouldBe expected
+  }
+
+  it should "be able to handle correctly file names with source prefixes" in {
+    val reportFilename =
+      Paths.get("src/test/resources/scoverage/filenames-with-source-prefixes.xml")
+    val sourcePrefixes = List(
+      Paths.get("src/main/java"),
+      Paths.get("src/main/scala"),
+      Paths.get("imaginary/sources")
+    )
+    val moduleCoverage = scoverageReportParser.parse(reportFilename, modulePath, sourcePrefixes)
+
+    val scoverage = Scoverage(
+      totalStatements = 2,
+      coveredStatements = 2,
+      statementCoverage = 100.0,
+      branchCoverage = 100.0
+    )
+    val expected = ModuleCoverage(
+      moduleScoverage = scoverage,
+      filesCoverage = Map(
+        "src/main/scala/com/mwz/sonar/scala/ScalaPlugin.scala" -> FileCoverage(
+          fileScoverage = scoverage,
+          linesCoverage = Map(66 -> 2)
+        )
+      )
+    )
+
+    moduleCoverage shouldBe expected
+  }
+
+  it should "be able to handle correctly module files with a sources prefix" in {
+    val reportFilename =
+      Paths.get("src/test/resources/scoverage/filenames-with-source-prefixes2.xml")
+
+    // I'm going to pretend here for convenience that src is a module path
+    // and src/main/scala is sources prefix, which doesn't include the module path
+    // in the scoverage report: main/scala/com/mwz/sonar/scala/ScalaPlugin.scala.
+    val modulePath = Paths.get("src")
+    val scalaSources = List(Paths.get("src/main/scala"))
+
+    val moduleCoverage = scoverageReportParser.parse(reportFilename, modulePath, scalaSources)
+
+    val scoverage = Scoverage(
+      totalStatements = 2,
+      coveredStatements = 2,
+      statementCoverage = 100.0,
+      branchCoverage = 100.0
+    )
+    val expected = ModuleCoverage(
+      moduleScoverage = scoverage,
+      filesCoverage = Map(
+        "src/main/scala/com/mwz/sonar/scala/ScalaPlugin.scala" -> FileCoverage(
+          fileScoverage = scoverage,
+          linesCoverage = Map(66 -> 2)
+        )
+      )
+    )
+
+    moduleCoverage shouldBe expected
   }
 
   it should "be able to merge the coverage metric of all classes of the same file" in {
-    val reportFilename = "src/test/resources/multi-class-one-file-project-scoverage.xml"
-    val moduleCoverage = scoverageReportParser.parse(reportFilename, "src/main/scala/")
-    inside(moduleCoverage) {
-      case ModuleCoverage(moduleScoverage, files) =>
-        inside(moduleScoverage) {
-          case Scoverage(totalStatements, coveredStatements, statementCoverage, branchCoverage) =>
-            totalStatements shouldBe 7
-            coveredStatements shouldBe 5
-            statementCoverage shouldBe 71.43
-            branchCoverage shouldBe 87.5
-        }
-        val (filename, fileCoverage) = files.loneElement
-        filename shouldBe "src/main/scala/com/mwz/sonar/scala/ScalaPlugin.scala"
-        inside(fileCoverage) {
-          case FileCoverage(fileScoverage, lines) =>
-            inside(fileScoverage) {
-              case Scoverage(totalStatements, coveredStatements, statementCoverage, branchCoverage) =>
-                totalStatements shouldBe 7
-                coveredStatements shouldBe 5
-                statementCoverage shouldBe 71.43
-                branchCoverage shouldBe 87.5
-            }
-            lines should contain theSameElementsAs Map(
-              38 -> 1,
-              39 -> 1,
-              40 -> 0,
-              56 -> 1,
-              57 -> 0,
-              66 -> 2
-            )
-        }
-    }
+    val reportFilename = Paths.get("src/test/resources/scoverage/multi-class-one-file-project.xml")
+    val moduleCoverage = scoverageReportParser.parse(reportFilename, modulePath, scalaSources)
+
+    val scoverage = Scoverage(
+      totalStatements = 7,
+      coveredStatements = 5,
+      statementCoverage = 71.43,
+      branchCoverage = 87.5
+    )
+    val expected = ModuleCoverage(
+      moduleScoverage = scoverage,
+      filesCoverage = Map(
+        "src/main/scala/com/mwz/sonar/scala/ScalaPlugin.scala" -> FileCoverage(
+          fileScoverage = scoverage,
+          linesCoverage = Map(38 -> 1, 39 -> 1, 40 -> 0, 56 -> 1, 57 -> 0, 66 -> 2)
+        )
+      )
+    )
+
+    moduleCoverage shouldBe expected
   }
 
   it should "be able to parse the report of a two files project" in {
-    val reportFilename = "src/test/resources/two-files-project-scoverage.xml"
-    val moduleCoverage = scoverageReportParser.parse(reportFilename, "src/main/scala/")
-    inside(moduleCoverage) {
-      case ModuleCoverage(moduleScoverage, files) =>
-        inside(moduleScoverage) {
-          case Scoverage(totalStatements, coveredStatements, statementCoverage, branchCoverage) =>
-            totalStatements shouldBe 6
-            coveredStatements shouldBe 5
-            statementCoverage shouldBe 83.33
-            branchCoverage shouldBe 83.33
-        }
-        files should have size 2
-        val file1name = "src/main/scala/com/mwz/sonar/scala/ScalaPlugin.scala"
-        files should contain key file1name
-        val file1Coverage = files(file1name)
-        inside(file1Coverage) {
-          case FileCoverage(fileScoverage, lines) =>
-            inside(fileScoverage) {
-              case Scoverage(totalStatements, coveredStatements, statementCoverage, branchCoverage) =>
-                totalStatements shouldBe 2
-                coveredStatements shouldBe 2
-                statementCoverage shouldBe 100.0
-                branchCoverage shouldBe 100.0
-            }
-            lines.loneElement shouldBe (66 -> 2)
-        }
-        val file2name = "src/main/scala/com/mwz/sonar/scala/sensor/ScalaSensor.scala"
-        files should contain key file2name
-        val file2Coverage = files(file2name)
-        inside(file2Coverage) {
-          case FileCoverage(fileScoverage, lines) =>
-            inside(fileScoverage) {
-              case Scoverage(totalStatements, coveredStatements, statementCoverage, branchCoverage) =>
-                totalStatements shouldBe 4
-                coveredStatements shouldBe 3
-                statementCoverage shouldBe 75.0
-                branchCoverage shouldBe 66.66
-            }
-            lines should contain theSameElementsAs Map(
-              20 -> 1,
-              21 -> 0,
-              22 -> 1,
-              23 -> 1
-            )
-        }
-    }
+    val reportFilename = Paths.get("src/test/resources/scoverage/two-files-project.xml")
+    val moduleCoverage = scoverageReportParser.parse(reportFilename, modulePath, scalaSources)
+
+    val scoverageTotal = Scoverage(
+      totalStatements = 6,
+      coveredStatements = 5,
+      statementCoverage = 83.33,
+      branchCoverage = 83.33
+    )
+    val scoverage1 = Scoverage(
+      totalStatements = 2,
+      coveredStatements = 2,
+      statementCoverage = 100.0,
+      branchCoverage = 100.0
+    )
+    val scoverage2 = Scoverage(
+      totalStatements = 4,
+      coveredStatements = 3,
+      statementCoverage = 75.0,
+      branchCoverage = 66.66
+    )
+
+    val expected = ModuleCoverage(
+      moduleScoverage = scoverageTotal,
+      filesCoverage = Map(
+        "src/main/scala/com/mwz/sonar/scala/ScalaPlugin.scala" -> FileCoverage(
+          fileScoverage = scoverage1,
+          linesCoverage = Map(66 -> 2)
+        ),
+        "src/main/scala/com/mwz/sonar/scala/sensor/ScalaSensor.scala" -> FileCoverage(
+          fileScoverage = scoverage2,
+          linesCoverage = Map(20 -> 1, 21 -> 0, 22 -> 1, 23 -> 1)
+        )
+      )
+    )
+
+    moduleCoverage shouldBe expected
   }
 }

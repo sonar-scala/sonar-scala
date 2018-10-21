@@ -1,0 +1,3 @@
+<scapegoat count="1" warns="0" errors="0" infos="1">
+  <warning line="15" text="Empty case class" snippet="Empty case class can be rewritten as a case object" level="Info" file="com.mwz.sonar.scala.scapegoat.TestFileA.scala" inspection="com.sksamuel.scapegoat.inspections.EmptyCaseClass"/>
+</scapegoat>

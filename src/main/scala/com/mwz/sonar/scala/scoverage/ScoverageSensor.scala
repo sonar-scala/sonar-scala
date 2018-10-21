@@ -16,138 +16,117 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-package com.mwz.sonar.scala.scoverage
+package com.mwz.sonar.scala
+package scoverage
 
-import com.mwz.sonar.scala.Scala
+import java.nio.file.{Path, Paths}
+
 import com.mwz.sonar.scala.util.JavaOptionals._
-import com.mwz.sonar.scala.util.PathUtils
-import java.nio.file.Paths
+import com.mwz.sonar.scala.util.PathUtils._
+import com.mwz.sonar.scala.util.{Log, PathUtils}
 import org.sonar.api.batch.fs.{FileSystem, InputComponent, InputFile}
 import org.sonar.api.batch.sensor.{Sensor, SensorContext, SensorDescriptor}
-import org.sonar.api.config.Configuration;
-import org.sonar.api.utils.log.Loggers
+import org.sonar.api.config.Configuration
+import scalariform.ScalaVersion
+
 import scala.collection.JavaConverters._
 import scala.util.{Failure, Success, Try}
 
-/** Main sensor for importing Scoverage reports to SonarQube */
-final class ScoverageSensor extends ScoverageSensorInternal with ScoverageReportParser
+/** Main sensor for importing Scoverage reports into SonarQube. */
+final class ScoverageSensor(scoverageReportParser: ScoverageReportParserAPI) extends Sensor {
+  import ScoverageSensor._ // scalastyle:ignore scalastyle_ImportGroupingChecker org.scalastyle.scalariform.ImportGroupingChecker
 
-/** Implementation of the sensor */
-private[scoverage] abstract class ScoverageSensorInternal extends Sensor {
-  // cake pattern to mock the scoverage report parser in tests
-  scoverageReportParser: ScoverageReportParserAPI =>
+  private[this] val log = Log(classOf[ScoverageSensor], "scoverage")
 
-  private[this] val logger = Loggers.get(classOf[ScoverageSensorInternal])
-
-  /** Populates the [[SensorDescriptor]] of this sensor. */
+  /** Populates the SensorDescriptor of this sensor. */
   override def describe(descriptor: SensorDescriptor): Unit = {
     descriptor
-      .onlyOnLanguage(Scala.Key)
+      .onlyOnLanguage(Scala.LanguageKey)
       .onlyOnFileType(InputFile.Type.MAIN)
-      .name(ScoverageSensorInternal.SensorName)
+      .name(SensorName)
   }
 
   /** Saves in SonarQube the scoverage information of a module */
   override def execute(context: SensorContext): Unit = {
-    logger.info("[scoverage] Initializing the scoverage sensor")
-    val settings = context.config()
-    val filesystem = context.fileSystem()
+    log.info("Initializing the scoverage sensor.")
+    log.debug(s"The current working directory is: '${PathUtils.cwd}'.")
+    val settings = context.config
+    val filesystem = context.fileSystem
 
     val modulePath = getModuleBaseDirectory(filesystem)
-    val reportFilename = modulePath + getScoverageReportFilename(settings)
-    val sourcesPrefix = PathUtils.sanitizePath(modulePath + Scala.getSourcesPath(settings))
-    Try(scoverageReportParser.parse(reportFilename, sourcesPrefix)) match {
-      case Success(moduleCoverage) => {
-        logger.info(s"[scoverage] Successfully loaded the scoverage report file: '${reportFilename}'")
+    val reportPath = modulePath.resolve(getScoverageReportPath(settings))
+    val sources = Scala.getSourcesPaths(settings)
+    val sourcePrefixes = sources.map(PathUtils.relativize(PathUtils.cwd, modulePath, _))
+    log.debug(s"The source prefixes are: ${sourcePrefixes.mkString("[", ",", "]")}.")
+    log.info(s"Loading the scoverage report file: '$reportPath'.")
 
-        logger.debug("[scoverage] Saving the overall scoverage information of the module")
+    Try(scoverageReportParser.parse(reportPath, modulePath, sourcePrefixes)) match {
+      case Success(moduleCoverage) =>
+        log.info("Successfully loaded the scoverage report file.")
+        log.debug(s"Module scoverage information: $moduleCoverage.")
+
         saveComponentScoverage(context, context.module(), moduleCoverage.moduleScoverage)
 
         // save the coverage information of each file of the module
-        for (file <- getModuleSourceFiles(filesystem)) {
+        getModuleSourceFiles(filesystem) foreach { file =>
           // toString returns the project relative path of the file
           val filename = file.toString
-          logger.debug(s"[scoverage] Saving the scoverage information of the file: '${filename}'")
+          log.debug(s"Saving the scoverage information of the file: '$filename'.")
+
           moduleCoverage.filesCoverage.get(filename) match {
-            case Some(fileCoverage) => {
+            case Some(fileCoverage) =>
+              log.debug(s"File scoverage information: $fileCoverage.")
+
               // save the file overall scoverage information
               saveComponentScoverage(context, file, fileCoverage.fileScoverage)
 
               // save the coverage of each line of the file
               val coverage = context.newCoverage()
               coverage.onFile(file)
-              for ((linenum, hits) <- fileCoverage.linesCoverage) {
-                coverage.lineHits(linenum, hits)
+              fileCoverage.linesCoverage foreach {
+                case (lineNum, hits) => coverage.lineHits(lineNum, hits)
               }
               coverage.save()
-            }
-            case None => {
-              logger.warn(
-                s"[scoverage] The file: '${filename}', has no scoverage information associated to it."
-              )
-            }
+            case None =>
+              log.warn(s"The file '$filename' has no scoverage information associated with it.")
           }
         }
-      }
-      case Failure(ex) => {
-        logger.error(
-          s"""[scoverage] Aborting the scoverage sensor execution,
-             |cause: an error occurred while reading the scoverage report file: '${reportFilename}',
-             |the error was: ${ex.getMessage}.""".stripMargin
+      case Failure(ex) =>
+        log.error(
+          "Aborting the scoverage sensor execution, " +
+          s"cause: an error occurred while reading the scoverage report file: '$reportPath', " +
+          s"the error was: ${ex.getMessage}."
         )
-      }
     }
   }
 
   /** Returns all scala main files from this module */
-  private[this] def getModuleSourceFiles(fs: FileSystem): Iterable[InputFile] = {
+  private[scoverage] def getModuleSourceFiles(fs: FileSystem): Iterable[InputFile] = {
     val predicates = fs.predicates
-    val predicate = predicates.and(predicates.hasLanguage(Scala.Key), predicates.hasType(InputFile.Type.MAIN))
+    val predicate =
+      predicates.and(
+        predicates.hasLanguage(Scala.LanguageKey),
+        predicates.hasType(InputFile.Type.MAIN)
+      )
+
     fs.inputFiles(predicate).asScala
   }
 
-  /** Returns the module base path */
-  private[this] def getModuleBaseDirectory(fs: FileSystem): String = {
-    val moduleAbsolutePath = Paths.get(fs.baseDir().getAbsolutePath).normalize()
-    val currentWorkdirAbsolutePath = Paths.get("./").toAbsolutePath().normalize()
-    val moduleBasePath = currentWorkdirAbsolutePath.relativize(moduleAbsolutePath).toString
-    PathUtils.sanitizePath(moduleBasePath)
-  }
-
   /** Returns the filename of the scoverage report for this module */
-  private[this] def getScoverageReportFilename(settings: Configuration): String = {
-    import ScoverageSensorInternal.DeprecatedScoverageReportPathPropertyKey
-    import ScoverageSensorInternal.ScoverageReportPathPropertyKey
-
+  private[scoverage] def getScoverageReportPath(settings: Configuration): Path = {
     val scalaVersion = Scala.getScalaVersion(settings)
-    val defaultScoverageReportPath = ScoverageSensorInternal.getDefaultScoverageReportPath(scalaVersion)
+    val defaultScoverageReportPath = getDefaultScoverageReportPath(scalaVersion)
 
-    // logging logic
-    if (settings.hasKey(ScoverageReportPathPropertyKey)) {
-      logger.warn(
-        s"""[scoverage] The property: '${DeprecatedScoverageReportPathPropertyKey}' is deprecated,
-           |use the new property '${ScoverageReportPathPropertyKey}' instead""".stripMargin
-      )
-    } else if (!settings.hasKey(ScoverageReportPathPropertyKey)) {
-      logger.info(
-        s"""[scoverage] Missing the property: '${ScoverageReportPathPropertyKey}',
-           |using the default value: '${defaultScoverageReportPath}'""".stripMargin
-      )
-    }
-
-    settings
-      .get(DeprecatedScoverageReportPathPropertyKey)
-      .toOption
-      .getOrElse(
-        settings
-          .get(ScoverageReportPathPropertyKey)
-          .toOption
-          .getOrElse(defaultScoverageReportPath)
-      )
+    Paths.get(
+      settings
+        .get(ScoverageReportPathPropertyKey)
+        .toOption
+        .getOrElse(defaultScoverageReportPath.toString)
+    )
   }
 
   /** Saves the [[ScoverageMetrics]] of a component */
-  private[this] def saveComponentScoverage(
+  private[scoverage] def saveComponentScoverage(
     context: SensorContext,
     component: InputComponent,
     scoverage: Scoverage
@@ -182,13 +161,10 @@ private[scoverage] abstract class ScoverageSensorInternal extends Sensor {
   }
 }
 
-object ScoverageSensorInternal {
-  private val SensorName = "Scoverage Sensor"
-  private val DeprecatedScoverageReportPathPropertyKey = "sonar.scoverage.reportPath"
-  private val ScoverageReportPathPropertyKey = "sonar.scala.scoverage.reportPath"
-  private def getDefaultScoverageReportPath(scalaRawVersion: String) = {
-    // remove the extra part of the scala version, e.g 2.11.0 -> 2.11
-    val scalaVersion = scalaRawVersion.take(scalaRawVersion.lastIndexOf("."))
-    s"target/scala-${scalaVersion}/scoverage-report/scoverage.xml"
-  }
+private[scoverage] object ScoverageSensor {
+  final val SensorName = "Scoverage Sensor"
+  final val ScoverageReportPathPropertyKey = "sonar.scala.scoverage.reportPath"
+
+  def getDefaultScoverageReportPath(scalaVersion: ScalaVersion): Path =
+    Paths.get(s"target/scala-${scalaVersion.major}.${scalaVersion.minor}/scoverage-report/scoverage.xml")
 }

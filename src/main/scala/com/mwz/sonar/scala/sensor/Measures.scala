@@ -16,7 +16,8 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-package com.mwz.sonar.scala.sensor
+package com.mwz.sonar.scala
+package sensor
 
 import scalariform.lexer.{Token, Tokens}
 
@@ -29,7 +30,7 @@ object Measures {
   val NewLineRegex: Regex = "(\r\n)|\r|\n".r
 
   def countClasses(tokens: List[Token]): Int = {
-    tokens.foldLeft(0) { // scalastyle:ignore LiteralArguments
+    tokens.foldLeft(0) { // scalastyle:ignore LiteralArguments org.scalastyle.scalariform.NamedArgumentChecker
       case (acc, token) =>
         val tokenType = token.tokenType
         if (tokenType == Tokens.CLASS || tokenType == Tokens.OBJECT) acc + 1
@@ -38,7 +39,7 @@ object Measures {
   }
 
   def countMethods(tokens: List[Token]): Int = {
-    tokens.foldLeft(0) { // scalastyle:ignore LiteralArguments
+    tokens.foldLeft(0) { // scalastyle:ignore LiteralArguments org.scalastyle.scalariform.NamedArgumentChecker
       case (acc, token) =>
         if (token.tokenType == Tokens.DEF) acc + 1
         else acc

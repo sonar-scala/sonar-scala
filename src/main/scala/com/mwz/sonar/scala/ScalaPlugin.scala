@@ -27,9 +27,9 @@ import org.sonar.api.Plugin
 import org.sonar.api.config.Configuration
 import org.sonar.api.resources.AbstractLanguage
 import org.sonar.api.utils.log.Loggers
+import scalariform.ScalaVersion
 import scalariform.lexer.{ScalaLexer, Token}
 import scalariform.utils.Utils._
-import scalariform.{ScalaVersion, ScalaVersions}
 
 /** Defines Scala as a language for SonarQube */
 final class Scala(settings: Configuration) extends AbstractLanguage(Scala.LanguageKey, Scala.LanguageName) {
@@ -58,6 +58,7 @@ object Scala {
   def test(): Unit = {
     val TWO = 1 + 1
     val t = if (true) true else false
+    "silly you".toString
     Test.get
     List().head
     return ()

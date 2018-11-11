@@ -185,7 +185,8 @@ class ScapegoatSensorSpec
       .setLanguage("scala")
       .setType(InputFile.Type.MAIN)
       .setLines(2)
-      .setOriginalLineOffsets(Array(0, 51)) // line 1 -> 50 chars, line 2 -> 80 chars
+      .setOriginalLineStartOffsets(Array(0, 51)) // line 1 -> 50 chars, line 2 -> 80 chars
+      .setOriginalLineEndOffsets(Array(50, 131))
       .setLastValidOffset(131)
       .build()
     sensorContext.fileSystem.add(testFileA)
@@ -195,7 +196,8 @@ class ScapegoatSensorSpec
       .setLanguage("scala")
       .setType(InputFile.Type.MAIN)
       .setLines(3)
-      .setOriginalLineOffsets(Array(0, 31, 82)) // line 1 -> 30 chars, line 2 -> 50 chars, line 3 -> 50 chars
+      .setOriginalLineStartOffsets(Array(0, 31, 82)) // line 1 -> 30 chars, line 2 -> 50 chars, line 3 -> 50 chars
+      .setOriginalLineEndOffsets(Array(30, 81, 132))
       .setLastValidOffset(132)
       .build()
     sensorContext.fileSystem.add(testFileB)
@@ -322,7 +324,8 @@ class ScapegoatSensorSpec
       .setLanguage("scala")
       .setType(InputFile.Type.MAIN)
       .setLines(2)
-      .setOriginalLineOffsets(Array(0, 51)) // line 1 -> 50 chars, line 2 -> 80 chars
+      .setOriginalLineStartOffsets(Array(0, 51)) // line 1 -> 50 chars, line 2 -> 80 chars
+      .setOriginalLineEndOffsets(Array(50, 131))
       .setLastValidOffset(131)
       .build()
     sensorContext.fileSystem.add(testFileA)
@@ -362,7 +365,8 @@ class ScapegoatSensorSpec
       .setLanguage("scala")
       .setType(InputFile.Type.MAIN)
       .setLines(2)
-      .setOriginalLineOffsets(Array(0, 51)) // line 1 -> 50 chars, line 2 -> 80 chars
+      .setOriginalLineStartOffsets(Array(0, 51)) // line 1 -> 50 chars, line 2 -> 80 chars
+      .setOriginalLineEndOffsets(Array(50, 131))
       .setLastValidOffset(131)
       .build()
     sensorContext.fileSystem.add(testFileA)
@@ -392,7 +396,8 @@ class ScapegoatSensorSpec
       .setLanguage("scala")
       .setType(InputFile.Type.MAIN)
       .setLines(2)
-      .setOriginalLineOffsets(Array(0, 51)) // line 1 -> 50 chars, line 2 -> 80 chars
+      .setOriginalLineStartOffsets(Array(0, 51)) // line 1 -> 50 chars, line 2 -> 80 chars
+      .setOriginalLineEndOffsets(Array(50, 131))
       .setLastValidOffset(131)
       .build()
     sensorContext.fileSystem.add(testFileA)
@@ -446,7 +451,8 @@ class ScapegoatSensorSpec
       .setLanguage("scala")
       .setType(InputFile.Type.MAIN)
       .setLines(2)
-      .setOriginalLineOffsets(Array(0, 51)) // line 1 -> 50 chars, line 2 -> 80 chars
+      .setOriginalLineStartOffsets(Array(0, 51)) // line 1 -> 50 chars, line 2 -> 80 chars
+      .setOriginalLineEndOffsets(Array(50, 131))
       .setLastValidOffset(131)
       .build()
 
@@ -502,7 +508,8 @@ class ScapegoatSensorSpec
       .setLanguage("scala")
       .setType(InputFile.Type.MAIN)
       .setLines(2)
-      .setOriginalLineOffsets(Array(0, 51)) // line 1 -> 50 chars, line 2 -> 80 chars
+      .setOriginalLineStartOffsets(Array(0, 51))
+      .setOriginalLineEndOffsets(Array(50, 131)) // line 1 -> 50 chars, line 2 -> 80 chars
       .setLastValidOffset(131)
       .build()
 

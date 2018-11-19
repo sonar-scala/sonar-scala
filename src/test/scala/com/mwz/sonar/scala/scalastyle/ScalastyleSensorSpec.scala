@@ -289,7 +289,8 @@ class ScalastyleSensorSpec
       .setLanguage("scala")
       .setType(InputFile.Type.MAIN)
       .setLines(2)
-      .setOriginalLineOffsets(Array(0, 16))
+      .setOriginalLineStartOffsets(Array(0, 16))
+      .setOriginalLineEndOffsets(Array(15, 30))
       .build()
 
     val ruleKey = RuleKey.of("sonar-scala-scalastyle", "org.scalastyle.scalariform.EmptyClassChecker")
@@ -355,7 +356,8 @@ class ScalastyleSensorSpec
       .setLanguage("scala")
       .setType(InputFile.Type.MAIN)
       .setLines(2)
-      .setOriginalLineOffsets(Array(0, 16))
+      .setOriginalLineStartOffsets(Array(0, 16))
+      .setOriginalLineEndOffsets(Array(15, 30))
       .build()
 
     val ruleKey = RuleKey.of("sonar-scala-scalastyle", "org.scalastyle.scalariform.EmptyClassChecker")

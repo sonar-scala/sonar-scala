@@ -1,5 +1,7 @@
 Changelog
 ===
+## [7.1.0](https://github.com/mwz/sonar-scala/releases/tag/v7.1.0) - 19.11.2018
+- Added support for [SonarQube 7.4](https://www.sonarqube.org/sonarqube-7-4). (#127 - @mwz)
 ## [7.0.0](https://github.com/mwz/sonar-scala/releases/tag/v7.0.0) - 08.10.2018
 - Added support for [SonarQube 7.3](https://www.sonarqube.org/sonarqube-7-3). The current `6.x` series targeting *SonarQube 6.7 LTS* will be still maintained and will follow the SonarQube LTS lifecycle. (#120 - @mwz)
 - Removed the following:

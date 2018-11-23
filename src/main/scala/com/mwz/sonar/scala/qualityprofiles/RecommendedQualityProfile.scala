@@ -102,7 +102,7 @@ private[qualityprofiles] object RecommendedQualityProfile {
   )
 
   /**
-   * Activate the given rule and if needed override its priority and parameter values.
+   * Activate the given rule and if needed override its severity and parameter values.
    */
   def processRule(
     profile: NewBuiltInQualityProfile,

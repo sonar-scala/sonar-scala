@@ -101,12 +101,15 @@ private[qualityprofiles] object RecommendedQualityProfile {
     "if.brace" -> Map("doubleLineAllowed" -> "true") // "if" without braces allowed if everything is on one or two lines
   )
 
+  /**
+   * Activate the given rule and if needed override its priority and parameter values.
+   */
   def processRule(
     profile: NewBuiltInQualityProfile,
     repoKey: String,
     ruleKey: String,
     inspectionId: String
-  ) = {
+  ): Unit = {
     val rule: NewBuiltInActiveRule =
       profile.activateRule(repoKey, ruleKey)
 

@@ -55,7 +55,7 @@ final class ScalastyleRulesRepository extends RulesDefinition {
   }
 }
 
-private[scalastyle] object ScalastyleRulesRepository {
+object ScalastyleRulesRepository {
   private final case class Acc(indent: Boolean, isEmpty: Boolean, text: String)
 
   final val RepositoryKey = "sonar-scala-scalastyle"

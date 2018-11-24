@@ -20,8 +20,12 @@
 package com.mwz.sonar.scala
 package scalastyle
 
+import com.mwz.sonar.scala.qualityprofiles.Overrides
 import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition
-import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition.NewBuiltInQualityProfile
+import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition.{
+  NewBuiltInActiveRule,
+  NewBuiltInQualityProfile
+}
 
 /**
  * Defines a Scalastyle quality profile.
@@ -44,15 +48,47 @@ final class ScalastyleQualityProfile extends BuiltInQualityProfilesDefinition {
 }
 
 object ScalastyleQualityProfile {
-  private[scalastyle] final val ProfileName = "Scalastyle"
+  private[scalastyle] final val ProfileName: String = "Scalastyle"
 
-  /** Activates all rules in the Scalastyle rules repository in the given profile */
-  def activateAllRules(profile: BuiltInQualityProfilesDefinition.NewBuiltInQualityProfile): Unit = {
+  /**
+   * Activates all rules in the Scalastyle rules repository for the given profile.
+   */
+  def activateAllRules(profile: NewBuiltInQualityProfile): Unit = {
     ScalastyleInspections.AllInspections
       .filterNot { i =>
         ScalastyleRulesRepository.SkipTemplateInstances.contains(i.id) ||
         ScalastyleRulesRepository.BlacklistRules.contains(i.id)
       }
       .foreach(i => profile.activateRule(ScalastyleRulesRepository.RepositoryKey, i.clazz))
+  }
+
+  /**
+   * Enables Scalastyle rules excluding blacklisted rules.
+   * Overrides the default severity and parameter values.
+   */
+  def activateWithOverrides(profile: NewBuiltInQualityProfile, overrides: Overrides): Unit = {
+    ScalastyleInspections.AllInspections
+      .filterNot { inspection =>
+        overrides.blacklist.contains(inspection.id) ||
+        inspection.params.nonEmpty
+      }
+      .foreach { inspection =>
+        val rule: NewBuiltInActiveRule =
+          profile.activateRule(ScalastyleRulesRepository.RepositoryKey, inspection.clazz)
+
+        // Override the severity.
+        overrides.severities
+          .get(inspection.id)
+          .foreach(severity => rule.overrideSeverity(severity.name))
+
+        // Override rule params.
+        overrides.params
+          .get(inspection.id)
+          .foreach {
+            _.foreach {
+              case (k, v) => rule.overrideParam(k, v)
+            }
+          }
+      }
   }
 }

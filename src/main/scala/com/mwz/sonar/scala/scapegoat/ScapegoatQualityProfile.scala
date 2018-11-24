@@ -19,7 +19,12 @@
 package com.mwz.sonar.scala
 package scapegoat
 
+import com.mwz.sonar.scala.qualityprofiles.Overrides
 import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition
+import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition.{
+  NewBuiltInActiveRule,
+  NewBuiltInQualityProfile
+}
 
 /** Defines a quality profile that activates all Scapegoat rules/inspections */
 final class ScapegoatQualityProfile extends BuiltInQualityProfilesDefinition {
@@ -41,12 +46,32 @@ final class ScapegoatQualityProfile extends BuiltInQualityProfilesDefinition {
 }
 
 object ScapegoatQualityProfile {
-  private[scapegoat] final val ProfileName = "Scapegoat"
+  private[scapegoat] final val ProfileName: String = "Scapegoat"
 
-  /** Activates all rules in the Scapegoat rules repository in the given quality profile */
-  def activateAllRules(profile: BuiltInQualityProfilesDefinition.NewBuiltInQualityProfile): Unit = {
+  /**
+   * Activates all rules in the Scapegoat rules repository for the given quality profile.
+   */
+  def activateAllRules(profile: NewBuiltInQualityProfile): Unit = {
     ScapegoatInspections.AllInspections.foreach { inspection =>
       profile.activateRule(ScapegoatRulesRepository.RepositoryKey, inspection.id)
     }
+  }
+
+  /**
+   * Enables Scapegoat rules excluding blacklisted rules.
+   * Overrides the default severity.
+   */
+  def activateWithOverrides(profile: NewBuiltInQualityProfile, overrides: Overrides): Unit = {
+    ScapegoatInspections.AllInspections
+      .filterNot(inspection => overrides.blacklist.contains(inspection.id))
+      .foreach { inspection =>
+        val rule: NewBuiltInActiveRule =
+          profile.activateRule(ScapegoatRulesRepository.RepositoryKey, inspection.id)
+
+        // Override the severity.
+        overrides.severities
+          .get(inspection.id)
+          .foreach(severity => rule.overrideSeverity(severity.name))
+      }
   }
 }

@@ -19,32 +19,33 @@
 package com.mwz.sonar.scala
 package qualityprofiles
 
-import com.mwz.sonar.scala.scalastyle.ScalastyleQualityProfile
+import com.mwz.sonar.scala.scalastyle.{ScalastyleQualityProfile, ScalastyleRulesRepository}
 import com.mwz.sonar.scala.scapegoat.ScapegoatQualityProfile
 import org.sonar.api.batch.rule.Severity
 import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition
 import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition.NewBuiltInQualityProfile
+import org.sonar.api.server.rule.RulesDefinition
 
 /**
  * Defines a quality profile recommended by sonar-scala (including Scalastyle and Scapegoat).
  */
-final class RecommendedQualityProfile extends BuiltInQualityProfilesDefinition {
+final class RecommendedQualityProfile(
+  scalastyleRulesRepository: ScalastyleRulesRepository
+) extends BuiltInQualityProfilesDefinition {
   override def define(context: BuiltInQualityProfilesDefinition.Context): Unit = {
     // Create an empty profile.
     val profile: NewBuiltInQualityProfile =
       context.createBuiltInQualityProfile(ScalastyleScapegoatQualityProfile.ProfileName, Scala.LanguageKey)
 
-    // Enable Scalastyle rules excluding blacklisted rules and templates.
-    // Overrides the default severity and parameter values.
-    ScalastyleQualityProfile.activateWithOverrides(profile, RecommendedQualityProfile.RuleOverrides)
+    // Ensure this is the default profile.
+    profile.setDefault(true)
 
-    // TODO: Scalastyle template instances.
+    // Enable Scalastyle rules excluding blacklisted rules.
+    // Overrides the default severity and parameter values.
+    ScalastyleQualityProfile.activateWithOverrides(profile, RecommendedQualityProfile.ScalastyleOverrides)
 
     // Enable Scapegoat rules excluding blacklisted rules. Overrides the severity.
-    ScapegoatQualityProfile.activateWithOverrides(profile, RecommendedQualityProfile.RuleOverrides)
-
-    // Ensure this is not the default profile.
-    profile.setDefault(false)
+    ScapegoatQualityProfile.activateWithOverrides(profile, RecommendedQualityProfile.ScapegoatOverrides)
 
     // Save the profile.
     profile.done()
@@ -53,18 +54,13 @@ final class RecommendedQualityProfile extends BuiltInQualityProfilesDefinition {
 
 private[qualityprofiles] object RecommendedQualityProfile {
   final val ProfileName: String = "Recommended by sonar-scala"
-  final val RuleOverrides: Overrides = Overrides(
+  final val ScalastyleOverrides: Overrides = Overrides(
     blacklist = Set(
-      // Scalastyle
       "block.import", // avoid block imports
       "lowercase.pattern.match", // lowercase pattern match
       "no.newline.at.eof", // no newline at EOF
       "pattern.match.align", // pattern match align
-      "underscore.import", // avoid wildcard imports
-      // Scapegoat
-      "com.sksamuel.scapegoat.inspections.naming.ClassNames", // exists in Scalastyle (class.name)
-      "com.sksamuel.scapegoat.inspections.string.EmptyInterpolatedString", // exists in Scalastyle (empty.interpolated.strings)
-      "com.sksamuel.scapegoat.inspections.unneccesary.UnnecessaryReturnUse" // exists in Scalastyle (return)
+      "underscore.import" // avoid wildcard imports
     ),
     severities = Map(
       "covariant.equals" -> Severity.MAJOR,
@@ -76,7 +72,25 @@ private[qualityprofiles] object RecommendedQualityProfile {
     ),
     params = Map(
       // Scalastyle
-      "if.brace" -> Map("doubleLineAllowed" -> "true") // "if" without braces allowed if everything is on one or two lines
+      // "if" without braces allowed if everything is on one or two lines
+      "if.brace" -> Map("doubleLineAllowed" -> "true"),
+      // the classParamIndentSize should be the same as methodParamIndentSize
+      "indentation" -> Map("classParamIndentSize" -> "2"),
+      // tabSize should be 2 according to the Scala Style Guide (https://docs.scala-lang.org/style/indentation.html)
+      // The default maxLineLength of 160 is an abomination!
+      "line.size.limit" -> Map("tabSize" -> "2", "maxLineLength" -> "110")
     )
+  )
+  final val ScapegoatOverrides: Overrides = Overrides(
+    blacklist = Set(
+      // exists in Scalastyle (class.name)
+      "com.sksamuel.scapegoat.inspections.naming.ClassNames",
+      // exists in Scalastyle (empty.interpolated.strings)
+      "com.sksamuel.scapegoat.inspections.string.EmptyInterpolatedString",
+      // exists in Scalastyle (return)
+      "com.sksamuel.scapegoat.inspections.unneccesary.UnnecessaryReturnUse"
+    ),
+    severities = Map.empty,
+    params = Map.empty
   )
 }

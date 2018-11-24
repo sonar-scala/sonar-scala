@@ -55,9 +55,9 @@ object ScalastyleQualityProfile {
    */
   def activateAllRules(profile: NewBuiltInQualityProfile): Unit = {
     ScalastyleInspections.AllInspections
-      .filterNot { i =>
-        ScalastyleRulesRepository.SkipTemplateInstances.contains(i.id) ||
-        ScalastyleRulesRepository.BlacklistRules.contains(i.id)
+      .filterNot { inspection =>
+        ScalastyleRulesRepository.SkipTemplateInstances.contains(inspection.id) ||
+        ScalastyleRulesRepository.BlacklistRules.contains(inspection.id)
       }
       .foreach(i => profile.activateRule(ScalastyleRulesRepository.RepositoryKey, i.clazz))
   }
@@ -69,8 +69,8 @@ object ScalastyleQualityProfile {
   def activateWithOverrides(profile: NewBuiltInQualityProfile, overrides: Overrides): Unit = {
     ScalastyleInspections.AllInspections
       .filterNot { inspection =>
-        overrides.blacklist.contains(inspection.id) ||
-        inspection.params.nonEmpty
+        ScalastyleRulesRepository.SkipTemplateInstances.contains(inspection.id) ||
+        overrides.blacklist.contains(inspection.id)
       }
       .foreach { inspection =>
         val rule: NewBuiltInActiveRule =

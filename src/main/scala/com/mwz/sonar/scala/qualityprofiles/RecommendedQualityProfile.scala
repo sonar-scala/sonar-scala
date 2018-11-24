@@ -24,7 +24,6 @@ import com.mwz.sonar.scala.scapegoat.ScapegoatQualityProfile
 import org.sonar.api.batch.rule.Severity
 import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition
 import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition.NewBuiltInQualityProfile
-import org.sonar.api.server.rule.RulesDefinition
 
 /**
  * Defines a quality profile recommended by sonar-scala (including Scalastyle and Scapegoat).
@@ -40,12 +39,11 @@ final class RecommendedQualityProfile(
     // Ensure this is the default profile.
     profile.setDefault(true)
 
-    // Enable Scalastyle rules excluding blacklisted rules.
-    // Overrides the default severity and parameter values.
-    ScalastyleQualityProfile.activateWithOverrides(profile, RecommendedQualityProfile.ScalastyleOverrides)
+    // Activate Scalastyle rules excluding blacklisted rules.
+    ScalastyleQualityProfile.activateRules(profile, Some(RecommendedQualityProfile.ScalastyleOverrides))
 
-    // Enable Scapegoat rules excluding blacklisted rules. Overrides the severity.
-    ScapegoatQualityProfile.activateWithOverrides(profile, RecommendedQualityProfile.ScapegoatOverrides)
+    // Activate Scapegoat rules excluding blacklisted rules.
+    ScapegoatQualityProfile.activateRules(profile, Some(RecommendedQualityProfile.ScapegoatOverrides))
 
     // Save the profile.
     profile.done()

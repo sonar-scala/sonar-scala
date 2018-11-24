@@ -38,7 +38,7 @@ final class ScapegoatQualityProfile extends BuiltInQualityProfilesDefinition {
     profile.setDefault(false)
 
     // Activate all rules in the Scapegoat rules repository.
-    ScapegoatQualityProfile.activateAllRules(profile)
+    ScapegoatQualityProfile.activateRules(profile)
 
     // Save the profile.
     profile.done()
@@ -49,28 +49,19 @@ object ScapegoatQualityProfile {
   private[scapegoat] final val ProfileName: String = "Scapegoat"
 
   /**
-   * Activates all rules in the Scapegoat rules repository for the given quality profile.
+   * Activates Scapegoat rules for the given quality profile excluding blacklisted rules.
+   * Overrides the default severity if provided in overrides.
    */
-  def activateAllRules(profile: NewBuiltInQualityProfile): Unit = {
-    ScapegoatInspections.AllInspections.foreach { inspection =>
-      profile.activateRule(ScapegoatRulesRepository.RepositoryKey, inspection.id)
-    }
-  }
-
-  /**
-   * Enables Scapegoat rules excluding blacklisted rules.
-   * Overrides the default severity.
-   */
-  def activateWithOverrides(profile: NewBuiltInQualityProfile, overrides: Overrides): Unit = {
+  def activateRules(profile: NewBuiltInQualityProfile, overrides: Option[Overrides] = None): Unit = {
     ScapegoatInspections.AllInspections
-      .filterNot(inspection => overrides.blacklist.contains(inspection.id))
+      .filterNot(inspection => overrides.exists(_.blacklist.contains(inspection.id)))
       .foreach { inspection =>
         val rule: NewBuiltInActiveRule =
           profile.activateRule(ScapegoatRulesRepository.RepositoryKey, inspection.id)
 
         // Override the severity.
-        overrides.severities
-          .get(inspection.id)
+        overrides
+          .flatMap(_.severities.get(inspection.id))
           .foreach(severity => rule.overrideSeverity(severity.name))
       }
   }

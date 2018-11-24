@@ -40,7 +40,7 @@ final class ScalastyleQualityProfile extends BuiltInQualityProfilesDefinition {
 
     // Activate all rules in the Scalastyle rules repository.
     // (except for those which were not included in the repository)
-    ScalastyleQualityProfile.activateAllRules(profile)
+    ScalastyleQualityProfile.activateRules(profile, Some(ScalastyleQualityProfile.RuleOverrides))
 
     // Save the profile.
     profile.done()
@@ -49,46 +49,41 @@ final class ScalastyleQualityProfile extends BuiltInQualityProfilesDefinition {
 
 object ScalastyleQualityProfile {
   private[scalastyle] final val ProfileName: String = "Scalastyle"
+  private[scalastyle] final val RuleOverrides: Overrides = Overrides(
+    blacklist = ScalastyleRulesRepository.SkipTemplateInstances,
+    severities = Map.empty,
+    params = Map.empty
+  )
 
   /**
-   * Activates all rules in the Scalastyle rules repository for the given profile.
+   * Activates Scalastyle rules for the given profile excluding blacklisted rules.
+   * Overrides the default severity and parameter values if provided in overrides.
    */
-  def activateAllRules(profile: NewBuiltInQualityProfile): Unit = {
+  def activateRules(profile: NewBuiltInQualityProfile, overrides: Option[Overrides] = None): Unit = {
     ScalastyleInspections.AllInspections
       .filterNot { inspection =>
         ScalastyleRulesRepository.SkipTemplateInstances.contains(inspection.id) ||
-        ScalastyleRulesRepository.BlacklistRules.contains(inspection.id)
-      }
-      .foreach(i => profile.activateRule(ScalastyleRulesRepository.RepositoryKey, i.clazz))
-  }
-
-  /**
-   * Enables Scalastyle rules excluding blacklisted rules.
-   * Overrides the default severity and parameter values.
-   */
-  def activateWithOverrides(profile: NewBuiltInQualityProfile, overrides: Overrides): Unit = {
-    ScalastyleInspections.AllInspections
-      .filterNot { inspection =>
-        ScalastyleRulesRepository.SkipTemplateInstances.contains(inspection.id) ||
-        overrides.blacklist.contains(inspection.id)
+        overrides.exists(_.blacklist.contains(inspection.id))
       }
       .foreach { inspection =>
         val rule: NewBuiltInActiveRule =
           profile.activateRule(ScalastyleRulesRepository.RepositoryKey, inspection.clazz)
 
-        // Override the severity.
-        overrides.severities
-          .get(inspection.id)
-          .foreach(severity => rule.overrideSeverity(severity.name))
+        overrides.foreach { overrides =>
+          // Override the severity.
+          overrides.severities
+            .get(inspection.id)
+            .foreach(severity => rule.overrideSeverity(severity.name))
 
-        // Override rule params.
-        overrides.params
-          .get(inspection.id)
-          .foreach {
-            _.foreach {
-              case (k, v) => rule.overrideParam(k, v)
+          // Override rule params.
+          overrides.params
+            .get(inspection.id)
+            .foreach {
+              _.foreach {
+                case (k, v) => rule.overrideParam(k, v)
+              }
             }
-          }
+        }
       }
   }
 }

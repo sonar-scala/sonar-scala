@@ -36,10 +36,10 @@ final class ScalastyleScapegoatQualityProfile extends BuiltInQualityProfilesDefi
     profile.setDefault(false)
 
     // Activate all rules in the Scalastyle rules repository.
-    ScalastyleQualityProfile.activateAllRules(profile)
+    ScalastyleQualityProfile.activateRules(profile)
 
     // Activate all rules in the Scapegoat rules repository.
-    ScapegoatQualityProfile.activateAllRules(profile)
+    ScapegoatQualityProfile.activateRules(profile)
 
     // Save the profile.
     profile.done()
@@ -47,5 +47,5 @@ final class ScalastyleScapegoatQualityProfile extends BuiltInQualityProfilesDefi
 }
 
 private[qualityprofiles] object ScalastyleScapegoatQualityProfile {
-  final val ProfileName = "Scalastyle+Scapegoat"
+  final val ProfileName: String = "Scalastyle+Scapegoat"
 }

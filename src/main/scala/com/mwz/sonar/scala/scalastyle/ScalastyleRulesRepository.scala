@@ -32,7 +32,7 @@ import org.sonar.api.server.rule.{RuleParamType, RulesDefinition}
  * Defines a repository for the Scalastyle inspections.
  */
 final class ScalastyleRulesRepository extends RulesDefinition {
-  import ScalastyleRulesRepository._ // scalastyle:ignore scalastyle_ImportGroupingChecker org.scalastyle.scalariform.ImportGroupingChecker
+  import ScalastyleRulesRepository._ // scalastyle:ignore org.scalastyle.scalariform.ImportGroupingChecker
 
   override def define(context: RulesDefinition.Context): Unit = {
     // Create an empty repository.

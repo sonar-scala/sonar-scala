@@ -40,7 +40,7 @@ final class ScalastyleQualityProfile extends BuiltInQualityProfilesDefinition {
 
     // Activate all rules in the Scalastyle rules repository.
     // (except for those which were not included in the repository)
-    ScalastyleQualityProfile.activateRules(profile, Some(ScalastyleQualityProfile.RuleOverrides))
+    ScalastyleQualityProfile.activateRules(profile)
 
     // Save the profile.
     profile.done()
@@ -49,11 +49,6 @@ final class ScalastyleQualityProfile extends BuiltInQualityProfilesDefinition {
 
 object ScalastyleQualityProfile {
   private[scalastyle] final val ProfileName: String = "Scalastyle"
-  private[scalastyle] final val RuleOverrides: Overrides = Overrides(
-    blacklist = ScalastyleRulesRepository.SkipTemplateInstances,
-    severities = Map.empty,
-    params = Map.empty
-  )
 
   /**
    * Activates Scalastyle rules for the given profile excluding blacklisted rules.
@@ -63,6 +58,7 @@ object ScalastyleQualityProfile {
     ScalastyleInspections.AllInspections
       .filterNot { inspection =>
         ScalastyleRulesRepository.SkipTemplateInstances.contains(inspection.id) ||
+        ScalastyleRulesRepository.BlacklistRules.contains(inspection.id) ||
         overrides.exists(_.blacklist.contains(inspection.id))
       }
       .foreach { inspection =>

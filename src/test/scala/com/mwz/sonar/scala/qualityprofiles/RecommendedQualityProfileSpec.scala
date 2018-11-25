@@ -19,7 +19,7 @@
 package com.mwz.sonar.scala
 package qualityprofiles
 
-import org.scalatest.{FlatSpec, Inspectors, LoneElement, Matchers}
+import org.scalatest._
 import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition.{
   BuiltInActiveRule,
   BuiltInQualityProfile,
@@ -28,7 +28,12 @@ import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition.{
 
 import scala.collection.JavaConverters._
 
-class RecommendedQualityProfileSpec extends FlatSpec with Inspectors with LoneElement with Matchers {
+class RecommendedQualityProfileSpec
+    extends FlatSpec
+    with Inspectors
+    with LoneElement
+    with OptionValues
+    with Matchers {
   trait Ctx {
     val context: Context = new Context()
     new RecommendedQualityProfile().define(context)
@@ -58,17 +63,24 @@ class RecommendedQualityProfileSpec extends FlatSpec with Inspectors with LoneEl
 
   it should "have overridden the default params" in new Ctx {
     val rulesWithOverridenParams = rules.filterNot(_.overriddenParams.isEmpty)
-    val overridenRules = RecommendedQualityProfile.ScapegoatOverrides.params.size +
-    RecommendedQualityProfile.ScalastyleOverrides.params.size
+    val paramOverrides = RecommendedQualityProfile.ScapegoatOverrides.params ++
+    RecommendedQualityProfile.ScalastyleOverrides.params
 
-    rulesWithOverridenParams.size shouldBe overridenRules
+    rulesWithOverridenParams.size shouldBe paramOverrides.size
+    forEvery(rulesWithOverridenParams) { rule =>
+      rule.overriddenParams.asScala.map(p => (p.key, p.overriddenValue)) should contain theSameElementsAs
+      paramOverrides.get(rule.ruleKey).value.toSeq
+    }
   }
 
   it should "have overridden the default severities" in new Ctx {
     val rulesWithOverridenSeverities = rules.filterNot(rule => Option(rule.overriddenSeverity).isEmpty)
-    val overridenRules = RecommendedQualityProfile.ScapegoatOverrides.severities.size +
-    RecommendedQualityProfile.ScalastyleOverrides.severities.size
+    val severityOverrides = RecommendedQualityProfile.ScapegoatOverrides.severities ++
+    RecommendedQualityProfile.ScalastyleOverrides.severities
 
-    rulesWithOverridenSeverities.size shouldBe overridenRules
+    rulesWithOverridenSeverities.size shouldBe severityOverrides.size
+    forEvery(rulesWithOverridenSeverities) { rule =>
+      rule.overriddenSeverity shouldBe severityOverrides.get(rule.ruleKey).value.name
+    }
   }
 }

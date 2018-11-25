@@ -52,38 +52,37 @@ private[qualityprofiles] object RecommendedQualityProfile {
   final val ProfileName: String = "Recommended by sonar-scala"
   final val ScalastyleOverrides: Overrides = Overrides(
     blacklist = Set(
-      "block.import", // avoid block imports
-      "lowercase.pattern.match", // lowercase pattern match
-      "no.newline.at.eof", // no newline at EOF
-      "pattern.match.align", // pattern match align
-      "underscore.import" // avoid wildcard imports
+      "org.scalastyle.scalariform.BlockImportChecker", // avoid block imports
+      "org.scalastyle.scalariform.LowercasePatternMatchChecker", // lowercase pattern match
+      "org.scalastyle.scalariform.PatternMatchAlignChecker", // pattern match align
+      "org.scalastyle.scalariform.UnderscoreImportChecker" // avoid wildcard imports
     ),
     severities = Map(
-      "covariant.equals" -> Severity.MAJOR,
-      "equals.hash.code" -> Severity.MAJOR,
-      "illegal.imports" -> Severity.MAJOR,
-      "null" -> Severity.MAJOR,
-      "var.field" -> Severity.MAJOR,
-      "var.local" -> Severity.MAJOR,
+      "org.scalastyle.scalariform.CovariantEqualsChecker" -> Severity.MAJOR,
+      "org.scalastyle.scalariform.EqualsHashCodeChecker" -> Severity.MAJOR,
+      "org.scalastyle.scalariform.IllegalImportsChecker" -> Severity.MAJOR,
+      "org.scalastyle.scalariform.NullChecker" -> Severity.MAJOR,
+      "org.scalastyle.scalariform.VarFieldChecker" -> Severity.MAJOR,
+      "org.scalastyle.scalariform.VarLocalChecker" -> Severity.MAJOR,
     ),
     params = Map(
       // Scalastyle
       // "if" without braces allowed if everything is on one or two lines
-      "if.brace" -> Map("doubleLineAllowed" -> "true"),
+      "org.scalastyle.scalariform.IfBraceChecker" -> Map("doubleLineAllowed" -> "true"),
       // the classParamIndentSize should be the same as methodParamIndentSize
-      "indentation" -> Map("classParamIndentSize" -> "2"),
+      "org.scalastyle.file.IndentationChecker" -> Map("classParamIndentSize" -> "2"),
       // tabSize should be 2 according to the Scala Style Guide (https://docs.scala-lang.org/style/indentation.html)
       // The default maxLineLength of 160 is an abomination!
-      "line.size.limit" -> Map("tabSize" -> "2", "maxLineLength" -> "110")
+      "org.scalastyle.file.FileLineLengthChecker" -> Map("tabSize" -> "2", "maxLineLength" -> "110")
     )
   )
   final val ScapegoatOverrides: Overrides = Overrides(
     blacklist = Set(
-      // exists in Scalastyle (class.name)
+      // exists in Scalastyle (org.scalastyle.scalariform.ClassNamesChecker)
       "com.sksamuel.scapegoat.inspections.naming.ClassNames",
-      // exists in Scalastyle (empty.interpolated.strings)
+      // exists in Scalastyle (org.scalastyle.scalariform.EmptyInterpolatedStringChecker)
       "com.sksamuel.scapegoat.inspections.string.EmptyInterpolatedString",
-      // exists in Scalastyle (return)
+      // exists in Scalastyle (org.scalastyle.scalariform.ReturnChecker)
       "com.sksamuel.scapegoat.inspections.unneccesary.UnnecessaryReturnUse"
     ),
     severities = Map.empty,

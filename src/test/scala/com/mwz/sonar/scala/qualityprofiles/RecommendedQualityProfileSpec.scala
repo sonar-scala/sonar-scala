@@ -1,0 +1,74 @@
+/*
+ * Sonar Scala Plugin
+ * Copyright (C) 2018 All contributors
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
+package com.mwz.sonar.scala
+package qualityprofiles
+
+import org.scalatest.{FlatSpec, Inspectors, LoneElement, Matchers}
+import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition.{
+  BuiltInActiveRule,
+  BuiltInQualityProfile,
+  Context
+}
+
+import scala.collection.JavaConverters._
+
+class RecommendedQualityProfileSpec extends FlatSpec with Inspectors with LoneElement with Matchers {
+  trait Ctx {
+    val context: Context = new Context()
+    new RecommendedQualityProfile().define(context)
+    val qualityProfile: BuiltInQualityProfile =
+      context.profilesByLanguageAndName.loneElement.value.loneElement.value
+    val rules: Seq[BuiltInActiveRule] = qualityProfile.rules.asScala
+  }
+
+  "RecommendedQualityProfile" should "define a quality profile" in new Ctx {
+    qualityProfile.language shouldBe "scala"
+    qualityProfile.name shouldBe "Recommended by sonar-scala"
+  }
+
+  it should "be the default profile" in new Ctx {
+    qualityProfile.isDefault shouldBe true
+  }
+
+  it should "have 184 rules" in new Ctx {
+    rules.size shouldBe 184 // 61 from Scalastyle + 123 from Scapegoat
+  }
+
+  it should "have all rules come from either the Scalastyle or the Scapegoat rules repositories" in new Ctx {
+    forEvery(rules) { rule =>
+      rule.repoKey should (be("sonar-scala-scalastyle") or be("sonar-scala-scapegoat"))
+    }
+  }
+
+  it should "have overridden the default params" in new Ctx {
+    val rulesWithOverridenParams = rules.filterNot(_.overriddenParams.isEmpty)
+    val overridenRules = RecommendedQualityProfile.ScapegoatOverrides.params.size +
+    RecommendedQualityProfile.ScalastyleOverrides.params.size
+
+    rulesWithOverridenParams.size shouldBe overridenRules
+  }
+
+  it should "have overridden the default severities" in new Ctx {
+    val rulesWithOverridenSeverities = rules.filterNot(rule => Option(rule.overriddenSeverity).isEmpty)
+    val overridenRules = RecommendedQualityProfile.ScapegoatOverrides.severities.size +
+    RecommendedQualityProfile.ScalastyleOverrides.severities.size
+
+    rulesWithOverridenSeverities.size shouldBe overridenRules
+  }
+}

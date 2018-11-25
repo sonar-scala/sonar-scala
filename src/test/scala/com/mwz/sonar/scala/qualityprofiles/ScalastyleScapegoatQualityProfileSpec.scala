@@ -19,7 +19,7 @@
 package com.mwz.sonar.scala.qualityprofiles
 
 import org.scalatest.{FlatSpec, Inspectors, LoneElement, Matchers}
-import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition.Context
+import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition.{BuiltInQualityProfile, Context}
 
 /** Tests the correct behavior of the Scalastyle+Scapegoat Quality Profile */
 class ScalastyleScapegoatQualityProfileSpec extends FlatSpec with Inspectors with LoneElement with Matchers {
@@ -27,7 +27,8 @@ class ScalastyleScapegoatQualityProfileSpec extends FlatSpec with Inspectors wit
   trait Ctx {
     val context = new Context()
     new ScalastyleScapegoatQualityProfile().define(context)
-    val qualityProfile = context.profilesByLanguageAndName.loneElement.value.loneElement.value
+    val qualityProfile: BuiltInQualityProfile =
+      context.profilesByLanguageAndName.loneElement.value.loneElement.value
     val rules = qualityProfile.rules
   }
 

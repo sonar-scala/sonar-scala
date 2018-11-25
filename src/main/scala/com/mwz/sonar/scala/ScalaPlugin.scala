@@ -27,9 +27,9 @@ import org.sonar.api.Plugin
 import org.sonar.api.config.Configuration
 import org.sonar.api.resources.AbstractLanguage
 import org.sonar.api.utils.log.Loggers
+import scalariform.ScalaVersion
 import scalariform.lexer.{ScalaLexer, Token}
 import scalariform.utils.Utils._
-import scalariform.{ScalaVersion, ScalaVersions}
 
 /** Defines Scala as a language for SonarQube */
 final class Scala(settings: Configuration) extends AbstractLanguage(Scala.LanguageKey, Scala.LanguageName) {
@@ -120,6 +120,7 @@ final class ScalaPlugin extends Plugin {
       classOf[scapegoat.ScapegoatSensor],
       // Built-in quality profiles.
       classOf[qualityprofiles.ScalastyleScapegoatQualityProfile],
+      classOf[qualityprofiles.RecommendedQualityProfile],
       // Scoverage.
       classOf[scoverage.ScoverageMetrics],
       classOf[scoverage.ScoverageReportParser],

@@ -34,7 +34,7 @@ import scala.util.{Failure, Success, Try}
 
 /** Main sensor for importing Scoverage reports into SonarQube. */
 final class ScoverageSensor(scoverageReportParser: ScoverageReportParserAPI) extends Sensor {
-  import ScoverageSensor._ // scalastyle:ignore scalastyle_ImportGroupingChecker org.scalastyle.scalariform.ImportGroupingChecker
+  import ScoverageSensor._ // scalastyle:ignore org.scalastyle.scalariform.ImportGroupingChecker
 
   private[this] val log = Log(classOf[ScoverageSensor], "scoverage")
 

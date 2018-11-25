@@ -50,7 +50,7 @@ class ScalastyleQualityProfileSpec extends FlatSpec with Matchers with LoneEleme
   it should "activate all default (non-template) rules" in new Ctx {
     rules.map(_.ruleKey) should contain allElementsOf
     ScalastyleInspections.AllInspections
-      .filter(i => i.params.isEmpty && !ScalastyleRulesRepository.BlacklistRules.contains(i.id))
+      .filter(i => i.params.isEmpty && !ScalastyleRulesRepository.BlacklistRules.contains(i.clazz))
       .map(_.clazz)
   }
 
@@ -68,12 +68,12 @@ class ScalastyleQualityProfileSpec extends FlatSpec with Matchers with LoneEleme
 
   it should "activate not excluded template rules" in new Ctx {
     val templateInstances = ScalastyleInspections.AllInspections
-      .filter(i => i.params.nonEmpty && !SkipTemplateInstances.contains(i.id))
+      .filter(i => i.params.nonEmpty && !SkipTemplateInstances.contains(i.clazz))
       .map(_.clazz)
     rules.map(_.ruleKey) should contain allElementsOf templateInstances
 
     val excluded = ScalastyleInspections.AllInspections
-      .filter(i => SkipTemplateInstances.contains(i.id))
+      .filter(i => SkipTemplateInstances.contains(i.clazz))
       .map(_.clazz)
 
     rules.map(_.ruleKey) should contain noElementsOf excluded

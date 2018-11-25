@@ -32,7 +32,7 @@ final class RecommendedQualityProfile extends BuiltInQualityProfilesDefinition {
   override def define(context: BuiltInQualityProfilesDefinition.Context): Unit = {
     // Create an empty profile.
     val profile: NewBuiltInQualityProfile =
-      context.createBuiltInQualityProfile(ScalastyleScapegoatQualityProfile.ProfileName, Scala.LanguageKey)
+      context.createBuiltInQualityProfile(RecommendedQualityProfile.ProfileName, Scala.LanguageKey)
 
     // Ensure this is the default profile.
     profile.setDefault(true)

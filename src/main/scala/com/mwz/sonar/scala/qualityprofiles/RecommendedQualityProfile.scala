@@ -19,7 +19,7 @@
 package com.mwz.sonar.scala
 package qualityprofiles
 
-import com.mwz.sonar.scala.scalastyle.{ScalastyleQualityProfile, ScalastyleRulesRepository}
+import com.mwz.sonar.scala.scalastyle.ScalastyleQualityProfile
 import com.mwz.sonar.scala.scapegoat.ScapegoatQualityProfile
 import org.sonar.api.batch.rule.Severity
 import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition
@@ -28,9 +28,7 @@ import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition.NewBuiltInQ
 /**
  * Defines a quality profile recommended by sonar-scala (including Scalastyle and Scapegoat).
  */
-final class RecommendedQualityProfile(
-  scalastyleRulesRepository: ScalastyleRulesRepository
-) extends BuiltInQualityProfilesDefinition {
+final class RecommendedQualityProfile extends BuiltInQualityProfilesDefinition {
   override def define(context: BuiltInQualityProfilesDefinition.Context): Unit = {
     // Create an empty profile.
     val profile: NewBuiltInQualityProfile =

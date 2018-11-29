@@ -58,7 +58,7 @@ object ScapegoatInspectionsGenerator {
   def extractInspections(): Seq[(String, Inspection)] =
     ScapegoatConfig.inspections.map { inspection =>
       (inspection.getClass.getName, inspection)
-    }.toList
+    }
 
   /** Stringifies a list of scapegoat inspections */
   def stringifyInspections(scapegoatInspections: Seq[(String, Inspection)]): Seq[String] =

@@ -27,9 +27,6 @@ import scala.meta._
 /** SBT Task that generates a managed file with all scapegoat inspections */
 object ScapegoatInspectionsGenerator {
 
-  /** Scapegoat inspections that won't be included in the generated file */
-  val BlacklistedInspections: Set[String] = Set.empty
-
   val generatorTask = Def.task {
     val log = streams.value.log
     log.info("Generating Scapegoat inspections file.")
@@ -45,8 +42,8 @@ object ScapegoatInspectionsGenerator {
         "ScapegoatInspections.scala"
       )
 
-    val allScapegoatInspections: List[(String, Inspection)] = extractInspections()
-    val stringifiedScapegoatIsnpections: List[String] = stringifyInspections(allScapegoatInspections)
+    val allScapegoatInspections: Seq[(String, Inspection)] = extractInspections()
+    val stringifiedScapegoatIsnpections: Seq[String] = stringifyInspections(allScapegoatInspections)
     val transformed: Tree = fillTemplate(templateFile.parse[Source].get, stringifiedScapegoatIsnpections)
 
     val scapegoatInspectionsFile: File = (sourceManaged in Compile).value / "scapegoat" / "inspections.scala"
@@ -58,14 +55,13 @@ object ScapegoatInspectionsGenerator {
   /**
    * Returns all scapegoat inspections, except the ones that should be ignored
    */
-  def extractInspections(): List[(String, Inspection)] =
-    ScapegoatConfig.inspections.collect {
-      case inspection if !BlacklistedInspections.contains(inspection.getClass.getName) =>
-        (inspection.getClass.getName, inspection)
+  def extractInspections(): Seq[(String, Inspection)] =
+    ScapegoatConfig.inspections.map { inspection =>
+      (inspection.getClass.getName, inspection)
     }.toList
 
   /** Stringifies a list of scapegoat inspections */
-  def stringifyInspections(scapegoatInspections: List[(String, Inspection)]): List[String] =
+  def stringifyInspections(scapegoatInspections: Seq[(String, Inspection)]): Seq[String] =
     scapegoatInspections map {
       case (inspectionClassName, inspection) =>
         s"""ScapegoatInspection(
@@ -77,7 +73,7 @@ object ScapegoatInspectionsGenerator {
     }
 
   /** Fill the template file */
-  def fillTemplate(template: Source, stringified: List[String]): Tree = {
+  def fillTemplate(template: Source, stringified: Seq[String]): Tree = {
     val term: Term = stringified.toString.parse[Term].get
     template.transform {
       case q"val AllInspections: $tpe = $expr" =>

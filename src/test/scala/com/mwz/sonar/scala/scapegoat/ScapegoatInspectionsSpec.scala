@@ -24,8 +24,8 @@ import org.sonar.api.batch.rule.Severity
 /** Tests the generated scapegoat inspections file */
 class ScapegoatInspectionsSpec extends FlatSpec with Inspectors with Matchers {
   "The Scapegoat Inspections object" should "define all scapegoat inspections" in {
-    ScapegoatInspections.AllInspections should have size 126
-    ScapegoatInspections.AllInspections.distinct should have size 126
+    ScapegoatInspections.AllInspections should have size 117
+    ScapegoatInspections.AllInspections.distinct should have size 117
   }
 
   it should "not define the blacklisted scapegoat inspections" in {
@@ -48,15 +48,17 @@ class ScapegoatInspectionsSpec extends FlatSpec with Inspectors with Matchers {
     }
   }
 
-  it should "correctly define the AnyUse inspection" in {
-    val anyUseInspection = ScapegoatInspection(
-      id = "com.sksamuel.scapegoat.inspections.AnyUse",
-      name = "AnyUse",
-      description = None,
+  it should "correctly define the ArrayEquals inspection" in {
+    val arrayEquals = ScapegoatInspection(
+      id = "com.sksamuel.scapegoat.inspections.collections.ArrayEquals",
+      name = "Array equals",
+      description = Some(
+        "Array equals is not an equality check. Use a.deep == b.deep or convert to another collection type"
+      ),
       defaultLevel = Level.Info
     )
 
-    ScapegoatInspections.AllInspections should contain(anyUseInspection)
+    ScapegoatInspections.AllInspections should contain(arrayEquals)
   }
 
   "The Scapegoat Inspection Levels" should "correctly map to SonarQube severities" in {

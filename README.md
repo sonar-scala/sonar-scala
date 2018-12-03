@@ -23,7 +23,7 @@ sonar-scala
 
 **SonarQube plugin for static code analysis of Scala projects.**
 
-Intended for [SonarQube 6.7+ LTS](https://www.sonarqube.org/downloads) and Scala 2.11/2.12.  
+Intended for [SonarQube 6.7+ LTS](https://www.sonarqube.org/sonarqube-6-7-lts) and Scala 2.11/2.12.  
 Running analysis from a Windows machine is currently not supported, please use Linux or other Unix-like operating system.
 
 This plugin is not an evolution from the legacy sonar-scala-plugin of which versions can be found laying around such as [1and1/sonar-scala](https://github.com/1and1/sonar-scala).

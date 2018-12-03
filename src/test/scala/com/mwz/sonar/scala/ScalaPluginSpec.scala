@@ -58,6 +58,7 @@ class ScalaPluginSpec extends FlatSpec with Matchers {
 
   it should "provide additional built-in quality profiles" in {
     assert(context.getExtensions.contains(classOf[qualityprofiles.ScalastyleScapegoatQualityProfile]))
+    assert(context.getExtensions.contains(classOf[qualityprofiles.RecommendedQualityProfile]))
   }
 
   it should "provide scoverage sensor" in {

@@ -20,8 +20,12 @@
 package com.mwz.sonar.scala
 package scalastyle
 
+import com.mwz.sonar.scala.qualityprofiles.Overrides
 import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition
-import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition.NewBuiltInQualityProfile
+import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition.{
+  NewBuiltInActiveRule,
+  NewBuiltInQualityProfile
+}
 
 /**
  * Defines a Scalastyle quality profile.
@@ -36,7 +40,7 @@ final class ScalastyleQualityProfile extends BuiltInQualityProfilesDefinition {
 
     // Activate all rules in the Scalastyle rules repository.
     // (except for those which were not included in the repository)
-    ScalastyleQualityProfile.activateAllRules(profile)
+    ScalastyleQualityProfile.activateRules(profile)
 
     // Save the profile.
     profile.done()
@@ -44,15 +48,38 @@ final class ScalastyleQualityProfile extends BuiltInQualityProfilesDefinition {
 }
 
 object ScalastyleQualityProfile {
-  private[scalastyle] final val ProfileName = "Scalastyle"
+  private[scalastyle] final val ProfileName: String = "Scalastyle"
 
-  /** Activates all rules in the Scalastyle rules repository in the given profile */
-  def activateAllRules(profile: BuiltInQualityProfilesDefinition.NewBuiltInQualityProfile): Unit = {
+  /**
+   * Activates Scalastyle rules for the given profile excluding blacklisted rules.
+   * Overrides the default severity and parameter values if provided in overrides.
+   */
+  def activateRules(profile: NewBuiltInQualityProfile, overrides: Option[Overrides] = None): Unit = {
     ScalastyleInspections.AllInspections
-      .filterNot { i =>
-        ScalastyleRulesRepository.SkipTemplateInstances.contains(i.id) ||
-        ScalastyleRulesRepository.BlacklistRules.contains(i.id)
+      .filterNot { inspection =>
+        ScalastyleRulesRepository.SkipTemplateInstances.contains(inspection.clazz) ||
+        ScalastyleRulesRepository.BlacklistRules.contains(inspection.clazz) ||
+        overrides.exists(_.blacklist.contains(inspection.clazz))
       }
-      .foreach(i => profile.activateRule(ScalastyleRulesRepository.RepositoryKey, i.clazz))
+      .foreach { inspection =>
+        val rule: NewBuiltInActiveRule =
+          profile.activateRule(ScalastyleRulesRepository.RepositoryKey, inspection.clazz)
+
+        overrides.foreach { overrides =>
+          // Override the severity.
+          overrides.severities
+            .get(inspection.clazz)
+            .foreach(severity => rule.overrideSeverity(severity.name))
+
+          // Override rule params.
+          overrides.params
+            .get(inspection.clazz)
+            .foreach {
+              _.foreach {
+                case (k, v) => rule.overrideParam(k, v)
+              }
+            }
+        }
+      }
   }
 }

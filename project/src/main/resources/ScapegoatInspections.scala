@@ -42,6 +42,6 @@ private[scapegoat] final case class ScapegoatInspection(
   defaultLevel: Level
 )
 
-private[scapegoat] object ScapegoatInspections {
+object ScapegoatInspections {
   val AllInspections: List[ScapegoatInspection] = ???
 }

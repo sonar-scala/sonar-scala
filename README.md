@@ -7,12 +7,12 @@ sonar-scala
 [![gitter-badge][]][gitter]
 [![insightio-badge][]][insightio]
 
-[circleci-badge]: https://img.shields.io/circleci/project/github/mwz/sonar-scala/master.svg?label=Build
+[circleci-badge]: https://img.shields.io/circleci/project/github/mwz/sonar-scala/sonar-6.7-lts.svg?label=Build
 [circleci]: https://circleci.com/gh/mwz/sonar-scala
-[coverage-badge]: https://sonar.sonar-scala.com/api/badges/measure?key=sonar-scala&metric=coverage
-[coverage]: https://sonar.sonar-scala.com/component_measures?id=sonar-scala&metric=coverage
-[bintray-badge]: https://api.bintray.com/packages/mwz/maven/sonar-scala/images/download.svg
-[bintray]: https://bintray.com/mwz/maven/sonar-scala/_latestVersion
+[coverage-badge]: https://sonar.sonar-scala.com/api/badges/measure?key=sonar-scala-lts&metric=coverage
+[coverage]: https://sonar.sonar-scala.com/component_measures?id=sonar-scala-lts&metric=coverage
+[bintray-badge]: https://api.bintray.com/packages/mwz/maven/sonar-scala/images/download.svg?version=6.6.0
+[bintray]: https://bintray.com/mwz/maven/sonar-scala/6.6.0
 [bintray-stats-badge]: https://img.shields.io/badge/dynamic/json.svg?uri=https://bintray.com/statistics/packageStatistics?pkgPath=/mwz/maven/sonar-scala&query=$.totalDownloads&label=Downloads+(last+30+days)&colorB=green
 [bintray-stats]: https://bintray.com/mwz/maven/sonar-scala#statistics
 [gitter-badge]: https://img.shields.io/gitter/room/sonar-scala/sonar-scala.svg?colorB=46BC99&label=Chat
@@ -23,7 +23,7 @@ sonar-scala
 
 **SonarQube plugin for static code analysis of Scala projects.**
 
-Intended for [SonarQube 6.7+ LTS](https://www.sonarqube.org/sonarqube-6-7-lts) and Scala 2.11/2.12.  
+Intended for [SonarQube 6.7 LTS](https://www.sonarqube.org/sonarqube-6-7-lts) and Scala 2.11/2.12.
 Running analysis from a Windows machine is currently not supported, please use Linux or other Unix-like operating system.
 
 This plugin is not an evolution from the legacy sonar-scala-plugin of which versions can be found laying around such as [1and1/sonar-scala](https://github.com/1and1/sonar-scala).
@@ -50,21 +50,21 @@ In addition to the above, the plugin reports the following custom metrics, which
 
 
 # Quality Rules and Profiles
-This plugin integrates 69 quality checks from [Scalastyle](http://www.scalastyle.org/rules-1.0.0.html) and 126 from [Scapegoat](https://github.com/sksamuel/scapegoat/tree/v1.3.7). 40 of the Scalastyle rules are defined without parameters and the remaining 29 are rule templates, which allow you to set up custom rules by specifying the parameters yourself. Most of those are are already activated for you with default values recommended by Scalastyle. Scapegoat rules don't contain any templates.
+This plugin integrates 69 quality checks from [Scalastyle](http://www.scalastyle.org/rules-1.0.0.html) and 117 from [Scapegoat](https://github.com/sksamuel/scapegoat/tree/v1.3.8). 40 of the Scalastyle rules are defined without parameters and the remaining 29 are rule templates, which allow you to set up custom rules by specifying the parameters yourself. Most of those are are already activated for you with default values recommended by Scalastyle. Scapegoat rules don't contain any templates.
 
-Sonar-scala creates two rule repositories and three built-in quality profiles: `Scalastyle`, `Scapegoat` and a combination of those two `Scalastyle+Scapegoat`. The rules in the quality profiles are almost all activated, except for those which are broken in the upstream projects and had to be blacklisted.
+Sonar-scala creates two rule repositories and four built-in quality profiles: `Scalastyle`, `Scapegoat` and a combination of those two `Scalastyle+Scapegoat` and `Recommended by sonar-scala`. The rules in the quality profiles are almost all activated, except for those which are broken in the upstream projects and had to be blacklisted.
 
-In order to make changes to any of the rules you can clone the quality profile of your choice and then you should be able to activate or deactivate rules, change rule severity and create more custom rules from the existing templates. Alternatively, you can create your own quality profile and activate rules from any of the repositories using SonarQube rule filtering and bulk-change features available on the Rules page. In the future, sonar-scala will also provide a recommended profile which should fit most of the use cases for majority of the users, so hopefully any tweaks to the profile won't be necessary.
+In order to make changes to any of the rules you can clone the quality profile of your choice and then you should be able to activate or deactivate rules, change rule severity and create more custom rules from the existing templates. Alternatively, you can create your own quality profile and activate rules from any of the repositories using SonarQube rule filtering and bulk-change features available on the Rules page.
 
 For more information about Scalastyle and Scapegoat rules, please consult the upstream documentation:
 - Scalastyle - http://www.scalastyle.org/rules-1.0.0.html
-- Scapegoat - https://github.com/sksamuel/scapegoat/tree/v1.3.7
+- Scapegoat - https://github.com/sksamuel/scapegoat/tree/v1.3.8
 
 
 # Set-up
 Download the latest [release](https://github.com/mwz/sonar-scala/releases) jar into your SonarQube plugins folder `/opt/sonarqube/extensions/plugins` and restart SonarQube either manually or using the update center.
 
-For an out-of-the-box setup, you can use my docker-compose recipe or a docker image with SonarQube LTS which contains bundled sonar-scala plugin. Please see [mwz/sonar-scala-docker](https://github.com/mwz/sonar-scala-docker) for more details.
+For an out-of-the-box setup, you can use my docker-compose recipe or a docker image with SonarQube which contains bundled sonar-scala plugin. Please see [mwz/sonar-scala-docker](https://github.com/mwz/sonar-scala-docker) for more details.
 
 For automating the analysis of your Scala projects, check out my sbt plugin [mwz/sbt-sonar](https://github.com/mwz/sbt-sonar).
 

@@ -12,10 +12,10 @@ sonar-scala
 [circleci]: https://circleci.com/gh/mwz/sonar-scala
 [coverage-badge]: https://sonar.sonar-scala.com/api/badges/measure?key=sonar-scala&metric=coverage
 [coverage]: https://sonar.sonar-scala.com/component_measures?id=sonar-scala&metric=coverage
-[bintray-badge]: https://api.bintray.com/packages/mwz/maven/sonar-scala/images/download.svg?version=7.2.0
-[bintray]: https://bintray.com/mwz/maven/sonar-scala/7.2.0/link
-[bintray-badge-lts]: https://api.bintray.com/packages/mwz/maven/sonar-scala/images/download.svg?version=6.7.0
-[bintray-lts]: https://bintray.com/mwz/maven/sonar-scala/6.7.0/link
+[bintray-badge]: https://api.bintray.com/packages/mwz/maven/sonar-scala/images/download.svg?version={{version}}
+[bintray]: https://bintray.com/mwz/maven/sonar-scala/{{version}}/link
+[bintray-badge-lts]: https://api.bintray.com/packages/mwz/maven/sonar-scala/images/download.svg?version={{ltsVersion}}
+[bintray-lts]: https://bintray.com/mwz/maven/sonar-scala/{{ltsVersion}}/link
 [bintray-stats-badge]: https://img.shields.io/badge/dynamic/json.svg?uri=https://bintray.com/statistics/packageStatistics?pkgPath=/mwz/maven/sonar-scala&query=$.totalDownloads&label=Downloads+(last+30+days)&colorB=green
 [bintray-stats]: https://bintray.com/mwz/maven/sonar-scala#statistics
 [gitter-badge]: https://img.shields.io/gitter/room/sonar-scala/sonar-scala.svg?colorB=46BC99&label=Chat
@@ -100,7 +100,7 @@ SonarQube | sonar-scala
 ----------|----------
 7.4       | [7.1](https://github.com/mwz/sonar-scala/releases/tag/v7.1.0), [7.2](https://github.com/mwz/sonar-scala/releases/tag/v7.2.0)
 7.3       | [7.0](https://github.com/mwz/sonar-scala/releases/tag/v7.0.0)
-6.7 LTS   | 6.x (*latest [6.7.0](https://github.com/mwz/sonar-scala/releases/tag/v6.7.0)*)
+6.7 LTS   | 6.x (*latest [{{ltsVersion}}](https://github.com/mwz/sonar-scala/releases/tag/v{{ltsVersion}})*)
 
 
 # Development

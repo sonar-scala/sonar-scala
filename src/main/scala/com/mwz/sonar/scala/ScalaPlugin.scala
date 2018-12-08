@@ -93,7 +93,7 @@ object Scala {
       .toOption
       .filter(_.nonEmpty)
       .getOrElse(DefaultSourcesFolder)
-      .split(',') // scalastyle:ignore LiteralArguments
+      .split(',') // scalastyle:ignore LiteralArguments org.scalastyle.scalariform.NamedArgumentChecker
       .map(p => Paths.get(p.trim))
       .toList
 
@@ -125,6 +125,7 @@ final class ScalaPlugin extends Plugin {
       classOf[scapegoat.ScapegoatSensor],
       // Built-in quality profiles.
       classOf[qualityprofiles.ScalastyleScapegoatQualityProfile],
+      classOf[qualityprofiles.RecommendedQualityProfile],
       // Scoverage.
       classOf[scoverage.ScoverageMetrics],
       classOf[scoverage.ScoverageReportParser],

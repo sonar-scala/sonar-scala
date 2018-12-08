@@ -19,10 +19,9 @@
 package com.mwz.sonar.scala.scapegoat
 
 import org.scalatest.{FlatSpec, Inspectors, LoneElement, Matchers}
-import org.sonar.api.server.rule.RulesDefinition.Context
-import org.sonar.api.rule.RuleStatus
-import org.sonar.api.rule.Severity
+import org.sonar.api.rule.{RuleStatus, Severity}
 import org.sonar.api.rules.RuleType
+import org.sonar.api.server.rule.RulesDefinition.Context
 
 /** Tests the correct behavior of the Scapegoat Rules Repository */
 class ScapegoatRulesRepositorySpec extends FlatSpec with Inspectors with LoneElement with Matchers {
@@ -48,16 +47,16 @@ class ScapegoatRulesRepositorySpec extends FlatSpec with Inspectors with LoneEle
     rules should have size ScapegoatInspections.AllInspections.size
   }
 
-  it should "properly define the properties of the AnyUse rule" in new Ctx {
-    val anyUseRule = repository.rule("com.sksamuel.scapegoat.inspections.AnyUse")
+  it should "properly define the properties of the ArrayEquals rule" in new Ctx {
+    val arrayEqualsRule = repository.rule("com.sksamuel.scapegoat.inspections.collections.ArrayEquals")
 
-    anyUseRule.internalKey shouldBe "com.sksamuel.scapegoat.inspections.AnyUse"
-    anyUseRule.name shouldBe "AnyUse"
-    anyUseRule.markdownDescription shouldBe "No description"
-    anyUseRule.activatedByDefault shouldBe true
-    anyUseRule.status shouldBe RuleStatus.READY
-    anyUseRule.severity shouldBe Severity.INFO
-    anyUseRule.`type` shouldBe RuleType.CODE_SMELL
+    arrayEqualsRule.internalKey shouldBe "com.sksamuel.scapegoat.inspections.collections.ArrayEquals"
+    arrayEqualsRule.name shouldBe "Array equals"
+    arrayEqualsRule.markdownDescription shouldBe "Array equals is not an equality check. Use a.deep == b.deep or convert to another collection type"
+    arrayEqualsRule.activatedByDefault shouldBe true
+    arrayEqualsRule.status shouldBe RuleStatus.READY
+    arrayEqualsRule.severity shouldBe Severity.INFO
+    arrayEqualsRule.`type` shouldBe RuleType.CODE_SMELL
   }
 
   "All Scapegoat Rules" should "have a valid internal key" in new Ctx {

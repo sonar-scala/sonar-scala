@@ -32,7 +32,7 @@ import org.sonar.api.server.rule.{RuleParamType, RulesDefinition}
  * Defines a repository for the Scalastyle inspections.
  */
 final class ScalastyleRulesRepository extends RulesDefinition {
-  import ScalastyleRulesRepository._
+  import ScalastyleRulesRepository._ // scalastyle:ignore org.scalastyle.scalariform.ImportGroupingChecker
 
   override def define(context: RulesDefinition.Context): Unit = {
     // Create an empty repository.
@@ -46,7 +46,7 @@ final class ScalastyleRulesRepository extends RulesDefinition {
 
       // For each template create a rule with default parameter values.
       // (except for the rules listed in the SkipTemplateInstances set)
-      if (inspection.params.nonEmpty && !SkipTemplateInstances.contains(inspection.id))
+      if (inspection.params.nonEmpty && !SkipTemplateInstances.contains(inspection.clazz))
         createRule(repository, inspection, template = false)
     }
 
@@ -55,22 +55,28 @@ final class ScalastyleRulesRepository extends RulesDefinition {
   }
 }
 
-private[scalastyle] object ScalastyleRulesRepository {
+object ScalastyleRulesRepository {
   private final case class Acc(indent: Boolean, isEmpty: Boolean, text: String)
 
   final val RepositoryKey = "sonar-scala-scalastyle"
   final val RepositoryName = "Scalastyle"
   final val RuleClassParam = "ruleClass"
 
-  // Blacklist the following rules:
-  // - "no.newline.at.eof" - it is the opposite to "newline.at.eof".
-  final val BlacklistRules = Set("no.newline.at.eof")
+  // Blacklist the following inspections.
+  final val BlacklistRules = Set(
+    // it is the opposite to "org.scalastyle.file.NewLineAtEofChecker"
+    "org.scalastyle.file.NoNewLineAtEofChecker"
+  )
 
-  // Skip creating template instances for the following inspections:
-  // - header.matches - this rule wouldn't work with a default parameter value.
-  // - regex - no default regex provided.
-  // - scaladoc - incorrect default value of the ignoreRegex parameter.
-  final val SkipTemplateInstances = Set("header.matches", "regex", "scaladoc")
+  // Skip creating template instances for the following inspections.
+  final val SkipTemplateInstances = Set(
+    // this rule wouldn't work with a default parameter value
+    "org.scalastyle.file.HeaderMatchesChecker",
+    // no default regex provided
+    "org.scalastyle.file.RegexChecker",
+    // incorrect default value of the ignoreRegex parameter
+    "org.scalastyle.scalariform.ScalaDocChecker"
+  )
 
   /**
    * Create a new rule from the given inspection.
@@ -81,7 +87,7 @@ private[scalastyle] object ScalastyleRulesRepository {
     rule.setInternalKey(key)
     rule.setName(inspection.label)
     rule.setMarkdownDescription(formatDescription(inspection))
-    rule.setActivatedByDefault(true) // scalastyle:ignore LiteralArguments
+    rule.setActivatedByDefault(true) // scalastyle:ignore LiteralArguments org.scalastyle.scalariform.NamedArgumentChecker
     rule.setStatus(RuleStatus.READY)
     rule.setSeverity(levelToSeverity(inspection.defaultLevel).name)
     rule.setType(RuleType.CODE_SMELL)

@@ -1,6 +1,6 @@
 Changelog
 ===
-## [6.7.0 LTS](https://github.com/mwz/sonar-scala/releases/tag/v6.7.0) - 08.12.2018
+## [6.7.0 LTS](https://github.com/mwz/sonar-scala/releases/tag/v6.7.0) - 09.12.2018
 - Backported features from the 7.x series - new `Recommended by sonar-scala` quality profile and cleaned up Scapegoat rule repository, see the notes from [7.2.0](https://github.com/mwz/sonar-scala/releases/tag/v7.2.0) release for more details. (#136 - @mwz)
 ## [7.2.0](https://github.com/mwz/sonar-scala/releases/tag/v7.2.0) - 03.12.2018
 - Added a new quality profile `Recommended by sonar-scala`, which is a combination of Scalastyle and Scapegoat rules. We recommend using this profile as it excludes any duplicate rules and contains custom instances of Scalastyle templates set up in accordance with the current style guides recommended by the community. (#130 - @mwz)

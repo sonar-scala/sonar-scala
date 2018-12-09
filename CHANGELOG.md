@@ -1,5 +1,7 @@
 Changelog
 ===
+## [6.7.0](https://github.com/mwz/sonar-scala/releases/tag/v6.7.0) - 09.12.2018
+- Backported features from the 7.x series - new `Recommended by sonar-scala` quality profile and cleaned up Scapegoat rule repository, see the notes from [7.2.0](https://github.com/mwz/sonar-scala/releases/tag/v7.2.0) release for more details. (#136 - @mwz)
 ## [6.6.0](https://github.com/mwz/sonar-scala/releases/tag/v6.6.0) - 30.09.2018
 - Refactored Scalastyle module and introduced new Scalastyle rules repository along with a new quality profile, which now in addition to the latest Scalastyle rules also consists of rule templates which are activated by default. The existing Scalastyle quality profile and rule registry have been deprecated and will be removed in the next major version of the plugin (7.x). The new module also exposes the following optional property `sonar.scala.scalastyle.disable`, which allows you to disable the Scalastyle sensor. (#35 - @mwz)
 - New `Scalastyle+Scapegoat` quality profile, which includes all of the default rules from Scalastyle and Scapegoat quality profiles. (#112 - @BalmungSan)

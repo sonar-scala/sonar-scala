@@ -104,6 +104,7 @@ jobs:
             git config --global user.name "CircleCI"
             git config --global user.email "mwz@users.noreply.github.com"
             ssh-keyscan -T 15 github.com >> ~/.ssh/known_hosts
+            git branch -u origin/sonar-6.7-lts
       - run:
           name: Set up sonar-scanner
           command: echo "$SONAR_SCANNER_VERSION" > ~/sonar-scanner-version

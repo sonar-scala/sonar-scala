@@ -22,10 +22,10 @@ import java.nio.file.{Path, Paths}
 
 import cats.kernel.Eq
 import com.mwz.sonar.scala.util.JavaOptionals._
+import com.mwz.sonar.scala.util.Log
 import org.sonar.api.Plugin
 import org.sonar.api.config.Configuration
 import org.sonar.api.resources.AbstractLanguage
-import org.sonar.api.utils.log.Loggers
 import scalariform.ScalaVersion
 import scalariform.lexer.{ScalaLexer, Token}
 import scalariform.utils.Utils._
@@ -33,8 +33,8 @@ import scalariform.utils.Utils._
 /** Defines Scala as a language for SonarQube */
 final class Scala(settings: Configuration) extends AbstractLanguage(Scala.LanguageKey, Scala.LanguageName) {
   override def getFileSuffixes: Array[String] = {
-    val suffixes = settings.getStringArray(Scala.FileSuffixesPropertyKey)
-    val filtered = suffixes.filter(_.trim.nonEmpty)
+    val suffixes: Array[String] = settings.getStringArray(Scala.FileSuffixesPropertyKey)
+    val filtered: Array[String] = suffixes.filter(_.trim.nonEmpty)
     if (filtered.nonEmpty) filtered
     else Scala.DefaultFileSuffixes
   }
@@ -47,12 +47,12 @@ object Scala {
   private val FileSuffixesPropertyKey = "sonar.scala.file.suffixes"
   private val DefaultFileSuffixes = Array(".scala")
   private val ScalaVersionPropertyKey = "sonar.scala.version"
-  private val DefaultScalaVersion = ScalaVersion(2, 12) // scalastyle:ignore LiteralArguments org.scalastyle.scalariform.NamedArgumentChecker
+  private val DefaultScalaVersion = ScalaVersion(2, 12) // scalastyle:ignore org.scalastyle.scalariform.NamedArgumentChecker
   private val ScalaVersionPattern = """(\d+)\.(\d+)(?:\..+)?""".r
   private val SourcesPropertyKey = "sonar.sources"
   private val DefaultSourcesFolder = "src/main/scala"
 
-  private val logger = Loggers.get(classOf[Scala])
+  private val logger = Log(classOf[Scala], "sonar-scala")
 
   def getScalaVersion(settings: Configuration): ScalaVersion = {
     def parseVersion(s: String): Option[ScalaVersion] = s match {
@@ -89,7 +89,7 @@ object Scala {
       .toOption
       .filter(_.nonEmpty)
       .getOrElse(DefaultSourcesFolder)
-      .split(',') // scalastyle:ignore LiteralArguments org.scalastyle.scalariform.NamedArgumentChecker
+      .split(',') // scalastyle:ignore org.scalastyle.scalariform.NamedArgumentChecker
       .map(p => Paths.get(p.trim))
       .toList
 

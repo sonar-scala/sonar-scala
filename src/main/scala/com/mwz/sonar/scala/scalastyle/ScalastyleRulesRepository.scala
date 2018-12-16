@@ -87,7 +87,7 @@ object ScalastyleRulesRepository {
     rule.setInternalKey(key)
     rule.setName(inspection.label)
     rule.setMarkdownDescription(formatDescription(inspection))
-    rule.setActivatedByDefault(true) // scalastyle:ignore LiteralArguments org.scalastyle.scalariform.NamedArgumentChecker
+    rule.setActivatedByDefault(true) // scalastyle:ignore org.scalastyle.scalariform.NamedArgumentChecker
     rule.setStatus(RuleStatus.READY)
     rule.setSeverity(levelToSeverity(inspection.defaultLevel).name)
     rule.setType(RuleType.CODE_SMELL)

@@ -21,7 +21,6 @@ package com.mwz.sonar.scala
 import java.nio.file.{Path, Paths}
 
 import cats.kernel.Eq
-import cats.syntax.eq._
 import com.mwz.sonar.scala.util.JavaOptionals._
 import org.sonar.api.Plugin
 import org.sonar.api.config.Configuration
@@ -54,7 +53,6 @@ object Scala {
   private val DefaultSourcesFolder = "src/main/scala"
 
   private val logger = Loggers.get(classOf[Scala])
-  implicit val eqScalaVersion: Eq[ScalaVersion] = Eq.fromUniversalEquals
 
   def getScalaVersion(settings: Configuration): ScalaVersion = {
     def parseVersion(s: String): Option[ScalaVersion] = s match {
@@ -67,20 +65,20 @@ object Scala {
         None
     }
 
-    val scalaVersion = settings
-      .get(ScalaVersionPropertyKey)
-      .toOption
-      .flatMap(parseVersion)
-      .getOrElse(DefaultScalaVersion)
+    val scalaVersion: Option[ScalaVersion] =
+      settings
+        .get(ScalaVersionPropertyKey)
+        .toOption
+        .flatMap(parseVersion)
 
-    // log a warning if using the default scala version
-    if (scalaVersion === DefaultScalaVersion)
+    // log a warning if the version is not set correctly or missing
+    if (scalaVersion.isEmpty)
       logger.warn(
-        s"[sonar-scala] The '$ScalaVersionPropertyKey' is not properly set or is missing, " +
+        s"The '$ScalaVersionPropertyKey' is not properly set or is missing, " +
         s"using the default value: '$DefaultScalaVersion'."
       )
 
-    scalaVersion
+    scalaVersion.getOrElse(DefaultScalaVersion)
   }
 
   // even if the 'sonar.sources' property is mandatory,

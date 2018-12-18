@@ -21,12 +21,11 @@ package com.mwz.sonar.scala
 import java.nio.file.{Path, Paths}
 
 import cats.kernel.Eq
-import cats.syntax.eq._
 import com.mwz.sonar.scala.util.JavaOptionals._
+import com.mwz.sonar.scala.util.Log
 import org.sonar.api.Plugin
 import org.sonar.api.config.Configuration
 import org.sonar.api.resources.AbstractLanguage
-import org.sonar.api.utils.log.Loggers
 import scalariform.ScalaVersion
 import scalariform.lexer.{ScalaLexer, Token}
 import scalariform.utils.Utils._
@@ -34,8 +33,8 @@ import scalariform.utils.Utils._
 /** Defines Scala as a language for SonarQube */
 final class Scala(settings: Configuration) extends AbstractLanguage(Scala.LanguageKey, Scala.LanguageName) {
   override def getFileSuffixes: Array[String] = {
-    val suffixes = settings.getStringArray(Scala.FileSuffixesPropertyKey)
-    val filtered = suffixes.filter(_.trim.nonEmpty)
+    val suffixes: Array[String] = settings.getStringArray(Scala.FileSuffixesPropertyKey)
+    val filtered: Array[String] = suffixes.filter(_.trim.nonEmpty)
     if (filtered.nonEmpty) filtered
     else Scala.DefaultFileSuffixes
   }
@@ -48,13 +47,12 @@ object Scala {
   private val FileSuffixesPropertyKey = "sonar.scala.file.suffixes"
   private val DefaultFileSuffixes = Array(".scala")
   private val ScalaVersionPropertyKey = "sonar.scala.version"
-  private val DefaultScalaVersion = ScalaVersion(2, 12) // scalastyle:ignore LiteralArguments org.scalastyle.scalariform.NamedArgumentChecker
+  private val DefaultScalaVersion = ScalaVersion(2, 12) // scalastyle:ignore org.scalastyle.scalariform.NamedArgumentChecker
   private val ScalaVersionPattern = """(\d+)\.(\d+)(?:\..+)?""".r
   private val SourcesPropertyKey = "sonar.sources"
   private val DefaultSourcesFolder = "src/main/scala"
 
-  private val logger = Loggers.get(classOf[Scala])
-  implicit val eqScalaVersion: Eq[ScalaVersion] = Eq.fromUniversalEquals
+  private val logger = Log(classOf[Scala], "sonar-scala")
 
   def getScalaVersion(settings: Configuration): ScalaVersion = {
     def parseVersion(s: String): Option[ScalaVersion] = s match {
@@ -67,20 +65,20 @@ object Scala {
         None
     }
 
-    val scalaVersion = settings
-      .get(ScalaVersionPropertyKey)
-      .toOption
-      .flatMap(parseVersion)
-      .getOrElse(DefaultScalaVersion)
+    val scalaVersion: Option[ScalaVersion] =
+      settings
+        .get(ScalaVersionPropertyKey)
+        .toOption
+        .flatMap(parseVersion)
 
-    // log a warning if using the default scala version
-    if (scalaVersion === DefaultScalaVersion)
+    // log a warning if the version is not set correctly or missing
+    if (scalaVersion.isEmpty)
       logger.warn(
-        s"[sonar-scala] The '$ScalaVersionPropertyKey' is not properly set or is missing, " +
+        s"The '$ScalaVersionPropertyKey' is not properly set or is missing, " +
         s"using the default value: '$DefaultScalaVersion'."
       )
 
-    scalaVersion
+    scalaVersion.getOrElse(DefaultScalaVersion)
   }
 
   // even if the 'sonar.sources' property is mandatory,
@@ -91,7 +89,7 @@ object Scala {
       .toOption
       .filter(_.nonEmpty)
       .getOrElse(DefaultSourcesFolder)
-      .split(',') // scalastyle:ignore LiteralArguments org.scalastyle.scalariform.NamedArgumentChecker
+      .split(',') // scalastyle:ignore org.scalastyle.scalariform.NamedArgumentChecker
       .map(p => Paths.get(p.trim))
       .toList
 

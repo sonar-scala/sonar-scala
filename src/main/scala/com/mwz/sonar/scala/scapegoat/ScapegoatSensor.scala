@@ -162,7 +162,7 @@ final class ScapegoatSensor(scapegoatReportParser: ScapegoatReportParserAPI) ext
       predicates.hasLanguage(Scala.LanguageKey),
       predicates.hasType(InputFile.Type.MAIN),
       predicates
-        .matchesPathPattern(s"**/$filename") // scalastyle:ignore LiteralArguments org.scalastyle.scalariform.NamedArgumentChecker
+        .matchesPathPattern(s"**/$filename") // scalastyle:ignore org.scalastyle.scalariform.NamedArgumentChecker
     )
 
     // catch both exceptions and null values

@@ -122,7 +122,10 @@ final class ScalaPlugin extends Plugin {
       // Scoverage.
       classOf[scoverage.ScoverageMetrics],
       classOf[scoverage.ScoverageReportParser],
-      classOf[scoverage.ScoverageSensor]
+      classOf[scoverage.ScoverageSensor],
+      // Unit tests.
+      classOf[unittests.UnitTestsSensor],
+      classOf[unittests.UnitTestReportParser],
     )
   }
 }

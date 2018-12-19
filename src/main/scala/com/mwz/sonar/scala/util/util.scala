@@ -23,6 +23,7 @@ import java.nio.file.{Path, Paths}
 import java.util.Optional
 
 import org.sonar.api.batch.fs.FileSystem
+import org.sonar.api.config.Configuration
 
 import scala.language.implicitConversions
 
@@ -49,6 +50,21 @@ class RichOptional[T](opt: Optional[T]) {
  * Various Path utilities.
  */
 object PathUtils {
+  import JavaOptionals._
+
+  /**
+   * Get a list of paths from the config for a given key.
+   * Fall back to the default value.
+   */
+  def fromConfig(config: Configuration, key: String, default: String): List[Path] =
+    config
+      .get(key)
+      .toOption
+      .filter(_.nonEmpty)
+      .getOrElse(default)
+      .split(',') // scalastyle:ignore org.scalastyle.scalariform.NamedArgumentChecker
+      .map(p => Paths.get(p.trim))
+      .toList
 
   /** Current working directory. */
   def cwd: Path = Paths.get(".").toAbsolutePath.normalize

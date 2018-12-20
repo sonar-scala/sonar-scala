@@ -29,27 +29,34 @@ class LogSpec extends FlatSpec with Matchers with SonarLogTester {
     val log = Log(classOf[LogSpec], "test")
 
     log.debug("debug")
-    logsFor(DEBUG) shouldBe Seq("[test] debug")
+    logsFor(DEBUG) shouldBe Seq("[sonar-scala-test] debug")
   }
 
   it should "log info" in {
     val log = Log(classOf[LogSpec], "test")
 
     log.info("info")
-    logsFor(INFO) shouldBe Seq("[test] info")
+    logsFor(INFO) shouldBe Seq("[sonar-scala-test] info")
   }
 
   it should "log warn" in {
     val log = Log(classOf[LogSpec], "test")
 
     log.warn("warn")
-    logsFor(WARN) shouldBe Seq("[test] warn")
+    logsFor(WARN) shouldBe Seq("[sonar-scala-test] warn")
   }
 
   it should "log error" in {
     val log = Log(classOf[LogSpec], "test")
 
     log.error("error")
-    logsFor(ERROR) shouldBe Seq("[test] error")
+    logsFor(ERROR) shouldBe Seq("[sonar-scala-test] error")
+  }
+
+  it should "default the prefix to sonar-scala" in {
+    val log = Log(classOf[LogSpec])
+
+    log.info("info")
+    logsFor(INFO) shouldBe Seq("[sonar-scala] info")
   }
 }

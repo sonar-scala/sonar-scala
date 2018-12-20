@@ -45,7 +45,7 @@ final class UnitTestReportParser(fileSystem: FileSystem) extends UnitTestReportP
     val unitTestReports: List[UnitTestReport] = parseReportFiles(reports)
 
     log.debug("Unit test reports:")
-    log.debug(unitTestReports.take(5).mkString(", "))
+    log.debug(unitTestReports.mkString(", "))
 
     // Convert package names into files.
     resolveFiles(tests, unitTestReports)

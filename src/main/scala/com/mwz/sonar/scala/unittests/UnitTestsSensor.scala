@@ -64,9 +64,7 @@ final class UnitTestsSensor(
       )
 
     log.debug("Input test files:")
-    inputFiles.forEach { f =>
-      log.debug(f.toString)
-    }
+    inputFiles.forEach(f => log.debug(f.toString))
 
     val directories: List[File] =
       reports.flatMap(path => Try(pathResolver.relativeFile(fs.baseDir, path.toString)).toOption)
@@ -78,9 +76,9 @@ final class UnitTestsSensor(
       val parsedReports = untTestsReportParser.parse(tests, directories)
       log.debug("Parsed reports:")
       log.debug(parsedReports.mkString(", "))
-      // TODO: Save the following metrics:
+      // TODO: Save the following metrics for each file:
       // TODO: CoreMetrics.SKIPPED_TESTS.
-      // TODO: CoreMetrics.TESTS.
+      // TODO: CoreMetrics.TESTS (excluding skipped?).
       // TODO: CoreMetrics.TEST_ERRORS.
       // TODO: CoreMetrics.TEST_FAILURES.
       // TODO: CoreMetrics.TEST_EXECUTION_TIME.

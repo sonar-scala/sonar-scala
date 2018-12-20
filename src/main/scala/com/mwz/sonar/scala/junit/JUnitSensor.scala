@@ -17,7 +17,7 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 package com.mwz.sonar.scala
-package unittests
+package junit
 
 import java.io.File
 import java.nio.file.Path
@@ -32,15 +32,15 @@ import org.sonar.api.scan.filesystem.PathResolver
 
 import scala.util.Try
 
-final class UnitTestsSensor(
-  untTestsReportParser: UnitTestReportParserAPI,
-  settings: Configuration,
+final class JUnitSensor(
+  untTestsReportParser: JUnitReportParserAPI,
+  config: Configuration,
   fs: FileSystem,
   pathResolver: PathResolver
 ) extends Sensor {
-  import UnitTestsSensor._ // scalastyle:ignore org.scalastyle.scalariform.ImportGroupingChecker
+  import JUnitSensor._ // scalastyle:ignore org.scalastyle.scalariform.ImportGroupingChecker
 
-  private[this] val log = Log(classOf[UnitTestsSensor], "unit-tests")
+  private[this] val log = Log(classOf[JUnitSensor], "junit")
 
   override def describe(descriptor: SensorDescriptor): Unit = {
     descriptor
@@ -49,10 +49,10 @@ final class UnitTestsSensor(
   }
 
   override def execute(context: SensorContext): Unit = {
-    log.info("Initializing the Scala unit tests sensor.")
+    log.info("Initializing the Scala JUnit sensor.")
 
-    val tests: List[Path] = fromConfig(settings, TestsPropertyKey, DefaultTests)
-    val reports: List[Path] = fromConfig(settings, ReportsPropertyKey, DefaultReportPaths)
+    val tests: List[Path] = fromConfig(config, TestsPropertyKey, DefaultTests)
+    val reports: List[Path] = fromConfig(config, ReportsPropertyKey, DefaultReportPaths)
 
     val inputFiles = context.fileSystem
       .inputFiles(
@@ -70,9 +70,9 @@ final class UnitTestsSensor(
     // TODO: Is the injected fileSystem different from context.fileSystem?
 
     if (directories.isEmpty)
-      log.warn(s"Unit test report path(s) not found for ${reports.mkString(", ")}.")
+      log.warn(s"JUnit test report path(s) not found for ${reports.mkString(", ")}.")
     else {
-      val parsedReports: Map[InputFile, UnitTestReport] = untTestsReportParser.parse(tests, directories)
+      val parsedReports: Map[InputFile, JUnitReport] = untTestsReportParser.parse(tests, directories)
       log.debug("Parsed reports:")
       log.debug(parsedReports.mkString(", "))
 
@@ -84,13 +84,13 @@ final class UnitTestsSensor(
   /**
    * Save test metrics.
    */
-  private[unittests] def save(
+  private[junit] def save(
     context: SensorContext,
-    reports: Map[InputFile, UnitTestReport]
+    reports: Map[InputFile, JUnitReport]
   ): Unit = {
     reports.foreach {
       case (file, report) =>
-        log.debug(s"Saving unit test metrics for $file.")
+        log.debug(s"Saving junit test metrics for $file.")
         MetricUtils.save[Integer](context, file, CoreMetrics.SKIPPED_TESTS, report.skipped)
         MetricUtils.save[Integer](context, file, CoreMetrics.TESTS, report.tests - report.skipped)
         MetricUtils.save[Integer](context, file, CoreMetrics.TEST_ERRORS, report.errors)
@@ -105,8 +105,8 @@ final class UnitTestsSensor(
   }
 }
 
-object UnitTestsSensor {
-  val SensorName = "Scala Unit Tests Sensor"
+object JUnitSensor {
+  val SensorName = "Scala JUnit Sensor"
   val TestsPropertyKey = "sonar.tests"
   val DefaultTests = "src/test/scala"
   val ReportsPropertyKey = "sonar.junit.reportPaths"

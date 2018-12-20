@@ -17,9 +17,9 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 package com.mwz.sonar.scala
-package unittests
+package junit
 
-private[unittests] final case class UnitTestReport(
+private[junit] final case class JUnitReport(
   name: String,
   tests: Int,
   errors: Int,

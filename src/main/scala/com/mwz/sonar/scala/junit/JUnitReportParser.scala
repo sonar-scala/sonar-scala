@@ -17,7 +17,7 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 package com.mwz.sonar.scala
-package unittests
+package junit
 
 import java.io.File
 import java.nio.file.Path
@@ -29,20 +29,20 @@ import org.sonar.api.batch.fs.{FilePredicate, FileSystem, InputFile}
 import scala.collection.JavaConverters._
 import scala.xml.{Elem, XML}
 
-trait UnitTestReportParserAPI {
-  def parse(tests: List[Path], directories: List[File]): Map[InputFile, UnitTestReport]
+trait JUnitReportParserAPI {
+  def parse(tests: List[Path], directories: List[File]): Map[InputFile, JUnitReport]
 }
 
 @ScannerSide
-final class UnitTestReportParser(fileSystem: FileSystem) extends UnitTestReportParserAPI {
-  private[this] val log = Log(classOf[UnitTestReportParser], "unit-tests")
+final class JUnitReportParser(fileSystem: FileSystem) extends JUnitReportParserAPI {
+  private[this] val log = Log(classOf[JUnitReportParser], "junit")
 
-  def parse(tests: List[Path], directories: List[File]): Map[InputFile, UnitTestReport] = {
+  def parse(tests: List[Path], directories: List[File]): Map[InputFile, JUnitReport] = {
     // Get report files - xml files starting with "TEST-".
     val reports: List[File] = reportFiles(directories)
 
     // Parse report files.
-    val unitTestReports: List[UnitTestReport] = parseReportFiles(reports)
+    val unitTestReports: List[JUnitReport] = parseReportFiles(reports)
 
     log.debug("Unit test reports:")
     log.debug(unitTestReports.mkString(", "))
@@ -54,7 +54,7 @@ final class UnitTestReportParser(fileSystem: FileSystem) extends UnitTestReportP
   /**
    * Get report files - xml files starting with "TEST-"
    */
-  private[unittests] def reportFiles(directories: List[File]): List[File] = {
+  private[junit] def reportFiles(directories: List[File]): List[File] = {
     val reportFiles: List[File] = directories.filter(_.isDirectory).flatMap { dir =>
       dir.listFiles((_, name) => name.startsWith("TEST-") && name.endsWith(".xml"))
     }
@@ -70,10 +70,10 @@ final class UnitTestReportParser(fileSystem: FileSystem) extends UnitTestReportP
   /**
    * Parse report files.
    */
-  private[unittests] def parseReportFiles(reports: List[File]): List[UnitTestReport] = {
+  private[junit] def parseReportFiles(reports: List[File]): List[JUnitReport] = {
     reports.map { file =>
       val xml: Elem = XML.loadFile(file)
-      UnitTestReport(
+      JUnitReport(
         name = xml \@ "name",
         tests = (xml \@ "tests").toInt,
         errors = (xml \@ "errors").toInt,
@@ -87,10 +87,10 @@ final class UnitTestReportParser(fileSystem: FileSystem) extends UnitTestReportP
   /**
    * Convert package names into files.
    */
-  private[unittests] def resolveFiles(
+  private[junit] def resolveFiles(
     tests: List[Path],
-    reports: List[UnitTestReport]
-  ): Map[InputFile, UnitTestReport] = {
+    reports: List[JUnitReport]
+  ): Map[InputFile, JUnitReport] = {
     reports
       .groupBy(_.name)
       .map {

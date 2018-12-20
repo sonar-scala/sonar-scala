@@ -51,7 +51,7 @@ object Scala {
   private val SourcesPropertyKey = "sonar.sources"
   private val DefaultSourcesFolder = "src/main/scala"
 
-  private val logger = Log(classOf[Scala], "sonar-scala")
+  private val logger = Log(classOf[Scala])
 
   def getScalaVersion(settings: Configuration): ScalaVersion = {
     def parseVersion(s: String): Option[ScalaVersion] = s match {
@@ -123,8 +123,8 @@ final class ScalaPlugin extends Plugin {
       classOf[scoverage.ScoverageReportParser],
       classOf[scoverage.ScoverageSensor],
       // Unit tests.
-      classOf[unittests.UnitTestsSensor],
-      classOf[unittests.UnitTestReportParser],
+      classOf[junit.JUnitSensor],
+      classOf[junit.JUnitReportParser],
     )
   }
 }

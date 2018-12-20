@@ -22,7 +22,9 @@ package util
 import java.nio.file.{Path, Paths}
 import java.util.Optional
 
-import org.sonar.api.batch.fs.FileSystem
+import org.sonar.api.batch.fs.{FileSystem, InputFile}
+import org.sonar.api.batch.measure.Metric
+import org.sonar.api.batch.sensor.SensorContext
 import org.sonar.api.config.Configuration
 
 import scala.language.implicitConversions
@@ -91,5 +93,25 @@ object PathUtils {
     val moduleAbsolutePath = Paths.get(fs.baseDir().getAbsolutePath).normalize
     val currentWorkdirAbsolutePath = PathUtils.cwd
     currentWorkdirAbsolutePath.relativize(moduleAbsolutePath)
+  }
+}
+
+object MetricUtils {
+
+  /**
+   * Save a new measure for the given metric.
+   */
+  def save[T <: java.io.Serializable](
+    context: SensorContext,
+    file: InputFile,
+    metric: Metric[T],
+    value: T
+  ): Unit = {
+    context
+      .newMeasure[T]
+      .on(file)
+      .forMetric(metric)
+      .withValue(value)
+      .save()
   }
 }

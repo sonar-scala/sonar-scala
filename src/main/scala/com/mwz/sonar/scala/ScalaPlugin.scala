@@ -20,7 +20,6 @@ package com.mwz.sonar.scala
 
 import java.nio.file.{Path, Paths}
 
-import cats.kernel.Eq
 import com.mwz.sonar.scala.util.JavaOptionals._
 import com.mwz.sonar.scala.util.Log
 import org.sonar.api.Plugin

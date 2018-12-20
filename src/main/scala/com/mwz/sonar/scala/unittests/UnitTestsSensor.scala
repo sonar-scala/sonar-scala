@@ -20,17 +20,16 @@ package com.mwz.sonar.scala
 package unittests
 
 import java.io.File
-import java.nio.file.{Path, Paths}
+import java.nio.file.Path
 
-import com.mwz.sonar.scala.util.Log
+import com.mwz.sonar.scala.util.PathUtils._
+import com.mwz.sonar.scala.util.{Log, MetricUtils}
 import org.sonar.api.batch.fs.{FileSystem, InputFile}
 import org.sonar.api.batch.sensor.{Sensor, SensorContext, SensorDescriptor}
 import org.sonar.api.config.Configuration
+import org.sonar.api.measures.CoreMetrics
 import org.sonar.api.scan.filesystem.PathResolver
-import com.mwz.sonar.scala.util.JavaOptionals._
-import com.mwz.sonar.scala.util.PathUtils._
 
-import scala.collection.JavaConverters._
 import scala.util.Try
 
 final class UnitTestsSensor(
@@ -73,15 +72,35 @@ final class UnitTestsSensor(
     if (directories.isEmpty)
       log.warn(s"Unit test report path(s) not found for ${reports.mkString(", ")}.")
     else {
-      val parsedReports = untTestsReportParser.parse(tests, directories)
+      val parsedReports: Map[InputFile, UnitTestReport] = untTestsReportParser.parse(tests, directories)
       log.debug("Parsed reports:")
       log.debug(parsedReports.mkString(", "))
-      // TODO: Save the following metrics for each file:
-      // TODO: CoreMetrics.SKIPPED_TESTS.
-      // TODO: CoreMetrics.TESTS (excluding skipped?).
-      // TODO: CoreMetrics.TEST_ERRORS.
-      // TODO: CoreMetrics.TEST_FAILURES.
-      // TODO: CoreMetrics.TEST_EXECUTION_TIME.
+
+      // Save test metrics for each file.
+      save(context, parsedReports)
+    }
+  }
+
+  /**
+   * Save test metrics.
+   */
+  private[unittests] def save(
+    context: SensorContext,
+    reports: Map[InputFile, UnitTestReport]
+  ): Unit = {
+    reports.foreach {
+      case (file, report) =>
+        log.debug(s"Saving unit test metrics for $file.")
+        MetricUtils.save[Integer](context, file, CoreMetrics.SKIPPED_TESTS, report.skipped)
+        MetricUtils.save[Integer](context, file, CoreMetrics.TESTS, report.tests - report.skipped)
+        MetricUtils.save[Integer](context, file, CoreMetrics.TEST_ERRORS, report.errors)
+        MetricUtils.save[Integer](context, file, CoreMetrics.TEST_FAILURES, report.failures)
+        MetricUtils.save[java.lang.Long](
+          context,
+          file,
+          CoreMetrics.TEST_EXECUTION_TIME,
+          (report.time * 1000).longValue
+        )
     }
   }
 }

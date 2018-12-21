@@ -60,7 +60,13 @@ final class JUnitReportParser(fileSystem: FileSystem) extends JUnitReportParserA
    */
   private[junit] def reportFiles(directories: List[File]): List[File] = {
     val reportFiles: List[File] = directories.filter(_.isDirectory).flatMap { dir =>
-      dir.listFiles((_, name) => name.startsWith("TEST-") && name.endsWith(".xml"))
+      dir.listFiles(
+        (_, name) =>
+          !name.startsWith("TEST-") &&
+          !name.startsWith("TESTS-") &&
+          name.endsWith(".xml")
+        // TODO: Is this also the case for the Maven surefire plugin?
+      )
     }
 
     if (directories.isEmpty)

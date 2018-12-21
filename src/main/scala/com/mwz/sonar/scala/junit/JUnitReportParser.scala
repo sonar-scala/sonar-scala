@@ -30,6 +30,11 @@ import scala.collection.JavaConverters._
 import scala.xml.{Elem, XML}
 
 trait JUnitReportParserAPI {
+
+  /**
+   * Parse JUnit report files from the given directory
+   * and return a map from input files to the parsed reports.
+   */
   def parse(tests: List[Path], directories: List[File]): Map[InputFile, JUnitReport]
 }
 
@@ -43,16 +48,15 @@ final class JUnitReportParser(fileSystem: FileSystem) extends JUnitReportParserA
 
     // Parse report files.
     val unitTestReports: List[JUnitReport] = parseReportFiles(reports)
-
-    log.debug("Unit test reports:")
-    log.debug(unitTestReports.mkString(", "))
+    if (unitTestReports.nonEmpty)
+      log.debug(s"JUnit test reports:\n${unitTestReports.mkString(", ")}")
 
     // Convert package names into files.
     resolveFiles(tests, unitTestReports)
   }
 
   /**
-   * Get report files - xml files starting with "TEST-"
+   * Get report files - xml files starting with "TEST-".
    */
   private[junit] def reportFiles(directories: List[File]): List[File] = {
     val reportFiles: List[File] = directories.filter(_.isDirectory).flatMap { dir =>

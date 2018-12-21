@@ -28,16 +28,17 @@ import org.sonar.api.batch.fs.{FileSystem, InputFile}
 import org.sonar.api.batch.sensor.{Sensor, SensorContext, SensorDescriptor}
 import org.sonar.api.config.Configuration
 import org.sonar.api.measures.CoreMetrics
-import org.sonar.api.scan.filesystem.PathResolver
 
 import scala.collection.JavaConverters._
-import scala.util.Try
 
+/**
+ * Scala JUnit sensor.
+ * Parses JUnit XML reports and saves test metrics.
+ */
 final class JUnitSensor(
   untTestsReportParser: JUnitReportParserAPI,
   config: Configuration,
-  fs: FileSystem,
-  pathResolver: PathResolver
+  fs: FileSystem // TODO: Is the injected fileSystem different from context.fileSystem?
 ) extends Sensor {
   import JUnitSensor._ // scalastyle:ignore org.scalastyle.scalariform.ImportGroupingChecker
 
@@ -48,14 +49,21 @@ final class JUnitSensor(
       .name(SensorName)
       .onlyOnLanguage(Scala.LanguageKey)
       .onlyOnFileType(InputFile.Type.TEST)
+    // TODO: Add a flag to disable the sensor.
   }
 
   override def execute(context: SensorContext): Unit = {
     log.info("Initializing the Scala JUnit sensor.")
 
+    // Get the test paths.
     val tests: List[Path] = fromConfig(config, TestsPropertyKey, DefaultTests)
-    val reports: List[Path] = fromConfig(config, ReportsPropertyKey, DefaultReportPaths)
+    log.debug(s"The source prefixes are: ${tests.mkString("[", ",", "]")}.")
 
+    // Get the junit report paths.
+    val reports: List[Path] = fromConfig(config, ReportsPropertyKey, DefaultReportPaths)
+    log.debug(s"The JUnit report paths are: ${reports.mkString("[", ",", "]")}.")
+
+    // Get test input files
     val inputFiles: Iterable[InputFile] =
       context.fileSystem
         .inputFiles(
@@ -65,21 +73,27 @@ final class JUnitSensor(
           )
         )
         .asScala
-    log.debug(s"Input test files: \n${inputFiles.mkString(", ")}")
 
-    val directories: List[File] =
-      reports.flatMap(path => Try(pathResolver.relativeFile(fs.baseDir, path.toString)).toOption)
-    // TODO: Is the injected fileSystem different from context.fileSystem?
+    if (inputFiles.nonEmpty)
+      log.debug(s"Input test files: \n${inputFiles.mkString(", ")}")
+    else
+      log.warn(s"No test files found for module ${context.module.key}.")
 
-    if (directories.isEmpty)
-      log.warn(s"JUnit test report path(s) not found for ${reports.mkString(", ")}.")
-    else {
-      val parsedReports: Map[InputFile, JUnitReport] = untTestsReportParser.parse(tests, directories)
-      log.debug(s"Parsed reports:\n${parsedReports.mkString(", ")}")
+    // Resolve test directories.
+    val testDirectories: List[File] = resolve(fs, tests)
+    if (testDirectories.isEmpty)
+      log.error(s"The following test directories were not found: ${reports.mkString(", ")}.")
 
-      // Save test metrics for each file.
-      save(context, parsedReports)
-    }
+    // Resolve JUnit report directories.
+    val reportDirectories: List[File] = resolve(fs, reports)
+    if (reportDirectories.isEmpty)
+      log.error(s"The following JUnit test report path(s) were not found : ${reports.mkString(", ")}.")
+
+    // Parse the reports.
+    val parsedReports: Map[InputFile, JUnitReport] = untTestsReportParser.parse(tests, reportDirectories)
+
+    // Save test metrics for each file.
+    save(context, parsedReports)
   }
 
   /**
@@ -103,6 +117,11 @@ final class JUnitSensor(
           (report.time * 1000).longValue
         )
     }
+
+    if (reports.nonEmpty)
+      log.debug(s"Parsed reports:\n${reports.mkString(", ")}")
+    else
+      log.info("No test metrics were saved by this sensor.")
   }
 }
 

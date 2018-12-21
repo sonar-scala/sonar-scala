@@ -19,6 +19,7 @@
 package com.mwz.sonar.scala
 package util
 
+import java.io.File
 import java.nio.file.{Path, Paths}
 import java.util.Optional
 
@@ -27,7 +28,8 @@ import org.sonar.api.batch.measure.Metric
 import org.sonar.api.batch.sensor.SensorContext
 import org.sonar.api.config.Configuration
 
-import scala.language.implicitConversions
+import scala.language.{higherKinds, implicitConversions}
+import scala.util.Try
 
 /**
  *  Scala.Option <-> Java.Optional conversions.
@@ -94,6 +96,14 @@ object PathUtils {
     val currentWorkdirAbsolutePath = PathUtils.cwd
     currentWorkdirAbsolutePath.relativize(moduleAbsolutePath)
   }
+
+  /**
+   * Resolve a list of paths relative to the given file system.
+   */
+  def resolve(fs: FileSystem, toResolve: List[Path]): List[File] =
+    toResolve.flatMap { path =>
+      Try(fs.resolvePath(path.toString)).toOption
+    }
 }
 
 object MetricUtils {

@@ -60,4 +60,9 @@ class ScalaPluginSpec extends FlatSpec with Matchers {
     assert(context.getExtensions.contains(classOf[scoverage.ScoverageReportParser]))
     assert(context.getExtensions.contains(classOf[scoverage.ScoverageSensor]))
   }
+
+  it should "provide junit sensor" in {
+    assert(context.getExtensions.contains(classOf[junit.JUnitReportParser]))
+    assert(context.getExtensions.contains(classOf[junit.JUnitSensor]))
+  }
 }

@@ -32,7 +32,7 @@ object Log {
   def apply[T](clazz: Class[T], module: String): Log = Log(clazz, Some(module))
   def apply[T](clazz: Class[T], module: Option[String] = None): Log = {
     val log: Logger = Loggers.get(clazz)
-    val prefix: String = "sonar-scala" + module.map("-" + _).getOrElse("")
+    val prefix: String = "sonar-scala" + module.fold("")("-" + _)
     new Log {
       override def debug(s: String): Unit = log.debug(s"[$prefix] $s")
       override def info(s: String): Unit = log.info(s"[$prefix] $s")

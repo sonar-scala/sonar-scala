@@ -46,6 +46,7 @@ final class JUnitSensor(
     descriptor
       .name(SensorName)
       .onlyOnLanguage(Scala.LanguageKey)
+      .onlyOnFileType(InputFile.Type.TEST)
   }
 
   override def execute(context: SensorContext): Unit = {

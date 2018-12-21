@@ -30,6 +30,7 @@ import org.sonar.api.config.Configuration
 import org.sonar.api.measures.CoreMetrics
 import org.sonar.api.scan.filesystem.PathResolver
 
+import scala.collection.JavaConverters._
 import scala.util.Try
 
 final class JUnitSensor(
@@ -55,16 +56,16 @@ final class JUnitSensor(
     val tests: List[Path] = fromConfig(config, TestsPropertyKey, DefaultTests)
     val reports: List[Path] = fromConfig(config, ReportsPropertyKey, DefaultReportPaths)
 
-    val inputFiles = context.fileSystem
-      .inputFiles(
-        context.fileSystem.predicates.and(
-          context.fileSystem.predicates.hasLanguage(Scala.LanguageKey),
-          context.fileSystem.predicates.hasType(InputFile.Type.TEST)
+    val inputFiles: Iterable[InputFile] =
+      context.fileSystem
+        .inputFiles(
+          context.fileSystem.predicates.and(
+            context.fileSystem.predicates.hasLanguage(Scala.LanguageKey),
+            context.fileSystem.predicates.hasType(InputFile.Type.TEST)
+          )
         )
-      )
-
-    log.debug("Input test files:")
-    inputFiles.forEach(f => log.debug(f.toString))
+        .asScala
+    log.debug(s"Input test files: \n${inputFiles.mkString(", ")}")
 
     val directories: List[File] =
       reports.flatMap(path => Try(pathResolver.relativeFile(fs.baseDir, path.toString)).toOption)
@@ -74,8 +75,7 @@ final class JUnitSensor(
       log.warn(s"JUnit test report path(s) not found for ${reports.mkString(", ")}.")
     else {
       val parsedReports: Map[InputFile, JUnitReport] = untTestsReportParser.parse(tests, directories)
-      log.debug("Parsed reports:")
-      log.debug(parsedReports.mkString(", "))
+      log.debug(s"Parsed reports:\n${parsedReports.mkString(", ")}")
 
       // Save test metrics for each file.
       save(context, parsedReports)

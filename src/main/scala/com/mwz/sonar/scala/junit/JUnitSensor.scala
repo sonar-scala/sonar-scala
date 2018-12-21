@@ -103,6 +103,11 @@ final class JUnitSensor(
     context: SensorContext,
     reports: Map[InputFile, JUnitReport]
   ): Unit = {
+    if (reports.nonEmpty)
+      log.debug(s"Parsed reports:\n${reports.mkString(", ")}")
+    else
+      log.info("No test metrics were saved by this sensor.")
+
     reports.foreach {
       case (file, report) =>
         log.debug(s"Saving junit test metrics for $file.")
@@ -117,11 +122,6 @@ final class JUnitSensor(
           (report.time * 1000).longValue
         )
     }
-
-    if (reports.nonEmpty)
-      log.debug(s"Parsed reports:\n${reports.mkString(", ")}")
-    else
-      log.info("No test metrics were saved by this sensor.")
   }
 }
 

@@ -22,6 +22,8 @@ package syntax
 
 import java.nio.file.{Path, Paths}
 
+import cats.instances.string._
+import cats.syntax.eq._
 import org.sonar.api.config.Configuration
 
 import scala.language.implicitConversions
@@ -35,7 +37,7 @@ final class ConfigOps(val configuration: Configuration) extends AnyVal {
   import JavaOptionals._ // scalastyle:ignore org.scalastyle.scalariform.ImportGroupingChecker
 
   /**
-   * Get a list of paths from the config for a given key.
+   * Get a list of paths for the given key.
    * Fall back to the default value.
    */
   def getPaths(key: String, default: String): List[Path] =
@@ -47,4 +49,15 @@ final class ConfigOps(val configuration: Configuration) extends AnyVal {
       .split(',') // scalastyle:ignore org.scalastyle.scalariform.NamedArgumentChecker
       .map(p => Paths.get(p.trim))
       .toList
+
+  /**
+   * Get a boolean property for the given key.
+   * Defaults to false.
+   */
+  def getValue[T](key: String)(implicit ev: T =:= Boolean): Boolean = {
+    configuration
+      .get(key)
+      .toOption
+      .exists(_.toLowerCase === "true")
+  }
 }

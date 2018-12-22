@@ -23,8 +23,10 @@ import java.io.File
 import java.nio.file.Path
 
 import cats.instances.list._
-import com.mwz.sonar.scala.util.PathUtils._
-import com.mwz.sonar.scala.util.{Log, MetricUtils}
+import com.mwz.sonar.scala.util.Log
+import com.mwz.sonar.scala.util.syntax.ConfigSyntax._
+import com.mwz.sonar.scala.util.syntax.FileSystemSyntax._
+import com.mwz.sonar.scala.util.syntax.SensorContextSyntax._
 import org.sonar.api.batch.fs.{FileSystem, InputFile}
 import org.sonar.api.batch.sensor.{Sensor, SensorContext, SensorDescriptor}
 import org.sonar.api.config.Configuration
@@ -81,12 +83,12 @@ final class JUnitSensor(
       log.warn(s"No test files found for module ${context.module.key}.")
 
     // Resolve test directories.
-    val testDirectories: List[File] = resolve(fs, tests)
+    val testDirectories: List[File] = fs.resolve(tests)
     if (testDirectories.isEmpty)
       log.error(s"The following test directories were not found: ${reports.mkString(", ")}.")
 
     // Resolve JUnit report directories.
-    val reportDirectories: List[File] = resolve(fs, reports)
+    val reportDirectories: List[File] = fs.resolve(reports)
     if (reportDirectories.isEmpty)
       log.error(s"The following JUnit test report path(s) were not found : ${reports.mkString(", ")}.")
 
@@ -112,12 +114,11 @@ final class JUnitSensor(
     reports.foreach {
       case (file, report) =>
         log.debug(s"Saving junit test metrics for $file.")
-        MetricUtils.save[Integer](context, file, CoreMetrics.SKIPPED_TESTS, report.skipped)
-        MetricUtils.save[Integer](context, file, CoreMetrics.TESTS, report.tests - report.skipped)
-        MetricUtils.save[Integer](context, file, CoreMetrics.TEST_ERRORS, report.errors)
-        MetricUtils.save[Integer](context, file, CoreMetrics.TEST_FAILURES, report.failures)
-        MetricUtils.save[java.lang.Long](
-          context,
+        context.saveMeasure[Integer](file, CoreMetrics.SKIPPED_TESTS, report.skipped)
+        context.saveMeasure[Integer](file, CoreMetrics.TESTS, report.tests - report.skipped)
+        context.saveMeasure[Integer](file, CoreMetrics.TEST_ERRORS, report.errors)
+        context.saveMeasure[Integer](file, CoreMetrics.TEST_FAILURES, report.failures)
+        context.saveMeasure[java.lang.Long](
           file,
           CoreMetrics.TEST_EXECUTION_TIME,
           (report.time * 1000).longValue

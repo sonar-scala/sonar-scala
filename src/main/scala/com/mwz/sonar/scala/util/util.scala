@@ -19,36 +19,31 @@
 package com.mwz.sonar.scala
 package util
 
-import java.io.File
 import java.nio.file.{Path, Paths}
 import java.util.Optional
 
-import cats.syntax.flatMap._
-import cats.{Monad, MonoidK}
-import org.sonar.api.batch.fs.{FileSystem, InputFile}
-import org.sonar.api.batch.measure.Metric
-import org.sonar.api.batch.sensor.SensorContext
-import org.sonar.api.config.Configuration
+import org.sonar.api.batch.fs.FileSystem
 
-import scala.language.{higherKinds, implicitConversions}
-import scala.util.{Failure, Success, Try}
+import scala.language.implicitConversions
 
 /**
  *  Scala.Option <-> Java.Optional conversions.
  *  @note Taken from https://gist.github.com/julienroubieu/fbb7e1467ab44203a09f.
  */
 object JavaOptionals {
-  implicit def toRichOption[T >: Null](opt: Option[T]): RichOption[T] = new RichOption[T](opt)
-  implicit def toRichOptional[T](optional: Optional[T]): RichOptional[T] = new RichOptional[T](optional)
+  implicit final def toRichOption[T >: Null](opt: Option[T]): RichOption[T] =
+    new RichOption[T](opt)
+  implicit final def toRichOptional[T](optional: Optional[T]): RichOptional[T] =
+    new RichOptional[T](optional)
 }
 
 /** Transform this Option to an equivalent Java Optional */
-class RichOption[T >: Null](opt: Option[T]) {
+final class RichOption[T >: Null](val opt: Option[T]) extends AnyVal {
   def toOptional: Optional[T] = Optional.ofNullable(opt.orNull)
 }
 
 /** Transform this Optional to an equivalent Scala Option */
-class RichOptional[T](opt: Optional[T]) {
+final class RichOptional[T](val opt: Optional[T]) extends AnyVal {
   def toOption: Option[T] = if (opt.isPresent) Some(opt.get()) else None
 }
 
@@ -56,8 +51,6 @@ class RichOptional[T](opt: Optional[T]) {
  * Various Path utilities.
  */
 object PathUtils {
-  implicit final def configurationSyntax(configuration: Configuration): ConfigurationOps =
-    new ConfigurationOps(configuration)
 
   /** Current working directory. */
   def cwd: Path = Paths.get(".").toAbsolutePath.normalize
@@ -84,54 +77,5 @@ object PathUtils {
     val moduleAbsolutePath = Paths.get(fs.baseDir().getAbsolutePath).normalize
     val currentWorkdirAbsolutePath = PathUtils.cwd
     currentWorkdirAbsolutePath.relativize(moduleAbsolutePath)
-  }
-
-  /**
-   * Resolve paths relative to the given file system.
-   */
-  def resolve[F[_]: Monad: MonoidK](fs: FileSystem, toResolve: F[Path]): F[File] =
-    toResolve.flatMap[File] { path =>
-      Try(fs.resolvePath(path.toString)) match {
-        case Failure(_) => MonoidK[F].empty
-        case Success(f) => Monad[F].pure(f)
-      }
-    }
-}
-
-final class ConfigurationOps(val configuration: Configuration) extends AnyVal {
-  import JavaOptionals._ // scalastyle:ignore org.scalastyle.scalariform.ImportGroupingChecker
-
-  /**
-   * Get a list of paths from the config for a given key.
-   * Fall back to the default value.
-   */
-  def getPaths(key: String, default: String): List[Path] =
-    configuration
-      .get(key)
-      .toOption
-      .filter(_.nonEmpty)
-      .getOrElse(default)
-      .split(',') // scalastyle:ignore org.scalastyle.scalariform.NamedArgumentChecker
-      .map(p => Paths.get(p.trim))
-      .toList
-}
-
-object MetricUtils {
-
-  /**
-   * Save a new measure for the given metric.
-   */
-  def save[T <: java.io.Serializable](
-    context: SensorContext,
-    file: InputFile,
-    metric: Metric[T],
-    value: T
-  ): Unit = {
-    context
-      .newMeasure[T]
-      .on(file)
-      .forMetric(metric)
-      .withValue(value)
-      .save()
   }
 }

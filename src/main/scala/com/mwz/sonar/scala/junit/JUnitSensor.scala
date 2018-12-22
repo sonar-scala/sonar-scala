@@ -22,6 +22,7 @@ package junit
 import java.io.File
 import java.nio.file.Path
 
+import cats.instances.list._
 import com.mwz.sonar.scala.util.PathUtils._
 import com.mwz.sonar.scala.util.{Log, MetricUtils}
 import org.sonar.api.batch.fs.{FileSystem, InputFile}
@@ -56,11 +57,11 @@ final class JUnitSensor(
     log.info("Initializing the Scala JUnit sensor.")
 
     // Get the test paths.
-    val tests: List[Path] = fromConfig(config, TestsPropertyKey, DefaultTests)
+    val tests: List[Path] = config.getPaths(TestsPropertyKey, DefaultTests)
     log.debug(s"The source prefixes are: ${tests.mkString("[", ",", "]")}.")
 
     // Get the junit report paths.
-    val reports: List[Path] = fromConfig(config, ReportsPropertyKey, DefaultReportPaths)
+    val reports: List[Path] = config.getPaths(ReportsPropertyKey, DefaultReportPaths)
     log.debug(s"The JUnit report paths are: ${reports.mkString("[", ",", "]")}.")
 
     // Get test input files

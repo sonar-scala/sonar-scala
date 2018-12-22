@@ -39,9 +39,9 @@ import scala.collection.JavaConverters._
  * Parses JUnit XML reports and saves test metrics.
  */
 final class JUnitSensor(
-  untTestsReportParser: JUnitReportParserAPI,
   config: Configuration,
-  fs: FileSystem // TODO: Is the injected fileSystem different from context.fileSystem?
+  fs: FileSystem, // TODO: Is the injected fileSystem different from context.fileSystem?
+  untTestsReportParser: JUnitReportParserAPI
 ) extends Sensor {
   import JUnitSensor._ // scalastyle:ignore org.scalastyle.scalariform.ImportGroupingChecker
 
@@ -52,18 +52,18 @@ final class JUnitSensor(
       .name(SensorName)
       .onlyOnLanguage(Scala.LanguageKey)
       .onlyOnFileType(InputFile.Type.TEST)
-    // TODO: Add a flag to disable the sensor.
+      .onlyWhenConfiguration(shouldEnableSensor)
   }
 
   override def execute(context: SensorContext): Unit = {
     log.info("Initializing the Scala JUnit sensor.")
 
     // Get the test paths.
-    val tests: List[Path] = config.getPaths(TestsPropertyKey, DefaultTests)
+    val tests: List[Path] = testPaths(config)
     log.debug(s"The source prefixes are: ${tests.mkString("[", ",", "]")}.")
 
     // Get the junit report paths.
-    val reports: List[Path] = config.getPaths(ReportsPropertyKey, DefaultReportPaths)
+    val reports: List[Path] = reportPaths(config)
     log.debug(s"The JUnit report paths are: ${reports.mkString("[", ",", "]")}.")
 
     // Get test input files
@@ -133,4 +133,14 @@ object JUnitSensor {
   val DefaultTests = "src/test/scala"
   val ReportsPropertyKey = "sonar.junit.reportPaths"
   val DefaultReportPaths = "target/test-reports"
+  val DisablePropertyKey = "sonar.junit.disable"
+
+  private[junit] def testPaths(conf: Configuration): List[Path] =
+    conf.getPaths(TestsPropertyKey, DefaultTests)
+
+  private[junit] def reportPaths(conf: Configuration): List[Path] =
+    conf.getPaths(ReportsPropertyKey, DefaultReportPaths)
+
+  private[junit] def shouldEnableSensor(conf: Configuration): Boolean =
+    !conf.getValue[Boolean](DisablePropertyKey)
 }

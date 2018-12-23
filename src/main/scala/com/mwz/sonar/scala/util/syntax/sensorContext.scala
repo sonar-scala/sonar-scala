@@ -26,7 +26,7 @@ import org.sonar.api.batch.sensor.SensorContext
 
 import scala.language.implicitConversions
 
-object SensorContextSyntax {
+trait SensorContextSyntax {
   implicit final def sensorContextSyntax(context: SensorContext): SensorContextOps =
     new SensorContextOps(context)
 }

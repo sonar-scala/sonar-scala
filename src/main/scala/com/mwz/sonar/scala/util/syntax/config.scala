@@ -28,7 +28,7 @@ import org.sonar.api.config.Configuration
 
 import scala.language.implicitConversions
 
-object ConfigSyntax {
+trait ConfigSyntax {
   implicit final def configSyntax(configuration: Configuration): ConfigOps =
     new ConfigOps(configuration)
 }

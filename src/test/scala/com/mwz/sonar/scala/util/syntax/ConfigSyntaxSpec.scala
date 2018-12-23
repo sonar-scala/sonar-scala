@@ -22,7 +22,7 @@ package syntax
 
 import java.nio.file.Paths
 
-import com.mwz.sonar.scala.util.syntax.ConfigSyntax._
+import com.mwz.sonar.scala.util.syntax.config._
 import org.scalatest.{FlatSpec, Matchers}
 import org.sonar.api.config.internal.MapSettings
 

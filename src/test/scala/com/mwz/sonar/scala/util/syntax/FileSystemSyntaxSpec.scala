@@ -24,7 +24,7 @@ import java.nio.file.{Path, Paths}
 
 import cats.instances.list._
 import cats.instances.option._
-import com.mwz.sonar.scala.util.syntax.FileSystemSyntax._
+import com.mwz.sonar.scala.util.syntax.fileSystem._
 import org.scalatest.{FlatSpec, Matchers, OptionValues}
 import org.sonar.api.batch.fs.internal.DefaultFileSystem
 

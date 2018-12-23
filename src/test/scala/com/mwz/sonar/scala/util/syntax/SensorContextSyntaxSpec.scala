@@ -22,7 +22,7 @@ package syntax
 
 import java.nio.file.Paths
 
-import com.mwz.sonar.scala.util.syntax.SensorContextSyntax._
+import com.mwz.sonar.scala.util.syntax.sensorContext._
 import org.scalatest.{FlatSpec, Matchers}
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder
 import org.sonar.api.batch.sensor.internal.SensorContextTester

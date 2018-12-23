@@ -18,33 +18,9 @@
  */
 package com.mwz.sonar.scala
 package util
-package syntax
 
-import java.io.File
-import java.nio.file.Path
-
-import cats.syntax.flatMap._
-import cats.{Monad, MonoidK}
-import org.sonar.api.batch.fs.FileSystem
-
-import scala.language.{higherKinds, implicitConversions}
-import scala.util.{Failure, Success, Try}
-
-trait FileSystemSyntax {
-  implicit final def fileSystemOps(fs: FileSystem): FileSystemOps =
-    new FileSystemOps(fs)
-}
-
-final class FileSystemOps(val fs: FileSystem) extends AnyVal {
-
-  /**
-   * Resolve paths relative to the given file system.
-   */
-  def resolve[F[_]: Monad: MonoidK](toResolve: F[Path]): F[File] =
-    toResolve.flatMap[File] { path =>
-      Try(fs.resolvePath(path.toString)) match {
-        case Failure(_) => MonoidK[F].empty
-        case Success(f) => Monad[F].pure(f)
-      }
-    }
+package object syntax {
+  object config extends ConfigSyntax
+  object fileSystem extends FileSystemSyntax
+  object sensorContext extends SensorContextSyntax
 }

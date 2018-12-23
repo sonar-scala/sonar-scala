@@ -22,16 +22,20 @@ package junit
 import java.io.File
 import java.nio.file.{Path, Paths}
 
-import org.mockito.ArgumentMatchers._
-import org.mockito.Mockito._
-import org.scalatest.mockito.MockitoSugar
+import org.mockito.{ArgumentMatchersSugar, IdiomaticMockito, MockitoSugar}
 import org.scalatest.{FlatSpec, LoneElement, Matchers}
 import org.sonar.api.batch.fs.InputFile
-import org.sonar.api.batch.fs.internal.DefaultFileSystem
+import org.sonar.api.batch.fs.internal.{DefaultFileSystem, TestInputFileBuilder}
 import org.sonar.api.batch.sensor.internal.{DefaultSensorDescriptor, SensorContextTester}
 import org.sonar.api.config.internal.MapSettings
 
-class JUnitSensorSpec extends FlatSpec with Matchers with LoneElement with MockitoSugar {
+class JUnitSensorSpec
+    extends FlatSpec
+    with Matchers
+    with LoneElement
+    with MockitoSugar
+    with ArgumentMatchersSugar
+    with SensorContextMatchers {
   trait Ctx {
     val settings = new MapSettings()
     val context = SensorContextTester.create(Paths.get("./"))
@@ -106,11 +110,11 @@ class JUnitSensorSpec extends FlatSpec with Matchers with LoneElement with Mocki
     junitSensor.describe(descriptor)
     descriptor.configurationPredicate.test(context.config) shouldBe true
 
-    when(reportParser.parse(any(), any()))
+    when(reportParser.parse(*, *))
       .thenReturn(Map.empty[InputFile, JUnitReport])
 
     junitSensor.execute(context)
-    verify(reportParser).parse(any(), any())
+    verify(reportParser).parse(*, *)
   }
 
   it should "respect the 'disable' config property and and skip sonar execution if set to true" in new Ctx {
@@ -123,10 +127,71 @@ class JUnitSensorSpec extends FlatSpec with Matchers with LoneElement with Mocki
   }
 
   it should "save test metrics for each input file" in new Ctx {
-    // TODO: test save in isolation
+    val junitSensor = sensor()
+    val testFile = TestInputFileBuilder
+      .create("", "TestFile.scala")
+      .build()
+    val report = JUnitReport("TestFile", 5, 3, 2, 1, 0.123f)
+    val reports: Map[InputFile, JUnitReport] = Map(testFile -> report)
+    context.fileSystem.add(testFile)
+    junitSensor.save(context, reports)
+
+    context should have(metric[Integer](testFile.key, "skipped_tests", 1))
+    context should have(metric[Integer](testFile.key, "tests", 4))
+    context should have(metric[Integer](testFile.key, "test_errors", 3))
+    context should have(metric[Integer](testFile.key, "test_failures", 2))
+    context should have(metric[java.lang.Long](testFile.key, "test_execution_time", 123l))
   }
 
   it should "save test metrics for all the parsed reports" in new Ctx {
-    // TODO: test that executing the sensor saves metrics for the given reports.
+    val conf = new MapSettings()
+      .setProperty("sonar.tests", "tests")
+    val reportParser = mock[JUnitReportParserAPI]
+    val junitSensor = sensor(settings = conf, parser = reportParser)
+
+    val testFile = TestInputFileBuilder
+      .create("", "tests/TestFile.scala")
+      .setLanguage("scala")
+      .setType(InputFile.Type.TEST)
+      .build()
+    val report = JUnitReport("TestFile", 5, 3, 2, 1, 0.123f)
+    val reports: Map[InputFile, JUnitReport] = Map(testFile -> report)
+    context.fileSystem.add(testFile)
+
+    when(reportParser.parse(*, *))
+      .thenReturn(reports)
+    junitSensor.execute(context)
+
+    context should have(metric[Integer](testFile.key, "skipped_tests", 1))
+    context should have(metric[Integer](testFile.key, "tests", 4))
+    context should have(metric[Integer](testFile.key, "test_errors", 3))
+    context should have(metric[Integer](testFile.key, "test_failures", 2))
+    context should have(metric[java.lang.Long](testFile.key, "test_execution_time", 123l))
+  }
+
+  it should "save test metrics for a module" in new Ctx {
+    val conf = new MapSettings()
+      .setProperty("sonar.tests", "tests")
+    val reportParser = mock[JUnitReportParserAPI]
+    val junitSensor = sensor(settings = conf, parser = reportParser)
+
+    val testFile = TestInputFileBuilder
+      .create("module1", "tests/TestFile.scala")
+      .setLanguage("scala")
+      .setType(InputFile.Type.TEST)
+      .build()
+    val report = JUnitReport("TestFile", 5, 3, 2, 1, 0.123f)
+    val reports: Map[InputFile, JUnitReport] = Map(testFile -> report)
+    context.fileSystem.add(testFile)
+
+    when(reportParser.parse(*, *))
+      .thenReturn(reports)
+    junitSensor.execute(context)
+
+    context should have(metric[Integer](testFile.key, "skipped_tests", 1))
+    context should have(metric[Integer](testFile.key, "tests", 4))
+    context should have(metric[Integer](testFile.key, "test_errors", 3))
+    context should have(metric[Integer](testFile.key, "test_failures", 2))
+    context should have(metric[java.lang.Long](testFile.key, "test_execution_time", 123l))
   }
 }

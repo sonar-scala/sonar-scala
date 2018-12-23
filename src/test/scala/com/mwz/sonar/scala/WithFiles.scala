@@ -21,10 +21,16 @@ package com.mwz.sonar.scala
 import java.io.File
 import java.nio.file.{Files, Path}
 
-trait WithFile {
-  def withFile(path: Path)(test: File => Any): Unit = {
-    val file = Files.createFile(path).toFile
-    try test(file)
-    finally Files.deleteIfExists(path)
+trait WithFiles {
+  def withFiles(paths: String*)(test: Seq[File] => Any): Unit = {
+    val tmpDir: Path = Files.createTempDirectory("")
+    val files: Seq[File] = paths.map { path =>
+      Files.createFile(tmpDir.resolve(path)).toFile
+    }
+    try test(files)
+    finally {
+      files.foreach(f => Files.deleteIfExists(f.toPath))
+      Files.deleteIfExists(tmpDir)
+    }
   }
 }

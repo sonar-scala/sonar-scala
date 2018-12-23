@@ -22,7 +22,7 @@ package junit
 import java.io.File
 import java.nio.file.{Path, Paths}
 
-import org.mockito.{ArgumentMatchersSugar, IdiomaticMockito, MockitoSugar}
+import org.mockito.{ArgumentMatchersSugar, MockitoSugar}
 import org.scalatest.{FlatSpec, LoneElement, Matchers}
 import org.sonar.api.batch.fs.InputFile
 import org.sonar.api.batch.fs.internal.{DefaultFileSystem, TestInputFileBuilder}

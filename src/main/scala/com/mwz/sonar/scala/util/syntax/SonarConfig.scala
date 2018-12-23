@@ -48,6 +48,7 @@ object SonarConfig {
      * Get a boolean property for the given key.
      * Defaults to false.
      */
+    @SuppressWarnings(Array("UnusedMethodParameter"))
     def getValue[T](key: String)(implicit ev: T =:= Boolean): Boolean = {
       configuration
         .get(key)

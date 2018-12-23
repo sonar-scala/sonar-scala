@@ -20,28 +20,24 @@ package com.mwz.sonar.scala
 package util
 package syntax
 
-import java.io.File
-import java.nio.file.Path
+import java.util.Optional
 
-import cats.syntax.flatMap._
-import cats.{Monad, MonoidK}
-import org.sonar.api.batch.fs.FileSystem
+/**
+ * Scala.Option <-> Java.Optional conversions.
+ */
+object Optionals {
 
-import scala.language.higherKinds
-import scala.util.{Failure, Success, Try}
+  /**
+   * Transform Scala Option to a Java Optional.
+   */
+  implicit final class OptionOps[T >: Null](val opt: Option[T]) extends AnyVal {
+    def toOptional: Optional[T] = Optional.ofNullable(opt.orNull)
+  }
 
-object FileSystem {
-  implicit final class FileSystemOps(val fs: FileSystem) extends AnyVal {
-
-    /**
-     * Resolve paths relative to the given file system.
-     */
-    def resolve[F[_]: Monad: MonoidK](toResolve: F[Path]): F[File] =
-      toResolve.flatMap[File] { path =>
-        Try(fs.resolvePath(path.toString)) match {
-          case Failure(_) => MonoidK[F].empty
-          case Success(f) => Monad[F].pure(f)
-        }
-      }
+  /**
+   * Transform Java Optional to a Scala Option.
+   */
+  implicit final class OptionalOps[T](val opt: Optional[T]) extends AnyVal {
+    def toOption: Option[T] = opt.map[Option[T]](Some(_)).orElse(None)
   }
 }

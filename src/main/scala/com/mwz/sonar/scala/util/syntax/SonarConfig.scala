@@ -24,10 +24,10 @@ import java.nio.file.{Path, Paths}
 
 import cats.instances.string._
 import cats.syntax.eq._
-import com.mwz.sonar.scala.util.JavaOptionals._
+import com.mwz.sonar.scala.util.syntax.Optionals._
 import org.sonar.api.config.Configuration
 
-object Config {
+object SonarConfig {
   implicit final class ConfigOps(val configuration: Configuration) extends AnyVal {
 
     /**

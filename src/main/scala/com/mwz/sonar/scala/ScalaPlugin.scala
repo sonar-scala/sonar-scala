@@ -20,8 +20,8 @@ package com.mwz.sonar.scala
 
 import java.nio.file.{Path, Paths}
 
-import com.mwz.sonar.scala.util.JavaOptionals._
 import com.mwz.sonar.scala.util.Log
+import com.mwz.sonar.scala.util.syntax.Optionals._
 import org.sonar.api.Plugin
 import org.sonar.api.config.Configuration
 import org.sonar.api.resources.AbstractLanguage

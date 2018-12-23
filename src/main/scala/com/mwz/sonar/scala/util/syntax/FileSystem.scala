@@ -20,31 +20,28 @@ package com.mwz.sonar.scala
 package util
 package syntax
 
-import org.sonar.api.batch.fs.InputFile
-import org.sonar.api.batch.measure.Metric
-import org.sonar.api.batch.sensor.SensorContext
+import java.io.File
+import java.nio.file.Path
 
-import scala.language.implicitConversions
+import cats.syntax.flatMap._
+import cats.{Monad, MonoidK}
+import org.sonar.api.batch.fs.FileSystem
 
-trait SensorContextSyntax {
-  implicit final def sensorContextSyntax(context: SensorContext): SensorContextOps =
-    new SensorContextOps(context)
-}
+import scala.language.higherKinds
+import scala.util.{Failure, Success, Try}
 
-final class SensorContextOps(val context: SensorContext) extends AnyVal {
+object FileSystem {
+  implicit final class FileSystemOps(val fs: FileSystem) extends AnyVal {
 
-  /**
-   * Save a new measure for the given metric.
-   */
-  def saveMeasure[T <: java.io.Serializable](
-    file: InputFile,
-    metric: Metric[T],
-    value: T
-  ): Unit =
-    context
-      .newMeasure[T]
-      .on(file)
-      .forMetric(metric)
-      .withValue(value)
-      .save()
+    /**
+     * Resolve paths relative to the given file system.
+     */
+    def resolve[F[_]: Monad: MonoidK](toResolve: F[Path]): F[File] =
+      toResolve.flatMap[File] { path =>
+        Try(fs.resolvePath(path.toString)) match {
+          case Failure(_) => MonoidK[F].empty
+          case Success(f) => Monad[F].pure(f)
+        }
+      }
+  }
 }

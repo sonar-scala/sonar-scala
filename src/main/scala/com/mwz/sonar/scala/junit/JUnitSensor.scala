@@ -24,9 +24,9 @@ import java.nio.file.Path
 
 import cats.instances.list._
 import com.mwz.sonar.scala.util.Log
-import com.mwz.sonar.scala.util.syntax.config._
-import com.mwz.sonar.scala.util.syntax.fileSystem._
-import com.mwz.sonar.scala.util.syntax.sensorContext._
+import com.mwz.sonar.scala.util.syntax.Config._
+import com.mwz.sonar.scala.util.syntax.FileSystem._
+import com.mwz.sonar.scala.util.syntax.SensorContext._
 import org.sonar.api.batch.fs.{FileSystem, InputFile}
 import org.sonar.api.batch.sensor.{Sensor, SensorContext, SensorDescriptor}
 import org.sonar.api.config.Configuration

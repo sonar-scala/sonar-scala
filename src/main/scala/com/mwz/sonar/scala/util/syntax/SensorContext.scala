@@ -18,9 +18,28 @@
  */
 package com.mwz.sonar.scala
 package util
+package syntax
 
-package object syntax {
-  object config extends ConfigSyntax
-  object fileSystem extends FileSystemSyntax
-  object sensorContext extends SensorContextSyntax
+import org.sonar.api.batch.fs.InputFile
+import org.sonar.api.batch.measure.Metric
+import org.sonar.api.batch.sensor.SensorContext
+
+object SensorContext {
+  implicit final class SensorContextOps(val context: SensorContext) extends AnyVal {
+
+    /**
+     * Save a new measure for the given metric.
+     */
+    def saveMeasure[T <: java.io.Serializable](
+      file: InputFile,
+      metric: Metric[T],
+      value: T
+    ): Unit =
+      context
+        .newMeasure[T]
+        .on(file)
+        .forMetric(metric)
+        .withValue(value)
+        .save()
+  }
 }

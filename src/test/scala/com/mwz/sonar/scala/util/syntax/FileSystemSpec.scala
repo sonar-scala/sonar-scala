@@ -20,31 +20,26 @@ package com.mwz.sonar.scala
 package util
 package syntax
 
-import java.io.File
-import java.nio.file.Path
+import java.nio.file.{Path, Paths}
 
-import cats.syntax.flatMap._
-import cats.{Monad, MonoidK}
-import org.sonar.api.batch.fs.FileSystem
+import cats.instances.list._
+import cats.instances.option._
+import com.mwz.sonar.scala.util.syntax.FileSystem._
+import org.scalatest.{FlatSpec, Matchers, OptionValues}
+import org.sonar.api.batch.fs.internal.DefaultFileSystem
 
-import scala.language.{higherKinds, implicitConversions}
-import scala.util.{Failure, Success, Try}
+class FileSystemSpec extends FlatSpec with Matchers with OptionValues {
+  it should "attempt to resolve paths" in {
+    val fs = new DefaultFileSystem(Paths.get("./"))
 
-trait FileSystemSyntax {
-  implicit final def fileSystemOps(fs: FileSystem): FileSystemOps =
-    new FileSystemOps(fs)
-}
+    val paths = List(Paths.get("path/1"), Paths.get("path/2"))
+    fs.resolve(paths) shouldBe List(
+      Paths.get("./").resolve("path/1").toAbsolutePath.normalize.toFile,
+      Paths.get("./").resolve("path/2").toAbsolutePath.normalize.toFile
+    )
 
-final class FileSystemOps(val fs: FileSystem) extends AnyVal {
-
-  /**
-   * Resolve paths relative to the given file system.
-   */
-  def resolve[F[_]: Monad: MonoidK](toResolve: F[Path]): F[File] =
-    toResolve.flatMap[File] { path =>
-      Try(fs.resolvePath(path.toString)) match {
-        case Failure(_) => MonoidK[F].empty
-        case Success(f) => Monad[F].pure(f)
-      }
-    }
+    val path: Option[Path] = Some(Paths.get("another/path"))
+    fs.resolve(path).value shouldBe
+    Paths.get("./").resolve("another/path").toAbsolutePath.normalize.toFile
+  }
 }

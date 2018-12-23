@@ -25,10 +25,14 @@ import java.nio.file.{Path, Paths}
 import cats.instances.list._
 import cats.instances.option._
 import com.mwz.sonar.scala.util.syntax.SonarFileSystem._
+import org.mockito.ArgumentMatchers._
+import org.mockito.Mockito._
+import org.scalatest.mockito.MockitoSugar
 import org.scalatest.{FlatSpec, Matchers, OptionValues}
+import org.sonar.api.batch.fs.FileSystem
 import org.sonar.api.batch.fs.internal.DefaultFileSystem
 
-class SonarFileSystemSpec extends FlatSpec with Matchers with OptionValues {
+class SonarFileSystemSpec extends FlatSpec with Matchers with OptionValues with MockitoSugar {
   it should "attempt to resolve paths" in {
     val fs = new DefaultFileSystem(Paths.get("./"))
 
@@ -41,5 +45,14 @@ class SonarFileSystemSpec extends FlatSpec with Matchers with OptionValues {
     val path: Option[Path] = Some(Paths.get("another/path"))
     fs.resolve(path).value shouldBe
     Paths.get("./").resolve("another/path").toAbsolutePath.normalize.toFile
+  }
+
+  it should "handle exceptions gracefully" in {
+    val fs = mock[FileSystem]
+    val path = List(Paths.get("path"))
+
+    when(fs.resolvePath(any())).thenThrow(new RuntimeException())
+
+    fs.resolve(path) shouldBe empty
   }
 }

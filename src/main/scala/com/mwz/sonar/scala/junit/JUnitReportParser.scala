@@ -59,15 +59,14 @@ final class JUnitReportParser(fileSystem: FileSystem) extends JUnitReportParserA
    * Get report files - xml files starting with "TEST-".
    */
   private[junit] def reportFiles(directories: List[File]): List[File] = {
-    val reportFiles: List[File] = directories.filter(_.isDirectory).flatMap { dir =>
-      dir.listFiles(
-        (_, name) =>
-          !name.startsWith("TEST-") &&
-          !name.startsWith("TESTS-") &&
-          name.endsWith(".xml")
-        // TODO: Is this also the case for the Maven surefire plugin?
-      )
-    }
+    val reportFiles: List[File] =
+      directories
+        .filter(_.isDirectory)
+        .flatMap { dir =>
+          // Sbt creates files without the "TEST-" prefix unlike the mvn surefire plugin.
+          // Also filter out the aggregate report starting with a "TESTS-" prefix.
+          dir.listFiles((_, name) => !name.startsWith("TESTS-") && name.endsWith(".xml"))
+        }
 
     if (directories.isEmpty)
       log.error(s"The paths ${directories.mkString(", ")} are not valid directories.")

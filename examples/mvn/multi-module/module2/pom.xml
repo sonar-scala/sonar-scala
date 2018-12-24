@@ -9,5 +9,8 @@
         <artifactId>example-mvn-multi-module</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
+    <properties>
+        <sonar.projectName>Module 2</sonar.projectName>
+    </properties>
     <artifactId>mvn-multi-module-module2</artifactId>
 </project>

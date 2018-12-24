@@ -113,7 +113,7 @@ final class JUnitSensor(
 
     reports.foreach {
       case (file, report) =>
-        log.debug(s"Saving junit test metrics for $file.")
+        log.info(s"Saving junit test metrics for $file.")
         context.saveMeasure[Integer](file, CoreMetrics.SKIPPED_TESTS, report.skipped)
         context.saveMeasure[Integer](file, CoreMetrics.TESTS, report.tests - report.skipped)
         context.saveMeasure[Integer](file, CoreMetrics.TEST_ERRORS, report.errors)

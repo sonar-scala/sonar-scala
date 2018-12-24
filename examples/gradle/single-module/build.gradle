@@ -25,6 +25,8 @@ sonarqube {
     properties {
         property "sonar.sourceEncoding", "UTF-8"
         property "sonar.sources", "src/main/scala"
+        property "sonar.tests", "src/test/scala"
+        property "sonar.junit.reportPaths", "build/test-results/test"
         property "sonar.scala.version", "2.12"
         property "sonar.scala.scoverage.reportPath", "build/reports/scoverage/scoverage.xml"
     }

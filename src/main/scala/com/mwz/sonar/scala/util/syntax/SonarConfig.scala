@@ -34,15 +34,16 @@ object SonarConfig {
      * Get a list of paths for the given key.
      * Fall back to the default value.
      */
-    def getPaths(key: String, default: String): List[Path] =
-      configuration
-        .get(key)
-        .toOption
-        .filter(_.nonEmpty)
-        .getOrElse(default)
-        .split(',') // scalastyle:ignore org.scalastyle.scalariform.NamedArgumentChecker
-        .map(p => Paths.get(p.trim))
-        .toList
+    def getPaths(key: String, default: List[Path]): List[Path] = {
+      val values: List[String] =
+        configuration
+          .getStringArray(key)
+          .filter(_.nonEmpty)
+          .toList
+
+      if (values.isEmpty) default
+      else values.map(p => Paths.get(p.trim))
+    }
 
     /**
      * Get a boolean property for the given key.

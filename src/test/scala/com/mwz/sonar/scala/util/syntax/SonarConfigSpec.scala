@@ -31,12 +31,13 @@ class SonarConfigSpec extends FlatSpec with Matchers {
     val conf = new MapSettings()
       .setProperty("path", "this/is/a/path, another/path")
       .asConfig()
+    val defaultPath = List(Paths.get("default/path"), Paths.get("default/path2"))
 
-    conf.getPaths("path", "default/path") shouldBe List(
+    conf.getPaths("path", defaultPath) shouldBe List(
       Paths.get("this/is/a/path"),
       Paths.get("another/path")
     )
-    conf.getPaths("not.a.path", "default/path") shouldBe List(Paths.get("default/path"))
+    conf.getPaths("not.a.path", defaultPath) shouldBe defaultPath
   }
 
   it should "get a boolean" in {

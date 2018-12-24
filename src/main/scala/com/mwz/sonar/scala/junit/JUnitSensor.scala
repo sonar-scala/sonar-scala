@@ -20,7 +20,7 @@ package com.mwz.sonar.scala
 package junit
 
 import java.io.File
-import java.nio.file.Path
+import java.nio.file.{Path, Paths}
 
 import cats.instances.list._
 import com.mwz.sonar.scala.util.Log
@@ -40,7 +40,7 @@ import scala.collection.JavaConverters._
  */
 final class JUnitSensor(
   config: Configuration,
-  fs: FileSystem, // TODO: Is the injected fileSystem different from context.fileSystem?
+  fs: FileSystem,
   untTestsReportParser: JUnitReportParserAPI
 ) extends Sensor {
   import JUnitSensor._ // scalastyle:ignore org.scalastyle.scalariform.ImportGroupingChecker
@@ -130,9 +130,9 @@ final class JUnitSensor(
 object JUnitSensor {
   val SensorName = "Scala JUnit Sensor"
   val TestsPropertyKey = "sonar.tests"
-  val DefaultTests = "src/test/scala"
+  val DefaultTests = List(Paths.get("src/test/scala"))
   val ReportsPropertyKey = "sonar.junit.reportPaths"
-  val DefaultReportPaths = "target/test-reports"
+  val DefaultReportPaths = List(Paths.get("target/test-reports"))
   val DisablePropertyKey = "sonar.junit.disable"
 
   private[junit] def testPaths(conf: Configuration): List[Path] =

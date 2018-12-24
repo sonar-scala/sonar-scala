@@ -63,7 +63,7 @@ private[qualityprofiles] object RecommendedQualityProfile {
       "org.scalastyle.scalariform.IllegalImportsChecker" -> Severity.MAJOR,
       "org.scalastyle.scalariform.NullChecker" -> Severity.MAJOR,
       "org.scalastyle.scalariform.VarFieldChecker" -> Severity.MAJOR,
-      "org.scalastyle.scalariform.VarLocalChecker" -> Severity.MAJOR,
+      "org.scalastyle.scalariform.VarLocalChecker" -> Severity.MAJOR
     ),
     params = Map(
       // Scalastyle

@@ -27,6 +27,7 @@ import org.sonar.api.batch.ScannerSide
 import org.sonar.api.batch.fs.{FilePredicate, FileSystem, InputFile}
 
 import scala.collection.JavaConverters._
+import scala.util.Try
 import scala.xml.{Elem, XML}
 
 trait JUnitReportParserAPI {
@@ -79,19 +80,18 @@ final class JUnitReportParser(fileSystem: FileSystem) extends JUnitReportParserA
   /**
    * Parse report files.
    */
-  private[junit] def parseReportFiles(reports: List[File]): List[JUnitReport] = {
+  private[junit] def parseReportFiles(reports: List[File]): List[JUnitReport] =
     reports.map { file =>
       val xml: Elem = XML.loadFile(file)
       JUnitReport(
         name = xml \@ "name",
-        tests = (xml \@ "tests").toInt,
-        errors = (xml \@ "errors").toInt,
-        failures = (xml \@ "failures").toInt,
-        skipped = (xml \@ "skipped").toInt,
-        time = (xml \@ "time").toFloat
+        tests = Try((xml \@ "tests").toInt).toOption.getOrElse(0),
+        errors = Try((xml \@ "errors").toInt).toOption.getOrElse(0),
+        failures = Try((xml \@ "failures").toInt).toOption.getOrElse(0),
+        skipped = Try((xml \@ "skipped").toInt).toOption.getOrElse(0),
+        time = Try((xml \@ "time").toFloat).toOption.getOrElse(0)
       )
     }
-  }
 
   /**
    * Convert package names into files.
@@ -99,7 +99,7 @@ final class JUnitReportParser(fileSystem: FileSystem) extends JUnitReportParserA
   private[junit] def resolveFiles(
     tests: List[Path],
     reports: List[JUnitReport]
-  ): Map[InputFile, JUnitReport] = {
+  ): Map[InputFile, JUnitReport] =
     reports
       .groupBy(_.name)
       .flatMap {
@@ -122,5 +122,4 @@ final class JUnitReportParser(fileSystem: FileSystem) extends JUnitReportParserA
           // Collect all of the input files.
           inputFiles.flatMap(file => reports.headOption.map((file, _)))
       }
-  }
 }

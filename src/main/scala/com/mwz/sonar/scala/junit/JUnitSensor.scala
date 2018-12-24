@@ -60,7 +60,7 @@ final class JUnitSensor(
 
     // Get the test paths.
     val tests: List[Path] = testPaths(config)
-    log.debug(s"The source prefixes are: ${tests.mkString("[", ",", "]")}.")
+    log.debug(s"The tests prefixes are: ${tests.mkString("[", ",", "]")}.")
 
     // Get the junit report paths.
     val reports: List[Path] = reportPaths(config)

@@ -52,7 +52,6 @@ final class JUnitSensor(
       .name(SensorName)
       .onlyOnLanguage(Scala.LanguageKey)
       .onlyOnFileType(InputFile.Type.TEST)
-      .onlyWhenConfiguration(shouldEnableSensor)
   }
 
   override def execute(context: SensorContext): Unit = {
@@ -133,14 +132,10 @@ object JUnitSensor {
   val DefaultTests = List(Paths.get("src/test/scala"))
   val ReportsPropertyKey = "sonar.junit.reportPaths"
   val DefaultReportPaths = List(Paths.get("target/test-reports"))
-  val DisablePropertyKey = "sonar.junit.disable"
 
   private[junit] def testPaths(conf: Configuration): List[Path] =
     conf.getPaths(TestsPropertyKey, DefaultTests)
 
   private[junit] def reportPaths(conf: Configuration): List[Path] =
     conf.getPaths(ReportsPropertyKey, DefaultReportPaths)
-
-  private[junit] def shouldEnableSensor(conf: Configuration): Boolean =
-    !conf.getValue[Boolean](DisablePropertyKey)
 }

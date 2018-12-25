@@ -55,16 +55,6 @@ class JUnitSensorSpec
     }
   }
 
-  it should "read the 'disable' property" in {
-    val confDisabled = new MapSettings()
-      .setProperty("sonar.junit.disable", "true")
-      .asConfig()
-    JUnitSensor.shouldEnableSensor(confDisabled) shouldBe false
-
-    val confEnabled = new MapSettings().asConfig()
-    JUnitSensor.shouldEnableSensor(confEnabled) shouldBe true
-  }
-
   it should "get the test paths" in {
     val conf = new MapSettings()
       .setProperty("sonar.tests", "test/path1, test/path2")
@@ -100,30 +90,6 @@ class JUnitSensorSpec
     descriptor.`type` shouldBe InputFile.Type.TEST
     descriptor.languages.loneElement shouldBe "scala"
     descriptor.ruleRepositories shouldBe empty
-  }
-
-  it should "execute the sensor if the 'disable' flag wasn't set" in new Ctx {
-    val reportParser = mock[JUnitReportParserAPI]
-    val junitSensor = sensor(parser = reportParser)
-
-    val descriptor = new DefaultSensorDescriptor
-    junitSensor.describe(descriptor)
-    descriptor.configurationPredicate.test(context.config) shouldBe true
-
-    when(reportParser.parse(*, *))
-      .thenReturn(Map.empty[InputFile, JUnitReport])
-
-    junitSensor.execute(context)
-    verify(reportParser).parse(*, *)
-  }
-
-  it should "respect the 'disable' config property and and skip sonar execution if set to true" in new Ctx {
-    val conf = new MapSettings().setProperty("sonar.junit.disable", "true")
-    val junitSensor = sensor(settings = conf)
-
-    val descriptor = new DefaultSensorDescriptor
-    junitSensor.describe(descriptor)
-    descriptor.configurationPredicate.test(context.config) shouldBe false
   }
 
   it should "save test metrics for each input file" in new Ctx {

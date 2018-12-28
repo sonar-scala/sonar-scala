@@ -20,30 +20,10 @@ package com.mwz.sonar.scala
 package util
 
 import java.nio.file.{Path, Paths}
-import java.util.Optional
 
 import org.sonar.api.batch.fs.FileSystem
 
 import scala.language.implicitConversions
-
-/**
- *  Scala.Option <-> Java.Optional conversions.
- *  @note Taken from https://gist.github.com/julienroubieu/fbb7e1467ab44203a09f.
- */
-object JavaOptionals {
-  implicit def toRichOption[T >: Null](opt: Option[T]): RichOption[T] = new RichOption[T](opt)
-  implicit def toRichOptional[T](optional: Optional[T]): RichOptional[T] = new RichOptional[T](optional)
-}
-
-/** Transform this Option to an equivalent Java Optional */
-class RichOption[T >: Null](opt: Option[T]) {
-  def toOptional: Optional[T] = Optional.ofNullable(opt.orNull)
-}
-
-/** Transform this Optional to an equivalent Scala Option */
-class RichOptional[T](opt: Optional[T]) {
-  def toOption: Option[T] = if (opt.isPresent) Some(opt.get()) else None
-}
 
 /**
  * Various Path utilities.
@@ -70,7 +50,7 @@ object PathUtils {
 
   /**
    * Returns the module base path relative to the current working directory
-   * */
+   */
   def getModuleBaseDirectory(fs: FileSystem): Path = {
     val moduleAbsolutePath = Paths.get(fs.baseDir().getAbsolutePath).normalize
     val currentWorkdirAbsolutePath = PathUtils.cwd

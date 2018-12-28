@@ -17,14 +17,27 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 package com.mwz.sonar.scala
+package util
+package syntax
 
-import java.io.File
-import java.nio.file.{Files, Path}
+import java.util.Optional
 
-trait WithFile {
-  def withFile(path: Path)(test: File => Any): Unit = {
-    val file = Files.createFile(path).toFile
-    try test(file)
-    finally Files.deleteIfExists(path)
+/**
+ * Scala.Option <-> Java.Optional conversions.
+ */
+object Optionals {
+
+  /**
+   * Transform Scala Option to a Java Optional.
+   */
+  implicit final class OptionOps[T >: Null](val opt: Option[T]) extends AnyVal {
+    def toOptional: Optional[T] = Optional.ofNullable(opt.orNull)
+  }
+
+  /**
+   * Transform Java Optional to a Scala Option.
+   */
+  implicit final class OptionalOps[T](val opt: Optional[T]) extends AnyVal {
+    def toOption: Option[T] = opt.map[Option[T]](Some(_)).orElse(None)
   }
 }

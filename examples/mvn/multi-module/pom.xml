@@ -23,12 +23,12 @@
 
         <sonar.projectName>[example] Maven Multi Module</sonar.projectName>
         <sonar.sources>src/main/scala</sonar.sources>
+        <sonar.tests>src/test/scala</sonar.tests>
+        <sonar.junit.reportPaths>target/surefire-reports</sonar.junit.reportPaths>
         <sonar.sourceEncoding>UTF-8</sonar.sourceEncoding>
         <sonar.scala.version>2.12</sonar.scala.version>
         <sonar.scala.scoverage.reportPath>target/scoverage.xml</sonar.scala.scoverage.reportPath>
         <sonar.modukes>module1,module2</sonar.modukes>
-        <module1.sonar.projectName>Module 1</module1.sonar.projectName>
-        <module2.sonar.projectName>Module 2</module2.sonar.projectName>
     </properties>
 
     <dependencies>

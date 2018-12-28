@@ -17,27 +17,20 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 package com.mwz.sonar.scala
-package util
 
-import org.sonar.api.utils.log.{Logger, Loggers}
+import java.io.File
+import java.nio.file.{Files, Path}
 
-trait Log {
-  def debug(s: String): Unit
-  def info(s: String): Unit
-  def warn(s: String): Unit
-  def error(s: String): Unit
-}
-
-object Log {
-  def apply[T](clazz: Class[T], module: String): Log = Log(clazz, Some(module))
-  def apply[T](clazz: Class[T], module: Option[String] = None): Log = {
-    val log: Logger = Loggers.get(clazz)
-    val prefix: String = "sonar-scala" + module.fold("")("-" + _)
-    new Log {
-      override def debug(s: String): Unit = log.debug(s"[$prefix] $s")
-      override def info(s: String): Unit = log.info(s"[$prefix] $s")
-      override def warn(s: String): Unit = log.warn(s"[$prefix] $s")
-      override def error(s: String): Unit = log.error(s"[$prefix] $s")
+trait WithFiles {
+  def withFiles(paths: String*)(test: Seq[File] => Any): Unit = {
+    val tmpDir: Path = Files.createTempDirectory("")
+    val files: Seq[File] = paths.map { path =>
+      Files.createFile(tmpDir.resolve(path)).toFile
+    }
+    try test(files)
+    finally {
+      files.foreach(f => Files.deleteIfExists(f.toPath))
+      Files.deleteIfExists(tmpDir)
     }
   }
 }

@@ -21,8 +21,8 @@ package scoverage
 
 import java.nio.file.{Path, Paths}
 
-import com.mwz.sonar.scala.util.JavaOptionals._
 import com.mwz.sonar.scala.util.PathUtils._
+import com.mwz.sonar.scala.util.syntax.Optionals._
 import com.mwz.sonar.scala.util.{Log, PathUtils}
 import org.sonar.api.batch.fs.{FileSystem, InputComponent, InputFile}
 import org.sonar.api.batch.sensor.{Sensor, SensorContext, SensorDescriptor}

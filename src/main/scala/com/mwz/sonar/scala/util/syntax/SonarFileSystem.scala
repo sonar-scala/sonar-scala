@@ -18,26 +18,30 @@
  */
 package com.mwz.sonar.scala
 package util
+package syntax
 
-import org.sonar.api.utils.log.{Logger, Loggers}
+import java.io.File
+import java.nio.file.Path
 
-trait Log {
-  def debug(s: String): Unit
-  def info(s: String): Unit
-  def warn(s: String): Unit
-  def error(s: String): Unit
-}
+import cats.syntax.flatMap._
+import cats.{Monad, MonoidK}
+import org.sonar.api.batch.fs.FileSystem
 
-object Log {
-  def apply[T](clazz: Class[T], module: String): Log = Log(clazz, Some(module))
-  def apply[T](clazz: Class[T], module: Option[String] = None): Log = {
-    val log: Logger = Loggers.get(clazz)
-    val prefix: String = "sonar-scala" + module.fold("")("-" + _)
-    new Log {
-      override def debug(s: String): Unit = log.debug(s"[$prefix] $s")
-      override def info(s: String): Unit = log.info(s"[$prefix] $s")
-      override def warn(s: String): Unit = log.warn(s"[$prefix] $s")
-      override def error(s: String): Unit = log.error(s"[$prefix] $s")
-    }
+import scala.language.higherKinds
+import scala.util.{Failure, Success, Try}
+
+object SonarFileSystem {
+  implicit final class FileSystemOps(val fs: FileSystem) extends AnyVal {
+
+    /**
+     * Resolve paths relative to the given file system.
+     */
+    def resolve[F[_]: Monad: MonoidK](toResolve: F[Path]): F[File] =
+      toResolve.flatMap[File] { path =>
+        Try(fs.resolvePath(path.toString)) match {
+          case Failure(_) => MonoidK[F].empty
+          case Success(f) => Monad[F].pure(f)
+        }
+      }
   }
 }

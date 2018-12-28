@@ -18,26 +18,21 @@
  */
 package com.mwz.sonar.scala
 package util
+package syntax
 
-import org.sonar.api.utils.log.{Logger, Loggers}
+import java.util.Optional
 
-trait Log {
-  def debug(s: String): Unit
-  def info(s: String): Unit
-  def warn(s: String): Unit
-  def error(s: String): Unit
-}
+import Optionals._
+import org.scalatest.{FlatSpec, Matchers, OptionValues}
 
-object Log {
-  def apply[T](clazz: Class[T], module: String): Log = Log(clazz, Some(module))
-  def apply[T](clazz: Class[T], module: Option[String] = None): Log = {
-    val log: Logger = Loggers.get(clazz)
-    val prefix: String = "sonar-scala" + module.fold("")("-" + _)
-    new Log {
-      override def debug(s: String): Unit = log.debug(s"[$prefix] $s")
-      override def info(s: String): Unit = log.info(s"[$prefix] $s")
-      override def warn(s: String): Unit = log.warn(s"[$prefix] $s")
-      override def error(s: String): Unit = log.error(s"[$prefix] $s")
-    }
+class OptionalsSpec extends FlatSpec with Matchers with OptionValues {
+  it should "convert Java Optional to Scala Option" in {
+    Optional.of("test").toOption.value shouldBe "test"
+    Optional.empty[String].toOption shouldBe empty
+  }
+
+  it should "convert Scala Option to Java Optional" in {
+    Some("test").toOptional shouldBe Optional.of("test")
+    None.toOptional shouldBe Optional.empty
   }
 }

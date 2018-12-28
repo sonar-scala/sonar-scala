@@ -7,6 +7,11 @@ import org.sonar.api.config.internal.MapSettings
 import scalariform.{ScalaVersion, ScalaVersions}
 
 class ScalaSpec extends FlatSpec with Matchers {
+  "getFileSuffixes" should "return Scala file suffixes" in {
+    val conf = new MapSettings().asConfig()
+    new Scala(conf).getFileSuffixes shouldBe Array(".scala")
+  }
+
   "getScalaVersion" should "return the available version, if properly set" in {
     val conf = new MapSettings()
       .setProperty("sonar.scala.version", "2.11.11")

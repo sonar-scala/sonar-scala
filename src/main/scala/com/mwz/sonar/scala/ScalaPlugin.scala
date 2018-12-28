@@ -20,9 +20,8 @@ package com.mwz.sonar.scala
 
 import java.nio.file.{Path, Paths}
 
-import cats.kernel.Eq
-import com.mwz.sonar.scala.util.JavaOptionals._
 import com.mwz.sonar.scala.util.Log
+import com.mwz.sonar.scala.util.syntax.Optionals._
 import org.sonar.api.Plugin
 import org.sonar.api.config.Configuration
 import org.sonar.api.resources.AbstractLanguage
@@ -52,7 +51,7 @@ object Scala {
   private val SourcesPropertyKey = "sonar.sources"
   private val DefaultSourcesFolder = "src/main/scala"
 
-  private val logger = Log(classOf[Scala], "sonar-scala")
+  private val logger = Log(classOf[Scala])
 
   def getScalaVersion(settings: Configuration): ScalaVersion = {
     def parseVersion(s: String): Option[ScalaVersion] = s match {
@@ -122,7 +121,10 @@ final class ScalaPlugin extends Plugin {
       // Scoverage.
       classOf[scoverage.ScoverageMetrics],
       classOf[scoverage.ScoverageReportParser],
-      classOf[scoverage.ScoverageSensor]
+      classOf[scoverage.ScoverageSensor],
+      // JUnit.
+      classOf[junit.JUnitReportParser],
+      classOf[junit.JUnitSensor]
     )
   }
 }

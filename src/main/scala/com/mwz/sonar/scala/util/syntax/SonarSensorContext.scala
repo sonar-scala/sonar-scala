@@ -18,26 +18,28 @@
  */
 package com.mwz.sonar.scala
 package util
+package syntax
 
-import org.sonar.api.utils.log.{Logger, Loggers}
+import org.sonar.api.batch.fs.InputFile
+import org.sonar.api.batch.measure.Metric
+import org.sonar.api.batch.sensor.SensorContext
 
-trait Log {
-  def debug(s: String): Unit
-  def info(s: String): Unit
-  def warn(s: String): Unit
-  def error(s: String): Unit
-}
+object SonarSensorContext {
+  implicit final class SensorContextOps(val context: SensorContext) extends AnyVal {
 
-object Log {
-  def apply[T](clazz: Class[T], module: String): Log = Log(clazz, Some(module))
-  def apply[T](clazz: Class[T], module: Option[String] = None): Log = {
-    val log: Logger = Loggers.get(clazz)
-    val prefix: String = "sonar-scala" + module.fold("")("-" + _)
-    new Log {
-      override def debug(s: String): Unit = log.debug(s"[$prefix] $s")
-      override def info(s: String): Unit = log.info(s"[$prefix] $s")
-      override def warn(s: String): Unit = log.warn(s"[$prefix] $s")
-      override def error(s: String): Unit = log.error(s"[$prefix] $s")
-    }
+    /**
+     * Save a new measure for the given metric.
+     */
+    def saveMeasure[T <: java.io.Serializable](
+      file: InputFile,
+      metric: Metric[T],
+      value: T
+    ): Unit =
+      context
+        .newMeasure[T]
+        .on(file)
+        .forMetric(metric)
+        .withValue(value)
+        .save()
   }
 }

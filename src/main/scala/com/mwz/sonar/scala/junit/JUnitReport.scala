@@ -17,27 +17,13 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 package com.mwz.sonar.scala
-package util
+package junit
 
-import org.sonar.api.utils.log.{Logger, Loggers}
-
-trait Log {
-  def debug(s: String): Unit
-  def info(s: String): Unit
-  def warn(s: String): Unit
-  def error(s: String): Unit
-}
-
-object Log {
-  def apply[T](clazz: Class[T], module: String): Log = Log(clazz, Some(module))
-  def apply[T](clazz: Class[T], module: Option[String] = None): Log = {
-    val log: Logger = Loggers.get(clazz)
-    val prefix: String = "sonar-scala" + module.fold("")("-" + _)
-    new Log {
-      override def debug(s: String): Unit = log.debug(s"[$prefix] $s")
-      override def info(s: String): Unit = log.info(s"[$prefix] $s")
-      override def warn(s: String): Unit = log.warn(s"[$prefix] $s")
-      override def error(s: String): Unit = log.error(s"[$prefix] $s")
-    }
-  }
-}
+private[junit] final case class JUnitReport(
+  name: String,
+  tests: Int,
+  errors: Int,
+  failures: Int,
+  skipped: Int,
+  time: Float
+)

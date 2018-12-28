@@ -22,9 +22,9 @@ package scapegoat
 import java.nio.file.{Path, Paths}
 
 import cats.implicits._
-import com.mwz.sonar.scala.util.JavaOptionals._
 import com.mwz.sonar.scala.util.Log
 import com.mwz.sonar.scala.util.PathUtils._
+import com.mwz.sonar.scala.util.syntax.Optionals._
 import org.sonar.api.batch.fs.{FileSystem, InputFile}
 import org.sonar.api.batch.sensor.{Sensor, SensorContext, SensorDescriptor}
 import org.sonar.api.config.Configuration

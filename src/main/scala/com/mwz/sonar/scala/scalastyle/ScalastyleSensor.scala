@@ -22,8 +22,8 @@ package scalastyle
 import java.io.File
 import java.nio.file.Paths
 
-import com.mwz.sonar.scala.util.JavaOptionals._
 import com.mwz.sonar.scala.util.Log
+import com.mwz.sonar.scala.util.syntax.Optionals._
 import org.scalastyle.{
   ConfigurationChecker,
   Directory,

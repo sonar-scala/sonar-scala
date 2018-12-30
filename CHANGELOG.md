@@ -1,12 +1,20 @@
 Changelog
 ===
+
+## [7.3.0](https://github.com/mwz/sonar-scala/releases/tag/v7.3.0) - 30.12.2018
+- Implemented a new sensor which saves unit test metrics such as unit test count, duration of each test and the number of skipped and failed tests. To use the new sensor, set the `sonar.tests` property which should point to directories containing tests (usually `src/test/scala`) and make sure you run your unit tests before you trigger sonar-scanner analysis. That's all you need to do in sbt unless you've changed the default location where sbt saves JUnit XML reports - then you'll also need to set the `sonar.junit.reportPaths` property (which defaults to `target/test-reports`). For projects using Gradle, setting both properties is necessary to make use of the sensor (Gradle outputs those in `build/test-results/test`), and Maven additionally requires the Surefire plugin to be installed. Please refer to the [sample](examples/) projects for example configuration for each build tool. (#143 - @mwz)
+- Fixed incorrect log messages about missing `sonar.scala.version` property. (#139 - @mwz)
+
 ## [6.7.0 LTS](https://github.com/mwz/sonar-scala/releases/tag/v6.7.0) - 09.12.2018
 - Backported features from the 7.x series - new `Recommended by sonar-scala` quality profile and cleaned up Scapegoat rule repository, see the notes from [7.2.0](https://github.com/mwz/sonar-scala/releases/tag/v7.2.0) release for more details. (#136 - @mwz)
+
 ## [7.2.0](https://github.com/mwz/sonar-scala/releases/tag/v7.2.0) - 03.12.2018
 - Added a new quality profile `Recommended by sonar-scala`, which is a combination of Scalastyle and Scapegoat rules. We recommend using this profile as it excludes any duplicate rules and contains custom instances of Scalastyle templates set up in accordance with the current style guides recommended by the community. (#130 - @mwz)
 - Cleaned up Scapegoat rule repository and quality profiles by removing any Scapegoat rules which are no longer active in the upstream project.  (#132 - @mwz)
+
 ## [7.1.0](https://github.com/mwz/sonar-scala/releases/tag/v7.1.0) - 19.11.2018
 - Added support for [SonarQube 7.4](https://www.sonarqube.org/sonarqube-7-4). (#127 - @mwz)
+
 ## [7.0.0](https://github.com/mwz/sonar-scala/releases/tag/v7.0.0) - 08.10.2018
 - Added support for [SonarQube 7.3](https://www.sonarqube.org/sonarqube-7-3). The current `6.x` series targeting *SonarQube 6.7 LTS* will be still maintained and will follow the SonarQube LTS lifecycle. (#120 - @mwz)
 - Removed the following:

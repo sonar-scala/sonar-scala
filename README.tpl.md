@@ -64,7 +64,7 @@ In addition to the above, the plugin reports the following custom metrics, which
 # Quality Rules and Profiles
 This plugin integrates 69 quality checks from [Scalastyle](http://www.scalastyle.org/rules-1.0.0.html) and 117 from [Scapegoat](https://github.com/sksamuel/scapegoat/tree/v1.3.8). 40 of the Scalastyle rules are defined without parameters, and the remaining 29 are rule templates, which allow you to set up custom rules by specifying the parameters yourself. Most of those are already activated for you with default values recommended by Scalastyle. Scapegoat rules don't contain any templates.
 
-Sonar-scala creates two rule repositories and four built-in quality profiles: `Scalastyle`, `Scapegoat` and a combination of those two `Scalastyle+Scapegoat` and `Recommended by sonar-scala`. The rules in the quality profiles are almost all activated, except for these which are broken in the upstream projects and had to be blacklisted.
+Sonar-scala creates two rules repositories and four built-in quality profiles: `Scalastyle`, `Scapegoat` and a combination of those two `Scalastyle+Scapegoat` and `Recommended by sonar-scala`. The rules in the quality profiles are almost all activated, except for those which are broken in the upstream projects and had to be blacklisted.
 
 To make changes to any of the rules, you can clone the quality profile of your choice and then you should be able to activate or deactivate rules, change rule severity and create more custom rules from the existing templates. Alternatively, you can create your quality profile and activate rules from any of the repositories using SonarQube rule filtering and bulk-change features available on the Rules page.
 
@@ -110,7 +110,7 @@ or simply `sbt sonarScan` if you use the [sbt-sonar](https://github.com/mwz/sbt-
 # Compatibility with SonarQube
 SonarQube | sonar-scala
 ----------|----------
-7.4       | [7.1](https://github.com/mwz/sonar-scala/releases/tag/v7.1.0), [7.2](https://github.com/mwz/sonar-scala/releases/tag/v7.2.0), [7.3](https://github.com/mwz/sonar-scala/releases/tag/v7.3.0)
+7.4       | [7.3](https://github.com/mwz/sonar-scala/releases/tag/v7.3.0)
 7.3       | [7.0](https://github.com/mwz/sonar-scala/releases/tag/v7.0.0)
 6.7 LTS   | 6.x (*latest [{{ltsVersion}}](https://github.com/mwz/sonar-scala/releases/tag/v{{ltsVersion}})*)
 

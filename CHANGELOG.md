@@ -1,7 +1,7 @@
 Changelog
 ===
 
-## [7.3.0](https://github.com/mwz/sonar-scala/releases/tag/v7.3.0) - 28.12.2018
+## [7.3.0](https://github.com/mwz/sonar-scala/releases/tag/v7.3.0) - 30.12.2018
 - Implemented a new sensor which saves unit test metrics such as unit test count, duration of each test and the number of skipped and failed tests. To use the new sensor, set the `sonar.tests` property which should point to directories containing tests (usually `src/test/scala`) and make sure you run your unit tests before you trigger sonar-scanner analysis. That's all you need to do in sbt unless you've changed the default location where sbt saves JUnit XML reports - then you'll also need to set the `sonar.junit.reportPaths` property (which defaults to `target/test-reports`). For projects using Gradle, setting both properties is necessary to make use of the sensor (Gradle outputs those in `build/test-results/test`), and Maven additionally requires the Surefire plugin to be installed. Please refer to the [sample](examples/) projects for example configuration for each build tool. (#143 - @mwz)
 - Fixed incorrect log messages about missing `sonar.scala.version` property. (#139 - @mwz)
 

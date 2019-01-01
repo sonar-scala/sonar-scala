@@ -1,13 +1,29 @@
+import java.time.Year
+
+import de.heikoseeberger.sbtheader.License
 import org.sonar.updatecenter.common.PluginManifest
 import sbt._
 import sbtrelease.ReleasePlugin.autoImport.ReleaseTransformations._
 import sbtrelease.Version.Bump.Minor
 
+enablePlugins(AutomateHeaderPlugin)
+
 name := "sonar-scala"
 organization := "com.github.mwz"
 homepage := Some(url("https://github.com/mwz/sonar-scala"))
-licenses := Seq("LGPL-3.0" -> url("https://opensource.org/licenses/lgpl-3.0.html"))
 description := "Enables analysis of Scala projects with SonarQube."
+
+// Licence
+organizationName := "All sonar-scala contributors"
+startYear := Some(2018)
+licenses := Seq("LGPL-3.0" -> url("https://www.gnu.org/licenses/lgpl-3.0.en.html"))
+headerLicense := Some(
+  License.LGPLv3(
+    s"${startYear.value.get}-${Year.now}",
+    organizationName.value
+  )
+)
+excludeFilter.in(headerResources) := "*.scala"
 
 // Compile options
 scalaVersion := "2.12.7"

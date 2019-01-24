@@ -208,6 +208,7 @@ class ScalastyleSensorSpec
     val activeRules: ActiveRules =
       new ActiveRulesBuilder()
         .create(RuleKey.of("sonar-scala-scalastyle", "rule1"))
+        .setLanguage("scala")
         .setInternalKey("rule1")
         .setSeverity(ErrorLevel.toString)
         .setParam("param1", "value1")
@@ -236,6 +237,50 @@ class ScalastyleSensorSpec
     result.internalKey === "rule1"
     result.severity === ErrorLevel.toString
     result.params.asScala === Map("param1" -> "value1")
+  }
+
+  it should "look up a rules by key and not internal key" in new Ctx {
+    val activeRules: ActiveRules =
+      new ActiveRulesBuilder()
+        .create(RuleKey.of("sonar-scala-scalastyle", "rule1"))
+        .setLanguage("scala")
+        .setInternalKey("org.scalastyle.file.RegexChecker-template")
+        .setSeverity(ErrorLevel.toString)
+        .setTemplateRuleKey("sonar-scala-scalastyle:org.scalastyle.file.RegexChecker-template")
+        .setParam("line", "false")
+        .setParam("regex", ".*")
+        .setParam("ruleClass", "org.scalastyle.file.RegexChecker")
+        .activate()
+        .build()
+
+    val fileSpec: FileSpec = new FileSpec {
+      def name: String = cwd.resolve("TestFile.scala").toString
+    }
+
+    val styleError = StyleError(
+      fileSpec,
+      (new EmptyClassChecker).getClass,
+      "rule1",
+      ErrorLevel,
+      List.empty,
+      lineNumber = None,
+      column = None,
+      customMessage = None
+    )
+
+    context.setActiveRules(activeRules)
+
+    val result: ActiveRule = ScalastyleSensor.ruleFromStyleError(context, styleError).value
+    result.language shouldEqual "scala"
+    result.ruleKey.rule shouldEqual "rule1"
+    result.internalKey shouldEqual "org.scalastyle.file.RegexChecker-template"
+    result.severity shouldEqual ErrorLevel.toString
+    result.params.asScala shouldEqual
+    Map(
+      "line" -> "false",
+      "regex" -> ".*",
+      "ruleClass" -> "org.scalastyle.file.RegexChecker"
+    )
   }
 
   it should "not open any issues if there are no active rules" in new Ctx {

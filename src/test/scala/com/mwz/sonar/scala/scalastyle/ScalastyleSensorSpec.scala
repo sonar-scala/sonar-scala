@@ -233,10 +233,10 @@ class ScalastyleSensorSpec
     context.setActiveRules(activeRules)
 
     val result: ActiveRule = ScalastyleSensor.ruleFromStyleError(context, styleError).value
-    result.language === "scala"
-    result.internalKey === "rule1"
-    result.severity === ErrorLevel.toString
-    result.params.asScala === Map("param1" -> "value1")
+    result.language shouldEqual "scala"
+    result.internalKey shouldEqual "rule1"
+    result.severity shouldEqual ErrorLevel.toString
+    result.params.asScala shouldEqual Map("param1" -> "value1")
   }
 
   it should "look up a rules by key and not internal key" in new Ctx {

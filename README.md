@@ -11,8 +11,8 @@ sonar-scala
 [circleci]: https://circleci.com/gh/mwz/sonar-scala
 [coverage-badge]: https://sonar.sonar-scala.com/api/badges/measure?key=sonar-scala&metric=coverage
 [coverage]: https://sonar.sonar-scala.com/component_measures?id=sonar-scala&metric=coverage
-[bintray-badge]: https://img.shields.io/badge/Download-7.3.0-blue.svg
-[bintray]: https://bintray.com/mwz/maven/sonar-scala/7.3.0/link
+[bintray-badge]: https://img.shields.io/badge/Download-7.3.1-blue.svg
+[bintray]: https://bintray.com/mwz/maven/sonar-scala/7.3.1/link
 [bintray-badge-lts]: https://img.shields.io/badge/Download-6.7.0_(LTS)-blue.svg
 [bintray-lts]: https://bintray.com/mwz/maven/sonar-scala/6.7.0/link
 [bintray-stats-badge]: https://img.shields.io/badge/dynamic/json.svg?uri=https://bintray.com/statistics/packageStatistics?pkgPath=/mwz/maven/sonar-scala&query=$.totalDownloads&label=Downloads+(last+30+days)&colorB=green
@@ -107,7 +107,7 @@ or simply `sbt sonarScan` if you use the [sbt-sonar](https://github.com/mwz/sbt-
 # Compatibility with SonarQube
 SonarQube | sonar-scala
 ----------|----------
-7.4       | [7.3](https://github.com/mwz/sonar-scala/releases/tag/v7.3.0)
+7.4       | [7.3.1](https://github.com/mwz/sonar-scala/releases/tag/v7.3.1)
 7.3       | [7.0](https://github.com/mwz/sonar-scala/releases/tag/v7.0.0)
 6.7 LTS   | 6.x (*latest [6.7.0](https://github.com/mwz/sonar-scala/releases/tag/v6.7.0)*)
 

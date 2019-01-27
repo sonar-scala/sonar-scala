@@ -6,7 +6,6 @@ sonar-scala
 [![bintray-badge-lts][]][bintray-lts]
 [![bintray-stats-badge][]][bintray-stats]
 [![gitter-badge][]][gitter]
-[![insightio-badge][]][insightio]
 
 [circleci-badge]: https://img.shields.io/circleci/project/github/mwz/sonar-scala/master.svg?label=Build
 [circleci]: https://circleci.com/gh/mwz/sonar-scala
@@ -20,8 +19,6 @@ sonar-scala
 [bintray-stats]: https://bintray.com/mwz/maven/sonar-scala#statistics
 [gitter-badge]: https://img.shields.io/gitter/room/sonar-scala/sonar-scala.svg?colorB=46BC99&label=Chat
 [gitter]: https://gitter.im/sonar-scala/sonar-scala
-[insightio-badge]: https://img.shields.io/badge/Insight.io-Ready-brightgreen.svg
-[insightio]: https://insight.io/github.com/mwz/sonar-scala
 
 
 **SonarQube plugin for static code analysis of Scala projects.**
@@ -110,7 +107,7 @@ or simply `sbt sonarScan` if you use the [sbt-sonar](https://github.com/mwz/sbt-
 # Compatibility with SonarQube
 SonarQube | sonar-scala
 ----------|----------
-7.4       | [7.3](https://github.com/mwz/sonar-scala/releases/tag/v7.3.0)
+7.4       | [7.3.1](https://github.com/mwz/sonar-scala/releases/tag/v7.3.1)
 7.3       | [7.0](https://github.com/mwz/sonar-scala/releases/tag/v7.0.0)
 6.7 LTS   | 6.x (*latest [{{ltsVersion}}](https://github.com/mwz/sonar-scala/releases/tag/v{{ltsVersion}})*)
 

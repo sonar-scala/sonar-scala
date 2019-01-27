@@ -43,6 +43,7 @@ import org.sonar.api.batch.sensor.issue.NewIssue
 import org.sonar.api.batch.sensor.{Sensor, SensorContext, SensorDescriptor}
 import org.sonar.api.config.Configuration
 import org.sonar.api.profiles.{RulesProfile => QualityProfile}
+import org.sonar.api.rule.RuleKey
 
 import scala.collection.JavaConverters._
 import scala.collection.immutable.Seq
@@ -192,7 +193,7 @@ private[scalastyle] object ScalastyleSensor {
     Option(
       context
         .activeRules()
-        .findByInternalKey(ScalastyleRulesRepository.RepositoryKey, styleError.key)
+        .find(RuleKey.of(ScalastyleRulesRepository.RepositoryKey, styleError.key))
     )
 
   /**

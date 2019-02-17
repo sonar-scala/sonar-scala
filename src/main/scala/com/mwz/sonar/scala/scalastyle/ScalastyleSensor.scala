@@ -40,10 +40,11 @@ import org.scalastyle.{
 import org.sonar.api.batch.fs.{FilePredicates, InputFile}
 import org.sonar.api.batch.rule.{ActiveRule, Severity}
 import org.sonar.api.batch.sensor.issue.NewIssue
-import org.sonar.api.batch.sensor.{Sensor, SensorContext, SensorDescriptor}
+import org.sonar.api.batch.sensor.{SensorContext, SensorDescriptor}
 import org.sonar.api.config.Configuration
 import org.sonar.api.profiles.{RulesProfile => QualityProfile}
 import org.sonar.api.rule.RuleKey
+import org.sonar.api.scanner.sensor.ProjectSensor
 
 import scala.collection.JavaConverters._
 import scala.collection.immutable.Seq
@@ -54,7 +55,7 @@ import scala.collection.immutable.Seq
 final class ScalastyleSensor(
   qualityProfile: QualityProfile,
   scalastyleChecker: ScalastyleCheckerAPI
-) extends Sensor {
+) extends ProjectSensor {
   private[this] val log = Log(classOf[ScalastyleSensor], "scalastyle")
 
   override def describe(descriptor: SensorDescriptor): Unit = {

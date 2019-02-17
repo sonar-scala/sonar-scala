@@ -40,17 +40,15 @@ object PathUtils {
     if (fullOrSuffix.isAbsolute) base.relativize(fullOrSuffix)
     else next.resolve(fullOrSuffix)
 
-  /**
-   * Strips out prefix from the path if it starts with the prefix.
-   */
+  /** Strips out prefix from the path if it starts with the prefix. */
   def stripOutPrefix(prefix: Path, path: Path): Path =
-    if (path.startsWith(prefix)) prefix.relativize(path)
-    else path
+    if (path.startsWith(prefix))
+      prefix.relativize(path)
+    else
+      path
 
-  /**
-   * Returns the module base path relative to the current working directory
-   */
-  def getModuleBaseDirectory(fs: FileSystem): Path = {
+  /** Returns the project base path relative to the current working directory. */
+  def getProjectBaseDirectory(fs: FileSystem): Path = {
     val moduleAbsolutePath = Paths.get(fs.baseDir().getAbsolutePath).normalize
     val currentWorkdirAbsolutePath = PathUtils.cwd
     currentWorkdirAbsolutePath.relativize(moduleAbsolutePath)

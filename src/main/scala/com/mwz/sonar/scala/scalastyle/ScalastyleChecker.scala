@@ -19,7 +19,7 @@ package com.mwz.sonar.scala
 package scalastyle
 
 import org.scalastyle.{FileSpec, Message, ScalastyleConfiguration, ScalastyleChecker => Checker}
-import org.sonar.api.batch.ScannerSide
+import org.sonar.api.scanner.ScannerSide
 
 trait ScalastyleCheckerAPI {
   private[scalastyle] def checkFiles(

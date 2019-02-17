@@ -20,7 +20,7 @@ package scapegoat
 
 import java.nio.file.{Path, Paths}
 
-import org.sonar.api.batch.ScannerSide
+import org.sonar.api.scanner.ScannerSide
 
 import scala.xml.XML
 

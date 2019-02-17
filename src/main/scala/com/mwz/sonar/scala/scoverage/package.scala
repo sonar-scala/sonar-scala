@@ -20,13 +20,13 @@ package com.mwz.sonar.scala
 package object scoverage {
 
   /**
-   *  The coverage information of an entire module.
+   *  The coverage information of an entire project.
    *  It is composed of:
-   *    - the overall [[ScoverageMetrics]] of the module.
-   *    - the coverage information of each file of the module.
+   *    - the overall [[ScoverageMetrics]] of the project.
+   *    - the coverage information of each file of the project.
    */
-  private[scoverage] final case class ModuleCoverage(
-    moduleScoverage: Scoverage,
+  private[scoverage] final case class ProjectCoverage(
+    projectScoverage: Scoverage,
     filesCoverage: Map[String, FileCoverage]
   )
 
@@ -34,7 +34,7 @@ package object scoverage {
    *  The coverage information of a file.
    *  It is composed of:
    *    - the overall [[ScoverageMetrics]] of the file.
-   *    - the coverage information of each line of the module.
+   *    - the coverage information of each line of the file.
    */
   private[scoverage] final case class FileCoverage(
     fileScoverage: Scoverage,
@@ -55,7 +55,7 @@ package object scoverage {
    */
   private[scoverage] type LinesCoverage = Map[Int, Int]
 
-  /** [[ScoverageMetrics]] of a component */
+  /** [[ScoverageMetrics]] of a component. */
   private[scoverage] final case class Scoverage(
     totalStatements: Int,
     coveredStatements: Int,
@@ -63,7 +63,7 @@ package object scoverage {
     branchCoverage: Double
   ) {
 
-    /** Merges two scoverages metrics in one */
+    /** Merges two scoverages metrics in one. */
     private[scoverage] def +(that: Scoverage): Scoverage = {
       val mergedTotalStatements = this.totalStatements + that.totalStatements
       val mergedCoveredStatements = this.coveredStatements + that.coveredStatements

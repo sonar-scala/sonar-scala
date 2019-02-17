@@ -144,7 +144,7 @@ class ScapegoatSensorSpec
     filesystem.add(testFileA)
 
     val moduleFile =
-      scapegoatSensor.getModuleFile("com/mwz/sonar/scala/scapegoat/TestFileA.scala", filesystem)
+      scapegoatSensor.getProjectFile("com/mwz/sonar/scala/scapegoat/TestFileA.scala", filesystem)
 
     moduleFile.value shouldBe testFileA
   }
@@ -160,7 +160,7 @@ class ScapegoatSensorSpec
     filesystem.add(testFileA)
 
     val moduleFile =
-      scapegoatSensor.getModuleFile("com/mwz/sonar/scala/scapegoat/TestFileA.scala", filesystem)
+      scapegoatSensor.getProjectFile("com/mwz/sonar/scala/scapegoat/TestFileA.scala", filesystem)
 
     moduleFile.value shouldBe testFileA
   }
@@ -169,7 +169,7 @@ class ScapegoatSensorSpec
     val filesystem = new DefaultFileSystem(Paths.get("./"))
 
     val moduleFile =
-      scapegoatSensor.getModuleFile("com/mwz/sonar/scala/scapegoat/TestFileA.scala", filesystem)
+      scapegoatSensor.getProjectFile("com/mwz/sonar/scala/scapegoat/TestFileA.scala", filesystem)
 
     moduleFile shouldBe None
   }

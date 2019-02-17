@@ -25,14 +25,17 @@ import com.mwz.sonar.scala.util.Log
 import com.mwz.sonar.scala.util.PathUtils._
 import com.mwz.sonar.scala.util.syntax.Optionals._
 import org.sonar.api.batch.fs.{FileSystem, InputFile}
-import org.sonar.api.batch.sensor.{Sensor, SensorContext, SensorDescriptor}
+import org.sonar.api.batch.sensor.{SensorContext, SensorDescriptor}
 import org.sonar.api.config.Configuration
+import org.sonar.api.scanner.sensor.ProjectSensor
 import scalariform.ScalaVersion
 
 import scala.util.{Failure, Success, Try}
 
 /** Main sensor for importing Scapegoat reports to SonarQube */
-final class ScapegoatSensor(scapegoatReportParser: ScapegoatReportParserAPI) extends Sensor {
+final class ScapegoatSensor(
+  scapegoatReportParser: ScapegoatReportParserAPI
+) extends ProjectSensor {
   import ScapegoatSensor._ // scalastyle:ignore org.scalastyle.scalariform.ImportGroupingChecker
 
   private[this] val log = Log(classOf[ScapegoatSensor], "scapegoat")
@@ -46,10 +49,10 @@ final class ScapegoatSensor(scapegoatReportParser: ScapegoatReportParserAPI) ext
       .onlyOnLanguage(Scala.LanguageKey)
       .onlyWhenConfiguration(shouldEnableSensor)
 
-  /** Saves the Scapegoat information of a module */
+  /** Saves the Scapegoat information of the project. */
   override def execute(context: SensorContext): Unit = {
-    val modulePath = getModuleBaseDirectory(context.fileSystem)
-    val reportPath = modulePath.resolve(getScapegoatReportPath(context.config))
+    val projectPath = getProjectBaseDirectory(context.fileSystem)
+    val reportPath = projectPath.resolve(getScapegoatReportPath(context.config))
 
     log.info("Initializing the Scapegoat sensor.")
     log.info(s"Loading the scapegoat report file: '$reportPath'.")
@@ -68,7 +71,7 @@ final class ScapegoatSensor(scapegoatReportParser: ScapegoatReportParserAPI) ext
     }
   }
 
-  /** Returns the path to the scapegoat report for this module */
+  /** Returns the path to the scapegoat report for this project. */
   private[scapegoat] def getScapegoatReportPath(settings: Configuration): Path = {
     val scalaVersion = Scala.getScalaVersion(settings)
     val defaultScapegoatReportPath = getDefaultScapegoatReportPath(scalaVersion)
@@ -103,7 +106,7 @@ final class ScapegoatSensor(scapegoatReportParser: ScapegoatReportParserAPI) ext
         else filename
       log.info(s"Saving the scapegoat issues for file '$relativeFile'.")
 
-      getModuleFile(relativeFile, filesystem) match {
+      getProjectFile(relativeFile, filesystem) match {
         case Some(file) =>
           scapegoatIssues foreach { scapegoatIssue =>
             log.debug(s"Saving the scapegoat issue: $scapegoatIssue.")
@@ -154,17 +157,18 @@ final class ScapegoatSensor(scapegoatReportParser: ScapegoatReportParserAPI) ext
     }
   }
 
-  /** Returns the module input file with the given filename */
-  private[scapegoat] def getModuleFile(filename: String, fs: FileSystem): Option[InputFile] = {
+  /** Returns the project input file with the given filename. */
+  private[scapegoat] def getProjectFile(filename: String, fs: FileSystem): Option[InputFile] = {
     val predicates = fs.predicates
-    val predicate = predicates.and(
-      predicates.hasLanguage(Scala.LanguageKey),
-      predicates.hasType(InputFile.Type.MAIN),
-      predicates
-        .matchesPathPattern(s"**/$filename") // scalastyle:ignore org.scalastyle.scalariform.NamedArgumentChecker
-    )
+    val pathPattern = s"**/$filename"
+    val predicate =
+      predicates.and(
+        predicates.hasLanguage(Scala.LanguageKey),
+        predicates.hasType(InputFile.Type.MAIN),
+        predicates.matchesPathPattern(pathPattern)
+      )
 
-    // catch both exceptions and null values
+    // Catch both exceptions and null values.
     Try(fs.inputFile(predicate)).fold(_ => None, file => Option(file))
   }
 }

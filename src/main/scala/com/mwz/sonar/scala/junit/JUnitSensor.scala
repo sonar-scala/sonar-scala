@@ -27,9 +27,10 @@ import com.mwz.sonar.scala.util.syntax.SonarConfig._
 import com.mwz.sonar.scala.util.syntax.SonarFileSystem._
 import com.mwz.sonar.scala.util.syntax.SonarSensorContext._
 import org.sonar.api.batch.fs.{FileSystem, InputFile}
-import org.sonar.api.batch.sensor.{Sensor, SensorContext, SensorDescriptor}
+import org.sonar.api.batch.sensor.{SensorContext, SensorDescriptor}
 import org.sonar.api.config.Configuration
 import org.sonar.api.measures.CoreMetrics
+import org.sonar.api.scanner.sensor.ProjectSensor
 
 import scala.collection.JavaConverters._
 
@@ -40,8 +41,8 @@ import scala.collection.JavaConverters._
 final class JUnitSensor(
   config: Configuration,
   fs: FileSystem,
-  untTestsReportParser: JUnitReportParserAPI
-) extends Sensor {
+  junitTestsReportParser: JUnitReportParserAPI
+) extends ProjectSensor {
   import JUnitSensor._ // scalastyle:ignore org.scalastyle.scalariform.ImportGroupingChecker
 
   private[this] val log = Log(classOf[JUnitSensor], "junit")
@@ -64,22 +65,6 @@ final class JUnitSensor(
     val reports: List[Path] = reportPaths(config)
     log.debug(s"The JUnit report paths are: ${reports.mkString("[", ",", "]")}.")
 
-    // Get test input files
-    val inputFiles: Iterable[InputFile] =
-      context.fileSystem
-        .inputFiles(
-          context.fileSystem.predicates.and(
-            context.fileSystem.predicates.hasLanguage(Scala.LanguageKey),
-            context.fileSystem.predicates.hasType(InputFile.Type.TEST)
-          )
-        )
-        .asScala
-
-    if (inputFiles.nonEmpty)
-      log.debug(s"Input test files: \n${inputFiles.mkString(", ")}")
-    else
-      log.warn(s"No test files found for module ${context.module.key}.")
-
     // Resolve test directories.
     val testDirectories: List[File] = fs.resolve(tests)
     if (testDirectories.isEmpty)
@@ -91,7 +76,7 @@ final class JUnitSensor(
       log.error(s"The following JUnit test report path(s) were not found : ${reports.mkString(", ")}.")
 
     // Parse the reports.
-    val parsedReports: Map[InputFile, JUnitReport] = untTestsReportParser.parse(tests, reportDirectories)
+    val parsedReports: Map[InputFile, JUnitReport] = junitTestsReportParser.parse(tests, reportDirectories)
 
     // Save test metrics for each file.
     save(context, parsedReports)

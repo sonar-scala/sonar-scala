@@ -33,7 +33,7 @@ trait ScoverageReportParserAPI {
 @ScannerSide
 final class ScoverageReportParser extends ScoverageReportParserAPI {
 
-  /** Parses the scoverage report from a file and returns the ModuleCoverage. */
+  /** Parses the scoverage report from a file and returns the ProjectCoverage. */
   override def parse(
     scoverageReportPath: Path,
     projectPath: Path,

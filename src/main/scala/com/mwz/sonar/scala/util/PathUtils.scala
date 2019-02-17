@@ -49,8 +49,8 @@ object PathUtils {
 
   /** Returns the project base path relative to the current working directory. */
   def getProjectBaseDirectory(fs: FileSystem): Path = {
-    val moduleAbsolutePath = Paths.get(fs.baseDir().getAbsolutePath).normalize
+    val projectAbsolutePath = Paths.get(fs.baseDir.getAbsolutePath).normalize
     val currentWorkdirAbsolutePath = PathUtils.cwd
-    currentWorkdirAbsolutePath.relativize(moduleAbsolutePath)
+    currentWorkdirAbsolutePath.relativize(projectAbsolutePath)
   }
 }

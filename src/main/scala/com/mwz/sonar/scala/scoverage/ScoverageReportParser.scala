@@ -20,6 +20,7 @@ package scoverage
 
 import java.nio.file.{Path, Paths}
 
+import cats.syntax.semigroup.catsSyntaxSemigroup
 import com.mwz.sonar.scala.util.PathUtils
 import org.sonar.api.scanner.ScannerSide
 
@@ -82,7 +83,7 @@ final class ScoverageReportParser extends ScoverageReportParserAPI {
       case (fileName, _) => fileName
     } mapValues { group =>
       val classCoveragesByFilename = group map { case (_, classCoverage) => classCoverage }
-      classCoveragesByFilename.reduce(_ + _)
+      classCoveragesByFilename.reduce(_ |+| _)
     }
 
     ProjectCoverage(projectScoverage, files)

@@ -38,14 +38,10 @@ import org.scalastyle.{
 }
 import org.scalatest._
 import org.scalatest.mockito.MockitoSugar
+import org.sonar.api.batch.bootstrap.ProjectDefinition
 import org.sonar.api.batch.fs.InputFile
-import org.sonar.api.batch.fs.internal.{
-  DefaultFileSystem,
-  DefaultTextPointer,
-  DefaultTextRange,
-  TestInputFileBuilder
-}
-import org.sonar.api.batch.rule.internal.ActiveRulesBuilder
+import org.sonar.api.batch.fs.internal._
+import org.sonar.api.batch.rule.internal.{ActiveRulesBuilder, NewActiveRule}
 import org.sonar.api.batch.rule.{ActiveRule, ActiveRules, Severity}
 import org.sonar.api.batch.sensor.internal.{DefaultSensorDescriptor, SensorContextTester}
 import org.sonar.api.batch.sensor.issue.internal.DefaultIssue
@@ -65,7 +61,6 @@ class ScalastyleSensorSpec
 
   trait Ctx {
     val context = SensorContextTester.create(Paths.get("./"))
-    val rulesProfile = mock[RulesProfile]
     val scalastyleChecker = new ScalastyleCheckerAPI {
       private[scalastyle] def checkFiles(
         checker: Checker[FileSpec],
@@ -74,7 +69,7 @@ class ScalastyleSensorSpec
       ): List[Message[FileSpec]] = List.empty
     }
 
-    val scalastyleSensor = new ScalastyleSensor(rulesProfile, scalastyleChecker)
+    val scalastyleSensor = new ScalastyleSensor(scalastyleChecker)
     val descriptor = new DefaultSensorDescriptor
   }
 
@@ -128,21 +123,21 @@ class ScalastyleSensorSpec
   }
 
   it should "convert a rule to a configuration checker" in {
-    val activeRule = new ActiveRule {
-      def ruleKey(): RuleKey =
-        RuleKey.of("sonar-scala-scalastyle", "rule1")
-      def severity(): String = Severity.MAJOR.toString
-      def language(): String = ???
-      def param(key: String): String = ???
-      def params(): util.Map[String, String] =
-        Map(
-          "ruleClass" -> "hello.class.name",
-          "param1" -> "value1",
-          "param2" -> "value2"
-        ).asJava
-      def internalKey(): String = ???
-      def templateRuleKey(): String = ???
-    }
+    val key = RuleKey.of("sonar-scala-scalastyle", "rule1")
+    val rules =
+      (new ActiveRulesBuilder)
+        .addRule(
+          (new NewActiveRule.Builder)
+            .setLanguage("scala")
+            .setRuleKey(key)
+            .setName("rule1")
+            .setParam("ruleClass", "hello.class.name")
+            .setParam("param1", "value1")
+            .setParam("param2", "value2")
+            .setSeverity(Severity.MAJOR.toString)
+            .build()
+        )
+        .build()
 
     val expected = ConfigurationChecker(
       "hello.class.name",
@@ -157,22 +152,21 @@ class ScalastyleSensorSpec
       Some("rule1")
     )
 
-    ScalastyleSensor.ruleToConfigurationChecker(activeRule).value shouldBe expected
+    ScalastyleSensor.ruleToConfigurationChecker(rules.find(key)).value shouldBe expected
   }
 
   it should "fail to convert an invalid rule to a configuration checker" in {
-    val activeRule = new ActiveRule {
-      def ruleKey(): RuleKey = ???
-      def severity(): String = ???
-      def language(): String = ???
-      def param(key: String): String = ???
-      def params(): util.Map[String, String] =
-        Map.empty[String, String].asJava
-      def internalKey(): String = ???
-      def templateRuleKey(): String = ???
-    }
+    val key = RuleKey.of("sonar-scala-scalastyle", "rule1")
+    val rules =
+      (new ActiveRulesBuilder)
+        .addRule(
+          (new NewActiveRule.Builder)
+            .setRuleKey(key)
+            .build()
+        )
+        .build()
 
-    ScalastyleSensor.ruleToConfigurationChecker(activeRule) shouldBe empty
+    ScalastyleSensor.ruleToConfigurationChecker(rules.find(key)) shouldBe empty
   }
 
   it should "get a list of files for analysis" in new Ctx {
@@ -205,17 +199,22 @@ class ScalastyleSensorSpec
   }
 
   it should "look up a rule from a style error" in new Ctx {
-    val activeRules: ActiveRules =
-      new ActiveRulesBuilder()
-        .create(RuleKey.of("sonar-scala-scalastyle", "rule1"))
-        .setLanguage("scala")
-        .setInternalKey("rule1")
-        .setSeverity(ErrorLevel.toString)
-        .setParam("param1", "value1")
-        .activate()
+    val key = RuleKey.of("sonar-scala-scalastyle", "rule1")
+    val rules =
+      (new ActiveRulesBuilder)
+        .addRule(
+          (new NewActiveRule.Builder)
+            .setLanguage("scala")
+            .setRuleKey(key)
+            .setInternalKey("rule1")
+            .setName("rule1")
+            .setParam("param1", "value1")
+            .setSeverity(ErrorLevel.toString)
+            .build()
+        )
         .build()
 
-    val fileSpec: FileSpec = new FileSpec {
+    val fileSpec = new FileSpec {
       def name: String = cwd.resolve("TestFile.scala").toString
     }
 
@@ -230,7 +229,7 @@ class ScalastyleSensorSpec
       customMessage = None
     )
 
-    context.setActiveRules(activeRules)
+    context.setActiveRules(rules)
 
     val result: ActiveRule = ScalastyleSensor.ruleFromStyleError(context, styleError).value
     result.language shouldEqual "scala"
@@ -240,17 +239,22 @@ class ScalastyleSensorSpec
   }
 
   it should "look up a rules by key and not internal key" in new Ctx {
-    val activeRules: ActiveRules =
-      new ActiveRulesBuilder()
-        .create(RuleKey.of("sonar-scala-scalastyle", "rule1"))
-        .setLanguage("scala")
-        .setInternalKey("org.scalastyle.file.RegexChecker-template")
-        .setSeverity(ErrorLevel.toString)
-        .setTemplateRuleKey("sonar-scala-scalastyle:org.scalastyle.file.RegexChecker-template")
-        .setParam("line", "false")
-        .setParam("regex", ".*")
-        .setParam("ruleClass", "org.scalastyle.file.RegexChecker")
-        .activate()
+    val key = RuleKey.of("sonar-scala-scalastyle", "rule1")
+    val rules =
+      (new ActiveRulesBuilder)
+        .addRule(
+          (new NewActiveRule.Builder)
+            .setLanguage("scala")
+            .setRuleKey(key)
+            .setInternalKey("org.scalastyle.file.RegexChecker-template")
+            .setName("rule1")
+            .setTemplateRuleKey("sonar-scala-scalastyle:org.scalastyle.file.RegexChecker-template")
+            .setParam("line", "false")
+            .setParam("regex", ".*")
+            .setParam("ruleClass", "org.scalastyle.file.RegexChecker")
+            .setSeverity(ErrorLevel.toString)
+            .build()
+        )
         .build()
 
     val fileSpec: FileSpec = new FileSpec {
@@ -268,7 +272,7 @@ class ScalastyleSensorSpec
       customMessage = None
     )
 
-    context.setActiveRules(activeRules)
+    context.setActiveRules(rules)
 
     val result: ActiveRule = ScalastyleSensor.ruleFromStyleError(context, styleError).value
     result.language shouldEqual "scala"
@@ -289,16 +293,21 @@ class ScalastyleSensorSpec
   }
 
   it should "not open any issues if there are no style errors reported" in new Ctx {
-    val activeRules: ActiveRules =
-      new ActiveRulesBuilder()
-        .create(RuleKey.of("sonar-scala-scalastyle", "rule1"))
-        .setInternalKey("rule1")
-        .setSeverity(Severity.MAJOR.toString)
-        .setParam("param1", "value1")
-        .activate()
+    val key = RuleKey.of("sonar-scala-scalastyle", "rule1")
+    val rules =
+      (new ActiveRulesBuilder)
+        .addRule(
+          (new NewActiveRule.Builder)
+            .setLanguage("scala")
+            .setRuleKey(key)
+            .setName("rule1")
+            .setParam("param1", "value1")
+            .setSeverity(Severity.MAJOR.toString)
+            .build()
+        )
         .build()
 
-    context.setActiveRules(activeRules)
+    context.setActiveRules(rules)
     scalastyleSensor.execute(context)
 
     context.allIssues shouldBe empty
@@ -337,18 +346,31 @@ class ScalastyleSensorSpec
       .setOriginalLineEndOffsets(Array(15, 30))
       .build()
 
-    val ruleKey = RuleKey.of("sonar-scala-scalastyle", "org.scalastyle.scalariform.EmptyClassChecker")
+    val key = RuleKey.of("sonar-scala-scalastyle", "org.scalastyle.scalariform.EmptyClassChecker")
 
-    val activeRules: ActiveRules =
-      new ActiveRulesBuilder()
-        .create(ruleKey)
-        .setInternalKey("org.scalastyle.scalariform.EmptyClassChecker")
-        .setSeverity(Severity.MAJOR.toString)
-        .setParam("ruleClass", "org.scalastyle.scalariform.EmptyClassChecker")
-        .activate()
+    val rules =
+      (new ActiveRulesBuilder)
+        .addRule(
+          (new NewActiveRule.Builder)
+            .setLanguage("scala")
+            .setRuleKey(key)
+            .setInternalKey("org.scalastyle.scalariform.EmptyClassChecker")
+            .setSeverity(Severity.MAJOR.toString)
+            .setParam("ruleClass", "org.scalastyle.scalariform.EmptyClassChecker")
+            .build()
+        )
         .build()
 
-    val issue = new DefaultIssue().forRule(ruleKey)
+    // TODO: Is that how you're supposed to use it??!!!
+    val projectDefinition = new DefaultInputProject(
+      ProjectDefinition
+        .create()
+        .setKey("projectKey")
+        .setBaseDir(context.fileSystem.baseDir)
+        .setWorkDir(context.fileSystem.baseDirPath.resolve(".sonar").toFile)
+    ).definition
+    val defaultProject = new DefaultInputProject(projectDefinition)
+    val issue = new DefaultIssue(defaultProject).forRule(key)
     val expected = Seq(
       issue.at(
         issue
@@ -364,9 +386,9 @@ class ScalastyleSensorSpec
       )
     )
 
-    context.fileSystem().add(testFile)
-    context.setActiveRules(activeRules)
-    new ScalastyleSensor(rulesProfile, checker).execute(context)
+    context.fileSystem.add(testFile)
+    context.setActiveRules(rules)
+    new ScalastyleSensor(checker).execute(context)
 
     context.allIssues should contain theSameElementsAs expected
   }
@@ -404,18 +426,31 @@ class ScalastyleSensorSpec
       .setOriginalLineEndOffsets(Array(15, 30))
       .build()
 
-    val ruleKey = RuleKey.of("sonar-scala-scalastyle", "org.scalastyle.scalariform.EmptyClassChecker")
+    val key = RuleKey.of("sonar-scala-scalastyle", "org.scalastyle.scalariform.EmptyClassChecker")
 
-    val activeRules: ActiveRules =
-      new ActiveRulesBuilder()
-        .create(ruleKey)
-        .setInternalKey("org.scalastyle.scalariform.EmptyClassChecker")
-        .setSeverity(Severity.MAJOR.toString)
-        .setParam("ruleClass", "org.scalastyle.scalariform.EmptyClassChecker")
-        .activate()
+    val rules =
+      (new ActiveRulesBuilder)
+        .addRule(
+          (new NewActiveRule.Builder)
+            .setLanguage("scala")
+            .setRuleKey(key)
+            .setInternalKey("org.scalastyle.scalariform.EmptyClassChecker")
+            .setSeverity(Severity.MAJOR.toString)
+            .setParam("ruleClass", "org.scalastyle.scalariform.EmptyClassChecker")
+            .build()
+        )
         .build()
 
-    val issue = new DefaultIssue().forRule(ruleKey)
+    // TODO: ???
+    val projectDefinition = new DefaultInputProject(
+      ProjectDefinition
+        .create()
+        .setKey("projectKey")
+        .setBaseDir(context.fileSystem.baseDir)
+        .setWorkDir(context.fileSystem.baseDirPath.resolve(".sonar").toFile)
+    ).definition
+    val defaultProject = new DefaultInputProject(projectDefinition)
+    val issue = new DefaultIssue(defaultProject).forRule(key)
     val expected = Seq(
       issue.at(
         issue
@@ -434,8 +469,8 @@ class ScalastyleSensorSpec
     val fs = new DefaultFileSystem(Paths.get("./module1")).setEncoding(Charset.defaultCharset)
     context.setFileSystem(fs)
     context.fileSystem().add(testFile)
-    context.setActiveRules(activeRules)
-    new ScalastyleSensor(rulesProfile, checker).execute(context)
+    context.setActiveRules(rules)
+    new ScalastyleSensor(checker).execute(context)
 
     context.allIssues should contain theSameElementsAs expected
   }

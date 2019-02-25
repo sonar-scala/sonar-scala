@@ -42,7 +42,6 @@ import org.sonar.api.batch.rule.{ActiveRule, Severity}
 import org.sonar.api.batch.sensor.issue.NewIssue
 import org.sonar.api.batch.sensor.{Sensor, SensorContext, SensorDescriptor}
 import org.sonar.api.config.Configuration
-import org.sonar.api.profiles.{RulesProfile => QualityProfile}
 import org.sonar.api.rule.RuleKey
 
 import scala.collection.JavaConverters._
@@ -51,10 +50,7 @@ import scala.collection.immutable.Seq
 /**
  * Main sensor for executing Scalastyle analysis.
  */
-final class ScalastyleSensor(
-  qualityProfile: QualityProfile,
-  scalastyleChecker: ScalastyleCheckerAPI
-) extends Sensor {
+final class ScalastyleSensor(scalastyleChecker: ScalastyleCheckerAPI) extends Sensor {
   private[this] val log = Log(classOf[ScalastyleSensor], "scalastyle")
 
   override def describe(descriptor: SensorDescriptor): Unit = {
@@ -111,8 +107,8 @@ final class ScalastyleSensor(
 
         rule.fold(
           log.warn(
-            s"Scalastyle rule with key ${styleError.key} was not found" +
-            s"in the ${qualityProfile.getName} quality profile."
+            s"Scalastyle rule with key ${styleError.key} was not found " +
+            "in the default quality profile."
           )
         ) { rule =>
           ScalastyleSensor.openIssue(context, ScalastyleInspections.AllInspectionsByClass, styleError, rule)

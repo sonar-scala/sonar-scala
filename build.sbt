@@ -55,7 +55,7 @@ sourceGenerators in Compile ++= Seq(
 val sonarVersion = "7.4"
 libraryDependencies ++= List(
   "org.sonarsource.sonarqube" % "sonar-plugin-api" % sonarVersion % Provided,
-  "org.slf4j"                 % "slf4j-api"        % "1.7.25" % Provided,
+  "org.slf4j"                 % "slf4j-api"        % "1.7.26" % Provided,
   "org.typelevel"             %% "cats-core"       % "1.5.0",
   "org.scalariform"           %% "scalariform"     % "0.2.6",
   "org.scalastyle"            %% "scalastyle"      % "1.0.0",

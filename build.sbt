@@ -60,7 +60,7 @@ libraryDependencies ++= List(
   "org.scalariform"           %% "scalariform"     % "0.2.6",
   "org.scalastyle"            %% "scalastyle"      % "1.0.0",
   "org.scala-lang.modules"    %% "scala-xml"       % "1.1.1",
-  "org.scalatest"             %% "scalatest"       % "3.0.5" % Test,
+  "org.scalatest"             %% "scalatest"       % "3.0.6" % Test,
   "org.mockito"               %% "mockito-scala"   % "1.0.10" % Test
 )
 

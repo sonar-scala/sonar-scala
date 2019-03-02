@@ -61,7 +61,7 @@ libraryDependencies ++= List(
   "org.scalastyle"            %% "scalastyle"      % "1.0.0",
   "org.scala-lang.modules"    %% "scala-xml"       % "1.1.1",
   "org.scalatest"             %% "scalatest"       % "3.0.6" % Test,
-  "org.mockito"               %% "mockito-scala"   % "1.0.10" % Test
+  "org.mockito"               %% "mockito-scala"   % "1.2.0" % Test
 )
 
 // Adding a resolver to the Artima maven repo, so sbt can download the Artima SuperSafe Scala compiler

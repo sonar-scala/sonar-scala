@@ -19,12 +19,12 @@ sonar-scanner ${SONAR_SCANNER_DEFAULTS}
 # Gradle single-module
 echo -e "\nScanning Gradle single-module project."
 cd $CWD/gradle/single-module
-gradle --no-daemon ${SONAR_SCANNER_DEFAULTS} clean reportScoverage sonarqube
+gradle --no-daemon ${SONAR_SCANNER_DEFAULTS} clean test reportScoverage sonarqube
 
 # Gradle multi-module
 echo -e "\nScanning Gradle multi-module project."
 cd $CWD/gradle/multi-module
-gradle --no-daemon ${SONAR_SCANNER_DEFAULTS} clean reportScoverage sonarqube
+gradle --no-daemon ${SONAR_SCANNER_DEFAULTS} clean test reportScoverage sonarqube
 
 # Maven single-module
 echo -e "\nScanning Maven single-module project."

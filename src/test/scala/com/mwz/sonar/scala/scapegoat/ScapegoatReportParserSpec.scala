@@ -1,31 +1,30 @@
 /*
- * Sonar Scala Plugin
- * Copyright (C) 2018 All contributors
+ * Copyright (C) 2018-2019  All sonar-scala contributors
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 3 of the License, or (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Lesser General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program; if not, write to the Free Software Foundation,
- * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ * You should have received a copy of the GNU General Lesser Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package com.mwz.sonar.scala
 package scapegoat
 
 import java.nio.file.Paths
 
 import com.mwz.sonar.scala.util.PathUtils.cwd
-import org.scalatest.{FlatSpec, Matchers}
+import org.scalatest.{FlatSpec, LoneElement, Matchers}
 
 /** Tests the correct behavior of the Scapegoat XML reports parser */
-class ScapegoatReportParserSpec extends FlatSpec with Matchers with WithFile {
+class ScapegoatReportParserSpec extends FlatSpec with Matchers with LoneElement with WithFiles {
   val scapegoatReportParser = new ScapegoatReportParser()
 
   "replaceAllDotsButLastWithSlashes" should "work with relative paths" in {
@@ -42,19 +41,20 @@ class ScapegoatReportParserSpec extends FlatSpec with Matchers with WithFile {
     linuxPath shouldBe cwd.resolve("ScapegoatReportParserSpec.scala").toString
   }
 
-  it should "handle correctly dots in the path" in withFile(cwd.resolve("example.file.scala")) { file =>
+  it should "handle correctly dots in the path" in withFiles("example.file.scala") { files =>
+    val file = files.loneElement
     val scapegoatPath = file.toString.replace("/", ".")
     val linuxPath = scapegoatReportParser.replaceAllDotsButLastWithSlashes(scapegoatPath)
 
     linuxPath shouldBe file.toString
   }
 
-  it should "handle correctly multiple dots in the path" in withFile(cwd.resolve("example..file.scala")) {
-    file =>
-      val scapegoatPath = file.toString.replace("/", ".")
-      val linuxPath = scapegoatReportParser.replaceAllDotsButLastWithSlashes(scapegoatPath)
+  it should "handle correctly multiple dots in the path" in withFiles("example..file.scala") { files =>
+    val file = files.loneElement
+    val scapegoatPath = file.toString.replace("/", ".")
+    val linuxPath = scapegoatReportParser.replaceAllDotsButLastWithSlashes(scapegoatPath)
 
-      linuxPath shouldBe file.toString
+    linuxPath shouldBe file.toString
   }
 
   "ScapegoatReportParser" should "be able to parse an empty report" in {

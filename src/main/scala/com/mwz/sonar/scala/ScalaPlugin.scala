@@ -1,43 +1,39 @@
 /*
- * Sonar Scala Plugin
- * Copyright (C) 2018 All contributors
+ * Copyright (C) 2018-2019  All sonar-scala contributors
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 3 of the License, or (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Lesser General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program; if not, write to the Free Software Foundation,
- * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ * You should have received a copy of the GNU General Lesser Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package com.mwz.sonar.scala
 
 import java.nio.file.{Path, Paths}
 
-import cats.kernel.Eq
-import cats.syntax.eq._
-import com.mwz.sonar.scala.util.JavaOptionals._
+import com.mwz.sonar.scala.util.Log
+import com.mwz.sonar.scala.util.syntax.Optionals._
 import com.ncredinburgh.sonar.{scalastyle => oldscalastyle}
-import org.scalastyle.{FileSpec, ScalastyleChecker}
 import org.sonar.api.Plugin
 import org.sonar.api.config.Configuration
 import org.sonar.api.resources.AbstractLanguage
-import org.sonar.api.utils.log.Loggers
+import scalariform.{ScalaVersion, ScalaVersions}
 import scalariform.lexer.{ScalaLexer, Token}
 import scalariform.utils.Utils._
-import scalariform.{ScalaVersion, ScalaVersions}
 
 /** Defines Scala as a language for SonarQube */
 final class Scala(settings: Configuration) extends AbstractLanguage(Scala.LanguageKey, Scala.LanguageName) {
   override def getFileSuffixes: Array[String] = {
-    val suffixes = settings.getStringArray(Scala.FileSuffixesPropertyKey)
-    val filtered = suffixes.filter(_.trim.nonEmpty)
+    val suffixes: Array[String] = settings.getStringArray(Scala.FileSuffixesPropertyKey)
+    val filtered: Array[String] = suffixes.filter(_.trim.nonEmpty)
     if (filtered.nonEmpty) filtered
     else Scala.DefaultFileSuffixes
   }
@@ -55,8 +51,7 @@ object Scala {
   private val SourcesPropertyKey = "sonar.sources"
   private val DefaultSourcesFolder = "src/main/scala"
 
-  private val logger = Loggers.get(classOf[Scala])
-  implicit val eqScalaVersion: Eq[ScalaVersion] = Eq.fromUniversalEquals
+  private val logger = Log(classOf[Scala])
 
   def getScalaVersion(settings: Configuration): ScalaVersion = {
     def parseVersion(s: String): Option[ScalaVersion] = s match {
@@ -69,20 +64,20 @@ object Scala {
         None
     }
 
-    val scalaVersion = settings
-      .get(ScalaVersionPropertyKey)
-      .toOption
-      .flatMap(parseVersion)
-      .getOrElse(DefaultScalaVersion)
+    val scalaVersion: Option[ScalaVersion] =
+      settings
+        .get(ScalaVersionPropertyKey)
+        .toOption
+        .flatMap(parseVersion)
 
-    // log a warning if using the default scala version
-    if (scalaVersion === DefaultScalaVersion)
+    // log a warning if the version is not set correctly or missing
+    if (scalaVersion.isEmpty)
       logger.warn(
-        s"[sonar-scala] The '$ScalaVersionPropertyKey' is not properly set or is missing, " +
+        s"The '$ScalaVersionPropertyKey' is not properly set or is missing, " +
         s"using the default value: '$DefaultScalaVersion'."
       )
 
-    scalaVersion
+    scalaVersion.getOrElse(DefaultScalaVersion)
   }
 
   // even if the 'sonar.sources' property is mandatory,
@@ -93,7 +88,7 @@ object Scala {
       .toOption
       .filter(_.nonEmpty)
       .getOrElse(DefaultSourcesFolder)
-      .split(',') // scalastyle:ignore LiteralArguments org.scalastyle.scalariform.NamedArgumentChecker
+      .split(',') // scalastyle:ignore org.scalastyle.scalariform.NamedArgumentChecker
       .map(p => Paths.get(p.trim))
       .toList
 
@@ -129,7 +124,10 @@ final class ScalaPlugin extends Plugin {
       // Scoverage.
       classOf[scoverage.ScoverageMetrics],
       classOf[scoverage.ScoverageReportParser],
-      classOf[scoverage.ScoverageSensor]
+      classOf[scoverage.ScoverageSensor],
+      // JUnit.
+      classOf[junit.JUnitReportParser],
+      classOf[junit.JUnitSensor]
     )
   }
 }

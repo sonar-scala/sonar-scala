@@ -1,21 +1,20 @@
 /*
- * Sonar Scala Plugin
- * Copyright (C) 2018 All contributors
+ * Copyright (C) 2018-2019  All sonar-scala contributors
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 3 of the License, or (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Lesser General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program; if not, write to the Free Software Foundation,
- * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ * You should have received a copy of the GNU General Lesser Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package com.mwz.sonar.scala
 package sensor
 
@@ -30,7 +29,7 @@ object Measures {
   val NewLineRegex: Regex = "(\r\n)|\r|\n".r
 
   def countClasses(tokens: List[Token]): Int = {
-    tokens.foldLeft(0) { // scalastyle:ignore LiteralArguments org.scalastyle.scalariform.NamedArgumentChecker
+    tokens.foldLeft(0) { // scalastyle:ignore org.scalastyle.scalariform.NamedArgumentChecker
       case (acc, token) =>
         val tokenType = token.tokenType
         if (tokenType == Tokens.CLASS || tokenType == Tokens.OBJECT) acc + 1
@@ -39,7 +38,7 @@ object Measures {
   }
 
   def countMethods(tokens: List[Token]): Int = {
-    tokens.foldLeft(0) { // scalastyle:ignore LiteralArguments org.scalastyle.scalariform.NamedArgumentChecker
+    tokens.foldLeft(0) { // scalastyle:ignore org.scalastyle.scalariform.NamedArgumentChecker
       case (acc, token) =>
         if (token.tokenType == Tokens.DEF) acc + 1
         else acc

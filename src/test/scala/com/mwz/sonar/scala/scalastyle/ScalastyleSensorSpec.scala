@@ -1,21 +1,20 @@
 /*
- * Sonar Scala Plugin
- * Copyright (C) 2018 All contributors
+ * Copyright (C) 2018-2019  All sonar-scala contributors
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 3 of the License, or (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Lesser General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program; if not, write to the Free Software Foundation,
- * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ * You should have received a copy of the GNU General Lesser Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package com.mwz.sonar.scala
 package scalastyle
 
@@ -209,6 +208,7 @@ class ScalastyleSensorSpec
     val activeRules: ActiveRules =
       new ActiveRulesBuilder()
         .create(RuleKey.of("sonar-scala-scalastyle", "rule1"))
+        .setLanguage("scala")
         .setInternalKey("rule1")
         .setSeverity(ErrorLevel.toString)
         .setParam("param1", "value1")
@@ -233,10 +233,54 @@ class ScalastyleSensorSpec
     context.setActiveRules(activeRules)
 
     val result: ActiveRule = ScalastyleSensor.ruleFromStyleError(context, styleError).value
-    result.language === "scala"
-    result.internalKey === "rule1"
-    result.severity === ErrorLevel.toString
-    result.params.asScala === Map("param1" -> "value1")
+    result.language shouldEqual "scala"
+    result.internalKey shouldEqual "rule1"
+    result.severity shouldEqual ErrorLevel.toString
+    result.params.asScala shouldEqual Map("param1" -> "value1")
+  }
+
+  it should "look up a rules by key and not internal key" in new Ctx {
+    val activeRules: ActiveRules =
+      new ActiveRulesBuilder()
+        .create(RuleKey.of("sonar-scala-scalastyle", "rule1"))
+        .setLanguage("scala")
+        .setInternalKey("org.scalastyle.file.RegexChecker-template")
+        .setSeverity(ErrorLevel.toString)
+        .setTemplateRuleKey("sonar-scala-scalastyle:org.scalastyle.file.RegexChecker-template")
+        .setParam("line", "false")
+        .setParam("regex", ".*")
+        .setParam("ruleClass", "org.scalastyle.file.RegexChecker")
+        .activate()
+        .build()
+
+    val fileSpec: FileSpec = new FileSpec {
+      def name: String = cwd.resolve("TestFile.scala").toString
+    }
+
+    val styleError = StyleError(
+      fileSpec,
+      (new EmptyClassChecker).getClass,
+      "rule1",
+      ErrorLevel,
+      List.empty,
+      lineNumber = None,
+      column = None,
+      customMessage = None
+    )
+
+    context.setActiveRules(activeRules)
+
+    val result: ActiveRule = ScalastyleSensor.ruleFromStyleError(context, styleError).value
+    result.language shouldEqual "scala"
+    result.ruleKey.rule shouldEqual "rule1"
+    result.internalKey shouldEqual "org.scalastyle.file.RegexChecker-template"
+    result.severity shouldEqual ErrorLevel.toString
+    result.params.asScala shouldEqual
+    Map(
+      "line" -> "false",
+      "regex" -> ".*",
+      "ruleClass" -> "org.scalastyle.file.RegexChecker"
+    )
   }
 
   it should "not open any issues if there are no active rules" in new Ctx {

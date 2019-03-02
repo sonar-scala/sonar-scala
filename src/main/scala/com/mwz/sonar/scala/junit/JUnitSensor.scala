@@ -65,6 +65,22 @@ final class JUnitSensor(
     val reports: List[Path] = reportPaths(config)
     log.debug(s"The JUnit report paths are: ${reports.mkString("[", ",", "]")}.")
 
+    // Get test input files
+    val inputFiles: Iterable[InputFile] =
+      context.fileSystem
+        .inputFiles(
+          context.fileSystem.predicates.and(
+            context.fileSystem.predicates.hasLanguage(Scala.LanguageKey),
+            context.fileSystem.predicates.hasType(InputFile.Type.TEST)
+          )
+        )
+        .asScala
+
+     if (inputFiles.nonEmpty)
+      log.debug(s"Input test files: \n${inputFiles.mkString(", ")}")
+    else
+      log.warn(s"No test files found for module ${context.module.key}.")
+
     // Resolve test directories.
     val testDirectories: List[File] = fs.resolve(tests)
     if (testDirectories.isEmpty)

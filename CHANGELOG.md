@@ -1,6 +1,9 @@
 Changelog
 ===
 
+## [6.8.0 LTS](https://github.com/mwz/sonar-scala/releases/tag/v6.8.0) - 03.03.2018
+- Backported features and bug fixes from the 7.x series - new unit test metrics such as unit test count, duration of each test and the number of skipped and failed tests - see the release notes from [7.3.0](https://github.com/mwz/sonar-scala/releases/tag/v7.3.0) and [7.3.1](https://github.com/mwz/sonar-scala/releases/tag/v7.3.1) releases for more details. (#164 - @mwz)
+
 ## [7.3.1](https://github.com/mwz/sonar-scala/releases/tag/v7.3.1) - 27.01.2018
 - Fixed Scalastyle rule lookup for custom rules created from templates. (#148 - @satabin)
 

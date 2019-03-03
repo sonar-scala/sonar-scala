@@ -5,7 +5,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath "gradle.plugin.org.scoverage:gradle-scoverage:2.3.0"
+        classpath "gradle.plugin.org.scoverage:gradle-scoverage:2.5.0"
         classpath "gradle.plugin.com.github.maiflai:gradle-scalatest:0.22"
         classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.6.2"
     }
@@ -25,6 +25,8 @@ sonarqube {
     properties {
         property "sonar.sourceEncoding", "UTF-8"
         property "sonar.sources", "src/main/scala"
+        property "sonar.tests", "src/test/scala"
+        property "sonar.junit.reportPaths", "build/test-results/test"
         property "sonar.scala.version", "2.12"
         property "sonar.scala.scoverage.reportPath", "build/reports/scoverage/scoverage.xml"
     }

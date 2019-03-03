@@ -18,6 +18,8 @@
         <sonar.projectName>[example] Maven Scala-Java</sonar.projectName>
         <sonar.projectKey>example-mvn-scala-java</sonar.projectKey>
         <sonar.sources>src/main/scala,src/main/java</sonar.sources>
+        <sonar.tests>src/test/scala,src/test/java</sonar.tests>
+        <sonar.junit.reportsPath>target/surefire-reports</sonar.junit.reportsPath>
         <sonar.sourceEncoding>UTF-8</sonar.sourceEncoding>
         <sonar.scala.version>2.12</sonar.scala.version>
         <sonar.scala.scoverage.reportPath>target/scoverage.xml</sonar.scala.scoverage.reportPath>
@@ -25,7 +27,6 @@
         <!-- Sonar Java properties -->
         <sonar.java.binaries>target/scoverage-classes</sonar.java.binaries>
         <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
-        <sonar.junit.reportsPath>target/surefire-reports</sonar.junit.reportsPath>
         <sonar.jacoco.reportPaths>target/jacoco.exec</sonar.jacoco.reportPaths>
         <sonar.exclusions>src/test/**</sonar.exclusions>
     </properties>

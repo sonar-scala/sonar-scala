@@ -71,9 +71,7 @@ final class ScoverageSensor(
 
         // Save the coverage information of each file of the project.
         getProjectSourceFiles(filesystem) foreach { file =>
-          // TODO: Change this.
-          // `toString` returns the project relative path of the file.
-          val filename = file.toString
+          val filename = PathUtils.cwd.relativize(Paths.get(file.uri())).toString
           log.debug(s"Saving the scoverage information of the file: '$filename'.")
 
           projectCoverage.filesCoverage.get(filename) match {

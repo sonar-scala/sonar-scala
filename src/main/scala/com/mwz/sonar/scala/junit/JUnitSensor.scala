@@ -76,10 +76,10 @@ final class JUnitSensor(
         )
         .asScala
 
-     if (inputFiles.nonEmpty)
+    if (inputFiles.nonEmpty)
       log.debug(s"Input test files: \n${inputFiles.mkString(", ")}")
     else
-      log.warn(s"No test files found for module ${context.module.key}.")
+      log.warn(s"No test files found for module ${context.project.key}.")
 
     // Resolve test directories.
     val testDirectories: List[File] = fs.resolve(tests)

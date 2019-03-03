@@ -37,7 +37,7 @@ import org.scalastyle.{
   ScalastyleChecker => Checker
 }
 import org.scalatest._
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import org.sonar.api.batch.fs.InputFile
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder
 import org.sonar.api.batch.rule.internal.{ActiveRulesBuilder, NewActiveRule}

@@ -23,8 +23,8 @@ import java.nio.file.{Path, Paths}
 import com.mwz.sonar.scala.util.PathUtils.cwd
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
-import org.scalatest.mockito.MockitoSugar
 import org.scalatest.{FlatSpec, LoneElement, OptionValues}
+import org.scalatestplus.mockito.MockitoSugar
 import org.sonar.api.batch.fs.InputFile
 import org.sonar.api.batch.fs.internal.{
   DefaultFileSystem,

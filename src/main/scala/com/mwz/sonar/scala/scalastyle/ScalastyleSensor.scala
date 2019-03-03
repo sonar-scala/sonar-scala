@@ -52,10 +52,7 @@ import scala.collection.immutable.Seq
 /**
  * Main sensor for executing Scalastyle analysis.
  */
-final class ScalastyleSensor(
-  qualityProfile: QualityProfile,
-  scalastyleChecker: ScalastyleCheckerAPI
-) extends ProjectSensor {
+final class ScalastyleSensor(scalastyleChecker: ScalastyleCheckerAPI) extends ProjectSensor {
   private[this] val log = Log(classOf[ScalastyleSensor], "scalastyle")
 
   override def describe(descriptor: SensorDescriptor): Unit = {
@@ -112,8 +109,8 @@ final class ScalastyleSensor(
 
         rule.fold(
           log.warn(
-            s"Scalastyle rule with key ${styleError.key} was not found" +
-            s"in the ${qualityProfile.getName} quality profile."
+            s"Scalastyle rule with key ${styleError.key} was not found " +
+            s"in the default quality profile."
           )
         ) { rule =>
           ScalastyleSensor.openIssue(context, ScalastyleInspections.AllInspectionsByClass, styleError, rule)

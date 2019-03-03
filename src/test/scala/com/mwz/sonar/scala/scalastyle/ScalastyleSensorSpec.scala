@@ -44,7 +44,6 @@ import org.sonar.api.batch.rule.internal.{ActiveRulesBuilder, NewActiveRule}
 import org.sonar.api.batch.rule.Severity
 import org.sonar.api.batch.sensor.internal.{DefaultSensorDescriptor, SensorContextTester}
 import org.sonar.api.config.internal.MapSettings
-import org.sonar.api.profiles.RulesProfile
 import org.sonar.api.rule.RuleKey
 
 import scala.collection.JavaConverters._
@@ -59,7 +58,6 @@ class ScalastyleSensorSpec
 
   trait Ctx {
     val context = SensorContextTester.create(Paths.get("./"))
-    val rulesProfile = mock[RulesProfile]
     val scalastyleChecker = new ScalastyleCheckerAPI {
       private[scalastyle] def checkFiles(
         checker: Checker[FileSpec],
@@ -68,7 +66,7 @@ class ScalastyleSensorSpec
       ): List[Message[FileSpec]] = List.empty
     }
 
-    val scalastyleSensor = new ScalastyleSensor(rulesProfile, scalastyleChecker)
+    val scalastyleSensor = new ScalastyleSensor(scalastyleChecker)
     val descriptor = new DefaultSensorDescriptor
   }
 
@@ -353,7 +351,7 @@ class ScalastyleSensorSpec
 
     context.fileSystem.add(testFile)
     context.setActiveRules(activeRules)
-    new ScalastyleSensor(rulesProfile, checker).execute(context)
+    new ScalastyleSensor(checker).execute(context)
 
     val result = context.allIssues.loneElement
     result.ruleKey shouldBe ruleKey

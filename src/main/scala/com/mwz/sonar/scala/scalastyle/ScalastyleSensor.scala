@@ -108,8 +108,7 @@ final class ScalastyleSensor(scalastyleChecker: ScalastyleCheckerAPI) extends Se
 
         rule.fold(
           log.warn(
-            s"Scalastyle rule with key ${styleError.key} was not found " +
-            s"in the default quality profile."
+            s"Scalastyle rule with key ${styleError.key} was not found in the default quality profile."
           )
         ) { rule =>
           ScalastyleSensor.openIssue(context, ScalastyleInspections.AllInspectionsByClass, styleError, rule)

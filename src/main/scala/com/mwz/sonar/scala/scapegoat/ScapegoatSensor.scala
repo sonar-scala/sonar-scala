@@ -25,17 +25,14 @@ import com.mwz.sonar.scala.util.Log
 import com.mwz.sonar.scala.util.PathUtils._
 import com.mwz.sonar.scala.util.syntax.Optionals._
 import org.sonar.api.batch.fs.{FileSystem, InputFile}
-import org.sonar.api.batch.sensor.{SensorContext, SensorDescriptor}
+import org.sonar.api.batch.sensor.{Sensor, SensorContext, SensorDescriptor}
 import org.sonar.api.config.Configuration
-import org.sonar.api.scanner.sensor.ProjectSensor
 import scalariform.ScalaVersion
 
 import scala.util.{Failure, Success, Try}
 
 /** Main sensor for importing Scapegoat reports to SonarQube */
-final class ScapegoatSensor(
-  scapegoatReportParser: ScapegoatReportParserAPI
-) extends ProjectSensor {
+final class ScapegoatSensor(scapegoatReportParser: ScapegoatReportParserAPI) extends Sensor {
   import ScapegoatSensor._ // scalastyle:ignore org.scalastyle.scalariform.ImportGroupingChecker
 
   private[this] val log = Log(classOf[ScapegoatSensor], "scapegoat")

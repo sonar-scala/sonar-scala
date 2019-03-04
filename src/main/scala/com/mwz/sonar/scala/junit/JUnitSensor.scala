@@ -27,10 +27,9 @@ import com.mwz.sonar.scala.util.syntax.SonarConfig._
 import com.mwz.sonar.scala.util.syntax.SonarFileSystem._
 import com.mwz.sonar.scala.util.syntax.SonarSensorContext._
 import org.sonar.api.batch.fs.{FileSystem, InputFile}
-import org.sonar.api.batch.sensor.{SensorContext, SensorDescriptor}
+import org.sonar.api.batch.sensor.{Sensor, SensorContext, SensorDescriptor}
 import org.sonar.api.config.Configuration
 import org.sonar.api.measures.CoreMetrics
-import org.sonar.api.scanner.sensor.ProjectSensor
 
 import scala.collection.JavaConverters._
 
@@ -42,7 +41,7 @@ final class JUnitSensor(
   config: Configuration,
   fs: FileSystem,
   junitTestsReportParser: JUnitReportParserAPI
-) extends ProjectSensor {
+) extends Sensor {
   import JUnitSensor._ // scalastyle:ignore org.scalastyle.scalariform.ImportGroupingChecker
 
   private[this] val log = Log(classOf[JUnitSensor], "junit")

@@ -24,18 +24,15 @@ import com.mwz.sonar.scala.util.PathUtils._
 import com.mwz.sonar.scala.util.syntax.Optionals._
 import com.mwz.sonar.scala.util.{Log, PathUtils}
 import org.sonar.api.batch.fs.{FileSystem, InputComponent, InputFile}
-import org.sonar.api.batch.sensor.{SensorContext, SensorDescriptor}
+import org.sonar.api.batch.sensor.{Sensor, SensorContext, SensorDescriptor}
 import org.sonar.api.config.Configuration
-import org.sonar.api.scanner.sensor.ProjectSensor
 import scalariform.ScalaVersion
 
 import scala.collection.JavaConverters._
 import scala.util.{Failure, Success, Try}
 
 /** Main sensor for importing Scoverage reports into SonarQube. */
-final class ScoverageSensor(
-  scoverageReportParser: ScoverageReportParserAPI
-) extends ProjectSensor {
+final class ScoverageSensor(scoverageReportParser: ScoverageReportParserAPI) extends Sensor {
   import ScoverageSensor._ // scalastyle:ignore org.scalastyle.scalariform.ImportGroupingChecker
 
   private[this] val log = Log(classOf[ScoverageSensor], "scoverage")

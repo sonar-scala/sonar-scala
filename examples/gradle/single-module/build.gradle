@@ -56,6 +56,6 @@ tasks.withType(ScalaCompile) {
   scalaCompileOptions.additionalParameters = [
     "-Xplugin:" + configurations.scalaCompilerPlugin.asPath,
     "-P:scapegoat:dataDir:" + buildDir + "/reports/scapegoat",
-    "-P:scapegoat:reports:all"
+    "-P:scapegoat:reports:xml"
   ]
 }

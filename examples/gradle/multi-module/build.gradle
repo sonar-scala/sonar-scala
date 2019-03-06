@@ -35,6 +35,7 @@ allprojects {
             property "sonar.junit.reportPaths", "build/test-results/test"
             property "sonar.scala.version", "2.12"
             property "sonar.scala.scoverage.reportPath", "build/reports/scoverage/scoverage.xml"
+            property "sonar.scala.scapegoat.reportPath", "build/reports/scapegoat/scapegoat.xml"
         }
     }
 
@@ -43,10 +44,28 @@ allprojects {
     }
 
     dependencies {
-        compile 'org.scala-lang:scala-library:2.12.6'
+        compile 'org.scala-lang:scala-library:2.12.8'
         scoverage 'org.scoverage:scalac-scoverage-plugin_2.12:1.3.1',
                 'org.scoverage:scalac-scoverage-runtime_2.12:1.3.1'
         testCompile 'org.scalatest:scalatest_2.12:3.0.5'
         testRuntime 'org.pegdown:pegdown:1.4.2'
+    }
+
+    // Scapegoat configuration.
+    configurations {
+        scalaCompilerPlugin
+    }
+
+    dependencies {
+        compile 'com.sksamuel.scapegoat:scalac-scapegoat-plugin_2.12:1.3.3' // to prevent https://github.com/sksamuel/scapegoat/issues/98
+        scalaCompilerPlugin "com.sksamuel.scapegoat:scalac-scapegoat-plugin_2.12:1.3.3"
+    }
+
+    tasks.withType(ScalaCompile) {
+        scalaCompileOptions.additionalParameters = [
+            "-Xplugin:" + configurations.scalaCompilerPlugin.asPath,
+            "-P:scapegoat:dataDir:" + buildDir + "/reports/scapegoat",
+            "-P:scapegoat:reports:xml"
+        ]
     }
 }

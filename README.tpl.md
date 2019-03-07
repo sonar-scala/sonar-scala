@@ -77,7 +77,7 @@ For an out-of-the-box setup, you can use my docker-compose recipe or a docker im
 
 For automating the analysis of your Scala projects, check out my sbt plugin [mwz/sbt-sonar](https://github.com/mwz/sbt-sonar).
 
-Also, see the [examples](https://github.com/mwz/sonar-scala/tree/master/examples) directory, which includes sample projects for sbt, Gradle and Maven along with basic instructions on how to execute SonarQube analysis for each of those projects.
+Also, see the [examples](https://github.com/mwz/sonar-scala/tree/master/examples) directory, which includes sample projects for SBT _(`1.x`)_, Gradle _(`5.x`)_ and Maven _(`3.x`)_ along with basic instructions on how to execute SonarQube analysis for each of those projects.
 
 
 # Sonar-scanner properties

@@ -24,8 +24,8 @@
         <sonar.junit.reportPaths>target/surefire-reports</sonar.junit.reportPaths>
         <sonar.sourceEncoding>UTF-8</sonar.sourceEncoding>
         <sonar.scala.version>${scala.binary.version}</sonar.scala.version>
-        <sonar.scala.scoverage.reportPath>target/scoverage.xml</sonar.scala.scoverage.reportPath>
-        <sonar.scala.scapegoat.reportPath>target/scapegoat.xml</sonar.scala.scapegoat.reportPath>
+        <sonar.scala.scoverage.reportPath>${project.build.directory}/scoverage.xml</sonar.scala.scoverage.reportPath>
+        <sonar.scala.scapegoat.reportPath>${project.build.directory}/scapegoat.xml</sonar.scala.scapegoat.reportPath>
     </properties>
 
     <dependencies>
@@ -103,7 +103,7 @@
                 <!-- Scapegoat setup -->
                 <configuration>
                     <args>
-                        <arg>-P:scapegoat:dataDir:./target</arg>
+                        <arg>-P:scapegoat:dataDir:${project.build.directory}</arg>
                         <arg>-P:scapegoat:reports:xml</arg>
                     </args>
                     <compilerPlugins>

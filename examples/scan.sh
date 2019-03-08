@@ -39,4 +39,4 @@ mvn ${SONAR_SCANNER_DEFAULTS} scoverage:report sonar:sonar
 # Maven scala-java
 echo -e "\nScanning Maven scala-java project."
 cd $CWD/mvn/scala-java
-mvn ${SONAR_SCANNER_DEFAULTS} clean test scoverage:report jacoco:report sonar:sonar
+mvn ${SONAR_SCANNER_DEFAULTS} clean test scoverage:report jacoco:report scala:compile sonar:sonar

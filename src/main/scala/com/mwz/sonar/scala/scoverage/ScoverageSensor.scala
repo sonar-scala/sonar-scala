@@ -43,6 +43,7 @@ final class ScoverageSensor(scoverageReportParser: ScoverageReportParserAPI) ext
       .name(SensorName)
       .onlyOnLanguage(Scala.LanguageKey)
       .onlyOnFileType(InputFile.Type.MAIN)
+      .onlyWhenConfiguration(shouldEnableSensor)
   }
 
   /** Saves in SonarQube the scoverage information of the project. */
@@ -161,7 +162,14 @@ final class ScoverageSensor(scoverageReportParser: ScoverageReportParserAPI) ext
 
 private[scoverage] object ScoverageSensor {
   final val SensorName = "Scoverage Sensor"
+  final val ScoverageDisablePropertyKey = "sonar.scala.scoverage.disable"
   final val ScoverageReportPathPropertyKey = "sonar.scala.scoverage.reportPath"
+
+  def shouldEnableSensor(conf: Configuration): Boolean =
+    conf
+      .get(ScoverageDisablePropertyKey)
+      .toOption
+      .forall(s => s.toLowerCase != "true")
 
   def getDefaultScoverageReportPath(scalaVersion: ScalaVersion): Path =
     Paths.get(s"target/scala-${scalaVersion.major}.${scalaVersion.minor}/scoverage-report/scoverage.xml")

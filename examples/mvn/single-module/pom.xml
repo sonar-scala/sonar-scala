@@ -15,7 +15,7 @@
         <java.version>1.8</java.version>
         <scala.version>2.12.8</scala.version>
         <scala.binary.version>2.12</scala.binary.version>
-        <scapegoat.version>1.3.8</scapegoat.version>
+        <scapegoat.version>1.3.6</scapegoat.version>
 
         <sonar.projectName>[example] Maven Single Module</sonar.projectName>
         <sonar.projectKey>example-mvn-single-module</sonar.projectKey>

@@ -87,6 +87,7 @@ The plugin exposes the following properties which can be passed to sonar-scanner
 - **sonar.junit.reportPaths** (optional) - relative path to the directory containing unit test execution reports in Surefire XML format (defaults to `target/test-reports`); those reports get generated automatically by sbt and Gradle (Gradle outputs those in `build/test-results/test`), for Maven see the [examples](examples/mvn) on how to configure the [Surefire](https://maven.apache.org/surefire/maven-surefire-plugin/test-mojo.html) plugin
 - **sonar.scala.version** (optional) - defines the version of Scala used in your project (requires the `{major}.{minor}` versions and the patch version is ignored, defaults to `2.12`)
 - **sonar.scala.scoverage.reportPath** (optional) - relative path to the scoverage report (defaults to `target/scala-${sonar.scala.version}/scoverage-report/scoverage.xml`)
+- **sonar.scala.scoverage.disable** (optional) - disables the Scoverage sensor from being executed on your sources (defaults to `false`)
 - **sonar.scala.scalastyle.disable** (optional) - disables the Scalastyle sensor from being executed on your sources (defaults to `false`)
 - **sonar.scala.scapegoat.reportPath** (optional) - relative path to the scapegoat report (defaults to `target/scala-${sonar.scala.version}/scapegoat-report/scapegoat.xml`)
 - **sonar.scala.scapegoat.disable** (optional) - disables the Scapegoat sensor from being executed on your sources (defaults to `false`)

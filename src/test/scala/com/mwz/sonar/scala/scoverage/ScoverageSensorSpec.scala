@@ -44,6 +44,34 @@ class ScoverageSensorSpec extends FlatSpec with SensorContextMatchers with LoneE
     descriptor.`type` shouldBe InputFile.Type.MAIN
   }
 
+  it should "read the 'disable' config property" in {
+    val context = SensorContextTester.create(cwd)
+    ScoverageSensor.shouldEnableSensor(context.config) shouldBe true
+
+    val context2 = SensorContextTester.create(cwd)
+    context2.setSettings(new MapSettings().setProperty("sonar.scala.scoverage.disable", "maybe"))
+    ScoverageSensor.shouldEnableSensor(context2.config) shouldBe true
+
+    val context3 = SensorContextTester.create(cwd)
+    context3.setSettings(new MapSettings().setProperty("sonar.scala.scoverage.disable", "true"))
+    ScoverageSensor.shouldEnableSensor(context3.config) shouldBe false
+  }
+
+  it should "execute the sensor if the 'disable' flag wasn't set" in {
+    val context = SensorContextTester.create(cwd)
+    val descriptor = new DefaultSensorDescriptor
+    scoverageSensor.describe(descriptor)
+    descriptor.configurationPredicate.test(context.config) shouldBe true
+  }
+
+  it should "respect the 'disable' config property and skip scapegoat analysis if set to true" in {
+    val context = SensorContextTester.create(cwd)
+    context.setSettings(new MapSettings().setProperty("sonar.scala.scoverage.disable", "true"))
+    val descriptor = new DefaultSensorDescriptor
+    scoverageSensor.describe(descriptor)
+    descriptor.configurationPredicate.test(context.config) shouldBe false
+  }
+
   it should "correctly save component scoverage" in {
     val context = SensorContextTester.create(cwd)
     val scoverage = Scoverage(123, 15, 88.72, 14.17)

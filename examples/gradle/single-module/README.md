@@ -3,7 +3,7 @@ Gradle single-module project
 
 This project consists of a single, root module.
 
-It uses [gradle-scoverage](https://github.com/scoverage/gradle-scoverage), [scapegoat](https://github.com/sksamuel/scapegoat) and [sonarqube-gradle](https://plugins.gradle.org/plugin/org.sonarqube) plugins and includes examples of how to configure and execute SonarQube analysis.
+It uses [gradle-scoverage](https://github.com/scoverage/gradle-scoverage), [scapegoat](https://github.com/sksamuel/scapegoat#gradle) and [sonarqube-gradle](https://plugins.gradle.org/plugin/org.sonarqube) plugins and includes examples of how to configure and execute SonarQube analysis.
 
 To run the analysis execute the following command setting the `sonar.host.url` property to point to your SonarQube instance with installed sonar-scala plugin.
 

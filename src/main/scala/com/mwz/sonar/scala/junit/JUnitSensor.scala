@@ -40,7 +40,7 @@ import scala.collection.JavaConverters._
 final class JUnitSensor(
   config: Configuration,
   fs: FileSystem,
-  untTestsReportParser: JUnitReportParserAPI
+  junitTestsReportParser: JUnitReportParserAPI
 ) extends Sensor {
   import JUnitSensor._ // scalastyle:ignore org.scalastyle.scalariform.ImportGroupingChecker
 
@@ -78,7 +78,7 @@ final class JUnitSensor(
     if (inputFiles.nonEmpty)
       log.debug(s"Input test files: \n${inputFiles.mkString(", ")}")
     else
-      log.warn(s"No test files found for module ${context.module.key}.")
+      log.warn(s"No test files found for module ${context.project.key}.")
 
     // Resolve test directories.
     val testDirectories: List[File] = fs.resolve(tests)
@@ -91,7 +91,7 @@ final class JUnitSensor(
       log.error(s"The following JUnit test report path(s) were not found : ${reports.mkString(", ")}.")
 
     // Parse the reports.
-    val parsedReports: Map[InputFile, JUnitReport] = untTestsReportParser.parse(tests, reportDirectories)
+    val parsedReports: Map[InputFile, JUnitReport] = junitTestsReportParser.parse(tests, reportDirectories)
 
     // Save test metrics for each file.
     save(context, parsedReports)

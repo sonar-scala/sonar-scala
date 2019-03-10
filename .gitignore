@@ -28,3 +28,4 @@ project/plugins/project/
 
 # other
 *.log
+/bin/

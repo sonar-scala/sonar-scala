@@ -47,8 +47,8 @@ class ScoverageReportParserSpec extends FlatSpec with Matchers {
       statementCoverage = 0.0,
       branchCoverage = 0.0
     )
-    val expected = ModuleCoverage(
-      moduleScoverage = scoverage,
+    val expected = ProjectCoverage(
+      projectScoverage = scoverage,
       filesCoverage = Map.empty
     )
 
@@ -65,8 +65,8 @@ class ScoverageReportParserSpec extends FlatSpec with Matchers {
       statementCoverage = 100.0,
       branchCoverage = 100.0
     )
-    val expected = ModuleCoverage(
-      moduleScoverage = scoverage,
+    val expected = ProjectCoverage(
+      projectScoverage = scoverage,
       filesCoverage = Map(
         "src/main/scala/com/mwz/sonar/scala/ScalaPlugin.scala" -> FileCoverage(
           fileScoverage = scoverage,
@@ -93,8 +93,8 @@ class ScoverageReportParserSpec extends FlatSpec with Matchers {
       statementCoverage = 100.0,
       branchCoverage = 100.0
     )
-    val expected = ModuleCoverage(
-      moduleScoverage = scoverage,
+    val expected = ProjectCoverage(
+      projectScoverage = scoverage,
       filesCoverage = Map(
         "src/main/scala/com/mwz/sonar/scala/ScalaPlugin.scala" -> FileCoverage(
           fileScoverage = scoverage,
@@ -122,8 +122,8 @@ class ScoverageReportParserSpec extends FlatSpec with Matchers {
       statementCoverage = 100.0,
       branchCoverage = 100.0
     )
-    val expected = ModuleCoverage(
-      moduleScoverage = scoverage,
+    val expected = ProjectCoverage(
+      projectScoverage = scoverage,
       filesCoverage = Map(
         "src/main/scala/com/mwz/sonar/scala/ScalaPlugin.scala" -> FileCoverage(
           fileScoverage = scoverage,
@@ -153,8 +153,8 @@ class ScoverageReportParserSpec extends FlatSpec with Matchers {
       statementCoverage = 100.0,
       branchCoverage = 100.0
     )
-    val expected = ModuleCoverage(
-      moduleScoverage = scoverage,
+    val expected = ProjectCoverage(
+      projectScoverage = scoverage,
       filesCoverage = Map(
         "src/main/scala/com/mwz/sonar/scala/ScalaPlugin.scala" -> FileCoverage(
           fileScoverage = scoverage,
@@ -176,8 +176,8 @@ class ScoverageReportParserSpec extends FlatSpec with Matchers {
       statementCoverage = 71.43,
       branchCoverage = 87.5
     )
-    val expected = ModuleCoverage(
-      moduleScoverage = scoverage,
+    val expected = ProjectCoverage(
+      projectScoverage = scoverage,
       filesCoverage = Map(
         "src/main/scala/com/mwz/sonar/scala/ScalaPlugin.scala" -> FileCoverage(
           fileScoverage = scoverage,
@@ -212,8 +212,8 @@ class ScoverageReportParserSpec extends FlatSpec with Matchers {
       branchCoverage = 66.66
     )
 
-    val expected = ModuleCoverage(
-      moduleScoverage = scoverageTotal,
+    val expected = ProjectCoverage(
+      projectScoverage = scoverageTotal,
       filesCoverage = Map(
         "src/main/scala/com/mwz/sonar/scala/ScalaPlugin.scala" -> FileCoverage(
           fileScoverage = scoverage1,

@@ -25,30 +25,35 @@ import scala.meta._
 
 /** SBT Task that generates a managed file with all scapegoat inspections */
 object ScapegoatInspectionsGenerator {
+  /** Project relative path to the Scapegoat Inspections temaplate file. */
+  private final val ScapegoatInspectionsTemplateFilePath = List(
+    "project",
+    "src",
+    "main",
+    "resources",
+    "ScapegoatInspections.scala"
+  )
 
   val generatorTask = Def.task {
     val log = streams.value.log
-    log.info("Generating Scapegoat inspections file.")
+    val cachedFun =
+      FileFunction
+        .cached(streams.value.cacheDirectory / "scapegoat", inStyle = FilesInfo.hash) { (in: Set[File]) =>
+          log.info("Generating Scapegoat inspections file.")
 
-    // Load the template file.
-    val templateFile: Path = Paths
-      .get(
-        baseDirectory.value.toString,
-        "project",
-        "src",
-        "main",
-        "resources",
-        "ScapegoatInspections.scala"
-      )
+          // Load the template file.
+          val templateFile: Path = Paths.get(baseDirectory.value.toString, ScapegoatInspectionsTemplateFilePath: _*)
 
-    val allScapegoatInspections: Seq[(String, Inspection)] = extractInspections()
-    val stringifiedScapegoatIsnpections: Seq[String] = stringifyInspections(allScapegoatInspections)
-    val transformed: Tree = fillTemplate(templateFile.parse[Source].get, stringifiedScapegoatIsnpections)
+          val allScapegoatInspections: Seq[(String, Inspection)] = extractInspections()
+          val stringifiedScapegoatIsnpections: Seq[String] = stringifyInspections(allScapegoatInspections)
+          val transformed: Tree = fillTemplate(templateFile.parse[Source].get, stringifiedScapegoatIsnpections)
 
-    val scapegoatInspectionsFile: File = (sourceManaged in Compile).value / "scapegoat" / "inspections.scala"
-    IO.write(scapegoatInspectionsFile, transformed.syntax)
+          val scapegoatInspectionsFile: File = (sourceManaged in Compile).value / "scapegoat" / "inspections.scala"
+          IO.write(scapegoatInspectionsFile, transformed.syntax)
+          Set(scapegoatInspectionsFile)
+        }
 
-    Seq(scapegoatInspectionsFile)
+    cachedFun(Set(file(ScapegoatInspectionsTemplateFilePath.mkString("/")))).toSeq
   }
 
   /**

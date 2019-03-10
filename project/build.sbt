@@ -1,4 +1,4 @@
-scalaVersion := "2.12.7"
+scalaVersion := "2.12.8"
 libraryDependencies ++= Seq(
   "org.sonarsource.update-center" % "sonar-update-center-common" % "1.21.0.561",
   // Scapegoat & scalastyle inspections generator dependencies

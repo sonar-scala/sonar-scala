@@ -22,7 +22,7 @@ import java.io.File
 import java.nio.file.Path
 
 import com.mwz.sonar.scala.util.Log
-import org.sonar.api.batch.ScannerSide
+import org.sonar.api.scanner.ScannerSide
 import org.sonar.api.batch.fs.{FilePredicate, FileSystem, InputFile}
 
 import scala.collection.JavaConverters._

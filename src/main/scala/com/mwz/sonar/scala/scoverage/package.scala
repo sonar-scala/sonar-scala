@@ -17,16 +17,21 @@
 
 package com.mwz.sonar.scala
 
+import cats.kernel.Semigroup
+import cats.instances.int.catsKernelStdGroupForInt
+import cats.instances.map.catsKernelStdMonoidForMap
+import cats.syntax.semigroup.catsSyntaxSemigroup
+
 package object scoverage {
 
   /**
-   *  The coverage information of an entire module.
+   *  The coverage information of an entire project.
    *  It is composed of:
-   *    - the overall [[ScoverageMetrics]] of the module.
-   *    - the coverage information of each file of the module.
+   *    - the overall [[ScoverageMetrics]] of the project.
+   *    - the coverage information of each file of the project.
    */
-  private[scoverage] final case class ModuleCoverage(
-    moduleScoverage: Scoverage,
+  private[scoverage] final case class ProjectCoverage(
+    projectScoverage: Scoverage,
     filesCoverage: Map[String, FileCoverage]
   )
 
@@ -34,20 +39,12 @@ package object scoverage {
    *  The coverage information of a file.
    *  It is composed of:
    *    - the overall [[ScoverageMetrics]] of the file.
-   *    - the coverage information of each line of the module.
+   *    - the coverage information of each line of the file.
    */
   private[scoverage] final case class FileCoverage(
     fileScoverage: Scoverage,
     linesCoverage: LinesCoverage
-  ) {
-
-    /** Merges two file coverages in one */
-    private[scoverage] def +(that: FileCoverage): FileCoverage = {
-      val mergedFileScoverage = this.fileScoverage + that.fileScoverage
-      val mergedLinesCoverage = this.linesCoverage ++ that.linesCoverage
-      FileCoverage(mergedFileScoverage, mergedLinesCoverage)
-    }
-  }
+  )
 
   /**
    *  The coverage information of the lines of a file.
@@ -55,34 +52,45 @@ package object scoverage {
    */
   private[scoverage] type LinesCoverage = Map[Int, Int]
 
-  /** [[ScoverageMetrics]] of a component */
+  /** [[ScoverageMetrics]] of a component. */
   private[scoverage] final case class Scoverage(
     totalStatements: Int,
     coveredStatements: Int,
     statementCoverage: Double,
     branchCoverage: Double
-  ) {
+  )
 
-    /** Merges two scoverages metrics in one */
-    private[scoverage] def +(that: Scoverage): Scoverage = {
-      val mergedTotalStatements = this.totalStatements + that.totalStatements
-      val mergedCoveredStatements = this.coveredStatements + that.coveredStatements
+  /** Merges two scoverages metrics in one. */
+  private[scoverage] final implicit val ScoverageSemigroup: Semigroup[Scoverage] = new Semigroup[Scoverage] {
+    // Helper methods used to aggregate scoverage metrics.
+    private[this] val Two = BigDecimal("2.0")
+    private[this] val Percentage = BigDecimal("100.0")
+
+    private[this] def toFixedPrecision(value: BigDecimal): Double =
+      value.setScale(scale = 2, mode = BigDecimal.RoundingMode.HALF_EVEN).toDouble
+
+    private[this] def averagePercentages(a: Double, b: Double): Double =
+      toFixedPrecision((BigDecimal.valueOf(a) + BigDecimal.valueOf(b)) / Two)
+
+    private[this] def computePercentage(hits: Double, total: Double): Double =
+      toFixedPrecision(BigDecimal.valueOf(hits) / BigDecimal.valueOf(total) * Percentage)
+
+    override def combine(a: Scoverage, b: Scoverage): Scoverage = {
+      val mergedTotalStatements = a.totalStatements + b.totalStatements
+      val mergedCoveredStatements = a.coveredStatements + b.coveredStatements
       val mergedStatementCoverage = computePercentage(mergedCoveredStatements, mergedTotalStatements)
-      val mergedBranchCoverage = averagePercentages(this.branchCoverage, that.branchCoverage)
+      val mergedBranchCoverage = averagePercentages(a.branchCoverage, b.branchCoverage)
       Scoverage(mergedTotalStatements, mergedCoveredStatements, mergedStatementCoverage, mergedBranchCoverage)
     }
   }
 
-  // helper methods used to aggregate scoverage metrics
-  private val Two = BigDecimal("2.0")
-  private val Percentage = BigDecimal("100.0")
-
-  private def averagePercentages(a: Double, b: Double): Double =
-    toFixedPrecision((BigDecimal.valueOf(a) + BigDecimal.valueOf(b)) / Two)
-
-  private def computePercentage(hits: Double, total: Double): Double =
-    toFixedPrecision(BigDecimal.valueOf(hits) / BigDecimal.valueOf(total) * Percentage)
-
-  private def toFixedPrecision(value: BigDecimal): Double =
-    value.setScale(scale = 2, mode = BigDecimal.RoundingMode.HALF_EVEN).toDouble
+  /** Merges two file coverages in one. */
+  private[scoverage] final implicit val FileCoverageSemigroup: Semigroup[FileCoverage] =
+    new Semigroup[FileCoverage] {
+      override def combine(a: FileCoverage, b: FileCoverage): FileCoverage = {
+        val mergedFileScoverage = a.fileScoverage |+| b.fileScoverage
+        val mergedLinesCoverage = a.linesCoverage |+| b.linesCoverage
+        FileCoverage(mergedFileScoverage, mergedLinesCoverage)
+      }
+    }
 }

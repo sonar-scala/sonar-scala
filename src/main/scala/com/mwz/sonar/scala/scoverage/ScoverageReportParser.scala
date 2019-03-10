@@ -20,37 +20,38 @@ package scoverage
 
 import java.nio.file.{Path, Paths}
 
+import cats.syntax.semigroup.catsSyntaxSemigroup
 import com.mwz.sonar.scala.util.PathUtils
-import org.sonar.api.batch.ScannerSide
+import org.sonar.api.scanner.ScannerSide
 
 import scala.xml.{Node, XML}
 
 trait ScoverageReportParserAPI {
-  def parse(scoverageReportPath: Path, modulePath: Path, sourcePrefixes: List[Path]): ModuleCoverage
+  def parse(scoverageReportPath: Path, projectPath: Path, sourcePrefixes: List[Path]): ProjectCoverage
 }
 
-/** Scoverage XML reports parser */
+/** Scoverage XML reports parser. */
 @ScannerSide
 final class ScoverageReportParser extends ScoverageReportParserAPI {
 
-  /** Parses the scoverage report from a file and returns the ModuleCoverage. */
+  /** Parses the scoverage report from a file and returns the ProjectCoverage. */
   override def parse(
     scoverageReportPath: Path,
-    modulePath: Path,
+    projectPath: Path,
     sourcePrefixes: List[Path]
-  ): ModuleCoverage = {
+  ): ProjectCoverage = {
     val scoverageXMLReport = XML.loadFile(scoverageReportPath.toFile)
-    val moduleScoverage = extractScoverageFromNode(scoverageXMLReport)
+    val projectScoverage = extractScoverageFromNode(scoverageXMLReport)
 
     val classCoverages = for {
       classNode <- scoverageXMLReport \\ "class"
       scoverageFilename = Paths.get(classNode \@ "filename")
       filename <- sourcePrefixes map { prefix =>
         // We call stripOutPrefix twice here to get the full path to the filenames from Scoverage report,
-        // relative to the current module and the sources prefix.
+        // relative to the current project and the sources prefix.
         // E.g. both module1/sources/File.scala as well as sources/File.scala will return File.scala as a result.
         val filename = PathUtils.stripOutPrefix(
-          PathUtils.stripOutPrefix(modulePath, prefix),
+          PathUtils.stripOutPrefix(projectPath, prefix),
           scoverageFilename
         )
         (prefix, filename)
@@ -77,18 +78,18 @@ final class ScoverageReportParser extends ScoverageReportParserAPI {
       classCoverage = FileCoverage(classScoverage, linesCoverage)
     } yield filename -> classCoverage
 
-    // merge the class coverages by filename
+    // Merge the class coverages by filename.
     val files = classCoverages groupBy {
       case (fileName, _) => fileName
     } mapValues { group =>
       val classCoveragesByFilename = group map { case (_, classCoverage) => classCoverage }
-      classCoveragesByFilename.reduce(_ + _)
+      classCoveragesByFilename.reduce(_ |+| _)
     }
 
-    ModuleCoverage(moduleScoverage, files)
+    ProjectCoverage(projectScoverage, files)
   }
 
-  /** Extracts the scoverage metrics form a class or module node */
+  /** Extracts the scoverage metrics form a class or project node. */
   private[scoverage] def extractScoverageFromNode(node: Node): Scoverage =
     Scoverage(
       totalStatements = (node \@ "statement-count").toInt,

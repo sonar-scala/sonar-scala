@@ -66,8 +66,8 @@ class PathUtilsSpec extends FlatSpec with Matchers {
   }
 
   "getModuleBaseDirectory" should "get module base directory" in {
-    getModuleBaseDirectory(new DefaultFileSystem(cwd)) shouldBe Paths.get("")
-    getModuleBaseDirectory(
+    getProjectBaseDirectory(new DefaultFileSystem(cwd)) shouldBe Paths.get("")
+    getProjectBaseDirectory(
       new DefaultFileSystem(cwd.resolve("module"))
     ) shouldBe Paths.get("module")
   }

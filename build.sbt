@@ -26,7 +26,7 @@ headerLicense := Some(
 excludeFilter.in(headerResources) := "*.scala"
 
 // Compile options
-scalaVersion := "2.12.7"
+scalaVersion := "2.12.8"
 scalacOptions := Seq(
   "-unchecked",
   "-deprecation",
@@ -52,7 +52,7 @@ sourceGenerators in Compile ++= Seq(
 )
 
 // Lib dependencies
-val sonarVersion = "7.4"
+val sonarVersion = "7.6"
 libraryDependencies ++= List(
   "org.sonarsource.sonarqube" % "sonar-plugin-api" % sonarVersion % Provided,
   "org.slf4j"                 % "slf4j-api"        % "1.7.26" % Provided,

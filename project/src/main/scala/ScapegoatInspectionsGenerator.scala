@@ -38,7 +38,11 @@ object ScapegoatInspectionsGenerator {
     val log = streams.value.log
     val cachedFun =
       FileFunction
-        .cached(streams.value.cacheDirectory / "scapegoat", inStyle = FilesInfo.hash) { (in: Set[File]) =>
+        .cached(
+          cacheBaseDirectory = streams.value.cacheDirectory / "scapegoat",
+          inStyle = FilesInfo.hash,
+          outStyle = FilesInfo.exists
+        ) { (in: Set[File]) =>
           log.info("Generating Scapegoat inspections file.")
 
           // Load the template file.

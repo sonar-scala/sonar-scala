@@ -65,8 +65,6 @@ final class ScoverageSensor(scoverageReportParser: ScoverageReportParserAPI) ext
         log.info("Successfully loaded the scoverage report file.")
         log.debug(s"Project scoverage information: $projectCoverage.")
 
-        saveComponentScoverage(context, context.module, projectCoverage.projectScoverage)
-
         // Save the coverage information of each file of the project.
         getProjectSourceFiles(filesystem) foreach { file =>
           val filename = PathUtils.cwd.relativize(Paths.get(file.uri())).toString

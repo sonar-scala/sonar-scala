@@ -162,13 +162,6 @@ class ScoverageSensorSpec extends FlatSpec with SensorContextMatchers with LoneE
     // execute the sensor
     scoverageSensor.execute(context)
 
-    // validate the module scoverage metrics
-    val moduleKey = context.module.key
-    context should have(metric[java.lang.Integer](moduleKey, "sonar-scala-scoverage-total-statements", 5))
-    context should have(metric[java.lang.Integer](moduleKey, "sonar-scala-scoverage-covered-statements", 3))
-    context should have(metric[java.lang.Double](moduleKey, "sonar-scala-scoverage-statement-coverage", 60.0))
-    context should have(metric[java.lang.Double](moduleKey, "sonar-scala-scoverage-branch-scoverage", 100.0))
-
     // validate the main file scoverage metrics
     val fileKey = mainFile.key
     context should have(metric[java.lang.Integer](fileKey, "sonar-scala-scoverage-total-statements", 5))
@@ -204,12 +197,12 @@ class ScoverageSensorSpec extends FlatSpec with SensorContextMatchers with LoneE
     // execute the sensor
     scoverageSensor.execute(context)
 
-    //validate the module scoverage metrics
-    val moduleKey = context.module.key
-    context should have(metric[java.lang.Integer](moduleKey, "sonar-scala-scoverage-total-statements", 5))
-    context should have(metric[java.lang.Integer](moduleKey, "sonar-scala-scoverage-covered-statements", 3))
-    context should have(metric[java.lang.Double](moduleKey, "sonar-scala-scoverage-statement-coverage", 60.0))
-    context should have(metric[java.lang.Double](moduleKey, "sonar-scala-scoverage-branch-scoverage", 100.0))
+    // validate the main file scoverage metrics
+    val fileKey = mainFile.key
+    context should have(metric[java.lang.Integer](fileKey, "sonar-scala-scoverage-total-statements", 5))
+    context should have(metric[java.lang.Integer](fileKey, "sonar-scala-scoverage-covered-statements", 3))
+    context should have(metric[java.lang.Double](fileKey, "sonar-scala-scoverage-statement-coverage", 60.0))
+    context should have(metric[java.lang.Double](fileKey, "sonar-scala-scoverage-branch-scoverage", 100.0))
   }
 }
 

@@ -11,8 +11,8 @@ sonar-scala
 [circleci]: https://circleci.com/gh/mwz/sonar-scala
 [coverage-badge]: https://sonar.sonar-scala.com/api/badges/measure?key=sonar-scala&metric=coverage
 [coverage]: https://sonar.sonar-scala.com/component_measures?id=sonar-scala&metric=coverage
-[bintray-badge]: https://img.shields.io/badge/Download-7.3.1-blue.svg
-[bintray]: https://bintray.com/mwz/maven/sonar-scala/7.3.1/link
+[bintray-badge]: https://img.shields.io/badge/Download-7.4.0-blue.svg
+[bintray]: https://bintray.com/mwz/maven/sonar-scala/7.4.0/link
 [bintray-badge-lts]: https://img.shields.io/badge/Download-6.8.0_(LTS)-blue.svg
 [bintray-lts]: https://bintray.com/mwz/maven/sonar-scala/6.8.0/link
 [bintray-stats-badge]: https://img.shields.io/badge/dynamic/json.svg?uri=https://bintray.com/statistics/packageStatistics?pkgPath=/mwz/maven/sonar-scala&query=$.totalDownloads&label=Downloads+(last+30+days)&colorB=green
@@ -23,7 +23,7 @@ sonar-scala
 
 **SonarQube plugin for static code analysis of Scala projects.**
 
-Intended for [SonarQube 6.7 LTS](https://www.sonarqube.org/sonarqube-6-7-lts), [SonarQube 7.4](https://www.sonarqube.org/sonarqube-7-4) and Scala 2.11/2.12.
+Intended for [SonarQube 6.7 LTS](https://www.sonarqube.org/sonarqube-6-7-lts), [SonarQube 7.6](https://www.sonarqube.org/sonarqube-7-6) and Scala 2.11/2.12.
 Running analysis from a Windows machine is currently not supported, please use Linux or other Unix-like operating systems.
 
 This plugin is not an evolution from the legacy sonar-scala-plugin of which versions can be found laying around such as [1and1/sonar-scala](https://github.com/1and1/sonar-scala).
@@ -77,7 +77,7 @@ For an out-of-the-box setup, you can use my docker-compose recipe or a docker im
 
 For automating the analysis of your Scala projects, check out my sbt plugin [mwz/sbt-sonar](https://github.com/mwz/sbt-sonar).
 
-Also, see the [examples](https://github.com/mwz/sonar-scala/tree/master/examples) directory, which includes sample projects for sbt, Gradle and Maven along with basic instructions on how to execute SonarQube analysis for each of those projects.
+Also, see the [examples](https://github.com/mwz/sonar-scala/tree/master/examples) directory, which includes sample projects for SBT _(`1.x`)_, Gradle _(`5.x`)_ and Maven _(`3.x`)_ along with basic instructions on how to execute SonarQube analysis for each of those projects.
 
 
 # Sonar-scanner properties
@@ -87,6 +87,7 @@ The plugin exposes the following properties which can be passed to sonar-scanner
 - **sonar.junit.reportPaths** (optional) - relative path to the directory containing unit test execution reports in Surefire XML format (defaults to `target/test-reports`); those reports get generated automatically by sbt and Gradle (Gradle outputs those in `build/test-results/test`), for Maven see the [examples](examples/mvn) on how to configure the [Surefire](https://maven.apache.org/surefire/maven-surefire-plugin/test-mojo.html) plugin
 - **sonar.scala.version** (optional) - defines the version of Scala used in your project (requires the `{major}.{minor}` versions and the patch version is ignored, defaults to `2.12`)
 - **sonar.scala.scoverage.reportPath** (optional) - relative path to the scoverage report (defaults to `target/scala-${sonar.scala.version}/scoverage-report/scoverage.xml`)
+- **sonar.scala.scoverage.disable** (optional) - disables the Scoverage sensor from being executed on your sources (defaults to `false`)
 - **sonar.scala.scalastyle.disable** (optional) - disables the Scalastyle sensor from being executed on your sources (defaults to `false`)
 - **sonar.scala.scapegoat.reportPath** (optional) - relative path to the scapegoat report (defaults to `target/scala-${sonar.scala.version}/scapegoat-report/scapegoat.xml`)
 - **sonar.scala.scapegoat.disable** (optional) - disables the Scapegoat sensor from being executed on your sources (defaults to `false`)
@@ -107,6 +108,7 @@ or simply `sbt sonarScan` if you use the [sbt-sonar](https://github.com/mwz/sbt-
 # Compatibility with SonarQube
 SonarQube | sonar-scala
 ----------|----------
+7.6       | [7.4.0](https://github.com/mwz/sonar-scala/releases/tag/v7.4.0)
 7.4       | [7.3.1](https://github.com/mwz/sonar-scala/releases/tag/v7.3.1)
 7.3       | [7.0](https://github.com/mwz/sonar-scala/releases/tag/v7.0.0)
 6.7 LTS   | 6.x (*latest [6.8.0](https://github.com/mwz/sonar-scala/releases/tag/v6.8.0)*)

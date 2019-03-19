@@ -1,6 +1,6 @@
 lazy val baseSettings = Seq(
   scalaVersion := "2.12.6",
-  libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.6" % "test",
+  libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.7" % "test",
   scapegoatVersion in ThisBuild := "1.3.6"
 )
 

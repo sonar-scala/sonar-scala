@@ -11,8 +11,8 @@ sonar-scala
 [circleci]: https://circleci.com/gh/mwz/sonar-scala
 [coverage-badge]: https://sonar.sonar-scala.com/api/badges/measure?key=sonar-scala&metric=coverage
 [coverage]: https://sonar.sonar-scala.com/component_measures?id=sonar-scala&metric=coverage
-[bintray-badge]: https://img.shields.io/badge/Download-7.4.0-blue.svg
-[bintray]: https://bintray.com/mwz/maven/sonar-scala/7.4.0/link
+[bintray-badge]: https://img.shields.io/badge/Download-7.5.0-blue.svg
+[bintray]: https://bintray.com/mwz/maven/sonar-scala/7.5.0/link
 [bintray-badge-lts]: https://img.shields.io/badge/Download-6.8.0_(LTS)-blue.svg
 [bintray-lts]: https://bintray.com/mwz/maven/sonar-scala/6.8.0/link
 [bintray-stats-badge]: https://img.shields.io/badge/dynamic/json.svg?uri=https://bintray.com/statistics/packageStatistics?pkgPath=/mwz/maven/sonar-scala&query=$.totalDownloads&label=Downloads+(last+30+days)&colorB=green
@@ -23,7 +23,7 @@ sonar-scala
 
 **SonarQube plugin for static code analysis of Scala projects.**
 
-Intended for [SonarQube 6.7 LTS](https://www.sonarqube.org/sonarqube-6-7-lts), [SonarQube 7.6](https://www.sonarqube.org/sonarqube-7-6) and Scala 2.11/2.12.
+Intended for [SonarQube 6.7 LTS](https://www.sonarqube.org/sonarqube-6-7-lts), [SonarQube 7.7](https://www.sonarqube.org/sonarqube-7-7) and Scala 2.11/2.12.
 Running analysis from a Windows machine is currently not supported, please use Linux or other Unix-like operating systems.
 
 This plugin is not an evolution from the legacy sonar-scala-plugin of which versions can be found laying around such as [1and1/sonar-scala](https://github.com/1and1/sonar-scala).
@@ -37,7 +37,7 @@ This plugin currently supports the following SonarQube [metrics](https://docs.so
 **Size**
 - Number of classes (and objects) - [`classes`](https://docs.sonarqube.org/display/SONAR/Metric+Definitions#MetricDefinitions-Size)
 - Number of lines containing either comments or commented-out code - [`comment_lines`](https://docs.sonarqube.org/display/SONAR/Metric+Definitions#MetricDefinitions-Size)
-- Number of files - [`files`](https://docs.sonarqube.org/display/SONAR/Metric+Definitions#MetricDefinitions-Size)
+- Number of files (computed by the platform) - [`files`](https://docs.sonarqube.org/display/SONAR/Metric+Definitions#MetricDefinitions-Size)
 - Lines of code - [`ncloc`](https://docs.sonarqube.org/display/SONAR/Metric+Definitions#MetricDefinitions-Size)
 - Number of functions - [`functions`](https://docs.sonarqube.org/display/SONAR/Metric+Definitions#MetricDefinitions-Size)
 
@@ -108,6 +108,7 @@ or simply `sbt sonarScan` if you use the [sbt-sonar](https://github.com/mwz/sbt-
 # Compatibility with SonarQube
 SonarQube | sonar-scala
 ----------|----------
+7.7       | [7.5.0](https://github.com/mwz/sonar-scala/releases/tag/v7.5.0)
 7.6       | [7.4.0](https://github.com/mwz/sonar-scala/releases/tag/v7.4.0)
 7.4       | [7.3.1](https://github.com/mwz/sonar-scala/releases/tag/v7.3.1)
 7.3       | [7.0](https://github.com/mwz/sonar-scala/releases/tag/v7.0.0)

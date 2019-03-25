@@ -29,14 +29,17 @@ gradle --no-daemon ${SONAR_SCANNER_DEFAULTS} clean test reportScoverage sonarqub
 # Maven single-module
 echo -e "\nScanning Maven single-module project."
 cd $CWD/mvn/single-module
-mvn ${SONAR_SCANNER_DEFAULTS} clean test scoverage:report scala:compile sonar:sonar
+mvn ${SONAR_SCANNER_DEFAULTS} -Dsurefire.useSystemClassLoader=false \
+  clean test scoverage:report scala:compile sonar:sonar
 
 # Maven multi-module
 echo -e "\nScanning Maven multi-module project."
 cd $CWD/mvn/multi-module
-mvn ${SONAR_SCANNER_DEFAULTS} clean test scoverage:report scala:compile sonar:sonar
+mvn ${SONAR_SCANNER_DEFAULTS} -Dsurefire.useSystemClassLoader=false \
+  clean test scoverage:report scala:compile sonar:sonar
 
 # Maven scala-java
 echo -e "\nScanning Maven scala-java project."
 cd $CWD/mvn/scala-java
-mvn ${SONAR_SCANNER_DEFAULTS} clean test scoverage:report jacoco:report scala:compile sonar:sonar
+mvn ${SONAR_SCANNER_DEFAULTS} -Dsurefire.useSystemClassLoader=false \
+  clean test scoverage:report jacoco:report scala:compile sonar:sonar

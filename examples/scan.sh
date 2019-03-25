@@ -17,7 +17,6 @@ cd $CWD/sbt/multi-module
 sbt clean coverage test coverageReport scapegoat < /dev/null
 sonar-scanner ${SONAR_SCANNER_DEFAULTS}
 
-
 # Gradle single-module
 echo -e "\nScanning Gradle single-module project."
 cd $CWD/gradle/single-module

@@ -3,6 +3,7 @@ set -eu
 
 export CWD=`pwd`
 export SONAR_SCANNER_DEFAULTS="-Dsonar.host.url=${SONARQUBE_URL} -Dsonar.login=${SONARQUBE_ACCESS_TOKEN}"
+export GRADLE_VERSION=5.2.1
 
 # SBT single-module
 echo "Scanning SBT single-module project."
@@ -19,12 +20,14 @@ sonar-scanner ${SONAR_SCANNER_DEFAULTS}
 # Gradle single-module
 echo -e "\nScanning Gradle single-module project."
 cd $CWD/gradle/single-module
-gradle --no-daemon ${SONAR_SCANNER_DEFAULTS} clean test reportScoverage sonarqube
+gradle wrapper --gradle-version $GRADLE_VERSION
+./gradlew --no-daemon ${SONAR_SCANNER_DEFAULTS} clean test reportScoverage sonarqube
 
 # Gradle multi-module
 echo -e "\nScanning Gradle multi-module project."
 cd $CWD/gradle/multi-module
-gradle --no-daemon ${SONAR_SCANNER_DEFAULTS} clean test reportScoverage sonarqube
+gradle wrapper --gradle-version $GRADLE_VERSION
+./gradlew --no-daemon ${SONAR_SCANNER_DEFAULTS} clean test reportScoverage sonarqube
 
 # Maven single-module
 echo -e "\nScanning Maven single-module project."

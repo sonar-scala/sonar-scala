@@ -20,7 +20,7 @@ package scapegoat
 
 import org.sonar.api.batch.rule.Severity
 
-private[scapegoat] sealed trait Level {
+private[scapegoat] sealed trait Level extends Product with Serializable {
   def toRuleSeverity: Severity = this match {
     case Level.Error   => Severity.MAJOR
     case Level.Warning => Severity.MINOR
@@ -29,9 +29,9 @@ private[scapegoat] sealed trait Level {
 }
 
 private[scapegoat] object Level {
-  case object Error extends Level
-  case object Warning extends Level
-  case object Info extends Level
+  final case object Error extends Level
+  final case object Warning extends Level
+  final case object Info extends Level
 }
 
 private[scapegoat] final case class ScapegoatInspection(
@@ -41,6 +41,6 @@ private[scapegoat] final case class ScapegoatInspection(
   defaultLevel: Level
 )
 
-object ScapegoatInspections {
+private[scapegoat] object ScapegoatInspections {
   val AllInspections: List[ScapegoatInspection] = ???
 }

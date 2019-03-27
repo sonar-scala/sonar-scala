@@ -20,7 +20,7 @@ package scalastyle
 
 import org.scalastyle._
 
-final case class ScalastyleInspection(
+private[scalastyle] final case class ScalastyleInspection(
   clazz: String,
   id: String,
   label: String,
@@ -28,10 +28,10 @@ final case class ScalastyleInspection(
   extraDescription: Option[String],
   justification: Option[String],
   defaultLevel: Level,
-  params: Seq[Param]
+  params: List[Param]
 )
 
-final case class Param(
+private[scalastyle] final case class Param(
   name: String,
   typ: ParameterType,
   label: String,
@@ -39,7 +39,7 @@ final case class Param(
   default: String
 )
 
-object ScalastyleInspections {
+private[scalastyle] object ScalastyleInspections {
   val AllInspections: List[ScalastyleInspection] = ???
   val AllInspectionsByClass: Map[String, ScalastyleInspection] =
     AllInspections.map(i => i.clazz -> i).toMap

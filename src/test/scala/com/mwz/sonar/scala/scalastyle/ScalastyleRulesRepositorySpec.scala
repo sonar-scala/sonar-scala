@@ -33,7 +33,7 @@ class ScalastyleRulesRepositorySpec extends FlatSpec with Matchers with Inspecto
   trait Ctx {
     val context = new Context()
     new ScalastyleRulesRepository().define(context)
-    val repository: Repository = context.repositories.loneElement
+    val repository = context.repositories.loneElement
   }
 
   "ScalastyleRulesRepository" should "define rules repository" in new Ctx {
@@ -48,7 +48,7 @@ class ScalastyleRulesRepositorySpec extends FlatSpec with Matchers with Inspecto
 
   it should "include all Scalastyle inspections" in new Ctx {
     ScalastyleInspections.AllInspections should have size 69 // 29 templates + 40 default rules
-    ScalastyleInspections.AllInspectionsByClass.size shouldBe ScalastyleInspections.AllInspections.size
+    ScalastyleInspections.AllInspectionsByClass.size shouldBe 69
     repository.rules should have size 95 // 29 templates + 40 default rules + 26 template instances
   }
 
@@ -93,7 +93,7 @@ class ScalastyleRulesRepositorySpec extends FlatSpec with Matchers with Inspecto
   }
 
   it should "not have rules with empty parameters" in new Ctx {
-    val params: Seq[RulesDefinition.Param] =
+    val params =
       repository.rules.asScala
         .filter(r => !r.params.isEmpty)
         .flatMap(_.params.asScala)
@@ -105,16 +105,15 @@ class ScalastyleRulesRepositorySpec extends FlatSpec with Matchers with Inspecto
   }
 
   it should "have all rules contain ruleClass parameter" in new Ctx {
-    val rules: Seq[Rule] = repository.rules.asScala.filter(r => !r.params.isEmpty)
+    val rules = repository.rules.asScala.filter(r => !r.params.isEmpty)
     forEvery(rules) { rule =>
       rule.params.asScala.exists(p => p.key == "ruleClass" && p.defaultValue.startsWith("org.scalastyle"))
     }
   }
 
   it should "create rules with correct parameters" in new Ctx {
-    val rule: Rule = repository.rule("org.scalastyle.file.FileLineLengthChecker")
-    val params: Seq[(String, RuleParamType, String)] =
-      rule.params().asScala.map(p => (p.name, p.`type`, p.defaultValue))
+    val rule = repository.rule("org.scalastyle.file.FileLineLengthChecker")
+    val params = rule.params().asScala.map(p => (p.name, p.`type`, p.defaultValue))
     val expected = Seq(
       ("maxLineLength", RuleParamType.INTEGER, "160"),
       ("tabSize", RuleParamType.INTEGER, "4"),
@@ -151,7 +150,7 @@ class ScalastyleRulesRepositorySpec extends FlatSpec with Matchers with Inspecto
       extraDescription = None,
       justification = None,
       defaultLevel = InfoLevel,
-      params = Seq.empty
+      params = List.empty
     )
 
     val inspection2 = ScalastyleInspection(
@@ -162,7 +161,7 @@ class ScalastyleRulesRepositorySpec extends FlatSpec with Matchers with Inspecto
       extraDescription = Some("extraDescription"),
       justification = None,
       defaultLevel = InfoLevel,
-      params = Seq.empty
+      params = List.empty
     )
 
     val inspection3 = ScalastyleInspection(
@@ -173,7 +172,7 @@ class ScalastyleRulesRepositorySpec extends FlatSpec with Matchers with Inspecto
       extraDescription = Some("extraDescription"),
       justification = Some("justification"),
       defaultLevel = InfoLevel,
-      params = Seq.empty
+      params = List.empty
     )
 
     ScalastyleRulesRepository.formatDescription(inspection1) shouldBe "*description*"

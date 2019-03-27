@@ -15,10 +15,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import java.io.InputStream
 import java.nio.file.Paths
 
-import com.mwz.sonar.scala.scalastyle._
 import com.typesafe.config.{Config, ConfigFactory}
 import org.scalastyle.{Level, _}
 import sbt.Keys._
@@ -37,14 +35,14 @@ object ScalastyleInspectionsGenerator {
     log.info("Generating Scalastyle inspections file.")
 
     val c = classOf[MainConfig]
-    val definitionStream: InputStream = c.getResourceAsStream("/scalastyle_definition.xml")
-    val documentationStream: InputStream = c.getResourceAsStream("/scalastyle_documentation.xml")
-    val inspections: NodeSeq = XML.load(definitionStream) \\ "checker"
-    val docs: NodeSeq = XML.load(documentationStream) \\ "scalastyle-documentation" \ "check"
-    val config: Config = ConfigFactory.load(c.getClassLoader)
+    val definitionStream = c.getResourceAsStream("/scalastyle_definition.xml")
+    val documentationStream = c.getResourceAsStream("/scalastyle_documentation.xml")
+    val inspections = XML.load(definitionStream) \\ "checker"
+    val docs = XML.load(documentationStream) \\ "scalastyle-documentation" \ "check"
+    val config = ConfigFactory.load(c.getClassLoader)
 
     // Collect Scalastyle inspections from config files.
-    val generatedInspections: Seq[ScalastyleInspection] = extractInspections(inspections, docs, config)
+    val generatedInspections = extractInspections(inspections, docs, config)
 
     // Load the template file.
     val templateFile = Paths
@@ -53,7 +51,7 @@ object ScalastyleInspectionsGenerator {
         "project",
         "src",
         "main",
-        "scala",
+        "resources",
         "ScalastyleInspections.scala"
       )
 
@@ -75,7 +73,7 @@ object ScalastyleInspectionsGenerator {
     inspections: NodeSeq,
     docs: NodeSeq,
     config: Config
-  ): Seq[ScalastyleInspection] = {
+  ): Seq[String] = {
     val docsMap: Map[String, Node] = docs.map(node => node \@ "id" -> node).toMap
     for {
       inspection <- inspections
@@ -94,61 +92,30 @@ object ScalastyleInspectionsGenerator {
         val label = cfg.getString(s"$name.label")
         val description = cfg.getString(s"$name.description")
         val default = param \@ "default"
-        Param(name, typ, label, description, default)
+        s"""Param(
+           |  name = "$name",
+           |  typ = $typ,
+           |  label = "$label",
+           |  description = "$description",
+           |  default = \"\"\"$default\"\"\"
+           |)""".stripMargin
       }
-    } yield
-      ScalastyleInspection(
-        clazz,
-        id,
-        label,
-        description,
-        extraDescription,
-        justification,
-        defaultLevel,
-        params
-      )
+    } yield s"""ScalastyleInspection(
+               |  clazz = "$clazz",
+               |  id = "$id",
+               |  label = "$label",
+               |  description = "$description",
+               |  extraDescription = ${extraDescription.map(text => "\"\"\"" + text + "\"\"\"")},
+               |  justification = ${justification.map(text => "\"\"\"" + text + "\"\"\"")},
+               |  defaultLevel = $defaultLevel,
+               |  params = ${params.mkString("List(", ",", ")")}
+               |)""".stripMargin
   }
 
   /**
    * Fill the template with generated inspections.
    */
-  def transform(source: Tree, inspections: Seq[ScalastyleInspection]): Tree = {
-    val stringified: Seq[String] = inspections.collect {
-      case inspection =>
-        // Is there a better way of embedding multi-line text?
-        val extraDescription = inspection.extraDescription.map(s => "\"\"\"" + s + "\"\"\"")
-        val justification = inspection.justification.map(s => "\"\"\"" + s + "\"\"\"")
-        val params = inspection.params.map { p =>
-          s"""
-             |Param(
-             |  name = "${p.name}",
-             |  typ = ${p.typ},
-             |  label = "${p.label}",
-             |  description = "${p.description}",
-             |  default = \"\"\"${p.default}\"\"\"
-             |)
-           """.stripMargin
-        }
-
-        // It doesn't seem to be straightforward to automatically convert a collection
-        // into a tree using scalameta, so I'm turning it into a String so it can be parsed,
-        // which is easier than constructing the tree manually.
-        // Totally doable with shapeless though, but it would be a bit of an overkill in this case.
-        s"""
-           |ScalastyleInspection(
-           |  clazz = "${inspection.clazz}",
-           |  id = "${inspection.id}",
-           |  label = "${inspection.label}",
-           |  description = "${inspection.description}",
-           |  extraDescription = $extraDescription,
-           |  justification = $justification,
-           |  defaultLevel = ${inspection.defaultLevel},
-           |  params = ${params.toString.parse[Term].get.syntax}
-           |)
-         """.stripMargin
-    }
-
-    // Transform the template file.
+  def transform(source: Tree, stringified: Seq[String]): Tree = {
     val term: Term = stringified.toString.parse[Term].get
     source.transform {
       case q"val AllInspections: $tpe = $expr" =>

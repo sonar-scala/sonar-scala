@@ -18,7 +18,7 @@
 import java.nio.file.Paths
 
 import com.typesafe.config.{Config, ConfigFactory}
-import org.scalastyle.{Level, _}
+import org.scalastyle.{MainConfig, ParameterType, Level}
 import sbt.Keys._
 import sbt._
 
@@ -29,41 +29,50 @@ import scala.xml.{Node, NodeSeq, XML}
  * An SBT task that generates a managed source file with all Scalastyle inspections.
  */
 object ScalastyleInspectionsGenerator {
+  /** Project relative path to the Scalastyle Inspections template file. */
+  private final val ScalastyleInspectionsTemplateFilePath = List(
+    "project",
+    "src",
+    "main",
+    "resources",
+    "ScalastyleInspections.scala"
+  )
 
   val generatorTask = Def.task {
     val log = streams.value.log
-    log.info("Generating Scalastyle inspections file.")
+    val cachedFun =
+      FileFunction
+        .cached(
+          cacheBaseDirectory = streams.value.cacheDirectory / "scalastyle",
+          inStyle = FilesInfo.hash,
+          outStyle = FilesInfo.exists
+        ) { (in: Set[File]) =>
+          log.info("Generating Scalastyle inspections file.")
 
-    val c = classOf[MainConfig]
-    val definitionStream = c.getResourceAsStream("/scalastyle_definition.xml")
-    val documentationStream = c.getResourceAsStream("/scalastyle_documentation.xml")
-    val inspections = XML.load(definitionStream) \\ "checker"
-    val docs = XML.load(documentationStream) \\ "scalastyle-documentation" \ "check"
-    val config = ConfigFactory.load(c.getClassLoader)
+          val c = classOf[MainConfig]
+          val definitionStream = c.getResourceAsStream("/scalastyle_definition.xml")
+          val documentationStream = c.getResourceAsStream("/scalastyle_documentation.xml")
+          val inspections = XML.load(definitionStream) \\ "checker"
+          val docs = XML.load(documentationStream) \\ "scalastyle-documentation" \ "check"
+          val config = ConfigFactory.load(c.getClassLoader)
 
-    // Collect Scalastyle inspections from config files.
-    val generatedInspections = extractInspections(inspections, docs, config)
+          // Collect Scalastyle inspections from config files.
+          val generatedInspections = extractInspections(inspections, docs, config)
 
-    // Load the template file.
-    val templateFile = Paths
-      .get(
-        baseDirectory.value.toString,
-        "project",
-        "src",
-        "main",
-        "resources",
-        "ScalastyleInspections.scala"
-      )
+          // Load the template file.
+          val templateFile = Paths.get(baseDirectory.value.toString, ScalastyleInspectionsTemplateFilePath: _*)
 
-    // Substitute AllInspections with generated inspections.
-    val source: Source = templateFile.parse[Source].get
-    val transformed = transform(source, generatedInspections)
+          // Substitute AllInspections with generated inspections.
+          val source = templateFile.parse[Source].get
+          val transformed = transform(source, generatedInspections)
 
-    // Save the new file to the managed sources dir.
-    val scalastyleInspectionsFile = (sourceManaged in Compile).value / "scalastyle" / "inspections.scala"
-    IO.write(scalastyleInspectionsFile, transformed.syntax)
+          // Save the new file to the managed sources dir.
+          val scalastyleInspectionsFile = (sourceManaged in Compile).value / "scalastyle" / "inspections.scala"
+          IO.write(scalastyleInspectionsFile, transformed.syntax)
+          Set(scalastyleInspectionsFile)
+        }
 
-    Seq(scalastyleInspectionsFile)
+    cachedFun(Set(file(ScalastyleInspectionsTemplateFilePath.mkString("/")))).toSeq
   }
 
   /**

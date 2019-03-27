@@ -25,7 +25,7 @@ import scala.meta._
 
 /** SBT Task that generates a managed file with all scapegoat inspections */
 object ScapegoatInspectionsGenerator {
-  /** Project relative path to the Scapegoat Inspections temaplate file. */
+  /** Project relative path to the Scapegoat Inspections template file. */
   private final val ScapegoatInspectionsTemplateFilePath = List(
     "project",
     "src",
@@ -46,13 +46,13 @@ object ScapegoatInspectionsGenerator {
           log.info("Generating Scapegoat inspections file.")
 
           // Load the template file.
-          val templateFile: Path = Paths.get(baseDirectory.value.toString, ScapegoatInspectionsTemplateFilePath: _*)
+          val templateFile = Paths.get(baseDirectory.value.toString, ScapegoatInspectionsTemplateFilePath: _*)
 
-          val allScapegoatInspections: Seq[(String, Inspection)] = extractInspections()
-          val stringifiedScapegoatIsnpections: Seq[String] = stringifyInspections(allScapegoatInspections)
-          val transformed: Tree = fillTemplate(templateFile.parse[Source].get, stringifiedScapegoatIsnpections)
+          val allScapegoatInspections = extractInspections()
+          val stringifiedScapegoatIsnpections = stringifyInspections(allScapegoatInspections)
+          val transformed = fillTemplate(templateFile.parse[Source].get, stringifiedScapegoatIsnpections)
 
-          val scapegoatInspectionsFile: File = (sourceManaged in Compile).value / "scapegoat" / "inspections.scala"
+          val scapegoatInspectionsFile = (sourceManaged in Compile).value / "scapegoat" / "inspections.scala"
           IO.write(scapegoatInspectionsFile, transformed.syntax)
           Set(scapegoatInspectionsFile)
         }

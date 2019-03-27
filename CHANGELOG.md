@@ -1,6 +1,9 @@
 Changelog
 ===
 
+## [7.5.0](https://github.com/mwz/sonar-scala/releases/tag/v7.5.0) - 25.03.2019
+- Added support for [SonarQube 7.7](https://www.sonarqube.org/sonarqube-7-7). (#182 - @mwz)
+
 ## [7.4.0](https://github.com/mwz/sonar-scala/releases/tag/v7.4.0) - 11.03.2019
 - Added support for [SonarQube 7.6](https://www.sonarqube.org/sonarqube-7-6). (#152 - @BalmungSan)
 - Added an optional `sonar.scala.scoverage.disable` property, which can be used to disable the Scoverage sensor (defaults to `false`). (#169 - @BalmungSan)

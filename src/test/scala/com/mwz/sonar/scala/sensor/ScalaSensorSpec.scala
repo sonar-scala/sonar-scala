@@ -47,7 +47,6 @@ class ScalaSensorSpec extends FlatSpec with SensorContextMatchers with LoneEleme
 
     val componentKey = inputFile.key()
 
-    context should have(metric[java.lang.Integer](componentKey, CM.FILES_KEY, 1))
     context should have(metric[java.lang.Integer](componentKey, CM.COMMENT_LINES_KEY, 0))
     context should have(metric[java.lang.Integer](componentKey, CM.CLASSES_KEY, 1))
     context should have(metric[java.lang.Integer](componentKey, CM.FUNCTIONS_KEY, 1))
@@ -63,7 +62,6 @@ class ScalaSensorSpec extends FlatSpec with SensorContextMatchers with LoneEleme
 
     val componentKey = inputFile.key()
 
-    context should have(metric[java.lang.Integer](componentKey, CM.FILES_KEY, 1))
     context should have(metric[java.lang.Integer](componentKey, CM.COMMENT_LINES_KEY, 1))
     context should have(metric[java.lang.Integer](componentKey, CM.CLASSES_KEY, 2))
     context should have(metric[java.lang.Integer](componentKey, CM.FUNCTIONS_KEY, 2))

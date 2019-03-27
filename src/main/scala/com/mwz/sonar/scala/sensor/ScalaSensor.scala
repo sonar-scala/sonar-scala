@@ -38,13 +38,7 @@ final class ScalaSensor extends Sensor {
       Scala.getScalaVersion(context.config())
 
     inputFiles.asScala.foreach { inputFile =>
-      context
-        .newMeasure()
-        .on(inputFile)
-        .forMetric(CM.FILES)
-        .withValue(1) // scalastyle:ignore org.scalastyle.scalariform.NamedArgumentChecker
-        .save()
-
+      // TODO: This source needs to be closed.
       val sourceCode = Source.fromFile(inputFile.uri, charset).mkString
       val tokens = Scala.tokenize(sourceCode, scalaVersion)
 

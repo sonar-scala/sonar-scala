@@ -31,6 +31,6 @@ object Codec extends CirceEntityDecoder {
   val defaultPrinter: Printer = Printer.noSpaces.copy(dropNullValues = true)
   implicit val config: Configuration = Configuration.default.withSnakeCaseMemberNames
 
-  implicit def jsonEncoderOf[F[_]: Applicative, A](implicit encoder: Encoder[A]): EntityEncoder[F, A] =
+  implicit def jsonEncoderOf[F[_]: Applicative, A: Encoder]: EntityEncoder[F, A] =
     http4s.circe.jsonEncoderWithPrinterOf(defaultPrinter)
 }

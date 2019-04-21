@@ -18,10 +18,12 @@
 package com.mwz.sonar.scala
 package pr
 
+import java.util.concurrent.ConcurrentHashMap
+
 import org.sonar.api.batch.fs.InputFile
 import org.sonar.api.batch.{InstantiationStrategy, ScannerSide}
 
-import scala.collection.mutable
+import scala.collection.JavaConverters._
 
 /**
  * Global collection of issues reported during project analysis.
@@ -32,13 +34,12 @@ import scala.collection.mutable
 @ScannerSide
 @InstantiationStrategy(InstantiationStrategy.PER_BATCH)
 final class GlobalIssues {
-  // As far as I know this won't be accessed concurrently.
-  private[this] val issues: mutable.HashMap[InputFile, List[Issue]] =
-    mutable.HashMap.empty
+  private[this] val issues: ConcurrentHashMap[InputFile, List[Issue]] =
+    new ConcurrentHashMap()
 
   def add(issue: Issue): Unit =
-    issues += (issue.file -> (issue :: issues.getOrElse(issue.file, List.empty)))
+    issues.merge(issue.file, List(issue), (_, existing) => issue :: existing)
 
   def allIssues: Map[InputFile, List[Issue]] =
-    Map(issues.toList: _*)
+    issues.asScala.toMap
 }

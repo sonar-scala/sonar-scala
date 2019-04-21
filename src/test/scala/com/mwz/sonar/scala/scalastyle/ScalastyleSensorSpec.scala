@@ -22,6 +22,7 @@ import java.nio.charset.Charset
 import java.nio.file.Paths
 import java.util
 
+import com.mwz.sonar.scala.pr.GlobalIssues
 import com.mwz.sonar.scala.util.PathUtils.cwd
 import org.scalactic._
 import org.scalastyle.scalariform.EmptyClassChecker
@@ -57,6 +58,8 @@ class ScalastyleSensorSpec
     with MockitoSugar {
 
   trait Ctx {
+    val globalConfig = new GlobalConfig(new MapSettings().asConfig)
+    val globalIssues = new GlobalIssues()
     val context = SensorContextTester.create(Paths.get("./"))
     val scalastyleChecker = new ScalastyleCheckerAPI {
       private[scalastyle] def checkFiles(
@@ -66,7 +69,7 @@ class ScalastyleSensorSpec
       ): List[Message[FileSpec]] = List.empty
     }
 
-    val scalastyleSensor = new ScalastyleSensor(scalastyleChecker)
+    val scalastyleSensor = new ScalastyleSensor(globalConfig, globalIssues, scalastyleChecker)
     val descriptor = new DefaultSensorDescriptor
   }
 
@@ -351,7 +354,7 @@ class ScalastyleSensorSpec
 
     context.fileSystem.add(testFile)
     context.setActiveRules(activeRules)
-    new ScalastyleSensor(checker).execute(context)
+    new ScalastyleSensor(globalConfig, globalIssues, checker).execute(context)
 
     val result = context.allIssues.loneElement
     result.ruleKey shouldBe ruleKey

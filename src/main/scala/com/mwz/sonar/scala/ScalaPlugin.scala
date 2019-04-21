@@ -101,9 +101,14 @@ object Scala {
 final class ScalaPlugin extends Plugin {
   override def define(context: Plugin.Context): Unit = {
     context.addExtensions(
+      // Global configuration.
+      classOf[GlobalConfig],
       // Scala.
       classOf[Scala],
       classOf[sensor.ScalaSensor],
+      // PR decoration.
+      classOf[pr.GlobalIssues],
+      classOf[pr.GithubPostIssuesJob],
       // Scalastyle.
       classOf[scalastyle.ScalastyleRulesRepository],
       classOf[scalastyle.ScalastyleQualityProfile],

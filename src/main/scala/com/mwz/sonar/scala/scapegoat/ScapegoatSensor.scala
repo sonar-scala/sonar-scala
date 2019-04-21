@@ -126,7 +126,7 @@ final class ScapegoatSensor(scapegoatReportParser: ScapegoatReportParserAPI) ext
                     .at(file.selectLine(scapegoatIssue.line))
                     .message(scapegoatIssue.message)
                 )
-
+                // TODO: Add the issue to global issues if issue decoration is enabled.
                 sonarqubeIssue.save()
               case None =>
                 // if the rule was not found,

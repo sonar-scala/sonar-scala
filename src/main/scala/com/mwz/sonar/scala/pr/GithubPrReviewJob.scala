@@ -78,7 +78,7 @@ final class GithubPrReviewJob(
     for {
       // Get the authenticated user (to check the oauth token).
       user <- github.authenticatedUser
-      // TODO: Check user auth scope to make sure they have repo push access.
+      // TODO: Check user auth scope to make sure they have repo push access and fail early if they don't.
       // Fetch the PR (to verify whether it exists).
       pr <- github.pullRequest
       // Create a pending PR status for the review.
@@ -129,6 +129,7 @@ final class GithubPrReviewJob(
       patches = allPatches.filterKeys(f => issues.keySet.exists(_.toString === f))
       // Map file lines to patch lines.
       mappedPatches = patches.mapValues(file => Patch.parse(file.patch))
+      // TODO: Log any patch parsing failures.
       issuesWithComments = allCommentsForIssues(issues, mappedPatches, allUserComments)
       // TODO: Delete comments on lines which are no longer flagged as issues.
       //  Not that important as Github now indicates when comments are outdated.

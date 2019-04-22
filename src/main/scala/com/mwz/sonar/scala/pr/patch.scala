@@ -32,7 +32,7 @@ final case class FileLine(value: Int) {
   def inc: FileLine = FileLine(value + 1)
 }
 final case class Patch(fileLine: FileLine, patchLine: PatchLine, fileToPatch: Map[FileLine, PatchLine])
-final case class PatchError(line: PatchLine, text: String) extends Error
+final case class PatchError(line: PatchLine, text: String) extends Exception
 
 object Patch {
   private val PatchChunkStartRegex: Regex = new Regex(

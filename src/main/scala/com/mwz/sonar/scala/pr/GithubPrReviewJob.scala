@@ -147,7 +147,7 @@ object GithubPrReviewJob {
   // TODO: This is quite grim.
   def allCommentsForIssues(
     issues: Map[InputFile, List[Issue]],
-    mappedPatches: Map[String, ErrorOr[Map[FileLine, PatchLine]]],
+    mappedPatches: Map[String, Either[PatchError, Map[FileLine, PatchLine]]],
     allUserComments: Map[String, List[Comment]]
   ): Map[InputFile, Map[PatchLine, (Issue, List[Comment])]] =
     issues.collect {

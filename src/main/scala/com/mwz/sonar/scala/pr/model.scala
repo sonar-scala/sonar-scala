@@ -21,6 +21,7 @@ package pr
 import org.http4s.Uri
 
 // TODO: Capture more custom errors.
+@SuppressWarnings(Array("IncorrectlyNamedExceptions"))
 sealed trait ReviewError extends Exception
 case object NoFilesInPR extends ReviewError
 

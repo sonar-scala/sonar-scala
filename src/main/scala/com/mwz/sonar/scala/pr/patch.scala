@@ -32,7 +32,7 @@ final case class FileLine(value: Int) {
   def inc: FileLine = FileLine(value + 1)
 }
 final case class Patch(fileLine: FileLine, patchLine: PatchLine, fileToPatch: Map[FileLine, PatchLine])
-final case class PatchError(line: PatchLine, text: String) extends Exception
+final case class PatchError(line: PatchLine, text: String)
 
 object Patch {
   private val PatchChunkStartRegex: Regex = new Regex(
@@ -47,7 +47,7 @@ object Patch {
    * Parse a raw patch to extract how file lines are mapped to patch lines.
    */
   // TODO: Maybe it would be more practical if the mapping was reversed: PatchLine -> FileLine?
-  def parse(patch: String): ErrorOr[Map[FileLine, PatchLine]] =
+  def parse(patch: String): Either[PatchError, Map[FileLine, PatchLine]] =
     patch
       .replaceAll("(\r\n)|\r|\n", "\n")
       .lines

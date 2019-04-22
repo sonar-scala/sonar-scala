@@ -17,6 +17,7 @@
 
 package com.mwz.sonar.scala
 package pr
+package github
 
 import cats.Applicative
 import io.circe.generic.extras.Configuration

@@ -31,7 +31,8 @@ import cats.syntax.flatMap._
 import cats.syntax.functor._
 import cats.syntax.parallel._
 import cats.syntax.traverse._
-import com.mwz.sonar.scala.pr.GithubPostIssuesJob._
+import com.mwz.sonar.scala.pr.GithubPrReviewJob._
+import com.mwz.sonar.scala.pr.github._
 import com.mwz.sonar.scala.util.Log
 import org.http4s.Uri
 import org.http4s.client.blaze.BlazeClientBuilder
@@ -42,7 +43,7 @@ import org.sonar.api.batch.rule.Severity
 import scala.concurrent.ExecutionContext
 import scala.language.higherKinds
 
-final class GithubPostIssuesJob(
+final class GithubPrReviewJob(
   globalConfig: GlobalConfig,
   globalIssues: GlobalIssues
 ) extends PostJob {
@@ -137,16 +138,7 @@ final class GithubPostIssuesJob(
     } yield reviewStatus(issues)
 }
 
-object GithubPostIssuesJob {
-  // TODO: Add more user-friendly errors.
-  case object NoFilesInPR extends Exception
-
-  sealed trait PrStatus extends Product with Serializable
-  final case object Pending extends PrStatus
-  final case object Success extends PrStatus
-  final case class Error(reviewStatus: ReviewStatus) extends PrStatus
-  final case class Failure(error: Throwable) extends PrStatus
-
+object GithubPrReviewJob {
   final val GithubContext: String = "sonar-scala/review"
 
   // Lookup existing comments for all the issues.

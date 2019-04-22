@@ -17,8 +17,9 @@
 
 package com.mwz.sonar.scala
 package pr
+package github
 
-import com.mwz.sonar.scala.pr.Codec._
+import com.mwz.sonar.scala.pr.github.Codec._
 import io.circe.generic.extras.ConfiguredJsonCodec
 
 final case class PullRequest(number: Int, head: Head)

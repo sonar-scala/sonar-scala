@@ -108,7 +108,7 @@ final class ScalaPlugin extends Plugin {
       classOf[sensor.ScalaSensor],
       // PR decoration.
       classOf[pr.GlobalIssues],
-      classOf[pr.GithubPostIssuesJob],
+      classOf[pr.GithubPrReviewJob],
       // Scalastyle.
       classOf[scalastyle.ScalastyleRulesRepository],
       classOf[scalastyle.ScalastyleQualityProfile],

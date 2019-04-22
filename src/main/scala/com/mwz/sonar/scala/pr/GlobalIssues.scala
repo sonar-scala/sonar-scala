@@ -21,9 +21,19 @@ package pr
 import java.util.concurrent.ConcurrentHashMap
 
 import org.sonar.api.batch.fs.InputFile
+import org.sonar.api.batch.rule.Severity
 import org.sonar.api.batch.{InstantiationStrategy, ScannerSide}
+import org.sonar.api.rule.RuleKey
 
 import scala.collection.JavaConverters._
+
+final case class Issue(
+  key: RuleKey,
+  file: InputFile,
+  line: Int,
+  severity: Severity,
+  message: String
+)
 
 /**
  * Global collection of issues reported during project analysis.

@@ -32,8 +32,8 @@ import cats.syntax.functor._
 import cats.syntax.parallel._
 import cats.syntax.traverse._
 import com.mwz.sonar.scala.pr.GithubPrReviewJob._
-import com.mwz.sonar.scala.pr.github._
-import com.mwz.sonar.scala.util.Log
+import com.mwz.sonar.scala.pr.github.{Github, _}
+import com.mwz.sonar.scala.util.Logger
 import org.http4s.Uri
 import org.http4s.client.blaze.BlazeClientBuilder
 import org.sonar.api.batch.fs.InputFile
@@ -47,8 +47,6 @@ final class GithubPrReviewJob(
   globalConfig: GlobalConfig,
   globalIssues: GlobalIssues
 ) extends PostJob {
-  // TODO: Pure logging.
-  private[this] val logger: Log = Log(classOf[Scala], "github-pr-decorator")
   private implicit val cs: ContextShift[IO] = IO.contextShift(ExecutionContext.global)
 
   def describe(descriptor: PostJobDescriptor): Unit =
@@ -58,13 +56,18 @@ final class GithubPrReviewJob(
     BlazeClientBuilder[IO](ExecutionContext.global).resource
       .use { client =>
         for {
-          // TODO: Nicer logging syntax.
-          _ <- IO.delay(logger.debug(s"Global issues (${globalIssues.allIssues.size}):"))
-          _ <- IO.delay(logger.debug(globalIssues.allIssues.mkString(", ")))
+          implicit0(log: Logger[IO]) <- Logger.create(classOf[GithubPrReviewJob], "github-pr-review")
           _ <- globalConfig.pullRequest
             .map { config =>
-              IO.fromEither(globalConfig.baseUrl)
-                .flatMap(baseUrl => run(baseUrl, Github(client, config)))
+              for {
+                // TODO: Skip if issue decoration isn't enabled.
+                _ <- log.debug(
+                  s"Found ${globalIssues.allIssues.size} issues:\n" +
+                  globalIssues.allIssues.mkString(", ")
+                )
+                baseUrl <- IO.fromEither(globalConfig.baseUrl)
+                _       <- run(baseUrl, Github(client, config))
+              } yield ()
             }
             .getOrElse(IO.unit)
         } yield ()
@@ -72,7 +75,7 @@ final class GithubPrReviewJob(
       .unsafeRunSync()
   }
 
-  private[pr] def run[F[_]: Sync, M[_]](baseUrl: Uri, github: Github[F])(
+  private[pr] def run[F[_]: Sync: Logger, M[_]](baseUrl: Uri, github: Github[F])(
     implicit nep: NonEmptyParallel[F, M]
   ): F[Unit] = {
     for {
@@ -101,7 +104,7 @@ final class GithubPrReviewJob(
   }
 
   // TODO: Split this up a little bit more.
-  private[pr] def review[F[_]: Sync, M[_]](
+  private[pr] def review[F[_]: Sync: Logger, M[_]](
     baseUrl: Uri,
     github: Github[F],
     user: User,
@@ -112,12 +115,10 @@ final class GithubPrReviewJob(
       (allComments, files) <- (github.comments, github.files).parMapN((_, _))
       // Filter comments made by the authed user.
       allUserComments = allComments.filter(_.user.login === user.login).groupBy(_.path)
-      _ <- Sync[F].delay(
-        logger.debug(
-          s"PR: $pr\n" +
-          s"Comments: ${allUserComments.mkString(", ")}\n" +
-          s"Files: ${files.mkString(", ")}"
-        )
+      _ <- Logger[F].debug(
+        s"PR: $pr\n" +
+        s"Comments: ${allUserComments.mkString(", ")}\n" +
+        s"Files: ${files.mkString(", ")}"
       )
       // Group patches by file names - `filename` is the full path relative to the root
       // of the project, so it should be unique. Raise an error when no files are present.
@@ -135,7 +136,10 @@ final class GithubPrReviewJob(
       //  Not that important as Github now indicates when comments are outdated.
       // Post new comments.
       _ <- commentsForNewIssues(baseUrl, pr.head.sha, issuesWithComments)
-        .traverse(github.createComment)
+        .traverse { comment =>
+          Logger[F].debug(s"Posting a new comment $comment.") >>
+          github.createComment(comment)
+        }
     } yield reviewStatus(issues)
 }
 

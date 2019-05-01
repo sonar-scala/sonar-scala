@@ -39,6 +39,7 @@ trait Github[F[_]] {
 object Github {
   def apply[F[_]: Sync](client: Client[F], pr: GlobalConfig.PullRequest): Github[F] =
     new Github[F] {
+      val auth: Header = Header("Authorization", s"token ${pr.github.oauth}")
       val prUri: String =
         s"https://api.github.com/repos/${pr.github.repository}/pulls/${pr.prNumber}"
       val commentsUri: String =
@@ -51,8 +52,7 @@ object Github {
         s"https://api.github.com/repos/${pr.github.repository}/statuses/$sha"
 
       def authenticatedUser: F[User] = {
-        val auth = Header("Authorization", s"token ${pr.github.oauth}")
-        val request = Request[F](
+        val request: Request[F] = Request[F](
           uri = Uri.uri("https://api.github.com/user"),
           headers = Headers(auth)
         )
@@ -65,7 +65,11 @@ object Github {
           .fromString(commentsUri)
           .fold(
             Sync[F].raiseError,
-            uri => Sync[F].pure(Request(Method.POST, uri).withEntity(comment))
+            uri =>
+              Sync[F].pure(
+                Request(Method.POST, uri, headers = Headers(auth))
+                  .withEntity(comment)
+            )
           )
         client.expect[Comment](request)
       }
@@ -75,7 +79,11 @@ object Github {
           .fromString(newStatusUri(sha))
           .fold(
             Sync[F].raiseError,
-            uri => Sync[F].pure(Request(Method.POST, uri).withEntity(status))
+            uri =>
+              Sync[F].pure(
+                Request(Method.POST, uri, headers = Headers(auth))
+                  .withEntity(status)
+            )
           )
         client.expect[Status](request)
       }

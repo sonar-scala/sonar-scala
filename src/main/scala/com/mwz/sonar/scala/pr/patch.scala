@@ -32,16 +32,11 @@ final case class FileLine(value: Int) {
   def inc: FileLine = FileLine(value + 1)
 }
 final case class Patch(fileLine: FileLine, patchLine: PatchLine, fileToPatch: Map[FileLine, PatchLine])
-final case class PatchError(line: PatchLine, text: String)
+final case class PatchError(text: String)
 
 object Patch {
-  private val PatchChunkStartRegex: Regex = new Regex(
-    """@@ -(\d+),(\d+) +(\d+),(\d+) @@""",
-    "origStart",
-    "origSize",
-    "newStart",
-    "newSize"
-  )
+  private val PatchChunkStartRegex: Regex =
+    new Regex("""@@ \-(\d+),(\d+) \+(\d+),(\d+) @@""", "origStart", "origSize", "newStart", "newSize")
 
   /**
    * Parse a raw patch to extract how file lines are mapped to patch lines.
@@ -52,7 +47,7 @@ object Patch {
       .replaceAll("(\r\n)|\r|\n", "\n")
       .lines
       .toList
-      .foldLeftM[Either[PatchError, ?], Patch](Patch(FileLine(1), PatchLine(1), Map.empty)) {
+      .foldLeftM[Either[PatchError, ?], Patch](Patch(FileLine(0), PatchLine(0), Map.empty)) {
         case (patch, line) =>
           line match {
             // Start of a hunk.
@@ -61,7 +56,7 @@ object Patch {
               PatchChunkStartRegex
                 .findFirstMatchIn(l)
                 .flatMap(regexMatch => Try(regexMatch.group("newStart").toInt).toOption)
-                .fold[Either[PatchError, Patch]](Left(PatchError(patch.patchLine, l)))(
+                .fold[Either[PatchError, Patch]](Left(PatchError(l)))(
                   start => Right(Patch(FileLine(start), patch.patchLine.inc, patch.fileToPatch))
                 )
             // Keep track of added and context (unmodified) lines.

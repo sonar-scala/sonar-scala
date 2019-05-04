@@ -114,10 +114,10 @@ final class GithubPrReviewJob(
       // Fetch existing PR comments and get PR files along with their patches.
       (allComments, files) <- (github.comments, github.files).parMapN((_, _))
       // Filter comments made by the authed user.
-      allUserComments = allComments.filter(_.user.login === user.login).groupBy(_.path)
+      sonarComments = allComments.filter(_.user.login === user.login).groupBy(_.path)
       _ <- Logger[F].debug(
         s"PR: $pr\n" +
-        s"Comments: ${allUserComments.mkString(", ")}\n" +
+        s"Comments: ${sonarComments.mkString(", ")}\n" +
         s"Files: ${files.mkString(", ")}"
       )
       // Group patches by file names - `filename` is the full path relative to the root
@@ -130,8 +130,16 @@ final class GithubPrReviewJob(
       patches = allPatches.filterKeys(f => issues.keySet.exists(_.toString === f))
       // Map file lines to patch lines.
       mappedPatches = patches.mapValues(file => Patch.parse(file.patch))
+      _ <- mappedPatches
+        .collect { case (file, Left(error)) => (file, error) }
+        .toList
+        .traverse {
+          case (file, error) =>
+            Logger[F].error(s"Error parsing patch for $file.") >>
+            Logger[F].debug(s"""Invalid patch format: "${error.text}".""")
+        }
       // TODO: Log any patch parsing failures.
-      issuesWithComments = allCommentsForIssues(issues, mappedPatches, allUserComments)
+      issuesWithComments = allCommentsForIssues(issues, mappedPatches, sonarComments)
       // TODO: Delete comments on lines which are no longer flagged as issues.
       //  Not that important as Github now indicates when comments are outdated.
       // Post new comments.

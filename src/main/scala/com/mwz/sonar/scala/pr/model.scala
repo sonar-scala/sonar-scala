@@ -58,9 +58,9 @@ object Markdown {
    * The format is: "SEVERITY: TEXT ([more](link to the rule))"
    */
   def inline(baseUrl: Uri, issue: Issue): Markdown = {
-    val ruleUri: Uri = baseUrl
-      .withPath("coding_rules")
-      .withQueryParam("open", issue.key.toString)
+    val ruleUri: Uri =
+      (baseUrl / "coding_rules")
+        .withQueryParam("open", issue.key.toString)
     // TODO: Add severity image.
     Markdown(s"${issue.severity.name}: ${issue.message} ([more]($ruleUri))")
   }

@@ -18,13 +18,10 @@
 package com.mwz.sonar.scala
 package scalastyle
 
-import java.nio.charset.Charset
 import java.nio.file.Paths
-import java.util
 
 import com.mwz.sonar.scala.pr.GlobalIssues
 import com.mwz.sonar.scala.util.PathUtils.cwd
-import org.scalactic._
 import org.scalastyle.scalariform.EmptyClassChecker
 import org.scalastyle.{
   ConfigurationChecker,
@@ -41,8 +38,8 @@ import org.scalatest._
 import org.scalatestplus.mockito.MockitoSugar
 import org.sonar.api.batch.fs.InputFile
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder
-import org.sonar.api.batch.rule.internal.{ActiveRulesBuilder, NewActiveRule}
 import org.sonar.api.batch.rule.Severity
+import org.sonar.api.batch.rule.internal.{ActiveRulesBuilder, NewActiveRule}
 import org.sonar.api.batch.sensor.internal.{DefaultSensorDescriptor, SensorContextTester}
 import org.sonar.api.config.internal.MapSettings
 import org.sonar.api.rule.RuleKey

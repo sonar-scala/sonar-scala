@@ -20,18 +20,14 @@ package scapegoat
 
 import java.nio.file.{Path, Paths}
 
+import com.mwz.sonar.scala.pr.GlobalIssues
 import com.mwz.sonar.scala.util.PathUtils.cwd
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
 import org.scalatest.{FlatSpec, LoneElement, OptionValues}
 import org.scalatestplus.mockito.MockitoSugar
 import org.sonar.api.batch.fs.InputFile
-import org.sonar.api.batch.fs.internal.{
-  DefaultFileSystem,
-  DefaultTextPointer,
-  DefaultTextRange,
-  TestInputFileBuilder
-}
+import org.sonar.api.batch.fs.internal.{DefaultFileSystem, TestInputFileBuilder}
 import org.sonar.api.batch.rule.internal.{ActiveRulesBuilder, NewActiveRule}
 import org.sonar.api.batch.sensor.internal.{DefaultSensorDescriptor, SensorContextTester}
 import org.sonar.api.config.internal.MapSettings
@@ -47,8 +43,10 @@ class ScapegoatSensorSpec
     with SensorContextMatchers
     with LoneElement
     with OptionValues {
+  val globalConfig = new GlobalConfig(new MapSettings().asConfig)
+  val globalIssues = new GlobalIssues()
   val scapegoatReportParser = new TestScapegoatReportParser()
-  val scapegoatSensor = new ScapegoatSensor(scapegoatReportParser)
+  val scapegoatSensor = new ScapegoatSensor(globalConfig, globalIssues, scapegoatReportParser)
 
   it should "read the 'disable' config property" in {
     val context = SensorContextTester.create(cwd)
@@ -66,7 +64,7 @@ class ScapegoatSensorSpec
   it should "execute the sensor if the 'disable' flag wasn't set" in {
     val context = SensorContextTester.create(cwd)
     val scapegoatReportParser = mock[ScapegoatReportParserAPI]
-    val scapegoatSensor = new ScapegoatSensor(scapegoatReportParser)
+    val scapegoatSensor = new ScapegoatSensor(globalConfig, globalIssues, scapegoatReportParser)
 
     val descriptor = new DefaultSensorDescriptor
     scapegoatSensor.describe(descriptor)
@@ -84,7 +82,7 @@ class ScapegoatSensorSpec
     context.setSettings(new MapSettings().setProperty("sonar.scala.scapegoat.disable", "true"))
 
     val scapegoatReportParser = mock[ScapegoatReportParserAPI]
-    val scapegoatSensor = new ScapegoatSensor(scapegoatReportParser)
+    val scapegoatSensor = new ScapegoatSensor(globalConfig, globalIssues, scapegoatReportParser)
 
     val descriptor = new DefaultSensorDescriptor
     scapegoatSensor.describe(descriptor)

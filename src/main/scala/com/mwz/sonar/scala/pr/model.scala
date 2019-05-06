@@ -61,6 +61,7 @@ object Markdown {
     val ruleUri: Uri =
       (baseUrl / "coding_rules")
         .withQueryParam("open", issue.key.toString)
+        .withQueryParam("rule_key", issue.key.toString)
     // TODO: Add severity image.
     Markdown(s"${issue.severity.name}: ${issue.message} ([more]($ruleUri))")
   }

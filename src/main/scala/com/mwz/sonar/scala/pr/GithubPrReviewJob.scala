@@ -138,7 +138,6 @@ final class GithubPrReviewJob(
             Logger[F].error(s"Error parsing patch for $file.") >>
             Logger[F].debug(s"""Invalid patch format: "${error.text}".""")
         }
-      // TODO: Log any patch parsing failures.
       issuesWithComments = allCommentsForIssues(issues, mappedPatches, sonarComments)
       // TODO: Delete comments on lines which are no longer flagged as issues.
       //  Not that important as Github now indicates when comments are outdated.

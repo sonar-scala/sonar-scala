@@ -48,7 +48,7 @@ final class GlobalIssues {
     new ConcurrentHashMap()
 
   def add(issue: Issue): Unit =
-    issues.merge(issue.file, List(issue), (_, existing) => issue :: existing)
+    issues.merge(issue.file, List(issue), (current, value) => value ::: current)
 
   def allIssues: Map[InputFile, List[Issue]] =
     issues.asScala.toMap

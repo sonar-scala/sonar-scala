@@ -144,7 +144,7 @@ final class ScapegoatSensor(
                       file,
                       scapegoatIssue.line,
                       Severity.valueOf(rule.severity),
-                      scapegoatIssue.message
+                      scapegoatIssue.text
                     )
                   globalIssues.add(issue)
                 }

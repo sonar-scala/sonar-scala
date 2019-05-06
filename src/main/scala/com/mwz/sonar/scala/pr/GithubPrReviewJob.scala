@@ -99,6 +99,7 @@ final class GithubPrReviewJob(
         }
       )(Failure)
       // Create a new PR status.
+      _ <- Logger[F].debug(s"Set the PR status to $prStatus.")
       _ <- github.createStatus(pr.head.sha, githubStatus(prStatus))
     } yield ()
   }
@@ -139,8 +140,6 @@ final class GithubPrReviewJob(
             Logger[F].debug(s"""Invalid patch format: "${error.text}".""")
         }
       issuesWithComments = allCommentsForIssues(issues, mappedPatches, sonarComments)
-      // TODO: Delete comments on lines which are no longer flagged as issues.
-      //  Not that important as Github now indicates when comments are outdated.
       // Post new comments.
       _ <- commentsForNewIssues(baseUrl, pr.head.sha, issuesWithComments)
         .traverse { comment =>
@@ -166,22 +165,25 @@ object GithubPrReviewJob {
         val issuesWithComments: Map[PatchLine, List[(Issue, List[Comment])]] =
           issues
             .flatMap { issue =>
-            // patchLine -> issue
-            mappedPatches
+              // patchLine -> issue
+              mappedPatches
                 .get(file.toString)
-              .flatMap(_.toOption.flatMap { m =>
-                m.get(FileLine(issue.line)).map { patchLine =>
-                  // patchLine -> comments
-                  // Filter comments by the line number.
-                  // Those are filtered further later on based on the body.
-                  val comments: List[Comment] =
-                    allUserComments
-                        .get(file.toString)
-                      .map(_.filter(_.position === patchLine.value))
-                      .getOrElse(List.empty)
-                    (patchLine, List((issue, comments)))
-                }
-              })
+                .flatMap(_.toOption.flatMap { m =>
+                  m.get(FileLine(issue.line)).map {
+                    patchLine =>
+                      // patchLine -> comments
+                      // Filter comments by the line number.
+                      // Those are filtered further later on based on the body.
+                      val comments: List[Comment] =
+                        allUserComments
+                          .get(file.toString)
+                          // Outdated comments are filtered out here
+                          // as they don't have a current position.
+                          .map(_.filter(_.position.contains(patchLine.value)))
+                          .getOrElse(List.empty)
+                      (patchLine, List((issue, comments)))
+                  }
+                })
             }
             .groupBy { case (patchLine, _) => patchLine }
             .mapValues(_.flatMap { case (_, issuesAndComments) => issuesAndComments })
@@ -200,9 +202,9 @@ object GithubPrReviewJob {
       (patchLine, issuesAndComments) <- issuesAndComments
       (issue, comments)              <- issuesAndComments
     } yield {
-            val markdown: Markdown = Markdown.inline(baseUrl, issue)
-            comments
-              .find(comment => comment.body === markdown.text)
+      val markdown: Markdown = Markdown.inline(baseUrl, issue)
+      comments
+        .find(comment => comment.body === markdown.text)
         .fold(Option(NewComment(markdown.text, commitId, file.toString, patchLine.value)))(_ => None)
     }).toList.flatten
 

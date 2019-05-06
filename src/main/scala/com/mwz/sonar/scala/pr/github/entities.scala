@@ -27,7 +27,7 @@ final case class Head(sha: String)
 final case class Comment(
   id: Int,
   path: String,
-  position: Int, // Line in the diff.
+  position: Option[Int], // Line in the diff.
   user: User,
   body: String
 )

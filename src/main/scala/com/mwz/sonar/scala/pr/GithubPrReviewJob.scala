@@ -50,7 +50,7 @@ final class GithubPrReviewJob(
   private implicit val cs: ContextShift[IO] = IO.contextShift(ExecutionContext.global)
 
   def describe(descriptor: PostJobDescriptor): Unit =
-    descriptor.name("Github PR decorator")
+    descriptor.name("Github PR review job")
 
   def execute(context: PostJobContext): Unit = {
     BlazeClientBuilder[IO](ExecutionContext.global).resource
@@ -160,14 +160,15 @@ object GithubPrReviewJob {
     issues: Map[InputFile, List[Issue]],
     mappedPatches: Map[String, Either[PatchError, Map[FileLine, PatchLine]]],
     allUserComments: Map[String, List[Comment]]
-  ): Map[InputFile, Map[PatchLine, (Issue, List[Comment])]] =
+  ): Map[InputFile, Map[PatchLine, List[(Issue, List[Comment])]]] =
     issues.collect {
-      case (f, issues) =>
-        val issuesWithComments: Map[PatchLine, (Issue, List[Comment])] =
-          issues.flatMap { issue =>
+      case (file, issues) =>
+        val issuesWithComments: Map[PatchLine, List[(Issue, List[Comment])]] =
+          issues
+            .flatMap { issue =>
             // patchLine -> issue
             mappedPatches
-              .get(f.toString)
+                .get(file.toString)
               .flatMap(_.toOption.flatMap { m =>
                 m.get(FileLine(issue.line)).map { patchLine =>
                   // patchLine -> comments
@@ -175,14 +176,16 @@ object GithubPrReviewJob {
                   // Those are filtered further later on based on the body.
                   val comments: List[Comment] =
                     allUserComments
-                      .get(f.toString)
+                        .get(file.toString)
                       .map(_.filter(_.position === patchLine.value))
                       .getOrElse(List.empty)
-                  (patchLine, (issue, comments))
+                    (patchLine, List((issue, comments)))
                 }
               })
-          }.toMap
-        (f, issuesWithComments)
+            }
+            .groupBy { case (patchLine, _) => patchLine }
+            .mapValues(_.flatMap { case (_, issuesAndComments) => issuesAndComments })
+        (file, issuesWithComments)
     }
 
   // Comments for new issues (which don't already have a comment).
@@ -190,19 +193,18 @@ object GithubPrReviewJob {
   def commentsForNewIssues(
     baseUrl: Uri,
     commitId: String,
-    issuesWithComments: Map[InputFile, Map[PatchLine, (Issue, List[Comment])]]
+    issuesWithComments: Map[InputFile, Map[PatchLine, List[(Issue, List[Comment])]]]
   ): List[NewComment] =
-    issuesWithComments.flatMap {
-      case (f, issuesAndComments) =>
-        issuesAndComments.flatMap {
-          case (patchLine, (issue, comments)) =>
-            // Generate body for each issue to compare to the existing comments.
+    (for {
+      (file, issuesAndComments)      <- issuesWithComments
+      (patchLine, issuesAndComments) <- issuesAndComments
+      (issue, comments)              <- issuesAndComments
+    } yield {
             val markdown: Markdown = Markdown.inline(baseUrl, issue)
             comments
               .find(comment => comment.body === markdown.text)
-              .fold(Option(NewComment(markdown.text, commitId, f.toString, patchLine.value)))(_ => None)
-        }
-    }.toList
+        .fold(Option(NewComment(markdown.text, commitId, file.toString, patchLine.value)))(_ => None)
+    }).toList.flatten
 
   def reviewStatus(issues: Map[InputFile, List[Issue]]): ReviewStatus = {
     issues.values.flatten

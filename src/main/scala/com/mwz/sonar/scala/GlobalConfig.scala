@@ -51,14 +51,20 @@ final class GlobalConfig(config: Configuration) {
   val pullRequest: Option[PullRequest] = getPullRequest
 
   /**
-   * Pull request mode which enables PR decoration.
+   * Pull request mode which enables PR decoration
+   * (for both issues and coverage).
    */
   def prDecoration: Boolean = pullRequest.nonEmpty
 
   /**
-   * Posting issues as PR comments.
+   * Post issues as PR comments.
    */
   def issueDecoration: Boolean = pullRequest.exists(!_.disableIssues)
+
+  /**
+   * Post coverage data as PR comments.
+   */
+  def coverageDecoration: Boolean = false
 
   // TODO: Use Either to catch and log errors.
   private[this] def getPullRequest: Option[PullRequest] =

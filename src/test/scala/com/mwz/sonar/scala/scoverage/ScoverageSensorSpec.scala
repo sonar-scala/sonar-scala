@@ -29,8 +29,9 @@ import org.sonar.api.config.internal.MapSettings
 
 /** Tests the Scoverage Sensor */
 class ScoverageSensorSpec extends FlatSpec with SensorContextMatchers with LoneElement {
+  val globalConfig = new GlobalConfig(new MapSettings().asConfig)
   val scoverageReportParser = new TestScoverageReportParser()
-  val scoverageSensor = new ScoverageSensor(scoverageReportParser)
+  val scoverageSensor = new ScoverageSensor(globalConfig, scoverageReportParser)
 
   behavior of "Scoverage Sensor"
 

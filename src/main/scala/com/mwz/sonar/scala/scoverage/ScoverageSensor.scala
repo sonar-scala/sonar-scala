@@ -20,6 +20,7 @@ package scoverage
 
 import java.nio.file.{Path, Paths}
 
+import com.mwz.sonar.scala.scoverage.ScoverageSensor._
 import com.mwz.sonar.scala.util.PathUtils._
 import com.mwz.sonar.scala.util.syntax.Optionals._
 import com.mwz.sonar.scala.util.{Log, PathUtils}
@@ -32,9 +33,10 @@ import scala.collection.JavaConverters._
 import scala.util.{Failure, Success, Try}
 
 /** Main sensor for importing Scoverage reports into SonarQube. */
-final class ScoverageSensor(scoverageReportParser: ScoverageReportParserAPI) extends Sensor {
-  import ScoverageSensor._ // scalastyle:ignore org.scalastyle.scalariform.ImportGroupingChecker
-
+final class ScoverageSensor(
+  globalConfig: GlobalConfig,
+  scoverageReportParser: ScoverageReportParserAPI
+) extends Sensor {
   private[this] val log = Log(classOf[ScoverageSensor], "scoverage")
 
   /** Populates the SensorDescriptor of this sensor. */
@@ -83,7 +85,11 @@ final class ScoverageSensor(scoverageReportParser: ScoverageReportParserAPI) ext
               fileCoverage.linesCoverage foreach {
                 case (lineNum, hits) => coverage.lineHits(lineNum, hits)
               }
-              coverage.save()
+
+              // Save the coverage (if not in pr decoration mode).
+              if (!globalConfig.prDecoration)
+                coverage.save()
+
             case None =>
               log.warn(s"The file '$filename' has no scoverage information associated with it.")
           }

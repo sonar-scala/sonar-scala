@@ -142,7 +142,7 @@ final class GithubPrReviewJob(
       issuesWithComments = allCommentsForIssues(issues, mappedPatches, sonarComments)
       // Post new comments.
       commentsToPost = commentsForNewIssues(baseUrl, pr.head.sha, issuesWithComments)
-      _ <- if (commentsToPost.nonEmpty) Logger[F].info(s"Posting comments to Github.") else Sync[F].unit
+      _ <- if (commentsToPost.nonEmpty) Logger[F].info("Posting comments to Github.") else Sync[F].unit
       _ <- commentsToPost
         .sortBy(c => (c.path, c.position))
         .traverse { comment =>

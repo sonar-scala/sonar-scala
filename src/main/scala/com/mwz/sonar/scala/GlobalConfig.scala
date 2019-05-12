@@ -74,15 +74,14 @@ final class GlobalConfig(config: Configuration) {
         .toOption
         .contains("true")
       disableCoverage = config.get("sonar.scala.pullrequest.coverage.disable").toOption.contains("true")
-    } yield
-      PullRequest(
-        provider,
-        prNumber,
-        Github(githubRepo, githubOauth),
-        disableIssues,
-        disableInlineComments,
-        disableCoverage
-      )
+    } yield PullRequest(
+      provider,
+      prNumber,
+      Github(githubRepo, githubOauth),
+      disableIssues,
+      disableInlineComments,
+      disableCoverage
+    )
 }
 
 object GlobalConfig {

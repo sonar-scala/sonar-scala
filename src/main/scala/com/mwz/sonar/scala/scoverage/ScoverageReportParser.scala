@@ -80,11 +80,11 @@ final class ScoverageReportParser extends ScoverageReportParserAPI {
 
     // Merge the class coverages by filename.
     val files = classCoverages groupBy {
-      case (fileName, _) => fileName
-    } mapValues { group =>
-      val classCoveragesByFilename = group map { case (_, classCoverage) => classCoverage }
-      classCoveragesByFilename.reduce(_ |+| _)
-    }
+        case (fileName, _) => fileName
+      } mapValues { group =>
+        val classCoveragesByFilename = group map { case (_, classCoverage) => classCoverage }
+        classCoveragesByFilename.reduce(_ |+| _)
+      }
 
     ProjectCoverage(projectScoverage, files)
   }

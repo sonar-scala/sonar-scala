@@ -39,7 +39,6 @@ scalacOptions := Seq(
 javacOptions := Seq("-Xlint:deprecation")
 cancelable in Global := true
 scalafmtOnCompile in ThisBuild := true
-scalafmtVersion in ThisBuild := "1.4.0"
 scapegoatVersion in ThisBuild := "1.3.8"
 scapegoatReports := Seq("xml")
 coverageOutputXML := true

@@ -121,7 +121,7 @@ final class ScalastyleSensor(
             globalIssues,
             ScalastyleInspections.AllInspectionsByClass,
             styleError,
-            rule,
+            rule
           )
         }
 

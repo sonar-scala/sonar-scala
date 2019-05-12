@@ -69,7 +69,7 @@ object Github {
               Sync[F].pure(
                 Request(Method.POST, uri, headers = Headers(auth))
                   .withEntity(comment)
-            )
+              )
           )
         client.expect[Comment](request)
       }
@@ -83,7 +83,7 @@ object Github {
               Sync[F].pure(
                 Request(Method.POST, uri, headers = Headers(auth))
                   .withEntity(status)
-            )
+              )
           )
         client.expect[Status](request)
       }

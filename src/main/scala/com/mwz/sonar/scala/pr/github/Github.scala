@@ -54,7 +54,7 @@ object Github {
       def authenticatedUser: F[User] = {
         val request: Request[F] = Request[F](
           uri = Uri.uri("https://api.github.com/user"),
-          headers = Headers(auth)
+          headers = Headers.of(auth)
         )
         client.expect[User](request)
       }
@@ -67,7 +67,7 @@ object Github {
             Sync[F].raiseError,
             uri =>
               Sync[F].pure(
-                Request(Method.POST, uri, headers = Headers(auth))
+                Request(Method.POST, uri, headers = Headers.of(auth))
                   .withEntity(comment)
               )
           )
@@ -81,7 +81,7 @@ object Github {
             Sync[F].raiseError,
             uri =>
               Sync[F].pure(
-                Request(Method.POST, uri, headers = Headers(auth))
+                Request(Method.POST, uri, headers = Headers.of(auth))
                   .withEntity(status)
               )
           )

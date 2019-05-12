@@ -53,14 +53,14 @@ sourceGenerators in Compile ++= Seq(
 
 // Lib dependencies
 val sonarVersion = "7.7"
-val circe = "0.11.0"
-val http4s = "0.20.0-M4"
+val circe = "0.11.1"
+val http4s = "0.20.0"
 libraryDependencies ++= List(
   "org.sonarsource.sonarqube" % "sonar-plugin-api"      % sonarVersion % Provided,
   "org.slf4j"                 % "slf4j-api"             % "1.7.26" % Provided,
   "org.typelevel"             %% "cats-core"            % "1.6.0",
-  "org.typelevel"             %% "cats-effect"          % "1.1.0",
-  "org.typelevel"             %% "mouse"                % "0.20",
+  "org.typelevel"             %% "cats-effect"          % "1.3.0",
+  "org.typelevel"             %% "mouse"                % "0.21",
   "io.circe"                  %% "circe-core"           % circe,
   "io.circe"                  %% "circe-generic"        % circe,
   "io.circe"                  %% "circe-generic-extras" % circe,
@@ -159,5 +159,5 @@ testOptions in Test += Tests.Argument(TestFrameworks.ScalaTest, "-oDTF")
 
 // plugins
 addCompilerPlugin("com.olegpy"      %% "better-monadic-for" % "0.3.0")
-addCompilerPlugin("org.spire-math"  %% "kind-projector"     % "0.9.9")
-addCompilerPlugin("org.scalamacros" % "paradise"            % "2.1.0" cross CrossVersion.full)
+addCompilerPlugin("org.spire-math"  %% "kind-projector"     % "0.9.10")
+addCompilerPlugin("org.scalamacros" % "paradise"            % "2.1.1" cross CrossVersion.full)

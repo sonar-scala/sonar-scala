@@ -54,7 +54,7 @@ sourceGenerators in Compile ++= Seq(
 // Lib dependencies
 val sonarVersion = "7.7"
 val circe = "0.11.1"
-val http4s = "0.20.0"
+val http4s = "0.20.1"
 libraryDependencies ++= List(
   "org.sonarsource.sonarqube" % "sonar-plugin-api"      % sonarVersion % Provided,
   "org.slf4j"                 % "slf4j-api"             % "1.7.26" % Provided,
@@ -70,7 +70,7 @@ libraryDependencies ++= List(
   "org.scalastyle"            %% "scalastyle"           % "1.0.0",
   "org.scala-lang.modules"    %% "scala-xml"            % "1.2.0",
   "org.scalatest"             %% "scalatest"            % "3.0.7" % Test,
-  "org.mockito"               %% "mockito-scala"        % "1.4.2" % Test
+  "org.mockito"               %% "mockito-scala"        % "1.4.3" % Test
 )
 
 // Project resolvers

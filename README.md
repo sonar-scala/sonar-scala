@@ -100,8 +100,8 @@ sonar-scanner -Dsonar.projectName=test \
               -Dsonar.tests=src/test/scala \
               -Dsonar.sourceEncoding=UTF-8 \
               -Dsonar.scala.version=2.12 \
-              -Dsonar.scoverage.reportPath=target/scala-2.12/scoverage-report/scoverage.xml \
-              -Dsonar.scapegoat.reportPath=target/scala-2.12/scapegoat-report/scapegoat.xml
+              -Dsonar.scala.scoverage.reportPath=target/scala-2.12/scoverage-report/scoverage.xml \
+              -Dsonar.scala.scapegoat.reportPath=target/scala-2.12/scapegoat-report/scapegoat.xml
 ```
 or simply `sbt sonarScan` if you use the [sbt-sonar](https://github.com/mwz/sbt-sonar) sbt plugin.
 

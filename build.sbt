@@ -70,7 +70,7 @@ libraryDependencies ++= List(
   "org.scalastyle"            %% "scalastyle"           % "1.0.0",
   "org.scala-lang.modules"    %% "scala-xml"            % "1.2.0",
   "org.scalatest"             %% "scalatest"            % "3.0.7" % Test,
-  "org.mockito"               %% "mockito-scala"        % "1.3.1" % Test
+  "org.mockito"               %% "mockito-scala"        % "1.4.2" % Test
 )
 
 // Project resolvers

@@ -24,6 +24,7 @@ import cats.effect.IO._
 import cats.effect.{ContextShift, IO, Sync}
 import cats.instances.int._
 import cats.instances.list._
+import cats.instances.option._
 import cats.instances.string._
 import cats.syntax.either._
 import cats.syntax.eq._
@@ -57,10 +58,10 @@ final class GithubPrReviewJob(
       .use { client =>
         for {
           implicit0(log: Logger[IO]) <- Logger.create(classOf[GithubPrReviewJob], "github-pr-review")
-          _ <- globalConfig.pullRequest
+          _ <- globalConfig.pullRequest.value
             .map { config =>
               for {
-                // TODO: Skip if issue decoration isn't enabled.
+                config <- IO.fromEither(config)
                 _ <- log.debug(
                   s"Found ${globalIssues.allIssues.size} issues:\n" +
                   globalIssues.allIssues.mkString(", ")

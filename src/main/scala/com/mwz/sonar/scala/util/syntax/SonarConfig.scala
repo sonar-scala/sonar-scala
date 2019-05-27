@@ -55,5 +55,12 @@ object SonarConfig {
         .toOption
         .exists(_.toLowerCase === "true")
     }
+
+    def getString(key: String): Option[String] = {
+      configuration
+        .get(key)
+        .toOption
+        .filterNot(_.trim.isEmpty)
+    }
   }
 }

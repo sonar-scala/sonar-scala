@@ -17,15 +17,20 @@
 
 package com.mwz.sonar.scala
 
+import cats.data.EitherT
 import cats.instances.string._
 import cats.syntax.eq._
-import com.mwz.sonar.scala.GlobalConfig.{Github, PullRequest}
+import cats.instances.option._
+import com.mwz.sonar.scala.GlobalConfig._
 import com.mwz.sonar.scala.util.Log
 import com.mwz.sonar.scala.util.syntax.Optionals._
+import com.mwz.sonar.scala.util.syntax.SonarConfig._
 import org.http4s.{ParseFailure, ParseResult, Uri}
 import org.sonar.api.CoreProperties
 import org.sonar.api.batch.{InstantiationStrategy, ScannerSide}
 import org.sonar.api.config.Configuration
+
+final case class ConfigError(error: String) extends Exception
 
 // TODO: Both @ScannerSide and @InstantiationStrategy are deprecated, we should switch
 //  to the org.sonar.api.scanner.ScannerSide in the future.
@@ -48,38 +53,56 @@ final class GlobalConfig(config: Configuration) {
         )
       )(Uri.fromString)
 
-  val pullRequest: Option[PullRequest] = getPullRequest
+  val pullRequest: EitherT[Option, ConfigError, PullRequest] = getPullRequest
 
   /**
    * Pull request mode which enables PR decoration
    * (for both issues and coverage).
    */
-  def prDecoration: Boolean = pullRequest.nonEmpty
+  def prDecoration: Boolean =
+    pullRequest.isRight.getOrElse(false)
 
   /**
    * Post issues as PR comments.
    */
-  def issueDecoration: Boolean = pullRequest.exists(!_.disableIssues)
+  def issueDecoration: Boolean =
+    pullRequest.exists(!_.disableIssues).getOrElse(false)
 
   /**
    * Post coverage data as PR comments.
    */
   def coverageDecoration: Boolean = false
 
-  // TODO: Use Either to catch and log errors.
-  private[this] def getPullRequest: Option[PullRequest] =
+  private[this] def getPullRequest: EitherT[Option, ConfigError, PullRequest] =
     for {
-      provider    <- config.get("sonar.scala.pullrequest.provider").toOption.filter(_ === "github")
-      prNumber    <- config.get("sonar.scala.pullrequest.key").toOption
-      githubRepo  <- config.get("sonar.scala.pullrequest.github.repository").toOption
-      githubOauth <- config.get("sonar.scala.pullrequest.github.oauth").toOption
-      // TODO: Use the new config syntax.
-      disableIssues = config.get("sonar.scala.pullrequest.issues.disable").toOption.contains("true")
-      disableInlineComments = config
-        .get("sonar.scala.pullrequest.issues.disableInlineComments")
-        .toOption
-        .contains("true")
-      disableCoverage = config.get("sonar.scala.pullrequest.coverage.disable").toOption.contains("true")
+      provider <- EitherT[Option, ConfigError, String](
+        config
+          .getString(PR_PROVIDER)
+          .map { s =>
+            Option(s)
+              .filter(_ === "github")
+              .toRight(ConfigError("""Currently only "github" provider is supported."""))
+          }
+      )
+      prNumber <- EitherT.fromOption(
+        config.getString(PR_NUMBER),
+        ConfigError(s"Please provide a pull request number ($PR_NUMBER).")
+      )
+      githubRepo <- EitherT.fromOption(
+        config.getString(PR_GITHUB_REPO),
+        ConfigError(
+          s"""Please provide a name of the github repository, e.g. "mwz/sonar-scala" ($PR_GITHUB_REPO)."""
+        )
+      )
+      githubOauth <- EitherT.fromOption(
+        config.getString(PR_GITHUB_OAUTH),
+        ConfigError(
+          s"""Please provide a github oauth token ($PR_GITHUB_OAUTH)."""
+        )
+      )
+      disableIssues = config.getValue[Boolean](PR_DISABLE_ISSUES)
+      disableInlineComments = config.getValue[Boolean](PR_DISABLE_INLINE_COMMENTS)
+      disableCoverage = config.getValue[Boolean](PR_DISABLE_COVERAGE)
     } yield PullRequest(
       provider,
       prNumber,
@@ -91,11 +114,18 @@ final class GlobalConfig(config: Configuration) {
 }
 
 object GlobalConfig {
+  private val PR_PROVIDER = "sonar.scala.pullrequest.provider"
+  private val PR_NUMBER = "sonar.scala.pullrequest.number"
+  private val PR_GITHUB_REPO = "sonar.scala.pullrequest.github.repository"
+  private val PR_GITHUB_OAUTH = "sonar.scala.pullrequest.github.oauth"
+  private val PR_DISABLE_ISSUES = "sonar.scala.pullrequest.issues.disable"
+  private val PR_DISABLE_INLINE_COMMENTS = "sonar.scala.pullrequest.issues.disableInlineComments"
+  private val PR_DISABLE_COVERAGE = "sonar.scala.pullrequest.coverage.disable"
 
   /**
    * General PR settings:
    * - sonar.scala.pullrequest.provider=github
-   * - sonar.scala.pullrequest.key - pr number
+   * - sonar.scala.pullrequest.number - pull request number
    *
    * Github settings:
    * - sonar.scala.pullrequest.github.repository - org/project, e.g. mwz/sonar-scala

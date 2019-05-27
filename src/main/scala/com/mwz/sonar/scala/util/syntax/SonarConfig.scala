@@ -49,14 +49,19 @@ object SonarConfig {
      * Defaults to false.
      */
     @SuppressWarnings(Array("UnusedMethodParameter"))
-    def getValue[T](key: String)(implicit ev: T =:= Boolean): Boolean = {
+    def getAs[T <: Boolean](key: String)(implicit ev: T =:= Boolean): Boolean = {
       configuration
         .get(key)
         .toOption
         .exists(_.toLowerCase === "true")
     }
 
-    def getString(key: String): Option[String] = {
+    /**
+     * Get a property for the given key as a String.
+     * Returns `None` if the value is empty.
+     */
+    @SuppressWarnings(Array("UnusedMethodParameter"))
+    def getAs[T <: String](key: String)(implicit ev: T =:= String): Option[String] = {
       configuration
         .get(key)
         .toOption

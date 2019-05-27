@@ -77,7 +77,7 @@ final class GlobalConfig(config: Configuration) {
     for {
       provider <- EitherT[Option, ConfigError, String](
         config
-          .getString(PR_PROVIDER)
+          .getAs[String](PR_PROVIDER)
           .map { s =>
             Option(s)
               .filter(_ === "github")
@@ -85,24 +85,24 @@ final class GlobalConfig(config: Configuration) {
           }
       )
       prNumber <- EitherT.fromOption(
-        config.getString(PR_NUMBER),
+        config.getAs[String](PR_NUMBER),
         ConfigError(s"Please provide a pull request number ($PR_NUMBER).")
       )
       githubRepo <- EitherT.fromOption(
-        config.getString(PR_GITHUB_REPO),
+        config.getAs[String](PR_GITHUB_REPO),
         ConfigError(
           s"""Please provide a name of the github repository, e.g. "mwz/sonar-scala" ($PR_GITHUB_REPO)."""
         )
       )
       githubOauth <- EitherT.fromOption(
-        config.getString(PR_GITHUB_OAUTH),
+        config.getAs[String](PR_GITHUB_OAUTH),
         ConfigError(
           s"""Please provide a github oauth token ($PR_GITHUB_OAUTH)."""
         )
       )
-      disableIssues = config.getValue[Boolean](PR_DISABLE_ISSUES)
-      disableInlineComments = config.getValue[Boolean](PR_DISABLE_INLINE_COMMENTS)
-      disableCoverage = config.getValue[Boolean](PR_DISABLE_COVERAGE)
+      disableIssues = config.getAs[Boolean](PR_DISABLE_ISSUES)
+      disableInlineComments = config.getAs[Boolean](PR_DISABLE_INLINE_COMMENTS)
+      disableCoverage = config.getAs[Boolean](PR_DISABLE_COVERAGE)
     } yield PullRequest(
       provider,
       prNumber,

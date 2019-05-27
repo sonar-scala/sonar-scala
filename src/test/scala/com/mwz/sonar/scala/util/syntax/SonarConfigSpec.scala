@@ -46,9 +46,9 @@ class SonarConfigSpec extends FlatSpec with Matchers {
       .setProperty("bool.false", "false")
       .asConfig()
 
-    conf.getValue[Boolean]("bool.true") shouldBe true
-    conf.getValue[Boolean]("bool.true2") shouldBe true
-    conf.getValue[Boolean]("bool.false") shouldBe false
-    conf.getValue[Boolean]("not.a.bool") shouldBe false
+    conf.getAs[Boolean]("bool.true") shouldBe true
+    conf.getAs[Boolean]("bool.true2") shouldBe true
+    conf.getAs[Boolean]("bool.false") shouldBe false
+    conf.getAs[Boolean]("not.a.bool") shouldBe false
   }
 }

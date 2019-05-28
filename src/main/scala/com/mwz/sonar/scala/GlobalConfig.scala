@@ -19,6 +19,7 @@ package com.mwz.sonar.scala
 
 import cats.data.EitherT
 import cats.instances.string._
+import cats.syntax.either._
 import cats.syntax.eq._
 import cats.instances.option._
 import com.mwz.sonar.scala.GlobalConfig._
@@ -39,7 +40,7 @@ final case class ConfigError(error: String) extends Exception
 final class GlobalConfig(config: Configuration) {
   private[this] val logger = Log(classOf[Scala], "config")
 
-  val baseUrl: ParseResult[Uri] =
+  val baseUrl: ConfigErrorOr[Uri] =
     config
       .get(CoreProperties.SERVER_BASE_URL)
       .toOption
@@ -47,11 +48,12 @@ final class GlobalConfig(config: Configuration) {
       .fold[ParseResult[Uri]](
         Left(
           ParseFailure(
-            "Missing SonarQube base URI",
-            "Please configure the server base URL in your SonarQube instance or set the 'sonar.host.url' property."
+            "Missing SonarQube base URI - please configure the server base URL in your SonarQube instance or set the 'sonar.host.url' property.",
+            ""
           )
         )
       )(Uri.fromString)
+      .leftMap(f => ConfigError(f.sanitized))
 
   val pullRequest: EitherT[Option, ConfigError, PullRequest] = getPullRequest
 

@@ -21,7 +21,7 @@ import org.scalatest.{EitherValues, FlatSpec, Matchers}
 
 import scala.io.Source
 
-class PatchTest extends FlatSpec with Matchers with EitherValues {
+class PatchSpec extends FlatSpec with Matchers with EitherValues {
   def patch(path: String): String =
     Source
       .fromResource(path)

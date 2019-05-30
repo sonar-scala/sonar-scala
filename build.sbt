@@ -56,21 +56,23 @@ val sonarVersion = "7.7"
 val circe = "0.11.1"
 val http4s = "0.20.1"
 libraryDependencies ++= List(
-  "org.sonarsource.sonarqube" % "sonar-plugin-api"      % sonarVersion % Provided,
-  "org.slf4j"                 % "slf4j-api"             % "1.7.26" % Provided,
-  "org.typelevel"             %% "cats-core"            % "1.6.0",
-  "org.typelevel"             %% "cats-effect"          % "1.3.0",
-  "org.typelevel"             %% "mouse"                % "0.21",
-  "io.circe"                  %% "circe-core"           % circe,
-  "io.circe"                  %% "circe-generic"        % circe,
-  "io.circe"                  %% "circe-generic-extras" % circe,
-  "org.http4s"                %% "http4s-blaze-client"  % http4s,
-  "org.http4s"                %% "http4s-circe"         % http4s,
-  "org.scalariform"           %% "scalariform"          % "0.2.8",
-  "org.scalastyle"            %% "scalastyle"           % "1.0.0",
-  "org.scala-lang.modules"    %% "scala-xml"            % "1.2.0",
-  "org.scalatest"             %% "scalatest"            % "3.0.7" % Test,
-  "org.mockito"               %% "mockito-scala"        % "1.4.3" % Test
+  "org.sonarsource.sonarqube"  % "sonar-plugin-api"           % sonarVersion % Provided,
+  "org.slf4j"                  % "slf4j-api"                  % "1.7.26" % Provided,
+  "org.typelevel"              %% "cats-core"                 % "1.6.0",
+  "org.typelevel"              %% "cats-effect"               % "1.3.0",
+  "org.typelevel"              %% "mouse"                     % "0.21",
+  "io.circe"                   %% "circe-core"                % circe,
+  "io.circe"                   %% "circe-generic"             % circe,
+  "io.circe"                   %% "circe-generic-extras"      % circe,
+  "org.http4s"                 %% "http4s-blaze-client"       % http4s,
+  "org.http4s"                 %% "http4s-circe"              % http4s,
+  "org.scalariform"            %% "scalariform"               % "0.2.8",
+  "org.scalastyle"             %% "scalastyle"                % "1.0.0",
+  "org.scala-lang.modules"     %% "scala-xml"                 % "1.2.0",
+  "org.scalatest"              %% "scalatest"                 % "3.0.7" % Test,
+  "org.scalacheck"             %% "scalacheck"                % "1.14.0" % Test,
+  "com.github.alexarchambault" %% "scalacheck-shapeless_1.14" % "1.2.2" % Test,
+  "org.mockito"                %% "mockito-scala"             % "1.4.3" % Test
 )
 
 // Project resolvers

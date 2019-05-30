@@ -24,7 +24,7 @@ import org.sonar.api.batch.fs.internal.TestInputFileBuilder
 import org.sonar.api.batch.rule.Severity
 import org.sonar.api.rule.RuleKey
 
-class MarkdownTest extends FlatSpec with Matchers {
+class MarkdownSpec extends FlatSpec with Matchers {
   it should "create a markdown comment" in {
     val uri: Uri = Uri.uri("https://test.com")
     val file: InputFile = TestInputFileBuilder

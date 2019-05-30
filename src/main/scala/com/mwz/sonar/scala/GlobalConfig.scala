@@ -31,6 +31,7 @@ import org.sonar.api.CoreProperties
 import org.sonar.api.batch.{InstantiationStrategy, ScannerSide}
 import org.sonar.api.config.Configuration
 
+@SuppressWarnings(Array("IncorrectlyNamedExceptions"))
 final case class ConfigError(error: String) extends Exception
 
 // TODO: Both @ScannerSide and @InstantiationStrategy are deprecated, we should switch
@@ -73,7 +74,8 @@ final class GlobalConfig(config: Configuration) {
   /**
    * Post coverage data as PR comments.
    */
-  def coverageDecoration: Boolean = false
+  def coverageDecoration: Boolean =
+    pullRequest.exists(!_.disableCoverage).getOrElse(false)
 
   private[this] def getPullRequest: EitherT[Option, ConfigError, PullRequest] =
     for {
@@ -93,7 +95,7 @@ final class GlobalConfig(config: Configuration) {
       githubRepo <- EitherT.fromOption(
         config.getAs[String](PR_GITHUB_REPO),
         ConfigError(
-          s"""Please provide a name of the github repository, e.g. "mwz/sonar-scala" ($PR_GITHUB_REPO)."""
+          s"""Please provide a name of the github repository, e.g. "owner/repository" ($PR_GITHUB_REPO)."""
         )
       )
       githubOauth <- EitherT.fromOption(
@@ -104,7 +106,7 @@ final class GlobalConfig(config: Configuration) {
       )
       disableIssues = config.getAs[Boolean](PR_DISABLE_ISSUES)
       disableInlineComments = config.getAs[Boolean](PR_DISABLE_INLINE_COMMENTS)
-      disableCoverage = config.getAs[Boolean](PR_DISABLE_COVERAGE)
+      disableCoverage = true
     } yield PullRequest(
       provider,
       prNumber,
@@ -135,10 +137,10 @@ object GlobalConfig {
    *
    * Issues:
    * - sonar.scala.pullrequest.issues.disable - disable posting issues
-   * - TODO: sonar.scala.pullrequest.issues.disableInlineComments - disable inline comments and post a summary instead
+   * - sonar.scala.pullrequest.issues.disableInlineComments - disable inline comments and post a summary instead (currently not used)
    *
    * Coverage:
-   * - TODO: sonar.scala.pullrequest.coverage.disable - disable posting coverage summary
+   * - sonar.scala.pullrequest.coverage.disable - disable posting coverage summary (currently not used)
    */
   final case class PullRequest(
     provider: String,

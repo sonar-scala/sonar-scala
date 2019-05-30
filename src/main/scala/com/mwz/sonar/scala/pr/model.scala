@@ -33,6 +33,10 @@ final case class Failure(error: Throwable) extends PrStatus
 
 final case class ReviewStatus(blocker: Int, critical: Int)
 object ReviewStatus {
+
+  /**
+   * Get description of the review status.
+   */
   def description(reviewStatus: ReviewStatus): String = {
     reviewStatus match {
       case ReviewStatus(blockers, critical) if blockers > 0 && critical > 0 =>

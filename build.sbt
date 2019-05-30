@@ -59,7 +59,7 @@ libraryDependencies ++= List(
   "org.sonarsource.sonarqube"  % "sonar-plugin-api"           % sonarVersion % Provided,
   "org.slf4j"                  % "slf4j-api"                  % "1.7.26" % Provided,
   "org.typelevel"              %% "cats-core"                 % "1.6.0",
-  "org.typelevel"              %% "cats-effect"               % "1.3.0",
+  "org.typelevel"              %% "cats-effect"               % "1.3.1",
   "org.typelevel"              %% "mouse"                     % "0.21",
   "io.circe"                   %% "circe-core"                % circe,
   "io.circe"                   %% "circe-generic"             % circe,
@@ -72,7 +72,7 @@ libraryDependencies ++= List(
   "org.scalatest"              %% "scalatest"                 % "3.0.7" % Test,
   "org.scalacheck"             %% "scalacheck"                % "1.14.0" % Test,
   "com.github.alexarchambault" %% "scalacheck-shapeless_1.14" % "1.2.2" % Test,
-  "org.mockito"                %% "mockito-scala"             % "1.4.3" % Test
+  "org.mockito"                %% "mockito-scala"             % "1.4.7" % Test
 )
 
 // Project resolvers

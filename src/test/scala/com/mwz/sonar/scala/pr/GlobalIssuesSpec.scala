@@ -32,7 +32,6 @@ class GlobalIssuesSpec extends FlatSpec with Matchers with ScalaCheckDrivenPrope
     Arbitrary(
       Gen
         .nonEmptyListOf(Gen.alphaNumChar)
-        .suchThat(_.nonEmpty)
         .map { s =>
           TestInputFileBuilder
             .create("", s"${s.mkString}.scala")

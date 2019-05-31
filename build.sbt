@@ -34,7 +34,8 @@ scalacOptions := Seq(
   "-encoding",
   "utf8",
   "-feature",
-  "-language:reflectiveCalls"
+  "-language:reflectiveCalls",
+  "-Ypartial-unification"
 )
 javacOptions := Seq("-Xlint:deprecation")
 cancelable in Global := true
@@ -69,6 +70,8 @@ libraryDependencies ++= List(
   "org.scalariform"            %% "scalariform"               % "0.2.8",
   "org.scalastyle"             %% "scalastyle"                % "1.0.0",
   "org.scala-lang.modules"     %% "scala-xml"                 % "1.2.0",
+  "org.http4s"                 %% "http4s-blaze-server"       % http4s % Test,
+  "org.http4s"                 %% "http4s-dsl"                % http4s % Test,
   "org.scalatest"              %% "scalatest"                 % "3.0.7" % Test,
   "org.scalacheck"             %% "scalacheck"                % "1.14.0" % Test,
   "com.github.alexarchambault" %% "scalacheck-shapeless_1.14" % "1.2.2" % Test,

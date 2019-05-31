@@ -82,7 +82,7 @@ final class GithubPrReviewJob(
     for {
       // Get the authenticated user (to check the oauth token).
       user <- github.authenticatedUser
-      // TODO: Check user auth scope to make sure they have repo push access and fail early if they don't.
+      // TODO: Check user auth scopes to make sure the account has access to the repo (`public_repo` for public repositories or `repo` for private repositories).
       // Fetch the PR (to verify whether it exists).
       pr <- github.pullRequest
       // Create a pending PR status for the review.
@@ -195,7 +195,6 @@ object GithubPrReviewJob {
     }
 
   // Comments for new issues (which don't already have a comment).
-  // TODO: Should we bundle multiple issues into a single comment?
   def commentsForNewIssues(
     baseUrl: Uri,
     commitId: String,

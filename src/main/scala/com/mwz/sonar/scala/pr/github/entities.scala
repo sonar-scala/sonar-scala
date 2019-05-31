@@ -21,9 +21,15 @@ package github
 
 import com.mwz.sonar.scala.pr.github.Codec._
 import io.circe.generic.extras.ConfiguredJsonCodec
+import io.circe.generic.JsonCodec
 
+@JsonCodec
 final case class PullRequest(number: Int, head: Head)
+
+@JsonCodec
 final case class Head(sha: String)
+
+@JsonCodec
 final case class Comment(
   id: Int,
   path: String,
@@ -31,6 +37,7 @@ final case class Comment(
   user: User,
   body: String
 )
+
 @ConfiguredJsonCodec
 final case class NewComment(
   body: String,
@@ -38,12 +45,17 @@ final case class NewComment(
   path: String,
   position: Int
 )
+
+@JsonCodec
 final case class User(login: String)
+
+@JsonCodec
 final case class File(
   filename: String,
   status: String,
   patch: String
 )
+
 @ConfiguredJsonCodec
 final case class Status(
   state: String,
@@ -51,6 +63,7 @@ final case class Status(
   description: String,
   context: String
 )
+
 @ConfiguredJsonCodec
 final case class NewStatus(
   state: String,

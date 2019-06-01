@@ -46,8 +46,6 @@ object Github {
         s"https://api.github.com/repos/${pr.github.repository}/pulls/${pr.prNumber}/comments"
       val filesUri: String =
         s"https://api.github.com/repos/${pr.github.repository}/pulls/${pr.prNumber}/files"
-      def statusesUri(ref: String): String =
-        s"https://api.github.com/repos/${pr.github.repository}/commits/$ref/statuses"
       def newStatusUri(sha: String): String =
         s"https://api.github.com/repos/${pr.github.repository}/statuses/$sha"
 

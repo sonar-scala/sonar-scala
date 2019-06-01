@@ -17,6 +17,7 @@
 
 package com.mwz.sonar.scala.pr
 
+import com.mwz.sonar.scala.pr.Generators._
 import org.scalacheck._
 import org.scalacheck.ScalacheckShapeless._
 import org.scalatest.{FlatSpec, Inspectors, Matchers}
@@ -25,28 +26,8 @@ import org.sonar.api.batch.fs.internal.TestInputFileBuilder
 import org.sonar.api.batch.rule.Severity
 import org.sonar.api.config.internal.MapSettings
 import org.sonar.api.rule.RuleKey
-import org.sonar.api.batch.fs.InputFile
 
 class GlobalIssuesSpec extends FlatSpec with Matchers with ScalaCheckDrivenPropertyChecks {
-  implicit val arbInputFile: Arbitrary[InputFile] =
-    Arbitrary(
-      Gen
-        .nonEmptyListOf(Gen.alphaNumChar)
-        .map { s =>
-          TestInputFileBuilder
-            .create("", s"${s.mkString}.scala")
-            .build
-        }
-    )
-
-  implicit val arbRuleKey: Arbitrary[RuleKey] =
-    Arbitrary(
-      for {
-        repo <- Gen.nonEmptyListOf(Gen.alphaNumChar)
-        rule <- Gen.nonEmptyListOf(Gen.alphaNumChar)
-      } yield RuleKey.of(repo.mkString, rule.mkString)
-    )
-
   it should "add a new issue" in {
     val issues = new GlobalIssues
     val file = TestInputFileBuilder
@@ -65,14 +46,14 @@ class GlobalIssuesSpec extends FlatSpec with Matchers with ScalaCheckDrivenPrope
   }
 
   it should "return all issues" in {
-    forAll { (all: List[Issue]) =>
-      whenever(all.nonEmpty) {
-        val issues = new GlobalIssues
-        val expected = all.groupBy(_.file)
+    forAll { (issues: List[Issue]) =>
+      whenever(issues.nonEmpty) {
+        val globalIssues = new GlobalIssues
+        val expected = issues.groupBy(_.file)
 
-        all.foreach(issues.add)
+        issues.foreach(globalIssues.add)
 
-        Inspectors.forAll(issues.allIssues) {
+        Inspectors.forAll(globalIssues.allIssues) {
           case (file, issues) =>
             issues should contain theSameElementsAs expected(file)
         }

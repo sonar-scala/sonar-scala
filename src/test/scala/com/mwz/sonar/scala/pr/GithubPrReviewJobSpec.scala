@@ -19,7 +19,7 @@ package com.mwz.sonar.scala.pr
 
 import com.mwz.sonar.scala.GlobalConfig
 import com.mwz.sonar.scala.pr.Generators._
-import com.mwz.sonar.scala.pr.github.{Comment, NewComment, NewStatus}
+import com.mwz.sonar.scala.pr.github.{Comment, NewComment, NewStatus, User}
 import org.http4s.Uri
 import org.scalacheck._
 import org.scalacheck.ScalacheckShapeless._
@@ -27,7 +27,9 @@ import org.scalatest.{FlatSpec, Matchers}
 import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
 import org.sonar.api.config.internal.MapSettings
 import org.sonar.api.batch.postjob.internal.DefaultPostJobDescriptor
+import org.sonar.api.batch.fs.InputFile
 import org.sonar.api.batch.rule.Severity
+import org.sonar.api.rule.RuleKey
 
 class GithubPrReviewJobSpec extends FlatSpec with Matchers with ScalaCheckDrivenPropertyChecks {
   it should "correctly set the descriptor" in {
@@ -50,15 +52,45 @@ class GithubPrReviewJobSpec extends FlatSpec with Matchers with ScalaCheckDriven
   it should "create comments for new issues" in {
     forAll { (commit: String, patchLine: PatchLine, issuesComments: List[(Issue, List[Comment])]) =>
       val uri = Uri.unsafeFromString("https://hello.com")
-      val issues = issuesComments
-        .groupBy(v => (v._1.file))
-        .mapValues(_.groupBy(v => PatchLine(v._1.line)))
+      val issues =
+        issuesComments
+          .groupBy(v => (v._1.file))
+          .mapValues(_.groupBy(v => PatchLine(v._1.line)))
       val newComments = issuesComments.map {
         case (issue, _) =>
           NewComment(Markdown.inline(uri, issue).text, commit, issue.file.toString, issue.line)
       }
 
       GithubPrReviewJob.commentsForNewIssues(uri, commit, issues) should contain theSameElementsAs newComments
+    }
+  }
+
+  it should "ignore existing comments created by sonar-scala" in {
+    forAll { (commit: String, ruleKey: RuleKey, inputFile: InputFile) =>
+      val uri = Uri.unsafeFromString("https://hello.com")
+      val issueToIgnore =
+        Issue(ruleKey, inputFile, 2, Severity.MAJOR, "message 2")
+      val commentToIgnore =
+        Comment(2, "path", Some(2), User("user"), Markdown.inline(uri, issueToIgnore).text)
+      val issues = List(
+        (
+          Issue(ruleKey, inputFile, 1, Severity.MINOR, "message 1"),
+          List(Comment(1, "path", Some(1), User("user"), "body 1"))
+        )
+      )
+      val allIssues = (issueToIgnore, commentToIgnore) :: issues
+
+      val groupped =
+        issues
+          .groupBy(v => (v._1.file))
+          .mapValues(_.groupBy(v => PatchLine(v._1.line)))
+
+      val newComments = issues.map {
+        case (issue, _) =>
+          NewComment(Markdown.inline(uri, issue).text, commit, issue.file.toString, issue.line)
+      }
+
+      GithubPrReviewJob.commentsForNewIssues(uri, commit, groupped) should contain theSameElementsAs newComments
     }
   }
 

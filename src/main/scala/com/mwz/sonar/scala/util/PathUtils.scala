@@ -22,8 +22,6 @@ import java.nio.file.{Path, Paths}
 
 import org.sonar.api.batch.fs.FileSystem
 
-import scala.language.implicitConversions
-
 /**
  * Various Path utilities.
  */

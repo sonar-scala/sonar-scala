@@ -18,12 +18,9 @@
 package com.mwz.sonar.scala.util
 
 import cats.effect.IO
-import com.mwz.sonar.scala.util.Logger._
 import org.scalatest.{FlatSpec, Matchers}
 import org.sonar.api.utils.log.LoggerLevel._
 import org.sonar.api.utils.log.SonarLogTester
-
-import cats.implicits._
 
 class LoggerSpec extends FlatSpec with Matchers with SonarLogTester {
   trait Context {

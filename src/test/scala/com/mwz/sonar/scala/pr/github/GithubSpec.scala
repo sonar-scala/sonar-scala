@@ -22,7 +22,6 @@ import cats.data.OptionT
 import cats.effect.IO
 import com.mwz.sonar.scala.GlobalConfig
 import com.mwz.sonar.scala.pr.github.Codec._
-import io.circe.syntax._
 import org.http4s.circe.CirceEntityCodec._
 import org.http4s.circe.CirceEntityEncoder._
 import org.http4s.AuthedService

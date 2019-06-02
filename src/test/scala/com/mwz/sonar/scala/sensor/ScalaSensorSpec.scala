@@ -20,7 +20,7 @@ package sensor
 
 import java.nio.file.Paths
 
-import org.scalatest.{FlatSpec, LoneElement, Matchers}
+import org.scalatest.{FlatSpec, LoneElement}
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder
 import org.sonar.api.batch.sensor.internal.{DefaultSensorDescriptor, SensorContextTester}
 import org.sonar.api.config.internal.MapSettings

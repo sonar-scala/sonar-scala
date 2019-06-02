@@ -17,10 +17,8 @@
 
 package com.mwz.sonar.scala
 
-import org.http4s.ParseFailure
 import org.scalatest.{EitherValues, FlatSpec, Matchers, OptionValues}
 import org.sonar.api.config.internal.MapSettings
-import scalariform.{ScalaVersion, ScalaVersions}
 
 class GlobalConfigSpec extends FlatSpec with Matchers with OptionValues with EitherValues {
 

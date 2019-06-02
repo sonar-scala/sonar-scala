@@ -21,7 +21,6 @@ import com.mwz.sonar.scala.GlobalConfig
 import com.mwz.sonar.scala.pr.Generators._
 import com.mwz.sonar.scala.pr.github.{Comment, NewComment, NewStatus, User}
 import org.http4s.Uri
-import org.scalacheck._
 import org.scalacheck.ScalacheckShapeless._
 import org.scalatest.{FlatSpec, Matchers}
 import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks

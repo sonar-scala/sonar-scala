@@ -4,8 +4,8 @@ libraryDependencies ++= Seq(
   // Scapegoat & scalastyle inspections generator dependencies
   "com.sksamuel.scapegoat" %% "scalac-scapegoat-plugin" % "1.3.9",
   "org.scalastyle"         %% "scalastyle"              % "1.0.0",
-  "org.scalameta"          %% "scalameta"               % "4.1.11",
-  "org.scalatest"          %% "scalatest"               % "3.0.7" % Test
+  "org.scalameta"          %% "scalameta"               % "4.1.12",
+  "org.scalatest"          %% "scalatest"               % "3.0.8" % Test
 )
 
 // Adding a resolver to the Artima maven repo, so sbt can download the Artima SuperSafe sbt plugin

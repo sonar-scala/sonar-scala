@@ -39,7 +39,7 @@ javacOptions := Seq("-Xlint:deprecation")
 cancelable in Global := true
 scalafmtOnCompile in ThisBuild := true
 scalafmtVersion in ThisBuild := "1.4.0"
-scapegoatVersion in ThisBuild := "1.3.8"
+scapegoatVersion in ThisBuild := "1.3.9"
 scapegoatReports := Seq("xml")
 coverageOutputXML := true
 coverageOutputHTML := false
@@ -56,12 +56,12 @@ val sonarVersion = "7.7"
 libraryDependencies ++= List(
   "org.sonarsource.sonarqube" % "sonar-plugin-api" % sonarVersion % Provided,
   "org.slf4j"                 % "slf4j-api"        % "1.7.26" % Provided,
-  "org.typelevel"             %% "cats-core"       % "1.6.0",
-  "org.scalariform"           %% "scalariform"     % "0.2.9",
+  "org.typelevel"             %% "cats-core"       % "1.6.1",
+  "org.scalariform"           %% "scalariform"     % "0.2.10",
   "org.scalastyle"            %% "scalastyle"      % "1.0.0",
   "org.scala-lang.modules"    %% "scala-xml"       % "1.2.0",
-  "org.scalatest"             %% "scalatest"       % "3.0.7" % Test,
-  "org.mockito"               %% "mockito-scala"   % "1.5.1" % Test
+  "org.scalatest"             %% "scalatest"       % "3.0.8" % Test,
+  "org.mockito"               %% "mockito-scala"   % "1.5.11" % Test
 )
 
 // Adding a resolver to the Artima maven repo, so sbt can download the Artima SuperSafe Scala compiler

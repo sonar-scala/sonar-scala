@@ -27,7 +27,7 @@ import com.mwz.sonar.scala.util.syntax.Optionals._
 import org.sonar.api.config.Configuration
 
 object SonarConfig {
-  implicit final class ConfigOps(val configuration: Configuration) extends AnyVal {
+  implicit final class ConfigOps(private val configuration: Configuration) extends AnyVal {
 
     /**
      * Get a list of paths for the given key.

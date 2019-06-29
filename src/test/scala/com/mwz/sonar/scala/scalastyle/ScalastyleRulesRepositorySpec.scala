@@ -107,7 +107,7 @@ class ScalastyleRulesRepositorySpec extends FlatSpec with Matchers with Inspecto
   it should "have all rules contain ruleClass parameter" in new Ctx {
     val rules: Seq[Rule] = repository.rules.asScala.filter(r => !r.params.isEmpty)
     forEvery(rules) { rule =>
-      rule.params.asScala.exists(p => p.key == "ruleClass" && p.defaultValue.startsWith("org.scalastyle"))
+      rule.params.asScala.exists(p => p.key === "ruleClass" && p.defaultValue.startsWith("org.scalastyle"))
     }
   }
 

@@ -19,7 +19,7 @@ jobs:
             - v1-dependencies-
       - run:
           name: sbt test
-          command: sbt ';clean ;coverage ;test ;coverageReport ;scapegoat ;reload plugins ;test' < /dev/null
+          command: sbt ';clean ;coverage ;test ;coverageReport ;scapegoat ;fixCheck ;reload plugins ;test' < /dev/null
       - save_cache:
           paths:
             - ~/.iv2/cache

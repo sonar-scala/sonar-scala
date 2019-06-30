@@ -179,7 +179,7 @@ private[scapegoat] object ScapegoatSensor {
     conf
       .get(ScapegoatDisablePropertyKey)
       .toOption
-      .forall(s => s.toLowerCase != "true")
+      .forall(s => s.toLowerCase =!= "true")
 
   def getDefaultScapegoatReportPath(scalaVersion: ScalaVersion): Path =
     Paths.get(

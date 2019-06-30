@@ -29,14 +29,14 @@ object Optionals {
   /**
    * Transform Scala Option to a Java Optional.
    */
-  implicit final class OptionOps[T >: Null](val opt: Option[T]) extends AnyVal {
+  implicit final class OptionOps[T >: Null](private val opt: Option[T]) extends AnyVal {
     def toOptional: Optional[T] = Optional.ofNullable(opt.orNull)
   }
 
   /**
    * Transform Java Optional to a Scala Option.
    */
-  implicit final class OptionalOps[T](val opt: Optional[T]) extends AnyVal {
+  implicit final class OptionalOps[T](private val opt: Optional[T]) extends AnyVal {
     def toOption: Option[T] = opt.map[Option[T]](Some(_)).orElse(None)
   }
 }

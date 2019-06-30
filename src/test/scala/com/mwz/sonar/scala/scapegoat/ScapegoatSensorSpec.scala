@@ -26,12 +26,7 @@ import org.mockito.Mockito._
 import org.scalatest.{FlatSpec, LoneElement, OptionValues}
 import org.scalatestplus.mockito.MockitoSugar
 import org.sonar.api.batch.fs.InputFile
-import org.sonar.api.batch.fs.internal.{
-  DefaultFileSystem,
-  DefaultTextPointer,
-  DefaultTextRange,
-  TestInputFileBuilder
-}
+import org.sonar.api.batch.fs.internal.{DefaultFileSystem, TestInputFileBuilder}
 import org.sonar.api.batch.rule.internal.{ActiveRulesBuilder, NewActiveRule}
 import org.sonar.api.batch.sensor.internal.{DefaultSensorDescriptor, SensorContextTester}
 import org.sonar.api.config.internal.MapSettings

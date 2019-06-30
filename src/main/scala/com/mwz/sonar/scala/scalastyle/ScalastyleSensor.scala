@@ -21,6 +21,8 @@ package scalastyle
 import java.io.File
 import java.nio.file.Paths
 
+import cats.instances.string._
+import cats.syntax.eq._
 import com.mwz.sonar.scala.util.Log
 import com.mwz.sonar.scala.util.syntax.Optionals._
 import org.scalastyle.{
@@ -42,9 +44,7 @@ import org.sonar.api.batch.rule.{ActiveRule, Severity}
 import org.sonar.api.batch.sensor.issue.NewIssue
 import org.sonar.api.batch.sensor.{Sensor, SensorContext, SensorDescriptor}
 import org.sonar.api.config.Configuration
-import org.sonar.api.profiles.{RulesProfile => QualityProfile}
 import org.sonar.api.rule.RuleKey
-
 import scala.collection.JavaConverters._
 import scala.collection.immutable.Seq
 
@@ -133,7 +133,7 @@ private[scalastyle] object ScalastyleSensor {
     conf
       .get(ScalastyleDisablePropertyKey)
       .toOption
-      .forall(s => s.toLowerCase != "true")
+      .forall(s => s.toLowerCase =!= "true")
 
   /**
    * Convert SonarQube rule severity to Scalastyle inspection level.

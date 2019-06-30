@@ -18,7 +18,10 @@
 package com.mwz.sonar.scala
 package scalastyle
 
+import cats.instances.char._
+import cats.instances.int._
 import cats.instances.string._
+import cats.syntax.eq._
 import cats.syntax.option._
 import org.scalastyle._
 import org.sonar.api.batch.rule.Severity
@@ -132,8 +135,8 @@ object ScalastyleRulesRepository {
     typ match {
       // RuleParamType.TEXT is used for header parameter of the HeaderMatchesChecker inspection.
       case StringType
-          if ruleClass == "org.scalastyle.file.HeaderMatchesChecker" &&
-          name == "header" =>
+          if ruleClass === "org.scalastyle.file.HeaderMatchesChecker" &&
+          name === "header" =>
         RuleParamType.TEXT
       case StringType =>
         RuleParamType.STRING
@@ -160,13 +163,13 @@ object ScalastyleRulesRepository {
       case (acc, l) =>
         // Remove all backslashes as they are unnecessary.
         val line = l.replace("\\", "")
-        val trailingSpaces = line.takeWhile(_ == ' ').length
+        val trailingSpaces = line.takeWhile(_ === ' ').length
         // Trim the text and replace ` with `` for inline code blocks.
         val trimmed = line.trim.replace("`", "``")
 
         acc match {
           // Empty line.
-          case _ if trimmed.length == 0 =>
+          case _ if trimmed.length === 0 =>
             acc.copy(isEmpty = true)
 
           // Previous line indented.

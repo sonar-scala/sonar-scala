@@ -21,6 +21,10 @@ project/plugins/project/
 .settings
 .cache
 
+# metals
+.metals
+.bloop
+
 # Intellij IDEA Specific
 .idea/
 *.iws

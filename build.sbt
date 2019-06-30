@@ -33,7 +33,9 @@ scalacOptions := Seq(
   "-encoding",
   "utf8",
   "-feature",
-  "-language:reflectiveCalls"
+  "-language:reflectiveCalls",
+  "-Yrangepos",
+  "-Ywarn-unused-import"
 )
 javacOptions := Seq("-Xlint:deprecation")
 cancelable in Global := true
@@ -143,3 +145,8 @@ logBuffered in Test := false
 // T - show reminder of failed and cancelled tests with short stack traces,
 // F - show full stack traces.
 testOptions in Test += Tests.Argument(TestFrameworks.ScalaTest, "-oDTF")
+
+// scalafix
+addCompilerPlugin(scalafixSemanticdb)
+addCommandAlias("fix", "all compile:scalafix test:scalafix")
+addCommandAlias("fixCheck", ";compile:scalafix --check ;test:scalafix --check")

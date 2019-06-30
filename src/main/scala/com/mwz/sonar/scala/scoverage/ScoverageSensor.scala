@@ -20,6 +20,8 @@ package scoverage
 
 import java.nio.file.{Path, Paths}
 
+import cats.instances.string._
+import cats.syntax.eq._
 import com.mwz.sonar.scala.util.PathUtils._
 import com.mwz.sonar.scala.util.syntax.Optionals._
 import com.mwz.sonar.scala.util.{Log, PathUtils}
@@ -167,7 +169,7 @@ private[scoverage] object ScoverageSensor {
     conf
       .get(ScoverageDisablePropertyKey)
       .toOption
-      .forall(s => s.toLowerCase != "true")
+      .forall(s => s.toLowerCase =!= "true")
 
   def getDefaultScoverageReportPath(scalaVersion: ScalaVersion): Path =
     Paths.get(s"target/scala-${scalaVersion.major}.${scalaVersion.minor}/scoverage-report/scoverage.xml")

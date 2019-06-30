@@ -21,7 +21,7 @@ import java.nio.file.Paths
 
 import org.scalatest.{FlatSpec, Matchers}
 import org.sonar.api.config.internal.MapSettings
-import scalariform.{ScalaVersion, ScalaVersions}
+import scalariform.ScalaVersion
 
 class ScalaSpec extends FlatSpec with Matchers {
   "getFileSuffixes" should "return Scala file suffixes" in {

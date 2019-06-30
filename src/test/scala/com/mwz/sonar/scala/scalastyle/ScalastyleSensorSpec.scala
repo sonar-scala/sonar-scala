@@ -18,12 +18,9 @@
 package com.mwz.sonar.scala
 package scalastyle
 
-import java.nio.charset.Charset
 import java.nio.file.Paths
-import java.util
 
 import com.mwz.sonar.scala.util.PathUtils.cwd
-import org.scalactic._
 import org.scalastyle.scalariform.EmptyClassChecker
 import org.scalastyle.{
   ConfigurationChecker,

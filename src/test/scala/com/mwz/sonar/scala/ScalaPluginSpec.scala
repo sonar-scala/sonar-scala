@@ -24,7 +24,7 @@ import org.sonar.api.{Plugin, SonarEdition, SonarQubeSide, SonarRuntime}
 
 class ScalaPluginSpec extends FlatSpec with Matchers {
   val runtime: SonarRuntime = SonarRuntimeImpl.forSonarQube(
-    Version.create(7, 8),
+    Version.create(7, 9),
     SonarQubeSide.SCANNER,
     SonarEdition.COMMUNITY
   )

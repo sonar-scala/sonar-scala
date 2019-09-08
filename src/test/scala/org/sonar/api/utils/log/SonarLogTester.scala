@@ -17,9 +17,9 @@
 
 package org.sonar.api.utils.log
 
-import org.scalatest.{BeforeAndAfter, Suite}
-
 import scala.collection.JavaConverters._
+
+import org.scalatest.{BeforeAndAfter, Suite}
 
 trait SonarLogTester extends BeforeAndAfter { this: Suite =>
   before {

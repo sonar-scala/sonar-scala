@@ -20,6 +20,8 @@ package scapegoat
 
 import java.nio.file.{Path, Paths}
 
+import scala.util.{Failure, Success, Try}
+
 import cats.implicits._
 import com.mwz.sonar.scala.util.Log
 import com.mwz.sonar.scala.util.PathUtils._
@@ -28,8 +30,6 @@ import org.sonar.api.batch.fs.{FileSystem, InputFile}
 import org.sonar.api.batch.sensor.{Sensor, SensorContext, SensorDescriptor}
 import org.sonar.api.config.Configuration
 import scalariform.ScalaVersion
-
-import scala.util.{Failure, Success, Try}
 
 /** Main sensor for importing Scapegoat reports to SonarQube */
 final class ScapegoatSensor(scapegoatReportParser: ScapegoatReportParserAPI) extends Sensor {

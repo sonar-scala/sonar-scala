@@ -20,11 +20,11 @@ package scoverage
 
 import java.nio.file.{Path, Paths}
 
+import scala.xml.{Node, XML}
+
 import cats.syntax.semigroup.catsSyntaxSemigroup
 import com.mwz.sonar.scala.util.PathUtils
 import org.sonar.api.scanner.ScannerSide
-
-import scala.xml.{Node, XML}
 
 trait ScoverageReportParserAPI {
   def parse(scoverageReportPath: Path, projectPath: Path, sourcePrefixes: List[Path]): ProjectCoverage

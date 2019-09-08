@@ -67,7 +67,7 @@ libraryDependencies ++= List(
 )
 
 // Adding a resolver to the Artima maven repo, so sbt can download the Artima SuperSafe Scala compiler
-resolvers += "Artima Maven Repository" at "http://repo.artima.com/releases"
+resolvers += "Artima Maven Repository" at "https://repo.artima.com/releases"
 
 // Manifest attributes
 packageOptions in (Compile, packageBin) += Package.ManifestAttributes(
@@ -147,6 +147,7 @@ logBuffered in Test := false
 testOptions in Test += Tests.Argument(TestFrameworks.ScalaTest, "-oDTF")
 
 // scalafix
+scalafixDependencies in ThisBuild += "com.nequissimus" %% "sort-imports" % "0.2.1"
 addCompilerPlugin(scalafixSemanticdb)
 addCommandAlias("fix", "all compile:scalafix test:scalafix")
 addCommandAlias("fixCheck", ";compile:scalafix --check ;test:scalafix --check")

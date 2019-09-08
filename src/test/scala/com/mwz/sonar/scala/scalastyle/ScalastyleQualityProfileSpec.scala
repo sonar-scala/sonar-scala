@@ -18,6 +18,8 @@
 package com.mwz.sonar.scala
 package scalastyle
 
+import scala.collection.JavaConverters._
+
 import com.mwz.sonar.scala.scalastyle.ScalastyleRulesRepository.SkipTemplateInstances
 import org.scalatest.{FlatSpec, Inspectors, LoneElement, Matchers}
 import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition.{
@@ -25,8 +27,6 @@ import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition.{
   BuiltInQualityProfile,
   Context
 }
-
-import scala.collection.JavaConverters._
 
 class ScalastyleQualityProfileSpec extends FlatSpec with Matchers with LoneElement with Inspectors {
   trait Ctx {

@@ -20,6 +20,9 @@ package scoverage
 
 import java.nio.file.{Path, Paths}
 
+import scala.collection.JavaConverters._
+import scala.util.{Failure, Success, Try}
+
 import cats.instances.string._
 import cats.syntax.eq._
 import com.mwz.sonar.scala.util.PathUtils._
@@ -29,9 +32,6 @@ import org.sonar.api.batch.fs.{FileSystem, InputComponent, InputFile}
 import org.sonar.api.batch.sensor.{Sensor, SensorContext, SensorDescriptor}
 import org.sonar.api.config.Configuration
 import scalariform.ScalaVersion
-
-import scala.collection.JavaConverters._
-import scala.util.{Failure, Success, Try}
 
 /** Main sensor for importing Scoverage reports into SonarQube. */
 final class ScoverageSensor(scoverageReportParser: ScoverageReportParserAPI) extends Sensor {

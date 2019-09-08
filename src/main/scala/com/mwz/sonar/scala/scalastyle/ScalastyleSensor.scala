@@ -21,6 +21,9 @@ package scalastyle
 import java.io.File
 import java.nio.file.Paths
 
+import scala.collection.JavaConverters._
+import scala.collection.immutable.Seq
+
 import cats.instances.string._
 import cats.syntax.eq._
 import com.mwz.sonar.scala.util.Log
@@ -45,8 +48,6 @@ import org.sonar.api.batch.sensor.issue.NewIssue
 import org.sonar.api.batch.sensor.{Sensor, SensorContext, SensorDescriptor}
 import org.sonar.api.config.Configuration
 import org.sonar.api.rule.RuleKey
-import scala.collection.JavaConverters._
-import scala.collection.immutable.Seq
 
 /**
  * Main sensor for executing Scalastyle analysis.

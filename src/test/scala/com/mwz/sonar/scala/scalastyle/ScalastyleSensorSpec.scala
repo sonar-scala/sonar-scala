@@ -20,6 +20,8 @@ package scalastyle
 
 import java.nio.file.Paths
 
+import scala.collection.JavaConverters._
+
 import com.mwz.sonar.scala.util.PathUtils.cwd
 import org.scalastyle.scalariform.EmptyClassChecker
 import org.scalastyle.{
@@ -37,13 +39,11 @@ import org.scalatest._
 import org.scalatestplus.mockito.MockitoSugar
 import org.sonar.api.batch.fs.InputFile
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder
-import org.sonar.api.batch.rule.internal.{ActiveRulesBuilder, NewActiveRule}
 import org.sonar.api.batch.rule.Severity
+import org.sonar.api.batch.rule.internal.{ActiveRulesBuilder, NewActiveRule}
 import org.sonar.api.batch.sensor.internal.{DefaultSensorDescriptor, SensorContextTester}
 import org.sonar.api.config.internal.MapSettings
 import org.sonar.api.rule.RuleKey
-
-import scala.collection.JavaConverters._
 
 class ScalastyleSensorSpec
     extends FlatSpec

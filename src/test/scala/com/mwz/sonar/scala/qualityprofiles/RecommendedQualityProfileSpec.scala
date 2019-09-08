@@ -18,14 +18,14 @@
 package com.mwz.sonar.scala
 package qualityprofiles
 
+import scala.collection.JavaConverters._
+
 import org.scalatest._
 import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition.{
   BuiltInActiveRule,
   BuiltInQualityProfile,
   Context
 }
-
-import scala.collection.JavaConverters._
 
 class RecommendedQualityProfileSpec
     extends FlatSpec

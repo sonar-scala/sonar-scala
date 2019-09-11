@@ -58,7 +58,7 @@ val sonarVersion = "7.9"
 libraryDependencies ++= List(
   "org.sonarsource.sonarqube" % "sonar-plugin-api" % sonarVersion % Provided,
   "org.slf4j"                 % "slf4j-api"        % "1.7.28" % Provided,
-  "org.typelevel"             %% "cats-core"       % "1.6.1",
+  "org.typelevel"             %% "cats-core"       % "2.0.0",
   "org.scalariform"           %% "scalariform"     % "0.2.10",
   "org.scalastyle"            %% "scalastyle"      % "1.0.0",
   "org.scala-lang.modules"    %% "scala-xml"       % "1.2.0",

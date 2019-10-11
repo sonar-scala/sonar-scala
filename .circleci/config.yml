@@ -109,9 +109,6 @@ jobs:
             sbt -Dsonar.host.url=${SONARQUBE_URL} \
               -Dsonar.login=${SONARQUBE_ACCESS_TOKEN} \
               'release with-defaults skip-tests' < /dev/null
-      - save_cache:
-          key: v1-sonar-cache-{{ checksum "~/sonar-scanner-version" }}
-          paths: ~/.sonar/cache
 
 workflows:
   version: 2

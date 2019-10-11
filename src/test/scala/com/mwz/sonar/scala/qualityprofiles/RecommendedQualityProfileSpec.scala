@@ -63,7 +63,7 @@ class RecommendedQualityProfileSpec
   it should "have overridden the default params" in new Ctx {
     val rulesWithOverridenParams = rules.filterNot(_.overriddenParams.isEmpty)
     val paramOverrides = RecommendedQualityProfile.ScapegoatOverrides.params ++
-    RecommendedQualityProfile.ScalastyleOverrides.params
+      RecommendedQualityProfile.ScalastyleOverrides.params
 
     rulesWithOverridenParams.size shouldBe paramOverrides.size
     forEvery(rulesWithOverridenParams) { rule =>
@@ -75,7 +75,7 @@ class RecommendedQualityProfileSpec
   it should "have overridden the default severities" in new Ctx {
     val rulesWithOverridenSeverities = rules.filterNot(rule => Option(rule.overriddenSeverity).isEmpty)
     val severityOverrides = RecommendedQualityProfile.ScapegoatOverrides.severities ++
-    RecommendedQualityProfile.ScalastyleOverrides.severities
+      RecommendedQualityProfile.ScalastyleOverrides.severities
 
     rulesWithOverridenSeverities.size shouldBe severityOverrides.size
     forEvery(rulesWithOverridenSeverities) { rule =>

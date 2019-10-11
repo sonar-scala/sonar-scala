@@ -105,7 +105,7 @@ class JUnitSensorSpec
     context should have(metric[Integer](testFile.key, "tests", 4))
     context should have(metric[Integer](testFile.key, "test_errors", 3))
     context should have(metric[Integer](testFile.key, "test_failures", 2))
-    context should have(metric[java.lang.Long](testFile.key, "test_execution_time", 123l))
+    context should have(metric[java.lang.Long](testFile.key, "test_execution_time", 123L))
   }
 
   it should "save test metrics for all the parsed reports" in new Ctx {
@@ -131,7 +131,7 @@ class JUnitSensorSpec
     context should have(metric[Integer](testFile.key, "tests", 4))
     context should have(metric[Integer](testFile.key, "test_errors", 3))
     context should have(metric[Integer](testFile.key, "test_failures", 2))
-    context should have(metric[java.lang.Long](testFile.key, "test_execution_time", 123l))
+    context should have(metric[java.lang.Long](testFile.key, "test_execution_time", 123L))
   }
 
   it should "save test metrics for a module" in new Ctx {
@@ -157,6 +157,6 @@ class JUnitSensorSpec
     context should have(metric[Integer](testFile.key, "tests", 4))
     context should have(metric[Integer](testFile.key, "test_errors", 3))
     context should have(metric[Integer](testFile.key, "test_failures", 2))
-    context should have(metric[java.lang.Long](testFile.key, "test_execution_time", 123l))
+    context should have(metric[java.lang.Long](testFile.key, "test_execution_time", 123L))
   }
 }

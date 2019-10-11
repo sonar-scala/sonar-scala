@@ -35,9 +35,9 @@ class SonarSensorContextSpec extends FlatSpec with Matchers with SensorContextMa
       .build()
 
     ctx.saveMeasure[Integer](testFile, CoreMetrics.TESTS, 5)
-    ctx.saveMeasure[java.lang.Long](testFile, CoreMetrics.TEST_EXECUTION_TIME, 124l)
+    ctx.saveMeasure[java.lang.Long](testFile, CoreMetrics.TEST_EXECUTION_TIME, 124L)
 
     ctx should have(metric[Integer](testFile.key, "tests", 5))
-    ctx should have(metric[java.lang.Long](testFile.key, "test_execution_time", 124l))
+    ctx should have(metric[java.lang.Long](testFile.key, "test_execution_time", 124L))
   }
 }

@@ -39,7 +39,10 @@ scalacOptions := Seq(
 )
 javacOptions := Seq("-Xlint:deprecation")
 cancelable in Global := true
-scalafmtOnCompile in ThisBuild := true
+scalafmtOnCompile in ThisBuild :=
+  sys.env
+    .get("DISABLE_SCALAFMT")
+    .forall(_.toLowerCase == "false")
 scapegoatVersion in ThisBuild := "1.3.9"
 scapegoatReports := Seq("xml")
 coverageOutputXML := true

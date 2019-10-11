@@ -125,7 +125,7 @@ class ScapegoatReportParserSpec extends FlatSpec with Matchers with LoneElement 
           snippet = "scala.Predef.augmentString(\"data is: %s\").format(scala.Array.apply(1, 2, 3))",
           file = "com/mwz/sonar/scala/scapegoat/TestFileA.scala",
           inspectionId = "com.sksamuel.scapegoat.inspections.string.ArraysInFormat"
-        ),
+        )
       ),
       "com/mwz/sonar/scala/scapegoat/TestFileB.scala" -> Seq(
         ScapegoatIssue(

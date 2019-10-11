@@ -26,7 +26,7 @@ headerLicense := Some(
 excludeFilter.in(headerResources) := "*.scala"
 
 // Compile options
-scalaVersion := "2.12.8"
+scalaVersion := "2.12.10"
 scalacOptions := Seq(
   "-unchecked",
   "-deprecation",
@@ -40,7 +40,6 @@ scalacOptions := Seq(
 javacOptions := Seq("-Xlint:deprecation")
 cancelable in Global := true
 scalafmtOnCompile in ThisBuild := true
-scalafmtVersion in ThisBuild := "1.4.0"
 scapegoatVersion in ThisBuild := "1.3.9"
 scapegoatReports := Seq("xml")
 coverageOutputXML := true
@@ -147,7 +146,7 @@ logBuffered in Test := false
 testOptions in Test += Tests.Argument(TestFrameworks.ScalaTest, "-oDTF")
 
 // scalafix
-scalafixDependencies in ThisBuild += "com.nequissimus" %% "sort-imports" % "0.2.1"
+scalafixDependencies in ThisBuild += "com.nequissimus" %% "sort-imports" % "0.3.0"
 addCompilerPlugin(scalafixSemanticdb)
 addCommandAlias("fix", "all compile:scalafix test:scalafix")
 addCommandAlias("fixCheck", ";compile:scalafix --check ;test:scalafix --check")

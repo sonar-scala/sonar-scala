@@ -207,9 +207,10 @@ private[scalastyle] object ScalastyleSensor {
     val file: InputFile = context.fileSystem.inputFile(predicates.hasPath(relativized.toString))
     val newIssue: NewIssue = context.newIssue().forRule(rule.ruleKey)
     val line: Int = styleError.lineNumber.filter(_ > 0).getOrElse(1) // scalastyle:ignore org.scalastyle.scalariform.NamedArgumentChecker
-    val message: Option[String] = styleError.customMessage orElse inspections
-      .get(styleError.clazz.getName)
-      .map(_.label)
+    val message: Option[String] =
+      styleError.customMessage orElse inspections
+        .get(styleError.clazz.getName)
+        .map(_.label)
 
     // Open a new issue.
     newIssue

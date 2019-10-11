@@ -5,6 +5,8 @@ defaults: &defaults
     - image: mwizner/sonar-scala-circleci
   working_directory: ~/repo
   environment:
+    TERM: xterm
+    DEBIAN_FRONTEND: noninteractive
     JVM_OPTS: -Xmx3200m
     SBT_OPTS: -Xmx3G -XX:MaxMetaspaceSize=1G
 
@@ -19,7 +21,8 @@ jobs:
             - v1-dependencies-
       - run:
           name: sbt test
-          command: sbt ';clean ;coverage ;test ;coverageReport ;scapegoat ;fixCheck ;reload plugins ;test' < /dev/null
+          command: |
+            sbt ';clean ;coverage ;test ;coverageReport ;scapegoat ;fixCheck ;reload plugins ;test' < /dev/null
       - save_cache:
           paths:
             - ~/.iv2/cache

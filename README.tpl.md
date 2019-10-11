@@ -193,7 +193,7 @@ or simply `sbt sonarScan` if you use the
 
 | SonarQube | sonar-scala                                                                                          |
 | --------- | ---------------------------------------------------------------------------------------------------- |
-| 7.9 LTS   | [7.7.0](https://github.com/mwz/sonar-scala/releases/tag/v7.7.0)                                      |
+| 7.9 LTS   | [{{ltsVersion}}](https://github.com/mwz/sonar-scala/releases/tag/v7.7.0)                             |
 | 6.7 LTS   | 6.x (_latest [{{lts67Version}}](https://github.com/mwz/sonar-scala/releases/tag/v{{lts67Version}})_) |
 
 <details>

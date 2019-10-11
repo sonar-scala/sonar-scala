@@ -2,13 +2,18 @@
 
 [![circleci-badge]][circleci] [![coverage-badge]][coverage]
 [![bintray-badge]][bintray] [![bintray-badge-lts]][bintray-lts]
+[![bintray-badge-lts-67]][bintray-lts-67]
 [![bintray-stats-badge]][bintray-stats] [![gitter-badge]][gitter]
 
-[bintray]: https://bintray.com/mwz/maven/sonar-scala/7.6.0/link
-[bintray-badge]: https://img.shields.io/badge/Download-7.6.0-blue.svg
+[bintray]: https://bintray.com/mwz/maven/sonar-scala/7.7.0/link
+[bintray-badge]: https://img.shields.io/badge/Download-7.7.0-blue.svg
 [bintray-badge-lts]:
-  https://img.shields.io/badge/Download-6.8.0_(LTS)-blue.svg
-[bintray-lts]: https://bintray.com/mwz/maven/sonar-scala/6.8.0/link
+  https://img.shields.io/badge/Download-7.7.0_(7.9_LTS)-blue.svg
+[bintray-badge-lts-67]:
+  https://img.shields.io/badge/Download-6.8.0_(6.7_LTS)-blue.svg
+[bintray-lts]: https://bintray.com/mwz/maven/sonar-scala/7.7.0/link
+[bintray-lts-67]:
+  https://bintray.com/mwz/maven/sonar-scala/6.8.0/link
 [bintray-stats]: https://bintray.com/mwz/maven/sonar-scala#statistics
 [bintray-stats-badge]:
   https://img.shields.io/badge/dynamic/json.svg?uri=https://bintray.com/statistics/packageStatistics?pkgPath=/mwz/maven/sonar-scala&query=$.totalDownloads&label=Downloads+(last+30+days)&colorB=green
@@ -26,7 +31,8 @@
 **SonarQube plugin for static code analysis of Scala projects.**
 
 Intended for [SonarQube 6.7 LTS](https://www.sonarqube.org/sonarqube-6-7-lts),
-[SonarQube 7.8](https://www.sonarqube.org/sonarqube-7-8) and Scala 2.11/2.12.
+[SonarQube 7.9 LTS](https://www.sonarqube.org/sonarqube-7-9-lts) and Scala
+2.11/2.12.
 
 This plugin uses the [scalariform](https://github.com/scala-ide/scalariform)
 library to parse the source code in a version independent way and integrates
@@ -185,14 +191,40 @@ or simply `sbt sonarScan` if you use the
 
 # Compatibility with SonarQube
 
-| SonarQube | sonar-scala                                                                                      |
-| --------- | ------------------------------------------------------------------------------------------------ |
-| 7.8       | [7.6.0](https://github.com/mwz/sonar-scala/releases/tag/v7.6.0)                                  |
-| 7.7       | [7.5.0](https://github.com/mwz/sonar-scala/releases/tag/v7.5.0)                                  |
-| 7.6       | [7.4.0](https://github.com/mwz/sonar-scala/releases/tag/v7.4.0)                                  |
-| 7.4       | [7.3.1](https://github.com/mwz/sonar-scala/releases/tag/v7.3.1)                                  |
-| 7.3       | [7.0](https://github.com/mwz/sonar-scala/releases/tag/v7.0.0)                                    |
+| SonarQube | sonar-scala                                                                                          |
+| --------- | ---------------------------------------------------------------------------------------------------- |
+| 7.9 LTS   | [7.7.0](https://github.com/mwz/sonar-scala/releases/tag/v7.7.0)                             |
 | 6.7 LTS   | 6.x (_latest [6.8.0](https://github.com/mwz/sonar-scala/releases/tag/v6.8.0)_) |
+
+<details>
+  <summary>Other versions</summary>
+  <table>
+    <tr>
+      <td><b>SonarQube</b></td>
+      <td><b>sonar-scala</b></td>
+    </tr>
+    <tr>
+      <td>7.8</td>
+      <td><a href="https://github.com/mwz/sonar-scala/releases/tag/v7.6.0">7.6.0</a></td>
+    </tr>
+    <tr>
+      <td>7.7</td>
+      <td><a href="https://github.com/mwz/sonar-scala/releases/tag/v7.5.0">7.5.0</a></td>
+    </tr>
+    <tr>
+      <td>7.6</td>
+      <td><a href="https://github.com/mwz/sonar-scala/releases/tag/v7.4.0">7.4.0</a></td>
+    </tr>
+    <tr>
+      <td>7.4</td>
+      <td><a href="https://github.com/mwz/sonar-scala/releases/tag/v7.3.1">7.3.1</a></td>
+    </tr>
+    <tr>
+      <td>7.3</td>
+      <td><a href="https://github.com/mwz/sonar-scala/releases/tag/v7.0.0">7.0</a></td>
+    </tr>
+  </table> 
+</details>
 
 # Development
 

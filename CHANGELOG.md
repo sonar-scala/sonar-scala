@@ -1,5 +1,11 @@
 # Changelog
 
+## [7.7.0 LTS](https://github.com/mwz/sonar-scala/releases/tag/v7.7.0) - 11.10.2019
+
+- Added support for
+  [SonarQube 7.9 LTS](https://www.sonarqube.org/sonarqube-7-9-lts). (#260 -
+  @mwz)
+
 ## [7.6.0](https://github.com/mwz/sonar-scala/releases/tag/v7.6.0) - 30.06.2019
 
 - Added support for [SonarQube 7.8](https://www.sonarqube.org/sonarqube-7-8).

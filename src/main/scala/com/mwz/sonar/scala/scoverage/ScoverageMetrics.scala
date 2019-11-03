@@ -18,9 +18,9 @@
 package com.mwz.sonar.scala
 package scoverage
 
-import org.sonar.api.measures.{CoreMetrics, Metric, Metrics}
-
 import scala.collection.JavaConverters._
+
+import org.sonar.api.measures.{CoreMetrics, Metric, Metrics}
 
 /** Statement coverage metric definition. */
 final class ScoverageMetrics extends Metrics {
@@ -34,7 +34,6 @@ final class ScoverageMetrics extends Metrics {
 }
 
 object ScoverageMetrics {
-
   /** Builds a new [[Metric]] */
   private def buildMetric[T <: java.io.Serializable](
     metricKey: String,

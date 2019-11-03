@@ -19,14 +19,14 @@ package com.mwz.sonar.scala
 package pr
 package github
 
+import scala.language.higherKinds
+
 import cats.Applicative
 import io.circe.generic.extras.Configuration
 import io.circe.{Encoder, Printer}
 import org.http4s
 import org.http4s.EntityEncoder
 import org.http4s.circe.CirceEntityDecoder
-
-import scala.language.higherKinds
 
 object Codec extends CirceEntityDecoder {
   val defaultPrinter: Printer = Printer.noSpaces.copy(dropNullValues = true)

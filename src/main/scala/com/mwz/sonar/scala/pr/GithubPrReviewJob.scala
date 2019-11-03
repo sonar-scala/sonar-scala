@@ -18,6 +18,9 @@
 package com.mwz.sonar.scala
 package pr
 
+import scala.concurrent.ExecutionContext
+import scala.language.higherKinds
+
 import cats.NonEmptyParallel
 import cats.data.NonEmptyList
 import cats.effect.IO._
@@ -38,9 +41,6 @@ import org.http4s.client.blaze.BlazeClientBuilder
 import org.sonar.api.batch.fs.InputFile
 import org.sonar.api.batch.postjob.{PostJob, PostJobContext, PostJobDescriptor}
 import org.sonar.api.batch.rule.Severity
-
-import scala.concurrent.ExecutionContext
-import scala.language.higherKinds
 
 final class GithubPrReviewJob(
   globalConfig: GlobalConfig,

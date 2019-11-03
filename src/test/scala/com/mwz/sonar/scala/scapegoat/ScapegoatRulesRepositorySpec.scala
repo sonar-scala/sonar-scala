@@ -24,7 +24,6 @@ import org.sonar.api.server.rule.RulesDefinition.Context
 
 /** Tests the correct behavior of the Scapegoat Rules Repository */
 class ScapegoatRulesRepositorySpec extends FlatSpec with Inspectors with LoneElement with Matchers {
-
   trait Ctx {
     val context = new Context()
     new ScapegoatRulesRepository().define(context)

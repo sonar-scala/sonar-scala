@@ -20,11 +20,11 @@ package scoverage
 
 import java.nio.file.{Path, Paths}
 
+import scala.xml.{Node, XML}
+
 import cats.syntax.semigroup.catsSyntaxSemigroup
 import com.mwz.sonar.scala.util.PathUtils
 import org.sonar.api.scanner.ScannerSide
-
-import scala.xml.{Node, XML}
 
 trait ScoverageReportParserAPI {
   def parse(scoverageReportPath: Path, projectPath: Path, sourcePrefixes: List[Path]): ProjectCoverage
@@ -33,7 +33,6 @@ trait ScoverageReportParserAPI {
 /** Scoverage XML reports parser. */
 @ScannerSide
 final class ScoverageReportParser extends ScoverageReportParserAPI {
-
   /** Parses the scoverage report from a file and returns the ProjectCoverage. */
   override def parse(
     scoverageReportPath: Path,
@@ -80,11 +79,11 @@ final class ScoverageReportParser extends ScoverageReportParserAPI {
 
     // Merge the class coverages by filename.
     val files = classCoverages groupBy {
-        case (fileName, _) => fileName
-      } mapValues { group =>
-        val classCoveragesByFilename = group map { case (_, classCoverage) => classCoverage }
-        classCoveragesByFilename.reduce(_ |+| _)
-      }
+      case (fileName, _) => fileName
+    } mapValues { group =>
+      val classCoveragesByFilename = group map { case (_, classCoverage) => classCoverage }
+      classCoveragesByFilename.reduce(_ |+| _)
+    }
 
     ProjectCoverage(projectScoverage, files)
   }

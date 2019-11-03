@@ -20,6 +20,8 @@ package scapegoat
 
 import java.nio.file.{Path, Paths}
 
+import scala.util.{Failure, Success, Try}
+
 import cats.instances.string._
 import cats.syntax.eq._
 import com.mwz.sonar.scala.pr.{GlobalIssues, Issue}
@@ -33,8 +35,6 @@ import org.sonar.api.batch.sensor.issue.{NewIssue, NewIssueLocation}
 import org.sonar.api.batch.sensor.{Sensor, SensorContext, SensorDescriptor}
 import org.sonar.api.config.Configuration
 import scalariform.ScalaVersion
-
-import scala.util.{Failure, Success, Try}
 
 /** Main sensor for importing Scapegoat reports to SonarQube */
 final class ScapegoatSensor(
@@ -199,7 +199,7 @@ private[scapegoat] object ScapegoatSensor {
     conf
       .get(ScapegoatDisablePropertyKey)
       .toOption
-      .forall(s => s.toLowerCase != "true")
+      .forall(s => s.toLowerCase =!= "true")
 
   def getDefaultScapegoatReportPath(scalaVersion: ScalaVersion): Path =
     Paths.get(

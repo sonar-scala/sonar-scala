@@ -20,6 +20,8 @@ package scalastyle
 
 import java.nio.file.Paths
 
+import scala.collection.JavaConverters._
+
 import com.mwz.sonar.scala.pr.GlobalIssues
 import com.mwz.sonar.scala.util.PathUtils.cwd
 import org.scalastyle.scalariform.EmptyClassChecker
@@ -44,8 +46,6 @@ import org.sonar.api.batch.sensor.internal.{DefaultSensorDescriptor, SensorConte
 import org.sonar.api.config.internal.MapSettings
 import org.sonar.api.rule.RuleKey
 
-import scala.collection.JavaConverters._
-
 class ScalastyleSensorSpec
     extends FlatSpec
     with Matchers
@@ -53,7 +53,6 @@ class ScalastyleSensorSpec
     with LoneElement
     with OptionValues
     with MockitoSugar {
-
   trait Ctx {
     val globalConfig = new GlobalConfig(new MapSettings().asConfig)
     val globalIssues = new GlobalIssues()
@@ -187,7 +186,6 @@ class ScalastyleSensorSpec
     val activeRule = activeRules.find(badRuleKey)
 
     ScalastyleSensor.ruleToConfigurationChecker(activeRule) shouldBe empty
-
   }
 
   it should "look up a rule from a style error" in new Ctx {

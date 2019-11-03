@@ -19,13 +19,13 @@ package com.mwz.sonar.scala
 package pr
 package github
 
+import scala.language.higherKinds
+
 import cats.effect.Sync
 import com.mwz.sonar.scala.pr.github.Codec._
 import io.circe.generic.auto._
 import org.http4s.client.Client
 import org.http4s.{Header, Headers, Method, Request, Uri}
-
-import scala.language.higherKinds
 
 trait Github[F[_]] {
   def authenticatedUser: F[User]

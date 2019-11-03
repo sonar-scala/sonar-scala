@@ -23,7 +23,6 @@ import org.sonar.api.utils.log.LoggerLevel._
 import org.sonar.api.utils.log._
 
 class LogSpec extends FlatSpec with Matchers with SonarLogTester {
-
   "Log" should "log debug" in {
     val log = Log(classOf[LogSpec], "test")
 

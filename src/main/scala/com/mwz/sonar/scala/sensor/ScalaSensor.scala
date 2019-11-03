@@ -18,12 +18,12 @@
 package com.mwz.sonar.scala
 package sensor
 
+import scala.collection.JavaConverters._
+import scala.io.Source
+
 import org.sonar.api.batch.sensor.{Sensor, SensorContext, SensorDescriptor}
 import org.sonar.api.measures.{CoreMetrics => CM}
 import scalariform.ScalaVersion
-
-import scala.collection.JavaConverters._
-import scala.io.Source
 
 /** SonarQube Sensor for the Scala programming language */
 final class ScalaSensor(globalConfig: GlobalConfig) extends Sensor {

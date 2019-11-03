@@ -20,9 +20,9 @@ package scapegoat
 
 import java.nio.file.{Path, Paths}
 
-import org.sonar.api.scanner.ScannerSide
-
 import scala.xml.XML
+
+import org.sonar.api.scanner.ScannerSide
 
 trait ScapegoatReportParserAPI {
   def parse(scapegoatReportPath: Path): Map[String, Seq[ScapegoatIssue]]

@@ -22,16 +22,15 @@ package syntax
 import java.io.File
 import java.nio.file.Path
 
+import scala.language.higherKinds
+import scala.util.{Failure, Success, Try}
+
 import cats.syntax.flatMap._
 import cats.{Monad, MonoidK}
 import org.sonar.api.batch.fs.FileSystem
 
-import scala.language.higherKinds
-import scala.util.{Failure, Success, Try}
-
 object SonarFileSystem {
-  implicit final class FileSystemOps(val fs: FileSystem) extends AnyVal {
-
+  implicit final class FileSystemOps(private val fs: FileSystem) extends AnyVal {
     /**
      * Resolve paths relative to the given file system.
      */

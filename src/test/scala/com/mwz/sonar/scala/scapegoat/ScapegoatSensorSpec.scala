@@ -20,6 +20,8 @@ package scapegoat
 
 import java.nio.file.{Path, Paths}
 
+import scala.collection.JavaConverters._
+
 import com.mwz.sonar.scala.pr.GlobalIssues
 import com.mwz.sonar.scala.util.PathUtils.cwd
 import org.mockito.ArgumentMatchers._
@@ -33,8 +35,6 @@ import org.sonar.api.batch.sensor.internal.{DefaultSensorDescriptor, SensorConte
 import org.sonar.api.config.internal.MapSettings
 import org.sonar.api.rule.RuleKey
 import scalariform.ScalaVersion
-
-import scala.collection.JavaConverters._
 
 /** Tests the Scapegoat Sensor. */
 class ScapegoatSensorSpec

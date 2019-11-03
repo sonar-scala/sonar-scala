@@ -18,8 +18,9 @@
 package com.mwz.sonar.scala
 package scoverage
 
-import org.scalatest.{FlatSpec, Matchers}
 import java.nio.file.Paths
+
+import org.scalatest.{FlatSpec, Matchers}
 
 /** Tests the correct behavior of the Scoverage XML reports parser */
 class ScoverageReportParserSpec extends FlatSpec with Matchers {

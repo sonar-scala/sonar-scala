@@ -20,6 +20,11 @@ package scoverage
 
 import java.nio.file.{Path, Paths}
 
+import scala.collection.JavaConverters._
+import scala.util.{Failure, Success, Try}
+
+import cats.instances.string._
+import cats.syntax.eq._
 import com.mwz.sonar.scala.scoverage.ScoverageSensor._
 import com.mwz.sonar.scala.util.PathUtils._
 import com.mwz.sonar.scala.util.syntax.Optionals._
@@ -28,9 +33,6 @@ import org.sonar.api.batch.fs.{FileSystem, InputComponent, InputFile}
 import org.sonar.api.batch.sensor.{Sensor, SensorContext, SensorDescriptor}
 import org.sonar.api.config.Configuration
 import scalariform.ScalaVersion
-
-import scala.collection.JavaConverters._
-import scala.util.{Failure, Success, Try}
 
 /** Main sensor for importing Scoverage reports into SonarQube. */
 final class ScoverageSensor(
@@ -173,7 +175,7 @@ private[scoverage] object ScoverageSensor {
     conf
       .get(ScoverageDisablePropertyKey)
       .toOption
-      .forall(s => s.toLowerCase != "true")
+      .forall(s => s.toLowerCase =!= "true")
 
   def getDefaultScoverageReportPath(scalaVersion: ScalaVersion): Path =
     Paths.get(s"target/scala-${scalaVersion.major}.${scalaVersion.minor}/scoverage-report/scoverage.xml")

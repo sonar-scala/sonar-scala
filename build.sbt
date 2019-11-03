@@ -27,7 +27,7 @@ headerLicense := Some(
 excludeFilter.in(headerResources) := "*.scala"
 
 // Compile options
-scalaVersion := "2.12.8"
+scalaVersion := "2.12.10"
 scalacOptions := Seq(
   "-unchecked",
   "-deprecation",
@@ -41,8 +41,11 @@ scalacOptions := Seq(
 )
 javacOptions := Seq("-Xlint:deprecation")
 cancelable in Global := true
-scalafmtOnCompile in ThisBuild := true
-scapegoatVersion in ThisBuild := "1.3.8"
+scalafmtOnCompile in ThisBuild :=
+  sys.env
+    .get("DISABLE_SCALAFMT")
+    .forall(_.toLowerCase == "false")
+scapegoatVersion in ThisBuild := "1.3.9"
 scapegoatReports := Seq("xml")
 coverageOutputXML := true
 coverageOutputHTML := false
@@ -55,12 +58,12 @@ sourceGenerators in Compile ++= Seq(
 )
 
 // Lib dependencies
-val sonarVersion = "7.7"
+val sonarVersion = "7.9"
 val circe = "0.11.1"
 val http4s = "0.20.1"
 libraryDependencies ++= List(
   "org.sonarsource.sonarqube"  % "sonar-plugin-api"           % sonarVersion % Provided,
-  "org.slf4j"                  % "slf4j-api"                  % "1.7.26" % Provided,
+  "org.slf4j"                  % "slf4j-api"                  % "1.7.29" % Provided,
   "org.typelevel"              %% "cats-core"                 % "1.6.0",
   "org.typelevel"              %% "cats-effect"               % "1.3.1",
   "org.typelevel"              %% "mouse"                     % "0.21",
@@ -69,22 +72,22 @@ libraryDependencies ++= List(
   "io.circe"                   %% "circe-generic-extras"      % circe,
   "org.http4s"                 %% "http4s-blaze-client"       % http4s,
   "org.http4s"                 %% "http4s-circe"              % http4s,
-  "org.scalariform"            %% "scalariform"               % "0.2.9",
+  "org.scalariform"            %% "scalariform"               % "0.2.10",
   "org.scalastyle"             %% "scalastyle"                % "1.0.0",
   "org.scala-lang.modules"     %% "scala-xml"                 % "1.2.0",
   "org.http4s"                 %% "http4s-blaze-server"       % http4s % Test,
   "org.http4s"                 %% "http4s-dsl"                % http4s % Test,
-  "org.scalatest"              %% "scalatest"                 % "3.0.7" % Test,
+  "org.scalatest"              %% "scalatest"                 % "3.0.8" % Test,
   "org.scalacheck"             %% "scalacheck"                % "1.14.0" % Test,
   "com.github.alexarchambault" %% "scalacheck-shapeless_1.14" % "1.2.2" % Test,
-  "org.mockito"                %% "mockito-scala"             % "1.5.1" % Test
+  "org.mockito"                %% "mockito-scala"             % "1.7.1" % Test
 )
 
 // Project resolvers
 resolvers ++= List(
   Resolver.sonatypeRepo("snapshots"),
   Resolver.sonatypeRepo("releases"),
-  "Artima Maven Repository" at "http://repo.artima.com/releases"
+  "Artima Maven Repository" at "https://repo.artima.com/releases"
 )
 
 // Manifest attributes
@@ -164,8 +167,13 @@ logBuffered in Test := false
 // F - show full stack traces.
 testOptions in Test += Tests.Argument(TestFrameworks.ScalaTest, "-oDTF")
 
+// scalafix
+scalafixDependencies in ThisBuild += "com.nequissimus" %% "sort-imports" % "0.3.1"
+addCommandAlias("fix", "all compile:scalafix test:scalafix")
+addCommandAlias("fixCheck", ";compile:scalafix --check ;test:scalafix --check")
+
 // plugins
+addCompilerPlugin(scalafixSemanticdb)
 addCompilerPlugin("com.olegpy"      %% "better-monadic-for" % "0.3.0")
 addCompilerPlugin("org.spire-math"  %% "kind-projector"     % "0.9.10")
 addCompilerPlugin("org.scalamacros" % "paradise"            % "2.1.1" cross CrossVersion.full)
-addCompilerPlugin(scalafixSemanticdb)

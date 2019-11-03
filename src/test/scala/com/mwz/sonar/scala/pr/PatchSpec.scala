@@ -17,9 +17,9 @@
 
 package com.mwz.sonar.scala.pr
 
-import org.scalatest.{EitherValues, FlatSpec, Matchers}
-
 import scala.io.Source
+
+import org.scalatest.{EitherValues, FlatSpec, Matchers}
 
 class PatchSpec extends FlatSpec with Matchers with EitherValues {
   def patch(path: String): String =

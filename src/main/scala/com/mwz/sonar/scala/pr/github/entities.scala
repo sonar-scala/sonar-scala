@@ -20,8 +20,8 @@ package pr
 package github
 
 import com.mwz.sonar.scala.pr.github.Codec._
-import io.circe.generic.extras.ConfiguredJsonCodec
 import io.circe.generic.JsonCodec
+import io.circe.generic.extras.ConfiguredJsonCodec
 
 @JsonCodec
 final case class PullRequest(number: Int, head: Head)

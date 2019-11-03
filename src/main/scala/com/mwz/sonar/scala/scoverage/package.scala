@@ -17,13 +17,12 @@
 
 package com.mwz.sonar.scala
 
-import cats.kernel.Semigroup
 import cats.instances.int.catsKernelStdGroupForInt
 import cats.instances.map.catsKernelStdMonoidForMap
+import cats.kernel.Semigroup
 import cats.syntax.semigroup.catsSyntaxSemigroup
 
 package object scoverage {
-
   /**
    *  The coverage information of an entire project.
    *  It is composed of:

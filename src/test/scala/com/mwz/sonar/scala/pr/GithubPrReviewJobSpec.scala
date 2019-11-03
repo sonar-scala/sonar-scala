@@ -24,10 +24,10 @@ import org.http4s.Uri
 import org.scalacheck.ScalacheckShapeless._
 import org.scalatest.{FlatSpec, Matchers}
 import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
-import org.sonar.api.config.internal.MapSettings
-import org.sonar.api.batch.postjob.internal.DefaultPostJobDescriptor
 import org.sonar.api.batch.fs.InputFile
+import org.sonar.api.batch.postjob.internal.DefaultPostJobDescriptor
 import org.sonar.api.batch.rule.Severity
+import org.sonar.api.config.internal.MapSettings
 import org.sonar.api.rule.RuleKey
 
 class GithubPrReviewJobSpec extends FlatSpec with Matchers with ScalaCheckDrivenPropertyChecks {

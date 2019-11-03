@@ -18,12 +18,12 @@
 package com.mwz.sonar.scala
 package pr
 
+import scala.util.Try
+import scala.util.matching.Regex
+
 import cats.instances.either._
 import cats.instances.list._
 import cats.syntax.foldable._
-
-import scala.util.Try
-import scala.util.matching.Regex
 
 final case class PatchLine(value: Int) {
   def inc: PatchLine = PatchLine(value + 1)

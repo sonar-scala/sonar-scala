@@ -21,7 +21,6 @@ import org.scalatest.{EitherValues, FlatSpec, Matchers, OptionValues}
 import org.sonar.api.config.internal.MapSettings
 
 class GlobalConfigSpec extends FlatSpec with Matchers with OptionValues with EitherValues {
-
   def prDecorationConf =
     new MapSettings()
       .setProperty("sonar.scala.pullrequest.provider", "github")

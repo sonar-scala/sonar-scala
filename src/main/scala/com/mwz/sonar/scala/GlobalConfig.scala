@@ -18,10 +18,10 @@
 package com.mwz.sonar.scala
 
 import cats.data.EitherT
+import cats.instances.option._
 import cats.instances.string._
 import cats.syntax.either._
 import cats.syntax.eq._
-import cats.instances.option._
 import com.mwz.sonar.scala.GlobalConfig._
 import com.mwz.sonar.scala.util.Log
 import com.mwz.sonar.scala.util.syntax.Optionals._

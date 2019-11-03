@@ -25,7 +25,6 @@ import org.sonar.api.batch.sensor.issue.{Issue, IssueLocation}
 
 /** Custom matchers to test properties of sensor contexts */
 trait SensorContextMatchers extends Matchers {
-
   /** Checks that a sensor context have an expected value for some metric */
   def metric[T <: java.io.Serializable](
     componentKey: String,
@@ -34,7 +33,7 @@ trait SensorContextMatchers extends Matchers {
   ): HavePropertyMatcher[SensorContextTester, T] = (sensorContext: SensorContextTester) => {
     val measure = Option(sensorContext.measure[T](componentKey, metricKey))
     HavePropertyMatchResult(
-      matches = measure.fold(false)(m => m.value() == expectedValue),
+      matches = measure.fold(false)(m => m.value === expectedValue),
       propertyName = "measure",
       expectedValue = expectedValue,
       actualValue = None.orNull.asInstanceOf[T]
@@ -49,7 +48,7 @@ trait SensorContextMatchers extends Matchers {
   ): HavePropertyMatcher[SensorContextTester, Int] = (sensorContext: SensorContextTester) => {
     val hits = Option(sensorContext.lineHits(fileKey, lineNum))
     HavePropertyMatchResult(
-      matches = hits.fold(false)(_ == expectedValue),
+      matches = hits.fold(false)(_ === expectedValue),
       propertyName = "measure",
       expectedValue = expectedValue,
       actualValue = None.orNull.asInstanceOf[Int]

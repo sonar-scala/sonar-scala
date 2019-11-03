@@ -22,19 +22,19 @@ import cats.data.OptionT
 import cats.effect.IO
 import com.mwz.sonar.scala.GlobalConfig
 import com.mwz.sonar.scala.pr.github.Codec._
+import org.http4s.AuthedService
+import org.http4s.HttpApp
+import org.http4s.HttpRoutes
+import org.http4s.Request
 import org.http4s.circe.CirceEntityCodec._
 import org.http4s.circe.CirceEntityEncoder._
-import org.http4s.AuthedService
 import org.http4s.client.Client
 import org.http4s.dsl.io._
 import org.http4s.headers.Authorization
-import org.http4s.HttpApp
-import org.http4s.HttpRoutes
 import org.http4s.implicits._
-import org.http4s.Request
 import org.http4s.server._
-import org.scalacheck._
 import org.scalacheck.ScalacheckShapeless._
+import org.scalacheck._
 import org.scalatest.{FlatSpec, Matchers}
 import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
 

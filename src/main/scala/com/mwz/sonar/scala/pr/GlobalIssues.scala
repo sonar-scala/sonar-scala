@@ -20,12 +20,12 @@ package pr
 
 import java.util.concurrent.ConcurrentHashMap
 
+import scala.collection.JavaConverters._
+
 import org.sonar.api.batch.fs.InputFile
 import org.sonar.api.batch.rule.Severity
 import org.sonar.api.batch.{InstantiationStrategy, ScannerSide}
 import org.sonar.api.rule.RuleKey
-
-import scala.collection.JavaConverters._
 
 final case class Issue(
   key: RuleKey,

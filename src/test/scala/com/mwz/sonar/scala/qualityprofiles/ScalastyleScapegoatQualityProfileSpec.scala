@@ -22,7 +22,6 @@ import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition.{BuiltInQua
 
 /** Tests the correct behavior of the Scalastyle+Scapegoat Quality Profile */
 class ScalastyleScapegoatQualityProfileSpec extends FlatSpec with Inspectors with LoneElement with Matchers {
-
   trait Ctx {
     val context = new Context()
     new ScalastyleScapegoatQualityProfile().define(context)
@@ -46,7 +45,7 @@ class ScalastyleScapegoatQualityProfileSpec extends FlatSpec with Inspectors wit
   }
 
   it should "define all Scalastyle + Scapegoat rules" in new Ctx {
-    qualityProfile.rules should have size 182 // 65 from Scalastyle + 117 from Scapegoat
+    qualityProfile.rules should have size 183 // 65 from Scalastyle + 118 from Scapegoat
   }
 
   it should "have all rules come from either the Scalastyle or the Scapegaot rules repositories" in new Ctx {

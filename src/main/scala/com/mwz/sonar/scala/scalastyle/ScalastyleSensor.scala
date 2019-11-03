@@ -21,6 +21,11 @@ package scalastyle
 import java.io.File
 import java.nio.file.Paths
 
+import scala.collection.JavaConverters._
+import scala.collection.immutable.Seq
+
+import cats.instances.string._
+import cats.syntax.eq._
 import com.mwz.sonar.scala.pr.{GlobalIssues, Issue}
 import com.mwz.sonar.scala.util.Log
 import com.mwz.sonar.scala.util.syntax.Optionals._
@@ -44,9 +49,6 @@ import org.sonar.api.batch.sensor.issue.{NewIssue, NewIssueLocation}
 import org.sonar.api.batch.sensor.{Sensor, SensorContext, SensorDescriptor}
 import org.sonar.api.config.Configuration
 import org.sonar.api.rule.RuleKey
-
-import scala.collection.JavaConverters._
-import scala.collection.immutable.Seq
 
 /**
  * Main sensor for executing Scalastyle analysis.
@@ -144,7 +146,7 @@ private[scalastyle] object ScalastyleSensor {
     conf
       .get(ScalastyleDisablePropertyKey)
       .toOption
-      .forall(s => s.toLowerCase != "true")
+      .forall(s => s.toLowerCase =!= "true")
 
   /**
    * Convert SonarQube rule severity to Scalastyle inspection level.
@@ -220,7 +222,9 @@ private[scalastyle] object ScalastyleSensor {
     val newIssue: NewIssue = context.newIssue().forRule(rule.ruleKey)
     val line: Int = styleError.lineNumber.filter(_ > 0).getOrElse(1) // scalastyle:ignore org.scalastyle.scalariform.NamedArgumentChecker
     val message: String =
-      (styleError.customMessage orElse inspections.get(styleError.clazz.getName).map(_.label))
+      (styleError.customMessage orElse inspections
+        .get(styleError.clazz.getName)
+        .map(_.label))
         .getOrElse(styleError.key)
 
     val location: NewIssueLocation =

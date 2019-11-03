@@ -21,16 +21,15 @@ package junit
 import java.io.File
 import java.nio.file.Path
 
-import com.mwz.sonar.scala.util.Log
-import org.sonar.api.scanner.ScannerSide
-import org.sonar.api.batch.fs.{FilePredicate, FileSystem, InputFile}
-
 import scala.collection.JavaConverters._
 import scala.util.Try
 import scala.xml.{Elem, XML}
 
-trait JUnitReportParserAPI {
+import com.mwz.sonar.scala.util.Log
+import org.sonar.api.batch.fs.{FilePredicate, FileSystem, InputFile}
+import org.sonar.api.scanner.ScannerSide
 
+trait JUnitReportParserAPI {
   /**
    * Parse JUnit report files from the given directory
    * and return a map from input files to the parsed reports.

@@ -59,18 +59,18 @@ sourceGenerators in Compile ++= Seq(
 
 // Lib dependencies
 val sonarVersion = "7.9"
-val circe = "0.11.1"
-val http4s = "0.20.1"
+val circe = "0.12.3"
+val http4s = "0.20.12"
 libraryDependencies ++= List(
   "org.sonarsource.sonarqube"  % "sonar-plugin-api"           % sonarVersion % Provided,
   "org.slf4j"                  % "slf4j-api"                  % "1.7.29" % Provided,
-  "org.typelevel"              %% "cats-core"                 % "1.6.0",
-  "org.typelevel"              %% "cats-effect"               % "1.3.1",
-  "org.typelevel"              %% "mouse"                     % "0.21",
+  "org.typelevel"              %% "cats-core"                 % "2.0.0",
+  "org.typelevel"              %% "cats-effect"               % "2.0.0",
+  "org.typelevel"              %% "mouse"                     % "0.23",
   "io.circe"                   %% "circe-core"                % circe,
   "io.circe"                   %% "circe-generic"             % circe,
-  "io.circe"                   %% "circe-generic-extras"      % circe,
   "org.http4s"                 %% "http4s-blaze-client"       % http4s,
+  "io.circe"                   %% "circe-generic-extras"      % "0.12.2",
   "org.http4s"                 %% "http4s-circe"              % http4s,
   "org.scalariform"            %% "scalariform"               % "0.2.10",
   "org.scalastyle"             %% "scalastyle"                % "1.0.0",
@@ -78,8 +78,8 @@ libraryDependencies ++= List(
   "org.http4s"                 %% "http4s-blaze-server"       % http4s % Test,
   "org.http4s"                 %% "http4s-dsl"                % http4s % Test,
   "org.scalatest"              %% "scalatest"                 % "3.0.8" % Test,
-  "org.scalacheck"             %% "scalacheck"                % "1.14.0" % Test,
-  "com.github.alexarchambault" %% "scalacheck-shapeless_1.14" % "1.2.2" % Test,
+  "org.scalacheck"             %% "scalacheck"                % "1.14.2" % Test,
+  "com.github.alexarchambault" %% "scalacheck-shapeless_1.14" % "1.2.3" % Test,
   "org.mockito"                %% "mockito-scala"             % "1.7.1" % Test
 )
 
@@ -174,6 +174,6 @@ addCommandAlias("fixCheck", ";compile:scalafix --check ;test:scalafix --check")
 
 // plugins
 addCompilerPlugin(scalafixSemanticdb)
-addCompilerPlugin("com.olegpy"      %% "better-monadic-for" % "0.3.0")
+addCompilerPlugin("com.olegpy"      %% "better-monadic-for" % "0.3.1")
 addCompilerPlugin("org.spire-math"  %% "kind-projector"     % "0.9.10")
 addCompilerPlugin("org.scalamacros" % "paradise"            % "2.1.1" cross CrossVersion.full)

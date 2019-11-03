@@ -74,8 +74,8 @@ final class GithubPrReviewJob(
       .unsafeRunSync()
   }
 
-  private[pr] def run[F[_]: Sync: Logger, M[_]](baseUrl: Uri, github: Github[F])(
-    implicit nep: NonEmptyParallel[F, M]
+  private[pr] def run[F[_]: Sync: Logger](baseUrl: Uri, github: Github[F])(
+    implicit nep: NonEmptyParallel[F]
   ): F[Unit] = {
     for {
       // Get the authenticated user (to check the oauth token).
@@ -104,12 +104,12 @@ final class GithubPrReviewJob(
   }
 
   // TODO: Split this up a little bit more.
-  private[pr] def review[F[_]: Sync: Logger, M[_]](
+  private[pr] def review[F[_]: Sync: Logger](
     baseUrl: Uri,
     github: Github[F],
     user: User,
     pr: PullRequest
-  )(implicit nep: NonEmptyParallel[F, M]): F[ReviewStatus] =
+  )(implicit nep: NonEmptyParallel[F]): F[ReviewStatus] =
     for {
       // Fetch existing PR comments and get PR files along with their patches.
       (allComments, files) <- (github.comments, github.files).parMapN((_, _))

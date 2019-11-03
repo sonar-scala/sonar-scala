@@ -22,7 +22,7 @@ import cats.data.OptionT
 import cats.effect.IO
 import com.mwz.sonar.scala.GlobalConfig
 import com.mwz.sonar.scala.pr.github.Codec._
-import org.http4s.AuthedService
+import org.http4s.AuthedRoutes
 import org.http4s.HttpApp
 import org.http4s.HttpRoutes
 import org.http4s.Request
@@ -63,7 +63,7 @@ class GithubSpec extends FlatSpec with Matchers with ScalaCheckDrivenPropertyChe
     AuthMiddleware(authUser)
 
   it should "get the authenticated user" in {
-    val service = AuthedService[String, IO] {
+    val service = AuthedRoutes.of[String, IO] {
       case req @ GET -> Root / "user" as _ =>
         Ok(user)
     }
@@ -104,7 +104,7 @@ class GithubSpec extends FlatSpec with Matchers with ScalaCheckDrivenPropertyChe
         user = user,
         body = newComment.body
       )
-      val http = AuthedService[String, IO] {
+      val http = AuthedRoutes.of[String, IO] {
         case req @ POST -> Root / "repos" / "owner" / "repo" / "pulls" / "123" / "comments" as _ =>
           Ok(response)
       }
@@ -135,7 +135,7 @@ class GithubSpec extends FlatSpec with Matchers with ScalaCheckDrivenPropertyChe
         description = newStatus.description,
         context = newStatus.context
       )
-      val http = AuthedService[String, IO] {
+      val http = AuthedRoutes.of[String, IO] {
         case req @ POST -> Root / "repos" / "owner" / "repo" / "statuses" / sha as _ =>
           Ok(response)
       }

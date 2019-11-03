@@ -74,8 +74,9 @@ final class GithubPrReviewJob(
       .unsafeRunSync()
   }
 
-  private[pr] def run[F[_]: Sync: Logger](baseUrl: Uri, github: Github[F])(
-    implicit nep: NonEmptyParallel[F]
+  private[pr] def run[F[_]: Sync: NonEmptyParallel: Logger](
+    baseUrl: Uri,
+    github: Github[F]
   ): F[Unit] = {
     for {
       // Get the authenticated user (to check the oauth token).
@@ -88,7 +89,7 @@ final class GithubPrReviewJob(
         pr.head.sha,
         NewStatus("pending", "", "SonarQube is reviewing this pull request.", GithubContext)
       )
-      // Run the PR review.
+      // Run the PR review.#
       prStatus <- Sync[F].handleError(
         review(baseUrl, github, user, pr).map {
           case status if status.blocker > 0 || status.critical > 0 =>
@@ -104,12 +105,12 @@ final class GithubPrReviewJob(
   }
 
   // TODO: Split this up a little bit more.
-  private[pr] def review[F[_]: Sync: Logger](
+  private[pr] def review[F[_]: Sync: NonEmptyParallel: Logger](
     baseUrl: Uri,
     github: Github[F],
     user: User,
     pr: PullRequest
-  )(implicit nep: NonEmptyParallel[F]): F[ReviewStatus] =
+  ): F[ReviewStatus] =
     for {
       // Fetch existing PR comments and get PR files along with their patches.
       (allComments, files) <- (github.comments, github.files).parMapN((_, _))

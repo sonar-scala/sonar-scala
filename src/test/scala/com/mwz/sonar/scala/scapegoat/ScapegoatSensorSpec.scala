@@ -23,6 +23,7 @@ import java.nio.file.{Path, Paths}
 import scala.collection.JavaConverters._
 
 import com.mwz.sonar.scala.pr.GlobalIssues
+import com.mwz.sonar.scala.pr.Issue
 import com.mwz.sonar.scala.util.PathUtils.cwd
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
@@ -30,6 +31,7 @@ import org.scalatest.{FlatSpec, LoneElement, OptionValues}
 import org.scalatestplus.mockito.MockitoSugar
 import org.sonar.api.batch.fs.InputFile
 import org.sonar.api.batch.fs.internal.{DefaultFileSystem, TestInputFileBuilder}
+import org.sonar.api.batch.rule.Severity
 import org.sonar.api.batch.rule.internal.{ActiveRulesBuilder, NewActiveRule}
 import org.sonar.api.batch.sensor.internal.{DefaultSensorDescriptor, SensorContextTester}
 import org.sonar.api.config.internal.MapSettings
@@ -48,16 +50,22 @@ class ScapegoatSensorSpec
   val scapegoatReportParser = new TestScapegoatReportParser()
   val scapegoatSensor = new ScapegoatSensor(globalConfig, globalIssues, scapegoatReportParser)
 
+  it should "expose correct constants" in {
+    ScapegoatSensor.SensorName shouldBe "Scapegoat Sensor"
+    ScapegoatSensor.ScapegoatDisablePropertyKey shouldBe "sonar.scala.scapegoat.disable"
+    ScapegoatSensor.ScapegoatReportPathPropertyKey shouldBe "sonar.scala.scapegoat.reportPath"
+  }
+
   it should "read the 'disable' config property" in {
     val context = SensorContextTester.create(cwd)
     ScapegoatSensor.shouldEnableSensor(context.config) shouldBe true
 
     val context2 = SensorContextTester.create(cwd)
-    context2.setSettings(new MapSettings().setProperty("sonar.scala.scapegoat.disable", "maybe"))
+    context2.setSettings(new MapSettings().setProperty(ScapegoatSensor.ScapegoatDisablePropertyKey, "maybe"))
     ScapegoatSensor.shouldEnableSensor(context2.config) shouldBe true
 
     val context3 = SensorContextTester.create(cwd)
-    context3.setSettings(new MapSettings().setProperty("sonar.scala.scapegoat.disable", "true"))
+    context3.setSettings(new MapSettings().setProperty(ScapegoatSensor.ScapegoatDisablePropertyKey, "true"))
     ScapegoatSensor.shouldEnableSensor(context3.config) shouldBe false
   }
 
@@ -79,7 +87,7 @@ class ScapegoatSensorSpec
 
   it should "respect the 'disable' config property and skip scapegoat analysis if set to true" in {
     val context = SensorContextTester.create(cwd)
-    context.setSettings(new MapSettings().setProperty("sonar.scala.scapegoat.disable", "true"))
+    context.setSettings(new MapSettings().setProperty(ScapegoatSensor.ScapegoatDisablePropertyKey, "true"))
 
     val scapegoatReportParser = mock[ScapegoatReportParserAPI]
     val scapegoatSensor = new ScapegoatSensor(globalConfig, globalIssues, scapegoatReportParser)
@@ -104,7 +112,7 @@ class ScapegoatSensorSpec
     scapegoatSensor.describe(descriptor)
 
     descriptor should not be 'global
-    descriptor.name shouldBe "Scapegoat Sensor"
+    descriptor.name shouldBe ScapegoatSensor.SensorName
     descriptor.`type` shouldBe InputFile.Type.MAIN
     descriptor.languages.loneElement shouldBe "scala"
     descriptor.ruleRepositories.loneElement shouldBe "sonar-scala-scapegoat"
@@ -126,7 +134,9 @@ class ScapegoatSensorSpec
 
   it should "get scapegoat report path set in sonar properties" in {
     val reportPath = scapegoatSensor.getScapegoatReportPath(
-      new MapSettings().setProperty("sonar.scala.scapegoat.reportPath", "target/report-path").asConfig()
+      new MapSettings()
+        .setProperty(ScapegoatSensor.ScapegoatReportPathPropertyKey, "target/report-path")
+        .asConfig()
     )
 
     reportPath shouldBe Paths.get("target", "report-path")
@@ -173,7 +183,7 @@ class ScapegoatSensorSpec
     moduleFile shouldBe None
   }
 
-  it should "create an issue for each scapegoat report's warning" in {
+  it should "create an issue for each scapegoat warning" in {
     // Create the sensor context.
     val sensorContext = SensorContextTester.create(Paths.get("./"))
 
@@ -244,7 +254,10 @@ class ScapegoatSensorSpec
     // Set the scapegoat report path property.
     sensorContext.setSettings(
       new MapSettings()
-        .setProperty("sonar.scala.scapegoat.reportPath", "scapegoat-report/two-files-five-warnings.xml")
+        .setProperty(
+          ScapegoatSensor.ScapegoatReportPathPropertyKey,
+          "scapegoat-report/two-files-five-warnings.xml"
+        )
     )
 
     // Execute the sensor.
@@ -315,7 +328,7 @@ class ScapegoatSensorSpec
     // Set the scapegoat report path property.
     sensorContext.setSettings(
       new MapSettings()
-        .setProperty("sonar.scala.scapegoat.reportPath", "scapegoat-report/no-warnings.xml")
+        .setProperty(ScapegoatSensor.ScapegoatReportPathPropertyKey, "scapegoat-report/no-warnings.xml")
     )
 
     // Execute the sensor.
@@ -325,7 +338,7 @@ class ScapegoatSensorSpec
     sensorContext.allIssues shouldBe empty
   }
 
-  it should "not report an issue if its rule is not active" in {
+  it should "not report any issues for inactive rules" in {
     // Create the sensor context.
     val sensorContext = SensorContextTester.create(Paths.get("./"))
 
@@ -344,7 +357,10 @@ class ScapegoatSensorSpec
     // Set the scapegoat report path property.
     sensorContext.setSettings(
       new MapSettings()
-        .setProperty("sonar.scala.scapegoat.reportPath", "scapegoat-report/one-file-one-warning.xml")
+        .setProperty(
+          ScapegoatSensor.ScapegoatReportPathPropertyKey,
+          "scapegoat-report/one-file-one-warning.xml"
+        )
     )
 
     // Execute the sensor.
@@ -385,7 +401,7 @@ class ScapegoatSensorSpec
     // Set up the sensor.
     sensorContext.setSettings(
       new MapSettings().setProperty(
-        "sonar.scala.scapegoat.reportPath",
+        ScapegoatSensor.ScapegoatReportPathPropertyKey,
         "scapegoat-report/absolute-file-path.xml"
       )
     )
@@ -401,6 +417,68 @@ class ScapegoatSensorSpec
     result.primaryLocation.inputComponent shouldBe testFile
     result.primaryLocation.textRange shouldBe testFile.newRange(1, 0, 1, 50)
     result.primaryLocation.message shouldBe "Empty case class\nEmpty case class can be rewritten as a case object"
+  }
+
+  it should "collect global issues if issue decoration is enabled" in {
+    // Create the sensor context.
+    val sensorContext = SensorContextTester.create(Paths.get("./"))
+
+    // Setup the filesystem.
+    val testFile =
+      new TestInputFileBuilder("test-project", "src/main/scala/com/mwz/sonar/scala/scapegoat/TestFileA.scala")
+        .setLanguage("scala")
+        .setType(InputFile.Type.MAIN)
+        .setLines(2)
+        .setOriginalLineStartOffsets(Array(0, 51)) // line 1 -> 50 chars, line 2 -> 80 chars
+        .setOriginalLineEndOffsets(Array(50, 131))
+        .setLastValidOffset(131)
+        .build()
+    sensorContext.fileSystem.add(testFile)
+
+    // Setup the active rules.
+    val emptyClassRuleKey = RuleKey.of("sonar-scala-scapegoat", "Empty case class")
+
+    val activeRules = (new ActiveRulesBuilder)
+      .addRule(
+        (new NewActiveRule.Builder)
+          .setRuleKey(emptyClassRuleKey)
+          .setInternalKey("com.sksamuel.scapegoat.inspections.EmptyCaseClass")
+          .setLanguage("scala")
+          .build()
+      )
+      .build()
+
+    sensorContext.setActiveRules(activeRules)
+
+    // Set the scapegoat report path property.
+    sensorContext.setSettings(
+      new MapSettings()
+        .setProperty(
+          ScapegoatSensor.ScapegoatReportPathPropertyKey,
+          "scapegoat-report/one-file-one-warning.xml"
+        )
+    )
+
+    // Execute the sensor.
+    val prDecorationConf =
+      new GlobalConfig(
+        new MapSettings()
+          .setProperty("sonar.scala.pullrequest.provider", "github")
+          .setProperty("sonar.scala.pullrequest.number", "123")
+          .setProperty("sonar.scala.pullrequest.github.repository", "owner/repo")
+          .setProperty("sonar.scala.pullrequest.github.oauth", "token")
+          .asConfig
+      )
+    val sensor = new ScapegoatSensor(prDecorationConf, globalIssues, scapegoatReportParser)
+    sensor.execute(sensorContext)
+
+    // Validate the sensor behavior.
+    sensorContext.allIssues.asScala shouldBe empty
+    globalIssues.allIssues shouldBe Map(
+      testFile -> List(
+        Issue(emptyClassRuleKey, testFile, 1, Severity.MAJOR, "Empty case class")
+      )
+    )
   }
 }
 

@@ -20,8 +20,10 @@ package com.mwz.sonar.scala
 import cats.data.EitherT
 import cats.instances.option._
 import cats.instances.string._
+import cats.syntax.alternative._
 import cats.syntax.either._
 import cats.syntax.eq._
+import cats.syntax.functor._
 import com.mwz.sonar.scala.GlobalConfig._
 import com.mwz.sonar.scala.util.Log
 import com.mwz.sonar.scala.util.syntax.Optionals._
@@ -83,8 +85,9 @@ final class GlobalConfig(config: Configuration) {
         config
           .getAs[String](PR_PROVIDER)
           .map { s =>
-            Option(s)
-              .filter(_ === "github")
+            (s === "github")
+              .guard[Option]
+              .as(s)
               .toRight(ConfigError("""Currently only "github" provider is supported."""))
           }
       )

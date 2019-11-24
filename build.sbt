@@ -59,13 +59,13 @@ sourceGenerators in Compile ++= Seq(
 val sonarVersion = "7.9"
 libraryDependencies ++= List(
   "org.sonarsource.sonarqube" % "sonar-plugin-api" % sonarVersion % Provided,
-  "org.slf4j"                 % "slf4j-api"        % "1.7.28" % Provided,
+  "org.slf4j"                 % "slf4j-api"        % "1.7.29" % Provided,
   "org.typelevel"             %% "cats-core"       % "2.0.0",
   "org.scalariform"           %% "scalariform"     % "0.2.10",
   "org.scalastyle"            %% "scalastyle"      % "1.0.0",
   "org.scala-lang.modules"    %% "scala-xml"       % "1.2.0",
   "org.scalatest"             %% "scalatest"       % "3.0.8" % Test,
-  "org.mockito"               %% "mockito-scala"   % "1.6.2" % Test
+  "org.mockito"               %% "mockito-scala"   % "1.7.1" % Test
 )
 
 // Adding a resolver to the Artima maven repo, so sbt can download the Artima SuperSafe Scala compiler

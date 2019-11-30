@@ -20,10 +20,11 @@ package scoverage
 
 import java.nio.file.Paths
 
-import org.scalatest.{FlatSpec, Matchers}
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 
 /** Tests the correct behavior of the Scoverage XML reports parser */
-class ScoverageReportParserSpec extends FlatSpec with Matchers {
+class ScoverageReportParserSpec extends AnyFlatSpec with Matchers {
   val modulePath = Paths.get("")
   val scalaSources = List(Paths.get("src/main/scala"))
   val scoverageReportParser = new ScoverageReportParser()

@@ -21,14 +21,15 @@ package scoverage
 import java.nio.file.{Path, Paths}
 
 import com.mwz.sonar.scala.util.PathUtils._
-import org.scalatest.{FlatSpec, LoneElement}
+import org.scalatest.LoneElement
 import org.sonar.api.batch.fs.InputFile
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder
 import org.sonar.api.batch.sensor.internal.{DefaultSensorDescriptor, SensorContextTester}
 import org.sonar.api.config.internal.MapSettings
+import org.scalatest.flatspec.AnyFlatSpec
 
 /** Tests the Scoverage Sensor */
-class ScoverageSensorSpec extends FlatSpec with SensorContextMatchers with LoneElement {
+class ScoverageSensorSpec extends AnyFlatSpec with SensorContextMatchers with LoneElement {
   val scoverageReportParser = new TestScoverageReportParser()
   val scoverageSensor = new ScoverageSensor(scoverageReportParser)
 

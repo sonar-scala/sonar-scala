@@ -22,11 +22,13 @@ package junit
 import java.io.File
 import java.nio.file.Paths
 
-import org.scalatest.{FlatSpec, LoneElement, Matchers}
+import org.scalatest.LoneElement
 import org.sonar.api.batch.fs.InputFile
 import org.sonar.api.batch.fs.internal.{DefaultFileSystem, TestInputFileBuilder}
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 
-class JUnitReportParserSpec extends FlatSpec with Matchers with WithFiles with LoneElement {
+class JUnitReportParserSpec extends AnyFlatSpec with Matchers with WithFiles with LoneElement {
   it should "get report files" in {
     withFiles("file.xml", "file2.xml", "other.txt") { files =>
       val directories = files.map(_.getParentFile).distinct.toList

@@ -18,11 +18,12 @@
 package com.mwz.sonar.scala
 package sensor
 
-import org.scalatest.{FlatSpec, Matchers}
 import scalariform.ScalaVersions
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 
 /** Tests the Scala Sensor Metrics */
-class MeasuresSpec extends FlatSpec with Matchers {
+class MeasuresSpec extends AnyFlatSpec with Matchers {
   val exampleSourceFile =
     """/*
  * Sonar Scala Plugin

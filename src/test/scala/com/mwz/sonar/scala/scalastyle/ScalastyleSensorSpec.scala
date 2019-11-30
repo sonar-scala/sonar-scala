@@ -44,15 +44,16 @@ import org.sonar.api.batch.rule.internal.{ActiveRulesBuilder, NewActiveRule}
 import org.sonar.api.batch.sensor.internal.{DefaultSensorDescriptor, SensorContextTester}
 import org.sonar.api.config.internal.MapSettings
 import org.sonar.api.rule.RuleKey
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 
 class ScalastyleSensorSpec
-    extends FlatSpec
+    extends AnyFlatSpec
     with Matchers
     with SensorContextMatchers
     with LoneElement
     with OptionValues
     with MockitoSugar {
-
   trait Ctx {
     val context = SensorContextTester.create(Paths.get("./"))
     val scalastyleChecker = new ScalastyleCheckerAPI {
@@ -184,7 +185,6 @@ class ScalastyleSensorSpec
     val activeRule = activeRules.find(badRuleKey)
 
     ScalastyleSensor.ruleToConfigurationChecker(activeRule) shouldBe empty
-
   }
 
   it should "look up a rule from a style error" in new Ctx {

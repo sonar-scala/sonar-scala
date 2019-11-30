@@ -20,13 +20,14 @@ package sensor
 
 import java.nio.file.Paths
 
-import org.scalatest.{FlatSpec, LoneElement}
+import org.scalatest.LoneElement
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder
 import org.sonar.api.batch.sensor.internal.{DefaultSensorDescriptor, SensorContextTester}
 import org.sonar.api.measures.{CoreMetrics => CM}
+import org.scalatest.flatspec.AnyFlatSpec
 
 /** Tests the Scala Sensor */
-class ScalaSensorSpec extends FlatSpec with SensorContextMatchers with LoneElement {
+class ScalaSensorSpec extends AnyFlatSpec with SensorContextMatchers with LoneElement {
   val sensor = new ScalaSensor()
   behavior of "A ScalaSensor"
 

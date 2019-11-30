@@ -17,14 +17,15 @@
 
 package com.mwz.sonar.scala.scapegoat
 
-import org.scalatest.{FlatSpec, Inspectors, LoneElement, Matchers}
+import org.scalatest.{Inspectors, LoneElement}
 import org.sonar.api.rule.{RuleStatus, Severity}
 import org.sonar.api.rules.RuleType
 import org.sonar.api.server.rule.RulesDefinition.Context
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 
 /** Tests the correct behavior of the Scapegoat Rules Repository */
-class ScapegoatRulesRepositorySpec extends FlatSpec with Inspectors with LoneElement with Matchers {
-
+class ScapegoatRulesRepositorySpec extends AnyFlatSpec with Inspectors with LoneElement with Matchers {
   trait Ctx {
     val context = new Context()
     new ScapegoatRulesRepository().define(context)

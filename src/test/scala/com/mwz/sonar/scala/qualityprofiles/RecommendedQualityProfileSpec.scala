@@ -26,9 +26,11 @@ import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition.{
   BuiltInQualityProfile,
   Context
 }
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 
 class RecommendedQualityProfileSpec
-    extends FlatSpec
+    extends AnyFlatSpec
     with Inspectors
     with LoneElement
     with OptionValues

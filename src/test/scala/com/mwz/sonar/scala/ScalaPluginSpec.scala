@@ -17,12 +17,13 @@
 
 package com.mwz.sonar.scala
 
-import org.scalatest.{FlatSpec, Matchers}
 import org.sonar.api.internal.SonarRuntimeImpl
 import org.sonar.api.utils.Version
 import org.sonar.api.{Plugin, SonarEdition, SonarQubeSide, SonarRuntime}
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 
-class ScalaPluginSpec extends FlatSpec with Matchers {
+class ScalaPluginSpec extends AnyFlatSpec with Matchers {
   val runtime: SonarRuntime = SonarRuntimeImpl.forSonarQube(
     Version.create(7, 9),
     SonarQubeSide.SCANNER,

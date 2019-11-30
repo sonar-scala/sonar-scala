@@ -30,7 +30,7 @@ object Generators {
         .map { s =>
           TestInputFileBuilder
             .create("", s"${s.mkString}.scala")
-            .build
+            .build()
         }
     )
 

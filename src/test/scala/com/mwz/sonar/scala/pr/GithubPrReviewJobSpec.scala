@@ -40,11 +40,29 @@ class GithubPrReviewJobSpec extends FlatSpec with Matchers with ScalaCheckDriven
     descriptor.name shouldBe "Github PR review job"
   }
 
-  it should "determine a review status based on the found issues" in {
-    forAll { (i: List[Issue]) =>
-      val blockers = i.filter(_.severity === Severity.BLOCKER).size
-      val critical = i.filter(_.severity === Severity.CRITICAL).size
-      GithubPrReviewJob.reviewStatus(i.groupBy(_.file)) shouldBe ReviewStatus(blockers, critical)
+  it should "lookup existing comments for issues" in {
+    forAll { (issue: Issue, otherIssue: Issue) =>
+      val issues = Map(
+        issue.file -> List(issue),
+        otherIssue.file -> List(otherIssue)
+      )
+      val patchLineMapping = Map(
+        issue.file.toString -> Right(Map(FileLine(issue.line) -> PatchLine(7)))
+      )
+      val comment = Comment(1, issue.file.toString, Some(7), User("usr"), "comment")
+      val comments = Map(
+        issue.file.toString -> List(
+          comment,
+          Comment(2, issue.file.toString, Some(123), User("usr"), "comment"),
+          Comment(3, "otherFile", Some(123), User("usr"), "comment")
+        )
+      )
+
+      val expected = Map(
+        issue.file -> Map(PatchLine(7) -> List((issue, List(comment))))
+      )
+
+      GithubPrReviewJob.allCommentsForIssues(issues, patchLineMapping, comments) shouldBe expected
     }
   }
 
@@ -60,7 +78,8 @@ class GithubPrReviewJobSpec extends FlatSpec with Matchers with ScalaCheckDriven
           NewComment(Markdown.inline(uri, issue).text, commit, issue.file.toString, issue.line)
       }
 
-      GithubPrReviewJob.commentsForNewIssues(uri, commit, issues) should contain theSameElementsAs newComments
+      GithubPrReviewJob.commentsForNewIssues(uri, commit, issues) should
+      contain theSameElementsAs newComments
     }
   }
 
@@ -90,6 +109,14 @@ class GithubPrReviewJobSpec extends FlatSpec with Matchers with ScalaCheckDriven
       }
 
       GithubPrReviewJob.commentsForNewIssues(uri, commit, groupped) should contain theSameElementsAs newComments
+    }
+  }
+
+  it should "determine a review status based on found issues" in {
+    forAll { (i: List[Issue]) =>
+      val blockers = i.filter(_.severity === Severity.BLOCKER).size
+      val critical = i.filter(_.severity === Severity.CRITICAL).size
+      GithubPrReviewJob.reviewStatus(i.groupBy(_.file)) shouldBe ReviewStatus(blockers, critical)
     }
   }
 

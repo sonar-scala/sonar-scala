@@ -36,6 +36,7 @@ import cats.syntax.traverse._
 import com.mwz.sonar.scala.pr.GithubPrReviewJob._
 import com.mwz.sonar.scala.pr.github.{Github, _}
 import com.mwz.sonar.scala.util.Logger
+import mouse.boolean._
 import org.http4s.Uri
 import org.http4s.client.blaze.BlazeClientBuilder
 import org.sonar.api.batch.fs.InputFile
@@ -46,7 +47,8 @@ final class GithubPrReviewJob(
   globalConfig: GlobalConfig,
   globalIssues: GlobalIssues
 ) extends PostJob {
-  private implicit val cs: ContextShift[IO] = IO.contextShift(ExecutionContext.global)
+  private implicit val cs: ContextShift[IO] =
+    IO.contextShift(ExecutionContext.global)
 
   def describe(descriptor: PostJobDescriptor): Unit =
     descriptor.name("Github PR review job")
@@ -89,7 +91,7 @@ final class GithubPrReviewJob(
         pr.head.sha,
         NewStatus("pending", "", "SonarQube is reviewing this pull request.", GithubContext)
       )
-      // Run the PR review.#
+      // Run PR review.
       prStatus <- Sync[F].handleError(
         review(baseUrl, github, user, pr).map {
           case status if status.blocker > 0 || status.critical > 0 =>
@@ -118,7 +120,7 @@ final class GithubPrReviewJob(
       sonarComments = allComments.filter(_.user.login === user.login).groupBy(_.path)
       _ <- Logger[F].debug(
         s"PR: $pr\n" +
-        s"Comments: ${sonarComments.mkString(", ")}\n" +
+        s"Sonar comments: ${sonarComments.mkString(", ")}\n" +
         s"Files: ${files.mkString(", ")}"
       )
       // Group patches by file names - `filename` is the full path relative to the root
@@ -142,7 +144,10 @@ final class GithubPrReviewJob(
       issuesWithComments = allCommentsForIssues(issues, mappedPatches, sonarComments)
       // Post new comments.
       commentsToPost = commentsForNewIssues(baseUrl, pr.head.sha, issuesWithComments)
-      _ <- if (commentsToPost.nonEmpty) Logger[F].info("Posting comments to Github.") else Sync[F].unit
+      _ <- commentsToPost.nonEmpty.fold(
+        Logger[F].info("Posting new comments to Github."),
+        Logger[F].info("No new Github comments to post.")
+      )
       _ <- commentsToPost
         .sortBy(c => (c.path, c.position))
         .traverse { comment =>
@@ -157,26 +162,27 @@ object GithubPrReviewJob {
 
   // Lookup existing comments for all the issues.
   // Issues are linked to file lines, comments are linked to patch lines.
-  // TODO: This is quite grim.
+  // This gives us a mapping from a patch line to a list of issues and related comments (for each file).
   def allCommentsForIssues(
     issues: Map[InputFile, List[Issue]],
-    mappedPatches: Map[String, Either[PatchError, Map[FileLine, PatchLine]]],
+    mappedPatchLines: Map[String, Either[PatchError, Map[FileLine, PatchLine]]],
     allUserComments: Map[String, List[Comment]]
-  ): Map[InputFile, Map[PatchLine, List[(Issue, List[Comment])]]] =
-    issues.collect {
+  ): Map[InputFile, Map[PatchLine, List[(Issue, List[Comment])]]] = {
+    issues
+      .collect {
       case (file, issues) =>
         val issuesWithComments: Map[PatchLine, List[(Issue, List[Comment])]] =
           issues
             .flatMap { issue =>
               // patchLine -> issue
-              mappedPatches
+                mappedPatchLines
                 .get(file.toString)
-                .flatMap(_.toOption.flatMap { m =>
-                  m.get(FileLine(issue.line)).map {
+                  .flatMap(_.toOption.flatMap { mapping =>
+                    mapping.get(FileLine(issue.line)).map {
                     patchLine =>
                       // patchLine -> comments
                       // Filter comments by the line number.
-                      // Those are filtered further later on based on the body.
+                        // Those are filtered again later on based on the body text.
                       val comments: List[Comment] =
                         allUserComments
                           .get(file.toString)
@@ -192,6 +198,8 @@ object GithubPrReviewJob {
             .mapValues(_.flatMap { case (_, issuesAndComments) => issuesAndComments })
         (file, issuesWithComments)
     }
+      .filterNot { case (_, v) => v.isEmpty }
+  }
 
   // Comments for new issues (which don't already have a comment).
   def commentsForNewIssues(

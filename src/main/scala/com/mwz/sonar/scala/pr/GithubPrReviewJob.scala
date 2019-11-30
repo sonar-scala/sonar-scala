@@ -18,12 +18,12 @@
 package com.mwz.sonar.scala
 package pr
 
+import scala.collection.immutable.SortedMap
 import scala.concurrent.ExecutionContext
 import scala.language.higherKinds
 
 import cats.NonEmptyParallel
 import cats.data.NonEmptyList
-import cats.effect.IO._
 import cats.effect.{ContextShift, IO, Sync}
 import cats.instances.list._
 import cats.instances.string._
@@ -47,13 +47,15 @@ final class GithubPrReviewJob(
   globalConfig: GlobalConfig,
   globalIssues: GlobalIssues
 ) extends PostJob {
-  private implicit val cs: ContextShift[IO] =
-    IO.contextShift(ExecutionContext.global)
-
   def describe(descriptor: PostJobDescriptor): Unit =
     descriptor.name("Github PR review job")
 
   def execute(context: PostJobContext): Unit = {
+    import cats.effect.IO._
+
+    implicit val cs: ContextShift[IO] =
+      IO.contextShift(ExecutionContext.global)
+
     BlazeClientBuilder[IO](ExecutionContext.global).resource
       .use { client =>
         for {
@@ -83,7 +85,8 @@ final class GithubPrReviewJob(
     for {
       // Get the authenticated user (to check the oauth token).
       user <- github.authenticatedUser
-      // TODO: Check user auth scopes to make sure the account has access to the repo (`public_repo` for public repositories or `repo` for private repositories).
+      // TODO: Check user auth scopes to make sure the account has access to the repo,
+      // i.e. (`public_repo` for public repositories or `repo` for private repositories).
       // Fetch the PR (to verify whether it exists).
       pr <- github.pullRequest
       // Create a pending PR status for the review.
@@ -106,7 +109,6 @@ final class GithubPrReviewJob(
     } yield ()
   }
 
-  // TODO: Split this up a little bit more.
   private[pr] def review[F[_]: Sync: NonEmptyParallel: Logger](
     baseUrl: Uri,
     github: Github[F],
@@ -116,34 +118,14 @@ final class GithubPrReviewJob(
     for {
       // Fetch existing PR comments and get PR files along with their patches.
       (allComments, files) <- (github.comments, github.files).parMapN((_, _))
-      // Filter comments made by the authed user.
-      sonarComments = allComments.filter(_.user.login === user.login).groupBy(_.path)
-      _ <- Logger[F].debug(
-        s"PR: $pr\n" +
-        s"Sonar comments: ${sonarComments.mkString(", ")}\n" +
-        s"Files: ${files.mkString(", ")}"
-      )
       // Group patches by file names - `filename` is the full path relative to the root
       // of the project, so it should be unique. Raise an error when no files are present.
       prPatches <- Sync[F].fromEither(Either.fromOption(NonEmptyList.fromList(files), NoFilesInPR))
       allPatches = prPatches.groupByNem(_.filename).map(_.head).toSortedMap
       // Filter out issues which aren't related to any files in the PR.
       issues = globalIssues.allIssues.filterKeys(f => allPatches.keySet.contains(f.toString))
-      // Filter out patches without any issues.
-      patches = allPatches.filterKeys(f => issues.keySet.exists(_.toString === f))
-      // Map file lines to patch lines.
-      mappedPatches = patches.mapValues(file => Patch.parse(file.patch))
-      _ <- mappedPatches
-        .collect { case (file, Left(error)) => (file, error) }
-        .toList
-        .traverse {
-          case (file, error) =>
-            Logger[F].error(s"Error parsing patch for $file.") >>
-            Logger[F].debug(s"""Invalid patch format: "${error.text}".""")
-        }
-      issuesWithComments = allCommentsForIssues(issues, mappedPatches, sonarComments)
-      // Post new comments.
-      commentsToPost = commentsForNewIssues(baseUrl, pr.head.sha, issuesWithComments)
+      // Get new comments and post them.
+      commentsToPost <- newComments(baseUrl, user, pr, allComments, files, allPatches, issues)
       _ <- commentsToPost.nonEmpty.fold(
         Logger[F].info("Posting new comments to Github."),
         Logger[F].info("No new Github comments to post.")
@@ -155,6 +137,39 @@ final class GithubPrReviewJob(
           github.createComment(comment)
         }
     } yield reviewStatus(issues)
+
+  private[pr] def newComments[F[_]: Sync: Logger](
+    baseUrl: Uri,
+    user: User,
+    pr: PullRequest,
+    comments: List[Comment],
+    files: List[File],
+    patches: SortedMap[String, File],
+    issues: Map[InputFile, List[Issue]]
+  ): F[List[NewComment]] =
+    for {
+      // Filter comments made by the authed user.
+      sonarComments <- Sync[F].pure(comments.filter(_.user.login === user.login).groupBy(_.path))
+      _ <- Logger[F].debug(
+        s"PR: $pr\n" +
+        s"Sonar comments: ${sonarComments.mkString(", ")}\n" +
+        s"Files: ${files.mkString(", ")}"
+      )
+      // Filter out patches without any issues.
+      patchesWithIssues = patches.filterKeys(f => issues.keySet.exists(_.toString === f))
+      // Map file lines to patch lines.
+      mappedPatches = patchesWithIssues.mapValues(file => Patch.parse(file.patch))
+      _ <- mappedPatches
+        .collect { case (file, Left(error)) => (file, error) }
+        .toList
+        .traverse {
+          case (file, error) =>
+            Logger[F].error(s"Error parsing patch for $file.") >>
+            Logger[F].debug(s"""Invalid patch format: "${error.text}".""")
+        }
+      issuesWithComments = allCommentsForIssues(issues, mappedPatches, sonarComments)
+      commentsToPost = commentsForNewIssues(baseUrl, pr.head.sha, issuesWithComments)
+    } yield commentsToPost
 }
 
 object GithubPrReviewJob {

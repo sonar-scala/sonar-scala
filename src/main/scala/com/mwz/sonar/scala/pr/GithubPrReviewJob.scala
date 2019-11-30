@@ -170,34 +170,34 @@ object GithubPrReviewJob {
   ): Map[InputFile, Map[PatchLine, List[(Issue, List[Comment])]]] = {
     issues
       .collect {
-      case (file, issues) =>
-        val issuesWithComments: Map[PatchLine, List[(Issue, List[Comment])]] =
-          issues
-            .flatMap { issue =>
-              // patchLine -> issue
+        case (file, issues) =>
+          val issuesWithComments: Map[PatchLine, List[(Issue, List[Comment])]] =
+            issues
+              .flatMap { issue =>
+                // patchLine -> issue
                 mappedPatchLines
-                .get(file.toString)
+                  .get(file.toString)
                   .flatMap(_.toOption.flatMap { mapping =>
                     mapping.get(FileLine(issue.line)).map {
-                    patchLine =>
-                      // patchLine -> comments
-                      // Filter comments by the line number.
+                      patchLine =>
+                        // patchLine -> comments
+                        // Filter comments by the line number.
                         // Those are filtered again later on based on the body text.
-                      val comments: List[Comment] =
-                        allUserComments
-                          .get(file.toString)
-                          // Outdated comments are filtered out here
-                          // as they don't have a current position.
-                          .map(_.filter(_.position.contains(patchLine.value)))
-                          .getOrElse(List.empty)
-                      (patchLine, List((issue, comments)))
-                  }
-                })
-            }
-            .groupBy { case (patchLine, _) => patchLine }
-            .mapValues(_.flatMap { case (_, issuesAndComments) => issuesAndComments })
-        (file, issuesWithComments)
-    }
+                        val comments: List[Comment] =
+                          allUserComments
+                            .get(file.toString)
+                            // Outdated comments are filtered out here
+                            // as they don't have a current position.
+                            .map(_.filter(_.position.contains(patchLine.value)))
+                            .getOrElse(List.empty)
+                        (patchLine, List((issue, comments)))
+                    }
+                  })
+              }
+              .groupBy { case (patchLine, _) => patchLine }
+              .mapValues(_.flatMap { case (_, issuesAndComments) => issuesAndComments })
+          (file, issuesWithComments)
+      }
       .filterNot { case (_, v) => v.isEmpty }
   }
 
@@ -213,6 +213,7 @@ object GithubPrReviewJob {
       (issue, comments)              <- issuesAndComments
     } yield {
       val markdown: Markdown = Markdown.inline(baseUrl, issue)
+      // TODO: Would be good to support text evolution in the future.
       comments
         .find(comment => comment.body === markdown.text)
         .fold(Option(NewComment(markdown.text, commitId, file.toString, patchLine.value)))(_ => None)

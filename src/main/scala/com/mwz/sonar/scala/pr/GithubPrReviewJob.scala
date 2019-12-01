@@ -18,7 +18,6 @@
 package com.mwz.sonar.scala
 package pr
 
-import scala.collection.immutable.SortedMap
 import scala.concurrent.ExecutionContext
 import scala.language.higherKinds
 
@@ -121,7 +120,7 @@ final class GithubPrReviewJob(
       // Group patches by file names - `filename` is the full path relative to the root
       // of the project, so it should be unique. Raise an error when no files are present.
       prPatches <- Sync[F].fromEither(Either.fromOption(NonEmptyList.fromList(files), NoFilesInPR))
-      allPatches = prPatches.groupByNem(_.filename).map(_.head).toSortedMap
+      allPatches = prPatches.groupByNem(_.filename).map(_.head).toSortedMap.toMap
       // Filter out issues which aren't related to any files in the PR.
       issues = globalIssues.allIssues.filterKeys(f => allPatches.keySet.contains(f.toString))
       // Get new comments and post them.
@@ -144,7 +143,7 @@ final class GithubPrReviewJob(
     pr: PullRequest,
     comments: List[Comment],
     files: List[File],
-    patches: SortedMap[String, File],
+    patches: Map[String, File],
     issues: Map[InputFile, List[Issue]]
   ): F[List[NewComment]] =
     for {
@@ -207,19 +206,14 @@ object GithubPrReviewJob {
                               // as they don't have a current position.
                               .map(_.filter(_.position.contains(patchLine.value)))
                               .getOrElse(List.empty)
-                          comments.nonEmpty.fold(
-                            (patchLine, List((issue, comments))),
-                            (patchLine, List.empty)
-                          )
+                          (patchLine, List((issue, comments)))
                         }
-                        .filterNot { case (_, v) => v.isEmpty }
                   })
               }
               .groupBy { case (patchLine, _) => patchLine }
               .mapValues(_.flatMap { case (_, issuesAndComments) => issuesAndComments })
           (file, issuesWithComments)
       }
-      .filterNot { case (_, v) => v.isEmpty }
   }
 
   // Comments for new issues (which don't already have a comment).
@@ -234,7 +228,7 @@ object GithubPrReviewJob {
       (issue, comments)              <- issuesAndComments
     } yield {
       val markdown: Markdown = Markdown.inline(baseUrl, issue)
-      // TODO: Would be good to support text evolution in the future.
+      // TODO: It would be good to support text evolution in the future.
       comments
         .find(comment => comment.body === markdown.text)
         .fold(Option(NewComment(markdown.text, commitId, file.toString, patchLine.value)))(_ => None)

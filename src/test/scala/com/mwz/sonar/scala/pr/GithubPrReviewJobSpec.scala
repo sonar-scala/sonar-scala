@@ -17,8 +17,12 @@
 
 package com.mwz.sonar.scala.pr
 
+import cats.effect.IO
+import com.mwz.sonar.scala.EmptyLogger
 import com.mwz.sonar.scala.GlobalConfig
 import com.mwz.sonar.scala.pr.Generators._
+import com.mwz.sonar.scala.pr.github.File
+import com.mwz.sonar.scala.pr.github.PullRequest
 import com.mwz.sonar.scala.pr.github.{Comment, NewComment, NewStatus, User}
 import org.http4s.Uri
 import org.scalacheck.ScalacheckShapeless._
@@ -31,6 +35,12 @@ import org.sonar.api.config.internal.MapSettings
 import org.sonar.api.rule.RuleKey
 
 class GithubPrReviewJobSpec extends FlatSpec with Matchers with ScalaCheckDrivenPropertyChecks {
+  trait Ctx {
+    val globalConfig = new GlobalConfig(new MapSettings().asConfig)
+    val globalIssues = new GlobalIssues
+    val githubPrReviewJob = new GithubPrReviewJob(globalConfig, globalIssues)
+  }
+
   it should "correctly set the descriptor" in {
     val conf = new GlobalConfig(new MapSettings().asConfig())
     val job = new GithubPrReviewJob(conf, new GlobalIssues)
@@ -40,11 +50,58 @@ class GithubPrReviewJobSpec extends FlatSpec with Matchers with ScalaCheckDriven
     descriptor.name shouldBe "Github PR review job"
   }
 
+  it should "not create new comments if there are no issues" in new Ctx with EmptyLogger {
+    forAll {
+      (
+        baseUrl: Uri,
+        user: User,
+        pr: PullRequest,
+        comments: List[Comment],
+        files: List[File],
+        patches: Map[String, File]
+      ) =>
+        val issues: Map[InputFile, List[Issue]] = Map.empty
+        githubPrReviewJob
+          .newComments[IO](baseUrl, user, pr, comments, files, patches, issues)
+          .unsafeRunSync() shouldBe empty
+    }
+  }
+
+  it should "not create duplicate comments" in new Ctx with EmptyLogger {
+    forAll {
+      (
+        baseUrl: Uri,
+        user: User,
+        pr: PullRequest,
+        issue: Issue
+      ) =>
+        val issues = Map(
+          issue.file -> List(issue.copy(line = 5))
+        )
+        val files = List(
+          File(
+            issue.file.toString,
+            "status",
+            """@@ -2,7 +2,7 @@ scalaVersion := \"2.12.8\"\n libraryDependencies ++= Seq(\n   \"org.sonarsource.update-center\" % \"sonar-update-center-common\" % \"1.23.0.723\",\n   // Scapegoat & scalastyle inspections generator dependencies\n-  \"com.sksamuel.scapegoat\" %% \"scalac-scapegoat-plugin\" % \"1.3.10\",\n+  \"com.sksamuel.scapegoat\" %% \"scalac-scapegoat-plugin\" % \"1.3.11\",\n   \"org.scalastyle\"         %% \"scalastyle\"              % \"1.0.0\",\n   \"org.scalameta\"          %% \"scalameta\"               % \"4.2.3\",\n   \"org.scalatest\"          %% \"scalatest\"               % \"3.0.8\" % Test"""
+          )
+        )
+        val patches = files.groupBy(_.filename).mapValues(_.head)
+        val markdown: Markdown = Markdown.inline(baseUrl, issue)
+        val comments = List(
+          Comment(1, issue.file.toString, Some(5), user, markdown.text)
+        )
+
+        githubPrReviewJob
+          .newComments[IO](baseUrl, user, pr, comments, files, patches, issues)
+          .unsafeRunSync() shouldBe empty
+    }
+  }
+
   it should "lookup existing comments for issues" in {
-    forAll { (issue: Issue, otherIssue: Issue) =>
+    forAll { (issue: Issue, issue2: Issue) =>
       val issues = Map(
         issue.file -> List(issue),
-        otherIssue.file -> List(otherIssue)
+        issue2.file -> List(issue2)
       )
       val patchLineMapping = Map(
         issue.file.toString -> Right(Map(FileLine(issue.line) -> PatchLine(7)))
@@ -54,30 +111,38 @@ class GithubPrReviewJobSpec extends FlatSpec with Matchers with ScalaCheckDriven
         issue.file.toString -> List(
           comment,
           Comment(2, issue.file.toString, Some(123), User("usr"), "comment"),
-          Comment(3, "otherFile", Some(123), User("usr"), "comment")
+          Comment(3, issue.file.toString, Some(123), User("usr"), "comment")
         )
       )
 
       val expected = Map(
-        issue.file -> Map(PatchLine(7) -> List((issue, List(comment))))
+        issue.file -> Map(PatchLine(7) -> List((issue, List(comment)))),
+        issue2.file -> Map.empty
       )
 
       GithubPrReviewJob.allCommentsForIssues(issues, patchLineMapping, comments) shouldBe expected
     }
   }
 
-  it should "not return the lookup for no comments" in {
-    forAll { (issue: Issue, otherIssue: Issue) =>
+  it should "return a lookup with empty comments if there are no comments" in {
+    forAll { (issue: Issue, issue2: Issue) =>
       val issues = Map(
         issue.file -> List(issue),
-        otherIssue.file -> List(otherIssue)
+        issue2.file -> List(issue2)
       )
       val patchLineMapping = Map(
         issue.file.toString -> Right(Map(FileLine(issue.line) -> PatchLine(7)))
       )
       val comments = Map.empty[String, List[Comment]]
 
-      GithubPrReviewJob.allCommentsForIssues(issues, patchLineMapping, comments) shouldBe Map.empty
+      val expected = Map(
+        issue.file -> Map(
+          PatchLine(7) -> List((issue, List.empty))
+        ),
+        issue2.file -> Map.empty
+      )
+
+      GithubPrReviewJob.allCommentsForIssues(issues, patchLineMapping, comments) shouldBe expected
     }
   }
 

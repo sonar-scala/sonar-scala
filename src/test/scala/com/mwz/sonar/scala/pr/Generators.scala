@@ -17,6 +17,7 @@
 
 package com.mwz.sonar.scala.pr
 
+import org.http4s.Uri
 import org.scalacheck._
 import org.sonar.api.batch.fs.InputFile
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder
@@ -40,5 +41,12 @@ object Generators {
         repo <- Gen.nonEmptyListOf(Gen.alphaNumChar)
         rule <- Gen.nonEmptyListOf(Gen.alphaNumChar)
       } yield RuleKey.of(repo.mkString, rule.mkString)
+    )
+
+  implicit val arbUri: Arbitrary[Uri] =
+    Arbitrary(
+      Gen.nonEmptyListOf(Gen.alphaLowerChar).map { s =>
+        Uri.unsafeFromString(s.mkString)
+      }
     )
 }

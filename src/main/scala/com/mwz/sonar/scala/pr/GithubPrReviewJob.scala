@@ -192,21 +192,27 @@ object GithubPrReviewJob {
                 // patchLine -> issue
                 mappedPatchLines
                   .get(file.toString)
-                  .flatMap(_.toOption.flatMap { mapping =>
-                    mapping.get(FileLine(issue.line)).map {
-                      patchLine =>
-                        // patchLine -> comments
-                        // Filter comments by the line number.
-                        // Those are filtered again later on based on the body text.
-                        val comments: List[Comment] =
-                          allUserComments
-                            .get(file.toString)
-                            // Outdated comments are filtered out here
-                            // as they don't have a current position.
-                            .map(_.filter(_.position.contains(patchLine.value)))
-                            .getOrElse(List.empty)
-                        (patchLine, List((issue, comments)))
-                    }
+                  .flatMap(_.toOption.flatMap {
+                    mapping =>
+                      mapping
+                        .get(FileLine(issue.line))
+                        .map { patchLine =>
+                          // patchLine -> comments
+                          // Filter comments by the line number.
+                          // Those are filtered again later on based on the body text.
+                          val comments: List[Comment] =
+                            allUserComments
+                              .get(file.toString)
+                              // Outdated comments are filtered out here
+                              // as they don't have a current position.
+                              .map(_.filter(_.position.contains(patchLine.value)))
+                              .getOrElse(List.empty)
+                          comments.nonEmpty.fold(
+                            (patchLine, List((issue, comments))),
+                            (patchLine, List.empty)
+                          )
+                        }
+                        .filterNot { case (_, v) => v.isEmpty }
                   })
               }
               .groupBy { case (patchLine, _) => patchLine }

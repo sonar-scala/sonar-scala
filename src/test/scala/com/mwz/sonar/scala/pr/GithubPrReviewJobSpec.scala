@@ -66,6 +66,21 @@ class GithubPrReviewJobSpec extends FlatSpec with Matchers with ScalaCheckDriven
     }
   }
 
+  it should "not return the lookup for no comments" in {
+    forAll { (issue: Issue, otherIssue: Issue) =>
+      val issues = Map(
+        issue.file -> List(issue),
+        otherIssue.file -> List(otherIssue)
+      )
+      val patchLineMapping = Map(
+        issue.file.toString -> Right(Map(FileLine(issue.line) -> PatchLine(7)))
+      )
+      val comments = Map.empty[String, List[Comment]]
+
+      GithubPrReviewJob.allCommentsForIssues(issues, patchLineMapping, comments) shouldBe Map.empty
+    }
+  }
+
   it should "create comments for new issues" in {
     forAll { (commit: String, patchLine: PatchLine, issuesComments: List[(Issue, List[Comment])]) =>
       val uri = Uri.unsafeFromString("https://hello.com")

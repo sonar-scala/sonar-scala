@@ -25,7 +25,6 @@ import org.sonar.api.batch.sensor.SensorContext
 
 object SonarSensorContext {
   implicit final class SensorContextOps(private val context: SensorContext) extends AnyVal {
-
     /**
      * Save a new measure for the given metric.
      */

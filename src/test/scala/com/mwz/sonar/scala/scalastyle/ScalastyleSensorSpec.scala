@@ -22,6 +22,8 @@ import java.nio.file.Paths
 
 import scala.collection.JavaConverters._
 
+import com.mwz.sonar.scala.pr.GlobalIssues
+import com.mwz.sonar.scala.pr.Issue
 import com.mwz.sonar.scala.util.PathUtils.cwd
 import org.scalastyle.scalariform.EmptyClassChecker
 import org.scalastyle.{
@@ -52,8 +54,9 @@ class ScalastyleSensorSpec
     with LoneElement
     with OptionValues
     with MockitoSugar {
-
   trait Ctx {
+    val globalConfig = new GlobalConfig(new MapSettings().asConfig)
+    val globalIssues = new GlobalIssues()
     val context = SensorContextTester.create(Paths.get("./"))
     val scalastyleChecker = new ScalastyleCheckerAPI {
       private[scalastyle] def checkFiles(
@@ -63,8 +66,13 @@ class ScalastyleSensorSpec
       ): List[Message[FileSpec]] = List.empty
     }
 
-    val scalastyleSensor = new ScalastyleSensor(scalastyleChecker)
+    val scalastyleSensor = new ScalastyleSensor(globalConfig, globalIssues, scalastyleChecker)
     val descriptor = new DefaultSensorDescriptor
+  }
+
+  it should "exposecorrect constants" in {
+    ScalastyleSensor.SensorName shouldBe "Scalastyle Sensor"
+    ScalastyleSensor.ScalastyleDisablePropertyKey shouldBe "sonar.scala.scalastyle.disable"
   }
 
   it should "read the 'disable' config property" in {
@@ -72,11 +80,13 @@ class ScalastyleSensorSpec
     ScalastyleSensor.shouldEnableSensor(context.config) shouldBe true
 
     val context2 = SensorContextTester.create(cwd)
-    context2.setSettings(new MapSettings().setProperty("sonar.scala.scalastyle.disable", "maybe"))
+    context2.setSettings(
+      new MapSettings().setProperty(ScalastyleSensor.ScalastyleDisablePropertyKey, "maybe")
+    )
     ScalastyleSensor.shouldEnableSensor(context2.config) shouldBe true
 
     val context3 = SensorContextTester.create(cwd)
-    context3.setSettings(new MapSettings().setProperty("sonar.scala.scalastyle.disable", "true"))
+    context3.setSettings(new MapSettings().setProperty(ScalastyleSensor.ScalastyleDisablePropertyKey, "true"))
     ScalastyleSensor.shouldEnableSensor(context3.config) shouldBe false
   }
 
@@ -86,7 +96,7 @@ class ScalastyleSensorSpec
   }
 
   it should "respect the 'disable' config property and skip execution if set to true" in new Ctx {
-    context.setSettings(new MapSettings().setProperty("sonar.scala.scalastyle.disable", "true"))
+    context.setSettings(new MapSettings().setProperty(ScalastyleSensor.ScalastyleDisablePropertyKey, "true"))
     scalastyleSensor.describe(descriptor)
     descriptor.configurationPredicate.test(context.config) shouldBe false
   }
@@ -95,7 +105,7 @@ class ScalastyleSensorSpec
     scalastyleSensor.describe(descriptor)
 
     descriptor should not be 'global
-    descriptor.name shouldBe "Scalastyle Sensor"
+    descriptor.name shouldBe ScalastyleSensor.SensorName
     descriptor.`type` shouldBe InputFile.Type.MAIN
     descriptor.languages.loneElement shouldBe "scala"
     descriptor.ruleRepositories.loneElement shouldBe "sonar-scala-scalastyle"
@@ -184,7 +194,6 @@ class ScalastyleSensorSpec
     val activeRule = activeRules.find(badRuleKey)
 
     ScalastyleSensor.ruleToConfigurationChecker(activeRule) shouldBe empty
-
   }
 
   it should "look up a rule from a style error" in new Ctx {
@@ -348,12 +357,80 @@ class ScalastyleSensorSpec
 
     context.fileSystem.add(testFile)
     context.setActiveRules(activeRules)
-    new ScalastyleSensor(checker).execute(context)
+    new ScalastyleSensor(globalConfig, globalIssues, checker).execute(context)
 
     val result = context.allIssues.loneElement
     result.ruleKey shouldBe ruleKey
     result.primaryLocation.inputComponent shouldBe testFile
     result.primaryLocation.textRange shouldBe testFile.newRange(1, 0, 1, 15)
     result.primaryLocation.message shouldBe "Redundant braces in class definition"
+  }
+
+  it should "collect global issues if issue decoration is enabled" in new Ctx {
+    val ruleKey = RuleKey.of("sonar-scala-scalastyle", "org.scalastyle.scalariform.EmptyClassChecker")
+
+    val activeRules = (new ActiveRulesBuilder)
+      .addRule(
+        (new NewActiveRule.Builder)
+          .setRuleKey(ruleKey)
+          .setName("EmptyClassChecker")
+          .setInternalKey("org.scalastyle.scalariform.EmptyClassChecker")
+          .setSeverity(Severity.MAJOR.toString)
+          .setParam("ruleClass", "org.scalastyle.scalariform.EmptyClassChecker")
+          .build()
+      )
+      .build()
+
+    val fileSpec: FileSpec = new FileSpec {
+      def name: String = Paths.get("./").resolve("TestFile.scala").toString
+    }
+
+    val styleError = StyleError(
+      fileSpec,
+      (new EmptyClassChecker).getClass,
+      "org.scalastyle.scalariform.EmptyClassChecker",
+      ErrorLevel,
+      List.empty,
+      lineNumber = Some(1),
+      column = Some(5),
+      customMessage = None
+    )
+
+    val checker = new ScalastyleCheckerAPI {
+      private[scalastyle] def checkFiles(
+        checker: Checker[FileSpec],
+        configuration: ScalastyleConfiguration,
+        files: scala.Seq[FileSpec]
+      ): List[Message[FileSpec]] = List(styleError)
+    }
+
+    val testFile =
+      new TestInputFileBuilder("test-project", "TestFile.scala")
+        .setLanguage("scala")
+        .setType(InputFile.Type.MAIN)
+        .setLines(2)
+        .setOriginalLineStartOffsets(Array(0, 16))
+        .setOriginalLineEndOffsets(Array(15, 30))
+        .build()
+
+    context.fileSystem.add(testFile)
+    context.setActiveRules(activeRules)
+    val prDecorationConf =
+      new GlobalConfig(
+        new MapSettings()
+          .setProperty("sonar.scala.pullrequest.provider", "github")
+          .setProperty("sonar.scala.pullrequest.number", "123")
+          .setProperty("sonar.scala.pullrequest.github.repository", "owner/repo")
+          .setProperty("sonar.scala.pullrequest.github.oauth", "token")
+          .asConfig
+      )
+    new ScalastyleSensor(prDecorationConf, globalIssues, checker).execute(context)
+
+    context.allIssues.asScala shouldBe empty
+    globalIssues.allIssues shouldBe Map(
+      testFile -> List(
+        Issue(ruleKey, testFile, 1, Severity.MAJOR, "Redundant braces in class definition")
+      )
+    )
   }
 }

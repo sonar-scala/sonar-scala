@@ -15,46 +15,42 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.mwz.sonar.scala
-package util
+package com.mwz.sonar.scala.util
 
+import cats.effect.IO
 import org.scalatest.{FlatSpec, Matchers}
 import org.sonar.api.utils.log.LoggerLevel._
-import org.sonar.api.utils.log._
+import org.sonar.api.utils.log.SonarLogTester
 
-class LogSpec extends FlatSpec with Matchers with SonarLogTester {
-  "Log" should "log debug" in {
-    val log = Log(classOf[LogSpec], "test")
+class LoggerSpec extends FlatSpec with Matchers with SonarLogTester {
+  trait Context {
+    val log: IO[Logger[IO]] = Logger.create(classOf[LoggerSpec], "test")
+  }
 
-    log.debug("debug")
+  it should "log debug" in new Context {
+    log.flatMap(_.debug("debug")).unsafeRunSync()
     logsFor(DEBUG) shouldBe Seq("[sonar-scala-test] debug")
   }
 
-  it should "log info" in {
-    val log = Log(classOf[LogSpec], "test")
-
-    log.info("info")
+  it should "log info" in new Context {
+    log.flatMap(_.info("info")).unsafeRunSync()
     logsFor(INFO) shouldBe Seq("[sonar-scala-test] info")
   }
 
-  it should "log warn" in {
-    val log = Log(classOf[LogSpec], "test")
-
-    log.warn("warn")
+  it should "log warn" in new Context {
+    log.flatMap(_.warn("warn")).unsafeRunSync()
     logsFor(WARN) shouldBe Seq("[sonar-scala-test] warn")
   }
 
-  it should "log error" in {
-    val log = Log(classOf[LogSpec], "test")
-
-    log.error("error")
+  it should "log error" in new Context {
+    log.flatMap(_.error("error")).unsafeRunSync()
     logsFor(ERROR) shouldBe Seq("[sonar-scala-test] error")
   }
 
   it should "default the prefix to sonar-scala" in {
-    val log = Log(classOf[LogSpec])
+    val log: IO[Logger[IO]] = Logger.create(classOf[LoggerSpec])
 
-    log.info("info")
+    log.flatMap(_.info("info")).unsafeRunSync()
     logsFor(INFO) shouldBe Seq("[sonar-scala] info")
   }
 }

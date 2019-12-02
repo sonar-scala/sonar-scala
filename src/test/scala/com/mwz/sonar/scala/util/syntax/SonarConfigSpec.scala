@@ -22,10 +22,10 @@ package syntax
 import java.nio.file.Paths
 
 import com.mwz.sonar.scala.util.syntax.SonarConfig._
-import org.scalatest.{FlatSpec, Matchers}
+import org.scalatest.{FlatSpec, Matchers, OptionValues}
 import org.sonar.api.config.internal.MapSettings
 
-class SonarConfigSpec extends FlatSpec with Matchers {
+class SonarConfigSpec extends FlatSpec with Matchers with OptionValues {
   "config" should "get paths" in {
     val conf = new MapSettings()
       .setProperty("path", "this/is/a/path, another/path")
@@ -46,9 +46,22 @@ class SonarConfigSpec extends FlatSpec with Matchers {
       .setProperty("bool.false", "false")
       .asConfig()
 
-    conf.getValue[Boolean]("bool.true") shouldBe true
-    conf.getValue[Boolean]("bool.true2") shouldBe true
-    conf.getValue[Boolean]("bool.false") shouldBe false
-    conf.getValue[Boolean]("not.a.bool") shouldBe false
+    conf.getAs[Boolean]("bool.true") shouldBe true
+    conf.getAs[Boolean]("bool.true2") shouldBe true
+    conf.getAs[Boolean]("bool.false") shouldBe false
+    conf.getAs[Boolean]("not.a.bool") shouldBe false
+  }
+
+  it should "get a string" in {
+    val conf = new MapSettings()
+      .setProperty("text", "hello")
+      .setProperty("number", "55")
+      .setProperty("bool", "true")
+      .asConfig()
+
+    conf.getAs[String]("text").value shouldBe "hello"
+    conf.getAs[String]("number").value shouldBe "55"
+    conf.getAs[String]("bool").value shouldBe "true"
+    conf.getAs[String]("empty") shouldBe empty
   }
 }

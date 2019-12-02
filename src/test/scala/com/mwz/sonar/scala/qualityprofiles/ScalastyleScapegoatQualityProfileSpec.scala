@@ -22,7 +22,6 @@ import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition.{BuiltInQua
 
 /** Tests the correct behavior of the Scalastyle+Scapegoat Quality Profile */
 class ScalastyleScapegoatQualityProfileSpec extends FlatSpec with Inspectors with LoneElement with Matchers {
-
   trait Ctx {
     val context = new Context()
     new ScalastyleScapegoatQualityProfile().define(context)

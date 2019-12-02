@@ -16,30 +16,18 @@
  */
 
 package com.mwz.sonar.scala
-package util
-package syntax
 
-import java.io.File
-import java.nio.file.Path
+import cats.effect.IO
+import com.mwz.sonar.scala.util.Logger
 
-import scala.language.higherKinds
-import scala.util.{Failure, Success, Try}
-
-import cats.syntax.flatMap._
-import cats.{Monad, MonoidK}
-import org.sonar.api.batch.fs.FileSystem
-
-object SonarFileSystem {
-  implicit final class FileSystemOps(private val fs: FileSystem) extends AnyVal {
-    /**
-     * Resolve paths relative to the given file system.
-     */
-    def resolve[F[_]: Monad: MonoidK](toResolve: F[Path]): F[File] =
-      toResolve.flatMap[File] { path =>
-        Try(fs.resolvePath(path.toString)) match {
-          case Failure(_) => MonoidK[F].empty
-          case Success(f) => Monad[F].pure(f)
-        }
-      }
+trait EmptyLogger {
+  implicit val logger: Logger[IO] = new Logger[IO] {
+    override def debug(s: String): IO[Unit] = IO.unit
+    override def info(s: String): IO[Unit] = IO.unit
+    override def warn(s: String): IO[Unit] = IO.unit
+    override def error(s: String): IO[Unit] = IO.unit
+    override def error(s: String, e: Throwable): IO[Unit] = IO.unit
   }
 }
+
+object EmptyLogger extends EmptyLogger

@@ -26,7 +26,6 @@ import org.sonar.api.batch.fs.FileSystem
  * Various Path utilities.
  */
 object PathUtils {
-
   /** Current working directory. */
   def cwd: Path = Paths.get(".").toAbsolutePath.normalize
 

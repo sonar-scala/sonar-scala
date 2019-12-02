@@ -16,30 +16,22 @@
  */
 
 package com.mwz.sonar.scala
-package util
-package syntax
-
-import java.io.File
-import java.nio.file.Path
+package pr
+package github
 
 import scala.language.higherKinds
-import scala.util.{Failure, Success, Try}
 
-import cats.syntax.flatMap._
-import cats.{Monad, MonoidK}
-import org.sonar.api.batch.fs.FileSystem
+import cats.Applicative
+import io.circe.generic.extras.Configuration
+import io.circe.{Encoder, Printer}
+import org.http4s
+import org.http4s.EntityEncoder
+import org.http4s.circe.CirceEntityDecoder
 
-object SonarFileSystem {
-  implicit final class FileSystemOps(private val fs: FileSystem) extends AnyVal {
-    /**
-     * Resolve paths relative to the given file system.
-     */
-    def resolve[F[_]: Monad: MonoidK](toResolve: F[Path]): F[File] =
-      toResolve.flatMap[File] { path =>
-        Try(fs.resolvePath(path.toString)) match {
-          case Failure(_) => MonoidK[F].empty
-          case Success(f) => Monad[F].pure(f)
-        }
-      }
-  }
+object Codec extends CirceEntityDecoder {
+  val defaultPrinter: Printer = Printer.noSpaces.copy(dropNullValues = true)
+  implicit val config: Configuration = Configuration.default.withSnakeCaseMemberNames
+
+  implicit def jsonEncoderOf[F[_]: Applicative, A: Encoder]: EntityEncoder[F, A] =
+    http4s.circe.jsonEncoderWithPrinterOf(defaultPrinter)
 }

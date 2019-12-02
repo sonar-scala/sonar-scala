@@ -9,10 +9,6 @@ project/boot/
 project/project/
 project/plugins/project/
 
-# metals
-.metals
-.bloop
-
 # Scala-IDE specific
 .scala_dependencies
 .worksheet
@@ -37,3 +33,4 @@ project/plugins/project/
 # other
 *.log
 /bin/
+*.orig

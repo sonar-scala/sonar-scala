@@ -22,19 +22,26 @@ import java.nio.file.{Path, Paths}
 
 import scala.util.{Failure, Success, Try}
 
-import cats.implicits._
+import cats.instances.string._
+import cats.syntax.eq._
+import com.mwz.sonar.scala.pr.{GlobalIssues, Issue}
+import com.mwz.sonar.scala.scapegoat.ScapegoatSensor._
 import com.mwz.sonar.scala.util.Log
 import com.mwz.sonar.scala.util.PathUtils._
 import com.mwz.sonar.scala.util.syntax.Optionals._
 import org.sonar.api.batch.fs.{FileSystem, InputFile}
+import org.sonar.api.batch.rule.Severity
+import org.sonar.api.batch.sensor.issue.{NewIssue, NewIssueLocation}
 import org.sonar.api.batch.sensor.{Sensor, SensorContext, SensorDescriptor}
 import org.sonar.api.config.Configuration
 import scalariform.ScalaVersion
 
 /** Main sensor for importing Scapegoat reports to SonarQube */
-final class ScapegoatSensor(scapegoatReportParser: ScapegoatReportParserAPI) extends Sensor {
-  import ScapegoatSensor._ // scalastyle:ignore org.scalastyle.scalariform.ImportGroupingChecker
-
+final class ScapegoatSensor(
+  globalConfig: GlobalConfig,
+  globalIssues: GlobalIssues,
+  scapegoatReportParser: ScapegoatReportParserAPI
+) extends Sensor {
   private[this] val log = Log(classOf[ScapegoatSensor], "scapegoat")
 
   /** Populates the descriptor of this sensor */
@@ -117,17 +124,30 @@ final class ScapegoatSensor(scapegoatReportParser: ScapegoatReportParserAPI) ext
             ) match {
               case Some(rule) =>
                 // if the rule was found, create a new sonarqube issue for it
-                val sonarqubeIssue = context.newIssue().forRule(rule.ruleKey)
-
-                sonarqubeIssue.at(
-                  sonarqubeIssue
+                val newIssue: NewIssue = context.newIssue().forRule(rule.ruleKey)
+                val location: NewIssueLocation =
+                  newIssue
                     .newLocation()
                     .on(file)
                     .at(file.selectLine(scapegoatIssue.line))
                     .message(scapegoatIssue.message)
-                )
 
-                sonarqubeIssue.save()
+                // Open a new issue (if not in pr decoration mode).
+                if (!globalConfig.prDecoration)
+                  newIssue.at(location).save()
+
+                // Keep track of the issues (if not disabled).
+                else if (globalConfig.issueDecoration) {
+                  val issue: Issue =
+                    Issue(
+                      rule.ruleKey,
+                      file,
+                      scapegoatIssue.line,
+                      Severity.valueOf(rule.severity),
+                      scapegoatIssue.text
+                    )
+                  globalIssues.add(issue)
+                }
               case None =>
                 // if the rule was not found,
                 // check if it is because the rule is not activated in the current quality profile,

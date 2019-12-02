@@ -25,7 +25,6 @@ import java.util.Optional
  * Scala.Option <-> Java.Optional conversions.
  */
 object Optionals {
-
   /**
    * Transform Scala Option to a Java Optional.
    */

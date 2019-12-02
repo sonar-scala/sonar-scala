@@ -15,31 +15,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.mwz.sonar.scala
-package util
-package syntax
+package com.mwz.sonar.scala.scapegoat
 
-import java.io.File
-import java.nio.file.Path
+import org.scalatest.{FlatSpec, Matchers}
 
-import scala.language.higherKinds
-import scala.util.{Failure, Success, Try}
-
-import cats.syntax.flatMap._
-import cats.{Monad, MonoidK}
-import org.sonar.api.batch.fs.FileSystem
-
-object SonarFileSystem {
-  implicit final class FileSystemOps(private val fs: FileSystem) extends AnyVal {
-    /**
-     * Resolve paths relative to the given file system.
-     */
-    def resolve[F[_]: Monad: MonoidK](toResolve: F[Path]): F[File] =
-      toResolve.flatMap[File] { path =>
-        Try(fs.resolvePath(path.toString)) match {
-          case Failure(_) => MonoidK[F].empty
-          case Success(f) => Monad[F].pure(f)
-        }
-      }
+class ScapegoatIssueSpec extends FlatSpec with Matchers {
+  "message" should "return a correct message" in {
+    ScapegoatIssue(1, "text", "", "file", "inspection").message shouldBe "text"
+    ScapegoatIssue(1, "text", "snippet", "file", "inspection").message shouldBe "text\nsnippet"
   }
 }

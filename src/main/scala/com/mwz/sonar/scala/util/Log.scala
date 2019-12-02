@@ -18,7 +18,7 @@
 package com.mwz.sonar.scala
 package util
 
-import org.sonar.api.utils.log.{Logger, Loggers}
+import org.sonar.api.utils.log.{Logger => SonarLogger, Loggers => SonarLoggers}
 
 trait Log {
   def debug(s: String): Unit
@@ -30,7 +30,7 @@ trait Log {
 object Log {
   def apply[T](clazz: Class[T], module: String): Log = Log(clazz, Some(module))
   def apply[T](clazz: Class[T], module: Option[String] = None): Log = {
-    val log: Logger = Loggers.get(clazz)
+    val log: SonarLogger = SonarLoggers.get(clazz)
     val prefix: String = "sonar-scala" + module.fold("")("-" + _)
     new Log {
       override def debug(s: String): Unit = log.debug(s"[$prefix] $s")

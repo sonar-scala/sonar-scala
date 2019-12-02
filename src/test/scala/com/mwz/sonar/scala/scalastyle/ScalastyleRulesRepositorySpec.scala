@@ -29,7 +29,6 @@ import org.sonar.api.server.rule.RulesDefinition.{Context, Repository, Rule}
 import org.sonar.api.server.rule.{RuleParamType, RulesDefinition}
 
 class ScalastyleRulesRepositorySpec extends FlatSpec with Matchers with Inspectors with LoneElement {
-
   trait Ctx {
     val context = new Context()
     new ScalastyleRulesRepository().define(context)

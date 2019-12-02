@@ -26,7 +26,7 @@ import com.mwz.sonar.scala.pr.github.PullRequest
 import com.mwz.sonar.scala.pr.github.{Comment, NewComment, NewStatus, User}
 import org.http4s.Uri
 import org.scalacheck.ScalacheckShapeless._
-import org.scalatest.{FlatSpec, Matchers}
+import org.scalatest.{FlatSpec, LoneElement, Matchers}
 import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
 import org.sonar.api.batch.fs.InputFile
 import org.sonar.api.batch.postjob.internal.DefaultPostJobDescriptor
@@ -34,12 +34,19 @@ import org.sonar.api.batch.rule.Severity
 import org.sonar.api.config.internal.MapSettings
 import org.sonar.api.rule.RuleKey
 
-class GithubPrReviewJobSpec extends FlatSpec with Matchers with ScalaCheckDrivenPropertyChecks {
+class GithubPrReviewJobSpec
+    extends FlatSpec
+    with Matchers
+    with LoneElement
+    with ScalaCheckDrivenPropertyChecks {
   trait Ctx {
     val globalConfig = new GlobalConfig(new MapSettings().asConfig)
     val globalIssues = new GlobalIssues
     val githubPrReviewJob = new GithubPrReviewJob(globalConfig, globalIssues)
   }
+
+  val patch =
+    """@@ -2,7 +2,7 @@ scalaVersion := \"2.12.8\"\n libraryDependencies ++= Seq(\n   \"org.sonarsource.update-center\" % \"sonar-update-center-common\" % \"1.23.0.723\",\n   // Scapegoat & scalastyle inspections generator dependencies\n-  \"com.sksamuel.scapegoat\" %% \"scalac-scapegoat-plugin\" % \"1.3.10\",\n+  \"com.sksamuel.scapegoat\" %% \"scalac-scapegoat-plugin\" % \"1.3.11\",\n   \"org.scalastyle\"         %% \"scalastyle\"              % \"1.0.0\",\n   \"org.scalameta\"          %% \"scalameta\"               % \"4.2.3\",\n   \"org.scalatest\"          %% \"scalatest\"               % \"3.0.8\" % Test"""
 
   it should "correctly set the descriptor" in {
     val conf = new GlobalConfig(new MapSettings().asConfig())
@@ -79,14 +86,10 @@ class GithubPrReviewJobSpec extends FlatSpec with Matchers with ScalaCheckDriven
           issue.file -> List(issue.copy(line = 5))
         )
         val files = List(
-          File(
-            issue.file.toString,
-            "status",
-            """@@ -2,7 +2,7 @@ scalaVersion := \"2.12.8\"\n libraryDependencies ++= Seq(\n   \"org.sonarsource.update-center\" % \"sonar-update-center-common\" % \"1.23.0.723\",\n   // Scapegoat & scalastyle inspections generator dependencies\n-  \"com.sksamuel.scapegoat\" %% \"scalac-scapegoat-plugin\" % \"1.3.10\",\n+  \"com.sksamuel.scapegoat\" %% \"scalac-scapegoat-plugin\" % \"1.3.11\",\n   \"org.scalastyle\"         %% \"scalastyle\"              % \"1.0.0\",\n   \"org.scalameta\"          %% \"scalameta\"               % \"4.2.3\",\n   \"org.scalatest\"          %% \"scalatest\"               % \"3.0.8\" % Test"""
-          )
+          File(issue.file.toString, "status", patch)
         )
         val patches = files.groupBy(_.filename).mapValues(_.head)
-        val markdown: Markdown = Markdown.inline(baseUrl, issue)
+        val markdown = Markdown.inline(baseUrl, issue)
         val comments = List(
           Comment(1, issue.file.toString, Some(5), user, markdown.text)
         )
@@ -94,6 +97,61 @@ class GithubPrReviewJobSpec extends FlatSpec with Matchers with ScalaCheckDriven
         githubPrReviewJob
           .newComments[IO](baseUrl, user, pr, comments, files, patches, issues)
           .unsafeRunSync() shouldBe empty
+    }
+  }
+
+  it should "create new comments" in new Ctx with EmptyLogger {
+    forAll {
+      (
+        baseUrl: Uri,
+        user: User,
+        pr: PullRequest,
+        issue: Issue
+      ) =>
+        val issues = Map(
+          issue.file -> List(issue.copy(line = 5))
+        )
+        val files = List(
+          File(issue.file.toString, "status", patch)
+        )
+        val patches = files.groupBy(_.filename).mapValues(_.head)
+        val markdown = Markdown.inline(baseUrl, issue)
+
+        val expected = NewComment(markdown.text, pr.head.sha, issue.file.toString, 5)
+
+        githubPrReviewJob
+          .newComments[IO](baseUrl, user, pr, List.empty, files, patches, issues)
+          .unsafeRunSync()
+          .loneElement shouldBe expected
+    }
+  }
+
+  it should "ignore outdated comments" in new Ctx with EmptyLogger {
+    forAll {
+      (
+        baseUrl: Uri,
+        user: User,
+        pr: PullRequest,
+        issue: Issue
+      ) =>
+        val issues = Map(
+          issue.file -> List(issue.copy(line = 5))
+        )
+        val files = List(
+          File(issue.file.toString, "status", patch)
+        )
+        val patches = files.groupBy(_.filename).mapValues(_.head)
+        val markdown = Markdown.inline(baseUrl, issue)
+        val comments = List(
+          Comment(1, issue.file.toString, None, user, markdown.text)
+        )
+
+        val expected = NewComment(markdown.text, pr.head.sha, issue.file.toString, 5)
+
+        githubPrReviewJob
+          .newComments[IO](baseUrl, user, pr, comments, files, patches, issues)
+          .unsafeRunSync()
+          .loneElement shouldBe expected
     }
   }
 

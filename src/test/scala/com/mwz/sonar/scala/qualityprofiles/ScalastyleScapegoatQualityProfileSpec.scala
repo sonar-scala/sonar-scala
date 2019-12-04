@@ -23,7 +23,11 @@ import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 
 /** Tests the correct behavior of the Scalastyle+Scapegoat Quality Profile */
-class ScalastyleScapegoatQualityProfileSpec extends AnyFlatSpec with Inspectors with LoneElement with Matchers {
+class ScalastyleScapegoatQualityProfileSpec
+    extends AnyFlatSpec
+    with Inspectors
+    with LoneElement
+    with Matchers {
   trait Ctx {
     val context = new Context()
     new ScalastyleScapegoatQualityProfile().define(context)

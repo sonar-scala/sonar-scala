@@ -3,6 +3,7 @@ import java.time.Year
 import de.heikoseeberger.sbtheader.License
 import org.sonar.updatecenter.common.PluginManifest
 import sbt._
+import sbt.librarymanagement.Resolver
 import sbtrelease.ReleasePlugin.autoImport.ReleaseTransformations._
 import sbtrelease.Version.Bump.Minor
 
@@ -34,6 +35,7 @@ scalacOptions := Seq(
   "utf8",
   "-feature",
   "-language:reflectiveCalls",
+  "-Ypartial-unification",
   "-Yrangepos",
   "-Ywarn-unused-import"
 )
@@ -57,19 +59,38 @@ sourceGenerators in Compile ++= Seq(
 
 // Lib dependencies
 val sonarVersion = "7.9"
+val circe = "0.12.3"
+val http4s = "0.20.15"
 libraryDependencies ++= List(
-  "org.sonarsource.sonarqube" % "sonar-plugin-api" % sonarVersion % Provided,
-  "org.slf4j"                 % "slf4j-api"        % "1.7.29" % Provided,
-  "org.typelevel"             %% "cats-core"       % "2.0.0",
-  "org.scalariform"           %% "scalariform"     % "0.2.10",
-  "org.scalastyle"            %% "scalastyle"      % "1.0.0",
-  "org.scala-lang.modules"    %% "scala-xml"       % "1.2.0",
-  "org.scalatest"             %% "scalatest"       % "3.1.0" % Test,
-  "org.mockito"               %% "mockito-scala"   % "1.7.1" % Test
+  "org.sonarsource.sonarqube"  % "sonar-plugin-api"           % sonarVersion % Provided,
+  "org.slf4j"                  % "slf4j-api"                  % "1.7.29" % Provided,
+  "org.typelevel"              %% "cats-core"                 % "2.0.0",
+  "org.typelevel"              %% "cats-effect"               % "2.0.0",
+  "org.typelevel"              %% "mouse"                     % "0.23",
+  "io.circe"                   %% "circe-core"                % circe,
+  "io.circe"                   %% "circe-generic"             % circe,
+  "org.http4s"                 %% "http4s-blaze-client"       % http4s,
+  "io.circe"                   %% "circe-generic-extras"      % "0.12.2",
+  "org.http4s"                 %% "http4s-circe"              % http4s,
+  "org.scalariform"            %% "scalariform"               % "0.2.10",
+  "org.scalastyle"             %% "scalastyle"                % "1.0.0",
+  "org.scala-lang.modules"     %% "scala-xml"                 % "1.2.0",
+  "org.http4s"                 %% "http4s-blaze-server"       % http4s % Test,
+  "org.http4s"                 %% "http4s-dsl"                % http4s % Test,
+  "org.scalatest"              %% "scalatest"                 % "3.1.0" % Test,
+  "org.scalatestplus"          %% "mockito-1-10"              % "3.1.0.0" % Test,
+  "org.scalatestplus"          %% "scalacheck-1-14"           % "3.1.0.0" % Test,
+  "org.scalacheck"             %% "scalacheck"                % "1.14.2" % Test,
+  "com.github.alexarchambault" %% "scalacheck-shapeless_1.14" % "1.2.3" % Test,
+  "org.mockito"                %% "mockito-scala"             % "1.7.1" % Test
 )
 
-// Adding a resolver to the Artima maven repo, so sbt can download the Artima SuperSafe Scala compiler
-resolvers += "Artima Maven Repository" at "https://repo.artima.com/releases"
+// Project resolvers
+resolvers ++= List(
+  Resolver.sonatypeRepo("snapshots"),
+  Resolver.sonatypeRepo("releases"),
+  "Artima Maven Repository" at "https://repo.artima.com/releases"
+)
 
 // Manifest attributes
 packageOptions in (Compile, packageBin) += Package.ManifestAttributes(
@@ -149,7 +170,12 @@ logBuffered in Test := false
 testOptions in Test += Tests.Argument(TestFrameworks.ScalaTest, "-oDTF")
 
 // scalafix
-scalafixDependencies in ThisBuild += "com.nequissimus" %% "sort-imports" % "0.3.0"
-addCompilerPlugin(scalafixSemanticdb)
+scalafixDependencies in ThisBuild += "com.nequissimus" %% "sort-imports" % "0.3.1"
 addCommandAlias("fix", "all compile:scalafix test:scalafix")
 addCommandAlias("fixCheck", ";compile:scalafix --check ;test:scalafix --check")
+
+// plugins
+addCompilerPlugin(scalafixSemanticdb)
+addCompilerPlugin("com.olegpy"      %% "better-monadic-for" % "0.3.1")
+addCompilerPlugin("org.typelevel"   %% "kind-projector"     % "0.10.0")
+addCompilerPlugin("org.scalamacros" % "paradise"            % "2.1.1" cross CrossVersion.full)

@@ -30,8 +30,9 @@ import org.scalatest.flatspec.AnyFlatSpec
 
 /** Tests the Scoverage Sensor */
 class ScoverageSensorSpec extends AnyFlatSpec with SensorContextMatchers with LoneElement {
+  val globalConfig = new GlobalConfig(new MapSettings().asConfig)
   val scoverageReportParser = new TestScoverageReportParser()
-  val scoverageSensor = new ScoverageSensor(scoverageReportParser)
+  val scoverageSensor = new ScoverageSensor(globalConfig, scoverageReportParser)
 
   behavior of "Scoverage Sensor"
 

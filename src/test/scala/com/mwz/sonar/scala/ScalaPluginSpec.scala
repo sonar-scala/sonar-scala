@@ -32,38 +32,47 @@ class ScalaPluginSpec extends AnyFlatSpec with Matchers {
   val context = new Plugin.Context(runtime)
   new ScalaPlugin().define(context)
 
-  "Scala plugin" should "provide scala sensor" in {
-    assert(context.getExtensions.contains(classOf[Scala]))
-    assert(context.getExtensions.contains(classOf[sensor.ScalaSensor]))
+  it should "provide global config" in {
+    context.getExtensions should contain(classOf[GlobalConfig])
+  }
+
+  it should "provide scala sensor" in {
+    context.getExtensions should contain(classOf[Scala])
+    context.getExtensions should contain(classOf[sensor.ScalaSensor])
+  }
+
+  it should "provide Github pr review job" in {
+    context.getExtensions should contain(classOf[pr.GlobalIssues])
+    context.getExtensions should contain(classOf[pr.GithubPrReviewJob])
   }
 
   it should "provide Scalastyle repository, quality profile & sensor" in {
-    assert(context.getExtensions.contains(classOf[scalastyle.ScalastyleRulesRepository]))
-    assert(context.getExtensions.contains(classOf[scalastyle.ScalastyleQualityProfile]))
-    assert(context.getExtensions.contains(classOf[scalastyle.ScalastyleChecker]))
-    assert(context.getExtensions.contains(classOf[scalastyle.ScalastyleSensor]))
+    context.getExtensions should contain(classOf[scalastyle.ScalastyleRulesRepository])
+    context.getExtensions should contain(classOf[scalastyle.ScalastyleQualityProfile])
+    context.getExtensions should contain(classOf[scalastyle.ScalastyleChecker])
+    context.getExtensions should contain(classOf[scalastyle.ScalastyleSensor])
   }
 
   it should "provide scapegoat repository, quality profile & sensor" in {
-    assert(context.getExtensions.contains(classOf[scapegoat.ScapegoatRulesRepository]))
-    assert(context.getExtensions.contains(classOf[scapegoat.ScapegoatQualityProfile]))
-    assert(context.getExtensions.contains(classOf[scapegoat.ScapegoatReportParser]))
-    assert(context.getExtensions.contains(classOf[scapegoat.ScapegoatSensor]))
+    context.getExtensions should contain(classOf[scapegoat.ScapegoatRulesRepository])
+    context.getExtensions should contain(classOf[scapegoat.ScapegoatQualityProfile])
+    context.getExtensions should contain(classOf[scapegoat.ScapegoatReportParser])
+    context.getExtensions should contain(classOf[scapegoat.ScapegoatSensor])
   }
 
   it should "provide additional built-in quality profiles" in {
-    assert(context.getExtensions.contains(classOf[qualityprofiles.ScalastyleScapegoatQualityProfile]))
-    assert(context.getExtensions.contains(classOf[qualityprofiles.RecommendedQualityProfile]))
+    context.getExtensions should contain(classOf[qualityprofiles.ScalastyleScapegoatQualityProfile])
+    context.getExtensions should contain(classOf[qualityprofiles.RecommendedQualityProfile])
   }
 
   it should "provide scoverage sensor" in {
-    assert(context.getExtensions.contains(classOf[scoverage.ScoverageMetrics]))
-    assert(context.getExtensions.contains(classOf[scoverage.ScoverageReportParser]))
-    assert(context.getExtensions.contains(classOf[scoverage.ScoverageSensor]))
+    context.getExtensions should contain(classOf[scoverage.ScoverageMetrics])
+    context.getExtensions should contain(classOf[scoverage.ScoverageReportParser])
+    context.getExtensions should contain(classOf[scoverage.ScoverageSensor])
   }
 
   it should "provide junit sensor" in {
-    assert(context.getExtensions.contains(classOf[junit.JUnitReportParser]))
-    assert(context.getExtensions.contains(classOf[junit.JUnitSensor]))
+    context.getExtensions should contain(classOf[junit.JUnitReportParser])
+    context.getExtensions should contain(classOf[junit.JUnitSensor])
   }
 }

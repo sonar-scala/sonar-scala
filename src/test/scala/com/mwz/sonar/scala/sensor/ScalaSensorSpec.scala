@@ -23,12 +23,14 @@ import java.nio.file.Paths
 import org.scalatest.LoneElement
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder
 import org.sonar.api.batch.sensor.internal.{DefaultSensorDescriptor, SensorContextTester}
+import org.sonar.api.config.internal.MapSettings
 import org.sonar.api.measures.{CoreMetrics => CM}
 import org.scalatest.flatspec.AnyFlatSpec
 
 /** Tests the Scala Sensor */
 class ScalaSensorSpec extends AnyFlatSpec with SensorContextMatchers with LoneElement {
-  val sensor = new ScalaSensor()
+  val globalConfig = new GlobalConfig(new MapSettings().asConfig)
+  val sensor = new ScalaSensor(globalConfig)
   behavior of "A ScalaSensor"
 
   it should "correctly set descriptor" in {

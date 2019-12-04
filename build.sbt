@@ -60,7 +60,7 @@ sourceGenerators in Compile ++= Seq(
 // Lib dependencies
 val sonarVersion = "7.9"
 val circe = "0.12.3"
-val http4s = "0.20.12"
+val http4s = "0.20.15"
 libraryDependencies ++= List(
   "org.sonarsource.sonarqube"  % "sonar-plugin-api"           % sonarVersion % Provided,
   "org.slf4j"                  % "slf4j-api"                  % "1.7.29" % Provided,

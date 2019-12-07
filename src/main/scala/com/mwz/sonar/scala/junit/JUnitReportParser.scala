@@ -30,6 +30,7 @@ import org.sonar.api.batch.fs.{FilePredicate, FileSystem, InputFile}
 import org.sonar.api.scanner.ScannerSide
 
 trait JUnitReportParserAPI {
+
   /**
    * Parse JUnit report files from the given directory
    * and return a map from input files to the parsed reports.

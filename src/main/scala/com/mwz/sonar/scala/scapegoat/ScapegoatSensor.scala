@@ -153,8 +153,8 @@ final class ScapegoatSensor(
                 // check if it is because the rule is not activated in the current quality profile,
                 // or if it is because the inspection does not exist in the scapegoat rules repository
                 val inspectionExists =
-                  ScapegoatInspections.AllInspections.exists(
-                    inspection => inspection.id === scapegoatIssue.inspectionId
+                  ScapegoatInspections.AllInspections.exists(inspection =>
+                    inspection.id === scapegoatIssue.inspectionId
                   )
                 if (inspectionExists)
                   log.debug(

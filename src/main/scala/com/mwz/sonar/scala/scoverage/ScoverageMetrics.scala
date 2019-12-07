@@ -34,6 +34,7 @@ final class ScoverageMetrics extends Metrics {
 }
 
 object ScoverageMetrics {
+
   /** Builds a new [[Metric]] */
   private def buildMetric[T <: java.io.Serializable](
     metricKey: String,

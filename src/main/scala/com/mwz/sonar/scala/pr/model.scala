@@ -33,6 +33,7 @@ final case class Failure(error: Throwable) extends PrStatus
 
 final case class ReviewStatus(blocker: Int, critical: Int)
 object ReviewStatus {
+
   /**
    * Get description of the review status.
    */
@@ -55,6 +56,7 @@ object ReviewStatus {
 
 final case class Markdown(text: String) extends AnyVal
 object Markdown {
+
   /**
    * Generate an inline comment.
    * The format is: "SEVERITY: TEXT ([more](link to the rule))"

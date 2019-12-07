@@ -23,6 +23,7 @@ import cats.kernel.Semigroup
 import cats.syntax.semigroup.catsSyntaxSemigroup
 
 package object scoverage {
+
   /**
    *  The coverage information of an entire project.
    *  It is composed of:

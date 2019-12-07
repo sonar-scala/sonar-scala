@@ -24,6 +24,7 @@ import org.sonar.api.server.rule.RulesDefinition
 
 /** Defines a rules repository for the Scapegoat inspections */
 final class ScapegoatRulesRepository extends RulesDefinition {
+
   /** Defines the rules in the repository */
   override def define(context: RulesDefinition.Context): Unit = {
     // create an empty repository

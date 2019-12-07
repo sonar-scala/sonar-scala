@@ -31,6 +31,7 @@ import org.sonar.api.batch.fs.FileSystem
 
 object SonarFileSystem {
   implicit final class FileSystemOps(private val fs: FileSystem) extends AnyVal {
+
     /**
      * Resolve paths relative to the given file system.
      */

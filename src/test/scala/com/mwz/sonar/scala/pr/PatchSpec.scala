@@ -38,7 +38,18 @@ class PatchSpec extends FlatSpec with Matchers with EitherValues {
     Patch.parse(patch("patches/additions.patch")).right.value shouldBe expected
   }
 
-  it should "parse successfully a patch with deletions only" in {}
+  it should "parse successfully a patch with deletions only" in {
+    val expected: Map[FileLine, PatchLine] =
+      List(
+        List(26 -> 1, 27 -> 2, 28 -> 3, 29 -> 6, 30 -> 7, 31 -> 8),
+        List(43 -> 10, 44 -> 11, 45 -> 12, 46 -> 15, 47 -> 16, 48 -> 20, 49 -> 21, 50 -> 22)
+      ).flatten.map {
+        case (k, v) =>
+          FileLine(k) -> PatchLine(v)
+      }.toMap
+
+    Patch.parse(patch("patches/deletions.patch")).right.value shouldBe expected
+  }
 
   it should "parse successfully a patch with additions and deletions" in {}
 }

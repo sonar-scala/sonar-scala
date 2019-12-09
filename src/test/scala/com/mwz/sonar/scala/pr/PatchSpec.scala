@@ -20,13 +20,20 @@ package com.mwz.sonar.scala.pr
 import scala.io.Source
 
 import org.scalatest.{EitherValues, FlatSpec, Matchers}
+import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
 
-class PatchSpec extends FlatSpec with Matchers with EitherValues {
+class PatchSpec extends FlatSpec with Matchers with EitherValues with ScalaCheckDrivenPropertyChecks {
   def patch(path: String): String =
     Source
       .fromResource(path)
       .getLines()
       .mkString("\n")
+
+  it should "fail to parse an invalid patch" in {
+    forAll { s: String =>
+      Patch.parse(s) shouldBe Left(PatchError(s))
+    }
+  }
 
   it should "parse successfully a patch with additions only" in {
     val expected: Map[FileLine, PatchLine] =

@@ -74,4 +74,5 @@ object Patch {
           }
       }
       .map(_.fileToPatch)
+      .filterOrElse(_.nonEmpty, PatchError(patch))
 }

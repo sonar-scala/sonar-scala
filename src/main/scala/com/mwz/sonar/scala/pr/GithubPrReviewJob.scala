@@ -120,7 +120,7 @@ final class GithubPrReviewJob(
       // Group patches by file names - `filename` is the full path relative to the root
       // of the project, so it should be unique. Raise an error when no files are present.
       prPatches <- Sync[F].fromEither(Either.fromOption(NonEmptyList.fromList(files), NoFilesInPR))
-      allPatches = prPatches.groupByNem(_.filename).map(_.head).toSortedMap.toMap
+      allPatches = prPatches.groupByNem(_.filename).map(_.head).toSortedMap
       // Filter out issues which aren't related to any files in the PR.
       issues = globalIssues.allIssues.filterKeys(f => allPatches.keySet.contains(f.toString))
       // Get new comments and post them.

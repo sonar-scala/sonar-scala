@@ -58,7 +58,7 @@ sourceGenerators in Compile ++= Seq(
 )
 
 // Lib dependencies
-val sonarVersion = "7.9"
+val sonarVersion = "7.9.2"
 val circe = "0.12.3"
 val http4s = "0.20.15"
 libraryDependencies ++= List(

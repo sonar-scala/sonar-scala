@@ -35,7 +35,9 @@ import com.mwz.sonar.scala.pr.github.PullRequest
 import com.mwz.sonar.scala.pr.github.Status
 import com.mwz.sonar.scala.pr.github.{Comment, NewComment, NewStatus, User}
 import com.mwz.sonar.scala.util.Logger
+import org.http4s
 import org.http4s.Uri
+import org.http4s.client.UnexpectedStatus
 import org.scalacheck.ScalacheckShapeless._
 import org.scalatest.{FlatSpec, LoneElement, Matchers}
 import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
@@ -87,6 +89,50 @@ class GithubPrReviewJobSpec
     job.describe(descriptor)
 
     descriptor.name shouldBe "Github PR review job"
+  }
+
+  it should "fail for invalid github token" in new Ctx with IOCtx with EmptyLogger {
+    forAll { baseUrl: Uri =>
+      withTracing { trace =>
+        val github = new GithubNotImpl[IO] {
+          override def authenticatedUser =
+            trace.update("authenticatedUser" :: _) >>
+            IO.raiseError(UnexpectedStatus(http4s.Status.Unauthorized))
+        }
+
+        val result = githubPrReviewJob().run[IO](baseUrl, github)
+
+        result.attempt.unsafeRunSync() shouldBe Left(UnexpectedStatus(http4s.Status.Unauthorized))
+        trace.get.unsafeRunSync().loneElement shouldBe "authenticatedUser"
+      }
+    }
+  }
+
+  it should "report a failure status if review returns an error" in new Ctx with IOCtx with EmptyLogger {
+    forAll { (baseUrl: Uri, user: User, pr: PullRequest, status: Status) =>
+      withTracing { trace =>
+        val github = new GithubNotImpl[IO] {
+          override def authenticatedUser = trace.update("authenticatedUser" :: _) >> IO.pure(user)
+          override def pullRequest = trace.update("pullRequest" :: _) >> IO.pure(pr)
+          override def comments = trace.update("comments" :: _) >> IO.pure(List.empty)
+          override def files = trace.update("files" :: _) >> IO.pure(List.empty)
+          override def createStatus(sha: String, newStatus: NewStatus) =
+            trace.update("createStatus - " + newStatus.state :: _) >> IO.pure(status)
+        }
+
+        val result = githubPrReviewJob().run[IO](baseUrl, github)
+
+        result.attempt.unsafeRunSync() shouldBe Right(())
+        trace.get.unsafeRunSync() should contain theSameElementsAs List(
+          "authenticatedUser",
+          "pullRequest",
+          "comments",
+          "files",
+          "createStatus - pending",
+          "createStatus - failure"
+        )
+      }
+    }
   }
 
   it should "not create a review if no files exist in a PR" in new Ctx with IOCtx with EmptyLogger {

@@ -132,7 +132,9 @@ final class GithubPrReviewJob(
       _ <- commentsToPost
         .sortBy(c => (c.path, c.position))
         .traverse { comment =>
-          Logger[F].debug(s"Posting a new comment $comment.") >>
+          Logger[F].debug(
+            s"Posting a new comment for ${comment.path}:${comment.position} - ${comment.body}"
+          ) >>
           github.createComment(comment)
         }
     } yield reviewStatus(issues)

@@ -23,10 +23,11 @@ import scala.language.higherKinds
 import cats.data.NonEmptyList
 import cats.effect.ContextShift
 import cats.effect.IO
-import cats.effect.concurrent.Ref
 import cats.syntax.flatMap._
 import com.mwz.sonar.scala.EmptyLogger
 import com.mwz.sonar.scala.GlobalConfig
+import com.mwz.sonar.scala.WithLogging
+import com.mwz.sonar.scala.WithTracing
 import com.mwz.sonar.scala.pr.Generators._
 import com.mwz.sonar.scala.pr.github.File
 import com.mwz.sonar.scala.pr.github.Github
@@ -49,7 +50,9 @@ class GithubPrReviewJobSpec
     extends FlatSpec
     with Matchers
     with LoneElement
-    with ScalaCheckDrivenPropertyChecks {
+    with ScalaCheckDrivenPropertyChecks
+    with WithTracing
+    with WithLogging {
 
   trait Ctx {
     val globalConfig = new GlobalConfig(new MapSettings().asConfig)
@@ -63,18 +66,6 @@ class GithubPrReviewJobSpec
   trait IOCtx {
     implicit val ec: ExecutionContext = ExecutionContext.global
     implicit val cs: ContextShift[IO] = IO.contextShift(ec)
-    def createCalls = Ref.unsafe[IO, List[String]](List.empty)
-    def createLogs = {
-      val logs = Ref.unsafe[IO, List[(String, String)]](List.empty)
-      implicit val logger: Logger[IO] = new Logger[IO] {
-        def debug(s: String): IO[Unit] = logs.update(("debug", s) :: _)
-        def info(s: String): IO[Unit] = logs.update(("info", s) :: _)
-        def warn(s: String): IO[Unit] = logs.update(("warn", s) :: _)
-        def error(s: String): IO[Unit] = logs.update(("error", s) :: _)
-        def error(s: String, e: Throwable): IO[Unit] = logs.update(("error", s) :: _)
-      }
-      (logs, logger)
-    }
   }
 
   trait GithubNotImpl[F[_]] extends Github[F] {
@@ -100,58 +91,102 @@ class GithubPrReviewJobSpec
 
   it should "not create a review if no files exist in a PR" in new Ctx with IOCtx with EmptyLogger {
     forAll { (baseUrl: Uri, user: User, pr: PullRequest) =>
-      val calls = createCalls
-      val github = new GithubNotImpl[IO] {
-        override def comments = calls.update("comments" :: _) >> IO.pure(List.empty)
-        override def files = calls.update("files" :: _) >> IO.pure(List.empty)
-      }
-      val result = githubPrReviewJob().review[IO](baseUrl, github, user, pr)
+      withTracing { trace =>
+        val github = new GithubNotImpl[IO] {
+          override def comments = trace.update("comments" :: _) >> IO.pure(List.empty)
+          override def files = trace.update("files" :: _) >> IO.pure(List.empty)
+        }
+        val result = githubPrReviewJob().review[IO](baseUrl, github, user, pr)
 
-      result.attempt.unsafeRunSync() shouldBe Left(NoFilesInPR)
-      calls.get.unsafeRunSync() should contain theSameElementsAs List("files", "comments")
+        result.attempt.unsafeRunSync() shouldBe Left(NoFilesInPR)
+        trace.get.unsafeRunSync() should contain theSameElementsAs List("files", "comments")
+      }
     }
   }
 
   it should "not post any comments for no issues" in new Ctx with IOCtx with EmptyLogger {
     forAll { (baseUrl: Uri, user: User, pr: PullRequest, prFiles: NonEmptyList[File]) =>
-      val calls = createCalls
-      val github = new GithubNotImpl[IO] {
-        override def comments = calls.update("comments" :: _) >> IO.pure(List.empty)
-        override def files = calls.update("files" :: _) >> IO.pure(prFiles.toList)
-      }
-      val result = githubPrReviewJob().review[IO](baseUrl, github, user, pr)
+      withTracing { trace =>
+        val github = new GithubNotImpl[IO] {
+          override def comments = trace.update("comments" :: _) >> IO.pure(List.empty)
+          override def files = trace.update("files" :: _) >> IO.pure(prFiles.toList)
+        }
+        val result = githubPrReviewJob().review[IO](baseUrl, github, user, pr)
 
-      result.attempt.unsafeRunSync() shouldBe Right(ReviewStatus(blocker = 0, critical = 0))
-      calls.get.unsafeRunSync() should contain theSameElementsAs List("files", "comments")
+        result.attempt.unsafeRunSync() shouldBe Right(ReviewStatus(blocker = 0, critical = 0))
+        trace.get.unsafeRunSync() should contain theSameElementsAs List("files", "comments")
+      }
     }
   }
 
   it should "log and skip patches which can't be parsed" in new Ctx with IOCtx {
     forAll { (baseUrl: Uri, user: User, pr: PullRequest, prFiles: NonEmptyList[File]) =>
-      val calls = createCalls
-      val (logs, implicit0(logger: Logger[IO])) = createLogs
-      val github = new GithubNotImpl[IO] {
-        override def comments = calls.update("comments" :: _) >> IO.pure(List.empty)
-        override def files = calls.update("files" :: _) >> IO.pure(prFiles.toList)
+      withTracing { trace =>
+        withLogging {
+          case (logs, implicit0(logger: Logger[IO])) =>
+            val github = new GithubNotImpl[IO] {
+              override def comments = trace.update("comments" :: _) >> IO.pure(List.empty)
+              override def files = trace.update("files" :: _) >> IO.pure(prFiles.toList)
+            }
+            val file: InputFile = TestInputFileBuilder.create("", prFiles.head.filename).build()
+            val issue = Issue(RuleKey.of("repo", "rule"), file, 1, Severity.CRITICAL, "msg")
+
+            val issues = new GlobalIssues
+            issues.add(issue)
+            val result = githubPrReviewJob(globalIssues = issues).review[IO](baseUrl, github, user, pr)
+
+            result.attempt.unsafeRunSync() shouldBe Right(ReviewStatus(blocker = 0, critical = 1))
+            trace.get.unsafeRunSync() should contain theSameElementsAs List("files", "comments")
+            logs.get.unsafeRunSync().collect {
+              case (level, msg) if level === LogLevel.Error => msg
+            } should contain theSameElementsAs List(
+              s"Error parsing patch for ${prFiles.head.filename}."
+            )
+        }
       }
-      val file: InputFile = TestInputFileBuilder.create("", prFiles.head.filename).build()
-      val issue = Issue(RuleKey.of("repo", "rule"), file, 1, Severity.CRITICAL, "msg")
-
-      val issues = new GlobalIssues
-      issues.add(issue)
-      val result = githubPrReviewJob(globalIssues = issues).review[IO](baseUrl, github, user, pr)
-
-      result.attempt.unsafeRunSync() shouldBe Right(ReviewStatus(blocker = 0, critical = 1))
-      calls.get.unsafeRunSync() should contain theSameElementsAs List("files", "comments")
-      logs.get.unsafeRunSync().collect {
-        case (level, msg) if level === "error" => msg
-      } should contain theSameElementsAs List(
-        s"Error parsing patch for ${prFiles.head.filename}."
-      )
     }
   }
 
-  it should "post comments for pr issues" in new Ctx with IOCtx with EmptyLogger {}
+  it should "post comments for pr issues" in new Ctx with IOCtx with EmptyLogger {
+    forAll { (baseUrl: Uri, user: User, pr: PullRequest, prFile: File) =>
+      withTracing { trace =>
+        withLogging {
+          case (logs, implicit0(logger: Logger[IO])) =>
+            val fileWithPatch = prFile.copy(patch = patch)
+            val github = new GithubNotImpl[IO] {
+              override def comments = trace.update("comments" :: _) >> IO.pure(List.empty)
+              override def createComment(comment: NewComment) =
+                trace.update("createComment" :: _) >>
+                IO.pure(Comment(1, comment.path, Some(comment.position), user, comment.body))
+              override def files = trace.update("files" :: _) >> IO.pure(List(fileWithPatch))
+            }
+            val file: InputFile = TestInputFileBuilder.create("", fileWithPatch.filename).build()
+            val issue = Issue(RuleKey.of("repo", "rule"), file, 5, Severity.BLOCKER, "msg")
+            val markdown: Markdown = Markdown.inline(baseUrl, issue)
+
+            val issues = new GlobalIssues
+            issues.add(issue)
+            val result = githubPrReviewJob(globalIssues = issues).review[IO](baseUrl, github, user, pr)
+
+            result.attempt.unsafeRunSync() shouldBe Right(ReviewStatus(blocker = 1, critical = 0))
+            trace.get.unsafeRunSync() should contain theSameElementsAs List(
+              "files",
+              "comments",
+              "createComment"
+            )
+            logs.get.unsafeRunSync().collect {
+              case (level, msg)
+                  if level === LogLevel.Info ||
+                  (level === LogLevel.Debug && msg.contains("Posting a new comment for")) =>
+                msg
+            } should contain theSameElementsAs List(
+              "Posting new comments to Github.",
+              s"Posting a new comment for ${prFile.filename}:${issue.line} - ${markdown.text}"
+            )
+        }
+      }
+    }
+  }
 
   it should "not create new comments if there are no issues" in new Ctx with EmptyLogger {
     forAll {

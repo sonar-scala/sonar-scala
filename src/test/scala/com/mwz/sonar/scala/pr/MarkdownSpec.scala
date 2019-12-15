@@ -43,7 +43,7 @@ class MarkdownSpec extends FlatSpec with Matchers {
 
     val expected: Markdown =
       Markdown(
-        "MINOR: message " +
+        "![minor](https://static.sonar-scala.com/img/severity-minor.svg 'Severity: minor') message " +
         "([more](https://test.com/coding_rules?open=repo%3Arule&rule_key=repo%3Arule))"
       )
 

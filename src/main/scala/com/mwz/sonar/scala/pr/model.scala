@@ -61,11 +61,12 @@ object Markdown {
    * The format is: "SEVERITY: TEXT ([more](link to the rule))"
    */
   def inline(baseUrl: Uri, issue: Issue): Markdown = {
+    val severity: String = issue.severity.name.toLowerCase
+    val img: String = s"https://static.sonar-scala.com/img/severity-${severity}.svg"
     val ruleUri: Uri =
       (baseUrl / "coding_rules")
         .withQueryParam("open", issue.key.toString)
         .withQueryParam("rule_key", issue.key.toString)
-    // TODO: Add severity image.
-    Markdown(s"${issue.severity.name}: ${issue.message} ([more]($ruleUri))")
+    Markdown(s"![$severity]($img 'Severity: $severity') ${issue.message} ([more]($ruleUri))")
   }
 }

@@ -35,6 +35,12 @@ trait SonarLogTester extends BeforeAndAfter { this: Suite =>
   def logs: Seq[String] =
     LogInterceptors.get().asInstanceOf[ListInterceptor].logs.asScala
 
+  def getLogs: Seq[LogAndArguments] =
+    LogInterceptors.get().asInstanceOf[ListInterceptor].getLogs().asScala
+
   def logsFor(level: LoggerLevel): Seq[String] =
     LogInterceptors.get().asInstanceOf[ListInterceptor].logs(level).asScala
+
+  def getLogsFor(level: LoggerLevel): Seq[LogAndArguments] =
+    LogInterceptors.get().asInstanceOf[ListInterceptor].getLogs(level).asScala
 }

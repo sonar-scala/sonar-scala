@@ -25,6 +25,7 @@ import org.scalatest.matchers.should.Matchers
 
 /** Custom matchers to test properties of sensor contexts */
 trait SensorContextMatchers extends Matchers {
+
   /** Checks that a sensor context have an expected value for some metric */
   def metric[T <: java.io.Serializable](
     componentKey: String,

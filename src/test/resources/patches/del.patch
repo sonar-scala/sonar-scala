@@ -1,0 +1,23 @@
+@@ -26,8 +26,6 @@ sealed trait ReviewError extends Exception
+ case object NoFilesInPR extends ReviewError
+ 
+ sealed trait PrStatus extends Product with Serializable
+-case object Pending extends PrStatus
+-case object Success extends PrStatus
+ final case class Error(reviewStatus: ReviewStatus) extends PrStatus
+ final case class Failure(error: Throwable) extends PrStatus
+ 
+@@ -45,13 +43,8 @@ object ReviewStatus {
+         s"$blockers blocker${form(blockers)}"
+       case ReviewStatus(_, critical) if critical > 0 =>
+         s"$critical critical issue${form(critical)}"
+-      case _ =>
+-        "no critical or blocker issues"
+     }
+   }
+-
+-  private[pr] def form(i: Int): String =
+-    if (i > 1) "s" else ""
+ }
+ 
+ final case class Markdown(text: String) extends AnyVal

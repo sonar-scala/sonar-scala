@@ -80,7 +80,7 @@ libraryDependencies ++= List(
   "org.scalatest"              %% "scalatest"                 % "3.1.0" % Test,
   "org.scalatestplus"          %% "mockito-1-10"              % "3.1.0.0" % Test,
   "org.scalatestplus"          %% "scalacheck-1-14"           % "3.1.0.0" % Test,
-  "org.scalacheck"             %% "scalacheck"                % "1.14.2" % Test,
+  "org.scalacheck"             %% "scalacheck"                % "1.14.3" % Test,
   "com.github.alexarchambault" %% "scalacheck-shapeless_1.14" % "1.2.3" % Test,
   "org.mockito"                %% "mockito-scala"             % "1.7.1" % Test
 )
@@ -177,5 +177,5 @@ addCommandAlias("fixCheck", ";compile:scalafix --check ;test:scalafix --check")
 // plugins
 addCompilerPlugin(scalafixSemanticdb)
 addCompilerPlugin("com.olegpy"      %% "better-monadic-for" % "0.3.1")
-addCompilerPlugin("org.typelevel"   %% "kind-projector"     % "0.10.0")
+addCompilerPlugin("org.typelevel"   %% "kind-projector"     % "0.10.3")
 addCompilerPlugin("org.scalamacros" % "paradise"            % "2.1.1" cross CrossVersion.full)

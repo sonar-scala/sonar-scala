@@ -17,6 +17,7 @@
 
 package com.mwz.sonar.scala.pr
 
+import com.mwz.sonar.scala.pr.github.File
 import org.http4s.Uri
 import org.scalacheck._
 import org.sonar.api.batch.fs.InputFile
@@ -34,6 +35,16 @@ object Generators {
             .build()
         }
     )
+
+  implicit val arbFile: Arbitrary[File] = {
+    Arbitrary(
+      for {
+        fileName <- Gen.nonEmptyListOf(Gen.alphaNumChar)
+        status   <- Gen.alphaLowerStr
+        patch    <- Gen.alphaNumStr
+      } yield File(fileName.mkString, status, patch)
+    )
+  }
 
   implicit val arbRuleKey: Arbitrary[RuleKey] =
     Arbitrary(

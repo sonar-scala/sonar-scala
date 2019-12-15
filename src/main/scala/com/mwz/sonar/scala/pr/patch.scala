@@ -56,8 +56,8 @@ object Patch {
               PatchChunkStartRegex
                 .findFirstMatchIn(l)
                 .flatMap(regexMatch => Try(regexMatch.group("newStart").toInt).toOption)
-                .fold[Either[PatchError, Patch]](Left(PatchError(l)))(
-                  start => Right(Patch(FileLine(start), patch.patchLine.inc, patch.fileToPatch))
+                .fold[Either[PatchError, Patch]](Left(PatchError(l)))(start =>
+                  Right(Patch(FileLine(start), patch.patchLine.inc, patch.fileToPatch))
                 )
             // Keep track of added and context (unmodified) lines.
             case l if l.startsWith("+") || l.startsWith(" ") =>
@@ -74,4 +74,5 @@ object Patch {
           }
       }
       .map(_.fileToPatch)
+      .filterOrElse(_.nonEmpty, PatchError(patch))
 }

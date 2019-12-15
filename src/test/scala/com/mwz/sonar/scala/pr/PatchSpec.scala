@@ -22,13 +22,21 @@ import scala.io.Source
 import org.scalatest.EitherValues
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
+import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
 
-class PatchSpec extends AnyFlatSpec with Matchers with EitherValues {
+class PatchSpec extends AnyFlatSpec with Matchers with EitherValues with ScalaCheckDrivenPropertyChecks {
+
   def patch(path: String): String =
     Source
       .fromResource(path)
       .getLines()
       .mkString("\n")
+
+  it should "fail to parse an invalid patch" in {
+    forAll { s: String =>
+      Patch.parse(s) shouldBe Left(PatchError(s))
+    }
+  }
 
   it should "parse successfully a patch with additions only" in {
     val expected: Map[FileLine, PatchLine] =
@@ -37,10 +45,33 @@ class PatchSpec extends AnyFlatSpec with Matchers with EitherValues {
           (FileLine(fileLine), PatchLine(index + 1))
       }.toMap
 
-    Patch.parse(patch("patches/additions.patch")).right.value shouldBe expected
+    Patch.parse(patch("patches/add.patch")).right.value shouldBe expected
   }
 
-  it should "parse successfully a patch with deletions only" in {}
+  it should "parse successfully a patch with deletions only" in {
+    val expected: Map[FileLine, PatchLine] =
+      List(
+        List(26 -> 1, 27 -> 2, 28 -> 3, 29 -> 6, 30 -> 7, 31 -> 8),
+        List(43 -> 10, 44 -> 11, 45 -> 12, 46 -> 15, 47 -> 16, 48 -> 20, 49 -> 21, 50 -> 22)
+      ).flatten.map {
+        case (k, v) =>
+          FileLine(k) -> PatchLine(v)
+      }.toMap
 
-  it should "parse successfully a patch with additions and deletions" in {}
+    Patch.parse(patch("patches/del.patch")).right.value shouldBe expected
+  }
+
+  it should "parse successfully a patch with additions, deletions and modifications" in {
+    val expected: Map[FileLine, PatchLine] =
+      List(
+        (43 to 50).zipWithIndex.map(a => (a._1, a._2 + 1)),
+        List(60 -> 10, 61 -> 11, 62 -> 12, 63 -> 15, 64 -> 16, 65 -> 17),
+        List(77 -> 19, 78 -> 20, 79 -> 21, 80 -> 23, 81 -> 24, 82 -> 25, 83 -> 26)
+      ).flatten.map {
+        case (k, v) =>
+          FileLine(k) -> PatchLine(v)
+      }.toMap
+
+    Patch.parse(patch("patches/add-del-mod.patch")).right.value shouldBe expected
+  }
 }

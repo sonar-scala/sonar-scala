@@ -18,11 +18,13 @@
 package com.mwz.sonar.scala.util
 
 import cats.effect.IO
+import com.mwz.sonar.scala.util.syntax.Optionals._
 import org.scalatest.{FlatSpec, Matchers}
+import org.scalatest.{LoneElement, OptionValues}
 import org.sonar.api.utils.log.LoggerLevel._
 import org.sonar.api.utils.log.SonarLogTester
 
-class LoggerSpec extends FlatSpec with Matchers with SonarLogTester {
+class LoggerSpec extends FlatSpec with Matchers with LoneElement with OptionValues with SonarLogTester {
   trait Context {
     val log: IO[Logger[IO]] = Logger.create(classOf[LoggerSpec], "test")
   }
@@ -45,6 +47,17 @@ class LoggerSpec extends FlatSpec with Matchers with SonarLogTester {
   it should "log error" in new Context {
     log.flatMap(_.error("error")).unsafeRunSync()
     logsFor(ERROR) shouldBe Seq("[sonar-scala-test] error")
+  }
+
+  it should "log error with a throwable" in new Context {
+    log.flatMap(_.error("error", new Exception("cause"))).unsafeRunSync()
+
+    val result = getLogsFor(ERROR).loneElement
+    result.getFormattedMsg shouldBe "[sonar-scala-test] error"
+
+    val exception = result.getArgs.toOption.value.loneElement
+    exception shouldBe a[Exception]
+    exception.asInstanceOf[Exception].getMessage shouldBe "cause"
   }
 
   it should "default the prefix to sonar-scala" in {

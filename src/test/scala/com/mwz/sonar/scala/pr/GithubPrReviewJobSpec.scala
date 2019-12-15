@@ -122,7 +122,7 @@ class GithubPrReviewJobSpec
 
         val result = githubPrReviewJob().run[IO](baseUrl, github)
 
-        result.attempt.unsafeRunSync() shouldBe Right(())
+        result.attempt.unsafeRunSync() shouldBe Left(NoFilesInPR)
         trace.get.unsafeRunSync() should contain theSameElementsAs List(
           "authenticatedUser",
           "pullRequest",
@@ -130,6 +130,45 @@ class GithubPrReviewJobSpec
           "files",
           "createStatus - pending",
           "createStatus - failure"
+        )
+      }
+    }
+  }
+
+  it should "report an error status if review contains any blocker or critical issues" in
+  new Ctx with IOCtx with EmptyLogger {
+    forAll { (baseUrl: Uri, user: User, pr: PullRequest, status: Status, prFile: File) =>
+      withTracing { trace =>
+        val fileWithPatch = prFile.copy(patch = patch)
+        val github = new GithubNotImpl[IO] {
+          override def authenticatedUser = trace.update("authenticatedUser" :: _) >> IO.pure(user)
+          override def pullRequest = trace.update("pullRequest" :: _) >> IO.pure(pr)
+          override def comments = trace.update("comments" :: _) >> IO.pure(List.empty)
+          override def createComment(comment: NewComment) =
+            trace.update("createComment" :: _) >>
+            IO.pure(Comment(1, comment.path, Some(comment.position), user, comment.body))
+          override def files = trace.update("files" :: _) >> IO.pure(List(fileWithPatch))
+          override def createStatus(sha: String, newStatus: NewStatus) =
+            trace.update("createStatus - " + newStatus.state :: _) >> IO.pure(status)
+        }
+
+        val file: InputFile = TestInputFileBuilder.create("", fileWithPatch.filename).build()
+        val issue = Issue(RuleKey.of("repo", "rule"), file, 5, Severity.BLOCKER, "msg")
+        val markdown: Markdown = Markdown.inline(baseUrl, issue)
+
+        val issues = new GlobalIssues
+        issues.add(issue)
+        val result = githubPrReviewJob(globalIssues = issues).run[IO](baseUrl, github)
+
+        result.attempt.unsafeRunSync() shouldBe Right(Error(ReviewStatus(blocker = 1, critical = 0)))
+        trace.get.unsafeRunSync() should contain theSameElementsAs List(
+          "authenticatedUser",
+          "pullRequest",
+          "comments",
+          "files",
+          "createStatus - pending",
+          "createComment",
+          "createStatus - error"
         )
       }
     }

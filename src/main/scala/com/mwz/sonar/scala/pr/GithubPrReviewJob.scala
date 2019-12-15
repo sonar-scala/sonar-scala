@@ -80,7 +80,7 @@ final class GithubPrReviewJob(
   private[pr] def run[F[_]: Sync: NonEmptyParallel: Logger](
     baseUrl: Uri,
     github: Github[F]
-  ): F[Unit] = {
+  ): F[PrReviewStatus] = {
     for {
       // Get the authenticated user (to check the oauth token).
       user <- github.authenticatedUser
@@ -105,7 +105,12 @@ final class GithubPrReviewJob(
       // Create a new PR status.
       _ <- Logger[F].debug(s"Set the PR status to $prStatus.")
       _ <- github.createStatus(pr.head.sha, githubStatus(prStatus))
-    } yield ()
+      // Convert the "Failure" pr status to an error.
+      status <- prStatus match {
+        case Failure(error) => Sync[F].raiseError(error)
+        case other          => Sync[F].pure(other)
+      }
+    } yield (status)
   }
 
   private[pr] def review[F[_]: Sync: NonEmptyParallel: Logger](
@@ -250,7 +255,7 @@ object GithubPrReviewJob {
       }
   }
 
-  def statusState(prStatus: PrStatus): String = {
+  def statusState(prStatus: PrReviewStatus): String = {
     prStatus match {
       case Pending    => "pending"
       case Success    => "success"
@@ -259,7 +264,7 @@ object GithubPrReviewJob {
     }
   }
 
-  def statusDescription(prStatus: PrStatus): String = {
+  def statusDescription(prStatus: PrReviewStatus): String = {
     prStatus match {
       case Pending       => "SonarQube is reviewing this pull request."
       case Success       => "SonarQube didn't report any critical or blocker issues."
@@ -268,6 +273,6 @@ object GithubPrReviewJob {
     }
   }
 
-  def githubStatus(prStatus: PrStatus): NewStatus =
+  def githubStatus(prStatus: PrReviewStatus): NewStatus =
     NewStatus(statusState(prStatus), "", statusDescription(prStatus), GithubContext)
 }

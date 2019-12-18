@@ -23,10 +23,10 @@ import java.io.File
 import java.nio.file.Paths
 
 import org.scalatest.LoneElement
-import org.sonar.api.batch.fs.InputFile
-import org.sonar.api.batch.fs.internal.{DefaultFileSystem, TestInputFileBuilder}
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
+import org.sonar.api.batch.fs.InputFile
+import org.sonar.api.batch.fs.internal.{DefaultFileSystem, TestInputFileBuilder}
 
 class JUnitReportParserSpec extends AnyFlatSpec with Matchers with WithFiles with LoneElement {
   it should "get report files" in {

@@ -27,11 +27,11 @@ import com.mwz.sonar.scala.util.syntax.SonarFileSystem._
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
 import org.scalatest.OptionValues
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 import org.scalatestplus.mockito.MockitoSugar
 import org.sonar.api.batch.fs.FileSystem
 import org.sonar.api.batch.fs.internal.DefaultFileSystem
-import org.scalatest.flatspec.AnyFlatSpec
-import org.scalatest.matchers.should.Matchers
 
 class SonarFileSystemSpec extends AnyFlatSpec with Matchers with OptionValues with MockitoSugar {
   it should "attempt to resolve paths" in {

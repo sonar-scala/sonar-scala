@@ -18,9 +18,9 @@
 package com.mwz.sonar.scala.scapegoat
 
 import org.scalatest.Inspectors
-import org.sonar.api.batch.rule.Severity
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
+import org.sonar.api.batch.rule.Severity
 
 /** Tests the generated scapegoat inspections file */
 class ScapegoatInspectionsSpec extends AnyFlatSpec with Inspectors with Matchers {

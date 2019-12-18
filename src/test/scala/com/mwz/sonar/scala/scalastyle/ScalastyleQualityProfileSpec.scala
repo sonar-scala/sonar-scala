@@ -21,14 +21,14 @@ package scalastyle
 import scala.collection.JavaConverters._
 
 import com.mwz.sonar.scala.scalastyle.ScalastyleRulesRepository.SkipTemplateInstances
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 import org.scalatest.{Inspectors, LoneElement}
 import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition.{
   BuiltInActiveRule,
   BuiltInQualityProfile,
   Context
 }
-import org.scalatest.flatspec.AnyFlatSpec
-import org.scalatest.matchers.should.Matchers
 
 class ScalastyleQualityProfileSpec extends AnyFlatSpec with Matchers with LoneElement with Inspectors {
   trait Ctx {

@@ -22,11 +22,11 @@ import java.nio.file.{Path, Paths}
 
 import com.mwz.sonar.scala.util.PathUtils._
 import org.scalatest.LoneElement
+import org.scalatest.flatspec.AnyFlatSpec
 import org.sonar.api.batch.fs.InputFile
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder
 import org.sonar.api.batch.sensor.internal.{DefaultSensorDescriptor, SensorContextTester}
 import org.sonar.api.config.internal.MapSettings
-import org.scalatest.flatspec.AnyFlatSpec
 
 /** Tests the Scoverage Sensor */
 class ScoverageSensorSpec extends AnyFlatSpec with SensorContextMatchers with LoneElement {

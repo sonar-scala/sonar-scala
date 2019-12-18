@@ -18,10 +18,10 @@
 package com.mwz.sonar.scala
 
 import org.scalactic.Equality
+import org.scalatest.matchers.should.Matchers
 import org.scalatest.matchers.{HavePropertyMatchResult, HavePropertyMatcher}
 import org.sonar.api.batch.sensor.internal.SensorContextTester
 import org.sonar.api.batch.sensor.issue.{Issue, IssueLocation}
-import org.scalatest.matchers.should.Matchers
 
 /** Custom matchers to test properties of sensor contexts */
 trait SensorContextMatchers extends Matchers {

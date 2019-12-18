@@ -22,10 +22,10 @@ package syntax
 import java.nio.file.Paths
 
 import com.mwz.sonar.scala.util.syntax.SonarConfig._
-import org.scalatest.{Matchers, OptionValues}
-import org.sonar.api.config.internal.MapSettings
+import org.scalatest.OptionValues
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
+import org.sonar.api.config.internal.MapSettings
 
 class SonarConfigSpec extends AnyFlatSpec with Matchers with OptionValues {
   "config" should "get paths" in {

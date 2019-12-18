@@ -19,10 +19,10 @@ package com.mwz.sonar.scala
 
 import java.nio.file.Paths
 
-import org.sonar.api.config.internal.MapSettings
-import scalariform.ScalaVersion
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
+import org.sonar.api.config.internal.MapSettings
+import scalariform.ScalaVersion
 
 class ScalaSpec extends AnyFlatSpec with Matchers {
   "getFileSuffixes" should "return Scala file suffixes" in {

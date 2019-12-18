@@ -39,8 +39,8 @@ import org.http4s
 import org.http4s.Uri
 import org.http4s.client.UnexpectedStatus
 import org.scalacheck.ScalacheckShapeless._
-import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.LoneElement
+import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
 import org.sonar.api.batch.fs.InputFile

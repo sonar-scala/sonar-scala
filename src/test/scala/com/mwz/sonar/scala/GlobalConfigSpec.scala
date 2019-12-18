@@ -17,9 +17,9 @@
 
 package com.mwz.sonar.scala
 
-import org.scalatest.{EitherValues, OptionValues}
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
+import org.scalatest.{EitherValues, OptionValues}
 import org.sonar.api.config.internal.MapSettings
 
 class GlobalConfigSpec extends AnyFlatSpec with Matchers with OptionValues with EitherValues {

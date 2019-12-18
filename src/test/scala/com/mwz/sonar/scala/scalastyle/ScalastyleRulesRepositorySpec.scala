@@ -21,14 +21,14 @@ package scalastyle
 import scala.collection.JavaConverters._
 
 import org.scalastyle._
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 import org.scalatest.{Inspectors, LoneElement}
 import org.sonar.api.batch.rule.Severity
 import org.sonar.api.rule.RuleStatus
 import org.sonar.api.rules.RuleType
 import org.sonar.api.server.rule.RulesDefinition.{Context, Repository, Rule}
 import org.sonar.api.server.rule.{RuleParamType, RulesDefinition}
-import org.scalatest.flatspec.AnyFlatSpec
-import org.scalatest.matchers.should.Matchers
 
 class ScalastyleRulesRepositorySpec extends AnyFlatSpec with Matchers with Inspectors with LoneElement {
   trait Ctx {

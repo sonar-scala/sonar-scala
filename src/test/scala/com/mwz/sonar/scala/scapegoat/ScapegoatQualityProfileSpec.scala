@@ -17,10 +17,10 @@
 
 package com.mwz.sonar.scala.scapegoat
 
-import org.scalatest.{Inspectors, LoneElement}
-import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition.Context
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
+import org.scalatest.{Inspectors, LoneElement}
+import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition.Context
 
 /** Tests the correct behavior of the Scapegoat Quality Profile */
 class ScapegoatQualityProfileSpec extends AnyFlatSpec with Inspectors with LoneElement with Matchers {

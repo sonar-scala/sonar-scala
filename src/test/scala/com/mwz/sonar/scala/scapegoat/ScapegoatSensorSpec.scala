@@ -27,6 +27,7 @@ import com.mwz.sonar.scala.pr.Issue
 import com.mwz.sonar.scala.util.PathUtils.cwd
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
+import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.{LoneElement, OptionValues}
 import org.scalatestplus.mockito.MockitoSugar
 import org.sonar.api.batch.fs.InputFile
@@ -37,7 +38,6 @@ import org.sonar.api.batch.sensor.internal.{DefaultSensorDescriptor, SensorConte
 import org.sonar.api.config.internal.MapSettings
 import org.sonar.api.rule.RuleKey
 import scalariform.ScalaVersion
-import org.scalatest.flatspec.AnyFlatSpec
 
 /** Tests the Scapegoat Sensor. */
 class ScapegoatSensorSpec

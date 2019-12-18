@@ -18,9 +18,9 @@
 package com.mwz.sonar.scala
 package sensor
 
-import scalariform.ScalaVersions
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
+import scalariform.ScalaVersions
 
 /** Tests the Scala Sensor Metrics */
 class MeasuresSpec extends AnyFlatSpec with Matchers {

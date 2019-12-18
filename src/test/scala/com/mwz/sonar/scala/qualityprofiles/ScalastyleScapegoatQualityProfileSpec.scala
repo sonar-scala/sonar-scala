@@ -17,10 +17,10 @@
 
 package com.mwz.sonar.scala.qualityprofiles
 
-import org.scalatest.{Inspectors, LoneElement}
-import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition.{BuiltInQualityProfile, Context}
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
+import org.scalatest.{Inspectors, LoneElement}
+import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition.{BuiltInQualityProfile, Context}
 
 /** Tests the correct behavior of the Scalastyle+Scapegoat Quality Profile */
 class ScalastyleScapegoatQualityProfileSpec

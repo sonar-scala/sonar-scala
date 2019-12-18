@@ -19,8 +19,8 @@ package com.mwz.sonar.scala.pr
 
 import com.mwz.sonar.scala.pr.Generators._
 import org.scalacheck.ScalacheckShapeless._
-import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.Inspectors
+import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder

@@ -21,13 +21,13 @@ package qualityprofiles
 import scala.collection.JavaConverters._
 
 import org.scalatest._
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition.{
   BuiltInActiveRule,
   BuiltInQualityProfile,
   Context
 }
-import org.scalatest.flatspec.AnyFlatSpec
-import org.scalatest.matchers.should.Matchers
 
 class RecommendedQualityProfileSpec
     extends AnyFlatSpec

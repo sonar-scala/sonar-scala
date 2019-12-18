@@ -1,20 +1,20 @@
 #!/usr/bin/env bash
 set -eu
 
-export CWD=`pwd`
+export CWD=$(pwd)
 export SONAR_SCANNER_DEFAULTS="-Dsonar.host.url=${SONARQUBE_URL} -Dsonar.login=${SONARQUBE_ACCESS_TOKEN}"
-export GRADLE_VERSION=5.2.1
+export GRADLE_VERSION=5.3.1
 
 # SBT single-module
 echo "Scanning SBT single-module project."
 cd $CWD/sbt/single-module
-sbt clean coverage test coverageReport scapegoat < /dev/null
+sbt clean coverage test coverageReport scapegoat </dev/null
 sonar-scanner ${SONAR_SCANNER_DEFAULTS}
 
 # SBT multi-module
 echo -e "\nScanning SBT multi-module project."
 cd $CWD/sbt/multi-module
-sbt clean coverage test coverageReport scapegoat < /dev/null
+sbt clean coverage test coverageReport scapegoat </dev/null
 sonar-scanner ${SONAR_SCANNER_DEFAULTS}
 
 # Gradle single-module

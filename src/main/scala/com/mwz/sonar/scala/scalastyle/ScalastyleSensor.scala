@@ -21,6 +21,12 @@ package scalastyle
 import java.io.File
 import java.nio.file.Paths
 
+import scala.collection.JavaConverters._
+import scala.collection.immutable.Seq
+
+import cats.instances.string._
+import cats.syntax.eq._
+import com.mwz.sonar.scala.pr.{GlobalIssues, Issue}
 import com.mwz.sonar.scala.util.Log
 import com.mwz.sonar.scala.util.syntax.Optionals._
 import org.scalastyle.{
@@ -39,19 +45,19 @@ import org.scalastyle.{
 }
 import org.sonar.api.batch.fs.{FilePredicates, InputFile}
 import org.sonar.api.batch.rule.{ActiveRule, Severity}
-import org.sonar.api.batch.sensor.issue.NewIssue
+import org.sonar.api.batch.sensor.issue.{NewIssue, NewIssueLocation}
 import org.sonar.api.batch.sensor.{Sensor, SensorContext, SensorDescriptor}
 import org.sonar.api.config.Configuration
-import org.sonar.api.profiles.{RulesProfile => QualityProfile}
 import org.sonar.api.rule.RuleKey
-
-import scala.collection.JavaConverters._
-import scala.collection.immutable.Seq
 
 /**
  * Main sensor for executing Scalastyle analysis.
  */
-final class ScalastyleSensor(scalastyleChecker: ScalastyleCheckerAPI) extends Sensor {
+final class ScalastyleSensor(
+  globalConfig: GlobalConfig,
+  globalIssues: GlobalIssues,
+  scalastyleChecker: ScalastyleCheckerAPI
+) extends Sensor {
   private[this] val log = Log(classOf[ScalastyleSensor], "scalastyle")
 
   override def describe(descriptor: SensorDescriptor): Unit = {
@@ -111,7 +117,14 @@ final class ScalastyleSensor(scalastyleChecker: ScalastyleCheckerAPI) extends Se
             s"Scalastyle rule with key ${styleError.key} was not found in the default quality profile."
           )
         ) { rule =>
-          ScalastyleSensor.openIssue(context, ScalastyleInspections.AllInspectionsByClass, styleError, rule)
+          ScalastyleSensor.openIssue(
+            context,
+            globalConfig,
+            globalIssues,
+            ScalastyleInspections.AllInspectionsByClass,
+            styleError,
+            rule
+          )
         }
 
       case e: StyleException[_] =>
@@ -133,7 +146,7 @@ private[scalastyle] object ScalastyleSensor {
     conf
       .get(ScalastyleDisablePropertyKey)
       .toOption
-      .forall(s => s.toLowerCase != "true")
+      .forall(s => s.toLowerCase =!= "true")
 
   /**
    * Convert SonarQube rule severity to Scalastyle inspection level.
@@ -197,6 +210,8 @@ private[scalastyle] object ScalastyleSensor {
    */
   def openIssue(
     context: SensorContext,
+    globalConfig: GlobalConfig,
+    globalIssues: GlobalIssues,
     inspections: Map[String, ScalastyleInspection],
     styleError: StyleError[FileSpec],
     rule: ActiveRule
@@ -206,19 +221,27 @@ private[scalastyle] object ScalastyleSensor {
     val file: InputFile = context.fileSystem.inputFile(predicates.hasPath(relativized.toString))
     val newIssue: NewIssue = context.newIssue().forRule(rule.ruleKey)
     val line: Int = styleError.lineNumber.filter(_ > 0).getOrElse(1) // scalastyle:ignore org.scalastyle.scalariform.NamedArgumentChecker
-    val message: Option[String] = styleError.customMessage orElse inspections
-      .get(styleError.clazz.getName)
-      .map(_.label)
+    val message: String =
+      (styleError.customMessage orElse inspections
+        .get(styleError.clazz.getName)
+        .map(_.label))
+        .getOrElse(styleError.key)
 
-    // Open a new issue.
-    newIssue
-      .at(
-        newIssue
-          .newLocation()
-          .on(file)
-          .at(file.selectLine(line))
-          .message(message.getOrElse(""))
-      )
-      .save()
+    val location: NewIssueLocation =
+      newIssue
+        .newLocation()
+        .on(file)
+        .at(file.selectLine(line))
+        .message(message)
+
+    // Open a new issue (if not in pr decoration mode).
+    if (!globalConfig.prDecoration)
+      newIssue.at(location).save()
+
+    // Keep track of the issues (if not disabled).
+    else if (globalConfig.issueDecoration) {
+      val issue: Issue = Issue(rule.ruleKey, file, line, Severity.valueOf(rule.severity), message)
+      globalIssues.add(issue)
+    }
   }
 }

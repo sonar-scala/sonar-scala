@@ -21,6 +21,8 @@ package junit
 import java.io.File
 import java.nio.file.{Path, Paths}
 
+import scala.collection.JavaConverters._
+
 import cats.instances.list._
 import com.mwz.sonar.scala.util.Log
 import com.mwz.sonar.scala.util.syntax.SonarConfig._
@@ -30,8 +32,6 @@ import org.sonar.api.batch.fs.{FileSystem, InputFile}
 import org.sonar.api.batch.sensor.{Sensor, SensorContext, SensorDescriptor}
 import org.sonar.api.config.Configuration
 import org.sonar.api.measures.CoreMetrics
-
-import scala.collection.JavaConverters._
 
 /**
  * Scala JUnit sensor.

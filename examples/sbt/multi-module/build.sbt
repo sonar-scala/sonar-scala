@@ -1,7 +1,7 @@
 lazy val baseSettings = Seq(
-  scalaVersion := "2.12.6",
-  libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.7" % "test",
-  scapegoatVersion in ThisBuild := "1.3.6"
+  scalaVersion := "2.12.8",
+  libraryDependencies += "org.scalatest" %% "scalatest" % "3.1.0" % "test",
+  scapegoatVersion in ThisBuild := "1.3.9"
 )
 
 lazy val module1 = (project in file("module1"))

@@ -17,9 +17,9 @@
 
 package org.sonar.api.utils.log
 
-import org.scalatest.{BeforeAndAfter, Suite}
-
 import scala.collection.JavaConverters._
+
+import org.scalatest.{BeforeAndAfter, Suite}
 
 trait SonarLogTester extends BeforeAndAfter { this: Suite =>
   before {
@@ -35,6 +35,12 @@ trait SonarLogTester extends BeforeAndAfter { this: Suite =>
   def logs: Seq[String] =
     LogInterceptors.get().asInstanceOf[ListInterceptor].logs.asScala
 
+  def getLogs: Seq[LogAndArguments] =
+    LogInterceptors.get().asInstanceOf[ListInterceptor].getLogs().asScala
+
   def logsFor(level: LoggerLevel): Seq[String] =
     LogInterceptors.get().asInstanceOf[ListInterceptor].logs(level).asScala
+
+  def getLogsFor(level: LoggerLevel): Seq[LogAndArguments] =
+    LogInterceptors.get().asInstanceOf[ListInterceptor].getLogs(level).asScala
 }

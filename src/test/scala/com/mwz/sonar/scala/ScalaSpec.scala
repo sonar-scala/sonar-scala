@@ -19,14 +19,21 @@ package com.mwz.sonar.scala
 
 import java.nio.file.Paths
 
-import org.scalatest.{FlatSpec, Matchers}
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 import org.sonar.api.config.internal.MapSettings
-import scalariform.{ScalaVersion, ScalaVersions}
+import scalariform.ScalaVersion
 
-class ScalaSpec extends FlatSpec with Matchers {
+class ScalaSpec extends AnyFlatSpec with Matchers {
   "getFileSuffixes" should "return Scala file suffixes" in {
     val conf = new MapSettings().asConfig()
     new Scala(conf).getFileSuffixes shouldBe Array(".scala")
+
+    val conf2 =
+      new MapSettings()
+        .setProperty("sonar.scala.file.suffixes", ".scala")
+        .asConfig()
+    new Scala(conf2).getFileSuffixes shouldBe Array(".scala")
   }
 
   "getScalaVersion" should "return the available version, if properly set" in {

@@ -18,17 +18,19 @@
 package com.mwz.sonar.scala
 package scalastyle
 
+import scala.collection.JavaConverters._
+
 import com.mwz.sonar.scala.scalastyle.ScalastyleRulesRepository.SkipTemplateInstances
-import org.scalatest.{FlatSpec, Inspectors, LoneElement, Matchers}
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.{Inspectors, LoneElement}
 import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition.{
   BuiltInActiveRule,
   BuiltInQualityProfile,
   Context
 }
 
-import scala.collection.JavaConverters._
-
-class ScalastyleQualityProfileSpec extends FlatSpec with Matchers with LoneElement with Inspectors {
+class ScalastyleQualityProfileSpec extends AnyFlatSpec with Matchers with LoneElement with Inspectors {
   trait Ctx {
     val context = new Context()
     new ScalastyleQualityProfile().define(context)

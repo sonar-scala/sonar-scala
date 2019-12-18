@@ -42,8 +42,8 @@ object ScapegoatInspectionsGenerator {
       )
 
     val allScapegoatInspections: Seq[(String, Inspection)] = extractInspections()
-    val stringifiedScapegoatIsnpections: Seq[String] = stringifyInspections(allScapegoatInspections)
-    val transformed: Tree = fillTemplate(templateFile.parse[Source].get, stringifiedScapegoatIsnpections)
+    val stringifiedScapegoatInspections: Seq[String] = stringifyInspections(allScapegoatInspections)
+    val transformed: Tree = fillTemplate(templateFile.parse[Source].get, stringifiedScapegoatInspections)
 
     val scapegoatInspectionsFile: File = (sourceManaged in Compile).value / "scapegoat" / "inspections.scala"
     IO.write(scapegoatInspectionsFile, transformed.syntax)

@@ -22,12 +22,13 @@ package syntax
 import java.nio.file.Paths
 
 import com.mwz.sonar.scala.util.syntax.SonarSensorContext._
-import org.scalatest.{FlatSpec, Matchers}
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder
 import org.sonar.api.batch.sensor.internal.SensorContextTester
 import org.sonar.api.measures.CoreMetrics
 
-class SonarSensorContextSpec extends FlatSpec with Matchers with SensorContextMatchers {
+class SonarSensorContextSpec extends AnyFlatSpec with Matchers with SensorContextMatchers {
   it should "save a measure for a given input file" in {
     val ctx = SensorContextTester.create(Paths.get("./"))
     val testFile = TestInputFileBuilder
@@ -35,9 +36,9 @@ class SonarSensorContextSpec extends FlatSpec with Matchers with SensorContextMa
       .build()
 
     ctx.saveMeasure[Integer](testFile, CoreMetrics.TESTS, 5)
-    ctx.saveMeasure[java.lang.Long](testFile, CoreMetrics.TEST_EXECUTION_TIME, 124l)
+    ctx.saveMeasure[java.lang.Long](testFile, CoreMetrics.TEST_EXECUTION_TIME, 124L)
 
     ctx should have(metric[Integer](testFile.key, "tests", 5))
-    ctx should have(metric[java.lang.Long](testFile.key, "test_execution_time", 124l))
+    ctx should have(metric[java.lang.Long](testFile.key, "test_execution_time", 124L))
   }
 }

@@ -5,9 +5,9 @@ buildscript {
         }
     }
     dependencies {
-        classpath "gradle.plugin.org.scoverage:gradle-scoverage:2.5.0"
-        classpath "gradle.plugin.com.github.maiflai:gradle-scalatest:0.22"
-        classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.6.2"
+        classpath "gradle.plugin.org.scoverage:gradle-scoverage:3.1.5"
+        classpath "gradle.plugin.com.github.maiflai:gradle-scalatest:0.25"
+        classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.7.1"
     }
 }
 
@@ -35,10 +35,8 @@ sonarqube {
 
 dependencies {
     compile 'org.scala-lang:scala-library:2.12.8'
-    scoverage 'org.scoverage:scalac-scoverage-plugin_2.12:1.3.1',
-            'org.scoverage:scalac-scoverage-runtime_2.12:1.3.1'
-    testCompile 'org.scalatest:scalatest_2.12:3.0.5'
-    testRuntime 'org.pegdown:pegdown:1.4.2'
+    testCompile 'org.scalatest:scalatest_2.12:3.0.8'
+    testRuntime 'org.pegdown:pegdown:1.6.0'
 }
 
 
@@ -48,8 +46,8 @@ configurations {
 }
 
 dependencies {
-    compile 'com.sksamuel.scapegoat:scalac-scapegoat-plugin_2.12:1.3.6' // to prevent https://github.com/sksamuel/scapegoat/issues/98
-    scalaCompilerPlugin "com.sksamuel.scapegoat:scalac-scapegoat-plugin_2.12:1.3.6"
+    compile 'com.sksamuel.scapegoat:scalac-scapegoat-plugin_2.12:1.3.9' // to prevent https://github.com/sksamuel/scapegoat/issues/98
+    scalaCompilerPlugin "com.sksamuel.scapegoat:scalac-scapegoat-plugin_2.12:1.3.9"
 }
 
 tasks.withType(ScalaCompile) {

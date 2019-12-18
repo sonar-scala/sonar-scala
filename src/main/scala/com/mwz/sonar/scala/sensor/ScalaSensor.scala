@@ -18,15 +18,15 @@
 package com.mwz.sonar.scala
 package sensor
 
+import scala.collection.JavaConverters._
+import scala.io.Source
+
 import org.sonar.api.batch.sensor.{Sensor, SensorContext, SensorDescriptor}
 import org.sonar.api.measures.{CoreMetrics => CM}
 import scalariform.ScalaVersion
 
-import scala.collection.JavaConverters._
-import scala.io.Source
-
 /** SonarQube Sensor for the Scala programming language */
-final class ScalaSensor extends Sensor {
+final class ScalaSensor(globalConfig: GlobalConfig) extends Sensor {
   override def execute(context: SensorContext): Unit = {
     val charset = context.fileSystem().encoding.toString
 
@@ -37,36 +37,41 @@ final class ScalaSensor extends Sensor {
     val scalaVersion: ScalaVersion =
       Scala.getScalaVersion(context.config())
 
-    inputFiles.asScala.foreach { inputFile =>
-      // TODO: This source needs to be closed.
-      val sourceCode = Source.fromFile(inputFile.uri, charset).mkString
-      val tokens = Scala.tokenize(sourceCode, scalaVersion)
+    // Save measures if not in pr decoration mode.
+    if (!globalConfig.prDecoration)
+      inputFiles.asScala.foreach { inputFile =>
+        // TODO: This source needs to be closed!
+        val sourceCode = Source.fromFile(inputFile.uri, charset).mkString
+        val tokens = Scala.tokenize(sourceCode, scalaVersion)
 
-      context
-        .newMeasure()
-        .on(inputFile)
-        .forMetric(CM.COMMENT_LINES)
-        .withValue(Measures.countCommentLines(tokens))
-        .save()
-      context
-        .newMeasure()
-        .on(inputFile)
-        .forMetric(CM.NCLOC)
-        .withValue(Measures.countNonCommentLines(tokens))
-        .save()
-      context
-        .newMeasure()
-        .on(inputFile)
-        .forMetric(CM.CLASSES)
-        .withValue(Measures.countClasses(tokens))
-        .save()
-      context
-        .newMeasure()
-        .on(inputFile)
-        .forMetric(CM.FUNCTIONS)
-        .withValue(Measures.countMethods(tokens))
-        .save()
-    }
+        context
+          .newMeasure()
+          .on(inputFile)
+          .forMetric(CM.COMMENT_LINES)
+          .withValue(Measures.countCommentLines(tokens))
+          .save()
+
+        context
+          .newMeasure()
+          .on(inputFile)
+          .forMetric(CM.NCLOC)
+          .withValue(Measures.countNonCommentLines(tokens))
+          .save()
+
+        context
+          .newMeasure()
+          .on(inputFile)
+          .forMetric(CM.CLASSES)
+          .withValue(Measures.countClasses(tokens))
+          .save()
+
+        context
+          .newMeasure()
+          .on(inputFile)
+          .forMetric(CM.FUNCTIONS)
+          .withValue(Measures.countMethods(tokens))
+          .save()
+      }
   }
 
   def ExampleIssues(): Unit = {

@@ -18,7 +18,7 @@
 package com.mwz.sonar.scala
 
 import org.scalactic.Equality
-import org.scalatest.Matchers
+import org.scalatest.matchers.should.Matchers
 import org.scalatest.matchers.{HavePropertyMatchResult, HavePropertyMatcher}
 import org.sonar.api.batch.sensor.internal.SensorContextTester
 import org.sonar.api.batch.sensor.issue.{Issue, IssueLocation}
@@ -34,7 +34,7 @@ trait SensorContextMatchers extends Matchers {
   ): HavePropertyMatcher[SensorContextTester, T] = (sensorContext: SensorContextTester) => {
     val measure = Option(sensorContext.measure[T](componentKey, metricKey))
     HavePropertyMatchResult(
-      matches = measure.fold(false)(m => m.value() == expectedValue),
+      matches = measure.fold(false)(m => m.value === expectedValue),
       propertyName = "measure",
       expectedValue = expectedValue,
       actualValue = None.orNull.asInstanceOf[T]
@@ -49,7 +49,7 @@ trait SensorContextMatchers extends Matchers {
   ): HavePropertyMatcher[SensorContextTester, Int] = (sensorContext: SensorContextTester) => {
     val hits = Option(sensorContext.lineHits(fileKey, lineNum))
     HavePropertyMatchResult(
-      matches = hits.fold(false)(_ == expectedValue),
+      matches = hits.fold(false)(_ === expectedValue),
       propertyName = "measure",
       expectedValue = expectedValue,
       actualValue = None.orNull.asInstanceOf[Int]

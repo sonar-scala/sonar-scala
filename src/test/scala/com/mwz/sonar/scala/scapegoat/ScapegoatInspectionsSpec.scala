@@ -17,14 +17,16 @@
 
 package com.mwz.sonar.scala.scapegoat
 
-import org.scalatest.{FlatSpec, Inspectors, Matchers}
+import org.scalatest.Inspectors
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 import org.sonar.api.batch.rule.Severity
 
 /** Tests the generated scapegoat inspections file */
-class ScapegoatInspectionsSpec extends FlatSpec with Inspectors with Matchers {
+class ScapegoatInspectionsSpec extends AnyFlatSpec with Inspectors with Matchers {
   "The Scapegoat Inspections object" should "define all scapegoat inspections" in {
-    ScapegoatInspections.AllInspections should have size 117
-    ScapegoatInspections.AllInspections.distinct should have size 117
+    ScapegoatInspections.AllInspections should have size 118
+    ScapegoatInspections.AllInspections.distinct should have size 118
   }
 
   it should "not define the blacklisted scapegoat inspections" in {

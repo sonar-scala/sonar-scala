@@ -18,17 +18,19 @@
 package com.mwz.sonar.scala
 package qualityprofiles
 
+import scala.collection.JavaConverters._
+
 import org.scalatest._
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition.{
   BuiltInActiveRule,
   BuiltInQualityProfile,
   Context
 }
 
-import scala.collection.JavaConverters._
-
 class RecommendedQualityProfileSpec
-    extends FlatSpec
+    extends AnyFlatSpec
     with Inspectors
     with LoneElement
     with OptionValues
@@ -51,7 +53,7 @@ class RecommendedQualityProfileSpec
   }
 
   it should "have 175 rules" in new Ctx {
-    rules.size shouldBe 175 // 61 from Scalastyle + 114 from Scapegoat
+    rules.size shouldBe 176 // 61 from Scalastyle + 115 from Scapegoat
   }
 
   it should "have all rules come from either the Scalastyle or the Scapegoat rules repositories" in new Ctx {
@@ -63,7 +65,7 @@ class RecommendedQualityProfileSpec
   it should "have overridden the default params" in new Ctx {
     val rulesWithOverridenParams = rules.filterNot(_.overriddenParams.isEmpty)
     val paramOverrides = RecommendedQualityProfile.ScapegoatOverrides.params ++
-    RecommendedQualityProfile.ScalastyleOverrides.params
+      RecommendedQualityProfile.ScalastyleOverrides.params
 
     rulesWithOverridenParams.size shouldBe paramOverrides.size
     forEvery(rulesWithOverridenParams) { rule =>
@@ -75,7 +77,7 @@ class RecommendedQualityProfileSpec
   it should "have overridden the default severities" in new Ctx {
     val rulesWithOverridenSeverities = rules.filterNot(rule => Option(rule.overriddenSeverity).isEmpty)
     val severityOverrides = RecommendedQualityProfile.ScapegoatOverrides.severities ++
-    RecommendedQualityProfile.ScalastyleOverrides.severities
+      RecommendedQualityProfile.ScalastyleOverrides.severities
 
     rulesWithOverridenSeverities.size shouldBe severityOverrides.size
     forEvery(rulesWithOverridenSeverities) { rule =>

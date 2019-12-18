@@ -21,10 +21,10 @@ package scalastyle
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
 import org.scalastyle.{FileSpec, ScalastyleConfiguration, ScalastyleChecker => Checker}
-import org.scalatest.FlatSpec
+import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatestplus.mockito.MockitoSugar
 
-class ScalastyleCheckerSpec extends FlatSpec with MockitoSugar {
+class ScalastyleCheckerSpec extends AnyFlatSpec with MockitoSugar {
   "ScalastyleChecker" should "checkFiles" in {
     val checker = mock[Checker[FileSpec]]
     when(checker.checkFiles(any(), any()))

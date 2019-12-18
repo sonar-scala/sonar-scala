@@ -18,18 +18,19 @@
 package com.mwz.sonar.scala
 package scalastyle
 
+import scala.collection.JavaConverters._
+
 import org.scalastyle._
-import org.scalatest.{FlatSpec, Inspectors, LoneElement, Matchers}
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.{Inspectors, LoneElement}
 import org.sonar.api.batch.rule.Severity
 import org.sonar.api.rule.RuleStatus
 import org.sonar.api.rules.RuleType
 import org.sonar.api.server.rule.RulesDefinition.{Context, Repository, Rule}
 import org.sonar.api.server.rule.{RuleParamType, RulesDefinition}
 
-import scala.collection.JavaConverters._
-
-class ScalastyleRulesRepositorySpec extends FlatSpec with Matchers with Inspectors with LoneElement {
-
+class ScalastyleRulesRepositorySpec extends AnyFlatSpec with Matchers with Inspectors with LoneElement {
   trait Ctx {
     val context = new Context()
     new ScalastyleRulesRepository().define(context)
@@ -107,7 +108,7 @@ class ScalastyleRulesRepositorySpec extends FlatSpec with Matchers with Inspecto
   it should "have all rules contain ruleClass parameter" in new Ctx {
     val rules: Seq[Rule] = repository.rules.asScala.filter(r => !r.params.isEmpty)
     forEvery(rules) { rule =>
-      rule.params.asScala.exists(p => p.key == "ruleClass" && p.defaultValue.startsWith("org.scalastyle"))
+      rule.params.asScala.exists(p => p.key === "ruleClass" && p.defaultValue.startsWith("org.scalastyle"))
     }
   }
 

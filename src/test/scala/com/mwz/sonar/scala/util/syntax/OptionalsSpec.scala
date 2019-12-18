@@ -22,9 +22,11 @@ package syntax
 import java.util.Optional
 
 import Optionals._
-import org.scalatest.{FlatSpec, Matchers, OptionValues}
+import org.scalatest.OptionValues
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 
-class OptionalsSpec extends FlatSpec with Matchers with OptionValues {
+class OptionalsSpec extends AnyFlatSpec with Matchers with OptionValues {
   it should "convert Java Optional to Scala Option" in {
     Optional.of("test").toOption.value shouldBe "test"
     Optional.empty[String].toOption shouldBe empty

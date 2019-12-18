@@ -63,7 +63,7 @@ val circe = "0.12.3"
 val http4s = "0.20.15"
 libraryDependencies ++= List(
   "org.sonarsource.sonarqube"  % "sonar-plugin-api"           % sonarVersion % Provided,
-  "org.slf4j"                  % "slf4j-api"                  % "1.7.29" % Provided,
+  "org.slf4j"                  % "slf4j-api"                  % "1.7.30" % Provided,
   "org.typelevel"              %% "cats-core"                 % "2.0.0",
   "org.typelevel"              %% "cats-effect"               % "2.0.0",
   "org.typelevel"              %% "mouse"                     % "0.23",

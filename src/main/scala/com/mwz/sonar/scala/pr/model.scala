@@ -24,11 +24,11 @@ import org.http4s.Uri
 sealed trait ReviewError extends Exception
 case object NoFilesInPR extends ReviewError
 
-sealed trait PrStatus extends Product with Serializable
-case object Pending extends PrStatus
-case object Success extends PrStatus
-final case class Error(reviewStatus: ReviewStatus) extends PrStatus
-final case class Failure(error: Throwable) extends PrStatus
+sealed trait PrReviewStatus extends Product with Serializable
+case object Pending extends PrReviewStatus
+case object Success extends PrReviewStatus
+final case class Error(reviewStatus: ReviewStatus) extends PrReviewStatus
+final case class Failure(error: Throwable) extends PrReviewStatus
 
 final case class ReviewStatus(blocker: Int, critical: Int)
 object ReviewStatus {
@@ -61,11 +61,12 @@ object Markdown {
    * The format is: "SEVERITY: TEXT ([more](link to the rule))"
    */
   def inline(baseUrl: Uri, issue: Issue): Markdown = {
+    val severity: String = issue.severity.name.toLowerCase
+    val img: String = s"https://static.sonar-scala.com/img/severity-${severity}.svg"
     val ruleUri: Uri =
       (baseUrl / "coding_rules")
         .withQueryParam("open", issue.key.toString)
         .withQueryParam("rule_key", issue.key.toString)
-    // TODO: Add severity image.
-    Markdown(s"${issue.severity.name}: ${issue.message} ([more]($ruleUri))")
+    Markdown(s"![$severity]($img 'Severity: $severity') ${issue.message} ([more]($ruleUri))")
   }
 }

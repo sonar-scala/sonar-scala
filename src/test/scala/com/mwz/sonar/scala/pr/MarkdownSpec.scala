@@ -18,13 +18,14 @@
 package com.mwz.sonar.scala.pr
 
 import org.http4s.Uri
-import org.scalatest.{FlatSpec, Matchers}
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 import org.sonar.api.batch.fs.InputFile
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder
 import org.sonar.api.batch.rule.Severity
 import org.sonar.api.rule.RuleKey
 
-class MarkdownSpec extends FlatSpec with Matchers {
+class MarkdownSpec extends AnyFlatSpec with Matchers {
   it should "create a markdown comment" in {
     val uri: Uri = Uri.uri("https://test.com")
     val file: InputFile = TestInputFileBuilder

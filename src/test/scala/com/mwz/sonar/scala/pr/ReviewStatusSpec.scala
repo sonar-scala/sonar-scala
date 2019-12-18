@@ -17,9 +17,10 @@
 
 package com.mwz.sonar.scala.pr
 
-import org.scalatest.{FlatSpec, Matchers}
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 
-class ReviewStatusSpec extends FlatSpec with Matchers {
+class ReviewStatusSpec extends AnyFlatSpec with Matchers {
   it should "infer the description from a review status" in {
     ReviewStatus.description(ReviewStatus(blocker = 0, critical = 0)) shouldBe "no critical or blocker issues"
     ReviewStatus.description(ReviewStatus(blocker = 1, critical = 0)) shouldBe "1 blocker"

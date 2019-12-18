@@ -19,13 +19,15 @@ package com.mwz.sonar.scala.pr
 
 import com.mwz.sonar.scala.pr.Generators._
 import org.scalacheck.ScalacheckShapeless._
-import org.scalatest.{FlatSpec, Inspectors, Matchers}
+import org.scalatest.Inspectors
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder
 import org.sonar.api.batch.rule.Severity
 import org.sonar.api.rule.RuleKey
 
-class GlobalIssuesSpec extends FlatSpec with Matchers with ScalaCheckDrivenPropertyChecks {
+class GlobalIssuesSpec extends AnyFlatSpec with Matchers with ScalaCheckDrivenPropertyChecks {
   it should "add a new issue" in {
     val issues = new GlobalIssues
     val file = TestInputFileBuilder

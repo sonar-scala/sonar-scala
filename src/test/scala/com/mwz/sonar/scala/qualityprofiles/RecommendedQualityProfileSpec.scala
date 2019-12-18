@@ -21,6 +21,8 @@ package qualityprofiles
 import scala.collection.JavaConverters._
 
 import org.scalatest._
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition.{
   BuiltInActiveRule,
   BuiltInQualityProfile,
@@ -28,7 +30,7 @@ import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition.{
 }
 
 class RecommendedQualityProfileSpec
-    extends FlatSpec
+    extends AnyFlatSpec
     with Inspectors
     with LoneElement
     with OptionValues

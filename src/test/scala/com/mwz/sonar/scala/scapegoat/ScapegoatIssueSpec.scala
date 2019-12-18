@@ -17,9 +17,10 @@
 
 package com.mwz.sonar.scala.scapegoat
 
-import org.scalatest.{FlatSpec, Matchers}
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 
-class ScapegoatIssueSpec extends FlatSpec with Matchers {
+class ScapegoatIssueSpec extends AnyFlatSpec with Matchers {
   "message" should "return a correct message" in {
     ScapegoatIssue(1, "text", "", "file", "inspection").message shouldBe "text"
     ScapegoatIssue(1, "text", "snippet", "file", "inspection").message shouldBe "text\nsnippet"

@@ -19,10 +19,13 @@ package com.mwz.sonar.scala.pr
 
 import scala.io.Source
 
-import org.scalatest.{EitherValues, FlatSpec, Matchers}
+import org.scalatest.EitherValues
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
 
-class PatchSpec extends FlatSpec with Matchers with EitherValues with ScalaCheckDrivenPropertyChecks {
+class PatchSpec extends AnyFlatSpec with Matchers with EitherValues with ScalaCheckDrivenPropertyChecks {
+
   def patch(path: String): String =
     Source
       .fromResource(path)

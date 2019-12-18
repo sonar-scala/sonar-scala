@@ -39,7 +39,9 @@ import org.http4s
 import org.http4s.Uri
 import org.http4s.client.UnexpectedStatus
 import org.scalacheck.ScalacheckShapeless._
-import org.scalatest.{FlatSpec, LoneElement, Matchers}
+import org.scalatest.LoneElement
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
 import org.sonar.api.batch.fs.InputFile
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder
@@ -49,7 +51,7 @@ import org.sonar.api.config.internal.MapSettings
 import org.sonar.api.rule.RuleKey
 
 class GithubPrReviewJobSpec
-    extends FlatSpec
+    extends AnyFlatSpec
     with Matchers
     with LoneElement
     with ScalaCheckDrivenPropertyChecks

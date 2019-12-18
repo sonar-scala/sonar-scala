@@ -18,7 +18,7 @@
 package com.mwz.sonar.scala
 
 import org.scalactic.Equality
-import org.scalatest.Matchers
+import org.scalatest.matchers.should.Matchers
 import org.scalatest.matchers.{HavePropertyMatchResult, HavePropertyMatcher}
 import org.sonar.api.batch.sensor.internal.SensorContextTester
 import org.sonar.api.batch.sensor.issue.{Issue, IssueLocation}

@@ -19,12 +19,14 @@ package com.mwz.sonar.scala.util
 
 import cats.effect.IO
 import com.mwz.sonar.scala.util.syntax.Optionals._
-import org.scalatest.{FlatSpec, Matchers}
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 import org.scalatest.{LoneElement, OptionValues}
 import org.sonar.api.utils.log.LoggerLevel._
 import org.sonar.api.utils.log.SonarLogTester
 
-class LoggerSpec extends FlatSpec with Matchers with LoneElement with OptionValues with SonarLogTester {
+class LoggerSpec extends AnyFlatSpec with Matchers with LoneElement with OptionValues with SonarLogTester {
+
   trait Context {
     val log: IO[Logger[IO]] = Logger.create(classOf[LoggerSpec], "test")
   }

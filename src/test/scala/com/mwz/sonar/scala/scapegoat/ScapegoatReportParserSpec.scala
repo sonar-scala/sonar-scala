@@ -21,10 +21,12 @@ package scapegoat
 import java.nio.file.Paths
 
 import com.mwz.sonar.scala.util.PathUtils.cwd
-import org.scalatest.{FlatSpec, LoneElement, Matchers}
+import org.scalatest.LoneElement
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 
 /** Tests the correct behavior of the Scapegoat XML reports parser */
-class ScapegoatReportParserSpec extends FlatSpec with Matchers with LoneElement with WithFiles {
+class ScapegoatReportParserSpec extends AnyFlatSpec with Matchers with LoneElement with WithFiles {
   val scapegoatReportParser = new ScapegoatReportParser()
 
   "replaceAllDotsButLastWithSlashes" should "work with relative paths" in {

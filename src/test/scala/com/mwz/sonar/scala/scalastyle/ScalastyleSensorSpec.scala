@@ -38,6 +38,8 @@ import org.scalastyle.{
   ScalastyleChecker => Checker
 }
 import org.scalatest._
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 import org.scalatestplus.mockito.MockitoSugar
 import org.sonar.api.batch.fs.InputFile
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder
@@ -48,7 +50,7 @@ import org.sonar.api.config.internal.MapSettings
 import org.sonar.api.rule.RuleKey
 
 class ScalastyleSensorSpec
-    extends FlatSpec
+    extends AnyFlatSpec
     with Matchers
     with SensorContextMatchers
     with LoneElement

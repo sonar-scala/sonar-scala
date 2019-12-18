@@ -22,14 +22,16 @@ import java.io.File
 import java.nio.file.{Path, Paths}
 
 import org.mockito.{ArgumentMatchersSugar, MockitoSugar}
-import org.scalatest.{FlatSpec, LoneElement, Matchers}
+import org.scalatest.LoneElement
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 import org.sonar.api.batch.fs.InputFile
 import org.sonar.api.batch.fs.internal.{DefaultFileSystem, TestInputFileBuilder}
 import org.sonar.api.batch.sensor.internal.{DefaultSensorDescriptor, SensorContextTester}
 import org.sonar.api.config.internal.MapSettings
 
 class JUnitSensorSpec
-    extends FlatSpec
+    extends AnyFlatSpec
     with Matchers
     with LoneElement
     with MockitoSugar

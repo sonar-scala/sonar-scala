@@ -35,10 +35,11 @@ import org.http4s.implicits._
 import org.http4s.server._
 import org.scalacheck.ScalacheckShapeless._
 import org.scalacheck._
-import org.scalatest.{FlatSpec, Matchers}
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
 
-class GithubSpec extends FlatSpec with Matchers with ScalaCheckDrivenPropertyChecks {
+class GithubSpec extends AnyFlatSpec with Matchers with ScalaCheckDrivenPropertyChecks {
   val user = User("user123")
   val conf = GlobalConfig.PullRequest(
     provider = "github",

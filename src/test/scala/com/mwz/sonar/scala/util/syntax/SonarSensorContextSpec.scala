@@ -22,12 +22,13 @@ package syntax
 import java.nio.file.Paths
 
 import com.mwz.sonar.scala.util.syntax.SonarSensorContext._
-import org.scalatest.{FlatSpec, Matchers}
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder
 import org.sonar.api.batch.sensor.internal.SensorContextTester
 import org.sonar.api.measures.CoreMetrics
 
-class SonarSensorContextSpec extends FlatSpec with Matchers with SensorContextMatchers {
+class SonarSensorContextSpec extends AnyFlatSpec with Matchers with SensorContextMatchers {
   it should "save a measure for a given input file" in {
     val ctx = SensorContextTester.create(Paths.get("./"))
     val testFile = TestInputFileBuilder

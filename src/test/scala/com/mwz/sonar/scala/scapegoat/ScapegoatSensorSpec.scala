@@ -27,7 +27,8 @@ import com.mwz.sonar.scala.pr.Issue
 import com.mwz.sonar.scala.util.PathUtils.cwd
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
-import org.scalatest.{FlatSpec, LoneElement, OptionValues}
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.{LoneElement, OptionValues}
 import org.scalatestplus.mockito.MockitoSugar
 import org.sonar.api.batch.fs.InputFile
 import org.sonar.api.batch.fs.internal.{DefaultFileSystem, TestInputFileBuilder}
@@ -40,7 +41,7 @@ import scalariform.ScalaVersion
 
 /** Tests the Scapegoat Sensor. */
 class ScapegoatSensorSpec
-    extends FlatSpec
+    extends AnyFlatSpec
     with MockitoSugar
     with SensorContextMatchers
     with LoneElement

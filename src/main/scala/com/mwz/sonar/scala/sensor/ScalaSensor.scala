@@ -75,13 +75,8 @@ final class ScalaSensor(globalConfig: GlobalConfig) extends Sensor {
   }
 
   def ExampleIssues(): Unit = {
-    val isEmpty = List(1).size == 0
-    val b = if (true) true else false
     var TWO = 1 + 1
     //test
-    while (true) {
-      println("WOW!")
-    }
     return ()
   }
 

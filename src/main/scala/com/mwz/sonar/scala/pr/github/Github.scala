@@ -22,8 +22,10 @@ package github
 import scala.language.higherKinds
 
 import cats.effect.Sync
+import cats.syntax.flatMap._
 import com.mwz.sonar.scala.pr.github.Codec._
 import io.circe.generic.auto._
+import mouse.boolean._
 import org.http4s.client.Client
 import org.http4s.{Header, Headers, Method, Request, Uri}
 
@@ -31,9 +33,9 @@ trait Github[F[_]] {
   def authenticatedUser: F[User]
   def pullRequest: F[PullRequest]
   def comments: F[List[Comment]]
-  def createComment(comment: NewComment): F[Comment]
+  def createComment(comment: NewComment): F[Unit]
   def files: F[List[File]]
-  def createStatus(sha: String, status: NewStatus): F[Status]
+  def createStatus(sha: String, status: NewStatus): F[Unit]
 }
 
 object Github {
@@ -58,7 +60,7 @@ object Github {
       }
       def pullRequest: F[PullRequest] = client.expect[PullRequest](prUri)
       def comments: F[List[Comment]] = client.expect[List[Comment]](commentsUri)
-      def createComment(comment: NewComment): F[Comment] = {
+      def createComment(comment: NewComment): F[Unit] = {
         val request: F[Request[F]] = Uri
           .fromString(commentsUri)
           .fold(
@@ -69,10 +71,10 @@ object Github {
                   .withEntity(comment)
               )
           )
-        client.expect[Comment](request)
+        pr.dryRun.fold(Sync[F].unit, client.expect[Comment](request) >> Sync[F].unit)
       }
       def files: F[List[File]] = client.expect[List[File]](filesUri)
-      def createStatus(sha: String, status: NewStatus): F[Status] = {
+      def createStatus(sha: String, status: NewStatus): F[Unit] = {
         val request: F[Request[F]] = Uri
           .fromString(newStatusUri(sha))
           .fold(
@@ -83,7 +85,7 @@ object Github {
                   .withEntity(status)
               )
           )
-        client.expect[Status](request)
+        pr.dryRun.fold(Sync[F].unit, client.expect[Status](request) >> Sync[F].unit)
       }
     }
 }

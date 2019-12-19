@@ -32,7 +32,6 @@ import com.mwz.sonar.scala.pr.Generators._
 import com.mwz.sonar.scala.pr.github.File
 import com.mwz.sonar.scala.pr.github.Github
 import com.mwz.sonar.scala.pr.github.PullRequest
-import com.mwz.sonar.scala.pr.github.Status
 import com.mwz.sonar.scala.pr.github.{Comment, NewComment, NewStatus, User}
 import com.mwz.sonar.scala.util.Logger
 import org.http4s
@@ -76,9 +75,9 @@ class GithubPrReviewJobSpec
     def authenticatedUser: F[User] = ???
     def pullRequest: F[PullRequest] = ???
     def comments: F[List[Comment]] = ???
-    def createComment(comment: NewComment): F[Comment] = ???
+    def createComment(comment: NewComment): F[Unit] = ???
     def files: F[List[File]] = ???
-    def createStatus(sha: String, status: NewStatus): F[Status] = ???
+    def createStatus(sha: String, status: NewStatus): F[Unit] = ???
   }
 
   val patch =
@@ -111,7 +110,7 @@ class GithubPrReviewJobSpec
   }
 
   it should "report a failure status if review returns an error" in new Ctx with IOCtx with EmptyLogger {
-    forAll { (baseUrl: Uri, user: User, pr: PullRequest, status: Status) =>
+    forAll { (baseUrl: Uri, user: User, pr: PullRequest) =>
       withTracing { trace =>
         val github = new GithubNotImpl[IO] {
           override def authenticatedUser = trace.update("authenticatedUser" :: _) >> IO.pure(user)
@@ -119,7 +118,7 @@ class GithubPrReviewJobSpec
           override def comments = trace.update("comments" :: _) >> IO.pure(List.empty)
           override def files = trace.update("files" :: _) >> IO.pure(List.empty)
           override def createStatus(sha: String, newStatus: NewStatus) =
-            trace.update("createStatus - " + newStatus.state :: _) >> IO.pure(status)
+            trace.update("createStatus - " + newStatus.state :: _) >> IO.unit
         }
 
         val result = githubPrReviewJob().run[IO](baseUrl, github)
@@ -139,7 +138,7 @@ class GithubPrReviewJobSpec
 
   it should "report an error status if review contains any blocker or critical issues" in
   new Ctx with IOCtx with EmptyLogger {
-    forAll { (baseUrl: Uri, user: User, pr: PullRequest, status: Status, prFile: File) =>
+    forAll { (baseUrl: Uri, user: User, pr: PullRequest, prFile: File) =>
       withTracing { trace =>
         val fileWithPatch = prFile.copy(patch = patch)
         val github = new GithubNotImpl[IO] {
@@ -151,7 +150,7 @@ class GithubPrReviewJobSpec
             IO.pure(Comment(1, comment.path, Some(comment.position), user, comment.body))
           override def files = trace.update("files" :: _) >> IO.pure(List(fileWithPatch))
           override def createStatus(sha: String, newStatus: NewStatus) =
-            trace.update("createStatus - " + newStatus.state :: _) >> IO.pure(status)
+            trace.update("createStatus - " + newStatus.state :: _) >> IO.unit
         }
 
         val file: InputFile = TestInputFileBuilder.create("", fileWithPatch.filename).build()

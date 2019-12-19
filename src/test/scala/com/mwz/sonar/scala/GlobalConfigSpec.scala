@@ -110,7 +110,8 @@ class GlobalConfigSpec extends AnyFlatSpec with Matchers with OptionValues with 
         github = GlobalConfig.Github("owner/repo", "token"),
         disableIssues = false,
         disableInlineComments = false,
-        disableCoverage = true
+        disableCoverage = true,
+        dryRun = false
       )
     )
 
@@ -127,7 +128,8 @@ class GlobalConfigSpec extends AnyFlatSpec with Matchers with OptionValues with 
         github = GlobalConfig.Github("owner/repo", "token"),
         disableIssues = true,
         disableInlineComments = false,
-        disableCoverage = true
+        disableCoverage = true,
+        dryRun = false
       )
     )
 
@@ -143,8 +145,18 @@ class GlobalConfigSpec extends AnyFlatSpec with Matchers with OptionValues with 
         github = GlobalConfig.Github("owner/repo", "token"),
         disableIssues = false,
         disableInlineComments = true,
-        disableCoverage = true
+        disableCoverage = true,
+        dryRun = false
       )
     )
+  }
+
+  it should "respect the 'dryRun' property" in {
+    val conf = new GlobalConfig(
+      prDecorationConf
+        .setProperty("sonar.scala.pullrequest.dryrun", "true")
+        .asConfig
+    )
+    conf.pullRequest.value.value.right.value.dryRun shouldBe true
   }
 }

@@ -29,6 +29,7 @@ import org.http4s.Request
 import org.http4s.circe.CirceEntityCodec._
 import org.http4s.circe.CirceEntityEncoder._
 import org.http4s.client.Client
+import org.http4s.client.UnexpectedStatus
 import org.http4s.dsl.io._
 import org.http4s.headers.Authorization
 import org.http4s.implicits._
@@ -47,7 +48,8 @@ class GithubSpec extends AnyFlatSpec with Matchers with ScalaCheckDrivenProperty
     github = GlobalConfig.Github("owner/repo", "oauthToken"),
     disableIssues = false,
     disableInlineComments = true,
-    disableCoverage = true
+    disableCoverage = true,
+    dryRun = false
   )
 
   val authUser: Kleisli[OptionT[IO, ?], Request[IO], String] =
@@ -111,7 +113,25 @@ class GithubSpec extends AnyFlatSpec with Matchers with ScalaCheckDrivenProperty
       }
 
       val client = Client.fromHttpApp(HttpApp(auth(http).orNotFound.run))
-      Github(client, conf).createComment(newComment).unsafeRunSync() shouldBe response
+      Github(client, conf).createComment(newComment).unsafeRunSync() shouldBe ((): Unit)
+    }
+  }
+
+  it should "respect the dry run setting (create comment)" in {
+    forAll { (newComment: NewComment, comment: Comment) =>
+      val http = AuthedRoutes.of[String, IO] {
+        case req @ POST -> Root / "repos" / "owner" / "repo" / "pulls" / "123" / "comments" as _ =>
+          InternalServerError("error")
+      }
+
+      val client = Client.fromHttpApp(HttpApp(auth(http).orNotFound.run))
+      Github(client, conf)
+        .createComment(newComment)
+        .attempt
+        .unsafeRunSync() shouldBe Left(UnexpectedStatus(InternalServerError))
+      Github(client, conf.copy(dryRun = true))
+        .createComment(newComment)
+        .unsafeRunSync() shouldBe ((): Unit)
     }
   }
 
@@ -142,7 +162,26 @@ class GithubSpec extends AnyFlatSpec with Matchers with ScalaCheckDrivenProperty
       }
 
       val client = Client.fromHttpApp(HttpApp(auth(http).orNotFound.run))
-      Github(client, conf).createStatus(sha, newStatus).unsafeRunSync() shouldBe response
+      Github(client, conf).createStatus(sha, newStatus).unsafeRunSync() shouldBe ((): Unit)
+    }
+  }
+
+  it should "respect the dryRun setting (create status)" in {
+    val strGen = Gen.nonEmptyListOf(Gen.alphaNumChar).map(_.mkString)
+    forAll(strGen, implicitly[Arbitrary[NewStatus]].arbitrary) { (sha: String, newStatus: NewStatus) =>
+      val http = AuthedRoutes.of[String, IO] {
+        case req @ POST -> Root / "repos" / "owner" / "repo" / "statuses" / sha as _ =>
+          InternalServerError("error")
+      }
+
+      val client = Client.fromHttpApp(HttpApp(auth(http).orNotFound.run))
+      Github(client, conf)
+        .createStatus(sha, newStatus)
+        .attempt
+        .unsafeRunSync() shouldBe Left(UnexpectedStatus(InternalServerError))
+      Github(client, conf.copy(dryRun = true))
+        .createStatus(sha, newStatus)
+        .unsafeRunSync() shouldBe ((): Unit)
     }
   }
 }

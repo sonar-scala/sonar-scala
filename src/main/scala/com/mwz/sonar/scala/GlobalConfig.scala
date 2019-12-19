@@ -110,13 +110,15 @@ final class GlobalConfig(config: Configuration) {
       disableIssues = config.getAs[Boolean](PR_DISABLE_ISSUES)
       disableInlineComments = config.getAs[Boolean](PR_DISABLE_INLINE_COMMENTS)
       disableCoverage = true
+      dryRun = config.getAs[Boolean](PR_DRYRUN)
     } yield PullRequest(
       provider,
       prNumber,
       Github(githubRepo, githubOauth),
       disableIssues,
       disableInlineComments,
-      disableCoverage
+      disableCoverage,
+      dryRun
     )
 }
 
@@ -128,6 +130,7 @@ object GlobalConfig {
   private val PR_DISABLE_ISSUES = "sonar.scala.pullrequest.issues.disable"
   private val PR_DISABLE_INLINE_COMMENTS = "sonar.scala.pullrequest.issues.disableInlineComments"
   private val PR_DISABLE_COVERAGE = "sonar.scala.pullrequest.coverage.disable"
+  private val PR_DRYRUN = "sonar.scala.pullrequest.dryrun"
 
   /**
    * General PR settings:
@@ -144,6 +147,9 @@ object GlobalConfig {
    *
    * Coverage:
    * - sonar.scala.pullrequest.coverage.disable - disable posting coverage summary (currently not used)
+   *
+   * Other:
+   * - sonar.scala.pullrequest.dryrun - execute pr decoration in dry run mode (don't post the results back to Github)
    */
   final case class PullRequest(
     provider: String,
@@ -151,7 +157,8 @@ object GlobalConfig {
     github: Github,
     disableIssues: Boolean,
     disableInlineComments: Boolean,
-    disableCoverage: Boolean
+    disableCoverage: Boolean,
+    dryRun: Boolean
   )
   final case class Github(
     repository: String,

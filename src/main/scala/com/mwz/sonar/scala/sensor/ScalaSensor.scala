@@ -77,6 +77,7 @@ final class ScalaSensor(globalConfig: GlobalConfig) extends Sensor {
   def ExampleIssues(): Unit = {
     var TWO = 1 + 1
     //test
+    val stillTwo = TWO / 1
     return ()
   }
 

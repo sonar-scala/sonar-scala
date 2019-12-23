@@ -1,17 +1,17 @@
-# sonar-scala
+<h1 align="left"> <img src="./img/sonar-scala.svg" height="80px"> sonar-scala</h1>
 
 [![circleci-badge]][circleci] [![coverage-badge]][coverage]
 [![bintray-badge]][bintray] [![bintray-badge-lts]][bintray-lts]
 [![bintray-badge-lts-67]][bintray-lts-67]
 [![bintray-stats-badge]][bintray-stats] [![gitter-badge]][gitter]
 
-[bintray]: https://bintray.com/mwz/maven/sonar-scala/7.7.0/link
-[bintray-badge]: https://img.shields.io/badge/Download-7.7.0-blue.svg
+[bintray]: https://bintray.com/mwz/maven/sonar-scala/7.8.0/link
+[bintray-badge]: https://img.shields.io/badge/Download-7.8.0-blue.svg
 [bintray-badge-lts]:
-  https://img.shields.io/badge/Download-7.7.0_(7.9_LTS)-blue.svg
+  https://img.shields.io/badge/Download-7.8.0_(for_SonarQube_7.9_LTS)-blue.svg
 [bintray-badge-lts-67]:
-  https://img.shields.io/badge/Download-6.8.0_(6.7_LTS)-blue.svg
-[bintray-lts]: https://bintray.com/mwz/maven/sonar-scala/7.7.0/link
+  https://img.shields.io/badge/Download-6.8.0_(for_SonarQube_6.7_LTS)-blue.svg
+[bintray-lts]: https://bintray.com/mwz/maven/sonar-scala/7.8.0/link
 [bintray-lts-67]:
   https://bintray.com/mwz/maven/sonar-scala/6.8.0/link
 [bintray-stats]: https://bintray.com/mwz/maven/sonar-scala#statistics
@@ -28,7 +28,12 @@
 [gitter-badge]:
   https://img.shields.io/gitter/room/sonar-scala/sonar-scala.svg?colorB=46BC99&label=Chat
 
-**SonarQube plugin for static code analysis of Scala projects.**
+**A free and open-source SonarQube plugin for static code analysis of Scala
+projects.**
+
+Sonar-scala is an independent SonarQube plugin, driven by and developed with
+:heart: by the
+[community](https://github.com/mwz/sonar-scala/graphs/contributors).
 
 Intended for [SonarQube 6.7 LTS](https://www.sonarqube.org/sonarqube-6-7-lts),
 [SonarQube 7.9 LTS](https://www.sonarqube.org/sonarqube-7-9-lts) and Scala
@@ -36,12 +41,37 @@ Intended for [SonarQube 6.7 LTS](https://www.sonarqube.org/sonarqube-6-7-lts),
 
 This plugin uses the [scalariform](https://github.com/scala-ide/scalariform)
 library to parse the source code in a version independent way and integrates
-with [Scoverage](http://scoverage.org) (code coverage),
-[Scalastyle](http://www.scalastyle.org) and
-[Scapegoat](https://github.com/sksamuel/scapegoat) (static code analysis).
+with **[Scoverage](http://scoverage.org)** (code coverage),
+**[Scalastyle](http://www.scalastyle.org)** and
+**[Scapegoat](https://github.com/sksamuel/scapegoat)** (static code analysis).
+It also provides
+[pull request decoration](#pull-request-decoration-supspannewspansup)
+functionality, which can review pull requests on Github and make comments on new
+issues directly in the pull request instead of reporting them to SonarQube.
 
-_Running analysis from a Windows machine is currently not supported, please use
+_Running analysis from a Windows machine is currently not supported - please use
 Linux or other Unix-like operating systems._
+
+<h1>Table of Contents</h1>
+
+<!-- @import "[TOC]" {cmd="toc" depthFrom=1 depthTo=6 orderedList=false} -->
+
+<!-- code_chunk_output -->
+
+- [Supported Metrics](#supported-metrics)
+- [Quality Rules and Profiles](#quality-rules-and-profiles)
+- [Set-up](#set-up)
+- [Sonar-scanner properties](#sonar-scanner-properties)
+- [Pull request decoration <sup>NEW!</sup>](#pull-request-decoration-supspannewspansup)
+  - [Configuration](#configuration)
+  - [Usage](#usage)
+- [Compatibility with SonarQube](#compatibility-with-sonarqube)
+- [Development](#development)
+- [Credits](#credits)
+- [Changelog](#changelog)
+- [License](#license)
+
+<!-- /code_chunk_output -->
 
 # Supported Metrics
 
@@ -176,25 +206,148 @@ when running an analysis:
 See an example usage:
 
 ```bash
-sonar-scanner -Dsonar.projectName=test \
-              -Dsonar.projectKey=test \
-              -Dsonar.sources=src/main/scala \
-              -Dsonar.tests=src/test/scala \
-              -Dsonar.sourceEncoding=UTF-8 \
-              -Dsonar.scala.version=2.12 \
-              -Dsonar.scoverage.reportPath=target/scala-2.12/scoverage-report/scoverage.xml \
-              -Dsonar.scapegoat.reportPath=target/scala-2.12/scapegoat-report/scapegoat.xml
+sonar-scanner \
+  -Dsonar.host.url=https://your-sonarqube
+  -Dsonar.projectName=test \
+  -Dsonar.projectKey=test \
+  -Dsonar.sources=src/main/scala \
+  -Dsonar.tests=src/test/scala \
+  -Dsonar.sourceEncoding=UTF-8 \
+  -Dsonar.scala.version=2.12 \
+  -Dsonar.scoverage.reportPath=target/scala-2.12/scoverage-report/scoverage.xml \
+  -Dsonar.scapegoat.reportPath=target/scala-2.12/scapegoat-report/scapegoat.xml
 ```
 
-or simply `sbt sonarScan` if you use the
-[sbt-sonar](https://github.com/mwz/sbt-sonar) sbt plugin.
+or simply run `sbt -Dsonar.host.url=https://your-sonarqube sonarScan` if you use
+the [sbt-sonar](https://github.com/mwz/sbt-sonar) sbt plugin.
+
+To run sonar-scala in a debug mode, set the `sonar.verbose` property to `true`,
+e.g.
+
+```bash
+sbt \
+  -Dsonar.host.url=https://your-sonarqube \
+  -Dsonar.verbose=true \
+  sonarScan
+```
+
+# Pull request decoration <sup><span>NEW!</span></sup>
+
+Starting from version `7.8.0`, sonar-scala can be run in a decoration mode,
+which can analyse Github pull requests and make comments on any new issues
+directly on the pull request.
+
+This functionality is similar to what was provided by the
+[GitHub Plugin](https://docs.sonarqube.org/display/PLUG/GitHub+Plugin), which
+was deprecated in SonarQube 7.2 and replaced by similar functionality in the
+paid Developer Edition. :rage: SonarCloud also offers PR analysis, but it
+requires a paid subscription for private projects.
+
+**Sonar-scala brings Github PR decoration functionality for free to the
+Community Edition of SonarQube!**
+
+See some examples below:
+
+![](./img/pr-decoration-example1.png)
+
+![](./img/pr-decoration-example2.png)
+
+Sonar-scala also reports a status check at the end of the analysis - passed if
+no critical or blocker issues are found, or failed otherwise.
+
+![](./img/pr-decoration-status-check.png)
+
+## Configuration
+
+- Create a new dedicated Github account, or you can use your existing bot/CI
+  account if you already have one.
+- Generate a new personal access token for your account. The token can be
+  generated in the [developer settings](https://github.com/settings/tokens) on
+  Github. Select the `public_repo` scope for public repositories or `repo` for
+  private repositories (or a mix of public and private repositories).
+- Make sure you give your user write permissions to the repositories you want to
+  decorate your PRs for, otherwise sonar-scala will fail as it won't be able to
+  set a status of the PR check.
+
+## Usage
+
+Before you execute PR decoration, you need to check out to the latest commit of
+the branch which was used to open the pull request. Once you've done that, you
+can run sonar-scala in decoration mode by setting the following properties:
+
+- **sonar.scala.pullrequest.provider** - currently, only `github` is supported
+- **sonar.scala.pullrequest.number** - number of the pull request; if you use
+  CircleCI, you can use the `CIRCLE_PR_NUMBER` env variable, Travis has
+  `TRAVIS_PULL_REQUEST`
+- **sonar.scala.pullrequest.github.repository** - name of the repository
+  including organisation name in the following format `org/project`, e.g.
+  `mwz/sonar-scala` or `scala/scala`, etc.
+- **sonar.scala.pullrequest.github.oauth** - Github personal access token; can
+  be generated in the [developer settings](https://github.com/settings/tokens)
+  on Github; select the `public_repo` scope for public repositories or `repo`
+  for private repositories (or a mix of public and private repositories)
+
+Optional:
+
+- **sonar.scala.pullrequest.dryrun** - execute PR decoration in "dry run" mode
+  (sonar-scala will not post the results to Github). This setting is useful for
+  testing purposes in combination with `sonar.verbose=true`. You usually won't
+  need to use this setting, unless you run into any issues.
+
+Once you run sonar-scala in decoration mode, instead of sending the results to
+SonarQube it will post the relevant comments to Github, which results in
+creating an empty project in SonarQube. This is necessary to make this feature
+work since the Community Edition of SonarQube doesn't have the support for
+branch analysis. Sonar-scala works around that limitation by having an empty
+project so that it can still be executed, analyse your code and post any
+comments back to Github.
+
+You can create an empty project yourself, or you can let sonar-scala do this for
+you. If your SonarQube instance requires authentication to execute an analysis,
+you need to make sure that your user has the right permissions to create a new
+project and execute an analysis, or just the permission to execute analysis if
+you created a new project yourself. Once you created a new blank project, you
+can use it across all of your projects.
+
+![](./img/pr-decoration-sonarqube.png)
+
+The following example shows how to run sonar-scala in decoration mode for pull
+request [1](https://github.com/mwz/sonar-scala-pr-annotation-example/pull/1) in
+the
+[mwz/sonar-scala-pr-annotation-example](https://github.com/mwz/sonar-scala-pr-annotation-example)
+repository on Github. Notice the project name and key are set to match the
+dedicated blank project in SonarQube, which isn't the same project you would
+normally use to execute an analysis in a "normal" mode.
+
+```bash
+sbt \
+  -Dsonar.host.url=http://localhost \
+  -Dsonar.projectName='PR Decoration' \
+  -Dsonar.projectKey=pr-decoration \
+  -Dsonar.scala.pullrequest.provider=github \
+  -Dsonar.scala.pullrequest.number=1 \
+  -Dsonar.scala.pullrequest.github.repository=mwz/sonar-scala-pr-annotation-example \
+  -Dsonar.scala.pullrequest.github.oauth=REDACTED \
+  sonarScan
+```
+
+If you want to have this automated by your CI, which is ideally how it's
+intended to be used, the pull request setting will be different for each pull
+request. Most of the modern CI tools allow you to use a built-in environment
+variable to get the current pull request number, e.g. CircleCI has
+`CIRCLE_PR_NUMBER` and Travis provides `TRAVIS_PULL_REQUEST`.
+
+Please remember that if you use the Scapegoat integration, you still need to
+generate scapegoat report before executing sonar-scala by running
+`sbt scapegoat` - otherwise any Scapegoat issues in your project won't be
+reported back to Github.
 
 # Compatibility with SonarQube
 
 | SonarQube | sonar-scala                                                                                          |
 | --------- | ---------------------------------------------------------------------------------------------------- |
-| 7.9 LTS   | [7.7.0](https://github.com/mwz/sonar-scala/releases/tag/v7.7.0)                             |
-| 6.7 LTS   | 6.x (_latest [6.8.0](https://github.com/mwz/sonar-scala/releases/tag/v6.8.0)_) |
+| 7.9.x LTS | [7.8.0](https://github.com/mwz/sonar-scala/releases/tag/v7.8.0)                    |
+| 6.7.x LTS | 6.x (_latest [6.8.0](https://github.com/mwz/sonar-scala/releases/tag/v6.8.0)_) |
 
 <details>
   <summary>Other versions</summary>

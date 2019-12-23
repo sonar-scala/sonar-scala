@@ -1,5 +1,14 @@
 # Changelog
 
+## [7.8.0 LTS](https://github.com/mwz/sonar-scala/releases/tag/v7.8.0) - 23.12.2019
+
+- Implemented a new mode for pull request decoration. In this mode, sonar-scala
+  will review pull requests on Github and make comments on new issues directly
+  in the pull request instead of reporting them to SonarQube.  
+  To read more about this feature, see the documentation
+  [here](https://github.com/mwz/sonar-scala#pull-request-decoration-supspannewspansup).
+  (#196, #316. #318, #319, #324 - @mwz)
+
 ## [7.7.0 LTS](https://github.com/mwz/sonar-scala/releases/tag/v7.7.0) - 11.10.2019
 
 - Added support for

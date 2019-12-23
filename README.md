@@ -47,13 +47,12 @@ with **[Scoverage](http://scoverage.org)** (code coverage),
 It also provides
 [pull request decoration](#pull-request-decoration-supspannewspansup)
 functionality, which can review pull requests on Github and make comments on new
-issues directly in the pull request instead of reporting the issues to
-SonarQube.
+issues directly in the pull request instead of reporting them to SonarQube.
 
-_Running analysis from a Windows machine is currently not supported, please use
+_Running analysis from a Windows machine is currently not supported - please use
 Linux or other Unix-like operating systems._
 
-# Table of Contents {ignore=true}
+<h1>Table of Contents</h1>
 
 <!-- @import "[TOC]" {cmd="toc" depthFrom=1 depthTo=6 orderedList=false} -->
 
@@ -253,14 +252,14 @@ See some examples below:
 
 ![](./img/pr-decoration-example2.png)
 
-Sonar-scala will also report a status check at the end of the analysis - it will
-be passed if no critical or blocker issues were found, or failed otherwise.
+Sonar-scala also reports a status check at the end of the analysis - passed if
+no critical or blocker issues are found, or failed otherwise.
 
 ![](./img/pr-decoration-status-check.png)
 
 ## Configuration
 
-- Create a new dedicated Github account or you can use your existing bot/CI
+- Create a new dedicated Github account, or you can use your existing bot/CI
   account if you already have one.
 - Generate a new personal access token for your account. The token can be
   generated in the [developer settings](https://github.com/settings/tokens) on
@@ -276,7 +275,7 @@ Before you execute PR decoration, you need to check out to the latest commit of
 the branch which was used to open the pull request. Once you've done that, you
 can run sonar-scala in decoration mode by setting the following properties:
 
-- **sonar.scala.pullrequest.provider** - currently only `github` is supported
+- **sonar.scala.pullrequest.provider** - currently, only `github` is supported
 - **sonar.scala.pullrequest.number** - number of the pull request; if you use
   CircleCI, you can use the `CIRCLE_PR_NUMBER` env variable, Travis has
   `TRAVIS_PULL_REQUEST`
@@ -303,10 +302,10 @@ branch analysis. Sonar-scala works around that limitation by having an empty
 project so that it can still be executed, analyse your code and post any
 comments back to Github.
 
-You can create an empty project yourself or you can let sonar-scala do this for
-you. If your SonarQube instance requires authentication in order to execute an
-analysis, you need to make sure that your user has the right permissions to
-create a new project and execute an analysis, or just the execute permission if
+You can create an empty project yourself, or you can let sonar-scala do this for
+you. If your SonarQube instance requires authentication to execute an analysis,
+you need to make sure that your user has the right permissions to create a new
+project and execute an analysis, or just the permission to execute analysis if
 you created a new project yourself. Once you created a new blank project, you
 can use it across all of your projects.
 
@@ -332,10 +331,10 @@ sbt \
   sonarScan
 ```
 
-Obviously, if you want to have this automated by your CI, which is ideally how
-it's intended to be used, the pull request setting will be different for each
-pull request. Most of the modern CI tools allow you to use a built-in
-environment variable to get the current pull request number, e.g. CircleCI has
+If you want to have this automated by your CI, which is ideally how it's
+intended to be used, the pull request setting will be different for each pull
+request. Most of the modern CI tools allow you to use a built-in environment
+variable to get the current pull request number, e.g. CircleCI has
 `CIRCLE_PR_NUMBER` and Travis provides `TRAVIS_PULL_REQUEST`.
 
 Please remember that if you use the Scapegoat integration, you still need to
@@ -347,8 +346,8 @@ reported back to Github.
 
 | SonarQube | sonar-scala                                                                                          |
 | --------- | ---------------------------------------------------------------------------------------------------- |
-| 7.9 LTS   | [7.8.0](https://github.com/mwz/sonar-scala/releases/tag/v7.8.0)                    |
-| 6.7 LTS   | 6.x (_latest [6.8.0](https://github.com/mwz/sonar-scala/releases/tag/v6.8.0)_) |
+| 7.9.x LTS | [7.8.0](https://github.com/mwz/sonar-scala/releases/tag/v7.8.0)                    |
+| 6.7.x LTS | 6.x (_latest [6.8.0](https://github.com/mwz/sonar-scala/releases/tag/v6.8.0)_) |
 
 <details>
   <summary>Other versions</summary>

@@ -44,8 +44,7 @@ library to parse the source code in a version independent way and integrates
 with **[Scoverage](http://scoverage.org)** (code coverage),
 **[Scalastyle](http://www.scalastyle.org)** and
 **[Scapegoat](https://github.com/sksamuel/scapegoat)** (static code analysis).
-It also provides
-[pull request decoration](#pull-request-decoration-supspannewspansup)
+It also provides [pull request decoration](#pull-request-decoration-new)
 functionality, which can review pull requests on Github and make comments on new
 issues directly in the pull request instead of reporting them to SonarQube.
 
@@ -54,15 +53,11 @@ Linux or other Unix-like operating systems._
 
 <h1>Table of Contents</h1>
 
-<!-- @import "[TOC]" {cmd="toc" depthFrom=1 depthTo=6 orderedList=false} -->
-
-<!-- code_chunk_output -->
-
 - [Supported Metrics](#supported-metrics)
 - [Quality Rules and Profiles](#quality-rules-and-profiles)
 - [Set-up](#set-up)
 - [Sonar-scanner properties](#sonar-scanner-properties)
-- [Pull request decoration <sup>NEW!</sup>](#pull-request-decoration-supspannewspansup)
+- [Pull request decoration <sup>NEW!</sup>](#pull-request-decoration-new)
   - [Configuration](#configuration)
   - [Usage](#usage)
 - [Compatibility with SonarQube](#compatibility-with-sonarqube)
@@ -70,8 +65,6 @@ Linux or other Unix-like operating systems._
 - [Credits](#credits)
 - [Changelog](#changelog)
 - [License](#license)
-
-<!-- /code_chunk_output -->
 
 # Supported Metrics
 
@@ -231,7 +224,7 @@ sbt \
   sonarScan
 ```
 
-# Pull request decoration <sup><span>NEW!</span></sup>
+# Pull request decoration <sup>NEW!</sup>
 
 Starting from version `7.8.0`, sonar-scala can be run in a decoration mode,
 which can analyse Github pull requests and make comments on any new issues

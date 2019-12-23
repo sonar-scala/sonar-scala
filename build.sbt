@@ -66,7 +66,7 @@ libraryDependencies ++= List(
   "org.slf4j"                  % "slf4j-api"                  % "1.7.30" % Provided,
   "org.typelevel"              %% "cats-core"                 % "2.1.0",
   "org.typelevel"              %% "cats-effect"               % "2.0.0",
-  "org.typelevel"              %% "mouse"                     % "0.23",
+  "org.typelevel"              %% "mouse"                     % "0.24",
   "io.circe"                   %% "circe-core"                % circe,
   "io.circe"                   %% "circe-generic"             % circe,
   "org.http4s"                 %% "http4s-blaze-client"       % http4s,

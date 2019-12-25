@@ -82,7 +82,7 @@ libraryDependencies ++= List(
   "org.scalatestplus"          %% "scalacheck-1-14"           % "3.1.0.0" % Test,
   "org.scalacheck"             %% "scalacheck"                % "1.14.3" % Test,
   "com.github.alexarchambault" %% "scalacheck-shapeless_1.14" % "1.2.3" % Test,
-  "org.mockito"                %% "mockito-scala"             % "1.10.1" % Test
+  "org.mockito"                %% "mockito-scala"             % "1.10.2" % Test
 )
 
 // Project resolvers

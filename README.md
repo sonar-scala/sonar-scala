@@ -31,7 +31,7 @@
 **A free and open-source SonarQube plugin for static code analysis of Scala
 projects.**
 
-Sonar-scala is an independent SonarQube plugin, driven by and developed with
+sonar-scala is an independent SonarQube plugin, driven by and developed with
 :heart: by the
 [community](https://github.com/mwz/sonar-scala/graphs/contributors).
 
@@ -39,7 +39,7 @@ Intended for [SonarQube 6.7 LTS](https://www.sonarqube.org/sonarqube-6-7-lts),
 [SonarQube 7.9 LTS](https://www.sonarqube.org/sonarqube-7-9-lts) and Scala
 2.11/2.12. Support for Scala 2.13 is coming soon.
 
-Sonar-scala is developed in Scala. It uses the
+sonar-scala is developed in Scala. It uses the
 [scalariform](https://github.com/scala-ide/scalariform) library to parse the
 source code and integrates with [Scoverage](http://scoverage.org) (code
 coverage), [Scalastyle](http://www.scalastyle.org) and

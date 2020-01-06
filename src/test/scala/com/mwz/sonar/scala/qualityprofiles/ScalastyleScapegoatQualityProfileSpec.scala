@@ -51,7 +51,7 @@ class ScalastyleScapegoatQualityProfileSpec
   }
 
   it should "define all Scalastyle + Scapegoat rules" in new Ctx {
-    qualityProfile.rules should have size 183 // 65 from Scalastyle + 118 from Scapegoat
+    qualityProfile.rules should have size 186 // 68 from Scalastyle + 118 from Scapegoat
   }
 
   it should "have all rules come from either the Scalastyle or the Scapegaot rules repositories" in new Ctx {

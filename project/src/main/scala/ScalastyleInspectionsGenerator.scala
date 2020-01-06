@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018-2019  All sonar-scala contributors
+ * Copyright (C) 2018-2020  All sonar-scala contributors
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published
@@ -96,17 +96,16 @@ object ScalastyleInspectionsGenerator {
         val default = param \@ "default"
         Param(name, typ, label, description, default)
       }
-    } yield
-      ScalastyleInspection(
-        clazz,
-        id,
-        label,
-        description,
-        extraDescription,
-        justification,
-        defaultLevel,
-        params
-      )
+    } yield ScalastyleInspection(
+      clazz,
+      id,
+      label,
+      description,
+      extraDescription,
+      justification,
+      defaultLevel,
+      params
+    )
   }
 
   /**
@@ -124,7 +123,7 @@ object ScalastyleInspectionsGenerator {
              |  name = "${p.name}",
              |  typ = ${p.typ},
              |  label = "${p.label}",
-             |  description = "${p.description}",
+             |  description = \"\"\"${p.description}\"\"\",
              |  default = \"\"\"${p.default}\"\"\"
              |)
            """.stripMargin

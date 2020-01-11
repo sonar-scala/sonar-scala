@@ -5,13 +5,13 @@
 [![bintray-badge-lts-67]][bintray-lts-67]
 [![bintray-stats-badge]][bintray-stats] [![gitter-badge]][gitter]
 
-[bintray]: https://bintray.com/mwz/maven/sonar-scala/7.8.0/link
-[bintray-badge]: https://img.shields.io/badge/Download-7.8.0-blue.svg
+[bintray]: https://bintray.com/mwz/maven/sonar-scala/7.9.0/link
+[bintray-badge]: https://img.shields.io/badge/Download-7.9.0-blue.svg
 [bintray-badge-lts]:
-  https://img.shields.io/badge/Download-7.8.0_(for_SonarQube_7.9_LTS)-blue.svg
+  https://img.shields.io/badge/Download-7.9.0_(for_SonarQube_7.9_LTS)-blue.svg
 [bintray-badge-lts-67]:
   https://img.shields.io/badge/Download-6.8.0_(for_SonarQube_6.7_LTS)-blue.svg
-[bintray-lts]: https://bintray.com/mwz/maven/sonar-scala/7.8.0/link
+[bintray-lts]: https://bintray.com/mwz/maven/sonar-scala/7.9.0/link
 [bintray-lts-67]:
   https://bintray.com/mwz/maven/sonar-scala/6.8.0/link
 [bintray-stats]: https://bintray.com/mwz/maven/sonar-scala#statistics

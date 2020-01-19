@@ -20,6 +20,7 @@ project/plugins/project/
 # metals
 .metals
 .bloop
+metals.sbt
 
 # Intellij IDEA Specific
 .idea/

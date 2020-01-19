@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018-2019  All sonar-scala contributors
+ * Copyright (C) 2018-2020  All sonar-scala contributors
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published
@@ -48,9 +48,9 @@ class ScalastyleRulesRepositorySpec extends AnyFlatSpec with Matchers with Inspe
   }
 
   it should "include all Scalastyle inspections" in new Ctx {
-    ScalastyleInspections.AllInspections should have size 69 // 29 templates + 40 default rules
+    ScalastyleInspections.AllInspections should have size 72 // 31 templates + 41 default rules
     ScalastyleInspections.AllInspectionsByClass.size shouldBe ScalastyleInspections.AllInspections.size
-    repository.rules should have size 95 // 29 templates + 40 default rules + 26 template instances
+    repository.rules should have size 100 // 31 templates + 41 default rules + 28 template instances
   }
 
   it should "have all rules with non-empty properties" in new Ctx {

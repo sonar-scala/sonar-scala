@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018-2019  All sonar-scala contributors
+ * Copyright (C) 2018-2020  All sonar-scala contributors
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published
@@ -52,8 +52,8 @@ class RecommendedQualityProfileSpec
     qualityProfile.isDefault shouldBe true
   }
 
-  it should "have 175 rules" in new Ctx {
-    rules.size shouldBe 176 // 61 from Scalastyle + 115 from Scapegoat
+  it should "have 179 rules" in new Ctx {
+    rules.size shouldBe 179 // 64 from Scalastyle + 115 from Scapegoat
   }
 
   it should "have all rules come from either the Scalastyle or the Scapegoat rules repositories" in new Ctx {

@@ -74,7 +74,7 @@ libraryDependencies ++= List(
   "io.circe"                   %% "circe-generic-extras"      % "0.12.2",
   "org.http4s"                 %% "http4s-circe"              % http4s,
   "org.scalariform"            %% "scalariform"               % "0.2.10",
-  "org.scalastyle"             %% "scalastyle"                % "1.0.0",
+  "com.beautiful-scala"        %% "scalastyle"                % "1.1.0",
   "org.scala-lang.modules"     %% "scala-xml"                 % "1.2.0",
   "org.http4s"                 %% "http4s-blaze-server"       % http4s % Test,
   "org.http4s"                 %% "http4s-dsl"                % http4s % Test,
@@ -83,7 +83,7 @@ libraryDependencies ++= List(
   "org.scalatestplus"          %% "scalacheck-1-14"           % "3.1.0.1" % Test,
   "org.scalacheck"             %% "scalacheck"                % "1.14.3" % Test,
   "com.github.alexarchambault" %% "scalacheck-shapeless_1.14" % "1.2.3" % Test,
-  "org.mockito"                %% "mockito-scala"             % "1.10.2" % Test
+  "org.mockito"                %% "mockito-scala"             % "1.10.4" % Test
 )
 
 // Project resolvers

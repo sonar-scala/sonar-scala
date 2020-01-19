@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018-2019  All sonar-scala contributors
+ * Copyright (C) 2018-2020  All sonar-scala contributors
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published
@@ -55,8 +55,8 @@ class ScalastyleQualityProfileSpec extends AnyFlatSpec with Matchers with LoneEl
       .map(_.clazz)
   }
 
-  it should "have 65 rules" in new Ctx {
-    rules should have size 65 // 39 default rules + 26 template instances
+  it should "have 68 rules" in new Ctx {
+    rules should have size 68 // 40 default rules + 28 template instances
   }
 
   it should "not activate templates" in new Ctx {

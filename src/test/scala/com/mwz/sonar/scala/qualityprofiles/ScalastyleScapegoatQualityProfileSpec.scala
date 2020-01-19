@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018-2019  All sonar-scala contributors
+ * Copyright (C) 2018-2020  All sonar-scala contributors
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published
@@ -51,7 +51,7 @@ class ScalastyleScapegoatQualityProfileSpec
   }
 
   it should "define all Scalastyle + Scapegoat rules" in new Ctx {
-    qualityProfile.rules should have size 183 // 65 from Scalastyle + 118 from Scapegoat
+    qualityProfile.rules should have size 186 // 68 from Scalastyle + 118 from Scapegoat
   }
 
   it should "have all rules come from either the Scalastyle or the Scapegaot rules repositories" in new Ctx {

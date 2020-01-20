@@ -20,7 +20,7 @@ package pr
 
 import java.util.concurrent.ConcurrentHashMap
 
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 
 import org.sonar.api.batch.fs.InputFile
 import org.sonar.api.batch.rule.Severity

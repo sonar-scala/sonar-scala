@@ -20,7 +20,7 @@ package scoverage
 
 import java.nio.file.{Path, Paths}
 
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 import scala.util.{Failure, Success, Try}
 
 import cats.instances.string._

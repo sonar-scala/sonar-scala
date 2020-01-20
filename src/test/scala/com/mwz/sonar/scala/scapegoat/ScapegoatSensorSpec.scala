@@ -20,7 +20,7 @@ package scapegoat
 
 import java.nio.file.{Path, Paths}
 
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 
 import com.mwz.sonar.scala.pr.GlobalIssues
 import com.mwz.sonar.scala.pr.Issue

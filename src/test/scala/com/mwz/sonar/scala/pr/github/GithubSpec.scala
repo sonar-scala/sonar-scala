@@ -77,9 +77,8 @@ class GithubSpec extends AnyFlatSpec with Matchers with ScalaCheckDrivenProperty
 
   it should "get a pull request" in {
     forAll { (pr: PullRequest) =>
-      val prNumber = pr.number.toString
       val http = HttpRoutes.of[IO] {
-        case req @ GET -> Root / "repos" / "owner" / "repo" / "pulls" / prNumber =>
+        case _ @GET -> Root / "repos" / "owner" / "repo" / "pulls" / _ =>
           Ok(pr)
       }
 

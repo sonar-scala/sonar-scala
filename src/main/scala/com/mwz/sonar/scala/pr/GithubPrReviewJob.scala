@@ -127,7 +127,7 @@ final class GithubPrReviewJob(
       prPatches <- Sync[F].fromEither(Either.fromOption(NonEmptyList.fromList(files), NoFilesInPR))
       allPatches = prPatches.groupByNem(_.filename).map(_.head).toSortedMap
       // Filter out issues which aren't related to any files in the PR.
-      issues = globalIssues.allIssues.filterKeys(f => allPatches.keySet.contains(f.toString))
+      issues = globalIssues.allIssues.filterKeys(f => allPatches.keySet.contains(f.toString)).toMap
       // Get new comments and post them.
       commentsToPost <- newComments(baseUrl, user, pr, allComments, files, allPatches, issues)
       _ <- commentsToPost.nonEmpty.fold(
@@ -164,7 +164,7 @@ final class GithubPrReviewJob(
       // Filter out patches without any issues.
       patchesWithIssues = patches.filterKeys(f => issues.keySet.exists(_.toString === f))
       // Map file lines to patch lines.
-      mappedPatches = patchesWithIssues.mapValues(file => Patch.parse(file.patch))
+      mappedPatches = patchesWithIssues.mapValues(file => Patch.parse(file.patch)).toMap
       _ <- mappedPatches
         .collect { case (file, Left(error)) => (file, error) }
         .toList
@@ -219,6 +219,7 @@ object GithubPrReviewJob {
               }
               .groupBy { case (patchLine, _) => patchLine }
               .mapValues(_.flatMap { case (_, issuesAndComments) => issuesAndComments })
+              .toMap
           (file, issuesWithComments)
       }
   }

@@ -18,7 +18,7 @@
 package com.mwz.sonar.scala
 package qualityprofiles
 
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 
 import org.scalatest._
 import org.scalatest.flatspec.AnyFlatSpec
@@ -40,7 +40,7 @@ class RecommendedQualityProfileSpec
     new RecommendedQualityProfile().define(context)
     val qualityProfile: BuiltInQualityProfile =
       context.profilesByLanguageAndName.loneElement.value.loneElement.value
-    val rules: Seq[BuiltInActiveRule] = qualityProfile.rules.asScala
+    val rules: Seq[BuiltInActiveRule] = qualityProfile.rules.asScala.toSeq
   }
 
   "RecommendedQualityProfile" should "define a quality profile" in new Ctx {

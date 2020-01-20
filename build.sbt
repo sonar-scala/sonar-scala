@@ -27,7 +27,7 @@ headerLicense := Some(
 excludeFilter.in(headerResources) := "*.scala"
 
 // Compile options
-scalaVersion := "2.12.10"
+scalaVersion := "2.13.1"
 scalacOptions := Seq(
   "-unchecked",
   "-deprecation",
@@ -35,9 +35,10 @@ scalacOptions := Seq(
   "utf8",
   "-feature",
   "-language:reflectiveCalls",
-  "-Ypartial-unification",
+  "-Ymacro-annotations",
   "-Yrangepos",
-  "-Ywarn-unused-import"
+  "-Ywarn-unused",
+  "-P:semanticdb:synthetics:on"
 )
 javacOptions := Seq("-Xlint:deprecation")
 cancelable in Global := true
@@ -60,7 +61,7 @@ sourceGenerators in Compile ++= Seq(
 // Lib dependencies
 val sonarVersion = "8.1.0.31237"
 val circe = "0.12.3"
-val http4s = "0.20.15"
+val http4s = "0.21.0-M6"
 libraryDependencies ++= List(
   "org.sonarsource.sonarqube"  % "sonar-plugin-api"           % sonarVersion % Provided,
   "org.sonarsource.sonarqube"  % "sonar-plugin-api-impl"      % sonarVersion % Test,
@@ -83,7 +84,7 @@ libraryDependencies ++= List(
   "org.scalatestplus"          %% "scalacheck-1-14"           % "3.1.0.1" % Test,
   "org.scalacheck"             %% "scalacheck"                % "1.14.3" % Test,
   "com.github.alexarchambault" %% "scalacheck-shapeless_1.14" % "1.2.3" % Test,
-  "org.mockito"                %% "mockito-scala"             % "1.10.4" % Test
+  "org.mockito"                %% "mockito-scala"             % "1.10.6" % Test
 )
 
 // Project resolvers
@@ -177,6 +178,5 @@ addCommandAlias("fixCheck", ";compile:scalafix --check ;test:scalafix --check")
 
 // plugins
 addCompilerPlugin(scalafixSemanticdb)
-addCompilerPlugin("com.olegpy"      %% "better-monadic-for" % "0.3.1")
-addCompilerPlugin("org.typelevel"   %% "kind-projector"     % "0.10.3")
-addCompilerPlugin("org.scalamacros" % "paradise"            % "2.1.1" cross CrossVersion.full)
+addCompilerPlugin("com.olegpy"    %% "better-monadic-for" % "0.3.1")
+addCompilerPlugin("org.typelevel" %% "kind-projector"     % "0.10.3")

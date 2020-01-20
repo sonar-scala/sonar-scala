@@ -155,7 +155,6 @@ class GithubPrReviewJobSpec
 
         val file: InputFile = TestInputFileBuilder.create("", fileWithPatch.filename).build()
         val issue = Issue(RuleKey.of("repo", "rule"), file, 5, Severity.BLOCKER, "msg")
-        val markdown: Markdown = Markdown.inline(baseUrl, issue)
 
         val issues = new GlobalIssues
         issues.add(issue)
@@ -305,7 +304,7 @@ class GithubPrReviewJobSpec
         val files = List(
           File(issue.file.toString, "status", patch)
         )
-        val patches = files.groupBy(_.filename).mapValues(_.head)
+        val patches = files.groupBy(_.filename).mapValues(_.head).toMap
         val markdown = Markdown.inline(baseUrl, issue)
         val comments = List(
           Comment(1, issue.file.toString, Some(5), user, markdown.text)
@@ -331,7 +330,7 @@ class GithubPrReviewJobSpec
         val files = List(
           File(issue.file.toString, "status", patch)
         )
-        val patches = files.groupBy(_.filename).mapValues(_.head)
+        val patches = files.groupBy(_.filename).mapValues(_.head).toMap
         val markdown = Markdown.inline(baseUrl, issue)
 
         val expected = NewComment(markdown.text, pr.head.sha, issue.file.toString, 5)
@@ -357,7 +356,7 @@ class GithubPrReviewJobSpec
         val files = List(
           File(issue.file.toString, "status", patch)
         )
-        val patches = files.groupBy(_.filename).mapValues(_.head)
+        val patches = files.groupBy(_.filename).mapValues(_.head).toMap
         val markdown = Markdown.inline(baseUrl, issue)
         val comments = List(
           Comment(1, issue.file.toString, None, user, markdown.text)
@@ -428,6 +427,7 @@ class GithubPrReviewJobSpec
         issuesComments
           .groupBy(v => (v._1.file))
           .mapValues(_.groupBy(v => PatchLine(v._1.line)))
+          .toMap
       val newComments = issuesComments.map {
         case (issue, _) =>
           NewComment(Markdown.inline(uri, issue).text, commit, issue.file.toString, issue.line)
@@ -451,12 +451,12 @@ class GithubPrReviewJobSpec
           List(Comment(1, "path", Some(1), User("user"), "body 1"))
         )
       )
-      val allIssues = (issueToIgnore, commentToIgnore) :: issues
 
       val groupped =
         issues
           .groupBy(v => (v._1.file))
           .mapValues(_.groupBy(v => PatchLine(v._1.line)))
+          .toMap
 
       val newComments = issues.map {
         case (issue, _) =>

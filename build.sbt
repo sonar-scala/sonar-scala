@@ -28,18 +28,13 @@ excludeFilter.in(headerResources) := "*.scala"
 
 // Compile options
 scalaVersion := "2.13.1"
-scalacOptions := Seq(
-  "-unchecked",
-  "-deprecation",
-  "-encoding",
-  "utf8",
-  "-feature",
+scalacOptions ++= Seq(
   "-language:reflectiveCalls",
   "-Ymacro-annotations",
   "-Yrangepos",
-  "-Ywarn-unused",
-  "-P:semanticdb:synthetics:on"
+  "-Ywarn-unused"
 )
+scalacOptions -= "-Xfatal-warnings"
 javacOptions := Seq("-Xlint:deprecation")
 cancelable in Global := true
 scalafmtOnCompile in ThisBuild :=

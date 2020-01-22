@@ -79,7 +79,7 @@ object Measures {
           tail
         case token :: tail if token.tokenType === Tokens.LINE_COMMENT =>
           tail
-        case token :: tail =>
+        case _ :: tail =>
           getNextLine(tail)
       }
     }
@@ -88,7 +88,7 @@ object Measures {
       case Nil => i
       case token :: tail if token.tokenType === Tokens.WS =>
         countNonCommentLines(tail, i)
-      case token :: tail if token.tokenType === Tokens.EOF => i
+      case token :: _ if token.tokenType === Tokens.EOF => i
       case token :: tail =>
         if (!token.tokenType.isNewline & !token.tokenType.isComment)
           countNonCommentLines(getNextLine(tail), i + 1)

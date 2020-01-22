@@ -70,6 +70,7 @@ final class ScoverageReportParser extends ScoverageReportParserAPI {
 
       linesCoverage = lines
         .groupBy { case (lineNum, _) => lineNum }
+        .view
         .mapValues { group =>
           val countsByLine = group map { case (_, count) => count }
           countsByLine.sum
@@ -82,6 +83,7 @@ final class ScoverageReportParser extends ScoverageReportParserAPI {
     // Merge the class coverages by filename.
     val files = classCoverages
       .groupBy { case (fileName, _) => fileName }
+      .view
       .mapValues { group =>
         val classCoveragesByFilename = group map { case (_, classCoverage) => classCoverage }
         classCoveragesByFilename.reduce(_ |+| _)

@@ -18,8 +18,6 @@
 package com.mwz.sonar.scala
 package util
 
-import scala.language.higherKinds
-
 import cats.effect.Sync
 import org.sonar.api.utils.log.{Logger => SonarLogger, Loggers => SonarLoggers}
 

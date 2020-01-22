@@ -40,7 +40,7 @@ class ScoverageSensorSpec extends AnyFlatSpec with SensorContextMatchers with Lo
     val descriptor = new DefaultSensorDescriptor
     scoverageSensor.describe(descriptor)
 
-    descriptor should not be 'global
+    descriptor.isGlobal shouldBe false
     descriptor.name shouldBe "Scoverage Sensor"
     descriptor.languages.loneElement shouldBe "scala"
     descriptor.`type` shouldBe InputFile.Type.MAIN

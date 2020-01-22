@@ -112,7 +112,7 @@ class ScapegoatSensorSpec
     val descriptor = new DefaultSensorDescriptor
     scapegoatSensor.describe(descriptor)
 
-    descriptor should not be 'global
+    descriptor.isGlobal shouldBe false
     descriptor.name shouldBe ScapegoatSensor.SensorName
     descriptor.`type` shouldBe InputFile.Type.MAIN
     descriptor.languages.loneElement shouldBe "scala"

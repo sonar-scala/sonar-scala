@@ -47,7 +47,7 @@ class ScalastyleScapegoatQualityProfileSpec
   }
 
   it should "not be the default quality profile" in new Ctx {
-    qualityProfile should not be 'default
+    qualityProfile.isDefault shouldBe false
   }
 
   it should "define all Scalastyle + Scapegoat rules" in new Ctx {

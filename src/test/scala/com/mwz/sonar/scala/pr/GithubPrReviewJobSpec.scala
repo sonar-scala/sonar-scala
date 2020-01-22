@@ -18,7 +18,6 @@
 package com.mwz.sonar.scala.pr
 
 import scala.concurrent.ExecutionContext
-import scala.language.higherKinds
 
 import cats.data.NonEmptyList
 import cats.effect.ContextShift
@@ -304,7 +303,7 @@ class GithubPrReviewJobSpec
         val files = List(
           File(issue.file.toString, "status", patch)
         )
-        val patches = files.groupBy(_.filename).mapValues(_.head).toMap
+        val patches = files.groupBy(_.filename).view.mapValues(_.head).toMap
         val markdown = Markdown.inline(baseUrl, issue)
         val comments = List(
           Comment(1, issue.file.toString, Some(5), user, markdown.text)
@@ -330,7 +329,7 @@ class GithubPrReviewJobSpec
         val files = List(
           File(issue.file.toString, "status", patch)
         )
-        val patches = files.groupBy(_.filename).mapValues(_.head).toMap
+        val patches = files.groupBy(_.filename).view.mapValues(_.head).toMap
         val markdown = Markdown.inline(baseUrl, issue)
 
         val expected = NewComment(markdown.text, pr.head.sha, issue.file.toString, 5)
@@ -356,7 +355,7 @@ class GithubPrReviewJobSpec
         val files = List(
           File(issue.file.toString, "status", patch)
         )
-        val patches = files.groupBy(_.filename).mapValues(_.head).toMap
+        val patches = files.groupBy(_.filename).view.mapValues(_.head).toMap
         val markdown = Markdown.inline(baseUrl, issue)
         val comments = List(
           Comment(1, issue.file.toString, None, user, markdown.text)
@@ -421,11 +420,12 @@ class GithubPrReviewJobSpec
   }
 
   it should "create comments for new issues" in {
-    forAll { (commit: String, patchLine: PatchLine, issuesComments: List[(Issue, List[Comment])]) =>
+    forAll { (commit: String, issuesComments: List[(Issue, List[Comment])]) =>
       val uri = Uri.unsafeFromString("https://hello.com")
       val issues =
         issuesComments
           .groupBy(v => (v._1.file))
+          .view
           .mapValues(_.groupBy(v => PatchLine(v._1.line)))
           .toMap
       val newComments = issuesComments.map {
@@ -441,10 +441,6 @@ class GithubPrReviewJobSpec
   it should "ignore existing comments created by sonar-scala" in {
     forAll { (commit: String, ruleKey: RuleKey, inputFile: InputFile) =>
       val uri = Uri.unsafeFromString("https://hello.com")
-      val issueToIgnore =
-        Issue(ruleKey, inputFile, 2, Severity.MAJOR, "message 2")
-      val commentToIgnore =
-        Comment(2, "path", Some(2), User("user"), Markdown.inline(uri, issueToIgnore).text)
       val issues = List(
         (
           Issue(ruleKey, inputFile, 1, Severity.MINOR, "message 1"),
@@ -452,9 +448,10 @@ class GithubPrReviewJobSpec
         )
       )
 
-      val groupped =
+      val grouped =
         issues
           .groupBy(v => (v._1.file))
+          .view
           .mapValues(_.groupBy(v => PatchLine(v._1.line)))
           .toMap
 
@@ -463,7 +460,7 @@ class GithubPrReviewJobSpec
           NewComment(Markdown.inline(uri, issue).text, commit, issue.file.toString, issue.line)
       }
 
-      GithubPrReviewJob.commentsForNewIssues(uri, commit, groupped) should contain theSameElementsAs newComments
+      GithubPrReviewJob.commentsForNewIssues(uri, commit, grouped) should contain theSameElementsAs newComments
     }
   }
 

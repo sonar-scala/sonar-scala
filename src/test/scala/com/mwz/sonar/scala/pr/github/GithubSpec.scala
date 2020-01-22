@@ -67,7 +67,7 @@ class GithubSpec extends AnyFlatSpec with Matchers with ScalaCheckDrivenProperty
 
   it should "get the authenticated user" in {
     val service = AuthedRoutes.of[String, IO] {
-      case req @ GET -> Root / "user" as _ =>
+      case GET -> Root / "user" as _ =>
         Ok(user)
     }
 
@@ -90,7 +90,7 @@ class GithubSpec extends AnyFlatSpec with Matchers with ScalaCheckDrivenProperty
   it should "get comments" in {
     forAll { (comments: List[Comment]) =>
       val http = HttpRoutes.of[IO] {
-        case req @ GET -> Root / "repos" / "owner" / "repo" / "pulls" / "123" / "comments" =>
+        case GET -> Root / "repos" / "owner" / "repo" / "pulls" / "123" / "comments" =>
           Ok(comments)
       }
 
@@ -107,7 +107,7 @@ class GithubSpec extends AnyFlatSpec with Matchers with ScalaCheckDrivenProperty
         body = newComment.body
       )
       val http = AuthedRoutes.of[String, IO] {
-        case req @ POST -> Root / "repos" / "owner" / "repo" / "pulls" / "123" / "comments" as _ =>
+        case POST -> Root / "repos" / "owner" / "repo" / "pulls" / "123" / "comments" as _ =>
           Ok(response)
       }
 
@@ -117,9 +117,9 @@ class GithubSpec extends AnyFlatSpec with Matchers with ScalaCheckDrivenProperty
   }
 
   it should "respect the dry run setting (create comment)" in {
-    forAll { (newComment: NewComment, comment: Comment) =>
+    forAll { newComment: NewComment =>
       val http = AuthedRoutes.of[String, IO] {
-        case req @ POST -> Root / "repos" / "owner" / "repo" / "pulls" / "123" / "comments" as _ =>
+        case POST -> Root / "repos" / "owner" / "repo" / "pulls" / "123" / "comments" as _ =>
           InternalServerError("error")
       }
 
@@ -137,7 +137,7 @@ class GithubSpec extends AnyFlatSpec with Matchers with ScalaCheckDrivenProperty
   it should "get pr files" in {
     forAll { (files: List[File]) =>
       val http = HttpRoutes.of[IO] {
-        case req @ GET -> Root / "repos" / "owner" / "repo" / "pulls" / "123" / "files" =>
+        case GET -> Root / "repos" / "owner" / "repo" / "pulls" / "123" / "files" =>
           Ok(files)
       }
 
@@ -156,7 +156,7 @@ class GithubSpec extends AnyFlatSpec with Matchers with ScalaCheckDrivenProperty
         context = newStatus.context
       )
       val http = AuthedRoutes.of[String, IO] {
-        case req @ POST -> Root / "repos" / "owner" / "repo" / "statuses" / sha as _ =>
+        case POST -> Root / "repos" / "owner" / "repo" / "statuses" / _ as _ =>
           Ok(response)
       }
 
@@ -169,7 +169,7 @@ class GithubSpec extends AnyFlatSpec with Matchers with ScalaCheckDrivenProperty
     val strGen = Gen.nonEmptyListOf(Gen.alphaNumChar).map(_.mkString)
     forAll(strGen, implicitly[Arbitrary[NewStatus]].arbitrary) { (sha: String, newStatus: NewStatus) =>
       val http = AuthedRoutes.of[String, IO] {
-        case req @ POST -> Root / "repos" / "owner" / "repo" / "statuses" / sha as _ =>
+        case POST -> Root / "repos" / "owner" / "repo" / "statuses" / _ as _ =>
           InternalServerError("error")
       }
 

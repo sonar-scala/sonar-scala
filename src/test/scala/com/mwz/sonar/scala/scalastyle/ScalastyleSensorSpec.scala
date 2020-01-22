@@ -106,7 +106,7 @@ class ScalastyleSensorSpec
   it should "correctly set descriptor" in new Ctx {
     scalastyleSensor.describe(descriptor)
 
-    descriptor should not be 'global
+    descriptor.isGlobal shouldBe false
     descriptor.name shouldBe ScalastyleSensor.SensorName
     descriptor.`type` shouldBe InputFile.Type.MAIN
     descriptor.languages.loneElement shouldBe "scala"

@@ -159,7 +159,7 @@ object ScalastyleRulesRepository {
    * Reformat the text from Scalastyle docs into a markdown format.
    */
   def format(s: String): String = {
-    s.lines.foldLeft(Acc(indent = false, isEmpty = true, "")) {
+    s.linesIterator.foldLeft(Acc(indent = false, isEmpty = true, "")) {
       case (acc, l) =>
         // Remove all backslashes as they are unnecessary.
         val line = l.replace("\\", "")

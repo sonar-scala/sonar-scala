@@ -19,7 +19,6 @@ package com.mwz.sonar.scala
 package pr
 
 import scala.concurrent.ExecutionContext
-import scala.language.higherKinds
 
 import cats.NonEmptyParallel
 import cats.data.NonEmptyList
@@ -127,7 +126,7 @@ final class GithubPrReviewJob(
       prPatches <- Sync[F].fromEither(Either.fromOption(NonEmptyList.fromList(files), NoFilesInPR))
       allPatches = prPatches.groupByNem(_.filename).map(_.head).toSortedMap
       // Filter out issues which aren't related to any files in the PR.
-      issues = globalIssues.allIssues.filterKeys(f => allPatches.keySet.contains(f.toString)).toMap
+      issues = globalIssues.allIssues.view.filterKeys(f => allPatches.keySet.contains(f.toString)).toMap
       // Get new comments and post them.
       commentsToPost <- newComments(baseUrl, user, pr, allComments, files, allPatches, issues)
       _ <- commentsToPost.nonEmpty.fold(
@@ -162,9 +161,9 @@ final class GithubPrReviewJob(
         s"Files: ${files.mkString(", ")}"
       )
       // Filter out patches without any issues.
-      patchesWithIssues = patches.filterKeys(f => issues.keySet.exists(_.toString === f))
+      patchesWithIssues = patches.view.filterKeys(f => issues.keySet.exists(_.toString === f))
       // Map file lines to patch lines.
-      mappedPatches = patchesWithIssues.mapValues(file => Patch.parse(file.patch)).toMap
+      mappedPatches = patchesWithIssues.view.mapValues(file => Patch.parse(file.patch)).toMap
       _ <- mappedPatches
         .collect { case (file, Left(error)) => (file, error) }
         .toList
@@ -218,6 +217,7 @@ object GithubPrReviewJob {
                   })
               }
               .groupBy { case (patchLine, _) => patchLine }
+              .view
               .mapValues(_.flatMap { case (_, issuesAndComments) => issuesAndComments })
               .toMap
           (file, issuesWithComments)
@@ -245,6 +245,7 @@ object GithubPrReviewJob {
   def reviewStatus(issues: Map[InputFile, List[Issue]]): ReviewStatus = {
     issues.values.flatten
       .groupBy(i => i.severity)
+      .view
       .mapValues(_.size)
       .foldLeft(ReviewStatus(0, 0)) {
         case (s, (severity, count)) =>

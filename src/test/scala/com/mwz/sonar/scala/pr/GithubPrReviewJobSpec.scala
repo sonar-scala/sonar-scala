@@ -303,7 +303,7 @@ class GithubPrReviewJobSpec
         val files = List(
           File(issue.file.toString, "status", patch)
         )
-        val patches = files.groupBy(_.filename).view.mapValues(_.head).toMap
+        val patches = files.map(f => f.filename -> f).toMap
         val markdown = Markdown.inline(baseUrl, issue)
         val comments = List(
           Comment(1, issue.file.toString, Some(5), user, markdown.text)
@@ -329,7 +329,7 @@ class GithubPrReviewJobSpec
         val files = List(
           File(issue.file.toString, "status", patch)
         )
-        val patches = files.groupBy(_.filename).view.mapValues(_.head).toMap
+        val patches = files.map(f => f.filename -> f).toMap
         val markdown = Markdown.inline(baseUrl, issue)
 
         val expected = NewComment(markdown.text, pr.head.sha, issue.file.toString, 5)
@@ -355,7 +355,7 @@ class GithubPrReviewJobSpec
         val files = List(
           File(issue.file.toString, "status", patch)
         )
-        val patches = files.groupBy(_.filename).view.mapValues(_.head).toMap
+        val patches = files.map(f => f.filename -> f).toMap
         val markdown = Markdown.inline(baseUrl, issue)
         val comments = List(
           Comment(1, issue.file.toString, None, user, markdown.text)

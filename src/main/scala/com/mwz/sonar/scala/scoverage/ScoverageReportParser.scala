@@ -69,26 +69,19 @@ final class ScoverageReportParser extends ScoverageReportParserAPI {
       } yield lineNum -> count
 
       linesCoverage = lines
-        .groupBy { case (lineNum, _) => lineNum }
-        .view
-        .mapValues { group =>
-          val countsByLine = group map { case (_, count) => count }
-          countsByLine.sum
-        }
-        .toMap
+        .groupMapReduce { case (lineNum, _) => lineNum } {
+          case (_, count) => count
+        }(_ + _)
 
       classCoverage = FileCoverage(classScoverage, linesCoverage)
     } yield filename -> classCoverage
 
     // Merge the class coverages by filename.
-    val files = classCoverages
-      .groupBy { case (fileName, _) => fileName }
-      .view
-      .mapValues { group =>
-        val classCoveragesByFilename = group map { case (_, classCoverage) => classCoverage }
-        classCoveragesByFilename.reduce(_ |+| _)
-      }
-      .toMap
+    val files =
+      classCoverages
+        .groupMapReduce { case (fileName, _) => fileName } {
+          case (_, classCoverage) => classCoverage
+        }(_ |+| _)
 
     ProjectCoverage(projectScoverage, files)
   }

@@ -25,6 +25,8 @@ import org.sonar.api.config.internal.MapSettings
 import scalariform.ScalaVersion
 
 class ScalaSpec extends AnyFlatSpec with Matchers {
+  val defaultScala = ScalaVersion(2, 13)
+
   "getFileSuffixes" should "return Scala file suffixes" in {
     val conf = new MapSettings().asConfig()
     new Scala(conf).getFileSuffixes shouldBe Array(".scala")
@@ -49,7 +51,7 @@ class ScalaSpec extends AnyFlatSpec with Matchers {
       .setProperty("sonar.scala.version", "2.13.0-M3")
       .asConfig()
 
-    Scala.getScalaVersion(conf) shouldBe ScalaVersion(2, 13)
+    Scala.getScalaVersion(conf) shouldBe defaultScala
   }
 
   it should "be able to parse a version without patch" in {
@@ -72,7 +74,7 @@ class ScalaSpec extends AnyFlatSpec with Matchers {
 
   it should "return the default version, if the property is not set" in {
     val conf = new MapSettings().asConfig()
-    Scala.getScalaVersion(conf) shouldBe ScalaVersion(2, 12)
+    Scala.getScalaVersion(conf) shouldBe defaultScala
   }
 
   it should "return the default version, if the version property has an empty patch" in {
@@ -80,7 +82,7 @@ class ScalaSpec extends AnyFlatSpec with Matchers {
       .setProperty("sonar.scala.version", "2.12.")
       .asConfig()
 
-    Scala.getScalaVersion(conf) shouldBe ScalaVersion(2, 12)
+    Scala.getScalaVersion(conf) shouldBe defaultScala
   }
 
   it should "return the default version, if the version property only contains the major version" in {
@@ -88,7 +90,7 @@ class ScalaSpec extends AnyFlatSpec with Matchers {
       .setProperty("sonar.scala.version", "2")
       .asConfig()
 
-    Scala.getScalaVersion(conf) shouldBe ScalaVersion(2, 12)
+    Scala.getScalaVersion(conf) shouldBe defaultScala
   }
 
   "getSourcesPaths" should "return the available sources" in {

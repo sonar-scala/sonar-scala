@@ -134,7 +134,7 @@ class ScoverageSensorSpec extends AnyFlatSpec with SensorContextMatchers with Lo
 
   it should "get default scoverage report path" in {
     val path = scoverageSensor.getScoverageReportPath(new MapSettings().asConfig())
-    path shouldBe Paths.get(s"target/scala-2.12/scoverage-report/scoverage.xml")
+    path shouldBe Paths.get(s"target/scala-2.13/scoverage-report/scoverage.xml")
 
     val path2 = scoverageSensor.getScoverageReportPath(
       new MapSettings().setProperty("sonar.scala.version", "2.11.12").asConfig()
@@ -212,7 +212,7 @@ class ScoverageSensorSpec extends AnyFlatSpec with SensorContextMatchers with Lo
 final class TestScoverageReportParser extends ScoverageReportParserAPI {
   override def parse(reportPath: Path, modulePath: Path, sourcePrefixes: List[Path]): ProjectCoverage =
     reportPath.toString match {
-      case "target/scala-2.12/scoverage-report/scoverage.xml"
+      case "target/scala-2.13/scoverage-report/scoverage.xml"
           if sourcePrefixes.contains(Paths.get("src/main/scala")) =>
         ProjectCoverage(
           projectScoverage = Scoverage(

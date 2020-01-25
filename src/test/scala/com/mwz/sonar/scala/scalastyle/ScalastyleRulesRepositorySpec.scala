@@ -18,7 +18,7 @@
 package com.mwz.sonar.scala
 package scalastyle
 
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 
 import org.scalastyle._
 import org.scalatest.flatspec.AnyFlatSpec
@@ -98,6 +98,7 @@ class ScalastyleRulesRepositorySpec extends AnyFlatSpec with Matchers with Inspe
       repository.rules.asScala
         .filter(r => !r.params.isEmpty)
         .flatMap(_.params.asScala)
+        .toSeq
 
     forAll(params) { param =>
       param.name should not be empty
@@ -106,7 +107,7 @@ class ScalastyleRulesRepositorySpec extends AnyFlatSpec with Matchers with Inspe
   }
 
   it should "have all rules contain ruleClass parameter" in new Ctx {
-    val rules: Seq[Rule] = repository.rules.asScala.filter(r => !r.params.isEmpty)
+    val rules: Seq[Rule] = repository.rules.asScala.filter(r => !r.params.isEmpty).toSeq
     forEvery(rules) { rule =>
       rule.params.asScala.exists(p => p.key === "ruleClass" && p.defaultValue.startsWith("org.scalastyle"))
     }
@@ -115,7 +116,7 @@ class ScalastyleRulesRepositorySpec extends AnyFlatSpec with Matchers with Inspe
   it should "create rules with correct parameters" in new Ctx {
     val rule: Rule = repository.rule("org.scalastyle.file.FileLineLengthChecker")
     val params: Seq[(String, RuleParamType, String)] =
-      rule.params().asScala.map(p => (p.name, p.`type`, p.defaultValue))
+      rule.params().asScala.map(p => (p.name, p.`type`, p.defaultValue)).toSeq
     val expected = Seq(
       ("maxLineLength", RuleParamType.INTEGER, "160"),
       ("tabSize", RuleParamType.INTEGER, "4"),

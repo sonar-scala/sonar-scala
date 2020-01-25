@@ -18,7 +18,7 @@
 package com.mwz.sonar.scala
 package scalastyle
 
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 
 import com.mwz.sonar.scala.scalastyle.ScalastyleRulesRepository.SkipTemplateInstances
 import org.scalatest.flatspec.AnyFlatSpec
@@ -36,7 +36,7 @@ class ScalastyleQualityProfileSpec extends AnyFlatSpec with Matchers with LoneEl
     new ScalastyleQualityProfile().define(context)
     val qualityProfile: BuiltInQualityProfile =
       context.profilesByLanguageAndName.loneElement.value.loneElement.value
-    val rules: Seq[BuiltInActiveRule] = qualityProfile.rules.asScala
+    val rules: Seq[BuiltInActiveRule] = qualityProfile.rules.asScala.toSeq
   }
 
   "ScalastyleQualityProfile" should "define a quality profile" in new Ctx {

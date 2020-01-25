@@ -21,7 +21,7 @@ package junit
 import java.io.File
 import java.nio.file.{Path, Paths}
 
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 
 import cats.instances.list._
 import com.mwz.sonar.scala.util.Log

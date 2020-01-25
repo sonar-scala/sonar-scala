@@ -21,8 +21,7 @@ package scalastyle
 import java.io.File
 import java.nio.file.Paths
 
-import scala.collection.JavaConverters._
-import scala.collection.immutable.Seq
+import scala.jdk.CollectionConverters._
 
 import cats.instances.string._
 import cats.syntax.eq._

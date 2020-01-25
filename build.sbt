@@ -27,25 +27,21 @@ headerLicense := Some(
 excludeFilter.in(headerResources) := "*.scala"
 
 // Compile options
-scalaVersion := "2.12.10"
-scalacOptions := Seq(
-  "-unchecked",
-  "-deprecation",
-  "-encoding",
-  "utf8",
-  "-feature",
+scalaVersion := "2.13.1"
+scalacOptions ++= Seq(
   "-language:reflectiveCalls",
-  "-Ypartial-unification",
+  "-Ymacro-annotations",
   "-Yrangepos",
-  "-Ywarn-unused-import"
+  "-Ywarn-unused"
 )
+scalacOptions -= "-Xfatal-warnings"
 javacOptions := Seq("-Xlint:deprecation")
 cancelable in Global := true
 scalafmtOnCompile in ThisBuild :=
   sys.env
     .get("DISABLE_SCALAFMT")
     .forall(_.toLowerCase == "false")
-scapegoatVersion in ThisBuild := "1.3.9"
+scapegoatVersion in ThisBuild := "1.4.1"
 scapegoatReports := Seq("xml")
 coverageOutputXML := true
 coverageOutputHTML := false
@@ -60,7 +56,7 @@ sourceGenerators in Compile ++= Seq(
 // Lib dependencies
 val sonarVersion = "8.1.0.31237"
 val circe = "0.12.3"
-val http4s = "0.20.16"
+val http4s = "0.21.0-M6"
 libraryDependencies ++= List(
   "org.sonarsource.sonarqube"  % "sonar-plugin-api"           % sonarVersion % Provided,
   "org.sonarsource.sonarqube"  % "sonar-plugin-api-impl"      % sonarVersion % Test,
@@ -177,6 +173,5 @@ addCommandAlias("fixCheck", ";compile:scalafix --check ;test:scalafix --check")
 
 // plugins
 addCompilerPlugin(scalafixSemanticdb)
-addCompilerPlugin("com.olegpy"      %% "better-monadic-for" % "0.3.1")
-addCompilerPlugin("org.typelevel"   %% "kind-projector"     % "0.10.3")
-addCompilerPlugin("org.scalamacros" % "paradise"            % "2.1.1" cross CrossVersion.full)
+addCompilerPlugin("com.olegpy"    %% "better-monadic-for" % "0.3.1")
+addCompilerPlugin("org.typelevel" %% "kind-projector"     % "0.10.3")

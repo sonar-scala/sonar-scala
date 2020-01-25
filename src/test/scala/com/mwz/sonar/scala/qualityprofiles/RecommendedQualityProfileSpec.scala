@@ -18,7 +18,7 @@
 package com.mwz.sonar.scala
 package qualityprofiles
 
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 
 import org.scalatest._
 import org.scalatest.flatspec.AnyFlatSpec
@@ -40,7 +40,7 @@ class RecommendedQualityProfileSpec
     new RecommendedQualityProfile().define(context)
     val qualityProfile: BuiltInQualityProfile =
       context.profilesByLanguageAndName.loneElement.value.loneElement.value
-    val rules: Seq[BuiltInActiveRule] = qualityProfile.rules.asScala
+    val rules: Seq[BuiltInActiveRule] = qualityProfile.rules.asScala.toSeq
   }
 
   "RecommendedQualityProfile" should "define a quality profile" in new Ctx {
@@ -53,7 +53,7 @@ class RecommendedQualityProfileSpec
   }
 
   it should "have 179 rules" in new Ctx {
-    rules.size shouldBe 179 // 64 from Scalastyle + 115 from Scapegoat
+    rules.size shouldBe 177 // 64 from Scalastyle + 113 from Scapegoat
   }
 
   it should "have all rules come from either the Scalastyle or the Scapegoat rules repositories" in new Ctx {

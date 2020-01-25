@@ -25,7 +25,6 @@ import cats.syntax.either._
 import cats.syntax.eq._
 import cats.syntax.functor._
 import com.mwz.sonar.scala.GlobalConfig._
-import com.mwz.sonar.scala.util.Log
 import com.mwz.sonar.scala.util.syntax.Optionals._
 import com.mwz.sonar.scala.util.syntax.SonarConfig._
 import org.http4s.{ParseFailure, ParseResult, Uri}
@@ -41,7 +40,6 @@ final case class ConfigError(error: String) extends Exception
 @ScannerSide
 @InstantiationStrategy(InstantiationStrategy.PER_BATCH)
 final class GlobalConfig(config: Configuration) {
-  private[this] val logger = Log(classOf[Scala], "config")
 
   val baseUrl: ConfigErrorOr[Uri] =
     config
@@ -129,7 +127,7 @@ object GlobalConfig {
   private val PR_GITHUB_OAUTH = "sonar.scala.pullrequest.github.oauth"
   private val PR_DISABLE_ISSUES = "sonar.scala.pullrequest.issues.disable"
   private val PR_DISABLE_INLINE_COMMENTS = "sonar.scala.pullrequest.issues.disableInlineComments"
-  private val PR_DISABLE_COVERAGE = "sonar.scala.pullrequest.coverage.disable"
+  // private val PR_DISABLE_COVERAGE = "sonar.scala.pullrequest.coverage.disable"
   private val PR_DRYRUN = "sonar.scala.pullrequest.dryrun"
 
   /**

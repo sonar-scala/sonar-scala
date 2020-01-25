@@ -19,8 +19,6 @@ package com.mwz.sonar.scala
 package pr
 package github
 
-import scala.language.higherKinds
-
 import cats.effect.Sync
 import cats.syntax.flatMap._
 import com.mwz.sonar.scala.pr.github.Codec._

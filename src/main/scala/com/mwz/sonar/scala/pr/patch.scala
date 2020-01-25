@@ -45,7 +45,7 @@ object Patch {
   def parse(patch: String): Either[PatchError, Map[FileLine, PatchLine]] =
     patch
       .replaceAll("(\r\n)|\r|\n|\\\\n", "\n")
-      .lines
+      .linesIterator
       .toList
       .foldLeftM[Either[PatchError, ?], Patch](Patch(FileLine(0), PatchLine(0), Map.empty)) {
         case (patch, line) =>

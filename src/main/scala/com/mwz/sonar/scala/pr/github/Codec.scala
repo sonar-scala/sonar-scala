@@ -19,8 +19,6 @@ package com.mwz.sonar.scala
 package pr
 package github
 
-import scala.language.higherKinds
-
 import cats.Applicative
 import io.circe.generic.extras.Configuration
 import io.circe.{Encoder, Printer}

@@ -22,7 +22,6 @@ package syntax
 import java.io.File
 import java.nio.file.Path
 
-import scala.language.higherKinds
 import scala.util.{Failure, Success, Try}
 
 import cats.syntax.flatMap._

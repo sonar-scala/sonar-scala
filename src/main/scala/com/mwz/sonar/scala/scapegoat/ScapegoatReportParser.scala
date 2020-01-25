@@ -39,7 +39,7 @@ final class ScapegoatReportParser extends ScapegoatReportParserAPI {
    */
   private[scapegoat] def replaceAllDotsButLastWithSlashes(path: String): String =
     if (path.startsWith(".")) {
-      path.split('.').reduceLeft[String] {
+      path.split('.').foldLeft[String]("") {
         case (acc, str) =>
           val s = Option(str).filter(_.nonEmpty).getOrElse("/")
           val a = Option(acc).filter(_.nonEmpty).getOrElse("/")

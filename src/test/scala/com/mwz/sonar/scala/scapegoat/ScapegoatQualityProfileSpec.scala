@@ -42,7 +42,7 @@ class ScapegoatQualityProfileSpec extends AnyFlatSpec with Inspectors with LoneE
   }
 
   it should "not be the default quality profile" in new Ctx {
-    qualityProfile should not be 'default
+    qualityProfile.isDefault shouldBe false
   }
 
   it should "activate one rule for each scapegoat inspection" in new Ctx {

@@ -20,7 +20,7 @@ package scalastyle
 
 import java.nio.file.Paths
 
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 
 import com.mwz.sonar.scala.pr.GlobalIssues
 import com.mwz.sonar.scala.pr.Issue
@@ -106,7 +106,7 @@ class ScalastyleSensorSpec
   it should "correctly set descriptor" in new Ctx {
     scalastyleSensor.describe(descriptor)
 
-    descriptor should not be 'global
+    descriptor.isGlobal shouldBe false
     descriptor.name shouldBe ScalastyleSensor.SensorName
     descriptor.`type` shouldBe InputFile.Type.MAIN
     descriptor.languages.loneElement shouldBe "scala"

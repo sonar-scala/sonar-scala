@@ -20,7 +20,7 @@ package scapegoat
 
 import java.nio.file.{Path, Paths}
 
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 
 import com.mwz.sonar.scala.pr.GlobalIssues
 import com.mwz.sonar.scala.pr.Issue
@@ -112,7 +112,7 @@ class ScapegoatSensorSpec
     val descriptor = new DefaultSensorDescriptor
     scapegoatSensor.describe(descriptor)
 
-    descriptor should not be 'global
+    descriptor.isGlobal shouldBe false
     descriptor.name shouldBe ScapegoatSensor.SensorName
     descriptor.`type` shouldBe InputFile.Type.MAIN
     descriptor.languages.loneElement shouldBe "scala"

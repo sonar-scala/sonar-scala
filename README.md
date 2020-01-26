@@ -5,8 +5,8 @@
 [![bintray-badge-lts-67]][bintray-lts-67]
 [![bintray-stats-badge]][bintray-stats] [![gitter-badge]][gitter]
 
-[bintray]: https://bintray.com/mwz/maven/sonar-scala/7.9.0/link
-[bintray-badge]: https://img.shields.io/badge/Download-7.9.0-blue.svg
+[bintray]: https://bintray.com/mwz/maven/sonar-scala/8.0.0/link
+[bintray-badge]: https://img.shields.io/badge/Download-8.0.0-blue.svg
 [bintray-badge-lts]:
   https://img.shields.io/badge/Download-7.9.0_(for_SonarQube_7.9_LTS)-blue.svg
 [bintray-badge-lts-67]:
@@ -36,8 +36,9 @@ sonar-scala is an independent SonarQube plugin, driven by and developed with
 [community](https://github.com/mwz/sonar-scala/graphs/contributors).
 
 Intended for [SonarQube 6.7 LTS](https://www.sonarqube.org/sonarqube-6-7-lts),
-[SonarQube 7.9 LTS](https://www.sonarqube.org/sonarqube-7-9-lts) and Scala
-2.11/2.12. Support for Scala 2.13 is coming soon.
+[SonarQube 7.9 LTS](https://www.sonarqube.org/sonarqube-7-9-lts),
+[SonarQube 8.1](https://www.sonarqube.org/sonarqube-8-1) and Scala
+2.11/2.12/2.13.
 
 sonar-scala is developed in Scala. It uses the
 [scalariform](https://github.com/scala-ide/scalariform) library to parse the
@@ -61,7 +62,7 @@ documentation.
 
 To build the project from sources, run the `assembly` task in sbt shell and the
 jar assembled with all of the dependencies required by this plugin should be
-created in the `target/scala-2.12` directory.
+created in the `target/scala-2.13` directory.
 
 To debug the plugin, export the following environment variable before running
 `sonar-scanner` for your project:

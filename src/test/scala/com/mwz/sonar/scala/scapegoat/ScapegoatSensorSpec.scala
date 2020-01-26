@@ -99,10 +99,10 @@ class ScapegoatSensorSpec
   }
 
   it should "construct the default report path" in {
-    val scalaVersion = ScalaVersion(2, 12, "6")
+    val scalaVersion = ScalaVersion(2, 13, "1")
     ScapegoatSensor.getDefaultScapegoatReportPath(scalaVersion) shouldBe Paths.get(
       "target",
-      "scala-2.12",
+      "scala-2.13",
       "scapegoat-report",
       "scapegoat.xml"
     )
@@ -122,7 +122,7 @@ class ScapegoatSensorSpec
   it should "get default scapegoat report path, when the scala version property is missing" in {
     val reportPath = scapegoatSensor.getScapegoatReportPath(new MapSettings().asConfig())
 
-    reportPath shouldBe Paths.get("target", "scala-2.12", "scapegoat-report", "scapegoat.xml")
+    reportPath shouldBe Paths.get("target", "scala-2.13", "scapegoat-report", "scapegoat.xml")
   }
 
   it should "get default scapegoat report path, when the scala version property is set" in {
@@ -267,34 +267,46 @@ class ScapegoatSensorSpec
     // Validate the sensor behavior.
     sensorContext.allIssues.asScala.map { issue =>
       (issue.primaryLocation.inputComponent, issue.ruleKey) -> (
-        issue.primaryLocation.textRange,
-        issue.primaryLocation.message
+        (
+          issue.primaryLocation.textRange,
+          issue.primaryLocation.message
+        )
       )
     }.toMap shouldBe Map(
       (testFileA, emptyClassRuleKey) -> (
-        testFileA.newRange(1, 0, 1, 50),
-        """Empty case class
-          |Empty case class can be rewritten as a case object""".stripMargin
+        (
+          testFileA.newRange(1, 0, 1, 50),
+          """Empty case class
+            |Empty case class can be rewritten as a case object""".stripMargin
+        )
       ),
       (testFileA, arrayPassedToStringFormatRuleKey) -> (
-        testFileA.newRange(2, 0, 2, 80),
-        """Array passed to String.format
-          |scala.Predef.augmentString("data is: %s").format(scala.Array.apply(1, 2, 3))""".stripMargin
+        (
+          testFileA.newRange(2, 0, 2, 80),
+          """Array passed to String.format
+            |scala.Predef.augmentString("data is: %s").format(scala.Array.apply(1, 2, 3))""".stripMargin
+        )
       ),
       (testFileB, lonelySealedTraitRuleKey) -> (
-        testFileB.newRange(1, 0, 1, 30),
-        """Lonely sealed trait
-          |Sealed trait NotUsed has no implementing classes""".stripMargin
+        (
+          testFileB.newRange(1, 0, 1, 30),
+          """Lonely sealed trait
+            |Sealed trait NotUsed has no implementing classes""".stripMargin
+        )
       ),
       (testFileB, redundantFinalModifierRuleKey) -> (
-        testFileB.newRange(2, 0, 2, 50),
-        """Redundant final modifier on method
-          |com.mwz.sonar.scala.scapegoat.TestFileB.testMethod cannot be overridden, final modifier is redundant""".stripMargin
+        (
+          testFileB.newRange(2, 0, 2, 50),
+          """Redundant final modifier on method
+            |com.mwz.sonar.scala.scapegoat.TestFileB.testMethod cannot be overridden, final modifier is redundant""".stripMargin
+        )
       ),
       (testFileB, emptyClassRuleKey) -> (
-        testFileB.newRange(3, 0, 3, 50),
-        """Empty case class
-          |Empty case class can be rewritten as a case object""".stripMargin
+        (
+          testFileB.newRange(3, 0, 3, 50),
+          """Empty case class
+            |Empty case class can be rewritten as a case object""".stripMargin
+        )
       )
     )
   }

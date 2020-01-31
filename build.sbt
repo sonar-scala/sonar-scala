@@ -62,7 +62,7 @@ libraryDependencies ++= List(
   "org.sonarsource.sonarqube"  % "sonar-plugin-api-impl"      % sonarVersion % Test,
   "org.slf4j"                  % "slf4j-api"                  % "1.7.30" % Provided,
   "org.typelevel"              %% "cats-core"                 % "2.1.0",
-  "org.typelevel"              %% "cats-effect"               % "2.0.0",
+  "org.typelevel"              %% "cats-effect"               % "2.1.0",
   "org.typelevel"              %% "mouse"                     % "0.24",
   "io.circe"                   %% "circe-core"                % circe,
   "io.circe"                   %% "circe-generic"             % circe,

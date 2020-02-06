@@ -70,7 +70,7 @@ libraryDependencies ++= List(
   "io.circe"                   %% "circe-generic-extras"      % "0.12.2",
   "org.http4s"                 %% "http4s-circe"              % http4s,
   "org.scalariform"            %% "scalariform"               % "0.2.10",
-  "com.beautiful-scala"        %% "scalastyle"                % "1.1.0",
+  "com.beautiful-scala"        %% "scalastyle"                % "1.1.1",
   "org.scala-lang.modules"     %% "scala-xml"                 % "1.2.0",
   "org.http4s"                 %% "http4s-blaze-server"       % http4s % Test,
   "org.http4s"                 %% "http4s-dsl"                % http4s % Test,

@@ -55,14 +55,14 @@ sourceGenerators in Compile ++= Seq(
 
 // Lib dependencies
 val sonarVersion = "8.1.0.31237"
-val circe = "0.12.3"
-val http4s = "0.21.0-RC2"
+val circe = "0.13.0"
+val http4s = "0.21.0-RC5"
 libraryDependencies ++= List(
   "org.sonarsource.sonarqube"  % "sonar-plugin-api"           % sonarVersion % Provided,
   "org.sonarsource.sonarqube"  % "sonar-plugin-api-impl"      % sonarVersion % Test,
   "org.slf4j"                  % "slf4j-api"                  % "1.7.30" % Provided,
   "org.typelevel"              %% "cats-core"                 % "2.1.0",
-  "org.typelevel"              %% "cats-effect"               % "2.0.0",
+  "org.typelevel"              %% "cats-effect"               % "2.1.1",
   "org.typelevel"              %% "mouse"                     % "0.24",
   "io.circe"                   %% "circe-core"                % circe,
   "io.circe"                   %% "circe-generic"             % circe,
@@ -78,7 +78,7 @@ libraryDependencies ++= List(
   "org.scalatestplus"          %% "mockito-1-10"              % "3.1.0.0" % Test,
   "org.scalatestplus"          %% "scalacheck-1-14"           % "3.1.0.1" % Test,
   "org.scalacheck"             %% "scalacheck"                % "1.14.3" % Test,
-  "com.github.alexarchambault" %% "scalacheck-shapeless_1.14" % "1.2.3" % Test,
+  "com.github.alexarchambault" %% "scalacheck-shapeless_1.14" % "1.2.4" % Test,
   "org.mockito"                %% "mockito-scala"             % "1.11.2" % Test
 )
 

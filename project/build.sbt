@@ -9,7 +9,10 @@ libraryDependencies ++= Seq(
 )
 
 // Adding a resolver to the Artima maven repo, so sbt can download the Artima SuperSafe sbt plugin
-resolvers += "Artima Maven Repository" at "https://repo.artima.com/releases"
+resolvers ++= Seq(
+  Resolver.sonatypeRepo("snapshots"),
+  "Artima Maven Repository" at "https://repo.artima.com/releases"
+)
 
 logBuffered in Test := false
 testOptions in Test += Tests.Argument(TestFrameworks.ScalaTest, "-oDTF")

@@ -58,28 +58,30 @@ val sonarVersion = "8.1.0.31237"
 val circe = "0.13.0"
 val http4s = "0.21.1"
 libraryDependencies ++= List(
-  "org.sonarsource.sonarqube"  % "sonar-plugin-api"           % sonarVersion % Provided,
-  "org.sonarsource.sonarqube"  % "sonar-plugin-api-impl"      % sonarVersion % Test,
-  "org.slf4j"                  % "slf4j-api"                  % "1.7.30" % Provided,
-  "org.typelevel"              %% "cats-core"                 % "2.1.0",
-  "org.typelevel"              %% "cats-effect"               % "2.1.1",
-  "org.typelevel"              %% "mouse"                     % "0.24",
-  "io.circe"                   %% "circe-core"                % circe,
-  "io.circe"                   %% "circe-generic"             % circe,
-  "org.http4s"                 %% "http4s-blaze-client"       % http4s,
-  "io.circe"                   %% "circe-generic-extras"      % "0.13.0",
-  "org.http4s"                 %% "http4s-circe"              % http4s,
-  "org.scalariform"            %% "scalariform"               % "0.2.10",
-  "com.beautiful-scala"        %% "scalastyle"                % "1.2.0",
-  "org.scala-lang.modules"     %% "scala-xml"                 % "1.2.0",
-  "org.http4s"                 %% "http4s-blaze-server"       % http4s % Test,
-  "org.http4s"                 %% "http4s-dsl"                % http4s % Test,
-  "org.scalatest"              %% "scalatest"                 % "3.1.0" % Test,
-  "org.scalatestplus"          %% "mockito-1-10"              % "3.1.0.0" % Test,
-  "org.scalatestplus"          %% "scalacheck-1-14"           % "3.1.0.1" % Test,
-  "org.scalacheck"             %% "scalacheck"                % "1.14.3" % Test,
-  "com.github.alexarchambault" %% "scalacheck-shapeless_1.14" % "1.2.4" % Test,
-  "org.mockito"                %% "mockito-scala"             % "1.11.2" % Test
+  "com.beachape"              %% "enumeratum"           % "1.5.15",
+  "com.beautiful-scala"       %% "scalastyle"           % "1.2.0",
+  "io.circe"                  %% "circe-core"           % circe,
+  "io.circe"                  %% "circe-generic-extras" % "0.13.0",
+  "io.circe"                  %% "circe-generic"        % circe,
+  "org.http4s"                %% "http4s-blaze-client"  % http4s,
+  "org.http4s"                %% "http4s-circe"         % http4s,
+  "org.scala-lang.modules"    %% "scala-xml"            % "1.2.0",
+  "org.scalariform"           %% "scalariform"          % "0.2.10",
+  "org.slf4j"                 % "slf4j-api"             % "1.7.30" % Provided,
+  "org.sonarsource.sonarqube" % "sonar-plugin-api"      % sonarVersion % Provided,
+  "org.typelevel"             %% "cats-core"            % "2.1.0",
+  "org.typelevel"             %% "cats-effect"          % "2.1.1",
+  "org.typelevel"             %% "mouse"                % "0.24",
+  // TEST
+  "com.github.alexarchambault" %% "scalacheck-shapeless_1.14" % "1.2.4"      % Test,
+  "org.http4s"                 %% "http4s-blaze-server"       % http4s       % Test,
+  "org.http4s"                 %% "http4s-dsl"                % http4s       % Test,
+  "org.mockito"                %% "mockito-scala"             % "1.11.2"     % Test,
+  "org.scalacheck"             %% "scalacheck"                % "1.14.3"     % Test,
+  "org.scalatest"              %% "scalatest"                 % "3.1.0"      % Test,
+  "org.scalatestplus"          %% "mockito-1-10"              % "3.1.0.0"    % Test,
+  "org.scalatestplus"          %% "scalacheck-1-14"           % "3.1.0.1"    % Test,
+  "org.sonarsource.sonarqube"  % "sonar-plugin-api-impl"      % sonarVersion % Test
 )
 
 // Project resolvers

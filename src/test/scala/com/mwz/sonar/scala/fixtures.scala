@@ -27,9 +27,7 @@ import com.mwz.sonar.scala.util.Logger
 trait WithFiles {
   def withFiles(paths: String*)(test: Seq[File] => Any): Unit = {
     val tmpDir: Path = Files.createTempDirectory("")
-    val files: Seq[File] = paths.map { path =>
-      Files.createFile(tmpDir.resolve(path)).toFile
-    }
+    val files: Seq[File] = paths.map(path => Files.createFile(tmpDir.resolve(path)).toFile)
     try test(files)
     finally {
       files.foreach(f => Files.deleteIfExists(f.toPath))

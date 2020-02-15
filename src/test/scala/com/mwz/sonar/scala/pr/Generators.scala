@@ -56,8 +56,6 @@ object Generators {
 
   implicit val arbUri: Arbitrary[Uri] =
     Arbitrary(
-      Gen.nonEmptyListOf(Gen.alphaLowerChar).map { s =>
-        Uri.unsafeFromString(s.mkString)
-      }
+      Gen.nonEmptyListOf(Gen.alphaLowerChar).map(s => Uri.unsafeFromString(s.mkString))
     )
 }

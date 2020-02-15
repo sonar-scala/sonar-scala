@@ -205,7 +205,9 @@ class ScapegoatSensorSpec
         .setLanguage("scala")
         .setType(InputFile.Type.MAIN)
         .setLines(3)
-        .setOriginalLineStartOffsets(Array(0, 31, 82)) // line 1 -> 30 chars, line 2 -> 50 chars, line 3 -> 50 chars
+        .setOriginalLineStartOffsets(
+          Array(0, 31, 82)
+        ) // line 1 -> 30 chars, line 2 -> 50 chars, line 3 -> 50 chars
         .setOriginalLineEndOffsets(Array(30, 81, 132))
         .setLastValidOffset(132)
         .build()

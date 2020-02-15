@@ -81,14 +81,10 @@ class ScalastyleQualityProfileSpec extends AnyFlatSpec with Matchers with LoneEl
   }
 
   it should "have all rules come from the Scalastyle rules repository" in new Ctx {
-    forEvery(rules) { rule =>
-      rule.repoKey shouldBe "sonar-scala-scalastyle"
-    }
+    forEvery(rules)(rule => rule.repoKey shouldBe "sonar-scala-scalastyle")
   }
 
   it should "not have overridden any of the default params" in new Ctx {
-    forEvery(rules) { rule =>
-      rule.overriddenParams shouldBe empty
-    }
+    forEvery(rules)(rule => rule.overriddenParams shouldBe empty)
   }
 }

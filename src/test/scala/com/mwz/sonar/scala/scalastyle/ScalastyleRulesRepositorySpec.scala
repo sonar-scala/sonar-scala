@@ -64,33 +64,23 @@ class ScalastyleRulesRepositorySpec extends AnyFlatSpec with Matchers with Inspe
   }
 
   it should "have all rules' keys start with org.scalastyle" in new Ctx {
-    forEvery(repository.rules) { rule =>
-      rule.key should startWith("org.scalastyle")
-    }
+    forEvery(repository.rules)(rule => rule.key should startWith("org.scalastyle"))
   }
 
   it should "have all rules activated by default" in new Ctx {
-    forEvery(repository.rules) { rule =>
-      rule.activatedByDefault shouldBe true
-    }
+    forEvery(repository.rules)(rule => rule.activatedByDefault shouldBe true)
   }
 
   it should "have all rules with READY status" in new Ctx {
-    forEvery(repository.rules) { rule =>
-      rule.status shouldBe RuleStatus.READY
-    }
+    forEvery(repository.rules)(rule => rule.status shouldBe RuleStatus.READY)
   }
 
   it should "have all rules marked as CODE_SMELL" in new Ctx {
-    forEvery(repository.rules) { rule =>
-      rule.`type` shouldBe RuleType.CODE_SMELL
-    }
+    forEvery(repository.rules)(rule => rule.`type` shouldBe RuleType.CODE_SMELL)
   }
 
   it should "have rules with parameters" in new Ctx {
-    forAtLeast(1, repository.rules) { rule =>
-      rule.params should not be empty
-    }
+    forAtLeast(1, repository.rules)(rule => rule.params should not be empty)
   }
 
   it should "not have rules with empty parameters" in new Ctx {

@@ -33,9 +33,7 @@ class PatchSpec extends AnyFlatSpec with Matchers with EitherValues with ScalaCh
       .mkString("\n")
 
   it should "fail to parse an invalid patch" in {
-    forAll { s: String =>
-      Patch.parse(s) shouldBe Left(PatchError(s))
-    }
+    forAll((s: String) => Patch.parse(s) shouldBe Left(PatchError(s)))
   }
 
   it should "parse successfully a patch with additions only" in {

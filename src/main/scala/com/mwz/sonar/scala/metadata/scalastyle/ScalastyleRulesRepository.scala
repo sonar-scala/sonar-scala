@@ -31,18 +31,17 @@ object ScalastyleRulesRepository {
     "org.scalastyle.scalariform.ScalaDocChecker"
   )
 
-  lazy val rulesRepository: RulesRepository = {
+  lazy val rulesRepository: RulesRepository =
     RulesRepository(
       key = "sonar-scala-scalastyle",
       name = "Scalastyle",
       rules = ScalastyleRules.rules.flatMap(fromTemplate)
     )
-  }
 
   private[metadata] def fromTemplate(rule: Rule): Chain[Rule] = {
-    val newRule = rule.copy(params = rule.params :+ extraParam(rule.key))
+    val newRule = rule.copy(params = rule.params :+ extraParam(rule.key), template = false)
     if (rule.params.nonEmpty) {
-      val template = newRule.copy(key = rule.key + "-template")
+      val template = newRule.copy(key = rule.key + "-template", template = true)
       if (!SkipTemplateInstances.contains(rule.key))
         Chain(template, newRule)
       else Chain(template)

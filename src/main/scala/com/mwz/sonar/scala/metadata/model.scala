@@ -20,11 +20,18 @@ package com.mwz.sonar.scala.metadata
 import cats.data.Chain
 import enumeratum._
 
+final case class RulesRepository(
+  key: String,
+  name: String,
+  rules: Chain[Rule]
+)
+
 final case class Rule(
   key: String,
   name: String,
   description: String,
   severity: Severity,
+  template: Boolean,
   params: Chain[Param]
 )
 
@@ -53,9 +60,3 @@ object Severity extends Enum[Severity] with CirceEnum[Severity] {
   case object Blocker extends Severity
   val values = findValues
 }
-
-final case class RulesRepository(
-  key: String,
-  name: String,
-  rules: Chain[Rule]
-)

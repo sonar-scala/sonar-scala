@@ -40,6 +40,7 @@ object ScalastyleRules {
       name = inspection.label,
       description = formatDescription(inspection),
       severity = toSeverity(inspection.defaultLevel),
+      template = inspection.params.nonEmpty,
       params = Chain.fromSeq(inspection.params.map(p => toParam(inspection.clazz, inspection.label, p)))
     )
   }

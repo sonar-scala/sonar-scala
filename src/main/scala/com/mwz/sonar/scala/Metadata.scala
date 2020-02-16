@@ -44,29 +44,31 @@ private final case class Rules(
 )
 
 object Metadata extends IOApp {
-  private val metadata = SonarScalaMetadata(
-    Rules(ScalastyleRules.rules),
-    Map(
-      ScalastyleRulesRepository.rulesRepository.key ->
-      ScalastyleRulesRepository.rulesRepository
+  private val metadata: SonarScalaMetadata =
+    SonarScalaMetadata(
+      Rules(ScalastyleRules.rules),
+      Map(
+        ScalastyleRulesRepository.rulesRepository.key ->
+        ScalastyleRulesRepository.rulesRepository
+      )
     )
-  )
-  private val printer = Printer.spaces2SortKeys.copy(
-    colonLeft = "",
-    lbraceLeft = "",
-    rbraceRight = "",
-    lbracketLeft = "",
-    lrbracketsEmpty = "",
-    rbracketRight = "",
-    arrayCommaLeft = "",
-    objectCommaLeft = ""
-  )
+  private val printer: Printer =
+    Printer.spaces2SortKeys.copy(
+      colonLeft = "",
+      lbraceLeft = "",
+      rbraceRight = "",
+      lbracketLeft = "",
+      lrbracketsEmpty = "",
+      rbracketRight = "",
+      arrayCommaLeft = "",
+      objectCommaLeft = ""
+    )
 
   def run(args: List[String]): IO[ExitCode] = {
-    val write = Stream.resource(Blocker[IO]).flatMap { blocker =>
-      Stream(metadata.asJson.printWith(printer))
+    val write: Stream[IO, Unit] = Stream.resource(Blocker[IO]).flatMap { blocker =>
+      Stream[IO, String](metadata.asJson.printWith(printer))
         .through(text.utf8Encode)
-        .through(writeAll[IO](Paths.get("sonar-scala-metadata.json"), blocker))
+        .through(writeAll(Paths.get("sonar-scala-metadata.json"), blocker))
     }
     write.compile.drain.as(ExitCode.Success)
   }

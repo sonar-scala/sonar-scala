@@ -48,7 +48,7 @@ object Metadata extends IOApp {
     SonarScalaMetadata(
       Rules(ScalastyleRules.rules),
       Map(
-        ScalastyleRulesRepository.rulesRepository.key ->
+        ScalastyleRulesRepository.RepositoryKey ->
         ScalastyleRulesRepository.rulesRepository
       )
     )

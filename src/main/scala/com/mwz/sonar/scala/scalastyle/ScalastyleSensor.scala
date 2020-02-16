@@ -25,6 +25,7 @@ import scala.jdk.CollectionConverters._
 
 import cats.instances.string._
 import cats.syntax.eq._
+import com.mwz.sonar.scala.metadata.scalastyle.ScalastyleRulesRepository
 import com.mwz.sonar.scala.pr.{GlobalIssues, Issue}
 import com.mwz.sonar.scala.util.Log
 import com.mwz.sonar.scala.util.syntax.Optionals._

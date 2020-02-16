@@ -18,6 +18,7 @@
 package com.mwz.sonar.scala
 package scalastyle
 
+import com.mwz.sonar.scala.metadata.scalastyle.ScalastyleRulesRepository
 import com.mwz.sonar.scala.qualityprofiles.Overrides
 import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition
 import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition.{
@@ -48,15 +49,24 @@ final class ScalastyleQualityProfile extends BuiltInQualityProfilesDefinition {
 object ScalastyleQualityProfile {
   private[scalastyle] final val ProfileName: String = "Scalastyle"
 
+  // Blacklist the following inspections.
+  private[scalastyle] final val BlacklistRules = Set(
+    // it is the opposite to "org.scalastyle.file.NewLineAtEofChecker"
+    "org.scalastyle.file.NoNewLineAtEofChecker"
+  )
+
   /**
    * Activates Scalastyle rules for the given profile excluding blacklisted rules.
    * Overrides the default severity and parameter values if provided in overrides.
    */
-  def activateRules(profile: NewBuiltInQualityProfile, overrides: Option[Overrides] = None): Unit = {
+  def activateRules(
+    profile: NewBuiltInQualityProfile,
+    overrides: Option[Overrides] = None
+  ): Unit = {
     ScalastyleInspections.AllInspections
       .filterNot { inspection =>
         ScalastyleRulesRepository.SkipTemplateInstances.contains(inspection.clazz) ||
-        ScalastyleRulesRepository.BlacklistRules.contains(inspection.clazz) ||
+        BlacklistRules.contains(inspection.clazz) ||
         overrides.exists(_.blacklist.contains(inspection.clazz))
       }
       .foreach { inspection =>

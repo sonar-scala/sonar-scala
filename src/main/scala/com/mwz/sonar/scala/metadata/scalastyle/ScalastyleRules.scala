@@ -116,11 +116,8 @@ object ScalastyleRules {
           if ruleClass === "org.scalastyle.file.HeaderMatchesChecker" &&
           name === "header" =>
         ParamType.Text
-      case StringType =>
-        ParamType.String
-      case IntegerType =>
-        ParamType.Int
-      case BooleanType =>
-        ParamType.Bool
+      case StringType  => ParamType.String
+      case IntegerType => ParamType.Integer
+      case BooleanType => ParamType.Boolean
     }
 }

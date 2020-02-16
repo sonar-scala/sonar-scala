@@ -20,7 +20,7 @@ package scalastyle
 
 import scala.jdk.CollectionConverters._
 
-import com.mwz.sonar.scala.scalastyle.ScalastyleRulesRepository.SkipTemplateInstances
+import com.mwz.sonar.scala.metadata.scalastyle.ScalastyleRulesRepository.SkipTemplateInstances
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.{Inspectors, LoneElement}
@@ -51,7 +51,7 @@ class ScalastyleQualityProfileSpec extends AnyFlatSpec with Matchers with LoneEl
   it should "activate all default (non-template) rules" in new Ctx {
     rules.map(_.ruleKey) should contain allElementsOf
     ScalastyleInspections.AllInspections
-      .filter(i => i.params.isEmpty && !ScalastyleRulesRepository.BlacklistRules.contains(i.clazz))
+      .filter(i => i.params.isEmpty && !ScalastyleQualityProfile.BlacklistRules.contains(i.clazz))
       .map(_.clazz)
   }
 

@@ -21,8 +21,12 @@ package scalastyle
 import cats.data.Chain
 
 object ScalastyleRulesRepository {
+  final val RepositoryKey = "sonar-scala-scalastyle"
+  final val RepositoryName = "Scalastyle"
+  final val RuleClassParam = "ruleClass"
+
   // Skip creating template instances for the following inspections.
-  private final val SkipTemplateInstances = Set(
+  final val SkipTemplateInstances = Set(
     // this rule wouldn't work with a default parameter value
     "org.scalastyle.file.HeaderMatchesChecker",
     // no default regex provided
@@ -33,13 +37,20 @@ object ScalastyleRulesRepository {
 
   lazy val rulesRepository: RulesRepository =
     RulesRepository(
-      key = "sonar-scala-scalastyle",
-      name = "Scalastyle",
+      key = RepositoryKey,
+      name = RepositoryName,
       rules = ScalastyleRules.rules.flatMap(fromTemplate)
     )
 
+  /**
+   * From each template create a new rule (an instance).
+   * Also add an additional parameter to capture Scalastyle class name of each rule.
+   */
   private[metadata] def fromTemplate(rule: Rule): Chain[Rule] = {
     val newRule = rule.copy(params = rule.params :+ extraParam(rule.key), template = false)
+
+    // For each template create a rule with default parameter values.
+    // (except for the rules listed in the SkipTemplateInstances set)
     if (rule.params.nonEmpty) {
       val template = newRule.copy(key = rule.key + "-template", template = true)
       if (!SkipTemplateInstances.contains(rule.key))
@@ -48,9 +59,13 @@ object ScalastyleRulesRepository {
     } else Chain(newRule)
   }
 
+  /**
+   * Create an extra param to capture Scalastyle class name of each rule.
+   * This is used by the Scalastyle sensor.
+   */
   private[metadata] def extraParam(key: String): Param =
     Param(
-      name = "ruleClass",
+      name = RuleClassParam,
       typ = ParamType.String,
       description = "Scalastyle's rule (checker) class name.",
       default = key

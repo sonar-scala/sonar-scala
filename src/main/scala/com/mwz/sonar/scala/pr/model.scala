@@ -22,11 +22,11 @@ import org.http4s.Uri
 
 @SuppressWarnings(Array("IncorrectlyNamedExceptions"))
 sealed trait ReviewError extends Exception
-case object NoFilesInPR extends ReviewError
+final case object NoFilesInPR extends ReviewError
 
 sealed trait PrReviewStatus extends Product with Serializable
-case object Pending extends PrReviewStatus
-case object Success extends PrReviewStatus
+final case object Pending extends PrReviewStatus
+final case object Success extends PrReviewStatus
 final case class Error(reviewStatus: ReviewStatus) extends PrReviewStatus
 final case class Failure(error: Throwable) extends PrReviewStatus
 

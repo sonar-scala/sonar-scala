@@ -44,10 +44,10 @@ trait WithTracing {
 trait WithLogging {
   object LogLevel {
     sealed trait Level
-    case object Debug extends Level
-    case object Info extends Level
-    case object Warn extends Level
-    case object Error extends Level
+    final case object Debug extends Level
+    final case object Info extends Level
+    final case object Warn extends Level
+    final case object Error extends Level
   }
 
   def withLogging(test: (Ref[IO, List[(LogLevel.Level, String)]], Logger[IO]) => Any): Unit = {

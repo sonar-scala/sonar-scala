@@ -46,11 +46,11 @@ final case class Param(
 
 sealed trait ParamType extends EnumEntry
 object ParamType extends Enum[ParamType] with CirceEnum[ParamType] with CatsEnum[ParamType] {
-  case object String extends ParamType
-  case object Text extends ParamType
-  case object Boolean extends ParamType
-  case object Integer extends ParamType
-  case object Float extends ParamType
+  final case object String extends ParamType
+  final case object Text extends ParamType
+  final case object Boolean extends ParamType
+  final case object Integer extends ParamType
+  final case object Float extends ParamType
   val values = findValues
 
   implicit class ParamTypeSyntax(private val paramType: ParamType) extends AnyVal {
@@ -66,10 +66,10 @@ object ParamType extends Enum[ParamType] with CirceEnum[ParamType] with CatsEnum
 
 sealed trait Severity extends EnumEntry
 object Severity extends Enum[Severity] with CirceEnum[Severity] with CatsEnum[Severity] {
-  case object Info extends Severity
-  case object Minor extends Severity
-  case object Major extends Severity
-  case object Critical extends Severity
-  case object Blocker extends Severity
+  final case object Info extends Severity
+  final case object Minor extends Severity
+  final case object Major extends Severity
+  final case object Critical extends Severity
+  final case object Blocker extends Severity
   val values = findValues
 }

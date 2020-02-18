@@ -18,13 +18,14 @@
 package com.mwz.sonar.scala.metadata
 
 import cats.data.Chain
+import cats.data.NonEmptyChain
 import enumeratum._
 import org.sonar.api.server.rule.RuleParamType
 
 final case class RulesRepository(
   key: String,
   name: String,
-  rules: Chain[Rule]
+  rules: NonEmptyChain[Rule]
 )
 
 final case class Rule(

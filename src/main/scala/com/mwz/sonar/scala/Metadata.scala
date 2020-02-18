@@ -19,7 +19,7 @@ package com.mwz.sonar.scala
 
 import java.nio.file.Paths
 
-import cats.data.Chain
+import cats.data.NonEmptyChain
 import cats.effect.Blocker
 import cats.effect.ExitCode
 import cats.effect.IO
@@ -40,7 +40,7 @@ private final case class SonarScalaMetadata(
   repositories: Map[String, RulesRepository]
 )
 private final case class Rules(
-  scalastyle: Chain[Rule]
+  scalastyle: NonEmptyChain[Rule]
 )
 
 object Metadata extends IOApp {

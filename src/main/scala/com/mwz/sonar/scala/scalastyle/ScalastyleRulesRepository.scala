@@ -40,7 +40,7 @@ final class ScalastyleRulesRepository extends RulesDefinition {
         .setName(RepositoryName)
 
     // Register each Scalastyle inspection as a repository rule.
-    rulesRepository.rules.toList.foreach(rule => createRule(repository, rule))
+    rulesRepository.rules.iterator.foreach(rule => createRule(repository, rule))
 
     // Save the repository.
     repository.done()

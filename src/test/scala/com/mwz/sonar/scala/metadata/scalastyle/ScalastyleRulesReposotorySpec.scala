@@ -19,6 +19,7 @@ package com.mwz.sonar.scala.metadata
 package scalastyle
 
 import cats.data.Chain
+import cats.data.NonEmptyChain
 import enumeratum.scalacheck._
 import org.scalacheck.Prop._
 import org.scalacheck.Prop._
@@ -48,7 +49,9 @@ class ScalastyleRulesRepositorySpec
         template = false,
         params = Chain(extraParam)
       )
-      ScalastyleRulesRepository.fromTemplate(rule.copy(params = Chain.empty)) shouldBe Chain(expected)
+      ScalastyleRulesRepository.fromTemplate(rule.copy(params = Chain.empty)) shouldBe NonEmptyChain.one(
+        expected
+      )
     }
   }
 
@@ -67,7 +70,7 @@ class ScalastyleRulesRepositorySpec
           params = params :+ extraParam
         )
 
-        ScalastyleRulesRepository.fromTemplate(newRule) === Chain(expected)
+        ScalastyleRulesRepository.fromTemplate(newRule) === NonEmptyChain.one(expected)
       }
     )
   }
@@ -89,7 +92,7 @@ class ScalastyleRulesRepositorySpec
           template = true
         )
 
-        ScalastyleRulesRepository.fromTemplate(newRule) === Chain(template, instance)
+        ScalastyleRulesRepository.fromTemplate(newRule) === NonEmptyChain(template, instance)
       }
     )
   }

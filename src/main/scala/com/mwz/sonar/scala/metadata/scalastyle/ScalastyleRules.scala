@@ -19,6 +19,7 @@ package com.mwz.sonar.scala.metadata
 package scalastyle
 
 import cats.data.Chain
+import cats.data.NonEmptyChain
 import cats.instances.char._
 import cats.instances.int._
 import cats.instances.string._
@@ -31,8 +32,11 @@ import org.scalastyle.Level
 import org.scalastyle._
 
 object ScalastyleRules {
-  lazy val rules: Chain[Rule] =
-    Chain.fromSeq(ScalastyleInspections.AllInspections.map(toRule))
+  // TODO: Refactor AllInspections to be a NonEmptyChain.
+  lazy val rules: NonEmptyChain[Rule] =
+    NonEmptyChain.fromChainUnsafe(
+      Chain.fromSeq(ScalastyleInspections.AllInspections.map(toRule))
+    )
 
   private[metadata] def toRule(inspection: ScalastyleInspection): Rule = {
     Rule(

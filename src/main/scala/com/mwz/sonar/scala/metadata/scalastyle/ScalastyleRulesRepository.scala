@@ -18,7 +18,7 @@
 package com.mwz.sonar.scala.metadata
 package scalastyle
 
-import cats.data.Chain
+import cats.data.NonEmptyChain
 
 object ScalastyleRulesRepository {
   final val RepositoryKey = "sonar-scala-scalastyle"
@@ -46,7 +46,7 @@ object ScalastyleRulesRepository {
    * From each template create a new rule (an instance).
    * Also add an additional parameter to capture Scalastyle class name of each rule.
    */
-  private[metadata] def fromTemplate(rule: Rule): Chain[Rule] = {
+  private[metadata] def fromTemplate(rule: Rule): NonEmptyChain[Rule] = {
     val newRule = rule.copy(params = rule.params :+ extraParam(rule.key), template = false)
 
     // For each template create a rule with default parameter values.
@@ -54,9 +54,9 @@ object ScalastyleRulesRepository {
     if (rule.params.nonEmpty) {
       val template = newRule.copy(key = rule.key + "-template", template = true)
       if (!SkipTemplateInstances.contains(rule.key))
-        Chain(template, newRule)
-      else Chain(template)
-    } else Chain(newRule)
+        NonEmptyChain(template, newRule)
+      else NonEmptyChain.one(template)
+    } else NonEmptyChain.one(newRule)
   }
 
   /**

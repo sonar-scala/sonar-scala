@@ -32,14 +32,17 @@ import fs2.Stream
 import fs2.io.file._
 import fs2.text
 import io.circe.Printer
-import io.circe.generic.auto._
+import io.circe.generic.JsonCodec
 import io.circe.syntax._
 
-private final case class SonarScalaMetadata(
+@JsonCodec
+final case class SonarScalaMetadata(
   rules: Rules,
   repositories: Map[String, RulesRepository]
 )
-private final case class Rules(
+
+@JsonCodec
+final case class Rules(
   scalastyle: NonEmptyChain[Rule]
 )
 

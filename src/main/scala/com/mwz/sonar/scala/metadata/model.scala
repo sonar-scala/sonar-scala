@@ -20,14 +20,17 @@ package com.mwz.sonar.scala.metadata
 import cats.data.Chain
 import cats.data.NonEmptyChain
 import enumeratum._
+import io.circe.generic.JsonCodec
 import org.sonar.api.server.rule.RuleParamType
 
+@JsonCodec
 final case class RulesRepository(
   key: String,
   name: String,
   rules: NonEmptyChain[Rule]
 )
 
+@JsonCodec
 final case class Rule(
   key: String,
   name: String,
@@ -37,6 +40,7 @@ final case class Rule(
   params: Chain[Param]
 )
 
+@JsonCodec
 final case class Param(
   name: String,
   typ: ParamType,

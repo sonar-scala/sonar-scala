@@ -28,7 +28,7 @@
               "default": "1500",
               "description": "Maximum file length: Maximum number of lines in a file",
               "name": "maxFileLength",
-              "typ": "Int"
+              "typ": "Integer"
             },
             {
               "default": "org.scalastyle.file.FileLengthChecker",
@@ -49,7 +49,7 @@
               "default": "1500",
               "description": "Maximum file length: Maximum number of lines in a file",
               "name": "maxFileLength",
-              "typ": "Int"
+              "typ": "Integer"
             },
             {
               "default": "org.scalastyle.file.FileLengthChecker",
@@ -76,7 +76,7 @@
               "default": "false",
               "description": "Header Regex: Whether to treat the header string as a regular expression",
               "name": "regex",
-              "typ": "Bool"
+              "typ": "Boolean"
             },
             {
               "default": "org.scalastyle.file.HeaderMatchesChecker",
@@ -112,7 +112,7 @@
               "default": "false",
               "description": "Ignore lines with just whitespace: Skip a line if the entire contents are whitespace characters",
               "name": "ignoreWhitespaceLines",
-              "typ": "Bool"
+              "typ": "Boolean"
             },
             {
               "default": "org.scalastyle.file.WhitespaceEndOfLineChecker",
@@ -133,7 +133,7 @@
               "default": "false",
               "description": "Ignore lines with just whitespace: Skip a line if the entire contents are whitespace characters",
               "name": "ignoreWhitespaceLines",
-              "typ": "Bool"
+              "typ": "Boolean"
             },
             {
               "default": "org.scalastyle.file.WhitespaceEndOfLineChecker",
@@ -169,19 +169,19 @@
               "default": "160",
               "description": "Maximum line length: Maximum number of characters in a line",
               "name": "maxLineLength",
-              "typ": "Int"
+              "typ": "Integer"
             },
             {
               "default": "4",
               "description": "Tab size: Number of characters that a tab represents",
               "name": "tabSize",
-              "typ": "Int"
+              "typ": "Integer"
             },
             {
               "default": "false",
               "description": "Ignore import statements: Ignore import statements",
               "name": "ignoreImports",
-              "typ": "Bool"
+              "typ": "Boolean"
             },
             {
               "default": "org.scalastyle.file.FileLineLengthChecker",
@@ -202,19 +202,19 @@
               "default": "160",
               "description": "Maximum line length: Maximum number of characters in a line",
               "name": "maxLineLength",
-              "typ": "Int"
+              "typ": "Integer"
             },
             {
               "default": "4",
               "description": "Tab size: Number of characters that a tab represents",
               "name": "tabSize",
-              "typ": "Int"
+              "typ": "Integer"
             },
             {
               "default": "false",
               "description": "Ignore import statements: Ignore import statements",
               "name": "ignoreImports",
-              "typ": "Bool"
+              "typ": "Boolean"
             },
             {
               "default": "org.scalastyle.file.FileLineLengthChecker",
@@ -460,7 +460,7 @@
               "default": "8",
               "description": "Maximum Number: The maximum number of parameters",
               "name": "maxParameters",
-              "typ": "Int"
+              "typ": "Integer"
             },
             {
               "default": "org.scalastyle.scalariform.ParameterNumberChecker",
@@ -481,7 +481,7 @@
               "default": "8",
               "description": "Maximum Number: The maximum number of parameters",
               "name": "maxParameters",
-              "typ": "Int"
+              "typ": "Integer"
             },
             {
               "default": "org.scalastyle.scalariform.ParameterNumberChecker",
@@ -604,7 +604,7 @@
               "default": "true",
               "description": "Allow null checks: Allow occurrences in checks like 'x == null' or 'x != null'",
               "name": "allowNullChecks",
-              "typ": "Bool"
+              "typ": "Boolean"
             },
             {
               "default": "org.scalastyle.scalariform.NullChecker",
@@ -625,7 +625,7 @@
               "default": "true",
               "description": "Allow null checks: Allow occurrences in checks like 'x == null' or 'x != null'",
               "name": "allowNullChecks",
-              "typ": "Bool"
+              "typ": "Boolean"
             },
             {
               "default": "org.scalastyle.scalariform.NullChecker",
@@ -712,7 +712,7 @@
               "default": "false",
               "description": "Line: Boolean whether to process line by line",
               "name": "line",
-              "typ": "Bool"
+              "typ": "Boolean"
             },
             {
               "default": "org.scalastyle.file.RegexChecker",
@@ -733,7 +733,7 @@
               "default": "20",
               "description": "Maximum Number: Maximum number of types to allow",
               "name": "maxTypes",
-              "typ": "Int"
+              "typ": "Integer"
             },
             {
               "default": "org.scalastyle.scalariform.NumberOfTypesChecker",
@@ -754,7 +754,7 @@
               "default": "20",
               "description": "Maximum Number: Maximum number of types to allow",
               "name": "maxTypes",
-              "typ": "Int"
+              "typ": "Integer"
             },
             {
               "default": "org.scalastyle.scalariform.NumberOfTypesChecker",
@@ -775,13 +775,13 @@
               "default": "10",
               "description": "Maximum: Maximum cyclomatic complexity to allow for a method",
               "name": "maximum",
-              "typ": "Int"
+              "typ": "Integer"
             },
             {
               "default": "true",
               "description": "Count Cases: If true, each case increases method complexity, else only match keyword is considered",
               "name": "countCases",
-              "typ": "Bool"
+              "typ": "Boolean"
             },
             {
               "default": "org.scalastyle.scalariform.CyclomaticComplexityChecker",
@@ -802,13 +802,13 @@
               "default": "10",
               "description": "Maximum: Maximum cyclomatic complexity to allow for a method",
               "name": "maximum",
-              "typ": "Int"
+              "typ": "Integer"
             },
             {
               "default": "true",
               "description": "Count Cases: If true, each case increases method complexity, else only match keyword is considered",
               "name": "countCases",
-              "typ": "Bool"
+              "typ": "Boolean"
             },
             {
               "default": "org.scalastyle.scalariform.CyclomaticComplexityChecker",
@@ -859,13 +859,13 @@
               "default": "true",
               "description": "Single Line Allowed: If without braces allowed if everything is on one line",
               "name": "singleLineAllowed",
-              "typ": "Bool"
+              "typ": "Boolean"
             },
             {
               "default": "false",
               "description": "Double Line Allowed: If without braces allowed if everything is on one line or two lines",
               "name": "doubleLineAllowed",
-              "typ": "Bool"
+              "typ": "Boolean"
             },
             {
               "default": "org.scalastyle.scalariform.IfBraceChecker",
@@ -886,13 +886,13 @@
               "default": "true",
               "description": "Single Line Allowed: If without braces allowed if everything is on one line",
               "name": "singleLineAllowed",
-              "typ": "Bool"
+              "typ": "Boolean"
             },
             {
               "default": "false",
               "description": "Double Line Allowed: If without braces allowed if everything is on one line or two lines",
               "name": "doubleLineAllowed",
-              "typ": "Bool"
+              "typ": "Boolean"
             },
             {
               "default": "org.scalastyle.scalariform.IfBraceChecker",
@@ -913,19 +913,19 @@
               "default": "50",
               "description": "Maximum length: Maximum number of lines allowed for a method",
               "name": "maxLength",
-              "typ": "Int"
+              "typ": "Integer"
             },
             {
               "default": "false",
               "description": "Ignore comments: If set to true, comment lines in method body won't be counted",
               "name": "ignoreComments",
-              "typ": "Bool"
+              "typ": "Boolean"
             },
             {
               "default": "false",
               "description": "Ignore empty lines: If set to true, empty lines in method body won't be counted",
               "name": "ignoreEmpty",
-              "typ": "Bool"
+              "typ": "Boolean"
             },
             {
               "default": "org.scalastyle.scalariform.MethodLengthChecker",
@@ -946,19 +946,19 @@
               "default": "50",
               "description": "Maximum length: Maximum number of lines allowed for a method",
               "name": "maxLength",
-              "typ": "Int"
+              "typ": "Integer"
             },
             {
               "default": "false",
               "description": "Ignore comments: If set to true, comment lines in method body won't be counted",
               "name": "ignoreComments",
-              "typ": "Bool"
+              "typ": "Boolean"
             },
             {
               "default": "false",
               "description": "Ignore empty lines: If set to true, empty lines in method body won't be counted",
               "name": "ignoreEmpty",
-              "typ": "Bool"
+              "typ": "Boolean"
             },
             {
               "default": "org.scalastyle.scalariform.MethodLengthChecker",
@@ -991,7 +991,7 @@
               "default": "false",
               "description": "Ignore override: If set to true, methods which have the override modifier are ignored",
               "name": "ignoreOverride",
-              "typ": "Bool"
+              "typ": "Boolean"
             },
             {
               "default": "org.scalastyle.scalariform.MethodNamesChecker",
@@ -1024,7 +1024,7 @@
               "default": "false",
               "description": "Ignore override: If set to true, methods which have the override modifier are ignored",
               "name": "ignoreOverride",
-              "typ": "Bool"
+              "typ": "Boolean"
             },
             {
               "default": "org.scalastyle.scalariform.MethodNamesChecker",
@@ -1099,7 +1099,7 @@
               "default": "30",
               "description": "Maximum methods: The maximum number of methods allowed",
               "name": "maxMethods",
-              "typ": "Int"
+              "typ": "Integer"
             },
             {
               "default": "org.scalastyle.scalariform.NumberOfMethodsInTypeChecker",
@@ -1120,7 +1120,7 @@
               "default": "30",
               "description": "Maximum methods: The maximum number of methods allowed",
               "name": "maxMethods",
-              "typ": "Int"
+              "typ": "Integer"
             },
             {
               "default": "org.scalastyle.scalariform.NumberOfMethodsInTypeChecker",
@@ -1141,7 +1141,7 @@
               "default": "false",
               "description": "Ignore overridden methods: If true, public methods which override are ignored",
               "name": "ignoreOverride",
-              "typ": "Bool"
+              "typ": "Boolean"
             },
             {
               "default": "org.scalastyle.scalariform.PublicMethodsHaveTypeChecker",
@@ -1162,7 +1162,7 @@
               "default": "false",
               "description": "Ignore overridden methods: If true, public methods which override are ignored",
               "name": "ignoreOverride",
-              "typ": "Bool"
+              "typ": "Boolean"
             },
             {
               "default": "org.scalastyle.scalariform.PublicMethodsHaveTypeChecker",
@@ -1432,7 +1432,7 @@
               "default": "1",
               "description": "Maximum occurences allowed: Maximum number of occurences allowed",
               "name": "allowed",
-              "typ": "Int"
+              "typ": "Integer"
             },
             {
               "default": "^\"\"$",
@@ -1459,7 +1459,7 @@
               "default": "1",
               "description": "Maximum occurences allowed: Maximum number of occurences allowed",
               "name": "allowed",
-              "typ": "Int"
+              "typ": "Integer"
             },
             {
               "default": "^\"\"$",
@@ -1546,7 +1546,7 @@
               "default": "false",
               "description": "Allow parentheses for single-line for: For with parentheses allowed if everything is on one line",
               "name": "singleLineAllowed",
-              "typ": "Bool"
+              "typ": "Boolean"
             },
             {
               "default": "org.scalastyle.scalariform.ForBraceChecker",
@@ -1567,7 +1567,7 @@
               "default": "false",
               "description": "Allow parentheses for single-line for: For with parentheses allowed if everything is on one line",
               "name": "singleLineAllowed",
-              "typ": "Bool"
+              "typ": "Boolean"
             },
             {
               "default": "org.scalastyle.scalariform.ForBraceChecker",
@@ -1630,7 +1630,7 @@
               "default": "false",
               "description": "Ignore override: If set to true, methods which have the override modifier are ignored",
               "name": "ignoreOverride",
-              "typ": "Bool"
+              "typ": "Boolean"
             },
             {
               "default": "anydoc",
@@ -1717,7 +1717,7 @@
               "default": "false",
               "description": "Allow non-ASCII scripts in string literals.: White lists Unicode characters recognized by `\\p'{'Alnum'}'\\p'{'Punct'}'\\p'{'Sc'}'\\p'{'Space'}'` but not symbols like Emoji.",
               "name": "allowStringLiterals",
-              "typ": "Bool"
+              "typ": "Boolean"
             },
             {
               "default": "org.scalastyle.scalariform.NonASCIICharacterChecker",
@@ -1738,7 +1738,7 @@
               "default": "false",
               "description": "Allow non-ASCII scripts in string literals.: White lists Unicode characters recognized by `\\p'{'Alnum'}'\\p'{'Punct'}'\\p'{'Sc'}'\\p'{'Space'}'` but not symbols like Emoji.",
               "name": "allowStringLiterals",
-              "typ": "Bool"
+              "typ": "Boolean"
             },
             {
               "default": "org.scalastyle.scalariform.NonASCIICharacterChecker",
@@ -1759,19 +1759,19 @@
               "default": "2",
               "description": "Tab size: Number of characters that a tab represents",
               "name": "tabSize",
-              "typ": "Int"
+              "typ": "Integer"
             },
             {
               "default": "2",
               "description": "Multi-line method parameter spacing: Level of indentation of multi-line method parameters relative to the indentation of the first line of the method",
               "name": "methodParamIndentSize",
-              "typ": "Int"
+              "typ": "Integer"
             },
             {
               "default": "4",
               "description": "Multi-line class parameter spacing: Level of indentation of multi-line primary constructor parameters of a class. Relative to the indentation of the first line of class declaration",
               "name": "classParamIndentSize",
-              "typ": "Int"
+              "typ": "Integer"
             },
             {
               "default": "org.scalastyle.file.IndentationChecker",
@@ -1792,19 +1792,19 @@
               "default": "2",
               "description": "Tab size: Number of characters that a tab represents",
               "name": "tabSize",
-              "typ": "Int"
+              "typ": "Integer"
             },
             {
               "default": "2",
               "description": "Multi-line method parameter spacing: Level of indentation of multi-line method parameters relative to the indentation of the first line of the method",
               "name": "methodParamIndentSize",
-              "typ": "Int"
+              "typ": "Integer"
             },
             {
               "default": "4",
               "description": "Multi-line class parameter spacing: Level of indentation of multi-line primary constructor parameters of a class. Relative to the indentation of the first line of class declaration",
               "name": "classParamIndentSize",
-              "typ": "Int"
+              "typ": "Integer"
             },
             {
               "default": "org.scalastyle.file.IndentationChecker",
@@ -1981,7 +1981,7 @@
               "default": "false",
               "description": "Check string literals: If true, also checks that string literal arguments are named",
               "name": "checkString",
-              "typ": "Bool"
+              "typ": "Boolean"
             },
             {
               "default": "^set.+$",
@@ -2008,7 +2008,7 @@
               "default": "false",
               "description": "Check string literals: If true, also checks that string literal arguments are named",
               "name": "checkString",
-              "typ": "Bool"
+              "typ": "Boolean"
             },
             {
               "default": "^set.+$",
@@ -2078,7 +2078,7 @@
             "default": "1500",
             "description": "Maximum file length: Maximum number of lines in a file",
             "name": "maxFileLength",
-            "typ": "Int"
+            "typ": "Integer"
           }
         ],
         "severity": "Minor",
@@ -2099,7 +2099,7 @@
             "default": "false",
             "description": "Header Regex: Whether to treat the header string as a regular expression",
             "name": "regex",
-            "typ": "Bool"
+            "typ": "Boolean"
           }
         ],
         "severity": "Minor",
@@ -2122,7 +2122,7 @@
             "default": "false",
             "description": "Ignore lines with just whitespace: Skip a line if the entire contents are whitespace characters",
             "name": "ignoreWhitespaceLines",
-            "typ": "Bool"
+            "typ": "Boolean"
           }
         ],
         "severity": "Minor",
@@ -2145,19 +2145,19 @@
             "default": "160",
             "description": "Maximum line length: Maximum number of characters in a line",
             "name": "maxLineLength",
-            "typ": "Int"
+            "typ": "Integer"
           },
           {
             "default": "4",
             "description": "Tab size: Number of characters that a tab represents",
             "name": "tabSize",
-            "typ": "Int"
+            "typ": "Integer"
           },
           {
             "default": "false",
             "description": "Ignore import statements: Ignore import statements",
             "name": "ignoreImports",
-            "typ": "Bool"
+            "typ": "Boolean"
           }
         ],
         "severity": "Minor",
@@ -2255,7 +2255,7 @@
             "default": "8",
             "description": "Maximum Number: The maximum number of parameters",
             "name": "maxParameters",
-            "typ": "Int"
+            "typ": "Integer"
           }
         ],
         "severity": "Minor",
@@ -2317,7 +2317,7 @@
             "default": "true",
             "description": "Allow null checks: Allow occurrences in checks like 'x == null' or 'x != null'",
             "name": "allowNullChecks",
-            "typ": "Bool"
+            "typ": "Boolean"
           }
         ],
         "severity": "Minor",
@@ -2370,7 +2370,7 @@
             "default": "false",
             "description": "Line: Boolean whether to process line by line",
             "name": "line",
-            "typ": "Bool"
+            "typ": "Boolean"
           }
         ],
         "severity": "Minor",
@@ -2385,7 +2385,7 @@
             "default": "20",
             "description": "Maximum Number: Maximum number of types to allow",
             "name": "maxTypes",
-            "typ": "Int"
+            "typ": "Integer"
           }
         ],
         "severity": "Minor",
@@ -2400,13 +2400,13 @@
             "default": "10",
             "description": "Maximum: Maximum cyclomatic complexity to allow for a method",
             "name": "maximum",
-            "typ": "Int"
+            "typ": "Integer"
           },
           {
             "default": "true",
             "description": "Count Cases: If true, each case increases method complexity, else only match keyword is considered",
             "name": "countCases",
-            "typ": "Bool"
+            "typ": "Boolean"
           }
         ],
         "severity": "Minor",
@@ -2437,13 +2437,13 @@
             "default": "true",
             "description": "Single Line Allowed: If without braces allowed if everything is on one line",
             "name": "singleLineAllowed",
-            "typ": "Bool"
+            "typ": "Boolean"
           },
           {
             "default": "false",
             "description": "Double Line Allowed: If without braces allowed if everything is on one line or two lines",
             "name": "doubleLineAllowed",
-            "typ": "Bool"
+            "typ": "Boolean"
           }
         ],
         "severity": "Minor",
@@ -2458,19 +2458,19 @@
             "default": "50",
             "description": "Maximum length: Maximum number of lines allowed for a method",
             "name": "maxLength",
-            "typ": "Int"
+            "typ": "Integer"
           },
           {
             "default": "false",
             "description": "Ignore comments: If set to true, comment lines in method body won't be counted",
             "name": "ignoreComments",
-            "typ": "Bool"
+            "typ": "Boolean"
           },
           {
             "default": "false",
             "description": "Ignore empty lines: If set to true, empty lines in method body won't be counted",
             "name": "ignoreEmpty",
-            "typ": "Bool"
+            "typ": "Boolean"
           }
         ],
         "severity": "Minor",
@@ -2497,7 +2497,7 @@
             "default": "false",
             "description": "Ignore override: If set to true, methods which have the override modifier are ignored",
             "name": "ignoreOverride",
-            "typ": "Bool"
+            "typ": "Boolean"
           }
         ],
         "severity": "Minor",
@@ -2533,7 +2533,7 @@
             "default": "30",
             "description": "Maximum methods: The maximum number of methods allowed",
             "name": "maxMethods",
-            "typ": "Int"
+            "typ": "Integer"
           }
         ],
         "severity": "Minor",
@@ -2548,7 +2548,7 @@
             "default": "false",
             "description": "Ignore overridden methods: If true, public methods which override are ignored",
             "name": "ignoreOverride",
-            "typ": "Bool"
+            "typ": "Boolean"
           }
         ],
         "severity": "Minor",
@@ -2681,7 +2681,7 @@
             "default": "1",
             "description": "Maximum occurences allowed: Maximum number of occurences allowed",
             "name": "allowed",
-            "typ": "Int"
+            "typ": "Integer"
           },
           {
             "default": "^\"\"$",
@@ -2734,7 +2734,7 @@
             "default": "false",
             "description": "Allow parentheses for single-line for: For with parentheses allowed if everything is on one line",
             "name": "singleLineAllowed",
-            "typ": "Bool"
+            "typ": "Boolean"
           }
         ],
         "severity": "Minor",
@@ -2777,7 +2777,7 @@
             "default": "false",
             "description": "Ignore override: If set to true, methods which have the override modifier are ignored",
             "name": "ignoreOverride",
-            "typ": "Bool"
+            "typ": "Boolean"
           },
           {
             "default": "anydoc",
@@ -2830,7 +2830,7 @@
             "default": "false",
             "description": "Allow non-ASCII scripts in string literals.: White lists Unicode characters recognized by `\\p'{'Alnum'}'\\p'{'Punct'}'\\p'{'Sc'}'\\p'{'Space'}'` but not symbols like Emoji.",
             "name": "allowStringLiterals",
-            "typ": "Bool"
+            "typ": "Boolean"
           }
         ],
         "severity": "Minor",
@@ -2845,19 +2845,19 @@
             "default": "2",
             "description": "Tab size: Number of characters that a tab represents",
             "name": "tabSize",
-            "typ": "Int"
+            "typ": "Integer"
           },
           {
             "default": "2",
             "description": "Multi-line method parameter spacing: Level of indentation of multi-line method parameters relative to the indentation of the first line of the method",
             "name": "methodParamIndentSize",
-            "typ": "Int"
+            "typ": "Integer"
           },
           {
             "default": "4",
             "description": "Multi-line class parameter spacing: Level of indentation of multi-line primary constructor parameters of a class. Relative to the indentation of the first line of class declaration",
             "name": "classParamIndentSize",
-            "typ": "Int"
+            "typ": "Integer"
           }
         ],
         "severity": "Minor",
@@ -2940,7 +2940,7 @@
             "default": "false",
             "description": "Check string literals: If true, also checks that string literal arguments are named",
             "name": "checkString",
-            "typ": "Bool"
+            "typ": "Boolean"
           },
           {
             "default": "^set.+$",

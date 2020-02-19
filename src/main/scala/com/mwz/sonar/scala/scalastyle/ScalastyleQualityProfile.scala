@@ -50,7 +50,7 @@ object ScalastyleQualityProfile {
   private[scalastyle] final val ProfileName: String = "Scalastyle"
 
   // Blacklist the following inspections.
-  private[scalastyle] final val BlacklistRules = Set(
+  private[scalastyle] final val BlacklistRules: Set[String] = Set(
     // it is the opposite to "org.scalastyle.file.NewLineAtEofChecker"
     "org.scalastyle.file.NoNewLineAtEofChecker"
   )

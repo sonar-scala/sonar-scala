@@ -167,9 +167,9 @@ final class ScoverageSensor(
 }
 
 private[scoverage] object ScoverageSensor {
-  final val SensorName = "Scoverage Sensor"
-  final val ScoverageDisablePropertyKey = "sonar.scala.scoverage.disable"
-  final val ScoverageReportPathPropertyKey = "sonar.scala.scoverage.reportPath"
+  final val SensorName: String = "Scoverage Sensor"
+  final val ScoverageDisablePropertyKey: String = "sonar.scala.scoverage.disable"
+  final val ScoverageReportPathPropertyKey: String = "sonar.scala.scoverage.reportPath"
 
   def shouldEnableSensor(conf: Configuration): Boolean =
     conf

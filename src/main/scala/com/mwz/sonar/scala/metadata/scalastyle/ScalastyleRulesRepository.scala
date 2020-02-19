@@ -21,12 +21,12 @@ package scalastyle
 import cats.data.NonEmptyChain
 
 object ScalastyleRulesRepository {
-  final val RepositoryKey = "sonar-scala-scalastyle"
-  final val RepositoryName = "Scalastyle"
-  final val RuleClassParam = "ruleClass"
+  final val RepositoryKey: String = "sonar-scala-scalastyle"
+  final val RepositoryName: String = "Scalastyle"
+  final val RuleClassParam: String = "ruleClass"
 
   // Skip creating template instances for the following inspections.
-  final val SkipTemplateInstances = Set(
+  final val SkipTemplateInstances: Set[String] = Set(
     // this rule wouldn't work with a default parameter value
     "org.scalastyle.file.HeaderMatchesChecker",
     // no default regex provided

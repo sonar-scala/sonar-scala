@@ -50,14 +50,10 @@ class ScapegoatQualityProfileSpec extends AnyFlatSpec with Inspectors with LoneE
   }
 
   it should "have all rules come from the Scapegaot rules repository" in new Ctx {
-    forEvery(rules) { rule =>
-      rule.repoKey shouldBe "sonar-scala-scapegoat"
-    }
+    forEvery(rules)(rule => rule.repoKey shouldBe "sonar-scala-scapegoat")
   }
 
   it should "not have overridden any of the default params" in new Ctx {
-    forEvery(rules) { rule =>
-      rule.overriddenParams shouldBe empty
-    }
+    forEvery(rules)(rule => rule.overriddenParams shouldBe empty)
   }
 }

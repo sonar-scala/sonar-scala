@@ -61,8 +61,6 @@ class ScalastyleScapegoatQualityProfileSpec
   }
 
   it should "not have overridden any of the default params" in new Ctx {
-    forEvery(rules) { rule =>
-      rule.overriddenParams shouldBe empty
-    }
+    forEvery(rules)(rule => rule.overriddenParams shouldBe empty)
   }
 }

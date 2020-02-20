@@ -60,47 +60,33 @@ class ScapegoatRulesRepositorySpec extends AnyFlatSpec with Inspectors with Lone
   }
 
   "All Scapegoat Rules" should "have a valid internal key" in new Ctx {
-    forEvery(rules) { rule =>
-      rule.internalKey should startWith("com.sksamuel.scapegoat.inspections")
-    }
+    forEvery(rules)(rule => rule.internalKey should startWith("com.sksamuel.scapegoat.inspections"))
   }
 
   it should "have a non-empty name" in new Ctx {
-    forEvery(rules) { rule =>
-      rule.name should not be empty
-    }
+    forEvery(rules)(rule => rule.name should not be empty)
   }
 
   it should "have a non-empty description" in new Ctx {
-    forEvery(rules) { rule =>
-      rule.markdownDescription should not be empty
-    }
+    forEvery(rules)(rule => rule.markdownDescription should not be empty)
   }
 
   it should "be activated by default" in new Ctx {
-    forEvery(rules) { rule =>
-      rule.activatedByDefault shouldBe true
-    }
+    forEvery(rules)(rule => rule.activatedByDefault shouldBe true)
   }
 
   it should "have a READY status" in new Ctx {
-    forEvery(rules) { rule =>
-      rule.status shouldBe RuleStatus.READY
-    }
+    forEvery(rules)(rule => rule.status shouldBe RuleStatus.READY)
   }
 
   it should "have a valid severity" in new Ctx {
     forEvery(rules) { rule =>
       val ruleSeverity = rule.severity
-      forExactly(1, Severity.ALL) { severity =>
-        ruleSeverity shouldBe severity
-      }
+      forExactly(1, Severity.ALL)(severity => ruleSeverity shouldBe severity)
     }
   }
 
   it should "be a CODE_SMELL" in new Ctx {
-    forEvery(rules) { rule =>
-      rule.`type` shouldBe RuleType.CODE_SMELL
-    }
+    forEvery(rules)(rule => rule.`type` shouldBe RuleType.CODE_SMELL)
   }
 }

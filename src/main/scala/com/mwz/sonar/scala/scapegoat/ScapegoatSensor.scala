@@ -191,9 +191,9 @@ final class ScapegoatSensor(
 }
 
 private[scapegoat] object ScapegoatSensor {
-  final val SensorName = "Scapegoat Sensor"
-  final val ScapegoatDisablePropertyKey = "sonar.scala.scapegoat.disable"
-  final val ScapegoatReportPathPropertyKey = "sonar.scala.scapegoat.reportPath"
+  final val SensorName: String = "Scapegoat Sensor"
+  final val ScapegoatDisablePropertyKey: String = "sonar.scala.scapegoat.disable"
+  final val ScapegoatReportPathPropertyKey: String = "sonar.scala.scapegoat.reportPath"
 
   def shouldEnableSensor(conf: Configuration): Boolean =
     conf

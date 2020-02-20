@@ -25,6 +25,7 @@ import scala.jdk.CollectionConverters._
 
 import cats.instances.string._
 import cats.syntax.eq._
+import com.mwz.sonar.scala.metadata.scalastyle.ScalastyleRulesRepository
 import com.mwz.sonar.scala.pr.{GlobalIssues, Issue}
 import com.mwz.sonar.scala.util.Log
 import com.mwz.sonar.scala.util.syntax.Optionals._
@@ -135,8 +136,8 @@ final class ScalastyleSensor(
 }
 
 private[scalastyle] object ScalastyleSensor {
-  final val SensorName = "Scalastyle Sensor"
-  final val ScalastyleDisablePropertyKey = "sonar.scala.scalastyle.disable"
+  final val SensorName: String = "Scalastyle Sensor"
+  final val ScalastyleDisablePropertyKey: String = "sonar.scala.scalastyle.disable"
 
   /**
    * Returns a bool flag indicating whether the sensor should be enabled.

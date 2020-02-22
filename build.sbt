@@ -60,8 +60,8 @@ val http4s = "0.21.1"
 libraryDependencies ++= List(
   "com.beachape"              %% "enumeratum"           % "1.5.15",
   "com.beachape"              %% "enumeratum-cats"      % "1.5.16",
-  "com.beachape"              %% "enumeratum-circe"     % "1.5.22",
-  "com.beautiful-scala"       %% "scalastyle"           % "1.3.0",
+  "com.beachape"              %% "enumeratum-circe"     % "1.5.23",
+  "com.beautiful-scala"       %% "scalastyle"           % "1.2.0",
   "io.circe"                  %% "circe-core"           % circe,
   "io.circe"                  %% "circe-generic-extras" % "0.13.0",
   "io.circe"                  %% "circe-generic"        % circe,
@@ -79,11 +79,11 @@ libraryDependencies ++= List(
   "com.github.alexarchambault" %% "scalacheck-shapeless_1.14" % "1.2.4"      % Test,
   "org.http4s"                 %% "http4s-blaze-server"       % http4s       % Test,
   "org.http4s"                 %% "http4s-dsl"                % http4s       % Test,
-  "org.mockito"                %% "mockito-scala"             % "1.11.2"     % Test,
+  "org.mockito"                %% "mockito-scala"             % "1.11.3"     % Test,
   "org.scalacheck"             %% "scalacheck"                % "1.14.3"     % Test,
-  "org.scalatest"              %% "scalatest"                 % "3.1.0"      % Test,
+  "org.scalatest"              %% "scalatest"                 % "3.1.1"      % Test,
   "org.scalatestplus"          %% "mockito-1-10"              % "3.1.0.0"    % Test,
-  "org.scalatestplus"          %% "scalacheck-1-14"           % "3.1.0.1"    % Test,
+  "org.scalatestplus"          %% "scalacheck-1-14"           % "3.1.1.1"    % Test,
   "org.sonarsource.sonarqube"  % "sonar-plugin-api-impl"      % sonarVersion % Test
 )
 

@@ -60,7 +60,7 @@ val http4s = "0.21.1"
 libraryDependencies ++= List(
   "com.beachape"              %% "enumeratum"           % "1.5.15",
   "com.beachape"              %% "enumeratum-cats"      % "1.5.16",
-  "com.beachape"              %% "enumeratum-circe"     % "1.5.22",
+  "com.beachape"              %% "enumeratum-circe"     % "1.5.23",
   "com.beautiful-scala"       %% "scalastyle"           % "1.2.0",
   "io.circe"                  %% "circe-core"           % circe,
   "io.circe"                  %% "circe-generic-extras" % "0.13.0",

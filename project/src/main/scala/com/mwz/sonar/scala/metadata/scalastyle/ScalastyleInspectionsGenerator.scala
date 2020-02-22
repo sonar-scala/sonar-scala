@@ -15,10 +15,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+package com.mwz.sonar.scala.metadata.scalastyle
+
 import java.io.InputStream
 import java.nio.file.Paths
 
-import com.mwz.sonar.scala.scalastyle._
+import com.mwz.sonar.scala.metadata.scalastyle._
 import com.typesafe.config.{Config, ConfigFactory}
 import org.scalastyle.{Level, _}
 import sbt.Keys._
@@ -50,10 +52,8 @@ object ScalastyleInspectionsGenerator {
     val templateFile = Paths
       .get(
         baseDirectory.value.toString,
-        "project",
-        "src",
-        "main",
-        "scala",
+        "project/src/main/scala",
+        "com/mwz/sonar/scala/metadata/scalastyle",
         "ScalastyleInspections.scala"
       )
 
@@ -62,7 +62,8 @@ object ScalastyleInspectionsGenerator {
     val transformed = transform(source, generatedInspections)
 
     // Save the new file to the managed sources dir.
-    val scalastyleInspectionsFile = (sourceManaged in Compile).value / "scalastyle" / "inspections.scala"
+    val scalastyleInspectionsFile =
+      (sourceManaged in Compile).value / "metadata" / "scalastyle" / "inspections.scala"
     IO.write(scalastyleInspectionsFile, transformed.syntax)
 
     Seq(scalastyleInspectionsFile)
@@ -94,7 +95,7 @@ object ScalastyleInspectionsGenerator {
         val label = cfg.getString(s"$name.label")
         val description = cfg.getString(s"$name.description")
         val default = param \@ "default"
-        Param(name, typ, label, description, default)
+        ScalastyleParam(name, typ, label, description, default)
       }
     } yield ScalastyleInspection(
       clazz,
@@ -119,7 +120,7 @@ object ScalastyleInspectionsGenerator {
         val justification = inspection.justification.map(s => "\"\"\"" + s + "\"\"\"")
         val params = inspection.params.map { p =>
           s"""
-             |Param(
+             |ScalastyleParam(
              |  name = "${p.name}",
              |  typ = ${p.typ},
              |  label = "${p.label}",

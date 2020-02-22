@@ -15,6 +15,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+package com.mwz.sonar.scala.metadata.scapegoat
+
 import java.nio.file.{Path, Paths}
 
 import com.sksamuel.scapegoat.{Inspection, ScapegoatConfig}
@@ -45,7 +47,8 @@ object ScapegoatInspectionsGenerator {
     val stringifiedScapegoatInspections: Seq[String] = stringifyInspections(allScapegoatInspections)
     val transformed: Tree = fillTemplate(templateFile.parse[Source].get, stringifiedScapegoatInspections)
 
-    val scapegoatInspectionsFile: File = (sourceManaged in Compile).value / "scapegoat" / "inspections.scala"
+    val scapegoatInspectionsFile: File =
+      (sourceManaged in Compile).value / "metadata" / "scapegoat" / "inspections.scala"
     IO.write(scapegoatInspectionsFile, transformed.syntax)
 
     Seq(scapegoatInspectionsFile)

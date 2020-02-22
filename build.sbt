@@ -1,6 +1,7 @@
-import java.time.Year
-
+import com.mwz.sonar.scala.metadata.scalastyle._
+import com.mwz.sonar.scala.metadata.scapegoat._
 import de.heikoseeberger.sbtheader.License
+import java.time.Year
 import org.sonar.updatecenter.common.PluginManifest
 import sbt._
 import sbt.librarymanagement.Resolver

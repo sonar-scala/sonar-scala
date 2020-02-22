@@ -19,8 +19,6 @@ package com.mwz.sonar.scala.metadata
 package scalastyle
 
 import cats.data.Chain
-import com.mwz.sonar.scala.scalastyle.ScalastyleInspection
-import com.mwz.sonar.scala.scalastyle.{Param => ScalastyleParam}
 import org.scalastyle.BooleanType
 import org.scalastyle.ErrorLevel
 import org.scalastyle.InfoLevel

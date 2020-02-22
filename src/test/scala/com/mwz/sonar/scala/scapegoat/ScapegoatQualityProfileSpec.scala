@@ -17,6 +17,7 @@
 
 package com.mwz.sonar.scala.scapegoat
 
+import com.mwz.sonar.scala.metadata.scapegoat.ScapegoatRules
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.{Inspectors, LoneElement}
@@ -46,7 +47,7 @@ class ScapegoatQualityProfileSpec extends AnyFlatSpec with Inspectors with LoneE
   }
 
   it should "activate one rule for each scapegoat inspection" in new Ctx {
-    qualityProfile.rules should have size ScapegoatInspections.AllInspections.size
+    qualityProfile.rules should have size ScapegoatRules.rules.length
   }
 
   it should "have all rules come from the Scapegaot rules repository" in new Ctx {

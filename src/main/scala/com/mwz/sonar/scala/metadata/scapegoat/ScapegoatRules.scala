@@ -20,9 +20,6 @@ package scapegoat
 
 import cats.data.Chain
 import cats.data.NonEmptyChain
-import com.mwz.sonar.scala.scapegoat.Level
-import com.mwz.sonar.scala.scapegoat.ScapegoatInspections
-import com.mwz.sonar.scala.scapegoat._
 
 object ScapegoatRules {
   // TODO: Refactor AllInspections to be a NonEmptyChain.

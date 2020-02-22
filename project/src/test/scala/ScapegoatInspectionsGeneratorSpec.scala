@@ -80,7 +80,7 @@ class ScapegoatInspectionsGeneratorSpec extends FlatSpec with LoneElement with M
 
   "fillTemplate" should "succesfuly fill the code template with an stringyfied list of inspections" in {
     val expected =
-      """object ScapegoatInspections {
+      """private[metadata] object ScapegoatInspections {
         |  val AllInspections: List[ScapegoatInspection] = List(
         |    ScapegoatInspection(
         |      id = "com.sksamuel.scapegoat.inspections.AnyUse",
@@ -126,7 +126,7 @@ class ScapegoatInspectionsGeneratorSpec extends FlatSpec with LoneElement with M
       )
 
     val template =
-      """object ScapegoatInspections {
+      """private[metadata] object ScapegoatInspections {
         |  val AllInspections: List[ScapegoatInspection] = ???
         |}""".stripMargin
 

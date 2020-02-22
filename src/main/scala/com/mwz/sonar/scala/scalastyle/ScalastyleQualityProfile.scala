@@ -18,6 +18,7 @@
 package com.mwz.sonar.scala
 package scalastyle
 
+import com.mwz.sonar.scala.metadata.scalastyle.ScalastyleRules
 import com.mwz.sonar.scala.metadata.scalastyle.ScalastyleRulesRepository
 import com.mwz.sonar.scala.qualityprofiles.Overrides
 import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition
@@ -63,28 +64,29 @@ object ScalastyleQualityProfile {
     profile: NewBuiltInQualityProfile,
     overrides: Option[Overrides] = None
   ): Unit = {
-    ScalastyleInspections.AllInspections
-      .filterNot { inspection =>
-        ScalastyleRulesRepository.SkipTemplateInstances.contains(inspection.clazz) ||
-        BlacklistRules.contains(inspection.clazz) ||
-        overrides.exists(_.blacklist.contains(inspection.clazz))
+    ScalastyleRules.rules
+      .filterNot { rule =>
+        ScalastyleRulesRepository.SkipTemplateInstances.contains(rule.key) ||
+        BlacklistRules.contains(rule.key) ||
+        overrides.exists(_.blacklist.contains(rule.key))
       }
-      .foreach { inspection =>
-        val rule: NewBuiltInActiveRule =
-          profile.activateRule(ScalastyleRulesRepository.RepositoryKey, inspection.clazz)
+      .iterator
+      .foreach { rule =>
+        val activeRule: NewBuiltInActiveRule =
+          profile.activateRule(ScalastyleRulesRepository.RepositoryKey, rule.key)
 
         overrides.foreach { overrides =>
           // Override the severity.
           overrides.severities
-            .get(inspection.clazz)
-            .foreach(severity => rule.overrideSeverity(severity.name))
+            .get(rule.key)
+            .foreach(severity => activeRule.overrideSeverity(severity.name))
 
           // Override rule params.
           overrides.params
-            .get(inspection.clazz)
+            .get(rule.key)
             .foreach {
               _.foreach {
-                case (k, v) => rule.overrideParam(k, v)
+                case (k, v) => activeRule.overrideParam(k, v)
               }
             }
         }

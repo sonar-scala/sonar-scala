@@ -19,8 +19,6 @@ package com.mwz.sonar.scala.metadata
 package scapegoat
 
 import cats.data.Chain
-import com.mwz.sonar.scala.scapegoat.Level
-import com.mwz.sonar.scala.scapegoat.ScapegoatInspection
 import org.scalatest.Inspectors
 import org.scalatest.LoneElement
 import org.scalatest.flatspec.AnyFlatSpec

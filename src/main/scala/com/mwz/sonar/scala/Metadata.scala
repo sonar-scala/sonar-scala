@@ -28,6 +28,8 @@ import cats.syntax.functor._
 import com.mwz.sonar.scala.metadata._
 import com.mwz.sonar.scala.metadata.scalastyle.ScalastyleRules
 import com.mwz.sonar.scala.metadata.scalastyle.ScalastyleRulesRepository
+import com.mwz.sonar.scala.metadata.scapegoat.ScapegoatRules
+import com.mwz.sonar.scala.metadata.scapegoat.ScapegoatRulesRepository
 import fs2.Stream
 import fs2.io.file._
 import fs2.text
@@ -43,16 +45,17 @@ final case class SonarScalaMetadata(
 
 @JsonCodec
 final case class Rules(
-  scalastyle: NonEmptyChain[Rule]
+  scalastyle: NonEmptyChain[Rule],
+  scapegoat: NonEmptyChain[Rule]
 )
 
 object Metadata extends IOApp {
   private val metadata: SonarScalaMetadata =
     SonarScalaMetadata(
-      Rules(ScalastyleRules.rules),
-      Map(
-        ScalastyleRulesRepository.RepositoryKey ->
-        ScalastyleRulesRepository.rulesRepository
+      rules = Rules(ScalastyleRules.rules, ScapegoatRules.rules),
+      repositories = Map(
+        ScalastyleRulesRepository.RepositoryKey -> ScalastyleRulesRepository.rulesRepository,
+        ScapegoatRulesRepository.RepositoryKey -> ScapegoatRulesRepository.rulesRepository
       )
     )
   private val printer: Printer =

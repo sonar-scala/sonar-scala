@@ -18,6 +18,7 @@
 package com.mwz.sonar.scala
 package scapegoat
 
+import com.mwz.sonar.scala.metadata.scapegoat.ScapegoatRulesRepository
 import com.mwz.sonar.scala.qualityprofiles.Overrides
 import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition
 import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition.{

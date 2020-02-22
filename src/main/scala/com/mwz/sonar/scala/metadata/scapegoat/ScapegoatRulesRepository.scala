@@ -15,23 +15,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.mwz.sonar.scala
+package com.mwz.sonar.scala.metadata
 package scapegoat
 
-sealed trait Level
-object Level {
-  case object Error extends Level
-  case object Warning extends Level
-  case object Info extends Level
-}
+object ScapegoatRulesRepository {
+  final val RepositoryKey: String = "sonar-scala-scapegoat"
+  final val RepositoryName: String = "Scapegoat"
 
-final case class ScapegoatInspection(
-  id: String,
-  name: String,
-  description: Option[String],
-  defaultLevel: Level
-)
-
-object ScapegoatInspections {
-  val AllInspections: List[ScapegoatInspection] = ???
+  lazy val rulesRepository: RulesRepository =
+    RulesRepository(
+      key = RepositoryKey,
+      name = RepositoryName,
+      rules = ScapegoatRules.rules
+    )
 }

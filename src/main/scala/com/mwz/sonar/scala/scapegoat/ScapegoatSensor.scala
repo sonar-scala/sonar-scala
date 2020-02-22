@@ -24,6 +24,7 @@ import scala.util.{Failure, Success, Try}
 
 import cats.instances.string._
 import cats.syntax.eq._
+import com.mwz.sonar.scala.metadata.scapegoat.ScapegoatRulesRepository
 import com.mwz.sonar.scala.pr.{GlobalIssues, Issue}
 import com.mwz.sonar.scala.scapegoat.ScapegoatSensor._
 import com.mwz.sonar.scala.util.Log

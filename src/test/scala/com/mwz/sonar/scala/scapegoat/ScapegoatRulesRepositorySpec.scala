@@ -17,6 +17,7 @@
 
 package com.mwz.sonar.scala.scapegoat
 
+import com.mwz.sonar.scala.metadata.scapegoat.ScapegoatRules
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.{Inspectors, LoneElement}
@@ -44,7 +45,7 @@ class ScapegoatRulesRepositorySpec extends AnyFlatSpec with Inspectors with Lone
   }
 
   it should "define one rule for each scapegoat inspection" in new Ctx {
-    rules should have size ScapegoatInspections.AllInspections.size
+    rules should have size ScapegoatRules.rules.length
   }
 
   it should "properly define the properties of the ArrayEquals rule" in new Ctx {

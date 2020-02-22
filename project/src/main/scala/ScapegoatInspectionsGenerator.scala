@@ -55,9 +55,7 @@ object ScapegoatInspectionsGenerator {
    * Returns all scapegoat inspections, except the ones that should be ignored
    */
   def extractInspections(): Seq[(String, Inspection)] =
-    ScapegoatConfig.inspections.map { inspection =>
-      (inspection.getClass.getName, inspection)
-    }
+    ScapegoatConfig.inspections.map(inspection => (inspection.getClass.getName, inspection))
 
   /** Stringifies a list of scapegoat inspections */
   def stringifyInspections(scapegoatInspections: Seq[(String, Inspection)]): Seq[String] =

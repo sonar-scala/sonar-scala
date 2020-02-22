@@ -20,6 +20,7 @@ package scalastyle
 
 import scala.jdk.CollectionConverters._
 
+import com.mwz.sonar.scala.metadata.scalastyle.ScalastyleRules
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.{Inspectors, LoneElement}
@@ -46,8 +47,8 @@ class ScalastyleRulesRepositorySpec extends AnyFlatSpec with Matchers with Inspe
   }
 
   it should "include all Scalastyle inspections" in new Ctx {
-    ScalastyleInspections.AllInspections should have size 72 // 31 templates + 41 default rules
-    ScalastyleInspections.AllInspectionsByClass.size shouldBe ScalastyleInspections.AllInspections.size
+    ScalastyleRules.rules.length shouldBe 72 // 31 templates + 41 default rules
+    ScalastyleInspections.AllInspectionsByClass.size shouldBe ScalastyleRules.rules.length
     repository.rules should have size 100 // 31 templates + 41 default rules + 28 template instances
   }
 

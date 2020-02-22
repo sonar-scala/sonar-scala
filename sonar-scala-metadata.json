@@ -2057,6 +2057,940 @@
           "template": false
         }
       ]
+    },
+    "sonar-scala-scapegoat": {
+      "key": "sonar-scala-scapegoat",
+      "name": "Scapegoat",
+      "rules": [
+        {
+          "description": "Array equals is not an equality check. Use a.deep == b.deep or convert to another collection type",
+          "key": "com.sksamuel.scapegoat.inspections.collections.ArrayEquals",
+          "name": "Array equals",
+          "params": [],
+          "severity": "Info",
+          "template": false
+        },
+        {
+          "description": "No description",
+          "key": "com.sksamuel.scapegoat.inspections.string.ArraysInFormat",
+          "name": "Array passed to String.format",
+          "params": [],
+          "severity": "Major",
+          "template": false
+        },
+        {
+          "description": "No description",
+          "key": "com.sksamuel.scapegoat.inspections.string.ArraysToString",
+          "name": "Use of Array.toString",
+          "params": [],
+          "severity": "Minor",
+          "template": false
+        },
+        {
+          "description": "No description",
+          "key": "com.sksamuel.scapegoat.inspections.unsafe.AsInstanceOf",
+          "name": "Use of asInstanceOf",
+          "params": [],
+          "severity": "Minor",
+          "template": false
+        },
+        {
+          "description": "No description",
+          "key": "com.sksamuel.scapegoat.inspections.style.AvoidOperatorOverload",
+          "name": "Avoid operator overload",
+          "params": [],
+          "severity": "Info",
+          "template": false
+        },
+        {
+          "description": "No description",
+          "key": "com.sksamuel.scapegoat.inspections.collections.AvoidSizeEqualsZero",
+          "name": "Avoid Traversable.size == 0, use Traversable.isEmpty instead",
+          "params": [],
+          "severity": "Minor",
+          "template": false
+        },
+        {
+          "description": "No description",
+          "key": "com.sksamuel.scapegoat.inspections.collections.AvoidSizeNotEqualsZero",
+          "name": "Avoid Traversable.size != 0, use Traversable.nonEmpty instead",
+          "params": [],
+          "severity": "Minor",
+          "template": false
+        },
+        {
+          "description": "No description",
+          "key": "com.sksamuel.scapegoat.inspections.AvoidToMinusOne",
+          "name": "Avoid To Minus One",
+          "params": [],
+          "severity": "Info",
+          "template": false
+        },
+        {
+          "description": "No description",
+          "key": "com.sksamuel.scapegoat.inspections.math.BigDecimalDoubleConstructor",
+          "name": "Big decimal double constructor",
+          "params": [],
+          "severity": "Minor",
+          "template": false
+        },
+        {
+          "description": "When using setScale() on a BigDecimal without setting the rounding mode, this can throw an exception if rounding is required. Did you mean to call setScale(s, RoundingMode.XYZ)",
+          "key": "com.sksamuel.scapegoat.inspections.math.BigDecimalScaleWithoutRoundingMode",
+          "name": "BigDecimal setScale() without rounding mode",
+          "params": [],
+          "severity": "Minor",
+          "template": false
+        },
+        {
+          "description": "No description",
+          "key": "com.sksamuel.scapegoat.inspections.inference.BoundedByFinalType",
+          "name": "Bounded by final type",
+          "params": [],
+          "severity": "Minor",
+          "template": false
+        },
+        {
+          "description": "No description",
+          "key": "com.sksamuel.scapegoat.inspections.math.BrokenOddness",
+          "name": "Broken odd check",
+          "params": [],
+          "severity": "Minor",
+          "template": false
+        },
+        {
+          "description": "No description",
+          "key": "com.sksamuel.scapegoat.inspections.exception.CatchException",
+          "name": "Catch exception",
+          "params": [],
+          "severity": "Minor",
+          "template": false
+        },
+        {
+          "description": "No description",
+          "key": "com.sksamuel.scapegoat.inspections.exception.CatchFatal",
+          "name": "Catch fatal exception",
+          "params": [],
+          "severity": "Minor",
+          "template": false
+        },
+        {
+          "description": "No description",
+          "key": "com.sksamuel.scapegoat.inspections.exception.CatchNpe",
+          "name": "Catching NPE",
+          "params": [],
+          "severity": "Major",
+          "template": false
+        },
+        {
+          "description": "No description",
+          "key": "com.sksamuel.scapegoat.inspections.exception.CatchThrowable",
+          "name": "Catch throwable",
+          "params": [],
+          "severity": "Minor",
+          "template": false
+        },
+        {
+          "description": "No description",
+          "key": "com.sksamuel.scapegoat.inspections.naming.ClassNames",
+          "name": "Class name not recommended",
+          "params": [],
+          "severity": "Info",
+          "template": false
+        },
+        {
+          "description": "No description",
+          "key": "com.sksamuel.scapegoat.inspections.collections.CollectionIndexOnNonIndexedSeq",
+          "name": "Seq.apply() on a non-IndexedSeq may cause performance problems",
+          "params": [],
+          "severity": "Minor",
+          "template": false
+        },
+        {
+          "description": "No description",
+          "key": "com.sksamuel.scapegoat.inspections.collections.CollectionNamingConfusion",
+          "name": "Collection naming Confusion",
+          "params": [],
+          "severity": "Info",
+          "template": false
+        },
+        {
+          "description": "No description",
+          "key": "com.sksamuel.scapegoat.inspections.collections.CollectionNegativeIndex",
+          "name": "Collection index out of bounds",
+          "params": [],
+          "severity": "Minor",
+          "template": false
+        },
+        {
+          "description": "No description",
+          "key": "com.sksamuel.scapegoat.inspections.collections.CollectionPromotionToAny",
+          "name": "Collection promotion to any",
+          "params": [],
+          "severity": "Minor",
+          "template": false
+        },
+        {
+          "description": "No description",
+          "key": "com.sksamuel.scapegoat.inspections.equality.ComparingFloatingPointTypes",
+          "name": "Floating type comparison",
+          "params": [],
+          "severity": "Major",
+          "template": false
+        },
+        {
+          "description": "No description",
+          "key": "com.sksamuel.scapegoat.inspections.equality.ComparingUnrelatedTypes",
+          "name": "Comparing unrelated types",
+          "params": [],
+          "severity": "Major",
+          "template": false
+        },
+        {
+          "description": "No description",
+          "key": "com.sksamuel.scapegoat.inspections.collections.ComparisonToEmptyList",
+          "name": "Comparison to empty list",
+          "params": [],
+          "severity": "Info",
+          "template": false
+        },
+        {
+          "description": "No description",
+          "key": "com.sksamuel.scapegoat.inspections.collections.ComparisonToEmptySet",
+          "name": "Comparison to empty set",
+          "params": [],
+          "severity": "Info",
+          "template": false
+        },
+        {
+          "description": "Comparision with self will always yield true",
+          "key": "com.sksamuel.scapegoat.inspections.equality.ComparisonWithSelf",
+          "name": "Comparision with self",
+          "params": [],
+          "severity": "Minor",
+          "template": false
+        },
+        {
+          "description": "No description",
+          "key": "com.sksamuel.scapegoat.inspections.unneccesary.ConstantIf",
+          "name": "Constant if expression",
+          "params": [],
+          "severity": "Minor",
+          "template": false
+        },
+        {
+          "description": "Divide by one will always return the original value",
+          "key": "com.sksamuel.scapegoat.inspections.math.DivideByOne",
+          "name": "Divide by one",
+          "params": [],
+          "severity": "Minor",
+          "template": false
+        },
+        {
+          "description": "No description",
+          "key": "com.sksamuel.scapegoat.inspections.DoubleNegation",
+          "name": "Double negation",
+          "params": [],
+          "severity": "Info",
+          "template": false
+        },
+        {
+          "description": "No description",
+          "key": "com.sksamuel.scapegoat.inspections.imports.DuplicateImport",
+          "name": "Duplicated Import",
+          "params": [],
+          "severity": "Info",
+          "template": false
+        },
+        {
+          "description": "No description",
+          "key": "com.sksamuel.scapegoat.inspections.collections.DuplicateMapKey",
+          "name": "Duplicated map key",
+          "params": [],
+          "severity": "Minor",
+          "template": false
+        },
+        {
+          "description": "No description",
+          "key": "com.sksamuel.scapegoat.inspections.collections.DuplicateSetValue",
+          "name": "Duplicated set value",
+          "params": [],
+          "severity": "Minor",
+          "template": false
+        },
+        {
+          "description": "No description",
+          "key": "com.sksamuel.scapegoat.inspections.option.EitherGet",
+          "name": "Use of Either Right or Left Projection get",
+          "params": [],
+          "severity": "Major",
+          "template": false
+        },
+        {
+          "description": "Empty case class can be rewritten as a case object",
+          "key": "com.sksamuel.scapegoat.inspections.EmptyCaseClass",
+          "name": "Empty case class",
+          "params": [],
+          "severity": "Info",
+          "template": false
+        },
+        {
+          "description": "No description",
+          "key": "com.sksamuel.scapegoat.inspections.empty.EmptyFor",
+          "name": "Empty for loop",
+          "params": [],
+          "severity": "Minor",
+          "template": false
+        },
+        {
+          "description": "No description",
+          "key": "com.sksamuel.scapegoat.inspections.empty.EmptyIfBlock",
+          "name": "Empty if statement",
+          "params": [],
+          "severity": "Minor",
+          "template": false
+        },
+        {
+          "description": "No description",
+          "key": "com.sksamuel.scapegoat.inspections.string.EmptyInterpolatedString",
+          "name": "Empty interpolated string",
+          "params": [],
+          "severity": "Major",
+          "template": false
+        },
+        {
+          "description": "No description",
+          "key": "com.sksamuel.scapegoat.inspections.empty.EmptyMethod",
+          "name": "Empty method",
+          "params": [],
+          "severity": "Minor",
+          "template": false
+        },
+        {
+          "description": "No description",
+          "key": "com.sksamuel.scapegoat.inspections.empty.EmptySynchronizedBlock",
+          "name": "Empty synchronized block",
+          "params": [],
+          "severity": "Minor",
+          "template": false
+        },
+        {
+          "description": "No description",
+          "key": "com.sksamuel.scapegoat.inspections.empty.EmptyTryBlock",
+          "name": "Empty try block",
+          "params": [],
+          "severity": "Minor",
+          "template": false
+        },
+        {
+          "description": "No description",
+          "key": "com.sksamuel.scapegoat.inspections.empty.EmptyWhileBlock",
+          "name": "Empty while block",
+          "params": [],
+          "severity": "Minor",
+          "template": false
+        },
+        {
+          "description": "No description",
+          "key": "com.sksamuel.scapegoat.inspections.collections.ExistsSimplifiableToContains",
+          "name": "Exists simplifiable to contains",
+          "params": [],
+          "severity": "Info",
+          "template": false
+        },
+        {
+          "description": "No description",
+          "key": "com.sksamuel.scapegoat.inspections.collections.FilterDotHead",
+          "name": "filter().head can throw an exception; use find()",
+          "params": [],
+          "severity": "Info",
+          "template": false
+        },
+        {
+          "description": "No description",
+          "key": "com.sksamuel.scapegoat.inspections.collections.FilterDotHeadOption",
+          "name": "filter().headOption instead of find()",
+          "params": [],
+          "severity": "Info",
+          "template": false
+        },
+        {
+          "description": "No description",
+          "key": "com.sksamuel.scapegoat.inspections.collections.FilterDotIsEmpty",
+          "name": "filter().isEmpty instead of !exists()",
+          "params": [],
+          "severity": "Info",
+          "template": false
+        },
+        {
+          "description": "No description",
+          "key": "com.sksamuel.scapegoat.inspections.collections.FilterDotSize",
+          "name": "filter().size() instead of count()",
+          "params": [],
+          "severity": "Info",
+          "template": false
+        },
+        {
+          "description": "No description",
+          "key": "com.sksamuel.scapegoat.inspections.collections.FilterOptionAndGet",
+          "name": "filter(_.isDefined).map(_.get) instead of flatten",
+          "params": [],
+          "severity": "Info",
+          "template": false
+        },
+        {
+          "description": "Case classes should have final modifier",
+          "key": "com.sksamuel.scapegoat.inspections.FinalModifierOnCaseClass",
+          "name": "Missing final modifier on case class",
+          "params": [],
+          "severity": "Info",
+          "template": false
+        },
+        {
+          "description": "Finalizers should call super.finalize() to ensure superclasses are able to run any finalization logic",
+          "key": "com.sksamuel.scapegoat.inspections.unsafe.FinalizerWithoutSuper",
+          "name": "Finalizer without super",
+          "params": [],
+          "severity": "Minor",
+          "template": false
+        },
+        {
+          "description": "No description",
+          "key": "com.sksamuel.scapegoat.inspections.collections.FindAndNotEqualsNoneReplaceWithExists",
+          "name": "find(x => ) != None instead of exists(x =>)",
+          "params": [],
+          "severity": "Info",
+          "template": false
+        },
+        {
+          "description": "No description",
+          "key": "com.sksamuel.scapegoat.inspections.collections.FindDotIsDefined",
+          "name": "use exists() not find().isDefined()",
+          "params": [],
+          "severity": "Info",
+          "template": false
+        },
+        {
+          "description": "No description",
+          "key": "com.sksamuel.scapegoat.inspections.string.IllegalFormatString",
+          "name": "Illegal format string",
+          "params": [],
+          "severity": "Major",
+          "template": false
+        },
+        {
+          "description": "No description",
+          "key": "com.sksamuel.scapegoat.inspections.option.ImpossibleOptionSizeCondition",
+          "name": "Impossible Option.size condition",
+          "params": [],
+          "severity": "Major",
+          "template": false
+        },
+        {
+          "description": "No description",
+          "key": "com.sksamuel.scapegoat.inspections.string.IncorrectNumberOfArgsToFormat",
+          "name": "Incorrect number of args for format",
+          "params": [],
+          "severity": "Major",
+          "template": false
+        },
+        {
+          "description": "No description",
+          "key": "com.sksamuel.scapegoat.inspections.exception.IncorrectlyNamedExceptions",
+          "name": "Incorrectly Named Exceptions",
+          "params": [],
+          "severity": "Major",
+          "template": false
+        },
+        {
+          "description": "No description",
+          "key": "com.sksamuel.scapegoat.inspections.string.InvalidRegex",
+          "name": "Invalid regex",
+          "params": [],
+          "severity": "Info",
+          "template": false
+        },
+        {
+          "description": "No description",
+          "key": "com.sksamuel.scapegoat.inspections.unsafe.IsInstanceOf",
+          "name": "Use of isInstanceOf",
+          "params": [],
+          "severity": "Minor",
+          "template": false
+        },
+        {
+          "description": "Use of java conversions can lead to unusual behaviour. It is recommended to use JavaConverters",
+          "key": "com.sksamuel.scapegoat.inspections.collections.JavaConversionsUse",
+          "name": "Java conversions",
+          "params": [],
+          "severity": "Minor",
+          "template": false
+        },
+        {
+          "description": "List append is O(n). For large lists, consider using cons (::) or another data structure such as ListBuffer or Vector and converting to a List once built.",
+          "key": "com.sksamuel.scapegoat.inspections.collections.ListAppend",
+          "name": "List append is slow",
+          "params": [],
+          "severity": "Info",
+          "template": false
+        },
+        {
+          "description": "List.size is O(n). Consider using a different data type with O(1) size lookup such as Vector or Array.",
+          "key": "com.sksamuel.scapegoat.inspections.collections.ListSize",
+          "name": "List.size is O(n)",
+          "params": [],
+          "severity": "Info",
+          "template": false
+        },
+        {
+          "description": "No description",
+          "key": "com.sksamuel.scapegoat.inspections.LonelySealedTrait",
+          "name": "Lonely sealed trait",
+          "params": [],
+          "severity": "Major",
+          "template": false
+        },
+        {
+          "description": "No description",
+          "key": "com.sksamuel.scapegoat.inspections.string.LooksLikeInterpolatedString",
+          "name": "Looks Like Interpolated String",
+          "params": [],
+          "severity": "Minor",
+          "template": false
+        },
+        {
+          "description": "No description",
+          "key": "com.sksamuel.scapegoat.inspections.collections.MapGetAndGetOrElse",
+          "name": "Use of .get.getOrElse instead of .getOrElse",
+          "params": [],
+          "severity": "Major",
+          "template": false
+        },
+        {
+          "description": "No description",
+          "key": "com.sksamuel.scapegoat.inspections.MaxParameters",
+          "name": "Max parameters",
+          "params": [],
+          "severity": "Info",
+          "template": false
+        },
+        {
+          "description": "Methods should be in camelCase style with the first letter lower-case. See http://docs.scala-lang.org/style/naming-conventions.html#methods",
+          "key": "com.sksamuel.scapegoat.inspections.naming.MethodNames",
+          "name": "Method name not recommended",
+          "params": [],
+          "severity": "Info",
+          "template": false
+        },
+        {
+          "description": "No description",
+          "key": "com.sksamuel.scapegoat.inspections.inference.MethodReturningAny",
+          "name": "Method Returning Any",
+          "params": [],
+          "severity": "Minor",
+          "template": false
+        },
+        {
+          "description": "No description",
+          "key": "com.sksamuel.scapegoat.inspections.math.ModOne",
+          "name": "Integer mod one",
+          "params": [],
+          "severity": "Minor",
+          "template": false
+        },
+        {
+          "description": "NaN comparision will always fail. Use value.isNan instead.",
+          "key": "com.sksamuel.scapegoat.inspections.math.NanComparison",
+          "name": "Nan comparision",
+          "params": [],
+          "severity": "Major",
+          "template": false
+        },
+        {
+          "description": "No description",
+          "key": "com.sksamuel.scapegoat.inspections.collections.NegationIsEmpty",
+          "name": "!isEmpty can be replaced with nonEmpty",
+          "params": [],
+          "severity": "Info",
+          "template": false
+        },
+        {
+          "description": "No description",
+          "key": "com.sksamuel.scapegoat.inspections.collections.NegationNonEmpty",
+          "name": "!nonEmpty can be replaced with isEmpty",
+          "params": [],
+          "severity": "Info",
+          "template": false
+        },
+        {
+          "description": "No description",
+          "key": "com.sksamuel.scapegoat.inspections.NoOpOverride",
+          "name": "No op Override",
+          "params": [],
+          "severity": "Info",
+          "template": false
+        },
+        {
+          "description": "No description",
+          "key": "com.sksamuel.scapegoat.inspections.nulls.NullAssignment",
+          "name": "Null assignment",
+          "params": [],
+          "severity": "Minor",
+          "template": false
+        },
+        {
+          "description": "No description",
+          "key": "com.sksamuel.scapegoat.inspections.nulls.NullParameter",
+          "name": "Null parameter",
+          "params": [],
+          "severity": "Minor",
+          "template": false
+        },
+        {
+          "description": "No description",
+          "key": "com.sksamuel.scapegoat.inspections.naming.ObjectNames",
+          "name": "Object name not recommended",
+          "params": [],
+          "severity": "Info",
+          "template": false
+        },
+        {
+          "description": "No description",
+          "key": "com.sksamuel.scapegoat.inspections.option.OptionGet",
+          "name": "Use of Option.get",
+          "params": [],
+          "severity": "Major",
+          "template": false
+        },
+        {
+          "description": "No description",
+          "key": "com.sksamuel.scapegoat.inspections.option.OptionSize",
+          "name": "Prefer Option.isDefined instead of Option.size",
+          "params": [],
+          "severity": "Major",
+          "template": false
+        },
+        {
+          "description": "No description",
+          "key": "com.sksamuel.scapegoat.inspections.style.ParameterlessMethodReturnsUnit",
+          "name": "Parameterless methods returns unit",
+          "params": [],
+          "severity": "Minor",
+          "template": false
+        },
+        {
+          "description": "No description",
+          "key": "com.sksamuel.scapegoat.inspections.matching.PartialFunctionInsteadOfMatch",
+          "name": "Match instead of partial function",
+          "params": [],
+          "severity": "Info",
+          "template": false
+        },
+        {
+          "description": "No description",
+          "key": "com.sksamuel.scapegoat.inspections.inference.PointlessTypeBounds",
+          "name": "Pointless Type Bounds",
+          "params": [],
+          "severity": "Minor",
+          "template": false
+        },
+        {
+          "description": "No description",
+          "key": "com.sksamuel.scapegoat.inspections.collections.PreferMapEmpty",
+          "name": "Prefer Map.empty",
+          "params": [],
+          "severity": "Info",
+          "template": false
+        },
+        {
+          "description": "No description",
+          "key": "com.sksamuel.scapegoat.inspections.collections.PreferSeqEmpty",
+          "name": "Prefer Seq.empty",
+          "params": [],
+          "severity": "Info",
+          "template": false
+        },
+        {
+          "description": "No description",
+          "key": "com.sksamuel.scapegoat.inspections.collections.PreferSetEmpty",
+          "name": "Prefer Set.empty",
+          "params": [],
+          "severity": "Info",
+          "template": false
+        },
+        {
+          "description": "No description",
+          "key": "com.sksamuel.scapegoat.inspections.inference.ProductWithSerializableInferred",
+          "name": "Product with Serializable inferred",
+          "params": [],
+          "severity": "Minor",
+          "template": false
+        },
+        {
+          "description": "Public finalizer should be avoided as finalizers should not be programatically invoked",
+          "key": "com.sksamuel.scapegoat.inspections.PublicFinalizer",
+          "name": "PublicFinalizer",
+          "params": [],
+          "severity": "Info",
+          "template": false
+        },
+        {
+          "description": "No description",
+          "key": "com.sksamuel.scapegoat.inspections.RedundantFinalModifierOnMethod",
+          "name": "Redundant final modifier on method",
+          "params": [],
+          "severity": "Info",
+          "template": false
+        },
+        {
+          "description": "This var cannot be overridden, final modifier is redundant",
+          "key": "com.sksamuel.scapegoat.inspections.RedundantFinalModifierOnVar",
+          "name": "Redundant final modifier on var",
+          "params": [],
+          "severity": "Info",
+          "template": false
+        },
+        {
+          "description": "No description",
+          "key": "com.sksamuel.scapegoat.inspections.unneccesary.RedundantFinalizer",
+          "name": "Redundant finalizer",
+          "params": [],
+          "severity": "Minor",
+          "template": false
+        },
+        {
+          "description": "No description",
+          "key": "com.sksamuel.scapegoat.inspections.matching.RepeatedCaseBody",
+          "name": "Repeated case body",
+          "params": [],
+          "severity": "Minor",
+          "template": false
+        },
+        {
+          "description": "No description",
+          "key": "com.sksamuel.scapegoat.inspections.collections.ReverseFunc",
+          "name": "Unnecessary reverse",
+          "params": [],
+          "severity": "Info",
+          "template": false
+        },
+        {
+          "description": "No description",
+          "key": "com.sksamuel.scapegoat.inspections.collections.ReverseTailReverse",
+          "name": "reverse.tail.reverse instead of init",
+          "params": [],
+          "severity": "Info",
+          "template": false
+        },
+        {
+          "description": "No description",
+          "key": "com.sksamuel.scapegoat.inspections.collections.ReverseTakeReverse",
+          "name": "reverse.take(...).reverse instead of takeRight",
+          "params": [],
+          "severity": "Info",
+          "template": false
+        },
+        {
+          "description": "No description",
+          "key": "com.sksamuel.scapegoat.inspections.style.SimplifyBooleanExpression",
+          "name": "Simplify boolean expressions",
+          "params": [],
+          "severity": "Info",
+          "template": false
+        },
+        {
+          "description": "Strip margin will strip | from regex - possible corrupted regex",
+          "key": "com.sksamuel.scapegoat.inspections.string.StripMarginOnRegex",
+          "name": "Strip margin on regex",
+          "params": [],
+          "severity": "Major",
+          "template": false
+        },
+        {
+          "description": "No description",
+          "key": "com.sksamuel.scapegoat.inspections.string.SubstringZero",
+          "name": "String.substring(0)",
+          "params": [],
+          "severity": "Info",
+          "template": false
+        },
+        {
+          "description": "No description",
+          "key": "com.sksamuel.scapegoat.inspections.matching.SuspiciousMatchOnClassObject",
+          "name": "Suspicious match on class object",
+          "params": [],
+          "severity": "Minor",
+          "template": false
+        },
+        {
+          "description": "No description",
+          "key": "com.sksamuel.scapegoat.inspections.exception.SwallowedException",
+          "name": "Empty catch block",
+          "params": [],
+          "severity": "Minor",
+          "template": false
+        },
+        {
+          "description": "No description",
+          "key": "com.sksamuel.scapegoat.inspections.collections.SwapSortFilter",
+          "name": "Swap sort filter",
+          "params": [],
+          "severity": "Info",
+          "template": false
+        },
+        {
+          "description": "No description",
+          "key": "com.sksamuel.scapegoat.inspections.collections.UnsafeTraversableMethods",
+          "name": "Use of unsafe Traversable methods (head, tail, init, last, reduce, reduceLeft, reduceRight, max, maxBy, min, minBy)",
+          "params": [],
+          "severity": "Major",
+          "template": false
+        },
+        {
+          "description": "No description",
+          "key": "com.sksamuel.scapegoat.inspections.unsafe.TryGet",
+          "name": "Use of Try.get",
+          "params": [],
+          "severity": "Major",
+          "template": false
+        },
+        {
+          "description": "No description",
+          "key": "com.sksamuel.scapegoat.inspections.TypeShadowing",
+          "name": "Type shadowing",
+          "params": [],
+          "severity": "Minor",
+          "template": false
+        },
+        {
+          "description": "No description",
+          "key": "com.sksamuel.scapegoat.inspections.unneccesary.UnnecessaryConversion",
+          "name": "Unnecessary conversion",
+          "params": [],
+          "severity": "Minor",
+          "template": false
+        },
+        {
+          "description": "No description",
+          "key": "com.sksamuel.scapegoat.inspections.unneccesary.UnnecessaryIf",
+          "name": "Unnecessary if condition.",
+          "params": [],
+          "severity": "Info",
+          "template": false
+        },
+        {
+          "description": "Scala returns the value of the last expression in a block. Use of return here is not idiomatic scala",
+          "key": "com.sksamuel.scapegoat.inspections.unneccesary.UnnecessaryReturnUse",
+          "name": "Unnecessary return",
+          "params": [],
+          "severity": "Info",
+          "template": false
+        },
+        {
+          "description": "No description",
+          "key": "com.sksamuel.scapegoat.inspections.exception.UnreachableCatch",
+          "name": "Unreachable catch",
+          "params": [],
+          "severity": "Minor",
+          "template": false
+        },
+        {
+          "description": "No description",
+          "key": "com.sksamuel.scapegoat.inspections.collections.UnsafeContains",
+          "name": "Unsafe contains",
+          "params": [],
+          "severity": "Major",
+          "template": false
+        },
+        {
+          "description": "No description",
+          "key": "com.sksamuel.scapegoat.inspections.string.UnsafeStringContains",
+          "name": "Unsafe string contains",
+          "params": [],
+          "severity": "Major",
+          "template": false
+        },
+        {
+          "description": "No description",
+          "key": "com.sksamuel.scapegoat.inspections.unneccesary.UnusedMethodParameter",
+          "name": "Unused parameter",
+          "params": [],
+          "severity": "Minor",
+          "template": false
+        },
+        {
+          "description": "No description",
+          "key": "com.sksamuel.scapegoat.inspections.math.UseCbrt",
+          "name": "Use cbrt",
+          "params": [],
+          "severity": "Info",
+          "template": false
+        },
+        {
+          "description": "No description",
+          "key": "com.sksamuel.scapegoat.inspections.math.UseExpM1",
+          "name": "Use expm1",
+          "params": [],
+          "severity": "Info",
+          "template": false
+        },
+        {
+          "description": "No description",
+          "key": "com.sksamuel.scapegoat.inspections.math.UseLog10",
+          "name": "Use log10",
+          "params": [],
+          "severity": "Info",
+          "template": false
+        },
+        {
+          "description": "No description",
+          "key": "com.sksamuel.scapegoat.inspections.math.UseLog1P",
+          "name": "Use log1p",
+          "params": [],
+          "severity": "Info",
+          "template": false
+        },
+        {
+          "description": "No description",
+          "key": "com.sksamuel.scapegoat.inspections.math.UseSqrt",
+          "name": "Use sqrt",
+          "params": [],
+          "severity": "Info",
+          "template": false
+        },
+        {
+          "description": "No description",
+          "key": "com.sksamuel.scapegoat.inspections.VarClosure",
+          "name": "Var in closure",
+          "params": [],
+          "severity": "Minor",
+          "template": false
+        },
+        {
+          "description": "No description",
+          "key": "com.sksamuel.scapegoat.inspections.unneccesary.VarCouldBeVal",
+          "name": "Var could be val",
+          "params": [],
+          "severity": "Minor",
+          "template": false
+        },
+        {
+          "description": "No description",
+          "key": "com.sksamuel.scapegoat.inspections.controlflow.WhileTrue",
+          "name": "While true loop",
+          "params": [],
+          "severity": "Minor",
+          "template": false
+        },
+        {
+          "description": "Dividing zero by any number will always return zero",
+          "key": "com.sksamuel.scapegoat.inspections.math.ZeroNumerator",
+          "name": "Zero numerator",
+          "params": [],
+          "severity": "Minor",
+          "template": false
+        }
+      ]
     }
   },
   "rules": {
@@ -2964,6 +3898,936 @@
         "description": "*Checks that braces aren't used in case clauses*\n\nBraces aren't required in case clauses. They should be omitted according to Scala Style Guide.",
         "key": "org.scalastyle.scalariform.CaseBraceChecker",
         "name": "Omit braces in case clauses",
+        "params": [],
+        "severity": "Minor",
+        "template": false
+      }
+    ],
+    "scapegoat": [
+      {
+        "description": "Array equals is not an equality check. Use a.deep == b.deep or convert to another collection type",
+        "key": "com.sksamuel.scapegoat.inspections.collections.ArrayEquals",
+        "name": "Array equals",
+        "params": [],
+        "severity": "Info",
+        "template": false
+      },
+      {
+        "description": "No description",
+        "key": "com.sksamuel.scapegoat.inspections.string.ArraysInFormat",
+        "name": "Array passed to String.format",
+        "params": [],
+        "severity": "Major",
+        "template": false
+      },
+      {
+        "description": "No description",
+        "key": "com.sksamuel.scapegoat.inspections.string.ArraysToString",
+        "name": "Use of Array.toString",
+        "params": [],
+        "severity": "Minor",
+        "template": false
+      },
+      {
+        "description": "No description",
+        "key": "com.sksamuel.scapegoat.inspections.unsafe.AsInstanceOf",
+        "name": "Use of asInstanceOf",
+        "params": [],
+        "severity": "Minor",
+        "template": false
+      },
+      {
+        "description": "No description",
+        "key": "com.sksamuel.scapegoat.inspections.style.AvoidOperatorOverload",
+        "name": "Avoid operator overload",
+        "params": [],
+        "severity": "Info",
+        "template": false
+      },
+      {
+        "description": "No description",
+        "key": "com.sksamuel.scapegoat.inspections.collections.AvoidSizeEqualsZero",
+        "name": "Avoid Traversable.size == 0, use Traversable.isEmpty instead",
+        "params": [],
+        "severity": "Minor",
+        "template": false
+      },
+      {
+        "description": "No description",
+        "key": "com.sksamuel.scapegoat.inspections.collections.AvoidSizeNotEqualsZero",
+        "name": "Avoid Traversable.size != 0, use Traversable.nonEmpty instead",
+        "params": [],
+        "severity": "Minor",
+        "template": false
+      },
+      {
+        "description": "No description",
+        "key": "com.sksamuel.scapegoat.inspections.AvoidToMinusOne",
+        "name": "Avoid To Minus One",
+        "params": [],
+        "severity": "Info",
+        "template": false
+      },
+      {
+        "description": "No description",
+        "key": "com.sksamuel.scapegoat.inspections.math.BigDecimalDoubleConstructor",
+        "name": "Big decimal double constructor",
+        "params": [],
+        "severity": "Minor",
+        "template": false
+      },
+      {
+        "description": "When using setScale() on a BigDecimal without setting the rounding mode, this can throw an exception if rounding is required. Did you mean to call setScale(s, RoundingMode.XYZ)",
+        "key": "com.sksamuel.scapegoat.inspections.math.BigDecimalScaleWithoutRoundingMode",
+        "name": "BigDecimal setScale() without rounding mode",
+        "params": [],
+        "severity": "Minor",
+        "template": false
+      },
+      {
+        "description": "No description",
+        "key": "com.sksamuel.scapegoat.inspections.inference.BoundedByFinalType",
+        "name": "Bounded by final type",
+        "params": [],
+        "severity": "Minor",
+        "template": false
+      },
+      {
+        "description": "No description",
+        "key": "com.sksamuel.scapegoat.inspections.math.BrokenOddness",
+        "name": "Broken odd check",
+        "params": [],
+        "severity": "Minor",
+        "template": false
+      },
+      {
+        "description": "No description",
+        "key": "com.sksamuel.scapegoat.inspections.exception.CatchException",
+        "name": "Catch exception",
+        "params": [],
+        "severity": "Minor",
+        "template": false
+      },
+      {
+        "description": "No description",
+        "key": "com.sksamuel.scapegoat.inspections.exception.CatchFatal",
+        "name": "Catch fatal exception",
+        "params": [],
+        "severity": "Minor",
+        "template": false
+      },
+      {
+        "description": "No description",
+        "key": "com.sksamuel.scapegoat.inspections.exception.CatchNpe",
+        "name": "Catching NPE",
+        "params": [],
+        "severity": "Major",
+        "template": false
+      },
+      {
+        "description": "No description",
+        "key": "com.sksamuel.scapegoat.inspections.exception.CatchThrowable",
+        "name": "Catch throwable",
+        "params": [],
+        "severity": "Minor",
+        "template": false
+      },
+      {
+        "description": "No description",
+        "key": "com.sksamuel.scapegoat.inspections.naming.ClassNames",
+        "name": "Class name not recommended",
+        "params": [],
+        "severity": "Info",
+        "template": false
+      },
+      {
+        "description": "No description",
+        "key": "com.sksamuel.scapegoat.inspections.collections.CollectionIndexOnNonIndexedSeq",
+        "name": "Seq.apply() on a non-IndexedSeq may cause performance problems",
+        "params": [],
+        "severity": "Minor",
+        "template": false
+      },
+      {
+        "description": "No description",
+        "key": "com.sksamuel.scapegoat.inspections.collections.CollectionNamingConfusion",
+        "name": "Collection naming Confusion",
+        "params": [],
+        "severity": "Info",
+        "template": false
+      },
+      {
+        "description": "No description",
+        "key": "com.sksamuel.scapegoat.inspections.collections.CollectionNegativeIndex",
+        "name": "Collection index out of bounds",
+        "params": [],
+        "severity": "Minor",
+        "template": false
+      },
+      {
+        "description": "No description",
+        "key": "com.sksamuel.scapegoat.inspections.collections.CollectionPromotionToAny",
+        "name": "Collection promotion to any",
+        "params": [],
+        "severity": "Minor",
+        "template": false
+      },
+      {
+        "description": "No description",
+        "key": "com.sksamuel.scapegoat.inspections.equality.ComparingFloatingPointTypes",
+        "name": "Floating type comparison",
+        "params": [],
+        "severity": "Major",
+        "template": false
+      },
+      {
+        "description": "No description",
+        "key": "com.sksamuel.scapegoat.inspections.equality.ComparingUnrelatedTypes",
+        "name": "Comparing unrelated types",
+        "params": [],
+        "severity": "Major",
+        "template": false
+      },
+      {
+        "description": "No description",
+        "key": "com.sksamuel.scapegoat.inspections.collections.ComparisonToEmptyList",
+        "name": "Comparison to empty list",
+        "params": [],
+        "severity": "Info",
+        "template": false
+      },
+      {
+        "description": "No description",
+        "key": "com.sksamuel.scapegoat.inspections.collections.ComparisonToEmptySet",
+        "name": "Comparison to empty set",
+        "params": [],
+        "severity": "Info",
+        "template": false
+      },
+      {
+        "description": "Comparision with self will always yield true",
+        "key": "com.sksamuel.scapegoat.inspections.equality.ComparisonWithSelf",
+        "name": "Comparision with self",
+        "params": [],
+        "severity": "Minor",
+        "template": false
+      },
+      {
+        "description": "No description",
+        "key": "com.sksamuel.scapegoat.inspections.unneccesary.ConstantIf",
+        "name": "Constant if expression",
+        "params": [],
+        "severity": "Minor",
+        "template": false
+      },
+      {
+        "description": "Divide by one will always return the original value",
+        "key": "com.sksamuel.scapegoat.inspections.math.DivideByOne",
+        "name": "Divide by one",
+        "params": [],
+        "severity": "Minor",
+        "template": false
+      },
+      {
+        "description": "No description",
+        "key": "com.sksamuel.scapegoat.inspections.DoubleNegation",
+        "name": "Double negation",
+        "params": [],
+        "severity": "Info",
+        "template": false
+      },
+      {
+        "description": "No description",
+        "key": "com.sksamuel.scapegoat.inspections.imports.DuplicateImport",
+        "name": "Duplicated Import",
+        "params": [],
+        "severity": "Info",
+        "template": false
+      },
+      {
+        "description": "No description",
+        "key": "com.sksamuel.scapegoat.inspections.collections.DuplicateMapKey",
+        "name": "Duplicated map key",
+        "params": [],
+        "severity": "Minor",
+        "template": false
+      },
+      {
+        "description": "No description",
+        "key": "com.sksamuel.scapegoat.inspections.collections.DuplicateSetValue",
+        "name": "Duplicated set value",
+        "params": [],
+        "severity": "Minor",
+        "template": false
+      },
+      {
+        "description": "No description",
+        "key": "com.sksamuel.scapegoat.inspections.option.EitherGet",
+        "name": "Use of Either Right or Left Projection get",
+        "params": [],
+        "severity": "Major",
+        "template": false
+      },
+      {
+        "description": "Empty case class can be rewritten as a case object",
+        "key": "com.sksamuel.scapegoat.inspections.EmptyCaseClass",
+        "name": "Empty case class",
+        "params": [],
+        "severity": "Info",
+        "template": false
+      },
+      {
+        "description": "No description",
+        "key": "com.sksamuel.scapegoat.inspections.empty.EmptyFor",
+        "name": "Empty for loop",
+        "params": [],
+        "severity": "Minor",
+        "template": false
+      },
+      {
+        "description": "No description",
+        "key": "com.sksamuel.scapegoat.inspections.empty.EmptyIfBlock",
+        "name": "Empty if statement",
+        "params": [],
+        "severity": "Minor",
+        "template": false
+      },
+      {
+        "description": "No description",
+        "key": "com.sksamuel.scapegoat.inspections.string.EmptyInterpolatedString",
+        "name": "Empty interpolated string",
+        "params": [],
+        "severity": "Major",
+        "template": false
+      },
+      {
+        "description": "No description",
+        "key": "com.sksamuel.scapegoat.inspections.empty.EmptyMethod",
+        "name": "Empty method",
+        "params": [],
+        "severity": "Minor",
+        "template": false
+      },
+      {
+        "description": "No description",
+        "key": "com.sksamuel.scapegoat.inspections.empty.EmptySynchronizedBlock",
+        "name": "Empty synchronized block",
+        "params": [],
+        "severity": "Minor",
+        "template": false
+      },
+      {
+        "description": "No description",
+        "key": "com.sksamuel.scapegoat.inspections.empty.EmptyTryBlock",
+        "name": "Empty try block",
+        "params": [],
+        "severity": "Minor",
+        "template": false
+      },
+      {
+        "description": "No description",
+        "key": "com.sksamuel.scapegoat.inspections.empty.EmptyWhileBlock",
+        "name": "Empty while block",
+        "params": [],
+        "severity": "Minor",
+        "template": false
+      },
+      {
+        "description": "No description",
+        "key": "com.sksamuel.scapegoat.inspections.collections.ExistsSimplifiableToContains",
+        "name": "Exists simplifiable to contains",
+        "params": [],
+        "severity": "Info",
+        "template": false
+      },
+      {
+        "description": "No description",
+        "key": "com.sksamuel.scapegoat.inspections.collections.FilterDotHead",
+        "name": "filter().head can throw an exception; use find()",
+        "params": [],
+        "severity": "Info",
+        "template": false
+      },
+      {
+        "description": "No description",
+        "key": "com.sksamuel.scapegoat.inspections.collections.FilterDotHeadOption",
+        "name": "filter().headOption instead of find()",
+        "params": [],
+        "severity": "Info",
+        "template": false
+      },
+      {
+        "description": "No description",
+        "key": "com.sksamuel.scapegoat.inspections.collections.FilterDotIsEmpty",
+        "name": "filter().isEmpty instead of !exists()",
+        "params": [],
+        "severity": "Info",
+        "template": false
+      },
+      {
+        "description": "No description",
+        "key": "com.sksamuel.scapegoat.inspections.collections.FilterDotSize",
+        "name": "filter().size() instead of count()",
+        "params": [],
+        "severity": "Info",
+        "template": false
+      },
+      {
+        "description": "No description",
+        "key": "com.sksamuel.scapegoat.inspections.collections.FilterOptionAndGet",
+        "name": "filter(_.isDefined).map(_.get) instead of flatten",
+        "params": [],
+        "severity": "Info",
+        "template": false
+      },
+      {
+        "description": "Case classes should have final modifier",
+        "key": "com.sksamuel.scapegoat.inspections.FinalModifierOnCaseClass",
+        "name": "Missing final modifier on case class",
+        "params": [],
+        "severity": "Info",
+        "template": false
+      },
+      {
+        "description": "Finalizers should call super.finalize() to ensure superclasses are able to run any finalization logic",
+        "key": "com.sksamuel.scapegoat.inspections.unsafe.FinalizerWithoutSuper",
+        "name": "Finalizer without super",
+        "params": [],
+        "severity": "Minor",
+        "template": false
+      },
+      {
+        "description": "No description",
+        "key": "com.sksamuel.scapegoat.inspections.collections.FindAndNotEqualsNoneReplaceWithExists",
+        "name": "find(x => ) != None instead of exists(x =>)",
+        "params": [],
+        "severity": "Info",
+        "template": false
+      },
+      {
+        "description": "No description",
+        "key": "com.sksamuel.scapegoat.inspections.collections.FindDotIsDefined",
+        "name": "use exists() not find().isDefined()",
+        "params": [],
+        "severity": "Info",
+        "template": false
+      },
+      {
+        "description": "No description",
+        "key": "com.sksamuel.scapegoat.inspections.string.IllegalFormatString",
+        "name": "Illegal format string",
+        "params": [],
+        "severity": "Major",
+        "template": false
+      },
+      {
+        "description": "No description",
+        "key": "com.sksamuel.scapegoat.inspections.option.ImpossibleOptionSizeCondition",
+        "name": "Impossible Option.size condition",
+        "params": [],
+        "severity": "Major",
+        "template": false
+      },
+      {
+        "description": "No description",
+        "key": "com.sksamuel.scapegoat.inspections.string.IncorrectNumberOfArgsToFormat",
+        "name": "Incorrect number of args for format",
+        "params": [],
+        "severity": "Major",
+        "template": false
+      },
+      {
+        "description": "No description",
+        "key": "com.sksamuel.scapegoat.inspections.exception.IncorrectlyNamedExceptions",
+        "name": "Incorrectly Named Exceptions",
+        "params": [],
+        "severity": "Major",
+        "template": false
+      },
+      {
+        "description": "No description",
+        "key": "com.sksamuel.scapegoat.inspections.string.InvalidRegex",
+        "name": "Invalid regex",
+        "params": [],
+        "severity": "Info",
+        "template": false
+      },
+      {
+        "description": "No description",
+        "key": "com.sksamuel.scapegoat.inspections.unsafe.IsInstanceOf",
+        "name": "Use of isInstanceOf",
+        "params": [],
+        "severity": "Minor",
+        "template": false
+      },
+      {
+        "description": "Use of java conversions can lead to unusual behaviour. It is recommended to use JavaConverters",
+        "key": "com.sksamuel.scapegoat.inspections.collections.JavaConversionsUse",
+        "name": "Java conversions",
+        "params": [],
+        "severity": "Minor",
+        "template": false
+      },
+      {
+        "description": "List append is O(n). For large lists, consider using cons (::) or another data structure such as ListBuffer or Vector and converting to a List once built.",
+        "key": "com.sksamuel.scapegoat.inspections.collections.ListAppend",
+        "name": "List append is slow",
+        "params": [],
+        "severity": "Info",
+        "template": false
+      },
+      {
+        "description": "List.size is O(n). Consider using a different data type with O(1) size lookup such as Vector or Array.",
+        "key": "com.sksamuel.scapegoat.inspections.collections.ListSize",
+        "name": "List.size is O(n)",
+        "params": [],
+        "severity": "Info",
+        "template": false
+      },
+      {
+        "description": "No description",
+        "key": "com.sksamuel.scapegoat.inspections.LonelySealedTrait",
+        "name": "Lonely sealed trait",
+        "params": [],
+        "severity": "Major",
+        "template": false
+      },
+      {
+        "description": "No description",
+        "key": "com.sksamuel.scapegoat.inspections.string.LooksLikeInterpolatedString",
+        "name": "Looks Like Interpolated String",
+        "params": [],
+        "severity": "Minor",
+        "template": false
+      },
+      {
+        "description": "No description",
+        "key": "com.sksamuel.scapegoat.inspections.collections.MapGetAndGetOrElse",
+        "name": "Use of .get.getOrElse instead of .getOrElse",
+        "params": [],
+        "severity": "Major",
+        "template": false
+      },
+      {
+        "description": "No description",
+        "key": "com.sksamuel.scapegoat.inspections.MaxParameters",
+        "name": "Max parameters",
+        "params": [],
+        "severity": "Info",
+        "template": false
+      },
+      {
+        "description": "Methods should be in camelCase style with the first letter lower-case. See http://docs.scala-lang.org/style/naming-conventions.html#methods",
+        "key": "com.sksamuel.scapegoat.inspections.naming.MethodNames",
+        "name": "Method name not recommended",
+        "params": [],
+        "severity": "Info",
+        "template": false
+      },
+      {
+        "description": "No description",
+        "key": "com.sksamuel.scapegoat.inspections.inference.MethodReturningAny",
+        "name": "Method Returning Any",
+        "params": [],
+        "severity": "Minor",
+        "template": false
+      },
+      {
+        "description": "No description",
+        "key": "com.sksamuel.scapegoat.inspections.math.ModOne",
+        "name": "Integer mod one",
+        "params": [],
+        "severity": "Minor",
+        "template": false
+      },
+      {
+        "description": "NaN comparision will always fail. Use value.isNan instead.",
+        "key": "com.sksamuel.scapegoat.inspections.math.NanComparison",
+        "name": "Nan comparision",
+        "params": [],
+        "severity": "Major",
+        "template": false
+      },
+      {
+        "description": "No description",
+        "key": "com.sksamuel.scapegoat.inspections.collections.NegationIsEmpty",
+        "name": "!isEmpty can be replaced with nonEmpty",
+        "params": [],
+        "severity": "Info",
+        "template": false
+      },
+      {
+        "description": "No description",
+        "key": "com.sksamuel.scapegoat.inspections.collections.NegationNonEmpty",
+        "name": "!nonEmpty can be replaced with isEmpty",
+        "params": [],
+        "severity": "Info",
+        "template": false
+      },
+      {
+        "description": "No description",
+        "key": "com.sksamuel.scapegoat.inspections.NoOpOverride",
+        "name": "No op Override",
+        "params": [],
+        "severity": "Info",
+        "template": false
+      },
+      {
+        "description": "No description",
+        "key": "com.sksamuel.scapegoat.inspections.nulls.NullAssignment",
+        "name": "Null assignment",
+        "params": [],
+        "severity": "Minor",
+        "template": false
+      },
+      {
+        "description": "No description",
+        "key": "com.sksamuel.scapegoat.inspections.nulls.NullParameter",
+        "name": "Null parameter",
+        "params": [],
+        "severity": "Minor",
+        "template": false
+      },
+      {
+        "description": "No description",
+        "key": "com.sksamuel.scapegoat.inspections.naming.ObjectNames",
+        "name": "Object name not recommended",
+        "params": [],
+        "severity": "Info",
+        "template": false
+      },
+      {
+        "description": "No description",
+        "key": "com.sksamuel.scapegoat.inspections.option.OptionGet",
+        "name": "Use of Option.get",
+        "params": [],
+        "severity": "Major",
+        "template": false
+      },
+      {
+        "description": "No description",
+        "key": "com.sksamuel.scapegoat.inspections.option.OptionSize",
+        "name": "Prefer Option.isDefined instead of Option.size",
+        "params": [],
+        "severity": "Major",
+        "template": false
+      },
+      {
+        "description": "No description",
+        "key": "com.sksamuel.scapegoat.inspections.style.ParameterlessMethodReturnsUnit",
+        "name": "Parameterless methods returns unit",
+        "params": [],
+        "severity": "Minor",
+        "template": false
+      },
+      {
+        "description": "No description",
+        "key": "com.sksamuel.scapegoat.inspections.matching.PartialFunctionInsteadOfMatch",
+        "name": "Match instead of partial function",
+        "params": [],
+        "severity": "Info",
+        "template": false
+      },
+      {
+        "description": "No description",
+        "key": "com.sksamuel.scapegoat.inspections.inference.PointlessTypeBounds",
+        "name": "Pointless Type Bounds",
+        "params": [],
+        "severity": "Minor",
+        "template": false
+      },
+      {
+        "description": "No description",
+        "key": "com.sksamuel.scapegoat.inspections.collections.PreferMapEmpty",
+        "name": "Prefer Map.empty",
+        "params": [],
+        "severity": "Info",
+        "template": false
+      },
+      {
+        "description": "No description",
+        "key": "com.sksamuel.scapegoat.inspections.collections.PreferSeqEmpty",
+        "name": "Prefer Seq.empty",
+        "params": [],
+        "severity": "Info",
+        "template": false
+      },
+      {
+        "description": "No description",
+        "key": "com.sksamuel.scapegoat.inspections.collections.PreferSetEmpty",
+        "name": "Prefer Set.empty",
+        "params": [],
+        "severity": "Info",
+        "template": false
+      },
+      {
+        "description": "No description",
+        "key": "com.sksamuel.scapegoat.inspections.inference.ProductWithSerializableInferred",
+        "name": "Product with Serializable inferred",
+        "params": [],
+        "severity": "Minor",
+        "template": false
+      },
+      {
+        "description": "Public finalizer should be avoided as finalizers should not be programatically invoked",
+        "key": "com.sksamuel.scapegoat.inspections.PublicFinalizer",
+        "name": "PublicFinalizer",
+        "params": [],
+        "severity": "Info",
+        "template": false
+      },
+      {
+        "description": "No description",
+        "key": "com.sksamuel.scapegoat.inspections.RedundantFinalModifierOnMethod",
+        "name": "Redundant final modifier on method",
+        "params": [],
+        "severity": "Info",
+        "template": false
+      },
+      {
+        "description": "This var cannot be overridden, final modifier is redundant",
+        "key": "com.sksamuel.scapegoat.inspections.RedundantFinalModifierOnVar",
+        "name": "Redundant final modifier on var",
+        "params": [],
+        "severity": "Info",
+        "template": false
+      },
+      {
+        "description": "No description",
+        "key": "com.sksamuel.scapegoat.inspections.unneccesary.RedundantFinalizer",
+        "name": "Redundant finalizer",
+        "params": [],
+        "severity": "Minor",
+        "template": false
+      },
+      {
+        "description": "No description",
+        "key": "com.sksamuel.scapegoat.inspections.matching.RepeatedCaseBody",
+        "name": "Repeated case body",
+        "params": [],
+        "severity": "Minor",
+        "template": false
+      },
+      {
+        "description": "No description",
+        "key": "com.sksamuel.scapegoat.inspections.collections.ReverseFunc",
+        "name": "Unnecessary reverse",
+        "params": [],
+        "severity": "Info",
+        "template": false
+      },
+      {
+        "description": "No description",
+        "key": "com.sksamuel.scapegoat.inspections.collections.ReverseTailReverse",
+        "name": "reverse.tail.reverse instead of init",
+        "params": [],
+        "severity": "Info",
+        "template": false
+      },
+      {
+        "description": "No description",
+        "key": "com.sksamuel.scapegoat.inspections.collections.ReverseTakeReverse",
+        "name": "reverse.take(...).reverse instead of takeRight",
+        "params": [],
+        "severity": "Info",
+        "template": false
+      },
+      {
+        "description": "No description",
+        "key": "com.sksamuel.scapegoat.inspections.style.SimplifyBooleanExpression",
+        "name": "Simplify boolean expressions",
+        "params": [],
+        "severity": "Info",
+        "template": false
+      },
+      {
+        "description": "Strip margin will strip | from regex - possible corrupted regex",
+        "key": "com.sksamuel.scapegoat.inspections.string.StripMarginOnRegex",
+        "name": "Strip margin on regex",
+        "params": [],
+        "severity": "Major",
+        "template": false
+      },
+      {
+        "description": "No description",
+        "key": "com.sksamuel.scapegoat.inspections.string.SubstringZero",
+        "name": "String.substring(0)",
+        "params": [],
+        "severity": "Info",
+        "template": false
+      },
+      {
+        "description": "No description",
+        "key": "com.sksamuel.scapegoat.inspections.matching.SuspiciousMatchOnClassObject",
+        "name": "Suspicious match on class object",
+        "params": [],
+        "severity": "Minor",
+        "template": false
+      },
+      {
+        "description": "No description",
+        "key": "com.sksamuel.scapegoat.inspections.exception.SwallowedException",
+        "name": "Empty catch block",
+        "params": [],
+        "severity": "Minor",
+        "template": false
+      },
+      {
+        "description": "No description",
+        "key": "com.sksamuel.scapegoat.inspections.collections.SwapSortFilter",
+        "name": "Swap sort filter",
+        "params": [],
+        "severity": "Info",
+        "template": false
+      },
+      {
+        "description": "No description",
+        "key": "com.sksamuel.scapegoat.inspections.collections.UnsafeTraversableMethods",
+        "name": "Use of unsafe Traversable methods (head, tail, init, last, reduce, reduceLeft, reduceRight, max, maxBy, min, minBy)",
+        "params": [],
+        "severity": "Major",
+        "template": false
+      },
+      {
+        "description": "No description",
+        "key": "com.sksamuel.scapegoat.inspections.unsafe.TryGet",
+        "name": "Use of Try.get",
+        "params": [],
+        "severity": "Major",
+        "template": false
+      },
+      {
+        "description": "No description",
+        "key": "com.sksamuel.scapegoat.inspections.TypeShadowing",
+        "name": "Type shadowing",
+        "params": [],
+        "severity": "Minor",
+        "template": false
+      },
+      {
+        "description": "No description",
+        "key": "com.sksamuel.scapegoat.inspections.unneccesary.UnnecessaryConversion",
+        "name": "Unnecessary conversion",
+        "params": [],
+        "severity": "Minor",
+        "template": false
+      },
+      {
+        "description": "No description",
+        "key": "com.sksamuel.scapegoat.inspections.unneccesary.UnnecessaryIf",
+        "name": "Unnecessary if condition.",
+        "params": [],
+        "severity": "Info",
+        "template": false
+      },
+      {
+        "description": "Scala returns the value of the last expression in a block. Use of return here is not idiomatic scala",
+        "key": "com.sksamuel.scapegoat.inspections.unneccesary.UnnecessaryReturnUse",
+        "name": "Unnecessary return",
+        "params": [],
+        "severity": "Info",
+        "template": false
+      },
+      {
+        "description": "No description",
+        "key": "com.sksamuel.scapegoat.inspections.exception.UnreachableCatch",
+        "name": "Unreachable catch",
+        "params": [],
+        "severity": "Minor",
+        "template": false
+      },
+      {
+        "description": "No description",
+        "key": "com.sksamuel.scapegoat.inspections.collections.UnsafeContains",
+        "name": "Unsafe contains",
+        "params": [],
+        "severity": "Major",
+        "template": false
+      },
+      {
+        "description": "No description",
+        "key": "com.sksamuel.scapegoat.inspections.string.UnsafeStringContains",
+        "name": "Unsafe string contains",
+        "params": [],
+        "severity": "Major",
+        "template": false
+      },
+      {
+        "description": "No description",
+        "key": "com.sksamuel.scapegoat.inspections.unneccesary.UnusedMethodParameter",
+        "name": "Unused parameter",
+        "params": [],
+        "severity": "Minor",
+        "template": false
+      },
+      {
+        "description": "No description",
+        "key": "com.sksamuel.scapegoat.inspections.math.UseCbrt",
+        "name": "Use cbrt",
+        "params": [],
+        "severity": "Info",
+        "template": false
+      },
+      {
+        "description": "No description",
+        "key": "com.sksamuel.scapegoat.inspections.math.UseExpM1",
+        "name": "Use expm1",
+        "params": [],
+        "severity": "Info",
+        "template": false
+      },
+      {
+        "description": "No description",
+        "key": "com.sksamuel.scapegoat.inspections.math.UseLog10",
+        "name": "Use log10",
+        "params": [],
+        "severity": "Info",
+        "template": false
+      },
+      {
+        "description": "No description",
+        "key": "com.sksamuel.scapegoat.inspections.math.UseLog1P",
+        "name": "Use log1p",
+        "params": [],
+        "severity": "Info",
+        "template": false
+      },
+      {
+        "description": "No description",
+        "key": "com.sksamuel.scapegoat.inspections.math.UseSqrt",
+        "name": "Use sqrt",
+        "params": [],
+        "severity": "Info",
+        "template": false
+      },
+      {
+        "description": "No description",
+        "key": "com.sksamuel.scapegoat.inspections.VarClosure",
+        "name": "Var in closure",
+        "params": [],
+        "severity": "Minor",
+        "template": false
+      },
+      {
+        "description": "No description",
+        "key": "com.sksamuel.scapegoat.inspections.unneccesary.VarCouldBeVal",
+        "name": "Var could be val",
+        "params": [],
+        "severity": "Minor",
+        "template": false
+      },
+      {
+        "description": "No description",
+        "key": "com.sksamuel.scapegoat.inspections.controlflow.WhileTrue",
+        "name": "While true loop",
+        "params": [],
+        "severity": "Minor",
+        "template": false
+      },
+      {
+        "description": "Dividing zero by any number will always return zero",
+        "key": "com.sksamuel.scapegoat.inspections.math.ZeroNumerator",
+        "name": "Zero numerator",
         "params": [],
         "severity": "Minor",
         "template": false

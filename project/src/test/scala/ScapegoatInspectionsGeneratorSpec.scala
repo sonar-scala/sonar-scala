@@ -15,6 +15,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+package com.mwz.sonar.scala.metadata.scapegoat
+
 import com.sksamuel.scapegoat.inspections.{AnyUse, EmptyCaseClass}
 import com.sksamuel.scapegoat.inspections.string.ArraysInFormat
 import org.scalatest.{FlatSpec, LoneElement, Matchers}

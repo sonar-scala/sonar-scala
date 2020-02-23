@@ -19,8 +19,6 @@ package com.mwz.sonar.scala.metadata
 package scalastyle
 
 import cats.data.Chain
-import com.mwz.sonar.scala.scalastyle.ScalastyleInspection
-import com.mwz.sonar.scala.scalastyle.{Param => ScalastyleParam}
 import org.scalastyle.BooleanType
 import org.scalastyle.ErrorLevel
 import org.scalastyle.InfoLevel
@@ -35,7 +33,7 @@ import org.scalatest.matchers.should.Matchers
 class ScalastyleRulesSpec extends AnyFlatSpec with Matchers with Inspectors with LoneElement {
 
   it should "convert Scalastyle inspection to a Rule" in {
-    val inspection1 = ScalastyleInspection(
+    val inspection = ScalastyleInspection(
       clazz = "class",
       id = "id",
       label = "label",
@@ -70,7 +68,7 @@ class ScalastyleRulesSpec extends AnyFlatSpec with Matchers with Inspectors with
       )
     )
 
-    ScalastyleRules.toRule(inspection1) shouldBe expected
+    ScalastyleRules.toRule(inspection) shouldBe expected
   }
 
   it should "compose the full description from description, justification and extraDescription fields" in {

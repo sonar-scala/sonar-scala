@@ -25,9 +25,6 @@ import cats.instances.int._
 import cats.instances.string._
 import cats.syntax.eq._
 import cats.syntax.option._
-import com.mwz.sonar.scala.scalastyle.ScalastyleInspection
-import com.mwz.sonar.scala.scalastyle.ScalastyleInspections
-import com.mwz.sonar.scala.scalastyle.{Param => ScalastyleParam}
 import org.scalastyle.Level
 import org.scalastyle._
 

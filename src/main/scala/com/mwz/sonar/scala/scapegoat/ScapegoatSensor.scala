@@ -24,6 +24,8 @@ import scala.util.{Failure, Success, Try}
 
 import cats.instances.string._
 import cats.syntax.eq._
+import com.mwz.sonar.scala.metadata.scapegoat.ScapegoatRules
+import com.mwz.sonar.scala.metadata.scapegoat.ScapegoatRulesRepository
 import com.mwz.sonar.scala.pr.{GlobalIssues, Issue}
 import com.mwz.sonar.scala.scapegoat.ScapegoatSensor._
 import com.mwz.sonar.scala.util.Log
@@ -152,10 +154,7 @@ final class ScapegoatSensor(
                 // if the rule was not found,
                 // check if it is because the rule is not activated in the current quality profile,
                 // or if it is because the inspection does not exist in the scapegoat rules repository
-                val inspectionExists =
-                  ScapegoatInspections.AllInspections.exists(inspection =>
-                    inspection.id === scapegoatIssue.inspectionId
-                  )
+                val inspectionExists = ScapegoatRules.rules.exists(_.key === scapegoatIssue.inspectionId)
                 if (inspectionExists)
                   log.debug(
                     s"The rule: ${scapegoatIssue.inspectionId}, " +

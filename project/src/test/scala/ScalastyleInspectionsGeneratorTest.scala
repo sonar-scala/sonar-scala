@@ -1,22 +1,22 @@
 /*
- * Sonar Scala Plugin
- * Copyright (C) 2018 All contributors
+ * Copyright (C) 2018-2020  All sonar-scala contributors
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 3 of the License, or (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Lesser General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program; if not, write to the Free Software Foundation,
- * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ * You should have received a copy of the GNU General Lesser Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-import com.mwz.sonar.scala.scalastyle._
+
+package com.mwz.sonar.scala.metadata.scalastyle
+
 import com.typesafe.config.ConfigFactory
 import org.scalastyle._
 import org.scalatest._
@@ -52,7 +52,7 @@ class ScalastyleInspectionsGeneratorTest extends FlatSpec with Matchers {
         Some("Files which are too long can be hard to read and understand."),
         WarningLevel,
         List(
-          Param(
+          ScalastyleParam(
             "maxFileLength",
             IntegerType,
             "Maximum file length",
@@ -72,14 +72,14 @@ class ScalastyleInspectionsGeneratorTest extends FlatSpec with Matchers {
         ),
         WarningLevel,
         List(
-          Param(
+          ScalastyleParam(
             "allowed",
             IntegerType,
             "Maximum occurences allowed",
             "Maximum number of occurences allowed",
             "1"
           ),
-          Param(
+          ScalastyleParam(
             "ignoreRegex",
             StringType,
             "Ignore regular expression",
@@ -100,28 +100,28 @@ class ScalastyleInspectionsGeneratorTest extends FlatSpec with Matchers {
         Some("Scaladoc is generally considered a good thing. Within reason."),
         WarningLevel,
         List(
-          Param(
+          ScalastyleParam(
             "ignoreRegex",
             StringType,
             "Regular expression",
             "Class names matching this regular expression will be ignored",
             "^$"
           ),
-          Param(
+          ScalastyleParam(
             "ignoreTokenTypes",
             StringType,
             "Comma Separated String",
             "Include the following to ignore : PatDefOrDcl (variables), TmplDef (classes, traits), TypeDefOrDcl (type definitions), FunDefOrDcl (functions)",
             "^$"
           ),
-          Param(
+          ScalastyleParam(
             "ignoreOverride",
             BooleanType,
             "Ignore override",
             "If set to true, methods which have the override modifier are ignored",
             "false"
           ),
-          Param(
+          ScalastyleParam(
             "indentStyle",
             StringType,
             "Force indent style",
@@ -140,7 +140,7 @@ class ScalastyleInspectionsGeneratorTest extends FlatSpec with Matchers {
   "transform" should "successfully transform the code template" in {
     val template =
       """
-        |object ScalastyleInspections { 
+        |private[metadata] object ScalastyleInspections { 
         | val AllInspections: Seq[ScalastyleInspection] = ???
         |}
     """.stripMargin
@@ -167,7 +167,7 @@ class ScalastyleInspectionsGeneratorTest extends FlatSpec with Matchers {
         Some("Files which are too long can be hard to read and understand."),
         WarningLevel,
         List(
-          Param(
+          ScalastyleParam(
             "maxFileLength",
             IntegerType,
             "Maximum file length",
@@ -180,7 +180,7 @@ class ScalastyleInspectionsGeneratorTest extends FlatSpec with Matchers {
 
     val expected =
       """
-        |object ScalastyleInspections {
+        |private[metadata] object ScalastyleInspections {
         |val AllInspections: Seq[ScalastyleInspection] = List(
         | ScalastyleInspection(
         |   clazz = "org.scalastyle.file.FileTabChecker",
@@ -201,7 +201,7 @@ class ScalastyleInspectionsGeneratorTest extends FlatSpec with Matchers {
         |   justification = Some("Files which are too long can be hard to read and understand."),
         |   defaultLevel = WarningLevel,
         |   params = List(
-        |     Param(
+        |     ScalastyleParam(
         |       name = "maxFileLength",
         |       typ = IntegerType,
         |       label = "Maximum file length",

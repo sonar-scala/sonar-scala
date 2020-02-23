@@ -18,9 +18,14 @@
 package com.mwz.sonar.scala
 package scapegoat
 
+import com.mwz.sonar.scala.metadata.Rule
+import com.mwz.sonar.scala.metadata.scapegoat.ScapegoatRulesRepository._
+import com.mwz.sonar.scala.scapegoat.ScapegoatRulesRepository._
 import org.sonar.api.rule.RuleStatus
 import org.sonar.api.rules.RuleType
 import org.sonar.api.server.rule.RulesDefinition
+import org.sonar.api.server.rule.RulesDefinition.NewRepository
+import org.sonar.api.server.rule.RulesDefinition.NewRule
 
 /** Defines a rules repository for the Scapegoat inspections */
 final class ScapegoatRulesRepository extends RulesDefinition {
@@ -30,21 +35,11 @@ final class ScapegoatRulesRepository extends RulesDefinition {
     // create an empty repository
     val repository =
       context
-        .createRepository(ScapegoatRulesRepository.RepositoryKey, Scala.LanguageKey)
-        .setName(ScapegoatRulesRepository.RepositoryName)
+        .createRepository(RepositoryKey, Scala.LanguageKey)
+        .setName(RepositoryName)
 
     // register each scapegoat inspection as a repository rule
-    ScapegoatInspections.AllInspections.foreach { inspection =>
-      val rule = repository.createRule(inspection.id)
-
-      rule.setInternalKey(inspection.id)
-      rule.setName(inspection.name)
-      rule.setMarkdownDescription(inspection.description.getOrElse("No description"))
-      rule.setActivatedByDefault(true) // scalastyle:ignore org.scalastyle.scalariform.NamedArgumentChecker
-      rule.setStatus(RuleStatus.READY)
-      rule.setSeverity(inspection.defaultLevel.toRuleSeverity.name)
-      rule.setType(RuleType.CODE_SMELL)
-    }
+    rulesRepository.rules.iterator.foreach(rule => createRule(repository, rule))
 
     // save the repository
     repository.done()
@@ -52,6 +47,14 @@ final class ScapegoatRulesRepository extends RulesDefinition {
 }
 
 object ScapegoatRulesRepository {
-  final val RepositoryKey: String = "sonar-scala-scapegoat"
-  final val RepositoryName: String = "Scapegoat"
+  def createRule(repository: NewRepository, rule: Rule): NewRule = {
+    val newRule = repository.createRule(rule.key)
+    newRule.setInternalKey(rule.key)
+    newRule.setName(rule.name)
+    newRule.setMarkdownDescription(rule.description)
+    newRule.setActivatedByDefault(true) // scalastyle:ignore
+    newRule.setStatus(RuleStatus.READY)
+    newRule.setSeverity(rule.severity.entryName.toUpperCase)
+    newRule.setType(RuleType.CODE_SMELL)
+  }
 }

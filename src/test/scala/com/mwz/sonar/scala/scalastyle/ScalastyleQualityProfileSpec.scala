@@ -20,6 +20,7 @@ package scalastyle
 
 import scala.jdk.CollectionConverters._
 
+import com.mwz.sonar.scala.metadata.scalastyle.ScalastyleRules
 import com.mwz.sonar.scala.metadata.scalastyle.ScalastyleRulesRepository.SkipTemplateInstances
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
@@ -49,10 +50,13 @@ class ScalastyleQualityProfileSpec extends AnyFlatSpec with Matchers with LoneEl
   }
 
   it should "activate all default (non-template) rules" in new Ctx {
-    rules.map(_.ruleKey) should contain allElementsOf
-    ScalastyleInspections.AllInspections
-      .filter(i => i.params.isEmpty && !ScalastyleQualityProfile.BlacklistRules.contains(i.clazz))
-      .map(_.clazz)
+    val activated =
+      ScalastyleRules.rules
+        .filter(i => i.params.isEmpty && !ScalastyleQualityProfile.BlacklistRules.contains(i.key))
+        .map(_.key)
+        .toList
+
+    rules.map(_.ruleKey) should contain allElementsOf activated
   }
 
   it should "have 68 rules" in new Ctx {
@@ -60,22 +64,29 @@ class ScalastyleQualityProfileSpec extends AnyFlatSpec with Matchers with LoneEl
   }
 
   it should "not activate templates" in new Ctx {
-    val templates = ScalastyleInspections.AllInspections
-      .filter(_.params.nonEmpty)
-      .map(i => s"${i.clazz}-template")
+    val templates =
+      ScalastyleRules.rules
+        .filter(_.params.nonEmpty)
+        .map(i => s"${i.key}-template")
+        .toList
 
     rules.map(_.ruleKey) should contain noElementsOf templates
   }
 
   it should "activate not excluded template rules" in new Ctx {
-    val templateInstances = ScalastyleInspections.AllInspections
-      .filter(i => i.params.nonEmpty && !SkipTemplateInstances.contains(i.clazz))
-      .map(_.clazz)
+    val templateInstances =
+      ScalastyleRules.rules
+        .filter(i => i.params.nonEmpty && !SkipTemplateInstances.contains(i.key))
+        .map(_.key)
+        .toList
+
     rules.map(_.ruleKey) should contain allElementsOf templateInstances
 
-    val excluded = ScalastyleInspections.AllInspections
-      .filter(i => SkipTemplateInstances.contains(i.clazz))
-      .map(_.clazz)
+    val excluded =
+      ScalastyleRules.rules
+        .filter(i => SkipTemplateInstances.contains(i.key))
+        .map(_.key)
+        .toList
 
     rules.map(_.ruleKey) should contain noElementsOf excluded
   }

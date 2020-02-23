@@ -18,6 +18,8 @@
 package com.mwz.sonar.scala
 package scapegoat
 
+import com.mwz.sonar.scala.metadata.scapegoat.ScapegoatRules
+import com.mwz.sonar.scala.metadata.scapegoat.ScapegoatRulesRepository
 import com.mwz.sonar.scala.qualityprofiles.Overrides
 import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition
 import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition.{
@@ -52,16 +54,17 @@ object ScapegoatQualityProfile {
    * Overrides the default severity if provided in overrides.
    */
   def activateRules(profile: NewBuiltInQualityProfile, overrides: Option[Overrides] = None): Unit = {
-    ScapegoatInspections.AllInspections
-      .filterNot(inspection => overrides.exists(_.blacklist.contains(inspection.id)))
-      .foreach { inspection =>
-        val rule: NewBuiltInActiveRule =
-          profile.activateRule(ScapegoatRulesRepository.RepositoryKey, inspection.id)
+    ScapegoatRules.rules
+      .filterNot(rule => overrides.exists(_.blacklist.contains(rule.key)))
+      .iterator
+      .foreach { rule =>
+        val activeRule: NewBuiltInActiveRule =
+          profile.activateRule(ScapegoatRulesRepository.RepositoryKey, rule.key)
 
         // Override the severity.
         overrides
-          .flatMap(_.severities.get(inspection.id))
-          .foreach(severity => rule.overrideSeverity(severity.name))
+          .flatMap(_.severities.get(rule.key))
+          .foreach(severity => activeRule.overrideSeverity(severity.name))
       }
   }
 }

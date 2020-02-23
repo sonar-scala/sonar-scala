@@ -15,32 +15,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.mwz.sonar.scala
-package scalastyle
+package com.mwz.sonar.scala.metadata
+package scapegoat
 
-import org.scalastyle._
+object ScapegoatRulesRepository {
+  final val RepositoryKey: String = "sonar-scala-scapegoat"
+  final val RepositoryName: String = "Scapegoat"
 
-final case class ScalastyleInspection(
-  clazz: String,
-  id: String,
-  label: String,
-  description: String,
-  extraDescription: Option[String],
-  justification: Option[String],
-  defaultLevel: Level,
-  params: Seq[Param]
-)
-
-final case class Param(
-  name: String,
-  typ: ParameterType,
-  label: String,
-  description: String,
-  default: String
-)
-
-object ScalastyleInspections {
-  val AllInspections: List[ScalastyleInspection] = ???
-  val AllInspectionsByClass: Map[String, ScalastyleInspection] =
-    AllInspections.map(i => i.clazz -> i).toMap
+  lazy val rulesRepository: RulesRepository =
+    RulesRepository(
+      key = RepositoryKey,
+      name = RepositoryName,
+      rules = ScapegoatRules.rules
+    )
 }

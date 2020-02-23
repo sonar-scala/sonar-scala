@@ -25,6 +25,8 @@ import scala.jdk.CollectionConverters._
 
 import cats.instances.string._
 import cats.syntax.eq._
+import com.mwz.sonar.scala.metadata.Rule
+import com.mwz.sonar.scala.metadata.scalastyle.ScalastyleRules
 import com.mwz.sonar.scala.metadata.scalastyle.ScalastyleRulesRepository
 import com.mwz.sonar.scala.pr.{GlobalIssues, Issue}
 import com.mwz.sonar.scala.util.Log
@@ -121,7 +123,7 @@ final class ScalastyleSensor(
             context,
             globalConfig,
             globalIssues,
-            ScalastyleInspections.AllInspectionsByClass,
+            ScalastyleRules.rules.iterator.map(i => i.key -> i).toMap,
             styleError,
             rule
           )
@@ -212,7 +214,7 @@ private[scalastyle] object ScalastyleSensor {
     context: SensorContext,
     globalConfig: GlobalConfig,
     globalIssues: GlobalIssues,
-    inspections: Map[String, ScalastyleInspection],
+    inspections: Map[String, Rule],
     styleError: StyleError[FileSpec],
     rule: ActiveRule
   ): Unit = {
@@ -224,7 +226,7 @@ private[scalastyle] object ScalastyleSensor {
     val message: String =
       (styleError.customMessage orElse inspections
         .get(styleError.clazz.getName)
-        .map(_.label))
+        .map(_.name))
         .getOrElse(styleError.key)
 
     val location: NewIssueLocation =

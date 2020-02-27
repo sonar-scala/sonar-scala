@@ -18,6 +18,7 @@
 package com.mwz.sonar.scala
 
 import java.nio.file.Paths
+import java.nio.file.StandardOpenOption
 
 import cats.data.NonEmptyChain
 import cats.effect.Blocker
@@ -74,7 +75,13 @@ object Metadata extends IOApp {
     val write: Stream[IO, Unit] = Stream.resource(Blocker[IO]).flatMap { blocker =>
       Stream[IO, String](metadata.asJson.printWith(printer))
         .through(text.utf8Encode)
-        .through(writeAll(Paths.get("sonar-scala-metadata.json"), blocker))
+        .through(
+          writeAll(
+            Paths.get("sonar-scala-metadata.json"),
+            blocker,
+            List(StandardOpenOption.TRUNCATE_EXISTING)
+          )
+        )
     }
     write.compile.drain.as(ExitCode.Success)
   }

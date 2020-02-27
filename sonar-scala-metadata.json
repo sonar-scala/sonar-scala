@@ -62,7 +62,7 @@
           "template": false
         },
         {
-          "description": "*Check the first lines of each file matches the text*\n\nA lot of projects require a header with a copyright notice, or they require a license in each file. This does a simple text comparison between the header and the first lines of the file.\nYou can have multiple lines, but make sure you surround the text with a CDATA section. You can also specify a regular expression, as long as you set the regex parameter to true.",
+          "description": "*Check the first lines of each file matches the text*\n\nA lot of projects require a header with a copyright notice, or they require a license in each file. This does a simple text comparison between the header and the first lines of the file. You can have multiple lines, but make sure you surround the text with a `CDATA` section. You can also specify a regular expression, as long as you set the regex parameter to `true`.",
           "key": "org.scalastyle.file.HeaderMatchesChecker-template",
           "name": "Match Header",
           "params": [
@@ -89,7 +89,7 @@
           "template": true
         },
         {
-          "description": "*Check that the plus sign is followed by a space*\n\nAn expression with spaces around + can be easier to read",
+          "description": "*Check that the plus sign is followed by a space*\n\nAn expression with spaces around `+` can be easier to read.",
           "key": "org.scalastyle.scalariform.SpacesAfterPlusChecker",
           "name": "Space after plus",
           "params": [
@@ -146,7 +146,7 @@
           "template": false
         },
         {
-          "description": "*Check that the plus sign is preceded by a space*\n\nAn expression with spaces around + can be easier to read",
+          "description": "*Check that the plus sign is preceded by a space*\n\nAn expression with spaces around `+` can be easier to read.",
           "key": "org.scalastyle.scalariform.SpacesBeforePlusChecker",
           "name": "Space before plus",
           "params": [
@@ -316,7 +316,7 @@
           "name": "Package name",
           "params": [
             {
-              "default": "^[a-z][A-Za-z]*$",
+              "default": "^[a-z]+$",
               "description": "Regular expression: The package names must match this regular expression",
               "name": "regex",
               "typ": "String"
@@ -337,7 +337,7 @@
           "name": "Package name",
           "params": [
             {
-              "default": "^[a-z][A-Za-z]*$",
+              "default": "^[a-z]+$",
               "description": "Regular expression: The package names must match this regular expression",
               "name": "regex",
               "typ": "String"
@@ -410,7 +410,7 @@
           "template": false
         },
         {
-          "description": "*Check that a class does not import certain classes*\n\nUse of some classes can be discouraged for a project. For instance, use of sun._ is generally discouraged because\nthey are internal to the JDK and can be changed.",
+          "description": "*Check that a class does not import certain classes*\n\nUse of some classes can be discouraged for a project. For instance, use of `sun._` is generally discouraged because they are internal to the JDK and can be changed.",
           "key": "org.scalastyle.scalariform.IllegalImportsChecker-template",
           "name": "Illegal imports",
           "params": [
@@ -431,7 +431,7 @@
           "template": true
         },
         {
-          "description": "*Check that a class does not import certain classes*\n\nUse of some classes can be discouraged for a project. For instance, use of sun._ is generally discouraged because\nthey are internal to the JDK and can be changed.",
+          "description": "*Check that a class does not import certain classes*\n\nUse of some classes can be discouraged for a project. For instance, use of `sun._` is generally discouraged because they are internal to the JDK and can be changed.",
           "key": "org.scalastyle.scalariform.IllegalImportsChecker",
           "name": "Illegal imports",
           "params": [
@@ -494,7 +494,7 @@
           "template": false
         },
         {
-          "description": "*Checks for use of magic numbers*\n\nReplacing a magic number with a named constant can make code easier to read and understand, and can avoid some subtle bugs.\n\nA simple assignment to a val is not considered to be a magic number, for example:\n``\n    val foo = 4\n`` is not a magic number, but\n``\n    var foo = 4\n`` is considered to be a magic number.",
+          "description": "*Checks for use of magic numbers*\n\nReplacing a magic number with a named constant can make code easier to read and understand, and can avoid some subtle bugs.\n\nA simple assignment to a val is not considered to be a magic number, for example: `val foo = 4` is not a magic number, but `var foo = 4` is considered to be a magic number.",
           "key": "org.scalastyle.scalariform.MagicNumberChecker-template",
           "name": "Magic Number",
           "params": [
@@ -515,7 +515,7 @@
           "template": true
         },
         {
-          "description": "*Checks for use of magic numbers*\n\nReplacing a magic number with a named constant can make code easier to read and understand, and can avoid some subtle bugs.\n\nA simple assignment to a val is not considered to be a magic number, for example:\n``\n    val foo = 4\n`` is not a magic number, but\n``\n    var foo = 4\n`` is considered to be a magic number.",
+          "description": "*Checks for use of magic numbers*\n\nReplacing a magic number with a named constant can make code easier to read and understand, and can avoid some subtle bugs.\n\nA simple assignment to a val is not considered to be a magic number, for example: `val foo = 4` is not a magic number, but `var foo = 4` is considered to be a magic number.",
           "key": "org.scalastyle.scalariform.MagicNumberChecker",
           "name": "Magic Number",
           "params": [
@@ -536,7 +536,7 @@
           "template": false
         },
         {
-          "description": "*No whitespace before left bracket ''[''*\n\nIf there is whitespace before a left bracket, this can be confusing to the reader",
+          "description": "*No whitespace before left bracket ''[''*\n\nIf there is whitespace before a left bracket, this can be confusing to the reader.",
           "key": "org.scalastyle.scalariform.NoWhitespaceBeforeLeftBracketChecker",
           "name": "No whitespace before left bracket ''[''",
           "params": [
@@ -551,7 +551,7 @@
           "template": false
         },
         {
-          "description": "*No whitespace after left bracket ''[''*\n\nIf there is whitespace after a left bracket, this can be confusing to the reader",
+          "description": "*No whitespace after left bracket ''[''*\n\nIf there is whitespace after a left bracket, this can be confusing to the reader.",
           "key": "org.scalastyle.scalariform.NoWhitespaceAfterLeftBracketChecker",
           "name": "No whitespace after left bracket ''[''",
           "params": [
@@ -566,7 +566,7 @@
           "template": false
         },
         {
-          "description": "*No whitespace before right bracket '']''*\n\nIf there is whitespace before a right bracket, this can be confusing to the reader",
+          "description": "*No whitespace before right bracket '']''*\n\nIf there is whitespace before a right bracket, this can be confusing to the reader.",
           "key": "org.scalastyle.scalariform.NoWhitespaceBeforeRightBracketChecker",
           "name": "No whitespace before right bracket '']''",
           "params": [
@@ -581,7 +581,7 @@
           "template": false
         },
         {
-          "description": "*Check that return is not used*\n\nUse of return is not usually necessary in Scala. In fact, use of return can discourage a functional style of programming.",
+          "description": "*Check that return is not used*\n\nUse of `return` is not usually necessary in Scala. In fact, use of return can discourage a functional style of programming.",
           "key": "org.scalastyle.scalariform.ReturnChecker",
           "name": "Return",
           "params": [
@@ -596,7 +596,7 @@
           "template": false
         },
         {
-          "description": "*Check that null is not used*\n\nScala discourages use of nulls, preferring Option.",
+          "description": "*Check that null is not used*\n\nScala discourages use of `null`, preferring `Option`.",
           "key": "org.scalastyle.scalariform.NullChecker-template",
           "name": "Null",
           "params": [
@@ -617,7 +617,7 @@
           "template": true
         },
         {
-          "description": "*Check that null is not used*\n\nScala discourages use of nulls, preferring Option.",
+          "description": "*Check that null is not used*\n\nScala discourages use of `null`, preferring `Option`.",
           "key": "org.scalastyle.scalariform.NullChecker",
           "name": "Null",
           "params": [
@@ -638,7 +638,7 @@
           "template": false
         },
         {
-          "description": "*Check that classes and objects do not define the clone() method*\n\nThe clone method is difficult to get right. You can use the copy constructor of case classes rather than implementing clone.\nFor more information on clone(), see Effective Java by Joshua Bloch pages.",
+          "description": "*Check that classes and objects do not define the clone() method*\n\nThe clone method is difficult to get right. You can use the copy constructor of case classes rather than implementing clone. For more information on `clone()`, see Effective Java by Joshua Bloch pages.",
           "key": "org.scalastyle.scalariform.NoCloneChecker",
           "name": "Clone method",
           "params": [
@@ -653,7 +653,7 @@
           "template": false
         },
         {
-          "description": "*Check that classes and objects do not define the finalize() method*\n\nfinalize() is called when the object is garbage collected, and garbage collection is not guaranteed to happen.\nIt is therefore unwise to rely on code in finalize() method.",
+          "description": "*Check that classes and objects do not define the finalize() method*\n\n`finalize()` is called when the object is garbage collected, and garbage collection is not guaranteed to happen. It is therefore unwise to rely on code in `finalize()` method.",
           "key": "org.scalastyle.scalariform.NoFinalizeChecker",
           "name": "Finalize method",
           "params": [
@@ -668,7 +668,7 @@
           "template": false
         },
         {
-          "description": "*Check that classes and objects do not define equals without overriding equals(java.lang.Object).*\n\nMistakenly defining a covariant equals() method without overriding method equals(java.lang.Object) can produce unexpected runtime behaviour.",
+          "description": "*Check that classes and objects do not define equals without overriding equals(java.lang.Object).*\n\nMistakenly defining a covariant `equals()` method without overriding method `equals(java.lang.Object)` can produce unexpected runtime behaviour.",
           "key": "org.scalastyle.scalariform.CovariantEqualsChecker",
           "name": "Covariant equals",
           "params": [
@@ -683,7 +683,7 @@
           "template": false
         },
         {
-          "description": "*Check that structural types are not used.*\n\nStructural types in Scala can use reflection - this can have unexpected performance consequences.\nWarning: This check can also wrongly pick up type lamdbas and other such constructs. This checker should be used with care. You always have the alternative of the scalac checking for structural types.",
+          "description": "*Check that structural types are not used.*\n\nStructural types in Scala can use reflection - this can have unexpected performance consequences. Warning: This check can also wrongly pick up type lamdbas and other such constructs. This checker should be used with care. You always have the alternative of the scalac checking for structural types.",
           "key": "org.scalastyle.scalariform.StructuralTypeChecker",
           "name": "Structural type",
           "params": [
@@ -851,7 +851,7 @@
           "template": false
         },
         {
-          "description": "*Checks that if statements have braces*\n\nSome people find if clauses with braces easier to read.\n\nThe singleLineAllowed property allows if constructions of the type:\n``\n    if (bool_expression) expression1 else expression2\n`` The doubleLineAllowed property allows if constructions of the type:\n``\n    if (bool_expression) expression1\n    else expression2\n`` Note: If you intend to enable only if expressions in the format below, disable the IfBraceChecker altogether.\n``\n    if (bool_expression)\n      expression1\n    else\n      expression2\n``",
+          "description": "*Checks that if statements have braces*\n\nSome people find if clauses with braces easier to read.\n\nThe `singleLineAllowed` property allows if constructions of the type:\n\n```scala\nif (bool_expression) expression1 else expression2\n```\n\nThe `doubleLineAllowed` property allows if constructions of the type:\n\n```scala\nif (bool_expression) expression1 else expression2\n```\n\nNote: If you intend to enable only if expressions in the format below, disable the IfBraceChecker altogether.\n\n```scala\nif (bool_expression) expression1 else expression2\n```",
           "key": "org.scalastyle.scalariform.IfBraceChecker-template",
           "name": "If block braces",
           "params": [
@@ -878,7 +878,7 @@
           "template": true
         },
         {
-          "description": "*Checks that if statements have braces*\n\nSome people find if clauses with braces easier to read.\n\nThe singleLineAllowed property allows if constructions of the type:\n``\n    if (bool_expression) expression1 else expression2\n`` The doubleLineAllowed property allows if constructions of the type:\n``\n    if (bool_expression) expression1\n    else expression2\n`` Note: If you intend to enable only if expressions in the format below, disable the IfBraceChecker altogether.\n``\n    if (bool_expression)\n      expression1\n    else\n      expression2\n``",
+          "description": "*Checks that if statements have braces*\n\nSome people find if clauses with braces easier to read.\n\nThe `singleLineAllowed` property allows if constructions of the type:\n\n```scala\nif (bool_expression) expression1 else expression2\n```\n\nThe `doubleLineAllowed` property allows if constructions of the type:\n\n```scala\nif (bool_expression) expression1 else expression2\n```\n\nNote: If you intend to enable only if expressions in the format below, disable the IfBraceChecker altogether.\n\n```scala\nif (bool_expression) expression1 else expression2\n```",
           "key": "org.scalastyle.scalariform.IfBraceChecker",
           "name": "If block braces",
           "params": [
@@ -971,7 +971,7 @@
           "template": false
         },
         {
-          "description": "*Check that method names match a regular expression*\n\nThe Scala style guide recommends that method names conform to certain standards. If the methods are overriding another method, and the overridden method\ncannot be changed, then use the ignoreOverride parameter.",
+          "description": "*Check that method names match a regular expression*\n\nThe Scala style guide recommends that method names conform to certain standards. If the methods are overriding another method, and the overridden method cannot be changed, then use the `ignoreOverride` parameter.",
           "key": "org.scalastyle.scalariform.MethodNamesChecker-template",
           "name": "Method name",
           "params": [
@@ -1004,7 +1004,7 @@
           "template": true
         },
         {
-          "description": "*Check that method names match a regular expression*\n\nThe Scala style guide recommends that method names conform to certain standards. If the methods are overriding another method, and the overridden method\ncannot be changed, then use the ignoreOverride parameter.",
+          "description": "*Check that method names match a regular expression*\n\nThe Scala style guide recommends that method names conform to certain standards. If the methods are overriding another method, and the overridden method cannot be changed, then use the `ignoreOverride` parameter.",
           "key": "org.scalastyle.scalariform.MethodNamesChecker",
           "name": "Method name",
           "params": [
@@ -1205,7 +1205,7 @@
           "template": false
         },
         {
-          "description": "*Checks that while is not used*\n\nwhile loops are deprecated if you're using a strict functional style",
+          "description": "*Checks that while is not used*\n\n`while` loops are deprecated if you're using a strict functional style.",
           "key": "org.scalastyle.scalariform.WhileChecker",
           "name": "No while loops",
           "params": [
@@ -1220,7 +1220,7 @@
           "template": false
         },
         {
-          "description": "*Checks that classes and objects do not define mutable fields*\n\nvar (mutable fields) are deprecated if you're using a strict functional style",
+          "description": "*Checks that classes and objects do not define mutable fields*\n\n`var` (mutable fields) are deprecated if you're using a strict functional style.",
           "key": "org.scalastyle.scalariform.VarFieldChecker",
           "name": "No mutable fields",
           "params": [
@@ -1235,7 +1235,7 @@
           "template": false
         },
         {
-          "description": "*Checks that functions do not define mutable variables*\n\nvars (mutable local variables) loops are deprecated if you're using a strict functional style",
+          "description": "*Checks that functions do not define mutable variables*\n\n`var` (mutable local variables) are deprecated if you're using a strict functional style",
           "key": "org.scalastyle.scalariform.VarLocalChecker",
           "name": "No mutable local variables",
           "params": [
@@ -1250,7 +1250,7 @@
           "template": false
         },
         {
-          "description": "*Checks that if expressions are not redundant, i.e. easily replaced by a variant of the condition*\n\nIf expressions with boolean constants in both branches can be eliminated without affecting readability. Prefer simply ``cond`` to ``if (cond) true else false`` and ``!cond`` to ``if (cond) false else true``.",
+          "description": "*Checks that if expressions are not redundant, i.e. easily replaced by a variant of the condition*\n\nIf expressions with boolean constants in both branches can be eliminated without affecting readability. Prefer simply `cond` to `if (cond) true else false` and `!cond` to `if (cond) false else true`.",
           "key": "org.scalastyle.scalariform.RedundantIfChecker",
           "name": "No redundant if expressions",
           "params": [
@@ -1307,7 +1307,7 @@
           "template": false
         },
         {
-          "description": "*Checks that Java @Deprecated is not used, Scala @deprecated should be used instead*\n\nYou should be using the Scala @deprecated instead.",
+          "description": "*Checks that Java @Deprecated is not used, Scala @deprecated should be used instead*\n\nYou should be using the Scala `@deprecated` instead.",
           "key": "org.scalastyle.scalariform.DeprecatedJavaChecker",
           "name": "No use of Java @Deprecated",
           "params": [
@@ -1337,7 +1337,7 @@
           "template": false
         },
         {
-          "description": "*If a class/trait has no members, the braces are unnecessary*\n\nIf a class / trait has no members, then braces are unnecessary, and can be removed.",
+          "description": "*If a class/trait has no members, the braces are unnecessary*\n\nIf a `class` / `trait` has no members, then braces are unnecessary, and can be removed.",
           "key": "org.scalastyle.scalariform.EmptyClassChecker",
           "name": "Redundant braces in class definition",
           "params": [
@@ -1352,7 +1352,7 @@
           "template": false
         },
         {
-          "description": "*Checks that type parameter to a class matches a regular expression*\n\nScala generic type names are generally single upper case letters. This check checks for classes and traits.\nNote that this check only checks the innermost type parameter, to allow for List[T].",
+          "description": "*Checks that type parameter to a class matches a regular expression*\n\nScala generic type names are generally single upper case letters. This check checks for classes and traits. Note that this check only checks the innermost type parameter, to allow for `List[T]`.",
           "key": "org.scalastyle.scalariform.ClassTypeParameterChecker-template",
           "name": "Class type parameter name",
           "params": [
@@ -1373,7 +1373,7 @@
           "template": true
         },
         {
-          "description": "*Checks that type parameter to a class matches a regular expression*\n\nScala generic type names are generally single upper case letters. This check checks for classes and traits.\nNote that this check only checks the innermost type parameter, to allow for List[T].",
+          "description": "*Checks that type parameter to a class matches a regular expression*\n\nScala generic type names are generally single upper case letters. This check checks for classes and traits. Note that this check only checks the innermost type parameter, to allow for `List[T]`.",
           "key": "org.scalastyle.scalariform.ClassTypeParameterChecker",
           "name": "Class type parameter name",
           "params": [
@@ -1409,7 +1409,7 @@
           "template": false
         },
         {
-          "description": "*Checks that a case statement pattern match is not lower case, as this can cause confusion*\n\nA lower case pattern match clause with no other tokens is the same as _; this is not true for patterns which start with an upper\ncase letter. This can cause confusion, and may not be what was intended:\n``\n    val foo = \"foo\"\n    val Bar = \"bar\"\n    \"bar\" match { case Bar => \"we got bar\" }   // result = \"we got bar\"\n    \"bar\" match { case foo => \"we got foo\" }   // result = \"we got foo\"\n    \"bar\" match { case `foo` => \"we got foo\" } // result = MatchError\n`` This checker raises a warning with the second match. To fix it, use an identifier which starts with an upper case letter (best), use case _ or,\nif you wish to refer to the value, add a type ``: Any``\n``\n    val lc = \"lc\"\n    \"something\" match { case lc: Any => \"lc\" } // result = \"lc\"\n    \"something\" match { case _ => \"lc\" } // result = \"lc\"\n``",
+          "description": "*Checks that a case statement pattern match is not lower case, as this can cause confusion*\n\nA lower case pattern match clause with no other tokens is the same as `_`; this is not true for patterns which start with an upper case letter. This can cause confusion, and may not be what was intended:\n\n```scala\nval foo = \"foo\"\nval Bar = \"bar\"\n\"bar\" match { case Bar => \"we got bar\" } // result = \"we got bar\"\n\"bar\" match { case foo => \"we got foo\" } // result = \"we got foo\"\n\"bar\" match { case `foo` => \"we got foo\" } // result = MatchError\n```\n\nThis checker raises a warning with the second match. To fix it, use an identifier which starts with an upper case letter (best), use `case _` or, if you wish to refer to the value, add a type `: Any`, e.g.:\n\n```scala\nval lc = \"lc\"\n\"something\" match { case lc: Any => \"lc\" } // result = \"lc\"\n\"something\" match { case _ => \"lc\" } // result = \"lc\"\n```",
           "key": "org.scalastyle.scalariform.LowercasePatternMatchChecker",
           "name": "Lowercase pattern match",
           "params": [
@@ -1493,7 +1493,7 @@
           "template": false
         },
         {
-          "description": "*Checks that the code does not have ??? operators.*\n\nThe ??? operator denotes that an implementation is missing. This rule helps to avoid potential runtime errors because of not implemented code.",
+          "description": "*Checks that the code does not have ??? operators.*\n\nThe `???` operator denotes that an implementation is missing. This rule helps to avoid potential runtime errors because of not implemented code.",
           "key": "org.scalastyle.scalariform.NotImplementedErrorUsage",
           "name": "Usage of ??? operator",
           "params": [
@@ -1508,7 +1508,7 @@
           "template": false
         },
         {
-          "description": "*Checks that block imports are not used.*\n\nBlock imports (e.g. ``import a.{b, c}``) can lead to annoying merge errors in large code bases that are maintained by lot of developers. This rule allows to ensure that only single imports are used in order to minimize merge errors in import declarations.",
+          "description": "*Checks that block imports are not used.*\n\nBlock imports, e.g. `import a.{b, c}` can lead to annoying merge errors in large code bases that are maintained by lot of developers. This rule allows to ensure that only single imports are used in order to minimize merge errors in import declarations.",
           "key": "org.scalastyle.scalariform.BlockImportChecker",
           "name": "Avoid block imports",
           "params": [
@@ -1523,7 +1523,22 @@
           "template": false
         },
         {
-          "description": "*Use a : Unit = for procedure declarations*\n\nA procedure style declaration can cause confusion - the developer may have simply forgotten to add a '=', and now their method returns Unit rather than the inferred type:\n``\n    def foo() { println(\"hello\"); 5 }\n    def foo() = { println(\"hello\"); 5 }\n`` This checker raises a warning with the first line. To fix it, use an explicit return type, or add a '=' before the body.",
+          "description": "*Checks that curlies imports are not used.*\n\nCurlies imports, e.g. `import a.{b, c}`, can lead to annoying merge errors in large code bases that are maintained by lot of developers. This rule allows to ensure that only single imports, no renaming and no hiding imports are used in order to minimize merge errors in import declarations.",
+          "key": "org.scalastyle.scalariform.CurliesImportChecker",
+          "name": "Avoid curlies imports",
+          "params": [
+            {
+              "default": "org.scalastyle.scalariform.CurliesImportChecker",
+              "description": "Scalastyle's rule (checker) class name.",
+              "name": "ruleClass",
+              "typ": "String"
+            }
+          ],
+          "severity": "Minor",
+          "template": false
+        },
+        {
+          "description": "*Use a : Unit = for procedure declarations*\n\nA procedure style declaration can cause confusion - the developer may have simply forgotten to add a `=`, and now their method returns `Unit` rather than the inferred type:\n\n```scala\ndef foo() { println(\"hello\"); 5 }\n```\nThis checker raises a warning with the first line. To fix it, use an explicit return type, or add a `=` before the body.\n\n```scala\ndef foo() = { println(\"hello\"); 5 }\n```",
           "key": "org.scalastyle.scalariform.ProcedureDeclarationChecker",
           "name": "Use : Unit = for procedures",
           "params": [
@@ -1538,7 +1553,7 @@
           "template": false
         },
         {
-          "description": "*Checks that braces are used in for comprehensions*\n\nUsage of braces (rather than parentheses) within a for comprehension mean that you don't have to specify a semi-colon at the end of every line:\n``\n    for {      // braces\n      t <- List(1,2,3)\n      if (i % 2 == 0)\n    } yield t\n`` is preferred to\n``\n    for (      // parentheses\n      t <- List(1,2,3);\n      if (i % 2 == 0)\n    ) yield t\n`` To fix it, replace the () with {}. And then remove the ; at the end of the lines.\n\nThe singleLineAllowed property allows for constructions of the type:\n``\n    for (i <- List(1,2,3)) yield i\n``",
+          "description": "*Checks that braces are used in for comprehensions*\n\nUsage of braces (rather than parentheses) within a `for` comprehension mean that you don't have to specify a semi-colon at the end of every line:\n\n```scala\nfor { // braces\n  t <- List(1,2,3)\n  if (t % 2 == 0)\n} yield t\n```\n\nis preferred to\n\n```scala\nfor ( // parentheses\n  t <- List(1,2,3);\n  if (t % 2 == 0)\n) yield t\n```\n\nTo fix it, replace the `()` with `{}`. And then remove the `;` at the end of the lines.\n\nThe `singleLineAllowed` property allows for constructions of the type:\n\n```scala\nfor (i <- List(1,2,3)) yield i\n```",
           "key": "org.scalastyle.scalariform.ForBraceChecker-template",
           "name": "Use braces in for comprehensions",
           "params": [
@@ -1559,7 +1574,7 @@
           "template": true
         },
         {
-          "description": "*Checks that braces are used in for comprehensions*\n\nUsage of braces (rather than parentheses) within a for comprehension mean that you don't have to specify a semi-colon at the end of every line:\n``\n    for {      // braces\n      t <- List(1,2,3)\n      if (i % 2 == 0)\n    } yield t\n`` is preferred to\n``\n    for (      // parentheses\n      t <- List(1,2,3);\n      if (i % 2 == 0)\n    ) yield t\n`` To fix it, replace the () with {}. And then remove the ; at the end of the lines.\n\nThe singleLineAllowed property allows for constructions of the type:\n``\n    for (i <- List(1,2,3)) yield i\n``",
+          "description": "*Checks that braces are used in for comprehensions*\n\nUsage of braces (rather than parentheses) within a `for` comprehension mean that you don't have to specify a semi-colon at the end of every line:\n\n```scala\nfor { // braces\n  t <- List(1,2,3)\n  if (t % 2 == 0)\n} yield t\n```\n\nis preferred to\n\n```scala\nfor ( // parentheses\n  t <- List(1,2,3);\n  if (t % 2 == 0)\n) yield t\n```\n\nTo fix it, replace the `()` with `{}`. And then remove the `;` at the end of the lines.\n\nThe `singleLineAllowed` property allows for constructions of the type:\n\n```scala\nfor (i <- List(1,2,3)) yield i\n```",
           "key": "org.scalastyle.scalariform.ForBraceChecker",
           "name": "Use braces in for comprehensions",
           "params": [
@@ -1580,7 +1595,7 @@
           "template": false
         },
         {
-          "description": "*Checks that parentheses are used in for loops*\n\nFor-comprehensions which lack a yield clause is actually a loop rather than a functional comprehension and it is usually\n``\n   more readable to string the generators together between parentheses rather than using the syntactically-confusing } { construct:\n   for (x <- board.rows; y <- board.files) {\n     printf(\"(%d, %d)\", x, y)\n   }\n   is preferred to\n   for {\n     x <- board.rows\n     y <- board.files\n   } {\n     printf(\"(%d, %d)\", x, y)\n   }\n``",
+          "description": "*Checks that parentheses are used in for loops*\n\nFor-comprehensions which lack a `yield` clause is actually a loop rather than a functional comprehension and it is usually more readable to string the generators together between parentheses rather than using the syntactically-confusing `} {` construct:\n\n```scala\nfor (x <- board.rows; y <- board.files) {\n  printf(\"(%d, %d)\", x, y)\n}\n```\n\nis preferred to\n\n```scala\nfor {\n  x <- board.rows\n  y <- board.files\n} {\n  printf(\"(%d, %d)\", x, y)\n}\n```",
           "key": "org.scalastyle.scalariform.ForLoopChecker",
           "name": "Use parentheses in for loops",
           "params": [
@@ -1595,7 +1610,7 @@
           "template": false
         },
         {
-          "description": "*Checks a space after the start of the comment.*\n\nTo bring consistency with how comments should be formatted, leave a space right after the beginning of the comment.\n``\n    package foobar\n    object Foobar {\n    /**WRONG\n    *\n    */\n    /** Correct*/\n    val d = 2 /*Wrong*/ //Wrong\n    /**\n    *Correct\n    */\n    val e = 3/** Correct*/ // Correct\n    }\n``",
+          "description": "*Checks a space after the start of the comment.*\n\nTo bring consistency with how comments should be formatted, leave a space right after the beginning of the comment.\n\n```scala\npackage foobar\n\nobject Foobar {\n  /**WRONG\n    *\n    */\n  /** Correct\n    *\n    */\n  val d = 2 /*Wrong*/ //Wrong\n  /**\n    * Correct\n    */\n  val e = 3 /** Correct*/ // Correct\n}\n```",
           "key": "org.scalastyle.scalariform.SpaceAfterCommentStartChecker",
           "name": "Space after the start of the comment",
           "params": [
@@ -1610,7 +1625,7 @@
           "template": false
         },
         {
-          "description": "*Checks that the ScalaDoc on documentable members is well-formed*\n\nScaladoc is generally considered a good thing. Within reason.\n\nIgnore tokens is a comma separated string that may include the following : PatDefOrDcl (variables), TmplDef (classes, traits), TypeDefOrDcl (type definitions), FunDefOrDcl (functions)\nSupported indentation styles are \"scaladoc\" (for ScalaDoc-style comments, with two spaces before the asterisk), \"javadoc\" (for JavaDoc-style comments, with a single space before the asterisk) or \"anydoc\" to support any style (any number of spaces before the asterisk). For backwards compatibility, if left empty, \"anydoc\" will be assumed.",
+          "description": "*Checks that the ScalaDoc on documentable members is well-formed*\n\nScaladoc is generally considered a good thing. Within reason.\n\nIgnore tokens is a comma separated string that may include the following: `PatDefOrDcl` (variables), `TmplDef` (classes, traits), `TypeDefOrDcl` (type definitions), `FunDefOrDcl` (functions). Supported indentation styles are \"scaladoc\" (for ScalaDoc-style comments, with two spaces before the asterisk), \"javadoc\" (for JavaDoc-style comments, with a single space before the asterisk) or \"anydoc\" to support any style (any number of spaces before the asterisk). For backwards compatibility, if left empty, \"anydoc\" will be assumed.",
           "key": "org.scalastyle.scalariform.ScalaDocChecker-template",
           "name": "Missing or badly formed ScalaDoc: {0}",
           "params": [
@@ -1709,7 +1724,7 @@
           "template": false
         },
         {
-          "description": "*Some editors are unfriendly to non ASCII characters.*\n\nScala allows unicode characters as operators and some editors misbehave when they see non-ascii character.\n``\n    In a project collaborated by a community of developers. This check can be helpful in such situations.\n    \"value\".match {\n    case \"value\" => println(\"matched\")\n    ...\n    }\n    is preferred to\n    \"value\".match {\n    case \"value\" ⇒ println(\"matched\")\n    ...\n    }\n    To fix it, replace the (unicode operator)⇒ with =>.\n``",
+          "description": "*Some editors are unfriendly to non ASCII characters.*\n\nScala allows unicode characters as operators and some editors misbehave when they see non-ascii character. In a project collaborated by a community of developers. This check can be helpful in such situations. \n\n```scala\n\"value\" match {\n  case \"value\" => println(\"matched\")\n  ...\n}\n```\n\nis preferred to\n\n```scala\n\"value\" match {\n  case \"value\" ⇒ println(\"matched\")\n  ...\n}\n```\n\nTo fix it, replace the (unicode operator) `⇒` with `=>`.",
           "key": "org.scalastyle.scalariform.NonASCIICharacterChecker-template",
           "name": "Non ASCII characters are not allowed",
           "params": [
@@ -1730,7 +1745,7 @@
           "template": true
         },
         {
-          "description": "*Some editors are unfriendly to non ASCII characters.*\n\nScala allows unicode characters as operators and some editors misbehave when they see non-ascii character.\n``\n    In a project collaborated by a community of developers. This check can be helpful in such situations.\n    \"value\".match {\n    case \"value\" => println(\"matched\")\n    ...\n    }\n    is preferred to\n    \"value\".match {\n    case \"value\" ⇒ println(\"matched\")\n    ...\n    }\n    To fix it, replace the (unicode operator)⇒ with =>.\n``",
+          "description": "*Some editors are unfriendly to non ASCII characters.*\n\nScala allows unicode characters as operators and some editors misbehave when they see non-ascii character. In a project collaborated by a community of developers. This check can be helpful in such situations. \n\n```scala\n\"value\" match {\n  case \"value\" => println(\"matched\")\n  ...\n}\n```\n\nis preferred to\n\n```scala\n\"value\" match {\n  case \"value\" ⇒ println(\"matched\")\n  ...\n}\n```\n\nTo fix it, replace the (unicode operator) `⇒` with `=>`.",
           "key": "org.scalastyle.scalariform.NonASCIICharacterChecker",
           "name": "Non ASCII characters are not allowed",
           "params": [
@@ -1817,7 +1832,7 @@
           "template": false
         },
         {
-          "description": "*Check that field names match a regular expression*\n\nA consistent naming convention for field names can make code easier to read and understand",
+          "description": "*Check that field names match a regular expression*\n\nA consistent naming convention for field names can make code easier to read and understand.",
           "key": "org.scalastyle.scalariform.FieldNamesChecker-template",
           "name": "Field name",
           "params": [
@@ -1844,7 +1859,7 @@
           "template": true
         },
         {
-          "description": "*Check that field names match a regular expression*\n\nA consistent naming convention for field names can make code easier to read and understand",
+          "description": "*Check that field names match a regular expression*\n\nA consistent naming convention for field names can make code easier to read and understand.",
           "key": "org.scalastyle.scalariform.FieldNamesChecker",
           "name": "Field name",
           "params": [
@@ -1916,7 +1931,7 @@
           "template": false
         },
         {
-          "description": "*Check for use of TODO/FIXME single line comments*\n\nSome projects may consider TODO or FIXME comments in a code bad style. They would rather you fix the problem.",
+          "description": "*Check for use of TODO/FIXME single line comments*\n\nSome projects may consider `TODO` or `FIXME` comments in a code bad style. They would rather you fix the problem.",
           "key": "org.scalastyle.scalariform.TodoCommentChecker-template",
           "name": "TODO/FIXME comment",
           "params": [
@@ -1937,7 +1952,7 @@
           "template": true
         },
         {
-          "description": "*Check for use of TODO/FIXME single line comments*\n\nSome projects may consider TODO or FIXME comments in a code bad style. They would rather you fix the problem.",
+          "description": "*Check for use of TODO/FIXME single line comments*\n\nSome projects may consider `TODO` or `FIXME` comments in a code bad style. They would rather you fix the problem.",
           "key": "org.scalastyle.scalariform.TodoCommentChecker",
           "name": "TODO/FIXME comment",
           "params": [
@@ -1973,7 +1988,7 @@
           "template": false
         },
         {
-          "description": "*Checks that argument literals are named*\n\nNameless literals make code harder to understand (consider ``updateEntity(1, true)`` and ``updateEntity(id = 1, enabled = true)``).",
+          "description": "*Checks that argument literals are named*\n\nNameless literals make code harder to understand (consider `updateEntity(1, true)` and `updateEntity(id = 1, enabled = true)`).",
           "key": "org.scalastyle.scalariform.NamedArgumentChecker-template",
           "name": "Literal passed as argument without name",
           "params": [
@@ -2000,7 +2015,7 @@
           "template": true
         },
         {
-          "description": "*Checks that argument literals are named*\n\nNameless literals make code harder to understand (consider ``updateEntity(1, true)`` and ``updateEntity(id = 1, enabled = true)``).",
+          "description": "*Checks that argument literals are named*\n\nNameless literals make code harder to understand (consider `updateEntity(1, true)` and `updateEntity(id = 1, enabled = true)`).",
           "key": "org.scalastyle.scalariform.NamedArgumentChecker",
           "name": "Literal passed as argument without name",
           "params": [
@@ -2071,7 +2086,7 @@
           "template": false
         },
         {
-          "description": "No description",
+          "description": "",
           "key": "com.sksamuel.scapegoat.inspections.string.ArraysInFormat",
           "name": "Array passed to String.format",
           "params": [],
@@ -2079,7 +2094,7 @@
           "template": false
         },
         {
-          "description": "No description",
+          "description": "",
           "key": "com.sksamuel.scapegoat.inspections.string.ArraysToString",
           "name": "Use of Array.toString",
           "params": [],
@@ -2087,7 +2102,7 @@
           "template": false
         },
         {
-          "description": "No description",
+          "description": "",
           "key": "com.sksamuel.scapegoat.inspections.unsafe.AsInstanceOf",
           "name": "Use of asInstanceOf",
           "params": [],
@@ -2095,7 +2110,7 @@
           "template": false
         },
         {
-          "description": "No description",
+          "description": "",
           "key": "com.sksamuel.scapegoat.inspections.style.AvoidOperatorOverload",
           "name": "Avoid operator overload",
           "params": [],
@@ -2103,7 +2118,7 @@
           "template": false
         },
         {
-          "description": "No description",
+          "description": "",
           "key": "com.sksamuel.scapegoat.inspections.collections.AvoidSizeEqualsZero",
           "name": "Avoid Traversable.size == 0, use Traversable.isEmpty instead",
           "params": [],
@@ -2111,7 +2126,7 @@
           "template": false
         },
         {
-          "description": "No description",
+          "description": "",
           "key": "com.sksamuel.scapegoat.inspections.collections.AvoidSizeNotEqualsZero",
           "name": "Avoid Traversable.size != 0, use Traversable.nonEmpty instead",
           "params": [],
@@ -2119,7 +2134,7 @@
           "template": false
         },
         {
-          "description": "No description",
+          "description": "",
           "key": "com.sksamuel.scapegoat.inspections.AvoidToMinusOne",
           "name": "Avoid To Minus One",
           "params": [],
@@ -2127,7 +2142,7 @@
           "template": false
         },
         {
-          "description": "No description",
+          "description": "",
           "key": "com.sksamuel.scapegoat.inspections.math.BigDecimalDoubleConstructor",
           "name": "Big decimal double constructor",
           "params": [],
@@ -2143,7 +2158,7 @@
           "template": false
         },
         {
-          "description": "No description",
+          "description": "",
           "key": "com.sksamuel.scapegoat.inspections.inference.BoundedByFinalType",
           "name": "Bounded by final type",
           "params": [],
@@ -2151,7 +2166,7 @@
           "template": false
         },
         {
-          "description": "No description",
+          "description": "",
           "key": "com.sksamuel.scapegoat.inspections.math.BrokenOddness",
           "name": "Broken odd check",
           "params": [],
@@ -2159,7 +2174,7 @@
           "template": false
         },
         {
-          "description": "No description",
+          "description": "",
           "key": "com.sksamuel.scapegoat.inspections.exception.CatchException",
           "name": "Catch exception",
           "params": [],
@@ -2167,7 +2182,7 @@
           "template": false
         },
         {
-          "description": "No description",
+          "description": "",
           "key": "com.sksamuel.scapegoat.inspections.exception.CatchFatal",
           "name": "Catch fatal exception",
           "params": [],
@@ -2175,7 +2190,7 @@
           "template": false
         },
         {
-          "description": "No description",
+          "description": "",
           "key": "com.sksamuel.scapegoat.inspections.exception.CatchNpe",
           "name": "Catching NPE",
           "params": [],
@@ -2183,7 +2198,7 @@
           "template": false
         },
         {
-          "description": "No description",
+          "description": "",
           "key": "com.sksamuel.scapegoat.inspections.exception.CatchThrowable",
           "name": "Catch throwable",
           "params": [],
@@ -2191,7 +2206,7 @@
           "template": false
         },
         {
-          "description": "No description",
+          "description": "",
           "key": "com.sksamuel.scapegoat.inspections.naming.ClassNames",
           "name": "Class name not recommended",
           "params": [],
@@ -2199,7 +2214,7 @@
           "template": false
         },
         {
-          "description": "No description",
+          "description": "",
           "key": "com.sksamuel.scapegoat.inspections.collections.CollectionIndexOnNonIndexedSeq",
           "name": "Seq.apply() on a non-IndexedSeq may cause performance problems",
           "params": [],
@@ -2207,7 +2222,7 @@
           "template": false
         },
         {
-          "description": "No description",
+          "description": "",
           "key": "com.sksamuel.scapegoat.inspections.collections.CollectionNamingConfusion",
           "name": "Collection naming Confusion",
           "params": [],
@@ -2215,7 +2230,7 @@
           "template": false
         },
         {
-          "description": "No description",
+          "description": "",
           "key": "com.sksamuel.scapegoat.inspections.collections.CollectionNegativeIndex",
           "name": "Collection index out of bounds",
           "params": [],
@@ -2223,7 +2238,7 @@
           "template": false
         },
         {
-          "description": "No description",
+          "description": "",
           "key": "com.sksamuel.scapegoat.inspections.collections.CollectionPromotionToAny",
           "name": "Collection promotion to any",
           "params": [],
@@ -2231,7 +2246,7 @@
           "template": false
         },
         {
-          "description": "No description",
+          "description": "",
           "key": "com.sksamuel.scapegoat.inspections.equality.ComparingFloatingPointTypes",
           "name": "Floating type comparison",
           "params": [],
@@ -2239,7 +2254,7 @@
           "template": false
         },
         {
-          "description": "No description",
+          "description": "",
           "key": "com.sksamuel.scapegoat.inspections.equality.ComparingUnrelatedTypes",
           "name": "Comparing unrelated types",
           "params": [],
@@ -2247,7 +2262,7 @@
           "template": false
         },
         {
-          "description": "No description",
+          "description": "",
           "key": "com.sksamuel.scapegoat.inspections.collections.ComparisonToEmptyList",
           "name": "Comparison to empty list",
           "params": [],
@@ -2255,7 +2270,7 @@
           "template": false
         },
         {
-          "description": "No description",
+          "description": "",
           "key": "com.sksamuel.scapegoat.inspections.collections.ComparisonToEmptySet",
           "name": "Comparison to empty set",
           "params": [],
@@ -2271,7 +2286,7 @@
           "template": false
         },
         {
-          "description": "No description",
+          "description": "",
           "key": "com.sksamuel.scapegoat.inspections.unneccesary.ConstantIf",
           "name": "Constant if expression",
           "params": [],
@@ -2287,7 +2302,7 @@
           "template": false
         },
         {
-          "description": "No description",
+          "description": "",
           "key": "com.sksamuel.scapegoat.inspections.DoubleNegation",
           "name": "Double negation",
           "params": [],
@@ -2295,7 +2310,7 @@
           "template": false
         },
         {
-          "description": "No description",
+          "description": "",
           "key": "com.sksamuel.scapegoat.inspections.imports.DuplicateImport",
           "name": "Duplicated Import",
           "params": [],
@@ -2303,7 +2318,7 @@
           "template": false
         },
         {
-          "description": "No description",
+          "description": "",
           "key": "com.sksamuel.scapegoat.inspections.collections.DuplicateMapKey",
           "name": "Duplicated map key",
           "params": [],
@@ -2311,7 +2326,7 @@
           "template": false
         },
         {
-          "description": "No description",
+          "description": "",
           "key": "com.sksamuel.scapegoat.inspections.collections.DuplicateSetValue",
           "name": "Duplicated set value",
           "params": [],
@@ -2319,7 +2334,7 @@
           "template": false
         },
         {
-          "description": "No description",
+          "description": "",
           "key": "com.sksamuel.scapegoat.inspections.option.EitherGet",
           "name": "Use of Either Right or Left Projection get",
           "params": [],
@@ -2335,7 +2350,7 @@
           "template": false
         },
         {
-          "description": "No description",
+          "description": "",
           "key": "com.sksamuel.scapegoat.inspections.empty.EmptyFor",
           "name": "Empty for loop",
           "params": [],
@@ -2343,7 +2358,7 @@
           "template": false
         },
         {
-          "description": "No description",
+          "description": "",
           "key": "com.sksamuel.scapegoat.inspections.empty.EmptyIfBlock",
           "name": "Empty if statement",
           "params": [],
@@ -2351,7 +2366,7 @@
           "template": false
         },
         {
-          "description": "No description",
+          "description": "",
           "key": "com.sksamuel.scapegoat.inspections.string.EmptyInterpolatedString",
           "name": "Empty interpolated string",
           "params": [],
@@ -2359,7 +2374,7 @@
           "template": false
         },
         {
-          "description": "No description",
+          "description": "",
           "key": "com.sksamuel.scapegoat.inspections.empty.EmptyMethod",
           "name": "Empty method",
           "params": [],
@@ -2367,7 +2382,7 @@
           "template": false
         },
         {
-          "description": "No description",
+          "description": "",
           "key": "com.sksamuel.scapegoat.inspections.empty.EmptySynchronizedBlock",
           "name": "Empty synchronized block",
           "params": [],
@@ -2375,7 +2390,7 @@
           "template": false
         },
         {
-          "description": "No description",
+          "description": "",
           "key": "com.sksamuel.scapegoat.inspections.empty.EmptyTryBlock",
           "name": "Empty try block",
           "params": [],
@@ -2383,7 +2398,7 @@
           "template": false
         },
         {
-          "description": "No description",
+          "description": "",
           "key": "com.sksamuel.scapegoat.inspections.empty.EmptyWhileBlock",
           "name": "Empty while block",
           "params": [],
@@ -2391,7 +2406,7 @@
           "template": false
         },
         {
-          "description": "No description",
+          "description": "",
           "key": "com.sksamuel.scapegoat.inspections.collections.ExistsSimplifiableToContains",
           "name": "Exists simplifiable to contains",
           "params": [],
@@ -2399,7 +2414,7 @@
           "template": false
         },
         {
-          "description": "No description",
+          "description": "",
           "key": "com.sksamuel.scapegoat.inspections.collections.FilterDotHead",
           "name": "filter().head can throw an exception; use find()",
           "params": [],
@@ -2407,7 +2422,7 @@
           "template": false
         },
         {
-          "description": "No description",
+          "description": "",
           "key": "com.sksamuel.scapegoat.inspections.collections.FilterDotHeadOption",
           "name": "filter().headOption instead of find()",
           "params": [],
@@ -2415,7 +2430,7 @@
           "template": false
         },
         {
-          "description": "No description",
+          "description": "",
           "key": "com.sksamuel.scapegoat.inspections.collections.FilterDotIsEmpty",
           "name": "filter().isEmpty instead of !exists()",
           "params": [],
@@ -2423,7 +2438,7 @@
           "template": false
         },
         {
-          "description": "No description",
+          "description": "",
           "key": "com.sksamuel.scapegoat.inspections.collections.FilterDotSize",
           "name": "filter().size() instead of count()",
           "params": [],
@@ -2431,7 +2446,7 @@
           "template": false
         },
         {
-          "description": "No description",
+          "description": "",
           "key": "com.sksamuel.scapegoat.inspections.collections.FilterOptionAndGet",
           "name": "filter(_.isDefined).map(_.get) instead of flatten",
           "params": [],
@@ -2455,7 +2470,7 @@
           "template": false
         },
         {
-          "description": "No description",
+          "description": "",
           "key": "com.sksamuel.scapegoat.inspections.collections.FindAndNotEqualsNoneReplaceWithExists",
           "name": "find(x => ) != None instead of exists(x =>)",
           "params": [],
@@ -2463,7 +2478,7 @@
           "template": false
         },
         {
-          "description": "No description",
+          "description": "",
           "key": "com.sksamuel.scapegoat.inspections.collections.FindDotIsDefined",
           "name": "use exists() not find().isDefined()",
           "params": [],
@@ -2471,7 +2486,7 @@
           "template": false
         },
         {
-          "description": "No description",
+          "description": "",
           "key": "com.sksamuel.scapegoat.inspections.string.IllegalFormatString",
           "name": "Illegal format string",
           "params": [],
@@ -2479,7 +2494,7 @@
           "template": false
         },
         {
-          "description": "No description",
+          "description": "",
           "key": "com.sksamuel.scapegoat.inspections.option.ImpossibleOptionSizeCondition",
           "name": "Impossible Option.size condition",
           "params": [],
@@ -2487,7 +2502,7 @@
           "template": false
         },
         {
-          "description": "No description",
+          "description": "",
           "key": "com.sksamuel.scapegoat.inspections.string.IncorrectNumberOfArgsToFormat",
           "name": "Incorrect number of args for format",
           "params": [],
@@ -2495,7 +2510,7 @@
           "template": false
         },
         {
-          "description": "No description",
+          "description": "",
           "key": "com.sksamuel.scapegoat.inspections.exception.IncorrectlyNamedExceptions",
           "name": "Incorrectly Named Exceptions",
           "params": [],
@@ -2503,7 +2518,7 @@
           "template": false
         },
         {
-          "description": "No description",
+          "description": "",
           "key": "com.sksamuel.scapegoat.inspections.string.InvalidRegex",
           "name": "Invalid regex",
           "params": [],
@@ -2511,7 +2526,7 @@
           "template": false
         },
         {
-          "description": "No description",
+          "description": "",
           "key": "com.sksamuel.scapegoat.inspections.unsafe.IsInstanceOf",
           "name": "Use of isInstanceOf",
           "params": [],
@@ -2543,7 +2558,7 @@
           "template": false
         },
         {
-          "description": "No description",
+          "description": "",
           "key": "com.sksamuel.scapegoat.inspections.LonelySealedTrait",
           "name": "Lonely sealed trait",
           "params": [],
@@ -2551,7 +2566,7 @@
           "template": false
         },
         {
-          "description": "No description",
+          "description": "",
           "key": "com.sksamuel.scapegoat.inspections.string.LooksLikeInterpolatedString",
           "name": "Looks Like Interpolated String",
           "params": [],
@@ -2559,7 +2574,7 @@
           "template": false
         },
         {
-          "description": "No description",
+          "description": "",
           "key": "com.sksamuel.scapegoat.inspections.collections.MapGetAndGetOrElse",
           "name": "Use of .get.getOrElse instead of .getOrElse",
           "params": [],
@@ -2567,7 +2582,7 @@
           "template": false
         },
         {
-          "description": "No description",
+          "description": "",
           "key": "com.sksamuel.scapegoat.inspections.MaxParameters",
           "name": "Max parameters",
           "params": [],
@@ -2583,7 +2598,7 @@
           "template": false
         },
         {
-          "description": "No description",
+          "description": "",
           "key": "com.sksamuel.scapegoat.inspections.inference.MethodReturningAny",
           "name": "Method Returning Any",
           "params": [],
@@ -2591,7 +2606,7 @@
           "template": false
         },
         {
-          "description": "No description",
+          "description": "",
           "key": "com.sksamuel.scapegoat.inspections.math.ModOne",
           "name": "Integer mod one",
           "params": [],
@@ -2607,7 +2622,7 @@
           "template": false
         },
         {
-          "description": "No description",
+          "description": "",
           "key": "com.sksamuel.scapegoat.inspections.collections.NegationIsEmpty",
           "name": "!isEmpty can be replaced with nonEmpty",
           "params": [],
@@ -2615,7 +2630,7 @@
           "template": false
         },
         {
-          "description": "No description",
+          "description": "",
           "key": "com.sksamuel.scapegoat.inspections.collections.NegationNonEmpty",
           "name": "!nonEmpty can be replaced with isEmpty",
           "params": [],
@@ -2623,7 +2638,7 @@
           "template": false
         },
         {
-          "description": "No description",
+          "description": "",
           "key": "com.sksamuel.scapegoat.inspections.NoOpOverride",
           "name": "No op Override",
           "params": [],
@@ -2631,7 +2646,7 @@
           "template": false
         },
         {
-          "description": "No description",
+          "description": "",
           "key": "com.sksamuel.scapegoat.inspections.nulls.NullAssignment",
           "name": "Null assignment",
           "params": [],
@@ -2639,7 +2654,7 @@
           "template": false
         },
         {
-          "description": "No description",
+          "description": "",
           "key": "com.sksamuel.scapegoat.inspections.nulls.NullParameter",
           "name": "Null parameter",
           "params": [],
@@ -2647,7 +2662,7 @@
           "template": false
         },
         {
-          "description": "No description",
+          "description": "",
           "key": "com.sksamuel.scapegoat.inspections.naming.ObjectNames",
           "name": "Object name not recommended",
           "params": [],
@@ -2655,7 +2670,7 @@
           "template": false
         },
         {
-          "description": "No description",
+          "description": "",
           "key": "com.sksamuel.scapegoat.inspections.option.OptionGet",
           "name": "Use of Option.get",
           "params": [],
@@ -2663,7 +2678,7 @@
           "template": false
         },
         {
-          "description": "No description",
+          "description": "",
           "key": "com.sksamuel.scapegoat.inspections.option.OptionSize",
           "name": "Prefer Option.isDefined instead of Option.size",
           "params": [],
@@ -2671,7 +2686,7 @@
           "template": false
         },
         {
-          "description": "No description",
+          "description": "",
           "key": "com.sksamuel.scapegoat.inspections.style.ParameterlessMethodReturnsUnit",
           "name": "Parameterless methods returns unit",
           "params": [],
@@ -2679,7 +2694,7 @@
           "template": false
         },
         {
-          "description": "No description",
+          "description": "",
           "key": "com.sksamuel.scapegoat.inspections.matching.PartialFunctionInsteadOfMatch",
           "name": "Match instead of partial function",
           "params": [],
@@ -2687,7 +2702,7 @@
           "template": false
         },
         {
-          "description": "No description",
+          "description": "",
           "key": "com.sksamuel.scapegoat.inspections.inference.PointlessTypeBounds",
           "name": "Pointless Type Bounds",
           "params": [],
@@ -2695,7 +2710,7 @@
           "template": false
         },
         {
-          "description": "No description",
+          "description": "",
           "key": "com.sksamuel.scapegoat.inspections.collections.PreferMapEmpty",
           "name": "Prefer Map.empty",
           "params": [],
@@ -2703,7 +2718,7 @@
           "template": false
         },
         {
-          "description": "No description",
+          "description": "",
           "key": "com.sksamuel.scapegoat.inspections.collections.PreferSeqEmpty",
           "name": "Prefer Seq.empty",
           "params": [],
@@ -2711,7 +2726,7 @@
           "template": false
         },
         {
-          "description": "No description",
+          "description": "",
           "key": "com.sksamuel.scapegoat.inspections.collections.PreferSetEmpty",
           "name": "Prefer Set.empty",
           "params": [],
@@ -2719,7 +2734,7 @@
           "template": false
         },
         {
-          "description": "No description",
+          "description": "",
           "key": "com.sksamuel.scapegoat.inspections.inference.ProductWithSerializableInferred",
           "name": "Product with Serializable inferred",
           "params": [],
@@ -2735,7 +2750,7 @@
           "template": false
         },
         {
-          "description": "No description",
+          "description": "",
           "key": "com.sksamuel.scapegoat.inspections.RedundantFinalModifierOnMethod",
           "name": "Redundant final modifier on method",
           "params": [],
@@ -2751,7 +2766,7 @@
           "template": false
         },
         {
-          "description": "No description",
+          "description": "",
           "key": "com.sksamuel.scapegoat.inspections.unneccesary.RedundantFinalizer",
           "name": "Redundant finalizer",
           "params": [],
@@ -2759,7 +2774,7 @@
           "template": false
         },
         {
-          "description": "No description",
+          "description": "",
           "key": "com.sksamuel.scapegoat.inspections.matching.RepeatedCaseBody",
           "name": "Repeated case body",
           "params": [],
@@ -2767,7 +2782,7 @@
           "template": false
         },
         {
-          "description": "No description",
+          "description": "",
           "key": "com.sksamuel.scapegoat.inspections.collections.ReverseFunc",
           "name": "Unnecessary reverse",
           "params": [],
@@ -2775,7 +2790,7 @@
           "template": false
         },
         {
-          "description": "No description",
+          "description": "",
           "key": "com.sksamuel.scapegoat.inspections.collections.ReverseTailReverse",
           "name": "reverse.tail.reverse instead of init",
           "params": [],
@@ -2783,7 +2798,7 @@
           "template": false
         },
         {
-          "description": "No description",
+          "description": "",
           "key": "com.sksamuel.scapegoat.inspections.collections.ReverseTakeReverse",
           "name": "reverse.take(...).reverse instead of takeRight",
           "params": [],
@@ -2791,7 +2806,7 @@
           "template": false
         },
         {
-          "description": "No description",
+          "description": "",
           "key": "com.sksamuel.scapegoat.inspections.style.SimplifyBooleanExpression",
           "name": "Simplify boolean expressions",
           "params": [],
@@ -2807,7 +2822,7 @@
           "template": false
         },
         {
-          "description": "No description",
+          "description": "",
           "key": "com.sksamuel.scapegoat.inspections.string.SubstringZero",
           "name": "String.substring(0)",
           "params": [],
@@ -2815,7 +2830,7 @@
           "template": false
         },
         {
-          "description": "No description",
+          "description": "",
           "key": "com.sksamuel.scapegoat.inspections.matching.SuspiciousMatchOnClassObject",
           "name": "Suspicious match on class object",
           "params": [],
@@ -2823,7 +2838,7 @@
           "template": false
         },
         {
-          "description": "No description",
+          "description": "",
           "key": "com.sksamuel.scapegoat.inspections.exception.SwallowedException",
           "name": "Empty catch block",
           "params": [],
@@ -2831,7 +2846,7 @@
           "template": false
         },
         {
-          "description": "No description",
+          "description": "",
           "key": "com.sksamuel.scapegoat.inspections.collections.SwapSortFilter",
           "name": "Swap sort filter",
           "params": [],
@@ -2839,7 +2854,7 @@
           "template": false
         },
         {
-          "description": "No description",
+          "description": "",
           "key": "com.sksamuel.scapegoat.inspections.collections.UnsafeTraversableMethods",
           "name": "Use of unsafe Traversable methods (head, tail, init, last, reduce, reduceLeft, reduceRight, max, maxBy, min, minBy)",
           "params": [],
@@ -2847,7 +2862,7 @@
           "template": false
         },
         {
-          "description": "No description",
+          "description": "",
           "key": "com.sksamuel.scapegoat.inspections.unsafe.TryGet",
           "name": "Use of Try.get",
           "params": [],
@@ -2855,7 +2870,7 @@
           "template": false
         },
         {
-          "description": "No description",
+          "description": "",
           "key": "com.sksamuel.scapegoat.inspections.TypeShadowing",
           "name": "Type shadowing",
           "params": [],
@@ -2863,7 +2878,7 @@
           "template": false
         },
         {
-          "description": "No description",
+          "description": "",
           "key": "com.sksamuel.scapegoat.inspections.unneccesary.UnnecessaryConversion",
           "name": "Unnecessary conversion",
           "params": [],
@@ -2871,7 +2886,7 @@
           "template": false
         },
         {
-          "description": "No description",
+          "description": "",
           "key": "com.sksamuel.scapegoat.inspections.unneccesary.UnnecessaryIf",
           "name": "Unnecessary if condition.",
           "params": [],
@@ -2887,7 +2902,7 @@
           "template": false
         },
         {
-          "description": "No description",
+          "description": "",
           "key": "com.sksamuel.scapegoat.inspections.exception.UnreachableCatch",
           "name": "Unreachable catch",
           "params": [],
@@ -2895,7 +2910,7 @@
           "template": false
         },
         {
-          "description": "No description",
+          "description": "",
           "key": "com.sksamuel.scapegoat.inspections.collections.UnsafeContains",
           "name": "Unsafe contains",
           "params": [],
@@ -2903,7 +2918,7 @@
           "template": false
         },
         {
-          "description": "No description",
+          "description": "",
           "key": "com.sksamuel.scapegoat.inspections.string.UnsafeStringContains",
           "name": "Unsafe string contains",
           "params": [],
@@ -2911,7 +2926,7 @@
           "template": false
         },
         {
-          "description": "No description",
+          "description": "",
           "key": "com.sksamuel.scapegoat.inspections.unneccesary.UnusedMethodParameter",
           "name": "Unused parameter",
           "params": [],
@@ -2919,7 +2934,7 @@
           "template": false
         },
         {
-          "description": "No description",
+          "description": "",
           "key": "com.sksamuel.scapegoat.inspections.math.UseCbrt",
           "name": "Use cbrt",
           "params": [],
@@ -2927,7 +2942,7 @@
           "template": false
         },
         {
-          "description": "No description",
+          "description": "",
           "key": "com.sksamuel.scapegoat.inspections.math.UseExpM1",
           "name": "Use expm1",
           "params": [],
@@ -2935,7 +2950,7 @@
           "template": false
         },
         {
-          "description": "No description",
+          "description": "",
           "key": "com.sksamuel.scapegoat.inspections.math.UseLog10",
           "name": "Use log10",
           "params": [],
@@ -2943,7 +2958,7 @@
           "template": false
         },
         {
-          "description": "No description",
+          "description": "",
           "key": "com.sksamuel.scapegoat.inspections.math.UseLog1P",
           "name": "Use log1p",
           "params": [],
@@ -2951,7 +2966,7 @@
           "template": false
         },
         {
-          "description": "No description",
+          "description": "",
           "key": "com.sksamuel.scapegoat.inspections.math.UseSqrt",
           "name": "Use sqrt",
           "params": [],
@@ -2959,7 +2974,7 @@
           "template": false
         },
         {
-          "description": "No description",
+          "description": "",
           "key": "com.sksamuel.scapegoat.inspections.VarClosure",
           "name": "Var in closure",
           "params": [],
@@ -2967,7 +2982,7 @@
           "template": false
         },
         {
-          "description": "No description",
+          "description": "",
           "key": "com.sksamuel.scapegoat.inspections.unneccesary.VarCouldBeVal",
           "name": "Var could be val",
           "params": [],
@@ -2975,7 +2990,7 @@
           "template": false
         },
         {
-          "description": "No description",
+          "description": "",
           "key": "com.sksamuel.scapegoat.inspections.controlflow.WhileTrue",
           "name": "While true loop",
           "params": [],
@@ -3019,7 +3034,7 @@
         "template": true
       },
       {
-        "description": "*Check the first lines of each file matches the text*\n\nA lot of projects require a header with a copyright notice, or they require a license in each file. This does a simple text comparison between the header and the first lines of the file.\nYou can have multiple lines, but make sure you surround the text with a CDATA section. You can also specify a regular expression, as long as you set the regex parameter to true.",
+        "description": "*Check the first lines of each file matches the text*\n\nA lot of projects require a header with a copyright notice, or they require a license in each file. This does a simple text comparison between the header and the first lines of the file. You can have multiple lines, but make sure you surround the text with a `CDATA` section. You can also specify a regular expression, as long as you set the regex parameter to `true`.",
         "key": "org.scalastyle.file.HeaderMatchesChecker",
         "name": "Match Header",
         "params": [
@@ -3040,7 +3055,7 @@
         "template": true
       },
       {
-        "description": "*Check that the plus sign is followed by a space*\n\nAn expression with spaces around + can be easier to read",
+        "description": "*Check that the plus sign is followed by a space*\n\nAn expression with spaces around `+` can be easier to read.",
         "key": "org.scalastyle.scalariform.SpacesAfterPlusChecker",
         "name": "Space after plus",
         "params": [],
@@ -3063,7 +3078,7 @@
         "template": true
       },
       {
-        "description": "*Check that the plus sign is preceded by a space*\n\nAn expression with spaces around + can be easier to read",
+        "description": "*Check that the plus sign is preceded by a space*\n\nAn expression with spaces around `+` can be easier to read.",
         "key": "org.scalastyle.scalariform.SpacesBeforePlusChecker",
         "name": "Space before plus",
         "params": [],
@@ -3133,7 +3148,7 @@
         "name": "Package name",
         "params": [
           {
-            "default": "^[a-z][A-Za-z]*$",
+            "default": "^[a-z]+$",
             "description": "Regular expression: The package names must match this regular expression",
             "name": "regex",
             "typ": "String"
@@ -3166,7 +3181,7 @@
         "template": false
       },
       {
-        "description": "*Check that a class does not import certain classes*\n\nUse of some classes can be discouraged for a project. For instance, use of sun._ is generally discouraged because\nthey are internal to the JDK and can be changed.",
+        "description": "*Check that a class does not import certain classes*\n\nUse of some classes can be discouraged for a project. For instance, use of `sun._` is generally discouraged because they are internal to the JDK and can be changed.",
         "key": "org.scalastyle.scalariform.IllegalImportsChecker",
         "name": "Illegal imports",
         "params": [
@@ -3196,7 +3211,7 @@
         "template": true
       },
       {
-        "description": "*Checks for use of magic numbers*\n\nReplacing a magic number with a named constant can make code easier to read and understand, and can avoid some subtle bugs.\n\nA simple assignment to a val is not considered to be a magic number, for example:\n``\n    val foo = 4\n`` is not a magic number, but\n``\n    var foo = 4\n`` is considered to be a magic number.",
+        "description": "*Checks for use of magic numbers*\n\nReplacing a magic number with a named constant can make code easier to read and understand, and can avoid some subtle bugs.\n\nA simple assignment to a val is not considered to be a magic number, for example: `val foo = 4` is not a magic number, but `var foo = 4` is considered to be a magic number.",
         "key": "org.scalastyle.scalariform.MagicNumberChecker",
         "name": "Magic Number",
         "params": [
@@ -3211,7 +3226,7 @@
         "template": true
       },
       {
-        "description": "*No whitespace before left bracket ''[''*\n\nIf there is whitespace before a left bracket, this can be confusing to the reader",
+        "description": "*No whitespace before left bracket ''[''*\n\nIf there is whitespace before a left bracket, this can be confusing to the reader.",
         "key": "org.scalastyle.scalariform.NoWhitespaceBeforeLeftBracketChecker",
         "name": "No whitespace before left bracket ''[''",
         "params": [],
@@ -3219,7 +3234,7 @@
         "template": false
       },
       {
-        "description": "*No whitespace after left bracket ''[''*\n\nIf there is whitespace after a left bracket, this can be confusing to the reader",
+        "description": "*No whitespace after left bracket ''[''*\n\nIf there is whitespace after a left bracket, this can be confusing to the reader.",
         "key": "org.scalastyle.scalariform.NoWhitespaceAfterLeftBracketChecker",
         "name": "No whitespace after left bracket ''[''",
         "params": [],
@@ -3227,7 +3242,7 @@
         "template": false
       },
       {
-        "description": "*No whitespace before right bracket '']''*\n\nIf there is whitespace before a right bracket, this can be confusing to the reader",
+        "description": "*No whitespace before right bracket '']''*\n\nIf there is whitespace before a right bracket, this can be confusing to the reader.",
         "key": "org.scalastyle.scalariform.NoWhitespaceBeforeRightBracketChecker",
         "name": "No whitespace before right bracket '']''",
         "params": [],
@@ -3235,7 +3250,7 @@
         "template": false
       },
       {
-        "description": "*Check that return is not used*\n\nUse of return is not usually necessary in Scala. In fact, use of return can discourage a functional style of programming.",
+        "description": "*Check that return is not used*\n\nUse of `return` is not usually necessary in Scala. In fact, use of return can discourage a functional style of programming.",
         "key": "org.scalastyle.scalariform.ReturnChecker",
         "name": "Return",
         "params": [],
@@ -3243,7 +3258,7 @@
         "template": false
       },
       {
-        "description": "*Check that null is not used*\n\nScala discourages use of nulls, preferring Option.",
+        "description": "*Check that null is not used*\n\nScala discourages use of `null`, preferring `Option`.",
         "key": "org.scalastyle.scalariform.NullChecker",
         "name": "Null",
         "params": [
@@ -3258,7 +3273,7 @@
         "template": true
       },
       {
-        "description": "*Check that classes and objects do not define the clone() method*\n\nThe clone method is difficult to get right. You can use the copy constructor of case classes rather than implementing clone.\nFor more information on clone(), see Effective Java by Joshua Bloch pages.",
+        "description": "*Check that classes and objects do not define the clone() method*\n\nThe clone method is difficult to get right. You can use the copy constructor of case classes rather than implementing clone. For more information on `clone()`, see Effective Java by Joshua Bloch pages.",
         "key": "org.scalastyle.scalariform.NoCloneChecker",
         "name": "Clone method",
         "params": [],
@@ -3266,7 +3281,7 @@
         "template": false
       },
       {
-        "description": "*Check that classes and objects do not define the finalize() method*\n\nfinalize() is called when the object is garbage collected, and garbage collection is not guaranteed to happen.\nIt is therefore unwise to rely on code in finalize() method.",
+        "description": "*Check that classes and objects do not define the finalize() method*\n\n`finalize()` is called when the object is garbage collected, and garbage collection is not guaranteed to happen. It is therefore unwise to rely on code in `finalize()` method.",
         "key": "org.scalastyle.scalariform.NoFinalizeChecker",
         "name": "Finalize method",
         "params": [],
@@ -3274,7 +3289,7 @@
         "template": false
       },
       {
-        "description": "*Check that classes and objects do not define equals without overriding equals(java.lang.Object).*\n\nMistakenly defining a covariant equals() method without overriding method equals(java.lang.Object) can produce unexpected runtime behaviour.",
+        "description": "*Check that classes and objects do not define equals without overriding equals(java.lang.Object).*\n\nMistakenly defining a covariant `equals()` method without overriding method `equals(java.lang.Object)` can produce unexpected runtime behaviour.",
         "key": "org.scalastyle.scalariform.CovariantEqualsChecker",
         "name": "Covariant equals",
         "params": [],
@@ -3282,7 +3297,7 @@
         "template": false
       },
       {
-        "description": "*Check that structural types are not used.*\n\nStructural types in Scala can use reflection - this can have unexpected performance consequences.\nWarning: This check can also wrongly pick up type lamdbas and other such constructs. This checker should be used with care. You always have the alternative of the scalac checking for structural types.",
+        "description": "*Check that structural types are not used.*\n\nStructural types in Scala can use reflection - this can have unexpected performance consequences. Warning: This check can also wrongly pick up type lamdbas and other such constructs. This checker should be used with care. You always have the alternative of the scalac checking for structural types.",
         "key": "org.scalastyle.scalariform.StructuralTypeChecker",
         "name": "Structural type",
         "params": [],
@@ -3363,7 +3378,7 @@
         "template": false
       },
       {
-        "description": "*Checks that if statements have braces*\n\nSome people find if clauses with braces easier to read.\n\nThe singleLineAllowed property allows if constructions of the type:\n``\n    if (bool_expression) expression1 else expression2\n`` The doubleLineAllowed property allows if constructions of the type:\n``\n    if (bool_expression) expression1\n    else expression2\n`` Note: If you intend to enable only if expressions in the format below, disable the IfBraceChecker altogether.\n``\n    if (bool_expression)\n      expression1\n    else\n      expression2\n``",
+        "description": "*Checks that if statements have braces*\n\nSome people find if clauses with braces easier to read.\n\nThe `singleLineAllowed` property allows if constructions of the type:\n\n```scala\nif (bool_expression) expression1 else expression2\n```\n\nThe `doubleLineAllowed` property allows if constructions of the type:\n\n```scala\nif (bool_expression) expression1 else expression2\n```\n\nNote: If you intend to enable only if expressions in the format below, disable the IfBraceChecker altogether.\n\n```scala\nif (bool_expression) expression1 else expression2\n```",
         "key": "org.scalastyle.scalariform.IfBraceChecker",
         "name": "If block braces",
         "params": [
@@ -3411,7 +3426,7 @@
         "template": true
       },
       {
-        "description": "*Check that method names match a regular expression*\n\nThe Scala style guide recommends that method names conform to certain standards. If the methods are overriding another method, and the overridden method\ncannot be changed, then use the ignoreOverride parameter.",
+        "description": "*Check that method names match a regular expression*\n\nThe Scala style guide recommends that method names conform to certain standards. If the methods are overriding another method, and the overridden method cannot be changed, then use the `ignoreOverride` parameter.",
         "key": "org.scalastyle.scalariform.MethodNamesChecker",
         "name": "Method name",
         "params": [
@@ -3505,7 +3520,7 @@
         "template": false
       },
       {
-        "description": "*Checks that while is not used*\n\nwhile loops are deprecated if you're using a strict functional style",
+        "description": "*Checks that while is not used*\n\n`while` loops are deprecated if you're using a strict functional style.",
         "key": "org.scalastyle.scalariform.WhileChecker",
         "name": "No while loops",
         "params": [],
@@ -3513,7 +3528,7 @@
         "template": false
       },
       {
-        "description": "*Checks that classes and objects do not define mutable fields*\n\nvar (mutable fields) are deprecated if you're using a strict functional style",
+        "description": "*Checks that classes and objects do not define mutable fields*\n\n`var` (mutable fields) are deprecated if you're using a strict functional style.",
         "key": "org.scalastyle.scalariform.VarFieldChecker",
         "name": "No mutable fields",
         "params": [],
@@ -3521,7 +3536,7 @@
         "template": false
       },
       {
-        "description": "*Checks that functions do not define mutable variables*\n\nvars (mutable local variables) loops are deprecated if you're using a strict functional style",
+        "description": "*Checks that functions do not define mutable variables*\n\n`var` (mutable local variables) are deprecated if you're using a strict functional style",
         "key": "org.scalastyle.scalariform.VarLocalChecker",
         "name": "No mutable local variables",
         "params": [],
@@ -3529,7 +3544,7 @@
         "template": false
       },
       {
-        "description": "*Checks that if expressions are not redundant, i.e. easily replaced by a variant of the condition*\n\nIf expressions with boolean constants in both branches can be eliminated without affecting readability. Prefer simply ``cond`` to ``if (cond) true else false`` and ``!cond`` to ``if (cond) false else true``.",
+        "description": "*Checks that if expressions are not redundant, i.e. easily replaced by a variant of the condition*\n\nIf expressions with boolean constants in both branches can be eliminated without affecting readability. Prefer simply `cond` to `if (cond) true else false` and `!cond` to `if (cond) false else true`.",
         "key": "org.scalastyle.scalariform.RedundantIfChecker",
         "name": "No redundant if expressions",
         "params": [],
@@ -3552,7 +3567,7 @@
         "template": true
       },
       {
-        "description": "*Checks that Java @Deprecated is not used, Scala @deprecated should be used instead*\n\nYou should be using the Scala @deprecated instead.",
+        "description": "*Checks that Java @Deprecated is not used, Scala @deprecated should be used instead*\n\nYou should be using the Scala `@deprecated` instead.",
         "key": "org.scalastyle.scalariform.DeprecatedJavaChecker",
         "name": "No use of Java @Deprecated",
         "params": [],
@@ -3568,7 +3583,7 @@
         "template": false
       },
       {
-        "description": "*If a class/trait has no members, the braces are unnecessary*\n\nIf a class / trait has no members, then braces are unnecessary, and can be removed.",
+        "description": "*If a class/trait has no members, the braces are unnecessary*\n\nIf a `class` / `trait` has no members, then braces are unnecessary, and can be removed.",
         "key": "org.scalastyle.scalariform.EmptyClassChecker",
         "name": "Redundant braces in class definition",
         "params": [],
@@ -3576,7 +3591,7 @@
         "template": false
       },
       {
-        "description": "*Checks that type parameter to a class matches a regular expression*\n\nScala generic type names are generally single upper case letters. This check checks for classes and traits.\nNote that this check only checks the innermost type parameter, to allow for List[T].",
+        "description": "*Checks that type parameter to a class matches a regular expression*\n\nScala generic type names are generally single upper case letters. This check checks for classes and traits. Note that this check only checks the innermost type parameter, to allow for `List[T]`.",
         "key": "org.scalastyle.scalariform.ClassTypeParameterChecker",
         "name": "Class type parameter name",
         "params": [
@@ -3599,7 +3614,7 @@
         "template": false
       },
       {
-        "description": "*Checks that a case statement pattern match is not lower case, as this can cause confusion*\n\nA lower case pattern match clause with no other tokens is the same as _; this is not true for patterns which start with an upper\ncase letter. This can cause confusion, and may not be what was intended:\n``\n    val foo = \"foo\"\n    val Bar = \"bar\"\n    \"bar\" match { case Bar => \"we got bar\" }   // result = \"we got bar\"\n    \"bar\" match { case foo => \"we got foo\" }   // result = \"we got foo\"\n    \"bar\" match { case `foo` => \"we got foo\" } // result = MatchError\n`` This checker raises a warning with the second match. To fix it, use an identifier which starts with an upper case letter (best), use case _ or,\nif you wish to refer to the value, add a type ``: Any``\n``\n    val lc = \"lc\"\n    \"something\" match { case lc: Any => \"lc\" } // result = \"lc\"\n    \"something\" match { case _ => \"lc\" } // result = \"lc\"\n``",
+        "description": "*Checks that a case statement pattern match is not lower case, as this can cause confusion*\n\nA lower case pattern match clause with no other tokens is the same as `_`; this is not true for patterns which start with an upper case letter. This can cause confusion, and may not be what was intended:\n\n```scala\nval foo = \"foo\"\nval Bar = \"bar\"\n\"bar\" match { case Bar => \"we got bar\" } // result = \"we got bar\"\n\"bar\" match { case foo => \"we got foo\" } // result = \"we got foo\"\n\"bar\" match { case `foo` => \"we got foo\" } // result = MatchError\n```\n\nThis checker raises a warning with the second match. To fix it, use an identifier which starts with an upper case letter (best), use `case _` or, if you wish to refer to the value, add a type `: Any`, e.g.:\n\n```scala\nval lc = \"lc\"\n\"something\" match { case lc: Any => \"lc\" } // result = \"lc\"\n\"something\" match { case _ => \"lc\" } // result = \"lc\"\n```",
         "key": "org.scalastyle.scalariform.LowercasePatternMatchChecker",
         "name": "Lowercase pattern match",
         "params": [],
@@ -3636,7 +3651,7 @@
         "template": false
       },
       {
-        "description": "*Checks that the code does not have ??? operators.*\n\nThe ??? operator denotes that an implementation is missing. This rule helps to avoid potential runtime errors because of not implemented code.",
+        "description": "*Checks that the code does not have ??? operators.*\n\nThe `???` operator denotes that an implementation is missing. This rule helps to avoid potential runtime errors because of not implemented code.",
         "key": "org.scalastyle.scalariform.NotImplementedErrorUsage",
         "name": "Usage of ??? operator",
         "params": [],
@@ -3644,7 +3659,7 @@
         "template": false
       },
       {
-        "description": "*Checks that block imports are not used.*\n\nBlock imports (e.g. ``import a.{b, c}``) can lead to annoying merge errors in large code bases that are maintained by lot of developers. This rule allows to ensure that only single imports are used in order to minimize merge errors in import declarations.",
+        "description": "*Checks that block imports are not used.*\n\nBlock imports, e.g. `import a.{b, c}` can lead to annoying merge errors in large code bases that are maintained by lot of developers. This rule allows to ensure that only single imports are used in order to minimize merge errors in import declarations.",
         "key": "org.scalastyle.scalariform.BlockImportChecker",
         "name": "Avoid block imports",
         "params": [],
@@ -3652,7 +3667,15 @@
         "template": false
       },
       {
-        "description": "*Use a : Unit = for procedure declarations*\n\nA procedure style declaration can cause confusion - the developer may have simply forgotten to add a '=', and now their method returns Unit rather than the inferred type:\n``\n    def foo() { println(\"hello\"); 5 }\n    def foo() = { println(\"hello\"); 5 }\n`` This checker raises a warning with the first line. To fix it, use an explicit return type, or add a '=' before the body.",
+        "description": "*Checks that curlies imports are not used.*\n\nCurlies imports, e.g. `import a.{b, c}`, can lead to annoying merge errors in large code bases that are maintained by lot of developers. This rule allows to ensure that only single imports, no renaming and no hiding imports are used in order to minimize merge errors in import declarations.",
+        "key": "org.scalastyle.scalariform.CurliesImportChecker",
+        "name": "Avoid curlies imports",
+        "params": [],
+        "severity": "Minor",
+        "template": false
+      },
+      {
+        "description": "*Use a : Unit = for procedure declarations*\n\nA procedure style declaration can cause confusion - the developer may have simply forgotten to add a `=`, and now their method returns `Unit` rather than the inferred type:\n\n```scala\ndef foo() { println(\"hello\"); 5 }\n```\nThis checker raises a warning with the first line. To fix it, use an explicit return type, or add a `=` before the body.\n\n```scala\ndef foo() = { println(\"hello\"); 5 }\n```",
         "key": "org.scalastyle.scalariform.ProcedureDeclarationChecker",
         "name": "Use : Unit = for procedures",
         "params": [],
@@ -3660,7 +3683,7 @@
         "template": false
       },
       {
-        "description": "*Checks that braces are used in for comprehensions*\n\nUsage of braces (rather than parentheses) within a for comprehension mean that you don't have to specify a semi-colon at the end of every line:\n``\n    for {      // braces\n      t <- List(1,2,3)\n      if (i % 2 == 0)\n    } yield t\n`` is preferred to\n``\n    for (      // parentheses\n      t <- List(1,2,3);\n      if (i % 2 == 0)\n    ) yield t\n`` To fix it, replace the () with {}. And then remove the ; at the end of the lines.\n\nThe singleLineAllowed property allows for constructions of the type:\n``\n    for (i <- List(1,2,3)) yield i\n``",
+        "description": "*Checks that braces are used in for comprehensions*\n\nUsage of braces (rather than parentheses) within a `for` comprehension mean that you don't have to specify a semi-colon at the end of every line:\n\n```scala\nfor { // braces\n  t <- List(1,2,3)\n  if (t % 2 == 0)\n} yield t\n```\n\nis preferred to\n\n```scala\nfor ( // parentheses\n  t <- List(1,2,3);\n  if (t % 2 == 0)\n) yield t\n```\n\nTo fix it, replace the `()` with `{}`. And then remove the `;` at the end of the lines.\n\nThe `singleLineAllowed` property allows for constructions of the type:\n\n```scala\nfor (i <- List(1,2,3)) yield i\n```",
         "key": "org.scalastyle.scalariform.ForBraceChecker",
         "name": "Use braces in for comprehensions",
         "params": [
@@ -3675,7 +3698,7 @@
         "template": true
       },
       {
-        "description": "*Checks that parentheses are used in for loops*\n\nFor-comprehensions which lack a yield clause is actually a loop rather than a functional comprehension and it is usually\n``\n   more readable to string the generators together between parentheses rather than using the syntactically-confusing } { construct:\n   for (x <- board.rows; y <- board.files) {\n     printf(\"(%d, %d)\", x, y)\n   }\n   is preferred to\n   for {\n     x <- board.rows\n     y <- board.files\n   } {\n     printf(\"(%d, %d)\", x, y)\n   }\n``",
+        "description": "*Checks that parentheses are used in for loops*\n\nFor-comprehensions which lack a `yield` clause is actually a loop rather than a functional comprehension and it is usually more readable to string the generators together between parentheses rather than using the syntactically-confusing `} {` construct:\n\n```scala\nfor (x <- board.rows; y <- board.files) {\n  printf(\"(%d, %d)\", x, y)\n}\n```\n\nis preferred to\n\n```scala\nfor {\n  x <- board.rows\n  y <- board.files\n} {\n  printf(\"(%d, %d)\", x, y)\n}\n```",
         "key": "org.scalastyle.scalariform.ForLoopChecker",
         "name": "Use parentheses in for loops",
         "params": [],
@@ -3683,7 +3706,7 @@
         "template": false
       },
       {
-        "description": "*Checks a space after the start of the comment.*\n\nTo bring consistency with how comments should be formatted, leave a space right after the beginning of the comment.\n``\n    package foobar\n    object Foobar {\n    /**WRONG\n    *\n    */\n    /** Correct*/\n    val d = 2 /*Wrong*/ //Wrong\n    /**\n    *Correct\n    */\n    val e = 3/** Correct*/ // Correct\n    }\n``",
+        "description": "*Checks a space after the start of the comment.*\n\nTo bring consistency with how comments should be formatted, leave a space right after the beginning of the comment.\n\n```scala\npackage foobar\n\nobject Foobar {\n  /**WRONG\n    *\n    */\n  /** Correct\n    *\n    */\n  val d = 2 /*Wrong*/ //Wrong\n  /**\n    * Correct\n    */\n  val e = 3 /** Correct*/ // Correct\n}\n```",
         "key": "org.scalastyle.scalariform.SpaceAfterCommentStartChecker",
         "name": "Space after the start of the comment",
         "params": [],
@@ -3691,7 +3714,7 @@
         "template": false
       },
       {
-        "description": "*Checks that the ScalaDoc on documentable members is well-formed*\n\nScaladoc is generally considered a good thing. Within reason.\n\nIgnore tokens is a comma separated string that may include the following : PatDefOrDcl (variables), TmplDef (classes, traits), TypeDefOrDcl (type definitions), FunDefOrDcl (functions)\nSupported indentation styles are \"scaladoc\" (for ScalaDoc-style comments, with two spaces before the asterisk), \"javadoc\" (for JavaDoc-style comments, with a single space before the asterisk) or \"anydoc\" to support any style (any number of spaces before the asterisk). For backwards compatibility, if left empty, \"anydoc\" will be assumed.",
+        "description": "*Checks that the ScalaDoc on documentable members is well-formed*\n\nScaladoc is generally considered a good thing. Within reason.\n\nIgnore tokens is a comma separated string that may include the following: `PatDefOrDcl` (variables), `TmplDef` (classes, traits), `TypeDefOrDcl` (type definitions), `FunDefOrDcl` (functions). Supported indentation styles are \"scaladoc\" (for ScalaDoc-style comments, with two spaces before the asterisk), \"javadoc\" (for JavaDoc-style comments, with a single space before the asterisk) or \"anydoc\" to support any style (any number of spaces before the asterisk). For backwards compatibility, if left empty, \"anydoc\" will be assumed.",
         "key": "org.scalastyle.scalariform.ScalaDocChecker",
         "name": "Missing or badly formed ScalaDoc: {0}",
         "params": [
@@ -3756,7 +3779,7 @@
         "template": false
       },
       {
-        "description": "*Some editors are unfriendly to non ASCII characters.*\n\nScala allows unicode characters as operators and some editors misbehave when they see non-ascii character.\n``\n    In a project collaborated by a community of developers. This check can be helpful in such situations.\n    \"value\".match {\n    case \"value\" => println(\"matched\")\n    ...\n    }\n    is preferred to\n    \"value\".match {\n    case \"value\" ⇒ println(\"matched\")\n    ...\n    }\n    To fix it, replace the (unicode operator)⇒ with =>.\n``",
+        "description": "*Some editors are unfriendly to non ASCII characters.*\n\nScala allows unicode characters as operators and some editors misbehave when they see non-ascii character. In a project collaborated by a community of developers. This check can be helpful in such situations. \n\n```scala\n\"value\" match {\n  case \"value\" => println(\"matched\")\n  ...\n}\n```\n\nis preferred to\n\n```scala\n\"value\" match {\n  case \"value\" ⇒ println(\"matched\")\n  ...\n}\n```\n\nTo fix it, replace the (unicode operator) `⇒` with `=>`.",
         "key": "org.scalastyle.scalariform.NonASCIICharacterChecker",
         "name": "Non ASCII characters are not allowed",
         "params": [
@@ -3798,7 +3821,7 @@
         "template": true
       },
       {
-        "description": "*Check that field names match a regular expression*\n\nA consistent naming convention for field names can make code easier to read and understand",
+        "description": "*Check that field names match a regular expression*\n\nA consistent naming convention for field names can make code easier to read and understand.",
         "key": "org.scalastyle.scalariform.FieldNamesChecker",
         "name": "Field name",
         "params": [
@@ -3843,7 +3866,7 @@
         "template": false
       },
       {
-        "description": "*Check for use of TODO/FIXME single line comments*\n\nSome projects may consider TODO or FIXME comments in a code bad style. They would rather you fix the problem.",
+        "description": "*Check for use of TODO/FIXME single line comments*\n\nSome projects may consider `TODO` or `FIXME` comments in a code bad style. They would rather you fix the problem.",
         "key": "org.scalastyle.scalariform.TodoCommentChecker",
         "name": "TODO/FIXME comment",
         "params": [
@@ -3866,7 +3889,7 @@
         "template": false
       },
       {
-        "description": "*Checks that argument literals are named*\n\nNameless literals make code harder to understand (consider ``updateEntity(1, true)`` and ``updateEntity(id = 1, enabled = true)``).",
+        "description": "*Checks that argument literals are named*\n\nNameless literals make code harder to understand (consider `updateEntity(1, true)` and `updateEntity(id = 1, enabled = true)`).",
         "key": "org.scalastyle.scalariform.NamedArgumentChecker",
         "name": "Literal passed as argument without name",
         "params": [
@@ -3913,7 +3936,7 @@
         "template": false
       },
       {
-        "description": "No description",
+        "description": "",
         "key": "com.sksamuel.scapegoat.inspections.string.ArraysInFormat",
         "name": "Array passed to String.format",
         "params": [],
@@ -3921,7 +3944,7 @@
         "template": false
       },
       {
-        "description": "No description",
+        "description": "",
         "key": "com.sksamuel.scapegoat.inspections.string.ArraysToString",
         "name": "Use of Array.toString",
         "params": [],
@@ -3929,7 +3952,7 @@
         "template": false
       },
       {
-        "description": "No description",
+        "description": "",
         "key": "com.sksamuel.scapegoat.inspections.unsafe.AsInstanceOf",
         "name": "Use of asInstanceOf",
         "params": [],
@@ -3937,7 +3960,7 @@
         "template": false
       },
       {
-        "description": "No description",
+        "description": "",
         "key": "com.sksamuel.scapegoat.inspections.style.AvoidOperatorOverload",
         "name": "Avoid operator overload",
         "params": [],
@@ -3945,7 +3968,7 @@
         "template": false
       },
       {
-        "description": "No description",
+        "description": "",
         "key": "com.sksamuel.scapegoat.inspections.collections.AvoidSizeEqualsZero",
         "name": "Avoid Traversable.size == 0, use Traversable.isEmpty instead",
         "params": [],
@@ -3953,7 +3976,7 @@
         "template": false
       },
       {
-        "description": "No description",
+        "description": "",
         "key": "com.sksamuel.scapegoat.inspections.collections.AvoidSizeNotEqualsZero",
         "name": "Avoid Traversable.size != 0, use Traversable.nonEmpty instead",
         "params": [],
@@ -3961,7 +3984,7 @@
         "template": false
       },
       {
-        "description": "No description",
+        "description": "",
         "key": "com.sksamuel.scapegoat.inspections.AvoidToMinusOne",
         "name": "Avoid To Minus One",
         "params": [],
@@ -3969,7 +3992,7 @@
         "template": false
       },
       {
-        "description": "No description",
+        "description": "",
         "key": "com.sksamuel.scapegoat.inspections.math.BigDecimalDoubleConstructor",
         "name": "Big decimal double constructor",
         "params": [],
@@ -3985,7 +4008,7 @@
         "template": false
       },
       {
-        "description": "No description",
+        "description": "",
         "key": "com.sksamuel.scapegoat.inspections.inference.BoundedByFinalType",
         "name": "Bounded by final type",
         "params": [],
@@ -3993,7 +4016,7 @@
         "template": false
       },
       {
-        "description": "No description",
+        "description": "",
         "key": "com.sksamuel.scapegoat.inspections.math.BrokenOddness",
         "name": "Broken odd check",
         "params": [],
@@ -4001,7 +4024,7 @@
         "template": false
       },
       {
-        "description": "No description",
+        "description": "",
         "key": "com.sksamuel.scapegoat.inspections.exception.CatchException",
         "name": "Catch exception",
         "params": [],
@@ -4009,7 +4032,7 @@
         "template": false
       },
       {
-        "description": "No description",
+        "description": "",
         "key": "com.sksamuel.scapegoat.inspections.exception.CatchFatal",
         "name": "Catch fatal exception",
         "params": [],
@@ -4017,7 +4040,7 @@
         "template": false
       },
       {
-        "description": "No description",
+        "description": "",
         "key": "com.sksamuel.scapegoat.inspections.exception.CatchNpe",
         "name": "Catching NPE",
         "params": [],
@@ -4025,7 +4048,7 @@
         "template": false
       },
       {
-        "description": "No description",
+        "description": "",
         "key": "com.sksamuel.scapegoat.inspections.exception.CatchThrowable",
         "name": "Catch throwable",
         "params": [],
@@ -4033,7 +4056,7 @@
         "template": false
       },
       {
-        "description": "No description",
+        "description": "",
         "key": "com.sksamuel.scapegoat.inspections.naming.ClassNames",
         "name": "Class name not recommended",
         "params": [],
@@ -4041,7 +4064,7 @@
         "template": false
       },
       {
-        "description": "No description",
+        "description": "",
         "key": "com.sksamuel.scapegoat.inspections.collections.CollectionIndexOnNonIndexedSeq",
         "name": "Seq.apply() on a non-IndexedSeq may cause performance problems",
         "params": [],
@@ -4049,7 +4072,7 @@
         "template": false
       },
       {
-        "description": "No description",
+        "description": "",
         "key": "com.sksamuel.scapegoat.inspections.collections.CollectionNamingConfusion",
         "name": "Collection naming Confusion",
         "params": [],
@@ -4057,7 +4080,7 @@
         "template": false
       },
       {
-        "description": "No description",
+        "description": "",
         "key": "com.sksamuel.scapegoat.inspections.collections.CollectionNegativeIndex",
         "name": "Collection index out of bounds",
         "params": [],
@@ -4065,7 +4088,7 @@
         "template": false
       },
       {
-        "description": "No description",
+        "description": "",
         "key": "com.sksamuel.scapegoat.inspections.collections.CollectionPromotionToAny",
         "name": "Collection promotion to any",
         "params": [],
@@ -4073,7 +4096,7 @@
         "template": false
       },
       {
-        "description": "No description",
+        "description": "",
         "key": "com.sksamuel.scapegoat.inspections.equality.ComparingFloatingPointTypes",
         "name": "Floating type comparison",
         "params": [],
@@ -4081,7 +4104,7 @@
         "template": false
       },
       {
-        "description": "No description",
+        "description": "",
         "key": "com.sksamuel.scapegoat.inspections.equality.ComparingUnrelatedTypes",
         "name": "Comparing unrelated types",
         "params": [],
@@ -4089,7 +4112,7 @@
         "template": false
       },
       {
-        "description": "No description",
+        "description": "",
         "key": "com.sksamuel.scapegoat.inspections.collections.ComparisonToEmptyList",
         "name": "Comparison to empty list",
         "params": [],
@@ -4097,7 +4120,7 @@
         "template": false
       },
       {
-        "description": "No description",
+        "description": "",
         "key": "com.sksamuel.scapegoat.inspections.collections.ComparisonToEmptySet",
         "name": "Comparison to empty set",
         "params": [],
@@ -4113,7 +4136,7 @@
         "template": false
       },
       {
-        "description": "No description",
+        "description": "",
         "key": "com.sksamuel.scapegoat.inspections.unneccesary.ConstantIf",
         "name": "Constant if expression",
         "params": [],
@@ -4129,7 +4152,7 @@
         "template": false
       },
       {
-        "description": "No description",
+        "description": "",
         "key": "com.sksamuel.scapegoat.inspections.DoubleNegation",
         "name": "Double negation",
         "params": [],
@@ -4137,7 +4160,7 @@
         "template": false
       },
       {
-        "description": "No description",
+        "description": "",
         "key": "com.sksamuel.scapegoat.inspections.imports.DuplicateImport",
         "name": "Duplicated Import",
         "params": [],
@@ -4145,7 +4168,7 @@
         "template": false
       },
       {
-        "description": "No description",
+        "description": "",
         "key": "com.sksamuel.scapegoat.inspections.collections.DuplicateMapKey",
         "name": "Duplicated map key",
         "params": [],
@@ -4153,7 +4176,7 @@
         "template": false
       },
       {
-        "description": "No description",
+        "description": "",
         "key": "com.sksamuel.scapegoat.inspections.collections.DuplicateSetValue",
         "name": "Duplicated set value",
         "params": [],
@@ -4161,7 +4184,7 @@
         "template": false
       },
       {
-        "description": "No description",
+        "description": "",
         "key": "com.sksamuel.scapegoat.inspections.option.EitherGet",
         "name": "Use of Either Right or Left Projection get",
         "params": [],
@@ -4177,7 +4200,7 @@
         "template": false
       },
       {
-        "description": "No description",
+        "description": "",
         "key": "com.sksamuel.scapegoat.inspections.empty.EmptyFor",
         "name": "Empty for loop",
         "params": [],
@@ -4185,7 +4208,7 @@
         "template": false
       },
       {
-        "description": "No description",
+        "description": "",
         "key": "com.sksamuel.scapegoat.inspections.empty.EmptyIfBlock",
         "name": "Empty if statement",
         "params": [],
@@ -4193,7 +4216,7 @@
         "template": false
       },
       {
-        "description": "No description",
+        "description": "",
         "key": "com.sksamuel.scapegoat.inspections.string.EmptyInterpolatedString",
         "name": "Empty interpolated string",
         "params": [],
@@ -4201,7 +4224,7 @@
         "template": false
       },
       {
-        "description": "No description",
+        "description": "",
         "key": "com.sksamuel.scapegoat.inspections.empty.EmptyMethod",
         "name": "Empty method",
         "params": [],
@@ -4209,7 +4232,7 @@
         "template": false
       },
       {
-        "description": "No description",
+        "description": "",
         "key": "com.sksamuel.scapegoat.inspections.empty.EmptySynchronizedBlock",
         "name": "Empty synchronized block",
         "params": [],
@@ -4217,7 +4240,7 @@
         "template": false
       },
       {
-        "description": "No description",
+        "description": "",
         "key": "com.sksamuel.scapegoat.inspections.empty.EmptyTryBlock",
         "name": "Empty try block",
         "params": [],
@@ -4225,7 +4248,7 @@
         "template": false
       },
       {
-        "description": "No description",
+        "description": "",
         "key": "com.sksamuel.scapegoat.inspections.empty.EmptyWhileBlock",
         "name": "Empty while block",
         "params": [],
@@ -4233,7 +4256,7 @@
         "template": false
       },
       {
-        "description": "No description",
+        "description": "",
         "key": "com.sksamuel.scapegoat.inspections.collections.ExistsSimplifiableToContains",
         "name": "Exists simplifiable to contains",
         "params": [],
@@ -4241,7 +4264,7 @@
         "template": false
       },
       {
-        "description": "No description",
+        "description": "",
         "key": "com.sksamuel.scapegoat.inspections.collections.FilterDotHead",
         "name": "filter().head can throw an exception; use find()",
         "params": [],
@@ -4249,7 +4272,7 @@
         "template": false
       },
       {
-        "description": "No description",
+        "description": "",
         "key": "com.sksamuel.scapegoat.inspections.collections.FilterDotHeadOption",
         "name": "filter().headOption instead of find()",
         "params": [],
@@ -4257,7 +4280,7 @@
         "template": false
       },
       {
-        "description": "No description",
+        "description": "",
         "key": "com.sksamuel.scapegoat.inspections.collections.FilterDotIsEmpty",
         "name": "filter().isEmpty instead of !exists()",
         "params": [],
@@ -4265,7 +4288,7 @@
         "template": false
       },
       {
-        "description": "No description",
+        "description": "",
         "key": "com.sksamuel.scapegoat.inspections.collections.FilterDotSize",
         "name": "filter().size() instead of count()",
         "params": [],
@@ -4273,7 +4296,7 @@
         "template": false
       },
       {
-        "description": "No description",
+        "description": "",
         "key": "com.sksamuel.scapegoat.inspections.collections.FilterOptionAndGet",
         "name": "filter(_.isDefined).map(_.get) instead of flatten",
         "params": [],
@@ -4297,7 +4320,7 @@
         "template": false
       },
       {
-        "description": "No description",
+        "description": "",
         "key": "com.sksamuel.scapegoat.inspections.collections.FindAndNotEqualsNoneReplaceWithExists",
         "name": "find(x => ) != None instead of exists(x =>)",
         "params": [],
@@ -4305,7 +4328,7 @@
         "template": false
       },
       {
-        "description": "No description",
+        "description": "",
         "key": "com.sksamuel.scapegoat.inspections.collections.FindDotIsDefined",
         "name": "use exists() not find().isDefined()",
         "params": [],
@@ -4313,7 +4336,7 @@
         "template": false
       },
       {
-        "description": "No description",
+        "description": "",
         "key": "com.sksamuel.scapegoat.inspections.string.IllegalFormatString",
         "name": "Illegal format string",
         "params": [],
@@ -4321,7 +4344,7 @@
         "template": false
       },
       {
-        "description": "No description",
+        "description": "",
         "key": "com.sksamuel.scapegoat.inspections.option.ImpossibleOptionSizeCondition",
         "name": "Impossible Option.size condition",
         "params": [],
@@ -4329,7 +4352,7 @@
         "template": false
       },
       {
-        "description": "No description",
+        "description": "",
         "key": "com.sksamuel.scapegoat.inspections.string.IncorrectNumberOfArgsToFormat",
         "name": "Incorrect number of args for format",
         "params": [],
@@ -4337,7 +4360,7 @@
         "template": false
       },
       {
-        "description": "No description",
+        "description": "",
         "key": "com.sksamuel.scapegoat.inspections.exception.IncorrectlyNamedExceptions",
         "name": "Incorrectly Named Exceptions",
         "params": [],
@@ -4345,7 +4368,7 @@
         "template": false
       },
       {
-        "description": "No description",
+        "description": "",
         "key": "com.sksamuel.scapegoat.inspections.string.InvalidRegex",
         "name": "Invalid regex",
         "params": [],
@@ -4353,7 +4376,7 @@
         "template": false
       },
       {
-        "description": "No description",
+        "description": "",
         "key": "com.sksamuel.scapegoat.inspections.unsafe.IsInstanceOf",
         "name": "Use of isInstanceOf",
         "params": [],
@@ -4385,7 +4408,7 @@
         "template": false
       },
       {
-        "description": "No description",
+        "description": "",
         "key": "com.sksamuel.scapegoat.inspections.LonelySealedTrait",
         "name": "Lonely sealed trait",
         "params": [],
@@ -4393,7 +4416,7 @@
         "template": false
       },
       {
-        "description": "No description",
+        "description": "",
         "key": "com.sksamuel.scapegoat.inspections.string.LooksLikeInterpolatedString",
         "name": "Looks Like Interpolated String",
         "params": [],
@@ -4401,7 +4424,7 @@
         "template": false
       },
       {
-        "description": "No description",
+        "description": "",
         "key": "com.sksamuel.scapegoat.inspections.collections.MapGetAndGetOrElse",
         "name": "Use of .get.getOrElse instead of .getOrElse",
         "params": [],
@@ -4409,7 +4432,7 @@
         "template": false
       },
       {
-        "description": "No description",
+        "description": "",
         "key": "com.sksamuel.scapegoat.inspections.MaxParameters",
         "name": "Max parameters",
         "params": [],
@@ -4425,7 +4448,7 @@
         "template": false
       },
       {
-        "description": "No description",
+        "description": "",
         "key": "com.sksamuel.scapegoat.inspections.inference.MethodReturningAny",
         "name": "Method Returning Any",
         "params": [],
@@ -4433,7 +4456,7 @@
         "template": false
       },
       {
-        "description": "No description",
+        "description": "",
         "key": "com.sksamuel.scapegoat.inspections.math.ModOne",
         "name": "Integer mod one",
         "params": [],
@@ -4449,7 +4472,7 @@
         "template": false
       },
       {
-        "description": "No description",
+        "description": "",
         "key": "com.sksamuel.scapegoat.inspections.collections.NegationIsEmpty",
         "name": "!isEmpty can be replaced with nonEmpty",
         "params": [],
@@ -4457,7 +4480,7 @@
         "template": false
       },
       {
-        "description": "No description",
+        "description": "",
         "key": "com.sksamuel.scapegoat.inspections.collections.NegationNonEmpty",
         "name": "!nonEmpty can be replaced with isEmpty",
         "params": [],
@@ -4465,7 +4488,7 @@
         "template": false
       },
       {
-        "description": "No description",
+        "description": "",
         "key": "com.sksamuel.scapegoat.inspections.NoOpOverride",
         "name": "No op Override",
         "params": [],
@@ -4473,7 +4496,7 @@
         "template": false
       },
       {
-        "description": "No description",
+        "description": "",
         "key": "com.sksamuel.scapegoat.inspections.nulls.NullAssignment",
         "name": "Null assignment",
         "params": [],
@@ -4481,7 +4504,7 @@
         "template": false
       },
       {
-        "description": "No description",
+        "description": "",
         "key": "com.sksamuel.scapegoat.inspections.nulls.NullParameter",
         "name": "Null parameter",
         "params": [],
@@ -4489,7 +4512,7 @@
         "template": false
       },
       {
-        "description": "No description",
+        "description": "",
         "key": "com.sksamuel.scapegoat.inspections.naming.ObjectNames",
         "name": "Object name not recommended",
         "params": [],
@@ -4497,7 +4520,7 @@
         "template": false
       },
       {
-        "description": "No description",
+        "description": "",
         "key": "com.sksamuel.scapegoat.inspections.option.OptionGet",
         "name": "Use of Option.get",
         "params": [],
@@ -4505,7 +4528,7 @@
         "template": false
       },
       {
-        "description": "No description",
+        "description": "",
         "key": "com.sksamuel.scapegoat.inspections.option.OptionSize",
         "name": "Prefer Option.isDefined instead of Option.size",
         "params": [],
@@ -4513,7 +4536,7 @@
         "template": false
       },
       {
-        "description": "No description",
+        "description": "",
         "key": "com.sksamuel.scapegoat.inspections.style.ParameterlessMethodReturnsUnit",
         "name": "Parameterless methods returns unit",
         "params": [],
@@ -4521,7 +4544,7 @@
         "template": false
       },
       {
-        "description": "No description",
+        "description": "",
         "key": "com.sksamuel.scapegoat.inspections.matching.PartialFunctionInsteadOfMatch",
         "name": "Match instead of partial function",
         "params": [],
@@ -4529,7 +4552,7 @@
         "template": false
       },
       {
-        "description": "No description",
+        "description": "",
         "key": "com.sksamuel.scapegoat.inspections.inference.PointlessTypeBounds",
         "name": "Pointless Type Bounds",
         "params": [],
@@ -4537,7 +4560,7 @@
         "template": false
       },
       {
-        "description": "No description",
+        "description": "",
         "key": "com.sksamuel.scapegoat.inspections.collections.PreferMapEmpty",
         "name": "Prefer Map.empty",
         "params": [],
@@ -4545,7 +4568,7 @@
         "template": false
       },
       {
-        "description": "No description",
+        "description": "",
         "key": "com.sksamuel.scapegoat.inspections.collections.PreferSeqEmpty",
         "name": "Prefer Seq.empty",
         "params": [],
@@ -4553,7 +4576,7 @@
         "template": false
       },
       {
-        "description": "No description",
+        "description": "",
         "key": "com.sksamuel.scapegoat.inspections.collections.PreferSetEmpty",
         "name": "Prefer Set.empty",
         "params": [],
@@ -4561,7 +4584,7 @@
         "template": false
       },
       {
-        "description": "No description",
+        "description": "",
         "key": "com.sksamuel.scapegoat.inspections.inference.ProductWithSerializableInferred",
         "name": "Product with Serializable inferred",
         "params": [],
@@ -4577,7 +4600,7 @@
         "template": false
       },
       {
-        "description": "No description",
+        "description": "",
         "key": "com.sksamuel.scapegoat.inspections.RedundantFinalModifierOnMethod",
         "name": "Redundant final modifier on method",
         "params": [],
@@ -4593,7 +4616,7 @@
         "template": false
       },
       {
-        "description": "No description",
+        "description": "",
         "key": "com.sksamuel.scapegoat.inspections.unneccesary.RedundantFinalizer",
         "name": "Redundant finalizer",
         "params": [],
@@ -4601,7 +4624,7 @@
         "template": false
       },
       {
-        "description": "No description",
+        "description": "",
         "key": "com.sksamuel.scapegoat.inspections.matching.RepeatedCaseBody",
         "name": "Repeated case body",
         "params": [],
@@ -4609,7 +4632,7 @@
         "template": false
       },
       {
-        "description": "No description",
+        "description": "",
         "key": "com.sksamuel.scapegoat.inspections.collections.ReverseFunc",
         "name": "Unnecessary reverse",
         "params": [],
@@ -4617,7 +4640,7 @@
         "template": false
       },
       {
-        "description": "No description",
+        "description": "",
         "key": "com.sksamuel.scapegoat.inspections.collections.ReverseTailReverse",
         "name": "reverse.tail.reverse instead of init",
         "params": [],
@@ -4625,7 +4648,7 @@
         "template": false
       },
       {
-        "description": "No description",
+        "description": "",
         "key": "com.sksamuel.scapegoat.inspections.collections.ReverseTakeReverse",
         "name": "reverse.take(...).reverse instead of takeRight",
         "params": [],
@@ -4633,7 +4656,7 @@
         "template": false
       },
       {
-        "description": "No description",
+        "description": "",
         "key": "com.sksamuel.scapegoat.inspections.style.SimplifyBooleanExpression",
         "name": "Simplify boolean expressions",
         "params": [],
@@ -4649,7 +4672,7 @@
         "template": false
       },
       {
-        "description": "No description",
+        "description": "",
         "key": "com.sksamuel.scapegoat.inspections.string.SubstringZero",
         "name": "String.substring(0)",
         "params": [],
@@ -4657,7 +4680,7 @@
         "template": false
       },
       {
-        "description": "No description",
+        "description": "",
         "key": "com.sksamuel.scapegoat.inspections.matching.SuspiciousMatchOnClassObject",
         "name": "Suspicious match on class object",
         "params": [],
@@ -4665,7 +4688,7 @@
         "template": false
       },
       {
-        "description": "No description",
+        "description": "",
         "key": "com.sksamuel.scapegoat.inspections.exception.SwallowedException",
         "name": "Empty catch block",
         "params": [],
@@ -4673,7 +4696,7 @@
         "template": false
       },
       {
-        "description": "No description",
+        "description": "",
         "key": "com.sksamuel.scapegoat.inspections.collections.SwapSortFilter",
         "name": "Swap sort filter",
         "params": [],
@@ -4681,7 +4704,7 @@
         "template": false
       },
       {
-        "description": "No description",
+        "description": "",
         "key": "com.sksamuel.scapegoat.inspections.collections.UnsafeTraversableMethods",
         "name": "Use of unsafe Traversable methods (head, tail, init, last, reduce, reduceLeft, reduceRight, max, maxBy, min, minBy)",
         "params": [],
@@ -4689,7 +4712,7 @@
         "template": false
       },
       {
-        "description": "No description",
+        "description": "",
         "key": "com.sksamuel.scapegoat.inspections.unsafe.TryGet",
         "name": "Use of Try.get",
         "params": [],
@@ -4697,7 +4720,7 @@
         "template": false
       },
       {
-        "description": "No description",
+        "description": "",
         "key": "com.sksamuel.scapegoat.inspections.TypeShadowing",
         "name": "Type shadowing",
         "params": [],
@@ -4705,7 +4728,7 @@
         "template": false
       },
       {
-        "description": "No description",
+        "description": "",
         "key": "com.sksamuel.scapegoat.inspections.unneccesary.UnnecessaryConversion",
         "name": "Unnecessary conversion",
         "params": [],
@@ -4713,7 +4736,7 @@
         "template": false
       },
       {
-        "description": "No description",
+        "description": "",
         "key": "com.sksamuel.scapegoat.inspections.unneccesary.UnnecessaryIf",
         "name": "Unnecessary if condition.",
         "params": [],
@@ -4729,7 +4752,7 @@
         "template": false
       },
       {
-        "description": "No description",
+        "description": "",
         "key": "com.sksamuel.scapegoat.inspections.exception.UnreachableCatch",
         "name": "Unreachable catch",
         "params": [],
@@ -4737,7 +4760,7 @@
         "template": false
       },
       {
-        "description": "No description",
+        "description": "",
         "key": "com.sksamuel.scapegoat.inspections.collections.UnsafeContains",
         "name": "Unsafe contains",
         "params": [],
@@ -4745,7 +4768,7 @@
         "template": false
       },
       {
-        "description": "No description",
+        "description": "",
         "key": "com.sksamuel.scapegoat.inspections.string.UnsafeStringContains",
         "name": "Unsafe string contains",
         "params": [],
@@ -4753,7 +4776,7 @@
         "template": false
       },
       {
-        "description": "No description",
+        "description": "",
         "key": "com.sksamuel.scapegoat.inspections.unneccesary.UnusedMethodParameter",
         "name": "Unused parameter",
         "params": [],
@@ -4761,7 +4784,7 @@
         "template": false
       },
       {
-        "description": "No description",
+        "description": "",
         "key": "com.sksamuel.scapegoat.inspections.math.UseCbrt",
         "name": "Use cbrt",
         "params": [],
@@ -4769,7 +4792,7 @@
         "template": false
       },
       {
-        "description": "No description",
+        "description": "",
         "key": "com.sksamuel.scapegoat.inspections.math.UseExpM1",
         "name": "Use expm1",
         "params": [],
@@ -4777,7 +4800,7 @@
         "template": false
       },
       {
-        "description": "No description",
+        "description": "",
         "key": "com.sksamuel.scapegoat.inspections.math.UseLog10",
         "name": "Use log10",
         "params": [],
@@ -4785,7 +4808,7 @@
         "template": false
       },
       {
-        "description": "No description",
+        "description": "",
         "key": "com.sksamuel.scapegoat.inspections.math.UseLog1P",
         "name": "Use log1p",
         "params": [],
@@ -4793,7 +4816,7 @@
         "template": false
       },
       {
-        "description": "No description",
+        "description": "",
         "key": "com.sksamuel.scapegoat.inspections.math.UseSqrt",
         "name": "Use sqrt",
         "params": [],
@@ -4801,7 +4824,7 @@
         "template": false
       },
       {
-        "description": "No description",
+        "description": "",
         "key": "com.sksamuel.scapegoat.inspections.VarClosure",
         "name": "Var in closure",
         "params": [],
@@ -4809,7 +4832,7 @@
         "template": false
       },
       {
-        "description": "No description",
+        "description": "",
         "key": "com.sksamuel.scapegoat.inspections.unneccesary.VarCouldBeVal",
         "name": "Var could be val",
         "params": [],
@@ -4817,7 +4840,7 @@
         "template": false
       },
       {
-        "description": "No description",
+        "description": "",
         "key": "com.sksamuel.scapegoat.inspections.controlflow.WhileTrue",
         "name": "While true loop",
         "params": [],

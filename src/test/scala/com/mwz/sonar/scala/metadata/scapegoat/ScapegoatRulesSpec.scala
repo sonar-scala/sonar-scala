@@ -68,7 +68,8 @@ class ScapegoatRulesSpec extends AnyFlatSpec with Matchers with Inspectors with 
     val expected1 = Rule(
       key = "com.sksamuel.scapegoat.inspections.exception.CatchNpe",
       name = "Catching NPE",
-      description = "No description",
+      mdDescription = "",
+      sonarMdDescription = "No description",
       severity = Severity.Major,
       template = false,
       params = Chain.empty
@@ -77,7 +78,8 @@ class ScapegoatRulesSpec extends AnyFlatSpec with Matchers with Inspectors with 
     val expected2 = Rule(
       key = "com.sksamuel.scapegoat.inspections.equality.ComparisonWithSelf",
       name = "Comparison with self",
-      description = "Comparison with self will always yield true",
+      mdDescription = "Comparison with self will always yield true",
+      sonarMdDescription = "Comparison with self will always yield true",
       severity = Severity.Minor,
       template = false,
       params = Chain.empty

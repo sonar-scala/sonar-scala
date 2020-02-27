@@ -20,7 +20,6 @@ package scalastyle
 
 import cats.data.Chain
 import cats.data.NonEmptyChain
-import cats.instances.char._
 import cats.instances.int._
 import cats.instances.string._
 import cats.syntax.eq._
@@ -39,60 +38,93 @@ object ScalastyleRules {
     Rule(
       key = inspection.clazz,
       name = inspection.label,
-      description = formatDescription(inspection),
+      mdDescription = mdDescription(inspection),
+      sonarMdDescription = sonarMdDescription(inspection),
       severity = toSeverity(inspection.defaultLevel),
       template = inspection.params.nonEmpty,
       params = Chain.fromSeq(inspection.params.map(p => toParam(inspection.clazz, inspection.label, p)))
     )
   }
 
-  private[metadata] def formatDescription(inspection: ScalastyleInspection): String = {
+  private[metadata] def mdDescription(inspection: ScalastyleInspection): String = {
+    s"*${inspection.description}*" +
+    inspection.justification.map(s => s"\n\n$s").orEmpty +
+    inspection.extraDescription.map(s => s"\n\n$s").orEmpty
+  }
+
+  private[metadata] def sonarMdDescription(inspection: ScalastyleInspection): String = {
     s"*${inspection.description}*" +
     inspection.justification.map(s => s"\n\n${format(s)}").orEmpty +
     inspection.extraDescription.map(s => s"\n\n${format(s)}").orEmpty
   }
 
   /**
-   * Reformat the text from Scalastyle docs into a markdown format.
+   * Reformat the text from Scalastyle docs into a SonarQube markdown format.
    */
-  private final case class Acc(indent: Boolean, isEmpty: Boolean, text: String)
+  private final case class Acc(codeBlock: Boolean, isEmpty: Boolean, text: String, prev: String)
   private[metadata] def format(s: String): String = {
-    s.linesIterator.foldLeft(Acc(indent = false, isEmpty = true, "")) {
-      case (acc, l) =>
-        // Remove all backslashes as they are unnecessary.
-        val line = l.replace("\\", "")
-        val trailingSpaces = line.takeWhile(_ === ' ').length
-        // Trim the text and replace ` with `` for inline code blocks.
-        val trimmed = line.trim.replace("`", "``")
+    s.linesIterator
+      .foldLeft(Acc(codeBlock = false, isEmpty = true, "", "")) {
+        case (acc, l) =>
+          // Remove all backslashes as they are unnecessary.
+          val line = l.replace("\\", "")
+          val trimmed = line.trim
+          val trippleQuote = trimmed.contains("```")
+          // Replace all code blocks (inline and multiline) with ``.
+          val trimmedWithInlineCode = trimmed.replaceAll("^```(scala)?$", "`").replace("`", "``")
 
-        acc match {
-          // Empty line.
-          case _ if trimmed.length === 0 =>
-            acc.copy(isEmpty = true)
+          acc match {
+            // Empty line.
+            case _ if trimmedWithInlineCode.length === 0 =>
+              acc.copy(isEmpty = true)
 
-          // Previous line indented.
-          case Acc(true, _, text) =>
-            if (trailingSpaces <= 2)
-              Acc(indent = false, isEmpty = false, s"$text\n`` $trimmed")
-            else
-              Acc(indent = true, isEmpty = false, s"$text\n$line")
-
-          // Previous line not indented.
-          case Acc(false, isEmpty, text) =>
-            if (trailingSpaces <= 2)
-              if (isEmpty) {
-                val space = if (text.isEmpty) "" else "\n"
-                Acc(indent = false, isEmpty = false, s"$text$space$trimmed")
+            // Previous line is code block.
+            case Acc(true, isEmpty, text, prev) =>
+              if (!trippleQuote) {
+                val closed = prev.contains("``") && isEmpty
+                val space = if (closed) s" " else s"\n"
+                Acc(
+                  codeBlock = prev.contains("``") && !isEmpty,
+                  isEmpty = false,
+                  s"$text$space$line",
+                  trimmedWithInlineCode
+                )
               } else
-                Acc(indent = false, isEmpty = false, s"$text\n$trimmed")
-            else
-              Acc(indent = true, isEmpty = false, s"$text\n``\n$line")
-        }
-    } match {
-      // Close code block.
-      case Acc(true, _, text) => s"$text\n``"
-      case acc                => acc.text
-    }
+                Acc(
+                  codeBlock = true,
+                  isEmpty = false,
+                  s"$text\n$trimmedWithInlineCode",
+                  trimmedWithInlineCode
+                )
+
+            // Previous line not code block.
+            case Acc(false, isEmpty, text, _) =>
+              if (!trippleQuote)
+                if (isEmpty) {
+                  val space = if (text.isEmpty) "" else "\n"
+                  Acc(
+                    codeBlock = false,
+                    isEmpty = false,
+                    s"$text$space$trimmedWithInlineCode",
+                    trimmedWithInlineCode
+                  )
+                } else
+                  Acc(
+                    codeBlock = false,
+                    isEmpty = false,
+                    s"$text\n$trimmedWithInlineCode",
+                    trimmedWithInlineCode
+                  )
+              else
+                Acc(
+                  codeBlock = true,
+                  isEmpty = false,
+                  s"$text\n$trimmedWithInlineCode",
+                  trimmedWithInlineCode
+                )
+          }
+      }
+      .text
   }
 
   private[metadata] def toSeverity(level: Level): Severity = level match {

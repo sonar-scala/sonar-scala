@@ -52,8 +52,8 @@ class RecommendedQualityProfileSpec
     qualityProfile.isDefault shouldBe true
   }
 
-  it should "have 179 rules" in new Ctx {
-    rules.size shouldBe 177 // 64 from Scalastyle + 113 from Scapegoat
+  it should "have 178 rules" in new Ctx {
+    rules.size shouldBe 178 // 65 from Scalastyle + 113 from Scapegoat
   }
 
   it should "have all rules come from either the Scalastyle or the Scapegoat rules repositories" in new Ctx {

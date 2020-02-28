@@ -1,4 +1,4 @@
-addSbtPlugin("io.github.davidgregory084" % "sbt-tpolecat"         % "0.1.10")
+addSbtPlugin("io.github.davidgregory084" % "sbt-tpolecat"         % "0.1.11")
 addSbtPlugin("com.eed3si9n"              % "sbt-assembly"         % "0.14.10")
 addSbtPlugin("net.virtual-void"          % "sbt-dependency-graph" % "0.9.2")
 addSbtPlugin("com.github.gseitz"         % "sbt-release"          % "1.0.13")

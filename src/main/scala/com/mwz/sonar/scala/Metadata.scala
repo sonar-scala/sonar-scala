@@ -25,6 +25,7 @@ import cats.effect.Blocker
 import cats.effect.ExitCode
 import cats.effect.IO
 import cats.effect.IOApp
+import cats.instances.string._
 import cats.syntax.functor._
 import com.mwz.sonar.scala.metadata._
 import com.mwz.sonar.scala.metadata.scalastyle.ScalastyleRules
@@ -53,10 +54,14 @@ final case class Rules(
 object Metadata extends IOApp {
   private val metadata: SonarScalaMetadata =
     SonarScalaMetadata(
-      rules = Rules(ScalastyleRules.rules, ScapegoatRules.rules),
+      rules = Rules(sort(ScalastyleRules.rules), sort(ScapegoatRules.rules)),
       repositories = Map(
-        ScalastyleRulesRepository.RepositoryKey -> ScalastyleRulesRepository.rulesRepository,
-        ScapegoatRulesRepository.RepositoryKey -> ScapegoatRulesRepository.rulesRepository
+        ScalastyleRulesRepository.RepositoryKey ->
+        ScalastyleRulesRepository.rulesRepository
+          .copy(rules = sort(ScalastyleRulesRepository.rulesRepository.rules)),
+        ScapegoatRulesRepository.RepositoryKey ->
+        ScapegoatRulesRepository.rulesRepository
+          .copy(rules = sort(ScapegoatRulesRepository.rulesRepository.rules))
       )
     )
   private val printer: Printer =
@@ -70,6 +75,10 @@ object Metadata extends IOApp {
       arrayCommaLeft = "",
       objectCommaLeft = ""
     )
+
+  // Chain is missing sortBy, which should be added in 2.2.0.
+  private def sort(rules: NonEmptyChain[Rule]): NonEmptyChain[Rule] =
+    NonEmptyChain.fromNonEmptyList(rules.toNonEmptyList.sortBy(_.name))
 
   def run(args: List[String]): IO[ExitCode] = {
     val write: Stream[IO, Unit] = Stream.resource(Blocker[IO]).flatMap { blocker =>

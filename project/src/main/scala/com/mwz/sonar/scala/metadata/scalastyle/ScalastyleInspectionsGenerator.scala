@@ -52,8 +52,16 @@ object ScalastyleInspectionsGenerator {
     val templateFile = Paths
       .get(
         baseDirectory.value.toString,
-        "project/src/main/scala",
-        "com/mwz/sonar/scala/metadata/scalastyle",
+        "project",
+        "src",
+        "main",
+        "scala",
+        "com",
+        "mwz",
+        "sonar",
+        "scala",
+        "metadata",
+        "scalastyle",
         "ScalastyleInspections.scala"
       )
 

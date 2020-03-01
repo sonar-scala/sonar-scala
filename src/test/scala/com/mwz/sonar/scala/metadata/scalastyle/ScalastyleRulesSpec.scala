@@ -166,7 +166,7 @@ class ScalastyleRulesSpec extends AnyFlatSpec with Matchers with Inspectors with
         |  code block 2
         |```
         |
-        |line 4.
+        |line 4. `inline` and `inline 2`.
         |
         |```scala
         |code block 3
@@ -185,7 +185,7 @@ class ScalastyleRulesSpec extends AnyFlatSpec with Matchers with Inspectors with
         |``
         |code block 2
         |  code block 2
-        |`` line 4.
+        |`` line 4. ``inline`` and ``inline 2``.
         |``
         |code block 3
         |  code block 3

@@ -71,7 +71,8 @@ object ScalastyleRules {
           val trimmed = line.trim
           val trippleQuote = trimmed.contains("```")
           // Replace all code blocks (inline and multiline) with ``.
-          val trimmedWithInlineCode = trimmed.replaceAll("^```(scala)?$", "`").replace("`", "``")
+          val withInlineCode = line.replaceAll("^```(scala)?$", "`").replace("`", "``")
+          val trimmedWithInlineCode = withInlineCode.trim
 
           acc match {
             // Empty line.
@@ -86,8 +87,8 @@ object ScalastyleRules {
                 Acc(
                   codeBlock = prev.contains("``") && !isEmpty,
                   isEmpty = false,
-                  s"$text$space$line",
-                  trimmedWithInlineCode
+                  s"$text$space$withInlineCode",
+                  withInlineCode
                 )
               } else
                 Acc(

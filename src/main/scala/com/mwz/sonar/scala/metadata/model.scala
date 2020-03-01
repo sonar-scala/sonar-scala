@@ -20,8 +20,12 @@ package com.mwz.sonar.scala.metadata
 import cats.data.Chain
 import cats.data.NonEmptyChain
 import enumeratum._
+import io.circe._
 import io.circe.generic.JsonCodec
+import io.circe.generic.encoding._
 import org.sonar.api.server.rule.RuleParamType
+import shapeless._
+import shapeless.record._
 
 @JsonCodec
 final case class RulesRepository(
@@ -30,11 +34,22 @@ final case class RulesRepository(
   rules: NonEmptyChain[Rule]
 )
 
-@JsonCodec
+object Rule {
+  implicit val ruleEncoder: Encoder[Rule] =
+    ReprObjectEncoder.deriveReprAsObjectEncoder.contramap { rule =>
+      LabelledGeneric[Rule]
+        .to(rule)
+        .-(Symbol("sonarMdDescription"))
+        .renameField(Symbol("mdDescription"), Symbol("description"))
+    }
+}
+
+@JsonCodec(decodeOnly = true)
 final case class Rule(
   key: String,
   name: String,
-  description: String,
+  mdDescription: String,
+  sonarMdDescription: String,
   severity: Severity,
   template: Boolean,
   params: Chain[Param]

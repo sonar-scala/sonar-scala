@@ -56,7 +56,7 @@ object ScalastyleRulesRepository {
     val newRule = repository.createRule(rule.key)
     newRule.setInternalKey(rule.key)
     newRule.setName(rule.name)
-    newRule.setMarkdownDescription(rule.description)
+    newRule.setMarkdownDescription(rule.sonarMdDescription)
     newRule.setActivatedByDefault(true) // scalastyle:ignore
     newRule.setStatus(RuleStatus.READY)
     newRule.setSeverity(rule.severity.entryName.toUpperCase)

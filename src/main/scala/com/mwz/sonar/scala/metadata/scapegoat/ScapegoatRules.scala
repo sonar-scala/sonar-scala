@@ -32,7 +32,8 @@ object ScapegoatRules {
     Rule(
       key = inspection.id,
       name = inspection.name,
-      description = inspection.description.getOrElse("No description"),
+      mdDescription = inspection.description.getOrElse(""),
+      sonarMdDescription = inspection.description.getOrElse("No description"),
       severity = toSeverity(inspection.defaultLevel),
       template = false,
       params = Chain.empty

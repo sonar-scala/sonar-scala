@@ -55,7 +55,8 @@ class ScalastyleRulesSpec extends AnyFlatSpec with Matchers with Inspectors with
     val expected = Rule(
       key = "class",
       name = "label",
-      description = "*description*",
+      mdDescription = "*description*",
+      sonarMdDescription = "*description*",
       severity = Severity.Info,
       template = true,
       params = Chain(
@@ -105,9 +106,9 @@ class ScalastyleRulesSpec extends AnyFlatSpec with Matchers with Inspectors with
       params = Seq.empty
     )
 
-    ScalastyleRules.formatDescription(inspection1) shouldBe "*description*"
-    ScalastyleRules.formatDescription(inspection2) shouldBe "*description*\n\nextraDescription"
-    ScalastyleRules.formatDescription(inspection3) shouldBe "*description*\n\njustification\n\nextraDescription"
+    ScalastyleRules.mdDescription(inspection1) shouldBe "*description*"
+    ScalastyleRules.mdDescription(inspection2) shouldBe "*description*\n\nextraDescription"
+    ScalastyleRules.mdDescription(inspection3) shouldBe "*description*\n\njustification\n\nextraDescription"
   }
 
   it should "correctly reformat simple text " in {
@@ -153,17 +154,25 @@ class ScalastyleRulesSpec extends AnyFlatSpec with Matchers with Inspectors with
       """
         |line1. next
         |line 2.
-        |   code block 1
+        |
+        |```scala
+        |code block 1
+        |```
         |
         |line 3.
         |
-        |   code block 2
-        |   code block 2
+        |```scala
+        |code block 2
+        |  code block 2
+        |```
+        |
         |line 4.
         |
-        |   code block 3
+        |```scala
+        |code block 3
         |
-        |   code block 4
+        |  code block 3
+        |```
         |""".stripMargin.stripPrefix("\n").stripLineEnd
 
     val expected =
@@ -171,15 +180,15 @@ class ScalastyleRulesSpec extends AnyFlatSpec with Matchers with Inspectors with
         |line1. next
         |line 2.
         |``
-        |   code block 1
+        |code block 1
         |`` line 3.
         |``
-        |   code block 2
-        |   code block 2
+        |code block 2
+        |  code block 2
         |`` line 4.
         |``
-        |   code block 3
-        |   code block 4
+        |code block 3
+        |  code block 3
         |``
         |""".stripMargin.stripPrefix("\n").stripLineEnd
 

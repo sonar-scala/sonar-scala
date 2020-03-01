@@ -3,7 +3,7 @@ libraryDependencies ++= Seq(
   "org.sonarsource.update-center" % "sonar-update-center-common" % "1.24.0.735",
   // Scapegoat & scalastyle inspections generator dependencies
   "com.sksamuel.scapegoat" % s"scalac-scapegoat-plugin_${scalaVersion.value}" % "1.4.1",
-  "com.beautiful-scala"    %% "scalastyle"                                    % "1.3.0+13-77515f81-SNAPSHOT",
+  "com.beautiful-scala"    %% "scalastyle"                                    % "1.3.0+14-c70c73ba-SNAPSHOT",
   "org.scalameta"          %% "scalameta"                                     % "4.3.0",
   "org.scalatest"          %% "scalatest"                                     % "3.1.1" % Test
 )

@@ -51,6 +51,7 @@ private[qualityprofiles] object RecommendedQualityProfile {
   final val ProfileName: String = "Recommended by sonar-scala"
   final val ScalastyleOverrides: Overrides = Overrides(
     blacklist = Set(
+      "org.scalastyle.scalariform.CurliesImportChecker", // avoid curlies imports
       "org.scalastyle.scalariform.BlockImportChecker", // avoid block imports
       "org.scalastyle.scalariform.LowercasePatternMatchChecker", // lowercase pattern match
       "org.scalastyle.scalariform.PatternMatchAlignChecker", // pattern match align

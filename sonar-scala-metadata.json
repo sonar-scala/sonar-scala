@@ -949,7 +949,7 @@
         {
           "description": "*Checks that the ScalaDoc on documentable members is well-formed.*\n\nScaladoc is generally considered a good thing. Within reason.\n\nIgnore tokens is a comma separated string that may include the following: `PatDefOrDcl` (variables), `TmplDef` (classes, traits), `TypeDefOrDcl` (type definitions), `FunDefOrDcl` (functions). Supported indentation styles are \"scaladoc\" (for ScalaDoc-style comments, with two spaces before the asterisk), \"javadoc\" (for JavaDoc-style comments, with a single space before the asterisk) or \"anydoc\" to support any style (any number of spaces before the asterisk). For backwards compatibility, if left empty, \"anydoc\" will be assumed.",
           "key": "org.scalastyle.scalariform.ScalaDocChecker-template",
-          "name": "Missing or badly formed ScalaDoc: {0}",
+          "name": "Missing or badly formed ScalaDoc",
           "params": [
             {
               "default": "^$",
@@ -3414,7 +3414,7 @@
       {
         "description": "*Checks that the ScalaDoc on documentable members is well-formed.*\n\nScaladoc is generally considered a good thing. Within reason.\n\nIgnore tokens is a comma separated string that may include the following: `PatDefOrDcl` (variables), `TmplDef` (classes, traits), `TypeDefOrDcl` (type definitions), `FunDefOrDcl` (functions). Supported indentation styles are \"scaladoc\" (for ScalaDoc-style comments, with two spaces before the asterisk), \"javadoc\" (for JavaDoc-style comments, with a single space before the asterisk) or \"anydoc\" to support any style (any number of spaces before the asterisk). For backwards compatibility, if left empty, \"anydoc\" will be assumed.",
         "key": "org.scalastyle.scalariform.ScalaDocChecker",
-        "name": "Missing or badly formed ScalaDoc: {0}",
+        "name": "Missing or badly formed ScalaDoc",
         "params": [
           {
             "default": "^$",

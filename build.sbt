@@ -77,7 +77,7 @@ libraryDependencies ++= List(
   "org.typelevel"             %% "mouse"                % "0.24",
   // TEST
   "com.beachape"               %% "enumeratum-scalacheck"     % "1.5.16"     % Test,
-  "com.github.alexarchambault" %% "scalacheck-shapeless_1.14" % "1.2.4"      % Test,
+  "com.github.alexarchambault" %% "scalacheck-shapeless_1.14" % "1.2.5"      % Test,
   "org.http4s"                 %% "http4s-blaze-server"       % http4s       % Test,
   "org.http4s"                 %% "http4s-dsl"                % http4s       % Test,
   "org.mockito"                %% "mockito-scala"             % "1.11.4"     % Test,

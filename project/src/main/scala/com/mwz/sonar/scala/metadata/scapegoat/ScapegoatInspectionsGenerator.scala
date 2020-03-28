@@ -67,8 +67,9 @@ object ScapegoatInspectionsGenerator {
         s"""ScapegoatInspection(
            |  id = "$inspectionClassName",
            |  name = "${inspection.text}",
-           |  description = ${inspection.explanation.map(text => s""""$text"""")},
-           |  defaultLevel = Level.${inspection.defaultLevel}
+           |  defaultLevel = Level.${inspection.defaultLevel},
+           |  description = "${inspection.description}",
+           |  explanation = "${inspection.explanation}"
            |)""".stripMargin
     }
 

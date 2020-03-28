@@ -25,13 +25,14 @@ import scala.meta._
 
 /** Tests the correct behavior of the Scapegoat Inspections Generator SBT Task */
 class ScapegoatInspectionsGeneratorSpec extends FlatSpec with LoneElement with Matchers {
-  "stringifyInspections" should "correctly format a one scapegoat inspection" in {
+  "stringifyInspections" should "correctly format one scapegoat inspection" in {
     val expected =
       """ScapegoatInspection(
         |  id = "com.sksamuel.scapegoat.inspections.AnyUse",
-        |  name = "AnyUse",
-        |  description = None,
-        |  defaultLevel = Level.Info
+        |  name = "Use of Any",
+        |  defaultLevel = Level.Info,
+        |  description = "Checks for code returning Any.",
+        |  explanation = "Code returning Any is most likely an indication of a programming error."
         |)""".stripMargin
 
     val result =
@@ -49,21 +50,24 @@ class ScapegoatInspectionsGeneratorSpec extends FlatSpec with LoneElement with M
       List(
         """ScapegoatInspection(
           |  id = "com.sksamuel.scapegoat.inspections.AnyUse",
-          |  name = "AnyUse",
-          |  description = None,
-          |  defaultLevel = Level.Info
+          |  name = "Use of Any",
+          |  defaultLevel = Level.Info,
+          |  description = "Checks for code returning Any.",
+          |  explanation = "Code returning Any is most likely an indication of a programming error."
           |)""".stripMargin,
         """ScapegoatInspection(
           |  id = "com.sksamuel.scapegoat.inspections.EmptyCaseClass",
           |  name = "Empty case class",
-          |  description = Some("Empty case class can be rewritten as a case object"),
-          |  defaultLevel = Level.Info
+          |  defaultLevel = Level.Info,
+          |  description = "Checks for empty case classes like, e.g. case class Faceman().",
+          |  explanation = "An empty case class can be rewritten as a case object."
           |)""".stripMargin,
         """ScapegoatInspection(
           |  id = "com.sksamuel.scapegoat.inspections.string.ArraysInFormat",
           |  name = "Array passed to String.format",
-          |  description = None,
-          |  defaultLevel = Level.Error
+          |  defaultLevel = Level.Error,
+          |  description = "Checks for arrays passed to String.format.",
+          |  explanation = "An Array passed to String.format might result in an incorrect formatting."
           |)""".stripMargin
       )
 
@@ -86,21 +90,24 @@ class ScapegoatInspectionsGeneratorSpec extends FlatSpec with LoneElement with M
         |  val AllInspections: List[ScapegoatInspection] = List(
         |    ScapegoatInspection(
         |      id = "com.sksamuel.scapegoat.inspections.AnyUse",
-        |      name = "AnyUse",
-        |      description = None,
-        |      defaultLevel = Level.Info
+        |      name = "Use of Any",
+        |      defaultLevel = Level.Info,
+        |      description = "Checks for code returning Any.",
+        |      explanation = "Code returning Any is most likely an indication of a programming error."
         |    ),
         |    ScapegoatInspection(
-        |      id = "com.sksamuel.scapegoat.inspections.EmptyCaseClass",
-        |      name = "Empty case class",
-        |      description = Some("Empty case class can be rewritten as a case object"),
-        |      defaultLevel = Level.Info
+        |       id = "com.sksamuel.scapegoat.inspections.EmptyCaseClass",
+        |       name = "Empty case class",
+        |       defaultLevel = LeveL.Info,
+        |       description = "Checks for empty case classes like, e.g. case class Faceman().",
+        |       explanation = "An empty case class can be rewritten as a case object."
         |    ),
         |    ScapegoatInspection(
         |      id = "com.sksamuel.scapegoat.inspections.string.ArraysInFormat",
         |      name = "Array passed to String.format",
-        |      description = None,
-        |      defaultLevel = Level.Error
+        |      defaultLevel = Level.Error,
+        |      description = "Checks for arrays passed to String.format.",
+        |      explanation = "An Array passed to String.format might result in an incorrect formatting."
         |    )
         |  )
         |}""".stripMargin
@@ -109,21 +116,24 @@ class ScapegoatInspectionsGeneratorSpec extends FlatSpec with LoneElement with M
       List(
         """ScapegoatInspection(
           |  id = "com.sksamuel.scapegoat.inspections.AnyUse",
-          |  name = "AnyUse",
-          |  description = None,
-          |  defaultLevel = Level.Info
+          |  name = "Use of Any",
+          |  defaultLevel = Level.Info,
+          |  description = "Checks for code returning Any.",
+          |  explanation = "Code returning Any is most likely an indication of a programming error."
           |)""".stripMargin,
         """ScapegoatInspection(
           |  id = "com.sksamuel.scapegoat.inspections.EmptyCaseClass",
           |  name = "Empty case class",
-          |  description = Some("Empty case class can be rewritten as a case object"),
-          |  defaultLevel = Level.Info
+          |  defaultLevel = LeveL.Info,
+          |  description = "Checks for empty case classes like, e.g. case class Faceman().",
+          |  explanation = "An empty case class can be rewritten as a case object."
           |)""".stripMargin,
         """ScapegoatInspection(
           |  id = "com.sksamuel.scapegoat.inspections.string.ArraysInFormat",
           |  name = "Array passed to String.format",
-          |  description = None,
-          |  defaultLevel = Level.Error
+          |  defaultLevel = Level.Error,
+          |  description = "Checks for arrays passed to String.format.",
+          |  explanation = "An Array passed to String.format might result in an incorrect formatting."
           |)""".stripMargin
       )
 

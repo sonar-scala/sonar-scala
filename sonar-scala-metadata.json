@@ -2078,7 +2078,7 @@
       "name": "Scapegoat",
       "rules": [
         {
-          "description": "",
+          "description": "*Checks whether !isEmpty can be replaced with nonEmpty.*\n\n!.isEmpty can be replaced with.nonEmpty to make it easier to reason about.",
           "key": "com.sksamuel.scapegoat.inspections.collections.NegationIsEmpty",
           "name": "!isEmpty can be replaced with nonEmpty",
           "params": [],
@@ -2086,7 +2086,7 @@
           "template": false
         },
         {
-          "description": "",
+          "description": "*Checks whether !nonEmpty can be replaced with isEmpty.*\n\n!.nonEmpty can be replaced with.isEmpty to make it easier to reason about.",
           "key": "com.sksamuel.scapegoat.inspections.collections.NegationNonEmpty",
           "name": "!nonEmpty can be replaced with isEmpty",
           "params": [],
@@ -2094,7 +2094,7 @@
           "template": false
         },
         {
-          "description": "Array equals is not an equality check. Use a.deep == b.deep or convert to another collection type",
+          "description": "*Checks for comparison of arrays using == which will always return false.*\n\nArray equals is not an equality check. Use a.deep == b.deep or convert to another collection type.",
           "key": "com.sksamuel.scapegoat.inspections.collections.ArrayEquals",
           "name": "Array equals",
           "params": [],
@@ -2102,7 +2102,7 @@
           "template": false
         },
         {
-          "description": "",
+          "description": "*Checks for arrays passed to String.format.*\n\nAn Array passed to String.format might result in an incorrect formatting.",
           "key": "com.sksamuel.scapegoat.inspections.string.ArraysInFormat",
           "name": "Array passed to String.format",
           "params": [],
@@ -2110,31 +2110,31 @@
           "template": false
         },
         {
-          "description": "",
+          "description": "*Checks for ranges using (j to k - 1).*\n\nA range in the following format (j to k - 1) can be simplified to (j until k).",
           "key": "com.sksamuel.scapegoat.inspections.AvoidToMinusOne",
-          "name": "Avoid To Minus One",
+          "name": "Avoid (j to k - 1)",
           "params": [],
           "severity": "Info",
           "template": false
         },
         {
-          "description": "",
+          "description": "*Checks for use of Traversable.size.*\n\n.size can be slow for some data structures, prefer .nonEmpty, which is O(1).",
           "key": "com.sksamuel.scapegoat.inspections.collections.AvoidSizeNotEqualsZero",
-          "name": "Avoid Traversable.size != 0, use Traversable.nonEmpty instead",
+          "name": "Avoid Traversable.size != 0",
           "params": [],
           "severity": "Minor",
           "template": false
         },
         {
-          "description": "",
+          "description": "*Checks for use of Traversable.size.*\n\nTraversable.size can be slow for some data structures, prefer Traversable.isEmpty, which is O(1).",
           "key": "com.sksamuel.scapegoat.inspections.collections.AvoidSizeEqualsZero",
-          "name": "Avoid Traversable.size == 0, use Traversable.isEmpty instead",
+          "name": "Avoid Traversable.size == 0",
           "params": [],
           "severity": "Minor",
           "template": false
         },
         {
-          "description": "",
+          "description": "*Checks for symbolic method names.*\n\nScala style guide advocates against routinely using operators as method names, see http://docs.scala-lang.org/style/naming-conventions.html#symbolic-method-names.",
           "key": "com.sksamuel.scapegoat.inspections.style.AvoidOperatorOverload",
           "name": "Avoid operator overload",
           "params": [],
@@ -2142,7 +2142,7 @@
           "template": false
         },
         {
-          "description": "",
+          "description": "*Checks for use of BigDecimal(double) which can be unsafe.*\n\nThe results of this constructor can be somewhat unpredictable. E.g. writing new BigDecimal(0.1) in Java creates a BigDecimal which is actually equal to 0.1000000000000000055511151231257827021181583404541015625. This is because 0.1 cannot be represented exactly as a double.",
           "key": "com.sksamuel.scapegoat.inspections.math.BigDecimalDoubleConstructor",
           "name": "Big decimal double constructor",
           "params": [],
@@ -2150,7 +2150,7 @@
           "template": false
         },
         {
-          "description": "When using setScale() on a BigDecimal without setting the rounding mode, this can throw an exception if rounding is required. Did you mean to call setScale(s, RoundingMode.XYZ)",
+          "description": "*Checks for use of setScale() on a BigDecimal without setting the rounding mode can throw an exception.*\n\nWhen using setScale() on a BigDecimal without setting the rounding mode, this can throw an exception if rounding is required. Did you mean to call setScale(s, RoundingMode.XYZ)?",
           "key": "com.sksamuel.scapegoat.inspections.math.BigDecimalScaleWithoutRoundingMode",
           "name": "BigDecimal setScale() without rounding mode",
           "params": [],
@@ -2158,15 +2158,15 @@
           "template": false
         },
         {
-          "description": "",
+          "description": "*Checks for types with upper bounds of a final type.*\n\nPointless type bound. Type parameter can only be a single value.",
           "key": "com.sksamuel.scapegoat.inspections.inference.BoundedByFinalType",
-          "name": "Bounded by final type",
+          "name": "Bounded by a final type",
           "params": [],
           "severity": "Minor",
           "template": false
         },
         {
-          "description": "",
+          "description": "*Checks for potentially broken odd checks.*\n\nCode that attempts to check for oddness using x % 2 == 1 will fail on negative numbers. Consider using x % 2 != 0",
           "key": "com.sksamuel.scapegoat.inspections.math.BrokenOddness",
           "name": "Broken odd check",
           "params": [],
@@ -2174,7 +2174,7 @@
           "template": false
         },
         {
-          "description": "",
+          "description": "*Checks for try blocks that catch exception.*\n\nDid you intend to catch all exceptions? Consider catching a more specific exception class.",
           "key": "com.sksamuel.scapegoat.inspections.exception.CatchException",
           "name": "Catch exception",
           "params": [],
@@ -2182,7 +2182,7 @@
           "template": false
         },
         {
-          "description": "",
+          "description": "*Checks for try blocks that catch fatal exceptions: VirtualMachineError, ThreadDeath, InterruptedException, LinkageError, ControlThrowable.*\n\nDid you intend to catch a fatal exception? Consider using scala.util.control.NonFatal instead.",
           "key": "com.sksamuel.scapegoat.inspections.exception.CatchFatal",
           "name": "Catch fatal exception",
           "params": [],
@@ -2190,7 +2190,7 @@
           "template": false
         },
         {
-          "description": "",
+          "description": "*Checks for try blocks that catch Throwable.*\n\nDid you intend to catch all throwables? Consider catching a more specific exception class.",
           "key": "com.sksamuel.scapegoat.inspections.exception.CatchThrowable",
           "name": "Catch throwable",
           "params": [],
@@ -2198,7 +2198,7 @@
           "template": false
         },
         {
-          "description": "",
+          "description": "*Checks for try blocks that catch null pointer exceptions.*\n\nAvoid using null at all cost and you shouldn't need to catch NullPointerExceptions. Prefer Option to indicate potentially missing values and use Try to materialize exceptions thrown by any external libraries.",
           "key": "com.sksamuel.scapegoat.inspections.exception.CatchNpe",
           "name": "Catching NPE",
           "params": [],
@@ -2206,7 +2206,7 @@
           "template": false
         },
         {
-          "description": "",
+          "description": "*Ensures class names adhere to the style guidelines.*\n\nClass names should begin with uppercase letter.",
           "key": "com.sksamuel.scapegoat.inspections.naming.ClassNames",
           "name": "Class name not recommended",
           "params": [],
@@ -2214,7 +2214,7 @@
           "template": false
         },
         {
-          "description": "",
+          "description": "*Checks for negative access on a sequence, e.g. list.get(-1).*\n\nTrying to access Seq elements using a negative index will result in an IndexOutOfBoundsException.",
           "key": "com.sksamuel.scapegoat.inspections.collections.CollectionNegativeIndex",
           "name": "Collection index out of bounds",
           "params": [],
@@ -2222,23 +2222,23 @@
           "template": false
         },
         {
-          "description": "",
+          "description": "*Checks for variables that are confusingly named.*\n\nE.g. an instance of a Set is confusingly referred to by a variable called/containing list, or the other way around.",
           "key": "com.sksamuel.scapegoat.inspections.collections.CollectionNamingConfusion",
-          "name": "Collection naming Confusion",
+          "name": "Collection naming confusion",
           "params": [],
           "severity": "Info",
           "template": false
         },
         {
-          "description": "",
+          "description": "*Checks for collection operations that promote the collection to Any.*\n\nThe :+ (append) operator on collections accepts any argument you give it, which means that you can end up with e.g. Seq[Any] if your types don't match.",
           "key": "com.sksamuel.scapegoat.inspections.collections.CollectionPromotionToAny",
-          "name": "Collection promotion to any",
+          "name": "Collection promotion to Any",
           "params": [],
           "severity": "Minor",
           "template": false
         },
         {
-          "description": "",
+          "description": "*Checks for equality comparisons that cannot succeed.*\n\nIn most case comparing unrelated types cannot succeed and it's usually an indication of a bug.",
           "key": "com.sksamuel.scapegoat.inspections.equality.ComparingUnrelatedTypes",
           "name": "Comparing unrelated types",
           "params": [],
@@ -2246,7 +2246,7 @@
           "template": false
         },
         {
-          "description": "Comparision with self will always yield true",
+          "description": "*Checks for equality checks with itself.*\n\nComparison with self will always yield true.",
           "key": "com.sksamuel.scapegoat.inspections.equality.ComparisonWithSelf",
           "name": "Comparision with self",
           "params": [],
@@ -2254,7 +2254,7 @@
           "template": false
         },
         {
-          "description": "",
+          "description": "*Checks for code like a == List() or a == Nil.*\n\nPrefer use of isEmpty instead of comparison to an empty List.",
           "key": "com.sksamuel.scapegoat.inspections.collections.ComparisonToEmptyList",
           "name": "Comparison to empty list",
           "params": [],
@@ -2262,7 +2262,7 @@
           "template": false
         },
         {
-          "description": "",
+          "description": "*Checks for code like a == Set() or a == Set.empty.*\n\nPrefer use of isEmpty instead of comparison to an empty Set.",
           "key": "com.sksamuel.scapegoat.inspections.collections.ComparisonToEmptySet",
           "name": "Comparison to empty set",
           "params": [],
@@ -2270,7 +2270,7 @@
           "template": false
         },
         {
-          "description": "",
+          "description": "*Checks for code where the if condition compiles to a constant.*\n\nAn if condition which gets compiled to a constant, like e.g. if (1 < 2) or if (false) doesn't add any value and should be avoided.",
           "key": "com.sksamuel.scapegoat.inspections.unneccesary.ConstantIf",
           "name": "Constant if expression",
           "params": [],
@@ -2278,7 +2278,7 @@
           "template": false
         },
         {
-          "description": "Divide by one will always return the original value",
+          "description": "*Checks for division by one.*\n\nDivide by one will always return the original value.",
           "key": "com.sksamuel.scapegoat.inspections.math.DivideByOne",
           "name": "Divide by one",
           "params": [],
@@ -2286,7 +2286,7 @@
           "template": false
         },
         {
-          "description": "",
+          "description": "*Checks for code like !(!b).*\n\nDouble negation can be removed, e.g. !(!b) it equal to just b.",
           "key": "com.sksamuel.scapegoat.inspections.DoubleNegation",
           "name": "Double negation",
           "params": [],
@@ -2294,15 +2294,15 @@
           "template": false
         },
         {
-          "description": "",
+          "description": "*Checks for duplicate import statements.*\n\nDuplicate imports should be removed.",
           "key": "com.sksamuel.scapegoat.inspections.imports.DuplicateImport",
-          "name": "Duplicated Import",
+          "name": "Duplicate import",
           "params": [],
           "severity": "Info",
           "template": false
         },
         {
-          "description": "",
+          "description": "*Checks for duplicate key names in Map literals.*\n\nA map key is overwritten by a later entry.",
           "key": "com.sksamuel.scapegoat.inspections.collections.DuplicateMapKey",
           "name": "Duplicated map key",
           "params": [],
@@ -2310,7 +2310,7 @@
           "template": false
         },
         {
-          "description": "",
+          "description": "*Checks for duplicate values in set literals.*\n\nA set value is overwritten by a later entry.",
           "key": "com.sksamuel.scapegoat.inspections.collections.DuplicateSetValue",
           "name": "Duplicated set value",
           "params": [],
@@ -2318,7 +2318,7 @@
           "template": false
         },
         {
-          "description": "Empty case class can be rewritten as a case object",
+          "description": "*Checks for empty case classes like, e.g. case class Faceman().*\n\nAn empty case class can be rewritten as a case object.",
           "key": "com.sksamuel.scapegoat.inspections.EmptyCaseClass",
           "name": "Empty case class",
           "params": [],
@@ -2326,7 +2326,7 @@
           "template": false
         },
         {
-          "description": "",
+          "description": "*Finds catch blocks that don't handle caught exceptions.*\n\nIf you use a try/catch block to deal with an exception, you should handle all of the caught exceptions and if for some reason you're throwing another exception in the result, you should include the original exception as the cause.",
           "key": "com.sksamuel.scapegoat.inspections.exception.SwallowedException",
           "name": "Empty catch block",
           "params": [],
@@ -2334,7 +2334,7 @@
           "template": false
         },
         {
-          "description": "",
+          "description": "*Checks for empty for loops.*\n\nAn empty for loop isn't a common practice and in most cases is considered as dead code.",
           "key": "com.sksamuel.scapegoat.inspections.empty.EmptyFor",
           "name": "Empty for loop",
           "params": [],
@@ -2342,15 +2342,15 @@
           "template": false
         },
         {
-          "description": "",
+          "description": "*Checks for empty if blocks.*\n\nAn empty if block is considered as dead code.",
           "key": "com.sksamuel.scapegoat.inspections.empty.EmptyIfBlock",
-          "name": "Empty if statement",
+          "name": "Empty if expression",
           "params": [],
           "severity": "Minor",
           "template": false
         },
         {
-          "description": "",
+          "description": "*Looks for interpolated strings that have no arguments.*\n\nString declared as interpolated but has no parameters can be turned into a regular string.",
           "key": "com.sksamuel.scapegoat.inspections.string.EmptyInterpolatedString",
           "name": "Empty interpolated string",
           "params": [],
@@ -2358,7 +2358,7 @@
           "template": false
         },
         {
-          "description": "",
+          "description": "*Checks for empty method statements.*\n\nAn empty method is considered as dead code.",
           "key": "com.sksamuel.scapegoat.inspections.empty.EmptyMethod",
           "name": "Empty method",
           "params": [],
@@ -2366,7 +2366,7 @@
           "template": false
         },
         {
-          "description": "",
+          "description": "*Checks for empty synchronized blocks.*\n\nAn empty synchronized block is considered as dead code.",
           "key": "com.sksamuel.scapegoat.inspections.empty.EmptySynchronizedBlock",
           "name": "Empty synchronized block",
           "params": [],
@@ -2374,7 +2374,7 @@
           "template": false
         },
         {
-          "description": "",
+          "description": "*Checks for empty try blocks.*\n\nAn empty try block is considered as dead code.",
           "key": "com.sksamuel.scapegoat.inspections.empty.EmptyTryBlock",
           "name": "Empty try block",
           "params": [],
@@ -2382,7 +2382,7 @@
           "template": false
         },
         {
-          "description": "",
+          "description": "*Checks for empty while blocks.*\n\nAn empty while block is considered as dead code.",
           "key": "com.sksamuel.scapegoat.inspections.empty.EmptyWhileBlock",
           "name": "Empty while block",
           "params": [],
@@ -2390,7 +2390,7 @@
           "template": false
         },
         {
-          "description": "",
+          "description": "*Checks if exists() can be simplified to contains().*\n\nexists(x => x == y) can be replaced with contains(y).",
           "key": "com.sksamuel.scapegoat.inspections.collections.ExistsSimplifiableToContains",
           "name": "Exists simplifiable to contains",
           "params": [],
@@ -2398,7 +2398,7 @@
           "template": false
         },
         {
-          "description": "Finalizers should call super.finalize() to ensure superclasses are able to run any finalization logic",
+          "description": "*Checks for overridden finalizers that do not call super.*\n\nFinalizers should call super.finalize() to ensure superclasses are able to run their finalization logic.",
           "key": "com.sksamuel.scapegoat.inspections.unsafe.FinalizerWithoutSuper",
           "name": "Finalizer without super",
           "params": [],
@@ -2406,7 +2406,7 @@
           "template": false
         },
         {
-          "description": "",
+          "description": "*Checks for equality checks on floating point types.*\n\nDue to minor rounding errors, it is not advisable to compare floating-point numbers using the == operator. Either use a threshold based comparison, or switch to a BigDecimal.",
           "key": "com.sksamuel.scapegoat.inspections.equality.ComparingFloatingPointTypes",
           "name": "Floating type comparison",
           "params": [],
@@ -2414,7 +2414,7 @@
           "template": false
         },
         {
-          "description": "",
+          "description": "*Checks for invalid format strings.*\n\nAn unchecked exception will be thrown when a format string contains an illegal syntax or a format specifier that is incompatible with the given arguments.",
           "key": "com.sksamuel.scapegoat.inspections.string.IllegalFormatString",
           "name": "Illegal format string",
           "params": [],
@@ -2422,7 +2422,7 @@
           "template": false
         },
         {
-          "description": "",
+          "description": "*Checks for code like option.size > 1.*\n\nOption.size > 1 can never be true, did you mean to use Option.nonEmpty instead?",
           "key": "com.sksamuel.scapegoat.inspections.option.ImpossibleOptionSizeCondition",
           "name": "Impossible Option.size condition",
           "params": [],
@@ -2430,7 +2430,7 @@
           "template": false
         },
         {
-          "description": "",
+          "description": "*Checks for wrong number of arguments to String.format.*\n\nThe number of arguments passed to String.format doesn't correspond to the number of fields in the format string.",
           "key": "com.sksamuel.scapegoat.inspections.string.IncorrectNumberOfArgsToFormat",
           "name": "Incorrect number of args for format",
           "params": [],
@@ -2438,15 +2438,15 @@
           "template": false
         },
         {
-          "description": "",
+          "description": "*Checks for exceptions that are not called *Exception and vice versa.*\n\nClass named exception does not derive from Exception / class derived from Exception is not named *Exception.",
           "key": "com.sksamuel.scapegoat.inspections.exception.IncorrectlyNamedExceptions",
-          "name": "Incorrectly Named Exceptions",
+          "name": "Incorrectly named exceptions",
           "params": [],
           "severity": "Major",
           "template": false
         },
         {
-          "description": "",
+          "description": "*Checks for expressions like x % 1.*\n\nAny expression x % 1 will always return 0.",
           "key": "com.sksamuel.scapegoat.inspections.math.ModOne",
           "name": "Integer mod one",
           "params": [],
@@ -2454,7 +2454,7 @@
           "template": false
         },
         {
-          "description": "",
+          "description": "*Checks for invalid regex literals.*\n\nInvalid regex literals can fail at compile time with a PatternSyntaxException. This could be caused by e.g. dangling meta characters, or unclosed escape characters, etc.",
           "key": "com.sksamuel.scapegoat.inspections.string.InvalidRegex",
           "name": "Invalid regex",
           "params": [],
@@ -2462,7 +2462,7 @@
           "template": false
         },
         {
-          "description": "Use of java conversions can lead to unusual behaviour. It is recommended to use JavaConverters",
+          "description": "*Checks for use of Java conversions.*\n\nUse of Java conversions can lead to unusual behaviour. It is recommended to use JavaConverters.",
           "key": "com.sksamuel.scapegoat.inspections.collections.JavaConversionsUse",
           "name": "Java conversions",
           "params": [],
@@ -2470,7 +2470,7 @@
           "template": false
         },
         {
-          "description": "List append is O(n). For large lists, consider using cons (::) or another data structure such as ListBuffer or Vector and converting to a List once built.",
+          "description": "*Checks for when elements are appended to a list.*\n\nList append is O(n). For large lists, consider using cons (::) or another data structure such as ListBuffer, Vector or a cats.data.Chain (which has constant prepend and append).",
           "key": "com.sksamuel.scapegoat.inspections.collections.ListAppend",
           "name": "List append is slow",
           "params": [],
@@ -2478,7 +2478,7 @@
           "template": false
         },
         {
-          "description": "List.size is O(n). Consider using a different data type with O(1) size lookup such as Vector or Array.",
+          "description": "*Checks for use of List.size.*\n\nList.size is O(n). Consider using a different data type with O(1) size lookup such as Vector or an Array.",
           "key": "com.sksamuel.scapegoat.inspections.collections.ListSize",
           "name": "List.size is O(n)",
           "params": [],
@@ -2486,7 +2486,7 @@
           "template": false
         },
         {
-          "description": "",
+          "description": "*Checks for sealed traits without any classes extending it.*\n\nA sealed trait that is not extended is considered dead code.",
           "key": "com.sksamuel.scapegoat.inspections.LonelySealedTrait",
           "name": "Lonely sealed trait",
           "params": [],
@@ -2494,23 +2494,23 @@
           "template": false
         },
         {
-          "description": "",
+          "description": "*Checks for strings that look like they should be interpolated.*\n\nDid you forget to prefix this string with an s, f or raw to interpolate it?",
           "key": "com.sksamuel.scapegoat.inspections.string.LooksLikeInterpolatedString",
-          "name": "Looks Like Interpolated String",
+          "name": "Looks like interpolated String",
           "params": [],
           "severity": "Minor",
           "template": false
         },
         {
-          "description": "",
+          "description": "*Warns when you could use a partial function directly instead of a match block.*\n\nA map match can be replaced with a partial function for greater readability.",
           "key": "com.sksamuel.scapegoat.inspections.matching.PartialFunctionInsteadOfMatch",
-          "name": "Match instead of partial function",
+          "name": "Match instead of a partial function",
           "params": [],
           "severity": "Info",
           "template": false
         },
         {
-          "description": "",
+          "description": "*Checks for methods that have over 10 parameters.*\n\nMethods having a large number of parameters are more difficult to reason about, consider refactoring this code.",
           "key": "com.sksamuel.scapegoat.inspections.MaxParameters",
           "name": "Max parameters",
           "params": [],
@@ -2518,15 +2518,7 @@
           "template": false
         },
         {
-          "description": "",
-          "key": "com.sksamuel.scapegoat.inspections.inference.MethodReturningAny",
-          "name": "Method Returning Any",
-          "params": [],
-          "severity": "Minor",
-          "template": false
-        },
-        {
-          "description": "Methods should be in camelCase style with the first letter lower-case. See http://docs.scala-lang.org/style/naming-conventions.html#methods",
+          "description": "*Warns on method names that don't adhere to the Scala style guidelines.*\n\nMethods should be in camelCase style with the first letter lower-case. See http://docs.scala-lang.org/style/naming-conventions.html#methods.",
           "key": "com.sksamuel.scapegoat.inspections.naming.MethodNames",
           "name": "Method name not recommended",
           "params": [],
@@ -2534,7 +2526,15 @@
           "template": false
         },
         {
-          "description": "Case classes should have final modifier",
+          "description": "*Checks for functions that are defined or inferred to return Any.*\n\nMethod returns Any. Consider using a more specialized type.",
+          "key": "com.sksamuel.scapegoat.inspections.inference.MethodReturningAny",
+          "name": "Method returning Any",
+          "params": [],
+          "severity": "Minor",
+          "template": false
+        },
+        {
+          "description": "*Checks for case classes without a final modifier.*\n\nUsing case classes without final modifier can lead to surprising breakage.",
           "key": "com.sksamuel.scapegoat.inspections.FinalModifierOnCaseClass",
           "name": "Missing final modifier on case class",
           "params": [],
@@ -2542,23 +2542,23 @@
           "template": false
         },
         {
-          "description": "NaN comparision will always fail. Use value.isNan instead.",
+          "description": "*Checks for x == Double.NaN which will always fail.*\n\nNaN comparison will always fail. Use value.isNan instead.",
           "key": "com.sksamuel.scapegoat.inspections.math.NanComparison",
-          "name": "Nan comparision",
+          "name": "Nan comparison",
           "params": [],
           "severity": "Major",
           "template": false
         },
         {
-          "description": "",
+          "description": "*Checks for code that overrides parent method but simply calls super.*\n\nThis method is overridden yet only calls super.",
           "key": "com.sksamuel.scapegoat.inspections.NoOpOverride",
-          "name": "No op Override",
+          "name": "Noop override",
           "params": [],
           "severity": "Info",
           "template": false
         },
         {
-          "description": "",
+          "description": "*Checks for use of null in assignments.*\n\nUse an Option instead when the value can be empty.",
           "key": "com.sksamuel.scapegoat.inspections.nulls.NullAssignment",
           "name": "Null assignment",
           "params": [],
@@ -2566,7 +2566,7 @@
           "template": false
         },
         {
-          "description": "",
+          "description": "*Checks for use of null in method invocation.*\n\nUse an Option instead when the value can be empty and pass down a None instead.",
           "key": "com.sksamuel.scapegoat.inspections.nulls.NullParameter",
           "name": "Null parameter",
           "params": [],
@@ -2574,7 +2574,7 @@
           "template": false
         },
         {
-          "description": "",
+          "description": "*Ensures object names adhere to the Scala style guidelines.*\n\nObject names should only contain alphanumeric characters.",
           "key": "com.sksamuel.scapegoat.inspections.naming.ObjectNames",
           "name": "Object name not recommended",
           "params": [],
@@ -2582,7 +2582,7 @@
           "template": false
         },
         {
-          "description": "",
+          "description": "*Checks for methods returning Unit that are defined without empty parentheses.*\n\nMethods should be defined with empty parentheses if they have side effects. A method returning Unit must have side effects, therefore you should declare it with ().",
           "key": "com.sksamuel.scapegoat.inspections.style.ParameterlessMethodReturnsUnit",
           "name": "Parameterless methods returns unit",
           "params": [],
@@ -2590,15 +2590,15 @@
           "template": false
         },
         {
-          "description": "",
+          "description": "*Finds type bounds of the form [A <: Any] or [A >: Nothing].*\n\nType bound resolves to Nothing <: T <: Any. Did you mean to put in other bounds?",
           "key": "com.sksamuel.scapegoat.inspections.inference.PointlessTypeBounds",
-          "name": "Pointless Type Bounds",
+          "name": "Pointless type bounds",
           "params": [],
           "severity": "Minor",
           "template": false
         },
         {
-          "description": "",
+          "description": "*Checks for use of Map().*\n\nMap[K,V]() allocates an intermediate object. Consider Map.empty which returns a singleton instance without creating a new object.",
           "key": "com.sksamuel.scapegoat.inspections.collections.PreferMapEmpty",
           "name": "Prefer Map.empty",
           "params": [],
@@ -2606,7 +2606,7 @@
           "template": false
         },
         {
-          "description": "",
+          "description": "*Checks for use of Option.size.*\n\nPrefer to use Option.isDefined, Option.isEmpty or Option.nonEmpty instead of Option.size.",
           "key": "com.sksamuel.scapegoat.inspections.option.OptionSize",
           "name": "Prefer Option.isDefined instead of Option.size",
           "params": [],
@@ -2614,7 +2614,7 @@
           "template": false
         },
         {
-          "description": "",
+          "description": "*Checks for use of Seq().*\n\nSeq[T]() allocates an intermediate object. Consider Seq.empty which returns a singleton instance without creating a new object.",
           "key": "com.sksamuel.scapegoat.inspections.collections.PreferSeqEmpty",
           "name": "Prefer Seq.empty",
           "params": [],
@@ -2622,7 +2622,7 @@
           "template": false
         },
         {
-          "description": "",
+          "description": "*Checks for use of Set().*\n\nSet[T]() allocates an intermediate object. Consider Set.empty which returns a singleton instance without creating a new object.",
           "key": "com.sksamuel.scapegoat.inspections.collections.PreferSetEmpty",
           "name": "Prefer Set.empty",
           "params": [],
@@ -2630,7 +2630,7 @@
           "template": false
         },
         {
-          "description": "",
+          "description": "*Checks for values that have Product with Serializable as their inferred type.*\n\nIt is unlikely that Product with Serializable was your target type. This is often an indication of mixing up incompatible types.",
           "key": "com.sksamuel.scapegoat.inspections.inference.ProductWithSerializableInferred",
           "name": "Product with Serializable inferred",
           "params": [],
@@ -2638,7 +2638,7 @@
           "template": false
         },
         {
-          "description": "Public finalizer should be avoided as finalizers should not be programatically invoked",
+          "description": "*Checks for overridden finalizes that are public.*\n\nPublic finalizer should be avoided as finalizers should not be programmatically invoked.",
           "key": "com.sksamuel.scapegoat.inspections.PublicFinalizer",
           "name": "PublicFinalizer",
           "params": [],
@@ -2646,23 +2646,23 @@
           "template": false
         },
         {
-          "description": "",
+          "description": "*Checks for redundant final modifiers on methods.*\n\nA final modifier on methods that cannot be overridden is redundant.",
           "key": "com.sksamuel.scapegoat.inspections.RedundantFinalModifierOnMethod",
-          "name": "Redundant final modifier on method",
+          "name": "Redundant final modifier on a method",
           "params": [],
           "severity": "Info",
           "template": false
         },
         {
-          "description": "This var cannot be overridden, final modifier is redundant",
+          "description": "*Checks for redundant final modifier on vars.*\n\nA final modifier on a var that cannot be overridden is redundant.",
           "key": "com.sksamuel.scapegoat.inspections.RedundantFinalModifierOnVar",
-          "name": "Redundant final modifier on var",
+          "name": "Redundant final modifier on a var",
           "params": [],
           "severity": "Info",
           "template": false
         },
         {
-          "description": "",
+          "description": "*Checks for empty finalizers.*\n\nAn empty finalizer, e.g. override def finalize: Unit = {} is redundant and should be removed.",
           "key": "com.sksamuel.scapegoat.inspections.unneccesary.RedundantFinalizer",
           "name": "Redundant finalizer",
           "params": [],
@@ -2670,7 +2670,15 @@
           "template": false
         },
         {
-          "description": "",
+          "description": "*Checks for the main branch and the else branch of an if being the same.*\n\nThe if statement could be refactored if both branches are the same or start with the same.",
+          "key": "com.sksamuel.scapegoat.inspections.controlflow.RepeatedIfElseBody",
+          "name": "Repeated body of if main and else branch",
+          "params": [],
+          "severity": "Minor",
+          "template": false
+        },
+        {
+          "description": "*Checks for case statements which have the same body.*\n\nCase body is repeated. Consider merging pattern clauses together.",
           "key": "com.sksamuel.scapegoat.inspections.matching.RepeatedCaseBody",
           "name": "Repeated case body",
           "params": [],
@@ -2678,15 +2686,7 @@
           "template": false
         },
         {
-          "description": "",
-          "key": "com.sksamuel.scapegoat.inspections.collections.CollectionIndexOnNonIndexedSeq",
-          "name": "Seq.apply() on a non-IndexedSeq may cause performance problems",
-          "params": [],
-          "severity": "Minor",
-          "template": false
-        },
-        {
-          "description": "",
+          "description": "*Checks for boolean expressions that can be simplified.*\n\nBoolean expressions such as x == false can be re-written as !x.",
           "key": "com.sksamuel.scapegoat.inspections.style.SimplifyBooleanExpression",
           "name": "Simplify boolean expressions",
           "params": [],
@@ -2694,7 +2694,7 @@
           "template": false
         },
         {
-          "description": "",
+          "description": "*Checks for String.substring(0).*\n\nUse of String.substring(0) will always return the same string.",
           "key": "com.sksamuel.scapegoat.inspections.string.SubstringZero",
           "name": "String.substring(0)",
           "params": [],
@@ -2702,7 +2702,7 @@
           "template": false
         },
         {
-          "description": "Strip margin will strip | from regex - possible corrupted regex",
+          "description": "*Checks for .stripMargin calls on regex strings that contain a pipe.*\n\nStrip margin will strip | from regex - possible corrupted regex.",
           "key": "com.sksamuel.scapegoat.inspections.string.StripMarginOnRegex",
           "name": "Strip margin on regex",
           "params": [],
@@ -2710,7 +2710,7 @@
           "template": false
         },
         {
-          "description": "",
+          "description": "*Checks for code where matching is taking place on class literals.*\n\nMatching on an companion object of a case class is probably not what you intended.",
           "key": "com.sksamuel.scapegoat.inspections.matching.SuspiciousMatchOnClassObject",
           "name": "Suspicious match on class object",
           "params": [],
@@ -2718,7 +2718,7 @@
           "template": false
         },
         {
-          "description": "",
+          "description": "*Checks for an inefficient use of filter.sort.*\n\nFilter first and then sort the remaining collection. Swap sort.filter for filter.sort for better performance.",
           "key": "com.sksamuel.scapegoat.inspections.collections.SwapSortFilter",
           "name": "Swap sort filter",
           "params": [],
@@ -2726,7 +2726,7 @@
           "template": false
         },
         {
-          "description": "",
+          "description": "*Checks for shadowed type parameters in methods.*\n\nShadowing type parameters is considered a bad practice and should be avoided.",
           "key": "com.sksamuel.scapegoat.inspections.TypeShadowing",
           "name": "Type shadowing",
           "params": [],
@@ -2734,7 +2734,7 @@
           "template": false
         },
         {
-          "description": "",
+          "description": "*Checks for unnecessary toInt on instances of Int or toString on Strings, etc.*\n\nCalling e.g. toString on a String or toList on a List is completely unnecessary and it's an equivalent to identity.",
           "key": "com.sksamuel.scapegoat.inspections.unneccesary.UnnecessaryConversion",
           "name": "Unnecessary conversion",
           "params": [],
@@ -2742,7 +2742,7 @@
           "template": false
         },
         {
-          "description": "",
+          "description": "*Checks for code like if (expr) true else false.*\n\nIf comparison is not needed. Use the condition, e.g. instead of if (a == b) true else false, use a == b or instead of if (a == b) false else true, use !(a == b).",
           "key": "com.sksamuel.scapegoat.inspections.unneccesary.UnnecessaryIf",
           "name": "Unnecessary if condition.",
           "params": [],
@@ -2750,7 +2750,7 @@
           "template": false
         },
         {
-          "description": "Scala returns the value of the last expression in a block. Use of return here is not idiomatic scala",
+          "description": "*Checks for use of return keyword in blocks.*\n\nScala returns the value of the last expression in a block. Use of return here is not an idiomatic Scala.",
           "key": "com.sksamuel.scapegoat.inspections.unneccesary.UnnecessaryReturnUse",
           "name": "Unnecessary return",
           "params": [],
@@ -2758,7 +2758,7 @@
           "template": false
         },
         {
-          "description": "",
+          "description": "*Checks for use of reverse followed by head/headOption/iterator/map.*\n\nreverse followed by head, headOption, iterator, or map can be replaced, respectively, with last, lastOption, reverseIterator, or reverseMap.",
           "key": "com.sksamuel.scapegoat.inspections.collections.ReverseFunc",
           "name": "Unnecessary reverse",
           "params": [],
@@ -2766,7 +2766,7 @@
           "template": false
         },
         {
-          "description": "",
+          "description": "*Checks for catch clauses that cannot be reached.*\n\nOne or more cases are unreachable.",
           "key": "com.sksamuel.scapegoat.inspections.exception.UnreachableCatch",
           "name": "Unreachable catch",
           "params": [],
@@ -2774,7 +2774,7 @@
           "template": false
         },
         {
-          "description": "",
+          "description": "*Checks Seq.contains() and Option.contains() for unrelated types.*\n\ncontains() accepts arguments af any type, which means you might be checking if your collection contains an element of an unrelated type.",
           "key": "com.sksamuel.scapegoat.inspections.collections.UnsafeContains",
           "name": "Unsafe contains",
           "params": [],
@@ -2782,7 +2782,7 @@
           "template": false
         },
         {
-          "description": "",
+          "description": "*Checks for String.contains(value) for invalid types.*\n\nString.contains() accepts arguments af any type, which means you might be checking if your string contains an element of an unrelated type.",
           "key": "com.sksamuel.scapegoat.inspections.string.UnsafeStringContains",
           "name": "Unsafe string contains",
           "params": [],
@@ -2790,7 +2790,7 @@
           "template": false
         },
         {
-          "description": "",
+          "description": "*Checks for unused method parameters.*\n\nUnused constructor or method parameters should be removed.",
           "key": "com.sksamuel.scapegoat.inspections.unneccesary.UnusedMethodParameter",
           "name": "Unused parameter",
           "params": [],
@@ -2798,7 +2798,7 @@
           "template": false
         },
         {
-          "description": "",
+          "description": "*Checks for use of math.pow for calculating math.cbrt.*\n\nUse math.cbrt, which is clearer and more performant than math.pow(x, 1/3).",
           "key": "com.sksamuel.scapegoat.inspections.math.UseCbrt",
           "name": "Use cbrt",
           "params": [],
@@ -2806,7 +2806,7 @@
           "template": false
         },
         {
-          "description": "",
+          "description": "*Checks for use of math.exp(x) - 1 instead of math.expm1(x).*\n\nUse math.expm1(x), which is clearer and more performant than math.exp(x) - 1.",
           "key": "com.sksamuel.scapegoat.inspections.math.UseExpM1",
           "name": "Use expm1",
           "params": [],
@@ -2814,7 +2814,7 @@
           "template": false
         },
         {
-          "description": "",
+          "description": "*Checks for use of math.log(x)/math.log(10) instead of math.log10(x).*\n\nUse math.log10(x), which is clearer and more performant than $math.log(x)/$math.log(10).",
           "key": "com.sksamuel.scapegoat.inspections.math.UseLog10",
           "name": "Use log10",
           "params": [],
@@ -2822,7 +2822,7 @@
           "template": false
         },
         {
-          "description": "",
+          "description": "*Checks for use of math.log(x + 1) instead of math.log1p(x)*\n\nUse math.log1p(x) is clearer and more performant than $math.log(1 + x).",
           "key": "com.sksamuel.scapegoat.inspections.math.UseLog1P",
           "name": "Use log1p",
           "params": [],
@@ -2830,15 +2830,7 @@
           "template": false
         },
         {
-          "description": "",
-          "key": "com.sksamuel.scapegoat.inspections.collections.MapGetAndGetOrElse",
-          "name": "Use of .get.getOrElse instead of .getOrElse",
-          "params": [],
-          "severity": "Major",
-          "template": false
-        },
-        {
-          "description": "",
+          "description": "*Checks for explicit toString calls on arrays.*\n\nCalling toString on an array does not perform a deep toString.",
           "key": "com.sksamuel.scapegoat.inspections.string.ArraysToString",
           "name": "Use of Array.toString",
           "params": [],
@@ -2846,15 +2838,23 @@
           "template": false
         },
         {
-          "description": "",
+          "description": "*Checks for use of .get on Left or Right projection.*\n\nMethod .get on a Left and a Right projection in deprecated since 2.13, use Either.getOrElse or Either.swap.getOrElse instead.",
           "key": "com.sksamuel.scapegoat.inspections.option.EitherGet",
-          "name": "Use of Either Right or Left Projection get",
+          "name": "Use of Either.right or Either.left projection followed by a get",
           "params": [],
           "severity": "Major",
           "template": false
         },
         {
-          "description": "",
+          "description": "*Checks whether Map.get().getOrElse() can be simplified to Map.getOrElse().*\n\nMap.get(key).getOrElse(value) can be replaced with Map.getOrElse(key, value), which is more concise.",
+          "key": "com.sksamuel.scapegoat.inspections.collections.MapGetAndGetOrElse",
+          "name": "Use of Map.get().getOrElse instead of Map.getOrElse",
+          "params": [],
+          "severity": "Major",
+          "template": false
+        },
+        {
+          "description": "*Checks for use of Option.get*\n\nUsing Option.get defeats the purpose of using Option in the first place. Use the following instead: Option.getOrElse, Option.fold, pattern matching or don't take the value out of the container and map over it to transform it.",
           "key": "com.sksamuel.scapegoat.inspections.option.OptionGet",
           "name": "Use of Option.get",
           "params": [],
@@ -2862,7 +2862,7 @@
           "template": false
         },
         {
-          "description": "",
+          "description": "*Checks for use of Try.get.*\n\nUsing Try.get is unsafe because it will throw the underlying exception in case of a Failure. Use the following instead: Try.getOrElse, Try.fold, pattern matching or don't take the value out of the container and map over it to transform it.",
           "key": "com.sksamuel.scapegoat.inspections.unsafe.TryGet",
           "name": "Use of Try.get",
           "params": [],
@@ -2870,7 +2870,15 @@
           "template": false
         },
         {
-          "description": "",
+          "description": "*Checks for indexing on a Seq which is not an IndexedSeq.*\n\nUsing an index to access elements of an IndexedSeq may cause performance problems.",
+          "key": "com.sksamuel.scapegoat.inspections.collections.CollectionIndexOnNonIndexedSeq",
+          "name": "Use of apply method on a non-indexed Seq",
+          "params": [],
+          "severity": "Minor",
+          "template": false
+        },
+        {
+          "description": "**\n\nUse of asInstanceOf is considered a bad practice - consider using pattern matching instead.",
           "key": "com.sksamuel.scapegoat.inspections.unsafe.AsInstanceOf",
           "name": "Use of asInstanceOf",
           "params": [],
@@ -2878,7 +2886,7 @@
           "template": false
         },
         {
-          "description": "",
+          "description": "*Checks for use of isInstanceOf.*\n\nUse of isInstanceOf is considered a bad practice - consider using pattern matching instead.",
           "key": "com.sksamuel.scapegoat.inspections.unsafe.IsInstanceOf",
           "name": "Use of isInstanceOf",
           "params": [],
@@ -2886,15 +2894,15 @@
           "template": false
         },
         {
-          "description": "",
+          "description": "*Checks for use of unsafe methods on Traversable.*\n\nThe following methods on Traversable are considered to be unsafe (head, tail, init, last, reduce, reduceLeft, reduceRight, max, maxBy, min, minBy).",
           "key": "com.sksamuel.scapegoat.inspections.collections.UnsafeTraversableMethods",
-          "name": "Use of unsafe Traversable methods (head, tail, init, last, reduce, reduceLeft, reduceRight, max, maxBy, min, minBy)",
+          "name": "Use of unsafe Traversable methods.",
           "params": [],
           "severity": "Major",
           "template": false
         },
         {
-          "description": "",
+          "description": "*Checks for use of math.pow for calculating math.sqrt.*\n\nUse math.sqrt, which is clearer and more performant than $math.pow(x, 0.5).",
           "key": "com.sksamuel.scapegoat.inspections.math.UseSqrt",
           "name": "Use sqrt",
           "params": [],
@@ -2902,7 +2910,7 @@
           "template": false
         },
         {
-          "description": "",
+          "description": "*Checks for vars that could be declared as vals.*\n\nA variable (var) that is never written to could be turned into a value (val).",
           "key": "com.sksamuel.scapegoat.inspections.unneccesary.VarCouldBeVal",
           "name": "Var could be val",
           "params": [],
@@ -2910,7 +2918,7 @@
           "template": false
         },
         {
-          "description": "",
+          "description": "*Finds closures that reference variables (var).*\n\nClosing over a var can lead to subtle bugs.",
           "key": "com.sksamuel.scapegoat.inspections.VarClosure",
           "name": "Var in closure",
           "params": [],
@@ -2918,7 +2926,15 @@
           "template": false
         },
         {
-          "description": "",
+          "description": "*Checks for multiple uses of the variable name in nested scopes.*\n\nVariable shadowing is very useful, but can easily lead to nasty bugs in your code. Shadowed variables can be potentially confusing to other maintainers when the same name is adopted to have a new meaning in a nested scope.",
+          "key": "com.sksamuel.scapegoat.inspections.VariableShadowing",
+          "name": "Variable shadowing",
+          "params": [],
+          "severity": "Minor",
+          "template": false
+        },
+        {
+          "description": "*Checks for code that uses a while(true) or do {...} while(true) block.*\n\nA (do) while true loop is unlikely to be meant for production.",
           "key": "com.sksamuel.scapegoat.inspections.controlflow.WhileTrue",
           "name": "While true loop",
           "params": [],
@@ -2926,7 +2942,7 @@
           "template": false
         },
         {
-          "description": "Dividing zero by any number will always return zero",
+          "description": "*Checks for dividing 0 by a number.*\n\nDividing zero by any number will always return zero, e.g. 0 / x == 0.",
           "key": "com.sksamuel.scapegoat.inspections.math.ZeroNumerator",
           "name": "Zero numerator",
           "params": [],
@@ -2934,15 +2950,15 @@
           "template": false
         },
         {
-          "description": "",
+          "description": "*Checks for use of filter().head.*\n\nfilter().head can throw an exception if the collection is empty - it can be replaced with find() match {...}.",
           "key": "com.sksamuel.scapegoat.inspections.collections.FilterDotHead",
-          "name": "filter().head can throw an exception; use find()",
+          "name": "filter().head can throw an exception",
           "params": [],
           "severity": "Info",
           "template": false
         },
         {
-          "description": "",
+          "description": "*Checks for use of filter().headOption.*\n\nfilter() scans the entire collection, which is unnecessary if you only want to get the first element that satisfies the predicate - filter().headOption can be replaced with find() to potentially avoid scanning the entire collection.",
           "key": "com.sksamuel.scapegoat.inspections.collections.FilterDotHeadOption",
           "name": "filter().headOption instead of find()",
           "params": [],
@@ -2950,7 +2966,7 @@
           "template": false
         },
         {
-          "description": "",
+          "description": "*Checks for use of filter().isEmpty.*\n\nfilter() scans the entire collection, which can potentially be avoided if the element exists in the collection - filter().isEmpty can be replaced with !exists().",
           "key": "com.sksamuel.scapegoat.inspections.collections.FilterDotIsEmpty",
           "name": "filter().isEmpty instead of !exists()",
           "params": [],
@@ -2958,7 +2974,7 @@
           "template": false
         },
         {
-          "description": "",
+          "description": "*Checks if filter().size can be simplified to count().*\n\nfilter().size can be replaced with count(), which is more concise.",
           "key": "com.sksamuel.scapegoat.inspections.collections.FilterDotSize",
           "name": "filter().size() instead of count()",
           "params": [],
@@ -2966,7 +2982,7 @@
           "template": false
         },
         {
-          "description": "",
+          "description": "*Checks whether the expression can be rewritten using flatten.*\n\nfilter(_.isDefined).map(_.get) can be replaced with flatten.",
           "key": "com.sksamuel.scapegoat.inspections.collections.FilterOptionAndGet",
           "name": "filter(_.isDefined).map(_.get) instead of flatten",
           "params": [],
@@ -2974,7 +2990,15 @@
           "template": false
         },
         {
-          "description": "",
+          "description": "*Checks whether find() can be replaced with exists().*\n\nfind().isDefined can be replaced with exists(), which is more concise.",
+          "key": "com.sksamuel.scapegoat.inspections.collections.FindDotIsDefined",
+          "name": "find().isDefined() instead of exists()",
+          "params": [],
+          "severity": "Info",
+          "template": false
+        },
+        {
+          "description": "*Checks whether find() can be replaced with exists().*\n\nfind() != None can be replaced with exists(), which is more concise.",
           "key": "com.sksamuel.scapegoat.inspections.collections.FindAndNotEqualsNoneReplaceWithExists",
           "name": "find(x => ) != None instead of exists(x =>)",
           "params": [],
@@ -2982,7 +3006,7 @@
           "template": false
         },
         {
-          "description": "",
+          "description": "*Checks for use of reverse.tail.reverse.*\n\nreverse.tail.reverse can be replaced with init, which is more concise.",
           "key": "com.sksamuel.scapegoat.inspections.collections.ReverseTailReverse",
           "name": "reverse.tail.reverse instead of init",
           "params": [],
@@ -2990,17 +3014,9 @@
           "template": false
         },
         {
-          "description": "",
+          "description": "*Checks for use of reverse.take().reverse.*\n\nreverse.take().reverse can be replaced with takeRight, which is more concise.",
           "key": "com.sksamuel.scapegoat.inspections.collections.ReverseTakeReverse",
-          "name": "reverse.take(...).reverse instead of takeRight",
-          "params": [],
-          "severity": "Info",
-          "template": false
-        },
-        {
-          "description": "",
-          "key": "com.sksamuel.scapegoat.inspections.collections.FindDotIsDefined",
-          "name": "use exists() not find().isDefined()",
+          "name": "reverse.take().reverse instead of takeRight",
           "params": [],
           "severity": "Info",
           "template": false
@@ -3928,7 +3944,7 @@
     ],
     "scapegoat": [
       {
-        "description": "",
+        "description": "*Checks whether !isEmpty can be replaced with nonEmpty.*\n\n!.isEmpty can be replaced with.nonEmpty to make it easier to reason about.",
         "key": "com.sksamuel.scapegoat.inspections.collections.NegationIsEmpty",
         "name": "!isEmpty can be replaced with nonEmpty",
         "params": [],
@@ -3936,7 +3952,7 @@
         "template": false
       },
       {
-        "description": "",
+        "description": "*Checks whether !nonEmpty can be replaced with isEmpty.*\n\n!.nonEmpty can be replaced with.isEmpty to make it easier to reason about.",
         "key": "com.sksamuel.scapegoat.inspections.collections.NegationNonEmpty",
         "name": "!nonEmpty can be replaced with isEmpty",
         "params": [],
@@ -3944,7 +3960,7 @@
         "template": false
       },
       {
-        "description": "Array equals is not an equality check. Use a.deep == b.deep or convert to another collection type",
+        "description": "*Checks for comparison of arrays using == which will always return false.*\n\nArray equals is not an equality check. Use a.deep == b.deep or convert to another collection type.",
         "key": "com.sksamuel.scapegoat.inspections.collections.ArrayEquals",
         "name": "Array equals",
         "params": [],
@@ -3952,7 +3968,7 @@
         "template": false
       },
       {
-        "description": "",
+        "description": "*Checks for arrays passed to String.format.*\n\nAn Array passed to String.format might result in an incorrect formatting.",
         "key": "com.sksamuel.scapegoat.inspections.string.ArraysInFormat",
         "name": "Array passed to String.format",
         "params": [],
@@ -3960,31 +3976,31 @@
         "template": false
       },
       {
-        "description": "",
+        "description": "*Checks for ranges using (j to k - 1).*\n\nA range in the following format (j to k - 1) can be simplified to (j until k).",
         "key": "com.sksamuel.scapegoat.inspections.AvoidToMinusOne",
-        "name": "Avoid To Minus One",
+        "name": "Avoid (j to k - 1)",
         "params": [],
         "severity": "Info",
         "template": false
       },
       {
-        "description": "",
+        "description": "*Checks for use of Traversable.size.*\n\n.size can be slow for some data structures, prefer .nonEmpty, which is O(1).",
         "key": "com.sksamuel.scapegoat.inspections.collections.AvoidSizeNotEqualsZero",
-        "name": "Avoid Traversable.size != 0, use Traversable.nonEmpty instead",
+        "name": "Avoid Traversable.size != 0",
         "params": [],
         "severity": "Minor",
         "template": false
       },
       {
-        "description": "",
+        "description": "*Checks for use of Traversable.size.*\n\nTraversable.size can be slow for some data structures, prefer Traversable.isEmpty, which is O(1).",
         "key": "com.sksamuel.scapegoat.inspections.collections.AvoidSizeEqualsZero",
-        "name": "Avoid Traversable.size == 0, use Traversable.isEmpty instead",
+        "name": "Avoid Traversable.size == 0",
         "params": [],
         "severity": "Minor",
         "template": false
       },
       {
-        "description": "",
+        "description": "*Checks for symbolic method names.*\n\nScala style guide advocates against routinely using operators as method names, see http://docs.scala-lang.org/style/naming-conventions.html#symbolic-method-names.",
         "key": "com.sksamuel.scapegoat.inspections.style.AvoidOperatorOverload",
         "name": "Avoid operator overload",
         "params": [],
@@ -3992,7 +4008,7 @@
         "template": false
       },
       {
-        "description": "",
+        "description": "*Checks for use of BigDecimal(double) which can be unsafe.*\n\nThe results of this constructor can be somewhat unpredictable. E.g. writing new BigDecimal(0.1) in Java creates a BigDecimal which is actually equal to 0.1000000000000000055511151231257827021181583404541015625. This is because 0.1 cannot be represented exactly as a double.",
         "key": "com.sksamuel.scapegoat.inspections.math.BigDecimalDoubleConstructor",
         "name": "Big decimal double constructor",
         "params": [],
@@ -4000,7 +4016,7 @@
         "template": false
       },
       {
-        "description": "When using setScale() on a BigDecimal without setting the rounding mode, this can throw an exception if rounding is required. Did you mean to call setScale(s, RoundingMode.XYZ)",
+        "description": "*Checks for use of setScale() on a BigDecimal without setting the rounding mode can throw an exception.*\n\nWhen using setScale() on a BigDecimal without setting the rounding mode, this can throw an exception if rounding is required. Did you mean to call setScale(s, RoundingMode.XYZ)?",
         "key": "com.sksamuel.scapegoat.inspections.math.BigDecimalScaleWithoutRoundingMode",
         "name": "BigDecimal setScale() without rounding mode",
         "params": [],
@@ -4008,15 +4024,15 @@
         "template": false
       },
       {
-        "description": "",
+        "description": "*Checks for types with upper bounds of a final type.*\n\nPointless type bound. Type parameter can only be a single value.",
         "key": "com.sksamuel.scapegoat.inspections.inference.BoundedByFinalType",
-        "name": "Bounded by final type",
+        "name": "Bounded by a final type",
         "params": [],
         "severity": "Minor",
         "template": false
       },
       {
-        "description": "",
+        "description": "*Checks for potentially broken odd checks.*\n\nCode that attempts to check for oddness using x % 2 == 1 will fail on negative numbers. Consider using x % 2 != 0",
         "key": "com.sksamuel.scapegoat.inspections.math.BrokenOddness",
         "name": "Broken odd check",
         "params": [],
@@ -4024,7 +4040,7 @@
         "template": false
       },
       {
-        "description": "",
+        "description": "*Checks for try blocks that catch exception.*\n\nDid you intend to catch all exceptions? Consider catching a more specific exception class.",
         "key": "com.sksamuel.scapegoat.inspections.exception.CatchException",
         "name": "Catch exception",
         "params": [],
@@ -4032,7 +4048,7 @@
         "template": false
       },
       {
-        "description": "",
+        "description": "*Checks for try blocks that catch fatal exceptions: VirtualMachineError, ThreadDeath, InterruptedException, LinkageError, ControlThrowable.*\n\nDid you intend to catch a fatal exception? Consider using scala.util.control.NonFatal instead.",
         "key": "com.sksamuel.scapegoat.inspections.exception.CatchFatal",
         "name": "Catch fatal exception",
         "params": [],
@@ -4040,7 +4056,7 @@
         "template": false
       },
       {
-        "description": "",
+        "description": "*Checks for try blocks that catch Throwable.*\n\nDid you intend to catch all throwables? Consider catching a more specific exception class.",
         "key": "com.sksamuel.scapegoat.inspections.exception.CatchThrowable",
         "name": "Catch throwable",
         "params": [],
@@ -4048,7 +4064,7 @@
         "template": false
       },
       {
-        "description": "",
+        "description": "*Checks for try blocks that catch null pointer exceptions.*\n\nAvoid using null at all cost and you shouldn't need to catch NullPointerExceptions. Prefer Option to indicate potentially missing values and use Try to materialize exceptions thrown by any external libraries.",
         "key": "com.sksamuel.scapegoat.inspections.exception.CatchNpe",
         "name": "Catching NPE",
         "params": [],
@@ -4056,7 +4072,7 @@
         "template": false
       },
       {
-        "description": "",
+        "description": "*Ensures class names adhere to the style guidelines.*\n\nClass names should begin with uppercase letter.",
         "key": "com.sksamuel.scapegoat.inspections.naming.ClassNames",
         "name": "Class name not recommended",
         "params": [],
@@ -4064,7 +4080,7 @@
         "template": false
       },
       {
-        "description": "",
+        "description": "*Checks for negative access on a sequence, e.g. list.get(-1).*\n\nTrying to access Seq elements using a negative index will result in an IndexOutOfBoundsException.",
         "key": "com.sksamuel.scapegoat.inspections.collections.CollectionNegativeIndex",
         "name": "Collection index out of bounds",
         "params": [],
@@ -4072,23 +4088,23 @@
         "template": false
       },
       {
-        "description": "",
+        "description": "*Checks for variables that are confusingly named.*\n\nE.g. an instance of a Set is confusingly referred to by a variable called/containing list, or the other way around.",
         "key": "com.sksamuel.scapegoat.inspections.collections.CollectionNamingConfusion",
-        "name": "Collection naming Confusion",
+        "name": "Collection naming confusion",
         "params": [],
         "severity": "Info",
         "template": false
       },
       {
-        "description": "",
+        "description": "*Checks for collection operations that promote the collection to Any.*\n\nThe :+ (append) operator on collections accepts any argument you give it, which means that you can end up with e.g. Seq[Any] if your types don't match.",
         "key": "com.sksamuel.scapegoat.inspections.collections.CollectionPromotionToAny",
-        "name": "Collection promotion to any",
+        "name": "Collection promotion to Any",
         "params": [],
         "severity": "Minor",
         "template": false
       },
       {
-        "description": "",
+        "description": "*Checks for equality comparisons that cannot succeed.*\n\nIn most case comparing unrelated types cannot succeed and it's usually an indication of a bug.",
         "key": "com.sksamuel.scapegoat.inspections.equality.ComparingUnrelatedTypes",
         "name": "Comparing unrelated types",
         "params": [],
@@ -4096,7 +4112,7 @@
         "template": false
       },
       {
-        "description": "Comparision with self will always yield true",
+        "description": "*Checks for equality checks with itself.*\n\nComparison with self will always yield true.",
         "key": "com.sksamuel.scapegoat.inspections.equality.ComparisonWithSelf",
         "name": "Comparision with self",
         "params": [],
@@ -4104,7 +4120,7 @@
         "template": false
       },
       {
-        "description": "",
+        "description": "*Checks for code like a == List() or a == Nil.*\n\nPrefer use of isEmpty instead of comparison to an empty List.",
         "key": "com.sksamuel.scapegoat.inspections.collections.ComparisonToEmptyList",
         "name": "Comparison to empty list",
         "params": [],
@@ -4112,7 +4128,7 @@
         "template": false
       },
       {
-        "description": "",
+        "description": "*Checks for code like a == Set() or a == Set.empty.*\n\nPrefer use of isEmpty instead of comparison to an empty Set.",
         "key": "com.sksamuel.scapegoat.inspections.collections.ComparisonToEmptySet",
         "name": "Comparison to empty set",
         "params": [],
@@ -4120,7 +4136,7 @@
         "template": false
       },
       {
-        "description": "",
+        "description": "*Checks for code where the if condition compiles to a constant.*\n\nAn if condition which gets compiled to a constant, like e.g. if (1 < 2) or if (false) doesn't add any value and should be avoided.",
         "key": "com.sksamuel.scapegoat.inspections.unneccesary.ConstantIf",
         "name": "Constant if expression",
         "params": [],
@@ -4128,7 +4144,7 @@
         "template": false
       },
       {
-        "description": "Divide by one will always return the original value",
+        "description": "*Checks for division by one.*\n\nDivide by one will always return the original value.",
         "key": "com.sksamuel.scapegoat.inspections.math.DivideByOne",
         "name": "Divide by one",
         "params": [],
@@ -4136,7 +4152,7 @@
         "template": false
       },
       {
-        "description": "",
+        "description": "*Checks for code like !(!b).*\n\nDouble negation can be removed, e.g. !(!b) it equal to just b.",
         "key": "com.sksamuel.scapegoat.inspections.DoubleNegation",
         "name": "Double negation",
         "params": [],
@@ -4144,15 +4160,15 @@
         "template": false
       },
       {
-        "description": "",
+        "description": "*Checks for duplicate import statements.*\n\nDuplicate imports should be removed.",
         "key": "com.sksamuel.scapegoat.inspections.imports.DuplicateImport",
-        "name": "Duplicated Import",
+        "name": "Duplicate import",
         "params": [],
         "severity": "Info",
         "template": false
       },
       {
-        "description": "",
+        "description": "*Checks for duplicate key names in Map literals.*\n\nA map key is overwritten by a later entry.",
         "key": "com.sksamuel.scapegoat.inspections.collections.DuplicateMapKey",
         "name": "Duplicated map key",
         "params": [],
@@ -4160,7 +4176,7 @@
         "template": false
       },
       {
-        "description": "",
+        "description": "*Checks for duplicate values in set literals.*\n\nA set value is overwritten by a later entry.",
         "key": "com.sksamuel.scapegoat.inspections.collections.DuplicateSetValue",
         "name": "Duplicated set value",
         "params": [],
@@ -4168,7 +4184,7 @@
         "template": false
       },
       {
-        "description": "Empty case class can be rewritten as a case object",
+        "description": "*Checks for empty case classes like, e.g. case class Faceman().*\n\nAn empty case class can be rewritten as a case object.",
         "key": "com.sksamuel.scapegoat.inspections.EmptyCaseClass",
         "name": "Empty case class",
         "params": [],
@@ -4176,7 +4192,7 @@
         "template": false
       },
       {
-        "description": "",
+        "description": "*Finds catch blocks that don't handle caught exceptions.*\n\nIf you use a try/catch block to deal with an exception, you should handle all of the caught exceptions and if for some reason you're throwing another exception in the result, you should include the original exception as the cause.",
         "key": "com.sksamuel.scapegoat.inspections.exception.SwallowedException",
         "name": "Empty catch block",
         "params": [],
@@ -4184,7 +4200,7 @@
         "template": false
       },
       {
-        "description": "",
+        "description": "*Checks for empty for loops.*\n\nAn empty for loop isn't a common practice and in most cases is considered as dead code.",
         "key": "com.sksamuel.scapegoat.inspections.empty.EmptyFor",
         "name": "Empty for loop",
         "params": [],
@@ -4192,15 +4208,15 @@
         "template": false
       },
       {
-        "description": "",
+        "description": "*Checks for empty if blocks.*\n\nAn empty if block is considered as dead code.",
         "key": "com.sksamuel.scapegoat.inspections.empty.EmptyIfBlock",
-        "name": "Empty if statement",
+        "name": "Empty if expression",
         "params": [],
         "severity": "Minor",
         "template": false
       },
       {
-        "description": "",
+        "description": "*Looks for interpolated strings that have no arguments.*\n\nString declared as interpolated but has no parameters can be turned into a regular string.",
         "key": "com.sksamuel.scapegoat.inspections.string.EmptyInterpolatedString",
         "name": "Empty interpolated string",
         "params": [],
@@ -4208,7 +4224,7 @@
         "template": false
       },
       {
-        "description": "",
+        "description": "*Checks for empty method statements.*\n\nAn empty method is considered as dead code.",
         "key": "com.sksamuel.scapegoat.inspections.empty.EmptyMethod",
         "name": "Empty method",
         "params": [],
@@ -4216,7 +4232,7 @@
         "template": false
       },
       {
-        "description": "",
+        "description": "*Checks for empty synchronized blocks.*\n\nAn empty synchronized block is considered as dead code.",
         "key": "com.sksamuel.scapegoat.inspections.empty.EmptySynchronizedBlock",
         "name": "Empty synchronized block",
         "params": [],
@@ -4224,7 +4240,7 @@
         "template": false
       },
       {
-        "description": "",
+        "description": "*Checks for empty try blocks.*\n\nAn empty try block is considered as dead code.",
         "key": "com.sksamuel.scapegoat.inspections.empty.EmptyTryBlock",
         "name": "Empty try block",
         "params": [],
@@ -4232,7 +4248,7 @@
         "template": false
       },
       {
-        "description": "",
+        "description": "*Checks for empty while blocks.*\n\nAn empty while block is considered as dead code.",
         "key": "com.sksamuel.scapegoat.inspections.empty.EmptyWhileBlock",
         "name": "Empty while block",
         "params": [],
@@ -4240,7 +4256,7 @@
         "template": false
       },
       {
-        "description": "",
+        "description": "*Checks if exists() can be simplified to contains().*\n\nexists(x => x == y) can be replaced with contains(y).",
         "key": "com.sksamuel.scapegoat.inspections.collections.ExistsSimplifiableToContains",
         "name": "Exists simplifiable to contains",
         "params": [],
@@ -4248,7 +4264,7 @@
         "template": false
       },
       {
-        "description": "Finalizers should call super.finalize() to ensure superclasses are able to run any finalization logic",
+        "description": "*Checks for overridden finalizers that do not call super.*\n\nFinalizers should call super.finalize() to ensure superclasses are able to run their finalization logic.",
         "key": "com.sksamuel.scapegoat.inspections.unsafe.FinalizerWithoutSuper",
         "name": "Finalizer without super",
         "params": [],
@@ -4256,7 +4272,7 @@
         "template": false
       },
       {
-        "description": "",
+        "description": "*Checks for equality checks on floating point types.*\n\nDue to minor rounding errors, it is not advisable to compare floating-point numbers using the == operator. Either use a threshold based comparison, or switch to a BigDecimal.",
         "key": "com.sksamuel.scapegoat.inspections.equality.ComparingFloatingPointTypes",
         "name": "Floating type comparison",
         "params": [],
@@ -4264,7 +4280,7 @@
         "template": false
       },
       {
-        "description": "",
+        "description": "*Checks for invalid format strings.*\n\nAn unchecked exception will be thrown when a format string contains an illegal syntax or a format specifier that is incompatible with the given arguments.",
         "key": "com.sksamuel.scapegoat.inspections.string.IllegalFormatString",
         "name": "Illegal format string",
         "params": [],
@@ -4272,7 +4288,7 @@
         "template": false
       },
       {
-        "description": "",
+        "description": "*Checks for code like option.size > 1.*\n\nOption.size > 1 can never be true, did you mean to use Option.nonEmpty instead?",
         "key": "com.sksamuel.scapegoat.inspections.option.ImpossibleOptionSizeCondition",
         "name": "Impossible Option.size condition",
         "params": [],
@@ -4280,7 +4296,7 @@
         "template": false
       },
       {
-        "description": "",
+        "description": "*Checks for wrong number of arguments to String.format.*\n\nThe number of arguments passed to String.format doesn't correspond to the number of fields in the format string.",
         "key": "com.sksamuel.scapegoat.inspections.string.IncorrectNumberOfArgsToFormat",
         "name": "Incorrect number of args for format",
         "params": [],
@@ -4288,15 +4304,15 @@
         "template": false
       },
       {
-        "description": "",
+        "description": "*Checks for exceptions that are not called *Exception and vice versa.*\n\nClass named exception does not derive from Exception / class derived from Exception is not named *Exception.",
         "key": "com.sksamuel.scapegoat.inspections.exception.IncorrectlyNamedExceptions",
-        "name": "Incorrectly Named Exceptions",
+        "name": "Incorrectly named exceptions",
         "params": [],
         "severity": "Major",
         "template": false
       },
       {
-        "description": "",
+        "description": "*Checks for expressions like x % 1.*\n\nAny expression x % 1 will always return 0.",
         "key": "com.sksamuel.scapegoat.inspections.math.ModOne",
         "name": "Integer mod one",
         "params": [],
@@ -4304,7 +4320,7 @@
         "template": false
       },
       {
-        "description": "",
+        "description": "*Checks for invalid regex literals.*\n\nInvalid regex literals can fail at compile time with a PatternSyntaxException. This could be caused by e.g. dangling meta characters, or unclosed escape characters, etc.",
         "key": "com.sksamuel.scapegoat.inspections.string.InvalidRegex",
         "name": "Invalid regex",
         "params": [],
@@ -4312,7 +4328,7 @@
         "template": false
       },
       {
-        "description": "Use of java conversions can lead to unusual behaviour. It is recommended to use JavaConverters",
+        "description": "*Checks for use of Java conversions.*\n\nUse of Java conversions can lead to unusual behaviour. It is recommended to use JavaConverters.",
         "key": "com.sksamuel.scapegoat.inspections.collections.JavaConversionsUse",
         "name": "Java conversions",
         "params": [],
@@ -4320,7 +4336,7 @@
         "template": false
       },
       {
-        "description": "List append is O(n). For large lists, consider using cons (::) or another data structure such as ListBuffer or Vector and converting to a List once built.",
+        "description": "*Checks for when elements are appended to a list.*\n\nList append is O(n). For large lists, consider using cons (::) or another data structure such as ListBuffer, Vector or a cats.data.Chain (which has constant prepend and append).",
         "key": "com.sksamuel.scapegoat.inspections.collections.ListAppend",
         "name": "List append is slow",
         "params": [],
@@ -4328,7 +4344,7 @@
         "template": false
       },
       {
-        "description": "List.size is O(n). Consider using a different data type with O(1) size lookup such as Vector or Array.",
+        "description": "*Checks for use of List.size.*\n\nList.size is O(n). Consider using a different data type with O(1) size lookup such as Vector or an Array.",
         "key": "com.sksamuel.scapegoat.inspections.collections.ListSize",
         "name": "List.size is O(n)",
         "params": [],
@@ -4336,7 +4352,7 @@
         "template": false
       },
       {
-        "description": "",
+        "description": "*Checks for sealed traits without any classes extending it.*\n\nA sealed trait that is not extended is considered dead code.",
         "key": "com.sksamuel.scapegoat.inspections.LonelySealedTrait",
         "name": "Lonely sealed trait",
         "params": [],
@@ -4344,23 +4360,23 @@
         "template": false
       },
       {
-        "description": "",
+        "description": "*Checks for strings that look like they should be interpolated.*\n\nDid you forget to prefix this string with an s, f or raw to interpolate it?",
         "key": "com.sksamuel.scapegoat.inspections.string.LooksLikeInterpolatedString",
-        "name": "Looks Like Interpolated String",
+        "name": "Looks like interpolated String",
         "params": [],
         "severity": "Minor",
         "template": false
       },
       {
-        "description": "",
+        "description": "*Warns when you could use a partial function directly instead of a match block.*\n\nA map match can be replaced with a partial function for greater readability.",
         "key": "com.sksamuel.scapegoat.inspections.matching.PartialFunctionInsteadOfMatch",
-        "name": "Match instead of partial function",
+        "name": "Match instead of a partial function",
         "params": [],
         "severity": "Info",
         "template": false
       },
       {
-        "description": "",
+        "description": "*Checks for methods that have over 10 parameters.*\n\nMethods having a large number of parameters are more difficult to reason about, consider refactoring this code.",
         "key": "com.sksamuel.scapegoat.inspections.MaxParameters",
         "name": "Max parameters",
         "params": [],
@@ -4368,15 +4384,7 @@
         "template": false
       },
       {
-        "description": "",
-        "key": "com.sksamuel.scapegoat.inspections.inference.MethodReturningAny",
-        "name": "Method Returning Any",
-        "params": [],
-        "severity": "Minor",
-        "template": false
-      },
-      {
-        "description": "Methods should be in camelCase style with the first letter lower-case. See http://docs.scala-lang.org/style/naming-conventions.html#methods",
+        "description": "*Warns on method names that don't adhere to the Scala style guidelines.*\n\nMethods should be in camelCase style with the first letter lower-case. See http://docs.scala-lang.org/style/naming-conventions.html#methods.",
         "key": "com.sksamuel.scapegoat.inspections.naming.MethodNames",
         "name": "Method name not recommended",
         "params": [],
@@ -4384,7 +4392,15 @@
         "template": false
       },
       {
-        "description": "Case classes should have final modifier",
+        "description": "*Checks for functions that are defined or inferred to return Any.*\n\nMethod returns Any. Consider using a more specialized type.",
+        "key": "com.sksamuel.scapegoat.inspections.inference.MethodReturningAny",
+        "name": "Method returning Any",
+        "params": [],
+        "severity": "Minor",
+        "template": false
+      },
+      {
+        "description": "*Checks for case classes without a final modifier.*\n\nUsing case classes without final modifier can lead to surprising breakage.",
         "key": "com.sksamuel.scapegoat.inspections.FinalModifierOnCaseClass",
         "name": "Missing final modifier on case class",
         "params": [],
@@ -4392,23 +4408,23 @@
         "template": false
       },
       {
-        "description": "NaN comparision will always fail. Use value.isNan instead.",
+        "description": "*Checks for x == Double.NaN which will always fail.*\n\nNaN comparison will always fail. Use value.isNan instead.",
         "key": "com.sksamuel.scapegoat.inspections.math.NanComparison",
-        "name": "Nan comparision",
+        "name": "Nan comparison",
         "params": [],
         "severity": "Major",
         "template": false
       },
       {
-        "description": "",
+        "description": "*Checks for code that overrides parent method but simply calls super.*\n\nThis method is overridden yet only calls super.",
         "key": "com.sksamuel.scapegoat.inspections.NoOpOverride",
-        "name": "No op Override",
+        "name": "Noop override",
         "params": [],
         "severity": "Info",
         "template": false
       },
       {
-        "description": "",
+        "description": "*Checks for use of null in assignments.*\n\nUse an Option instead when the value can be empty.",
         "key": "com.sksamuel.scapegoat.inspections.nulls.NullAssignment",
         "name": "Null assignment",
         "params": [],
@@ -4416,7 +4432,7 @@
         "template": false
       },
       {
-        "description": "",
+        "description": "*Checks for use of null in method invocation.*\n\nUse an Option instead when the value can be empty and pass down a None instead.",
         "key": "com.sksamuel.scapegoat.inspections.nulls.NullParameter",
         "name": "Null parameter",
         "params": [],
@@ -4424,7 +4440,7 @@
         "template": false
       },
       {
-        "description": "",
+        "description": "*Ensures object names adhere to the Scala style guidelines.*\n\nObject names should only contain alphanumeric characters.",
         "key": "com.sksamuel.scapegoat.inspections.naming.ObjectNames",
         "name": "Object name not recommended",
         "params": [],
@@ -4432,7 +4448,7 @@
         "template": false
       },
       {
-        "description": "",
+        "description": "*Checks for methods returning Unit that are defined without empty parentheses.*\n\nMethods should be defined with empty parentheses if they have side effects. A method returning Unit must have side effects, therefore you should declare it with ().",
         "key": "com.sksamuel.scapegoat.inspections.style.ParameterlessMethodReturnsUnit",
         "name": "Parameterless methods returns unit",
         "params": [],
@@ -4440,15 +4456,15 @@
         "template": false
       },
       {
-        "description": "",
+        "description": "*Finds type bounds of the form [A <: Any] or [A >: Nothing].*\n\nType bound resolves to Nothing <: T <: Any. Did you mean to put in other bounds?",
         "key": "com.sksamuel.scapegoat.inspections.inference.PointlessTypeBounds",
-        "name": "Pointless Type Bounds",
+        "name": "Pointless type bounds",
         "params": [],
         "severity": "Minor",
         "template": false
       },
       {
-        "description": "",
+        "description": "*Checks for use of Map().*\n\nMap[K,V]() allocates an intermediate object. Consider Map.empty which returns a singleton instance without creating a new object.",
         "key": "com.sksamuel.scapegoat.inspections.collections.PreferMapEmpty",
         "name": "Prefer Map.empty",
         "params": [],
@@ -4456,7 +4472,7 @@
         "template": false
       },
       {
-        "description": "",
+        "description": "*Checks for use of Option.size.*\n\nPrefer to use Option.isDefined, Option.isEmpty or Option.nonEmpty instead of Option.size.",
         "key": "com.sksamuel.scapegoat.inspections.option.OptionSize",
         "name": "Prefer Option.isDefined instead of Option.size",
         "params": [],
@@ -4464,7 +4480,7 @@
         "template": false
       },
       {
-        "description": "",
+        "description": "*Checks for use of Seq().*\n\nSeq[T]() allocates an intermediate object. Consider Seq.empty which returns a singleton instance without creating a new object.",
         "key": "com.sksamuel.scapegoat.inspections.collections.PreferSeqEmpty",
         "name": "Prefer Seq.empty",
         "params": [],
@@ -4472,7 +4488,7 @@
         "template": false
       },
       {
-        "description": "",
+        "description": "*Checks for use of Set().*\n\nSet[T]() allocates an intermediate object. Consider Set.empty which returns a singleton instance without creating a new object.",
         "key": "com.sksamuel.scapegoat.inspections.collections.PreferSetEmpty",
         "name": "Prefer Set.empty",
         "params": [],
@@ -4480,7 +4496,7 @@
         "template": false
       },
       {
-        "description": "",
+        "description": "*Checks for values that have Product with Serializable as their inferred type.*\n\nIt is unlikely that Product with Serializable was your target type. This is often an indication of mixing up incompatible types.",
         "key": "com.sksamuel.scapegoat.inspections.inference.ProductWithSerializableInferred",
         "name": "Product with Serializable inferred",
         "params": [],
@@ -4488,7 +4504,7 @@
         "template": false
       },
       {
-        "description": "Public finalizer should be avoided as finalizers should not be programatically invoked",
+        "description": "*Checks for overridden finalizes that are public.*\n\nPublic finalizer should be avoided as finalizers should not be programmatically invoked.",
         "key": "com.sksamuel.scapegoat.inspections.PublicFinalizer",
         "name": "PublicFinalizer",
         "params": [],
@@ -4496,23 +4512,23 @@
         "template": false
       },
       {
-        "description": "",
+        "description": "*Checks for redundant final modifiers on methods.*\n\nA final modifier on methods that cannot be overridden is redundant.",
         "key": "com.sksamuel.scapegoat.inspections.RedundantFinalModifierOnMethod",
-        "name": "Redundant final modifier on method",
+        "name": "Redundant final modifier on a method",
         "params": [],
         "severity": "Info",
         "template": false
       },
       {
-        "description": "This var cannot be overridden, final modifier is redundant",
+        "description": "*Checks for redundant final modifier on vars.*\n\nA final modifier on a var that cannot be overridden is redundant.",
         "key": "com.sksamuel.scapegoat.inspections.RedundantFinalModifierOnVar",
-        "name": "Redundant final modifier on var",
+        "name": "Redundant final modifier on a var",
         "params": [],
         "severity": "Info",
         "template": false
       },
       {
-        "description": "",
+        "description": "*Checks for empty finalizers.*\n\nAn empty finalizer, e.g. override def finalize: Unit = {} is redundant and should be removed.",
         "key": "com.sksamuel.scapegoat.inspections.unneccesary.RedundantFinalizer",
         "name": "Redundant finalizer",
         "params": [],
@@ -4520,7 +4536,15 @@
         "template": false
       },
       {
-        "description": "",
+        "description": "*Checks for the main branch and the else branch of an if being the same.*\n\nThe if statement could be refactored if both branches are the same or start with the same.",
+        "key": "com.sksamuel.scapegoat.inspections.controlflow.RepeatedIfElseBody",
+        "name": "Repeated body of if main and else branch",
+        "params": [],
+        "severity": "Minor",
+        "template": false
+      },
+      {
+        "description": "*Checks for case statements which have the same body.*\n\nCase body is repeated. Consider merging pattern clauses together.",
         "key": "com.sksamuel.scapegoat.inspections.matching.RepeatedCaseBody",
         "name": "Repeated case body",
         "params": [],
@@ -4528,15 +4552,7 @@
         "template": false
       },
       {
-        "description": "",
-        "key": "com.sksamuel.scapegoat.inspections.collections.CollectionIndexOnNonIndexedSeq",
-        "name": "Seq.apply() on a non-IndexedSeq may cause performance problems",
-        "params": [],
-        "severity": "Minor",
-        "template": false
-      },
-      {
-        "description": "",
+        "description": "*Checks for boolean expressions that can be simplified.*\n\nBoolean expressions such as x == false can be re-written as !x.",
         "key": "com.sksamuel.scapegoat.inspections.style.SimplifyBooleanExpression",
         "name": "Simplify boolean expressions",
         "params": [],
@@ -4544,7 +4560,7 @@
         "template": false
       },
       {
-        "description": "",
+        "description": "*Checks for String.substring(0).*\n\nUse of String.substring(0) will always return the same string.",
         "key": "com.sksamuel.scapegoat.inspections.string.SubstringZero",
         "name": "String.substring(0)",
         "params": [],
@@ -4552,7 +4568,7 @@
         "template": false
       },
       {
-        "description": "Strip margin will strip | from regex - possible corrupted regex",
+        "description": "*Checks for .stripMargin calls on regex strings that contain a pipe.*\n\nStrip margin will strip | from regex - possible corrupted regex.",
         "key": "com.sksamuel.scapegoat.inspections.string.StripMarginOnRegex",
         "name": "Strip margin on regex",
         "params": [],
@@ -4560,7 +4576,7 @@
         "template": false
       },
       {
-        "description": "",
+        "description": "*Checks for code where matching is taking place on class literals.*\n\nMatching on an companion object of a case class is probably not what you intended.",
         "key": "com.sksamuel.scapegoat.inspections.matching.SuspiciousMatchOnClassObject",
         "name": "Suspicious match on class object",
         "params": [],
@@ -4568,7 +4584,7 @@
         "template": false
       },
       {
-        "description": "",
+        "description": "*Checks for an inefficient use of filter.sort.*\n\nFilter first and then sort the remaining collection. Swap sort.filter for filter.sort for better performance.",
         "key": "com.sksamuel.scapegoat.inspections.collections.SwapSortFilter",
         "name": "Swap sort filter",
         "params": [],
@@ -4576,7 +4592,7 @@
         "template": false
       },
       {
-        "description": "",
+        "description": "*Checks for shadowed type parameters in methods.*\n\nShadowing type parameters is considered a bad practice and should be avoided.",
         "key": "com.sksamuel.scapegoat.inspections.TypeShadowing",
         "name": "Type shadowing",
         "params": [],
@@ -4584,7 +4600,7 @@
         "template": false
       },
       {
-        "description": "",
+        "description": "*Checks for unnecessary toInt on instances of Int or toString on Strings, etc.*\n\nCalling e.g. toString on a String or toList on a List is completely unnecessary and it's an equivalent to identity.",
         "key": "com.sksamuel.scapegoat.inspections.unneccesary.UnnecessaryConversion",
         "name": "Unnecessary conversion",
         "params": [],
@@ -4592,7 +4608,7 @@
         "template": false
       },
       {
-        "description": "",
+        "description": "*Checks for code like if (expr) true else false.*\n\nIf comparison is not needed. Use the condition, e.g. instead of if (a == b) true else false, use a == b or instead of if (a == b) false else true, use !(a == b).",
         "key": "com.sksamuel.scapegoat.inspections.unneccesary.UnnecessaryIf",
         "name": "Unnecessary if condition.",
         "params": [],
@@ -4600,7 +4616,7 @@
         "template": false
       },
       {
-        "description": "Scala returns the value of the last expression in a block. Use of return here is not idiomatic scala",
+        "description": "*Checks for use of return keyword in blocks.*\n\nScala returns the value of the last expression in a block. Use of return here is not an idiomatic Scala.",
         "key": "com.sksamuel.scapegoat.inspections.unneccesary.UnnecessaryReturnUse",
         "name": "Unnecessary return",
         "params": [],
@@ -4608,7 +4624,7 @@
         "template": false
       },
       {
-        "description": "",
+        "description": "*Checks for use of reverse followed by head/headOption/iterator/map.*\n\nreverse followed by head, headOption, iterator, or map can be replaced, respectively, with last, lastOption, reverseIterator, or reverseMap.",
         "key": "com.sksamuel.scapegoat.inspections.collections.ReverseFunc",
         "name": "Unnecessary reverse",
         "params": [],
@@ -4616,7 +4632,7 @@
         "template": false
       },
       {
-        "description": "",
+        "description": "*Checks for catch clauses that cannot be reached.*\n\nOne or more cases are unreachable.",
         "key": "com.sksamuel.scapegoat.inspections.exception.UnreachableCatch",
         "name": "Unreachable catch",
         "params": [],
@@ -4624,7 +4640,7 @@
         "template": false
       },
       {
-        "description": "",
+        "description": "*Checks Seq.contains() and Option.contains() for unrelated types.*\n\ncontains() accepts arguments af any type, which means you might be checking if your collection contains an element of an unrelated type.",
         "key": "com.sksamuel.scapegoat.inspections.collections.UnsafeContains",
         "name": "Unsafe contains",
         "params": [],
@@ -4632,7 +4648,7 @@
         "template": false
       },
       {
-        "description": "",
+        "description": "*Checks for String.contains(value) for invalid types.*\n\nString.contains() accepts arguments af any type, which means you might be checking if your string contains an element of an unrelated type.",
         "key": "com.sksamuel.scapegoat.inspections.string.UnsafeStringContains",
         "name": "Unsafe string contains",
         "params": [],
@@ -4640,7 +4656,7 @@
         "template": false
       },
       {
-        "description": "",
+        "description": "*Checks for unused method parameters.*\n\nUnused constructor or method parameters should be removed.",
         "key": "com.sksamuel.scapegoat.inspections.unneccesary.UnusedMethodParameter",
         "name": "Unused parameter",
         "params": [],
@@ -4648,7 +4664,7 @@
         "template": false
       },
       {
-        "description": "",
+        "description": "*Checks for use of math.pow for calculating math.cbrt.*\n\nUse math.cbrt, which is clearer and more performant than math.pow(x, 1/3).",
         "key": "com.sksamuel.scapegoat.inspections.math.UseCbrt",
         "name": "Use cbrt",
         "params": [],
@@ -4656,7 +4672,7 @@
         "template": false
       },
       {
-        "description": "",
+        "description": "*Checks for use of math.exp(x) - 1 instead of math.expm1(x).*\n\nUse math.expm1(x), which is clearer and more performant than math.exp(x) - 1.",
         "key": "com.sksamuel.scapegoat.inspections.math.UseExpM1",
         "name": "Use expm1",
         "params": [],
@@ -4664,7 +4680,7 @@
         "template": false
       },
       {
-        "description": "",
+        "description": "*Checks for use of math.log(x)/math.log(10) instead of math.log10(x).*\n\nUse math.log10(x), which is clearer and more performant than $math.log(x)/$math.log(10).",
         "key": "com.sksamuel.scapegoat.inspections.math.UseLog10",
         "name": "Use log10",
         "params": [],
@@ -4672,7 +4688,7 @@
         "template": false
       },
       {
-        "description": "",
+        "description": "*Checks for use of math.log(x + 1) instead of math.log1p(x)*\n\nUse math.log1p(x) is clearer and more performant than $math.log(1 + x).",
         "key": "com.sksamuel.scapegoat.inspections.math.UseLog1P",
         "name": "Use log1p",
         "params": [],
@@ -4680,15 +4696,7 @@
         "template": false
       },
       {
-        "description": "",
-        "key": "com.sksamuel.scapegoat.inspections.collections.MapGetAndGetOrElse",
-        "name": "Use of .get.getOrElse instead of .getOrElse",
-        "params": [],
-        "severity": "Major",
-        "template": false
-      },
-      {
-        "description": "",
+        "description": "*Checks for explicit toString calls on arrays.*\n\nCalling toString on an array does not perform a deep toString.",
         "key": "com.sksamuel.scapegoat.inspections.string.ArraysToString",
         "name": "Use of Array.toString",
         "params": [],
@@ -4696,15 +4704,23 @@
         "template": false
       },
       {
-        "description": "",
+        "description": "*Checks for use of .get on Left or Right projection.*\n\nMethod .get on a Left and a Right projection in deprecated since 2.13, use Either.getOrElse or Either.swap.getOrElse instead.",
         "key": "com.sksamuel.scapegoat.inspections.option.EitherGet",
-        "name": "Use of Either Right or Left Projection get",
+        "name": "Use of Either.right or Either.left projection followed by a get",
         "params": [],
         "severity": "Major",
         "template": false
       },
       {
-        "description": "",
+        "description": "*Checks whether Map.get().getOrElse() can be simplified to Map.getOrElse().*\n\nMap.get(key).getOrElse(value) can be replaced with Map.getOrElse(key, value), which is more concise.",
+        "key": "com.sksamuel.scapegoat.inspections.collections.MapGetAndGetOrElse",
+        "name": "Use of Map.get().getOrElse instead of Map.getOrElse",
+        "params": [],
+        "severity": "Major",
+        "template": false
+      },
+      {
+        "description": "*Checks for use of Option.get*\n\nUsing Option.get defeats the purpose of using Option in the first place. Use the following instead: Option.getOrElse, Option.fold, pattern matching or don't take the value out of the container and map over it to transform it.",
         "key": "com.sksamuel.scapegoat.inspections.option.OptionGet",
         "name": "Use of Option.get",
         "params": [],
@@ -4712,7 +4728,7 @@
         "template": false
       },
       {
-        "description": "",
+        "description": "*Checks for use of Try.get.*\n\nUsing Try.get is unsafe because it will throw the underlying exception in case of a Failure. Use the following instead: Try.getOrElse, Try.fold, pattern matching or don't take the value out of the container and map over it to transform it.",
         "key": "com.sksamuel.scapegoat.inspections.unsafe.TryGet",
         "name": "Use of Try.get",
         "params": [],
@@ -4720,7 +4736,15 @@
         "template": false
       },
       {
-        "description": "",
+        "description": "*Checks for indexing on a Seq which is not an IndexedSeq.*\n\nUsing an index to access elements of an IndexedSeq may cause performance problems.",
+        "key": "com.sksamuel.scapegoat.inspections.collections.CollectionIndexOnNonIndexedSeq",
+        "name": "Use of apply method on a non-indexed Seq",
+        "params": [],
+        "severity": "Minor",
+        "template": false
+      },
+      {
+        "description": "**\n\nUse of asInstanceOf is considered a bad practice - consider using pattern matching instead.",
         "key": "com.sksamuel.scapegoat.inspections.unsafe.AsInstanceOf",
         "name": "Use of asInstanceOf",
         "params": [],
@@ -4728,7 +4752,7 @@
         "template": false
       },
       {
-        "description": "",
+        "description": "*Checks for use of isInstanceOf.*\n\nUse of isInstanceOf is considered a bad practice - consider using pattern matching instead.",
         "key": "com.sksamuel.scapegoat.inspections.unsafe.IsInstanceOf",
         "name": "Use of isInstanceOf",
         "params": [],
@@ -4736,15 +4760,15 @@
         "template": false
       },
       {
-        "description": "",
+        "description": "*Checks for use of unsafe methods on Traversable.*\n\nThe following methods on Traversable are considered to be unsafe (head, tail, init, last, reduce, reduceLeft, reduceRight, max, maxBy, min, minBy).",
         "key": "com.sksamuel.scapegoat.inspections.collections.UnsafeTraversableMethods",
-        "name": "Use of unsafe Traversable methods (head, tail, init, last, reduce, reduceLeft, reduceRight, max, maxBy, min, minBy)",
+        "name": "Use of unsafe Traversable methods.",
         "params": [],
         "severity": "Major",
         "template": false
       },
       {
-        "description": "",
+        "description": "*Checks for use of math.pow for calculating math.sqrt.*\n\nUse math.sqrt, which is clearer and more performant than $math.pow(x, 0.5).",
         "key": "com.sksamuel.scapegoat.inspections.math.UseSqrt",
         "name": "Use sqrt",
         "params": [],
@@ -4752,7 +4776,7 @@
         "template": false
       },
       {
-        "description": "",
+        "description": "*Checks for vars that could be declared as vals.*\n\nA variable (var) that is never written to could be turned into a value (val).",
         "key": "com.sksamuel.scapegoat.inspections.unneccesary.VarCouldBeVal",
         "name": "Var could be val",
         "params": [],
@@ -4760,7 +4784,7 @@
         "template": false
       },
       {
-        "description": "",
+        "description": "*Finds closures that reference variables (var).*\n\nClosing over a var can lead to subtle bugs.",
         "key": "com.sksamuel.scapegoat.inspections.VarClosure",
         "name": "Var in closure",
         "params": [],
@@ -4768,7 +4792,15 @@
         "template": false
       },
       {
-        "description": "",
+        "description": "*Checks for multiple uses of the variable name in nested scopes.*\n\nVariable shadowing is very useful, but can easily lead to nasty bugs in your code. Shadowed variables can be potentially confusing to other maintainers when the same name is adopted to have a new meaning in a nested scope.",
+        "key": "com.sksamuel.scapegoat.inspections.VariableShadowing",
+        "name": "Variable shadowing",
+        "params": [],
+        "severity": "Minor",
+        "template": false
+      },
+      {
+        "description": "*Checks for code that uses a while(true) or do {...} while(true) block.*\n\nA (do) while true loop is unlikely to be meant for production.",
         "key": "com.sksamuel.scapegoat.inspections.controlflow.WhileTrue",
         "name": "While true loop",
         "params": [],
@@ -4776,7 +4808,7 @@
         "template": false
       },
       {
-        "description": "Dividing zero by any number will always return zero",
+        "description": "*Checks for dividing 0 by a number.*\n\nDividing zero by any number will always return zero, e.g. 0 / x == 0.",
         "key": "com.sksamuel.scapegoat.inspections.math.ZeroNumerator",
         "name": "Zero numerator",
         "params": [],
@@ -4784,15 +4816,15 @@
         "template": false
       },
       {
-        "description": "",
+        "description": "*Checks for use of filter().head.*\n\nfilter().head can throw an exception if the collection is empty - it can be replaced with find() match {...}.",
         "key": "com.sksamuel.scapegoat.inspections.collections.FilterDotHead",
-        "name": "filter().head can throw an exception; use find()",
+        "name": "filter().head can throw an exception",
         "params": [],
         "severity": "Info",
         "template": false
       },
       {
-        "description": "",
+        "description": "*Checks for use of filter().headOption.*\n\nfilter() scans the entire collection, which is unnecessary if you only want to get the first element that satisfies the predicate - filter().headOption can be replaced with find() to potentially avoid scanning the entire collection.",
         "key": "com.sksamuel.scapegoat.inspections.collections.FilterDotHeadOption",
         "name": "filter().headOption instead of find()",
         "params": [],
@@ -4800,7 +4832,7 @@
         "template": false
       },
       {
-        "description": "",
+        "description": "*Checks for use of filter().isEmpty.*\n\nfilter() scans the entire collection, which can potentially be avoided if the element exists in the collection - filter().isEmpty can be replaced with !exists().",
         "key": "com.sksamuel.scapegoat.inspections.collections.FilterDotIsEmpty",
         "name": "filter().isEmpty instead of !exists()",
         "params": [],
@@ -4808,7 +4840,7 @@
         "template": false
       },
       {
-        "description": "",
+        "description": "*Checks if filter().size can be simplified to count().*\n\nfilter().size can be replaced with count(), which is more concise.",
         "key": "com.sksamuel.scapegoat.inspections.collections.FilterDotSize",
         "name": "filter().size() instead of count()",
         "params": [],
@@ -4816,7 +4848,7 @@
         "template": false
       },
       {
-        "description": "",
+        "description": "*Checks whether the expression can be rewritten using flatten.*\n\nfilter(_.isDefined).map(_.get) can be replaced with flatten.",
         "key": "com.sksamuel.scapegoat.inspections.collections.FilterOptionAndGet",
         "name": "filter(_.isDefined).map(_.get) instead of flatten",
         "params": [],
@@ -4824,7 +4856,15 @@
         "template": false
       },
       {
-        "description": "",
+        "description": "*Checks whether find() can be replaced with exists().*\n\nfind().isDefined can be replaced with exists(), which is more concise.",
+        "key": "com.sksamuel.scapegoat.inspections.collections.FindDotIsDefined",
+        "name": "find().isDefined() instead of exists()",
+        "params": [],
+        "severity": "Info",
+        "template": false
+      },
+      {
+        "description": "*Checks whether find() can be replaced with exists().*\n\nfind() != None can be replaced with exists(), which is more concise.",
         "key": "com.sksamuel.scapegoat.inspections.collections.FindAndNotEqualsNoneReplaceWithExists",
         "name": "find(x => ) != None instead of exists(x =>)",
         "params": [],
@@ -4832,7 +4872,7 @@
         "template": false
       },
       {
-        "description": "",
+        "description": "*Checks for use of reverse.tail.reverse.*\n\nreverse.tail.reverse can be replaced with init, which is more concise.",
         "key": "com.sksamuel.scapegoat.inspections.collections.ReverseTailReverse",
         "name": "reverse.tail.reverse instead of init",
         "params": [],
@@ -4840,17 +4880,9 @@
         "template": false
       },
       {
-        "description": "",
+        "description": "*Checks for use of reverse.take().reverse.*\n\nreverse.take().reverse can be replaced with takeRight, which is more concise.",
         "key": "com.sksamuel.scapegoat.inspections.collections.ReverseTakeReverse",
-        "name": "reverse.take(...).reverse instead of takeRight",
-        "params": [],
-        "severity": "Info",
-        "template": false
-      },
-      {
-        "description": "",
-        "key": "com.sksamuel.scapegoat.inspections.collections.FindDotIsDefined",
-        "name": "use exists() not find().isDefined()",
+        "name": "reverse.take().reverse instead of takeRight",
         "params": [],
         "severity": "Info",
         "template": false

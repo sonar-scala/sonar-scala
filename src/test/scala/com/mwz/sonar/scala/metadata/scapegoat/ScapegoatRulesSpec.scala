@@ -28,8 +28,8 @@ class ScapegoatRulesSpec extends AnyFlatSpec with Matchers with Inspectors with 
   val rules = ScapegoatRules.rules.toChain.toVector
 
   it should "define all scapegoat rules" in {
-    rules.size shouldBe 116
-    rules.distinct.size shouldBe 116
+    rules.size shouldBe 118
+    rules.distinct.size shouldBe 118
   }
 
   it should "not define the blacklisted scapegoat rules" in {
@@ -54,22 +54,27 @@ class ScapegoatRulesSpec extends AnyFlatSpec with Matchers with Inspectors with 
     val inspection1 = ScapegoatInspection(
       id = "com.sksamuel.scapegoat.inspections.exception.CatchNpe",
       name = "Catching NPE",
-      description = None,
-      defaultLevel = Level.Error
+      defaultLevel = Level.Error,
+      description = "Checks for try blocks that catch null pointer exceptions.",
+      explanation =
+        "Avoid using null at all cost and you shouldn't need to catch NullPointerExceptions. Prefer Option to indicate potentially missing values and use Try to materialize exceptions thrown by any external libraries."
     )
 
     val inspection2 = ScapegoatInspection(
       id = "com.sksamuel.scapegoat.inspections.equality.ComparisonWithSelf",
       name = "Comparison with self",
-      description = Some("Comparison with self will always yield true"),
-      defaultLevel = Level.Warning
+      defaultLevel = Level.Warning,
+      description = "Checks for equality checks with itself.",
+      explanation = "Comparison with self will always yield true."
     )
 
     val expected1 = Rule(
       key = "com.sksamuel.scapegoat.inspections.exception.CatchNpe",
       name = "Catching NPE",
-      mdDescription = "",
-      sonarMdDescription = "No description",
+      mdDescription =
+        "*Checks for try blocks that catch null pointer exceptions.*\n\nAvoid using null at all cost and you shouldn't need to catch NullPointerExceptions. Prefer Option to indicate potentially missing values and use Try to materialize exceptions thrown by any external libraries.",
+      sonarMdDescription =
+        "*Checks for try blocks that catch null pointer exceptions.*\n\n======= Avoid using null at all cost and you shouldn't need to catch NullPointerExceptions. Prefer Option to indicate potentially missing values and use Try to materialize exceptions thrown by any external libraries.",
       severity = Severity.Major,
       template = false,
       params = Chain.empty
@@ -78,8 +83,10 @@ class ScapegoatRulesSpec extends AnyFlatSpec with Matchers with Inspectors with 
     val expected2 = Rule(
       key = "com.sksamuel.scapegoat.inspections.equality.ComparisonWithSelf",
       name = "Comparison with self",
-      mdDescription = "Comparison with self will always yield true",
-      sonarMdDescription = "Comparison with self will always yield true",
+      mdDescription =
+        "*Checks for equality checks with itself.*\n\nComparison with self will always yield true.",
+      sonarMdDescription =
+        "*Checks for equality checks with itself.*\n\n======= Comparison with self will always yield true.",
       severity = Severity.Minor,
       template = false,
       params = Chain.empty
@@ -87,6 +94,19 @@ class ScapegoatRulesSpec extends AnyFlatSpec with Matchers with Inspectors with 
 
     ScapegoatRules.toRule(inspection1) shouldBe expected1
     ScapegoatRules.toRule(inspection2) shouldBe expected2
+  }
+
+  it should "compose the full description from description and explanation fields" in {
+    val inspection = ScapegoatInspection(
+      id = "com.sksamuel.scapegoat.inspections.equality.ComparisonWithSelf",
+      name = "Comparison with self",
+      defaultLevel = Level.Warning,
+      description = "Checks for equality checks with itself.",
+      explanation = "Comparison with self will always yield true."
+    )
+
+    ScapegoatRules.mdDescription(inspection) shouldBe "*Checks for equality checks with itself.*\n\nComparison with self will always yield true."
+    ScapegoatRules.sonarMdDescription(inspection) shouldBe "*Checks for equality checks with itself.*\n\n======= Comparison with self will always yield true."
   }
 
   it should "convert Scapegoat inspection level to SonarQube Severity" in {

@@ -32,13 +32,24 @@ object ScapegoatRules {
     Rule(
       key = inspection.id,
       name = inspection.name,
-      mdDescription = inspection.description.getOrElse(""),
-      sonarMdDescription = inspection.description.getOrElse("No description"),
+      mdDescription = mdDescription(inspection),
+      sonarMdDescription = sonarMdDescription(inspection),
       severity = toSeverity(inspection.defaultLevel),
       template = false,
       params = Chain.empty
     )
   }
+
+  private[metadata] def mdDescription(inspection: ScapegoatInspection): String =
+    s"*${inspection.description}*" +
+    s"\n\n${inspection.explanation}"
+
+  // SonarQube's markdown parser converts any '=' characters in the middle of a sentence
+  // into headings, so we're using a 7th level heading (which doesn't have any style properties)
+  // to make it ignore the '=' characters and make it look like regular text.
+  private[metadata] def sonarMdDescription(inspection: ScapegoatInspection): String =
+    s"*${inspection.description}*" +
+    s"\n\n======= ${inspection.explanation}"
 
   private[metadata] def toSeverity(level: Level): Severity = level match {
     case Level.Error   => Severity.Major

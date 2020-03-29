@@ -53,7 +53,7 @@ class ScapegoatRulesRepositorySpec extends AnyFlatSpec with Inspectors with Lone
 
     arrayEqualsRule.internalKey shouldBe "com.sksamuel.scapegoat.inspections.collections.ArrayEquals"
     arrayEqualsRule.name shouldBe "Array equals"
-    arrayEqualsRule.markdownDescription shouldBe "Array equals is not an equality check. Use a.deep == b.deep or convert to another collection type"
+    arrayEqualsRule.markdownDescription shouldBe "*Checks for comparison of arrays using == which will always return false.*\n\n======= Array equals is not an equality check. Use a.deep == b.deep or convert to another collection type."
     arrayEqualsRule.activatedByDefault shouldBe true
     arrayEqualsRule.status shouldBe RuleStatus.READY
     arrayEqualsRule.severity shouldBe Severity.INFO

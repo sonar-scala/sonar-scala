@@ -27,8 +27,9 @@ object Level {
 private[metadata] final case class ScapegoatInspection(
   id: String,
   name: String,
-  description: Option[String],
-  defaultLevel: Level
+  defaultLevel: Level,
+  description: String,
+  explanation: String
 )
 
 private[metadata] object ScapegoatInspections {

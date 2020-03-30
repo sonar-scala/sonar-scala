@@ -278,36 +278,31 @@ class ScapegoatSensorSpec
       (testFileA, emptyClassRuleKey) -> (
         (
           testFileA.newRange(1, 0, 1, 50),
-          """Empty case class
-            |Empty case class can be rewritten as a case object""".stripMargin
+          "Empty case class"
         )
       ),
       (testFileA, arrayPassedToStringFormatRuleKey) -> (
         (
           testFileA.newRange(2, 0, 2, 80),
-          """Array passed to String.format
-            |scala.Predef.augmentString("data is: %s").format(scala.Array.apply(1, 2, 3))""".stripMargin
+          "Array passed to String.format"
         )
       ),
       (testFileB, lonelySealedTraitRuleKey) -> (
         (
           testFileB.newRange(1, 0, 1, 30),
-          """Lonely sealed trait
-            |Sealed trait NotUsed has no implementing classes""".stripMargin
+          "Lonely sealed trait"
         )
       ),
       (testFileB, redundantFinalModifierRuleKey) -> (
         (
           testFileB.newRange(2, 0, 2, 50),
-          """Redundant final modifier on method
-            |com.mwz.sonar.scala.scapegoat.TestFileB.testMethod cannot be overridden, final modifier is redundant""".stripMargin
+          "Redundant final modifier on method"
         )
       ),
       (testFileB, emptyClassRuleKey) -> (
         (
           testFileB.newRange(3, 0, 3, 50),
-          """Empty case class
-            |Empty case class can be rewritten as a case object""".stripMargin
+          "Empty case class"
         )
       )
     )
@@ -431,7 +426,7 @@ class ScapegoatSensorSpec
     result.ruleKey shouldBe emptyClassRuleKey
     result.primaryLocation.inputComponent shouldBe testFile
     result.primaryLocation.textRange shouldBe testFile.newRange(1, 0, 1, 50)
-    result.primaryLocation.message shouldBe "Empty case class\nEmpty case class can be rewritten as a case object"
+    result.primaryLocation.message shouldBe "Empty case class"
   }
 
   it should "collect global issues if issue decoration is enabled" in {
@@ -508,7 +503,6 @@ final class TestScapegoatReportParser extends ScapegoatReportParserAPI {
           ScapegoatIssue(
             line = 1,
             text = "Empty case class",
-            snippet = "Empty case class can be rewritten as a case object",
             file = "com/mwz/sonar/scala/scapegoat/TestFileA.scala",
             inspectionId = "com.sksamuel.scapegoat.inspections.EmptyCaseClass"
           )
@@ -520,14 +514,12 @@ final class TestScapegoatReportParser extends ScapegoatReportParserAPI {
           ScapegoatIssue(
             line = 1,
             text = "Empty case class",
-            snippet = "Empty case class can be rewritten as a case object",
             file = "com/mwz/sonar/scala/scapegoat/TestFileA.scala",
             inspectionId = "com.sksamuel.scapegoat.inspections.EmptyCaseClass"
           ),
           ScapegoatIssue(
             line = 2,
             text = "Array passed to String.format",
-            snippet = "scala.Predef.augmentString(\"data is: %s\").format(scala.Array.apply(1, 2, 3))",
             file = "com/mwz/sonar/scala/scapegoat/TestFileA.scala",
             inspectionId = "com.sksamuel.scapegoat.inspections.string.ArraysInFormat"
           )
@@ -536,22 +528,18 @@ final class TestScapegoatReportParser extends ScapegoatReportParserAPI {
           ScapegoatIssue(
             line = 1,
             text = "Lonely sealed trait",
-            snippet = "Sealed trait NotUsed has no implementing classes",
             file = "com/mwz/sonar/scala/scapegoat/TestFileB.scala",
             inspectionId = "com.sksamuel.scapegoat.inspections.LonelySealedTrait"
           ),
           ScapegoatIssue(
             line = 2,
             text = "Redundant final modifier on method",
-            snippet =
-              "com.mwz.sonar.scala.scapegoat.TestFileB.testMethod cannot be overridden, final modifier is redundant",
             file = "com/mwz/sonar/scala/scapegoat/TestFileB.scala",
             inspectionId = "com.sksamuel.scapegoat.inspections.RedundantFinalModifierOnMethod"
           ),
           ScapegoatIssue(
             line = 3,
             text = "Empty case class",
-            snippet = "Empty case class can be rewritten as a case object",
             file = "com/mwz/sonar/scala/scapegoat/TestFileB.scala",
             inspectionId = "com.sksamuel.scapegoat.inspections.EmptyCaseClass"
           )
@@ -564,7 +552,6 @@ final class TestScapegoatReportParser extends ScapegoatReportParserAPI {
           ScapegoatIssue(
             line = 1,
             text = "Empty case class",
-            snippet = "Empty case class can be rewritten as a case object",
             file = file,
             inspectionId = "com.sksamuel.scapegoat.inspections.EmptyCaseClass"
           )

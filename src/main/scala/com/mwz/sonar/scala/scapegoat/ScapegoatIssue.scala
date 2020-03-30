@@ -22,11 +22,6 @@ package scapegoat
 private[scapegoat] final case class ScapegoatIssue(
   line: Int,
   text: String,
-  snippet: String,
   file: String,
   inspectionId: String
-) {
-  def message: String =
-    if (snippet.isEmpty) text
-    else s"$text\n$snippet"
-}
+)

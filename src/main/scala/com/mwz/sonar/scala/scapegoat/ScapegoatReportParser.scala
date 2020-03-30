@@ -57,10 +57,9 @@ final class ScapegoatReportParser extends ScapegoatReportParserAPI {
       issue <- scapegoatXMLReport \\ "warning"
       line = (issue \@ "line").toInt
       text = issue \@ "text"
-      snippet = issue \@ "snippet"
       file = replaceAllDotsButLastWithSlashes(issue \@ "file")
       inspectionId = issue \@ "inspection"
-    } yield ScapegoatIssue(line, text, snippet, file, inspectionId)
+    } yield ScapegoatIssue(line, text, file, inspectionId)
 
     scapegoatIssues.groupBy(issue => issue.file)
   }

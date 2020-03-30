@@ -132,7 +132,7 @@ final class ScapegoatSensor(
                     .newLocation()
                     .on(file)
                     .at(file.selectLine(scapegoatIssue.line))
-                    .message(scapegoatIssue.message)
+                    .message(scapegoatIssue.text)
 
                 // Open a new issue (if not in pr decoration mode).
                 if (!globalConfig.prDecoration)

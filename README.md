@@ -5,8 +5,8 @@
 [![bintray-badge-lts-67]][bintray-lts-67]
 [![bintray-stats-badge]][bintray-stats] [![gitter-badge]][gitter]
 
-[bintray]: https://bintray.com/mwz/maven/sonar-scala/8.1.0/link
-[bintray-badge]: https://img.shields.io/badge/Download-8.1.0-blue.svg
+[bintray]: https://bintray.com/mwz/maven/sonar-scala/8.2.0/link
+[bintray-badge]: https://img.shields.io/badge/Download-8.2.0-blue.svg
 [bintray-badge-lts]:
   https://img.shields.io/badge/Download-7.9.0_(for_SonarQube_7.9_LTS)-blue.svg
 [bintray-badge-lts-67]:
@@ -37,7 +37,7 @@ sonar-scala is an independent SonarQube plugin, driven by and developed with
 
 Intended for [SonarQube 6.7 LTS](https://www.sonarqube.org/sonarqube-6-7-lts),
 [SonarQube 7.9 LTS](https://www.sonarqube.org/sonarqube-7-9-lts),
-[SonarQube 8.1](https://www.sonarqube.org/sonarqube-8-1) and Scala
+[SonarQube 8.2](https://www.sonarqube.org/sonarqube-8-2) and Scala
 2.11/2.12/2.13.
 
 sonar-scala is developed in Scala. It uses the

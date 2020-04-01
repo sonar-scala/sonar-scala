@@ -93,6 +93,7 @@ final class GlobalConfig(config: Configuration) {
         config.getAs[String](PR_NUMBER),
         ConfigError(s"Please provide a pull request number ($PR_NUMBER).")
       )
+      githubApiUrl = config.getAs[String](PR_GITHUB_API_URL).getOrElse(DEFAULT_GITHUB_API_URL)
       githubRepo <- EitherT.fromOption(
         config.getAs[String](PR_GITHUB_REPO),
         ConfigError(
@@ -112,7 +113,7 @@ final class GlobalConfig(config: Configuration) {
     } yield PullRequest(
       provider,
       prNumber,
-      Github(githubRepo, githubOauth),
+      Github(githubApiUrl, githubRepo, githubOauth),
       disableIssues,
       disableInlineComments,
       disableCoverage,
@@ -121,8 +122,10 @@ final class GlobalConfig(config: Configuration) {
 }
 
 object GlobalConfig {
+  private val DEFAULT_GITHUB_API_URL = "https://api.github.com"
   private val PR_PROVIDER = "sonar.scala.pullrequest.provider"
   private val PR_NUMBER = "sonar.scala.pullrequest.number"
+  private val PR_GITHUB_API_URL = "sonar.scala.pullrequest.github.apiurl"
   private val PR_GITHUB_REPO = "sonar.scala.pullrequest.github.repository"
   private val PR_GITHUB_OAUTH = "sonar.scala.pullrequest.github.oauth"
   private val PR_DISABLE_ISSUES = "sonar.scala.pullrequest.issues.disable"
@@ -159,6 +162,7 @@ object GlobalConfig {
     dryRun: Boolean
   )
   final case class Github(
+    apiurl: String = DEFAULT_GITHUB_API_URL,
     repository: String,
     oauth: String
   )

@@ -107,7 +107,7 @@ class GlobalConfigSpec extends AnyFlatSpec with Matchers with OptionValues with 
       GlobalConfig.PullRequest(
         provider = "github",
         prNumber = "123",
-        github = GlobalConfig.Github("owner/repo", "token"),
+        github = GlobalConfig.Github(repository = "owner/repo", oauth = "token"),
         disableIssues = false,
         disableInlineComments = false,
         disableCoverage = true,
@@ -125,7 +125,7 @@ class GlobalConfigSpec extends AnyFlatSpec with Matchers with OptionValues with 
       GlobalConfig.PullRequest(
         provider = "github",
         prNumber = "123",
-        github = GlobalConfig.Github("owner/repo", "token"),
+        github = GlobalConfig.Github(repository = "owner/repo", oauth = "token"),
         disableIssues = true,
         disableInlineComments = false,
         disableCoverage = true,
@@ -142,7 +142,7 @@ class GlobalConfigSpec extends AnyFlatSpec with Matchers with OptionValues with 
       GlobalConfig.PullRequest(
         provider = "github",
         prNumber = "123",
-        github = GlobalConfig.Github("owner/repo", "token"),
+        github = GlobalConfig.Github(repository = "owner/repo", oauth = "token"),
         disableIssues = false,
         disableInlineComments = true,
         disableCoverage = true,

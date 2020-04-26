@@ -40,24 +40,25 @@ object Github {
   def apply[F[_]: Sync](client: Client[F], pr: GlobalConfig.PullRequest): Github[F] =
     new Github[F] {
       val auth: Header = Header("Authorization", s"token ${pr.github.oauth}")
+      val userUri: String = s"${pr.github.apiurl}/user"
       val prUri: String =
-        s"https://api.github.com/repos/${pr.github.repository}/pulls/${pr.prNumber}"
+        s"${pr.github.apiurl}/repos/${pr.github.repository}/pulls/${pr.prNumber}"
       val commentsUri: String =
-        s"https://api.github.com/repos/${pr.github.repository}/pulls/${pr.prNumber}/comments"
+        s"${pr.github.apiurl}/repos/${pr.github.repository}/pulls/${pr.prNumber}/comments"
       val filesUri: String =
-        s"https://api.github.com/repos/${pr.github.repository}/pulls/${pr.prNumber}/files"
+        s"${pr.github.apiurl}/repos/${pr.github.repository}/pulls/${pr.prNumber}/files"
       def newStatusUri(sha: String): String =
-        s"https://api.github.com/repos/${pr.github.repository}/statuses/$sha"
+        s"${pr.github.apiurl}/repos/${pr.github.repository}/statuses/$sha"
 
-      def authenticatedUser: F[User] = {
-        val request: Request[F] = Request[F](
-          uri = Uri.uri("https://api.github.com/user"),
+      def request(uri: String): Request[F] = {
+        Request[F](
+          uri = Uri.unsafeFromString(uri),
           headers = Headers.of(auth)
         )
-        client.expect[User](request)
       }
-      def pullRequest: F[PullRequest] = client.expect[PullRequest](prUri)
-      def comments: F[List[Comment]] = client.expect[List[Comment]](commentsUri)
+      def authenticatedUser: F[User] = client.expect[User](request(userUri))
+      def pullRequest: F[PullRequest] = client.expect[PullRequest](request(prUri))
+      def comments: F[List[Comment]] = client.expect[List[Comment]](request(commentsUri))
       def createComment(comment: NewComment): F[Unit] = {
         val request: F[Request[F]] = Uri
           .fromString(commentsUri)
@@ -71,7 +72,7 @@ object Github {
           )
         pr.dryRun.fold(Sync[F].unit, client.expect[Comment](request) >> Sync[F].unit)
       }
-      def files: F[List[File]] = client.expect[List[File]](filesUri)
+      def files: F[List[File]] = client.expect[List[File]](request(filesUri))
       def createStatus(sha: String, status: NewStatus): F[Unit] = {
         val request: F[Request[F]] = Uri
           .fromString(newStatusUri(sha))

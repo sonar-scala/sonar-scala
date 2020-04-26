@@ -45,7 +45,7 @@ class GithubSpec extends AnyFlatSpec with Matchers with ScalaCheckDrivenProperty
   val conf = GlobalConfig.PullRequest(
     provider = "github",
     prNumber = "123",
-    github = GlobalConfig.Github("owner/repo", "oauthToken"),
+    github = GlobalConfig.Github(repository = "owner/repo", oauth = "token"),
     disableIssues = false,
     disableInlineComments = true,
     disableCoverage = true,

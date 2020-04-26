@@ -57,7 +57,7 @@ sourceGenerators in Compile ++= Seq(
 // Lib dependencies
 val sonarVersion = "8.2.0.32929"
 val circe = "0.13.0"
-val http4s = "0.21.2"
+val http4s = "0.21.3"
 libraryDependencies ++= List(
   "com.beachape"              %% "enumeratum"           % "1.5.15",
   "com.beachape"              %% "enumeratum-cats"      % "1.5.16",
@@ -80,7 +80,7 @@ libraryDependencies ++= List(
   "com.github.alexarchambault" %% "scalacheck-shapeless_1.14" % "1.2.5"      % Test,
   "org.http4s"                 %% "http4s-blaze-server"       % http4s       % Test,
   "org.http4s"                 %% "http4s-dsl"                % http4s       % Test,
-  "org.mockito"                %% "mockito-scala"             % "1.13.1"     % Test,
+  "org.mockito"                %% "mockito-scala"             % "1.13.9"     % Test,
   "org.scalacheck"             %% "scalacheck"                % "1.14.3"     % Test,
   "org.scalatest"              %% "scalatest"                 % "3.1.1"      % Test,
   "org.scalatestplus"          %% "mockito-1-10"              % "3.1.0.0"    % Test,

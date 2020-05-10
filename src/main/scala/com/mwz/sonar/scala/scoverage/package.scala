@@ -17,6 +17,8 @@
 
 package com.mwz.sonar.scala
 
+import scala.util.Try
+
 import cats.instances.int.catsKernelStdGroupForInt
 import cats.instances.map.catsKernelStdMonoidForMap
 import cats.kernel.Semigroup
@@ -33,30 +35,24 @@ package object scoverage {
   /** Merges two scoverage metrics into one. */
   private[scoverage] final implicit val ScoverageSemigroup: Semigroup[Scoverage] =
     new Semigroup[Scoverage] {
-      // Helper methods used to aggregate scoverage metrics.
-      private[this] val Two = BigDecimal("2.0")
-      private[this] val Percentage = BigDecimal("100.0")
-
       private[this] def toFixedPrecision(value: BigDecimal): Double =
         value.setScale(scale = 2, mode = BigDecimal.RoundingMode.HALF_EVEN).toDouble
 
-      private[this] def averagePercentages(a: Double, b: Double): Double =
-        toFixedPrecision((BigDecimal.valueOf(a) + BigDecimal.valueOf(b)) / Two)
-
-      private[this] def computePercentage(hits: Double, total: Double): Double =
-        toFixedPrecision(BigDecimal.valueOf(hits) / BigDecimal.valueOf(total) * Percentage)
+      private[this] def percentage(hits: Double, total: Double): Double =
+        Try(toFixedPrecision(BigDecimal.valueOf(hits) / total * 100)).getOrElse(0)
 
       override def combine(a: Scoverage, b: Scoverage): Scoverage = {
-        val mergedTotalStatements = a.totalStatements + b.totalStatements
+        val mergedStatements = a.statements + b.statements
         val mergedCoveredStatements = a.coveredStatements + b.coveredStatements
-        val mergedStatementCoverage =
-          computePercentage(mergedCoveredStatements.toDouble, mergedTotalStatements.toDouble)
-        val mergedBranchCoverage = averagePercentages(a.branchCoverage, b.branchCoverage)
+        val mergedBranches = a.branches + b.branches
+        val mergedCoveredBranches = a.coveredBranches + b.coveredBranches
         Scoverage(
-          mergedTotalStatements,
-          mergedCoveredStatements,
-          mergedStatementCoverage,
-          mergedBranchCoverage
+          statements = mergedStatements,
+          coveredStatements = mergedCoveredStatements,
+          statementCoverage = percentage(mergedCoveredStatements.toDouble, mergedStatements.toDouble),
+          branches = mergedBranches,
+          coveredBranches = mergedCoveredBranches,
+          branchCoverage = percentage(mergedCoveredBranches.toDouble, mergedBranches.toDouble)
         )
       }
     }

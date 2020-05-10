@@ -123,6 +123,7 @@ final class ScalaPlugin extends Plugin {
       classOf[qualityprofiles.ScalastyleScapegoatQualityProfile],
       classOf[qualityprofiles.RecommendedQualityProfile],
       // Scoverage.
+      classOf[scoverage.ScoverageMeasures],
       classOf[scoverage.ScoverageMetrics],
       classOf[scoverage.ScoverageReportParser],
       classOf[scoverage.ScoverageSensor],

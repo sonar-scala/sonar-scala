@@ -28,9 +28,11 @@ import org.sonar.api.scanner.ScannerSide
 
 /** [[ScoverageMetrics]] of a component. */
 private[scoverage] final case class Scoverage(
-  totalStatements: Int,
+  statements: Int,
   coveredStatements: Int,
   statementCoverage: Double,
+  branches: Int,
+  coveredBranches: Int,
   branchCoverage: Double
 )
 
@@ -91,9 +93,8 @@ final class ScoverageReportParser extends ScoverageReportParserAPI {
       }
       classScoverage = extractScoverageFromNode(classNode)
 
-      lines = for {
-        statement <- classNode \\ "statement"
-        if !(statement \@ "ignored").toBoolean
+      lines: Seq[(Int, Int)] = for {
+        statement <- (classNode \\ "statement").filter(node => !(node \@ "ignored").toBoolean)
         lineNum = (statement \@ "line").toInt
         count = (statement \@ "invocation-count").toInt
       } yield lineNum -> count
@@ -117,11 +118,17 @@ final class ScoverageReportParser extends ScoverageReportParserAPI {
   }
 
   /** Extracts the scoverage metrics form a class or project node. */
-  private[scoverage] def extractScoverageFromNode(node: Node): Scoverage =
+  private[scoverage] def extractScoverageFromNode(node: Node): Scoverage = {
+    val branches = (node \\ "statement")
+      .filter(node => !(node \@ "ignored").toBoolean && (node \@ "branch").toBoolean)
+    val coveredBranches = branches.filter(statement => (statement \@ "invocation-count").toInt > 0)
     Scoverage(
-      totalStatements = (node \@ "statement-count").toInt,
+      statements = (node \@ "statement-count").toInt,
       coveredStatements = (node \@ "statements-invoked").toInt,
       statementCoverage = (node \@ "statement-rate").toDouble,
+      branches = branches.size,
+      coveredBranches = coveredBranches.size,
       branchCoverage = (node \@ "branch-rate").toDouble
     )
+  }
 }

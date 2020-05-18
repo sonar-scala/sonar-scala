@@ -23,7 +23,7 @@
 [coverage]:
   https://sonar.sonar-scala.com/component_measures?id=sonar-scala&metric=coverage
 [coverage-badge]:
-  https://sonar.sonar-scala.com/api/badges/measure?key=sonar-scala&metric=coverage
+  https://sonar.sonar-scala.com/api/project_badges/measure?project=sonar-scala&metric=coverage
 [gitter]: https://gitter.im/sonar-scala/sonar-scala
 [gitter-badge]:
   https://img.shields.io/gitter/room/sonar-scala/sonar-scala.svg?colorB=46BC99&label=Chat

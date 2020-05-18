@@ -60,7 +60,7 @@ val circe = "0.13.0"
 val http4s = "0.21.3"
 libraryDependencies ++= List(
   "com.beachape"              %% "enumeratum"           % "1.6.1",
-  "com.beachape"              %% "enumeratum-cats"      % "1.5.16",
+  "com.beachape"              %% "enumeratum-cats"      % "1.6.1",
   "com.beachape"              %% "enumeratum-circe"     % "1.6.1",
   "com.beautiful-scala"       %% "scalastyle"           % "1.4.0",
   "io.circe"                  %% "circe-core"           % circe,
@@ -76,7 +76,7 @@ libraryDependencies ++= List(
   "org.typelevel"             %% "cats-effect"          % "2.1.2",
   "org.typelevel"             %% "mouse"                % "0.25",
   // TEST
-  "com.beachape"               %% "enumeratum-scalacheck"     % "1.5.16"     % Test,
+  "com.beachape"               %% "enumeratum-scalacheck"     % "1.6.1"     % Test,
   "com.github.alexarchambault" %% "scalacheck-shapeless_1.14" % "1.2.5"      % Test,
   "org.http4s"                 %% "http4s-blaze-server"       % http4s       % Test,
   "org.http4s"                 %% "http4s-dsl"                % http4s       % Test,

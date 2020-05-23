@@ -71,7 +71,11 @@ final class ScoverageMeasures extends MeasureComputer {
               (
                 key,
                 (summed.get(total), summed.get(hits)).bisequence
-                  .map { case (total, hits) => BigDecimal.valueOf(hits.toLong) / total * 100 }
+                  .map {
+                    case (total, hits) =>
+                      if (total > 0) BigDecimal.valueOf(hits.toLong) / total * 100
+                      else BigDecimal(0)
+                  }
               )
           }
           .collect { case (key, Some(sum)) => (key, sum) }
@@ -83,6 +87,7 @@ final class ScoverageMeasures extends MeasureComputer {
 }
 
 object ScoverageMeasures {
+  // individual metric -> total metric
   val sumMetrics: Chain[String] = Chain(
     ScoverageMetrics.statements.key,
     ScoverageMetrics.coveredStatements.key,

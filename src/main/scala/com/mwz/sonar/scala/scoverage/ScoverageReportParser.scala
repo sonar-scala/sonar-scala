@@ -99,10 +99,11 @@ final class ScoverageReportParser extends ScoverageReportParserAPI {
         count = (statement \@ "invocation-count").toInt
       } yield lineNum -> count
 
-      linesCoverage = lines
-        .groupMapReduce { case (lineNum, _) => lineNum } {
-          case (_, count) => count
-        }(_ + _)
+      linesCoverage =
+        lines
+          .groupMapReduce { case (lineNum, _) => lineNum } {
+            case (_, count) => count
+          }(_ + _)
 
       classCoverage = FileCoverage(classScoverage, linesCoverage)
     } yield filename -> classCoverage

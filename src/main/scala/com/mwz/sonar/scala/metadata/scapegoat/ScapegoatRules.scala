@@ -51,9 +51,10 @@ object ScapegoatRules {
     s"*${inspection.description}*" +
     s"\n\n======= ${inspection.explanation}"
 
-  private[metadata] def toSeverity(level: Level): Severity = level match {
-    case Level.Error   => Severity.Major
-    case Level.Warning => Severity.Minor
-    case Level.Info    => Severity.Info
-  }
+  private[metadata] def toSeverity(level: Level): Severity =
+    level match {
+      case Level.Error   => Severity.Major
+      case Level.Warning => Severity.Minor
+      case Level.Info    => Severity.Info
+    }
 }

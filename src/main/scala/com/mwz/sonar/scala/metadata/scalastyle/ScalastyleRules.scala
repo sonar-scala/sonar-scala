@@ -128,11 +128,12 @@ object ScalastyleRules {
       .text
   }
 
-  private[metadata] def toSeverity(level: Level): Severity = level match {
-    case InfoLevel    => Severity.Info
-    case WarningLevel => Severity.Minor
-    case ErrorLevel   => Severity.Major
-  }
+  private[metadata] def toSeverity(level: Level): Severity =
+    level match {
+      case InfoLevel    => Severity.Info
+      case WarningLevel => Severity.Minor
+      case ErrorLevel   => Severity.Major
+    }
 
   private[metadata] def toParam(ruleClass: String, name: String, param: ScalastyleParam): Param = {
     Param(

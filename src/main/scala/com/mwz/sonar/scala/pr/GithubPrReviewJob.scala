@@ -58,19 +58,20 @@ final class GithubPrReviewJob(
       .use { client =>
         for {
           implicit0(log: Logger[IO]) <- Logger.create(classOf[GithubPrReviewJob], "github-pr-review")
-          _ <- globalConfig.pullRequest.value
-            .map { config =>
-              for {
-                config <- IO.fromEither(config)
-                _ <- log.debug(
-                  s"Found ${globalIssues.allIssues.size} issues:\n" +
-                  globalIssues.allIssues.mkString(", ")
-                )
-                baseUrl <- IO.fromEither(globalConfig.baseUrl)
-                _       <- run(baseUrl, Github(client, config))
-              } yield ()
-            }
-            .getOrElse(IO.unit)
+          _ <-
+            globalConfig.pullRequest.value
+              .map { config =>
+                for {
+                  config <- IO.fromEither(config)
+                  _ <- log.debug(
+                    s"Found ${globalIssues.allIssues.size} issues:\n" +
+                    globalIssues.allIssues.mkString(", ")
+                  )
+                  baseUrl <- IO.fromEither(globalConfig.baseUrl)
+                  _       <- run(baseUrl, Github(client, config))
+                } yield ()
+              }
+              .getOrElse(IO.unit)
         } yield ()
       }
       .unsafeRunSync()
@@ -133,14 +134,15 @@ final class GithubPrReviewJob(
         Logger[F].info("Posting new comments to Github."),
         Logger[F].info("No new Github comments to post.")
       )
-      _ <- commentsToPost
-        .sortBy(c => (c.path, c.position))
-        .traverse { comment =>
-          Logger[F].debug(
-            s"Posting a new comment for ${comment.path}:${comment.position} - ${comment.body}"
-          ) >>
-          github.createComment(comment)
-        }
+      _ <-
+        commentsToPost
+          .sortBy(c => (c.path, c.position))
+          .traverse { comment =>
+            Logger[F].debug(
+              s"Posting a new comment for ${comment.path}:${comment.position} - ${comment.body}"
+            ) >>
+            github.createComment(comment)
+          }
     } yield reviewStatus(issues)
 
   private[pr] def newComments[F[_]: Sync: Logger](
@@ -164,14 +166,15 @@ final class GithubPrReviewJob(
       patchesWithIssues = patches.view.filterKeys(f => issues.keySet.exists(_.toString === f))
       // Map file lines to patch lines.
       mappedPatches = patchesWithIssues.view.mapValues(file => Patch.parse(file.patch)).toMap
-      _ <- mappedPatches
-        .collect { case (file, Left(error)) => (file, error) }
-        .toList
-        .traverse {
-          case (file, error) =>
-            Logger[F].error(s"Error parsing patch for $file.") >>
-            Logger[F].debug(s"""Invalid patch format: "${error.text}".""")
-        }
+      _ <-
+        mappedPatches
+          .collect { case (file, Left(error)) => (file, error) }
+          .toList
+          .traverse {
+            case (file, error) =>
+              Logger[F].error(s"Error parsing patch for $file.") >>
+              Logger[F].debug(s"""Invalid patch format: "${error.text}".""")
+          }
       issuesWithComments = allCommentsForIssues(issues, mappedPatches, sonarComments)
       commentsToPost = commentsForNewIssues(baseUrl, pr.head.sha, issuesWithComments)
     } yield commentsToPost

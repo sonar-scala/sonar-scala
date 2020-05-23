@@ -153,13 +153,14 @@ private[scalastyle] object ScalastyleSensor {
   /**
    * Convert SonarQube rule severity to Scalastyle inspection level.
    */
-  def severityToLevel(severity: Severity): Level = severity match {
-    case Severity.INFO     => InfoLevel
-    case Severity.MINOR    => WarningLevel
-    case Severity.MAJOR    => ErrorLevel
-    case Severity.CRITICAL => ErrorLevel
-    case Severity.BLOCKER  => ErrorLevel
-  }
+  def severityToLevel(severity: Severity): Level =
+    severity match {
+      case Severity.INFO     => InfoLevel
+      case Severity.MINOR    => WarningLevel
+      case Severity.MAJOR    => ErrorLevel
+      case Severity.CRITICAL => ErrorLevel
+      case Severity.BLOCKER  => ErrorLevel
+    }
 
   /**
    * Convert an active SonarQube rule to Scalastyle checker configuration.
@@ -222,7 +223,10 @@ private[scalastyle] object ScalastyleSensor {
     val relativized = context.fileSystem.baseDir.toPath.relativize(Paths.get(styleError.fileSpec.name))
     val file: InputFile = context.fileSystem.inputFile(predicates.hasPath(relativized.toString))
     val newIssue: NewIssue = context.newIssue().forRule(rule.ruleKey)
-    val line: Int = styleError.lineNumber.filter(_ > 0).getOrElse(1) // scalastyle:ignore org.scalastyle.scalariform.NamedArgumentChecker
+    val line: Int =
+      styleError.lineNumber
+        .filter(_ > 0)
+        .getOrElse(1) // scalastyle:ignore org.scalastyle.scalariform.NamedArgumentChecker
     val message: String =
       (styleError.customMessage orElse inspections
         .get(styleError.clazz.getName)

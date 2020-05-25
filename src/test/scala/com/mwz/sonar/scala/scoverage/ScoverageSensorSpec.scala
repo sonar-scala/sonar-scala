@@ -34,8 +34,6 @@ class ScoverageSensorSpec extends AnyFlatSpec with SensorContextMatchers with Lo
   val scoverageReportParser = new TestScoverageReportParser()
   val scoverageSensor = new ScoverageSensor(globalConfig, scoverageReportParser)
 
-  behavior of "Scoverage Sensor"
-
   it should "correctly set descriptor" in {
     val descriptor = new DefaultSensorDescriptor
     scoverageSensor.describe(descriptor)
@@ -76,7 +74,14 @@ class ScoverageSensorSpec extends AnyFlatSpec with SensorContextMatchers with Lo
 
   it should "correctly save component scoverage" in {
     val context = SensorContextTester.create(cwd)
-    val scoverage = Scoverage(123, 15, 88.72, 14.17)
+    val scoverage = Scoverage(
+      statements = 123,
+      coveredStatements = 15,
+      statementCoverage = 88.72,
+      branches = 2,
+      coveredBranches = 1,
+      branchCoverage = 50.00
+    )
     val mainFile = TestInputFileBuilder
       .create("", "src/main/scala/package/Main.scala")
       .setLanguage("scala")
@@ -92,7 +97,9 @@ class ScoverageSensorSpec extends AnyFlatSpec with SensorContextMatchers with Lo
     context should have(metric[java.lang.Integer](fileKey, "sonar-scala-scoverage-total-statements", 123))
     context should have(metric[java.lang.Integer](fileKey, "sonar-scala-scoverage-covered-statements", 15))
     context should have(metric[java.lang.Double](fileKey, "sonar-scala-scoverage-statement-coverage", 88.72))
-    context should have(metric[java.lang.Double](fileKey, "sonar-scala-scoverage-branch-scoverage", 14.17))
+    context should have(metric[java.lang.Integer](fileKey, "sonar-scala-scoverage-total-branches", 2))
+    context should have(metric[java.lang.Integer](fileKey, "sonar-scala-scoverage-covered-branches", 1))
+    context should have(metric[java.lang.Double](fileKey, "sonar-scala-scoverage-branch-coverage", 50.00))
   }
 
   it should "return all scala files from the module" in {
@@ -169,7 +176,9 @@ class ScoverageSensorSpec extends AnyFlatSpec with SensorContextMatchers with Lo
     context should have(metric[java.lang.Integer](fileKey, "sonar-scala-scoverage-total-statements", 5))
     context should have(metric[java.lang.Integer](fileKey, "sonar-scala-scoverage-covered-statements", 3))
     context should have(metric[java.lang.Double](fileKey, "sonar-scala-scoverage-statement-coverage", 60.0))
-    context should have(metric[java.lang.Double](fileKey, "sonar-scala-scoverage-branch-scoverage", 100.0))
+    context should have(metric[java.lang.Integer](fileKey, "sonar-scala-scoverage-total-branches", 2))
+    context should have(metric[java.lang.Integer](fileKey, "sonar-scala-scoverage-covered-branches", 1))
+    context should have(metric[java.lang.Double](fileKey, "sonar-scala-scoverage-branch-coverage", 50.0))
 
     // validate the main file line coverage
     context should have(lineHits(fileKey, 5, 1))
@@ -204,7 +213,9 @@ class ScoverageSensorSpec extends AnyFlatSpec with SensorContextMatchers with Lo
     context should have(metric[java.lang.Integer](fileKey, "sonar-scala-scoverage-total-statements", 5))
     context should have(metric[java.lang.Integer](fileKey, "sonar-scala-scoverage-covered-statements", 3))
     context should have(metric[java.lang.Double](fileKey, "sonar-scala-scoverage-statement-coverage", 60.0))
-    context should have(metric[java.lang.Double](fileKey, "sonar-scala-scoverage-branch-scoverage", 100.0))
+    context should have(metric[java.lang.Integer](fileKey, "sonar-scala-scoverage-total-branches", 2))
+    context should have(metric[java.lang.Integer](fileKey, "sonar-scala-scoverage-covered-branches", 1))
+    context should have(metric[java.lang.Double](fileKey, "sonar-scala-scoverage-branch-coverage", 50.0))
   }
 }
 
@@ -216,19 +227,23 @@ final class TestScoverageReportParser extends ScoverageReportParserAPI {
           if sourcePrefixes.contains(Paths.get("src/main/scala")) =>
         ProjectCoverage(
           projectScoverage = Scoverage(
-            totalStatements = 5,
+            statements = 5,
             coveredStatements = 3,
             statementCoverage = 60.0,
-            branchCoverage = 100.0
+            branches = 2,
+            coveredBranches = 1,
+            branchCoverage = 50.0
           ),
           filesCoverage = Map(
             "src/main/scala/package/Main.scala" ->
             FileCoverage(
               fileScoverage = Scoverage(
-                totalStatements = 5,
+                statements = 5,
                 coveredStatements = 3,
                 statementCoverage = 60.0,
-                branchCoverage = 100.0
+                branches = 2,
+                coveredBranches = 1,
+                branchCoverage = 50.0
               ),
               linesCoverage = Map(5 -> 1, 6 -> 1, 7 -> 0, 8 -> 0, 9 -> 1)
             )

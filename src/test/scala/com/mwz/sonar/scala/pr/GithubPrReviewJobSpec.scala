@@ -460,7 +460,11 @@ class GithubPrReviewJobSpec
           NewComment(Markdown.inline(uri, issue).text, commit, issue.file.toString, issue.line)
       }
 
-      GithubPrReviewJob.commentsForNewIssues(uri, commit, grouped) should contain theSameElementsAs newComments
+      GithubPrReviewJob.commentsForNewIssues(
+        uri,
+        commit,
+        grouped
+      ) should contain theSameElementsAs newComments
     }
   }
 
@@ -481,9 +485,15 @@ class GithubPrReviewJobSpec
 
   it should "infer status description from a pr status" in {
     GithubPrReviewJob.statusDescription(Pending) shouldBe "SonarQube is reviewing this pull request."
-    GithubPrReviewJob.statusDescription(Success) shouldBe "SonarQube didn't report any critical or blocker issues."
-    GithubPrReviewJob.statusDescription(Error(ReviewStatus(1, 3))) shouldBe "SonarQube reported 1 blocker and 3 critical issues."
-    GithubPrReviewJob.statusDescription(Failure(new Throwable)) shouldBe "An error occurred during SonarQube review."
+
+    GithubPrReviewJob.statusDescription(Success) shouldBe
+    "SonarQube didn't report any critical or blocker issues."
+
+    GithubPrReviewJob.statusDescription(Error(ReviewStatus(1, 3))) shouldBe
+    "SonarQube reported 1 blocker and 3 critical issues."
+
+    GithubPrReviewJob.statusDescription(Failure(new Throwable)) shouldBe
+    "An error occurred during SonarQube review."
   }
 
   it should "infer a new pr status from the result of the review" in {

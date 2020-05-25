@@ -31,30 +31,32 @@ trait SensorContextMatchers extends Matchers {
     componentKey: String,
     metricKey: String,
     expectedValue: T
-  ): HavePropertyMatcher[SensorContextTester, T] = (sensorContext: SensorContextTester) => {
-    val measure = Option(sensorContext.measure[T](componentKey, metricKey))
-    HavePropertyMatchResult(
-      matches = measure.fold(false)(m => m.value === expectedValue),
-      propertyName = "measure",
-      expectedValue = expectedValue,
-      actualValue = None.orNull.asInstanceOf[T]
-    )
-  }
+  ): HavePropertyMatcher[SensorContextTester, T] =
+    (sensorContext: SensorContextTester) => {
+      val measure = Option(sensorContext.measure[T](componentKey, metricKey))
+      HavePropertyMatchResult(
+        matches = measure.fold(false)(m => m.value === expectedValue),
+        propertyName = "measure",
+        expectedValue = expectedValue,
+        actualValue = None.orNull.asInstanceOf[T]
+      )
+    }
 
   /** Checks that a sensor context have an expected value for some line hits */
   def lineHits(
     fileKey: String,
     lineNum: Int,
     expectedValue: Int
-  ): HavePropertyMatcher[SensorContextTester, Int] = (sensorContext: SensorContextTester) => {
-    val hits = Option(sensorContext.lineHits(fileKey, lineNum))
-    HavePropertyMatchResult(
-      matches = hits.fold(false)(_ === expectedValue),
-      propertyName = "measure",
-      expectedValue = expectedValue,
-      actualValue = None.orNull.asInstanceOf[Int]
-    )
-  }
+  ): HavePropertyMatcher[SensorContextTester, Int] =
+    (sensorContext: SensorContextTester) => {
+      val hits = Option(sensorContext.lineHits(fileKey, lineNum))
+      HavePropertyMatchResult(
+        matches = hits.fold(false)(_ === expectedValue),
+        propertyName = "measure",
+        expectedValue = expectedValue,
+        actualValue = None.orNull.asInstanceOf[Int]
+      )
+    }
 
   /** Custom equality for comparing issueLocations */
   implicit val issueLocationEq =

@@ -32,6 +32,7 @@ import com.mwz.sonar.scala.util.{Log, PathUtils}
 import org.sonar.api.batch.fs.{FileSystem, InputComponent, InputFile}
 import org.sonar.api.batch.sensor.{Sensor, SensorContext, SensorDescriptor}
 import org.sonar.api.config.Configuration
+import org.sonar.api.measures.Metric
 import scalariform.ScalaVersion
 
 /** Main sensor for importing Scoverage reports into SonarQube. */
@@ -136,33 +137,25 @@ final class ScoverageSensor(
     component: InputComponent,
     scoverage: Scoverage
   ): Unit = {
-    context
-      .newMeasure[java.lang.Integer]()
-      .on(component)
-      .forMetric(ScoverageMetrics.totalStatements)
-      .withValue(scoverage.totalStatements)
-      .save()
+    List(
+      (ScoverageMetrics.statements, scoverage.statements),
+      (ScoverageMetrics.coveredStatements, scoverage.coveredStatements),
+      (ScoverageMetrics.branches, scoverage.branches),
+      (ScoverageMetrics.coveredBranches, scoverage.coveredBranches)
+    ).foreach { case (metric, value) => save[java.lang.Integer](metric, value) }
 
-    context
-      .newMeasure[java.lang.Integer]()
-      .on(component)
-      .forMetric(ScoverageMetrics.coveredStatements)
-      .withValue(scoverage.coveredStatements)
-      .save()
+    List(
+      (ScoverageMetrics.statementCoverage, scoverage.statementCoverage),
+      (ScoverageMetrics.branchCoverage, scoverage.branchCoverage)
+    ).foreach { case (metric, value) => save[java.lang.Double](metric, value) }
 
-    context
-      .newMeasure[java.lang.Double]()
-      .on(component)
-      .forMetric(ScoverageMetrics.statementCoverage)
-      .withValue(scoverage.statementCoverage)
-      .save()
-
-    context
-      .newMeasure[java.lang.Double]()
-      .on(component)
-      .forMetric(ScoverageMetrics.branchCoverage)
-      .withValue(scoverage.branchCoverage)
-      .save()
+    def save[A <: java.io.Serializable](metric: Metric[A], value: A): Unit =
+      context
+        .newMeasure()
+        .on(component)
+        .forMetric(metric)
+        .withValue(value)
+        .save()
   }
 }
 

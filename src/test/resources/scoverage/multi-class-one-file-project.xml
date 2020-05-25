@@ -1,27 +1,27 @@
-<scoverage statement-count="7" statements-invoked="5" statement-rate="71.43" branch-rate="87.50" version="1.0" timestamp="1521408468011">
+<scoverage statement-count="7" statements-invoked="5" statement-rate="71.43" branch-rate="50.00" version="1.0" timestamp="1521408468011">
   <packages>
     <package name="com.mwz.sonar.scala" statement-count="7" statements-invoked="5" statement-rate="71.43">
       <classes>
-        <class name="com.mwz.sonar.scala.Scala" filename="com/mwz/sonar/scala/ScalaPlugin.scala" statement-count="5" statements-invoked="3" statement-rate="60.00" branch-rate="75.00">
+        <class name="com.mwz.sonar.scala.Scala" filename="com/mwz/sonar/scala/ScalaPlugin.scala" statement-count="5" statements-invoked="3" statement-rate="60.00" branch-rate="50.00">
           <methods>
             <method name="com.mwz.sonar.scala/Scala/getFileSuffixes" statement-count="3" statements-invoked="2" statement-rate="66.66" branch-rate="50.00">
-	            <statements>
-	              <statement package="com.mwz.sonar.scala" class="Scala" class-type="Class" full-class-name="com.mwz.sonar.scala.Scala" source="~/sonar-scala/src/main/scala/com/mwz/sonar/scala/ScalaPlugin.scala" method="getFileSuffixes" start="1690" end="1715" line="38" branch="false" invocation-count="1" ignored="false"></statement>
-	              <statement package="com.mwz.sonar.scala" class="Scala" class-type="Class" full-class-name="com.mwz.sonar.scala.Scala" source="~/sonar-scala/src/main/scala/com/mwz/sonar/scala/ScalaPlugin.scala" method="getFileSuffixes" start="1538" end="1592" line="39" branch="true" invocation-count="1" ignored="false"></statement>
-	              <statement package="com.mwz.sonar.scala" class="Scala" class-type="Class" full-class-name="com.mwz.sonar.scala.Scala" source="~/sonar-scala/src/main/scala/com/mwz/sonar/scala/ScalaPlugin.scala" method="getFileSuffixes" start="1612" end="1644" line="40" branch="true" invocation-count="0" ignored="false"></statement>
-	            </statements>
-	          </method>
-	          <method name="com.mwz.sonar.scala/Scala/getScalaVersion" statement-count="2" statements-invoked="1" statement-rate="50.00" branch-rate="100.00">
+              <statements>
+                <statement package="com.mwz.sonar.scala" class="Scala" class-type="Class" full-class-name="com.mwz.sonar.scala.Scala" source="~/sonar-scala/src/main/scala/com/mwz/sonar/scala/ScalaPlugin.scala" method="getFileSuffixes" start="1690" end="1715" line="38" branch="false" invocation-count="1" ignored="false"></statement>
+                <statement package="com.mwz.sonar.scala" class="Scala" class-type="Class" full-class-name="com.mwz.sonar.scala.Scala" source="~/sonar-scala/src/main/scala/com/mwz/sonar/scala/ScalaPlugin.scala" method="getFileSuffixes" start="1538" end="1592" line="39" branch="true" invocation-count="1" ignored="false"></statement>
+                <statement package="com.mwz.sonar.scala" class="Scala" class-type="Class" full-class-name="com.mwz.sonar.scala.Scala" source="~/sonar-scala/src/main/scala/com/mwz/sonar/scala/ScalaPlugin.scala" method="getFileSuffixes" start="1612" end="1644" line="40" branch="true" invocation-count="0" ignored="false"></statement>
+              </statements>
+            </method>
+            <method name="com.mwz.sonar.scala/Scala/getScalaVersion" statement-count="2" statements-invoked="1" statement-rate="50.00" branch-rate="0">
               <statements>
                 <statement package="com.mwz.sonar.scala" class="Scala" class-type="Object" full-class-name="com.mwz.sonar.scala.Scala" source="~/sonar-scala/src/main/scala/com/mwz/sonar/scala/ScalaPlugin.scala" method="getScalaVersion" start="2239" end="2274" line="56" branch="false" invocation-count="1" ignored="false"></statement>
                 <statement package="com.mwz.sonar.scala" class="Scala" class-type="Object" full-class-name="com.mwz.sonar.scala.Scala" source="~/sonar-scala/src/main/scala/com/mwz/sonar/scala/ScalaPlugin.scala" method="getScalaVersion" start="2182" end="2275" line="57" branch="false" invocation-count="0" ignored="false"></statement>
               </statements>
             </method>
-	        </methods>
-			  </class>
-			  <class name="com.mwz.sonar.scala.ScalaPlugin" filename="com/mwz/sonar/scala/ScalaPlugin.scala" statement-count="2" statements-invoked="2" statement-rate="100.00" branch-rate="100.00">
+          </methods>
+        </class>
+        <class name="com.mwz.sonar.scala.ScalaPlugin" filename="com/mwz/sonar/scala/ScalaPlugin.scala" statement-count="2" statements-invoked="2" statement-rate="100.00" branch-rate="0">
           <methods>
-            <method name="com.mwz.sonar.scala/ScalaPlugin/define" statement-count="2" statements-invoked="2" statement-rate="100.00" branch-rate="100.00">
+            <method name="com.mwz.sonar.scala/ScalaPlugin/define" statement-count="2" statements-invoked="2" statement-rate="100.00" branch-rate="0">
               <statements>
                 <statement package="com.mwz.sonar.scala" class="ScalaPlugin" class-type="Class" full-class-name="com.mwz.sonar.scala.ScalaPlugin" source="~/sonar-scala/src/main/scala/com/mwz/sonar/scala/ScalaPlugin.scala" method="define" start="2445" end="2445" line="66" branch="false" invocation-count="1" ignored="false"></statement>
                 <statement package="com.mwz.sonar.scala" class="ScalaPlugin" class-type="Class" full-class-name="com.mwz.sonar.scala.ScalaPlugin" source="~/sonar-scala/src/main/scala/com/mwz/sonar/scala/ScalaPlugin.scala" method="define" start="2424" end="2677" line="66" branch="false" invocation-count="1" ignored="false"></statement>
@@ -32,4 +32,4 @@
       </classes>
     </package>
   </packages>
-</scoverage >
+</scoverage>

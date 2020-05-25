@@ -73,13 +73,14 @@ object ParamType extends Enum[ParamType] with CirceEnum[ParamType] with CatsEnum
   val values = findValues
 
   implicit class ParamTypeSyntax(private val paramType: ParamType) extends AnyVal {
-    def asSonarRuleParamType: RuleParamType = paramType match {
-      case String  => RuleParamType.STRING
-      case Text    => RuleParamType.TEXT
-      case Boolean => RuleParamType.BOOLEAN
-      case Integer => RuleParamType.INTEGER
-      case Float   => RuleParamType.FLOAT
-    }
+    def asSonarRuleParamType: RuleParamType =
+      paramType match {
+        case String  => RuleParamType.STRING
+        case Text    => RuleParamType.TEXT
+        case Boolean => RuleParamType.BOOLEAN
+        case Integer => RuleParamType.INTEGER
+        case Float   => RuleParamType.FLOAT
+      }
   }
 }
 

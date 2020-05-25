@@ -20,11 +20,12 @@ package scoverage
 
 import java.nio.file.Paths
 
+import com.softwaremill.diffx.scalatest.DiffMatcher
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 
 /** Tests the correct behavior of the Scoverage XML reports parser */
-class ScoverageReportParserSpec extends AnyFlatSpec with Matchers {
+class ScoverageReportParserSpec extends AnyFlatSpec with Matchers with DiffMatcher {
   val modulePath = Paths.get("")
   val scalaSources = List(Paths.get("src/main/scala"))
   val scoverageReportParser = new ScoverageReportParser()
@@ -32,9 +33,29 @@ class ScoverageReportParserSpec extends AnyFlatSpec with Matchers {
   behavior of "A Scoverage XML Report Parser"
 
   it should "be able to extract scoverage data from XML" in {
-    val node = <node statement-count="123" statements-invoked="15" statement-rate="88.72" branch-rate="14.17">
-               </node>
-    val expected = Scoverage(123, 15, 88.72, 14.17)
+    val node =
+      <node statement-count="3" statements-invoked="2" statement-rate="66.67" branch-rate="50.00">
+        <methods>
+          <method>
+            <statements>
+              <statement branch="false" invocation-count="1" ignored="false"></statement>
+              <statement branch="false" invocation-count="1" ignored="false"></statement>
+              <statement branch="false" invocation-count="0" ignored="false"></statement>
+              <statement branch="true" invocation-count="1" ignored="false"></statement>
+              <statement branch="true" invocation-count="1" ignored="true"></statement>
+              <statement branch="true" invocation-count="0" ignored="false"></statement>
+            </statements>
+          </method>
+        </methods>
+      </node>
+    val expected = Scoverage(
+      statements = 3,
+      coveredStatements = 2,
+      statementCoverage = 66.67,
+      branches = 2,
+      coveredBranches = 1,
+      branchCoverage = 50.00
+    )
 
     scoverageReportParser.extractScoverageFromNode(node) shouldBe expected
   }
@@ -44,9 +65,11 @@ class ScoverageReportParserSpec extends AnyFlatSpec with Matchers {
     val moduleCoverage = scoverageReportParser.parse(reportFilename, modulePath, scalaSources)
 
     val scoverage = Scoverage(
-      totalStatements = 0,
+      statements = 0,
       coveredStatements = 0,
       statementCoverage = 0.0,
+      branches = 0,
+      coveredBranches = 0,
       branchCoverage = 0.0
     )
     val expected = ProjectCoverage(
@@ -62,9 +85,11 @@ class ScoverageReportParserSpec extends AnyFlatSpec with Matchers {
     val moduleCoverage = scoverageReportParser.parse(reportFilename, modulePath, scalaSources)
 
     val scoverage = Scoverage(
-      totalStatements = 2,
-      coveredStatements = 2,
+      statements = 3,
+      coveredStatements = 3,
       statementCoverage = 100.0,
+      branches = 1,
+      coveredBranches = 1,
       branchCoverage = 100.0
     )
     val expected = ProjectCoverage(
@@ -72,12 +97,12 @@ class ScoverageReportParserSpec extends AnyFlatSpec with Matchers {
       filesCoverage = Map(
         "src/main/scala/com/mwz/sonar/scala/ScalaPlugin.scala" -> FileCoverage(
           fileScoverage = scoverage,
-          linesCoverage = Map(66 -> 2)
+          linesCoverage = Map(66 -> 2, 67 -> 1)
         )
       )
     )
 
-    moduleCoverage shouldBe expected
+    moduleCoverage should matchTo(expected)
   }
 
   it should "be able to handle multiple source prefixes" in {
@@ -90,9 +115,11 @@ class ScoverageReportParserSpec extends AnyFlatSpec with Matchers {
     val moduleCoverage = scoverageReportParser.parse(reportFilename, modulePath, sourcePrefixes)
 
     val scoverage = Scoverage(
-      totalStatements = 2,
-      coveredStatements = 2,
+      statements = 3,
+      coveredStatements = 3,
       statementCoverage = 100.0,
+      branches = 1,
+      coveredBranches = 1,
       branchCoverage = 100.0
     )
     val expected = ProjectCoverage(
@@ -100,7 +127,7 @@ class ScoverageReportParserSpec extends AnyFlatSpec with Matchers {
       filesCoverage = Map(
         "src/main/scala/com/mwz/sonar/scala/ScalaPlugin.scala" -> FileCoverage(
           fileScoverage = scoverage,
-          linesCoverage = Map(66 -> 2)
+          linesCoverage = Map(66 -> 2, 67 -> 1)
         )
       )
     )
@@ -119,9 +146,11 @@ class ScoverageReportParserSpec extends AnyFlatSpec with Matchers {
     val moduleCoverage = scoverageReportParser.parse(reportFilename, modulePath, sourcePrefixes)
 
     val scoverage = Scoverage(
-      totalStatements = 2,
+      statements = 2,
       coveredStatements = 2,
       statementCoverage = 100.0,
+      branches = 0,
+      coveredBranches = 0,
       branchCoverage = 100.0
     )
     val expected = ProjectCoverage(
@@ -150,9 +179,11 @@ class ScoverageReportParserSpec extends AnyFlatSpec with Matchers {
     val moduleCoverage = scoverageReportParser.parse(reportFilename, modulePath, scalaSources)
 
     val scoverage = Scoverage(
-      totalStatements = 2,
+      statements = 2,
       coveredStatements = 2,
       statementCoverage = 100.0,
+      branches = 0,
+      coveredBranches = 0,
       branchCoverage = 100.0
     )
     val expected = ProjectCoverage(
@@ -173,10 +204,12 @@ class ScoverageReportParserSpec extends AnyFlatSpec with Matchers {
     val moduleCoverage = scoverageReportParser.parse(reportFilename, modulePath, scalaSources)
 
     val scoverage = Scoverage(
-      totalStatements = 7,
+      statements = 7,
       coveredStatements = 5,
       statementCoverage = 71.43,
-      branchCoverage = 87.5
+      branches = 2,
+      coveredBranches = 1,
+      branchCoverage = 50.00
     )
     val expected = ProjectCoverage(
       projectScoverage = scoverage,
@@ -188,30 +221,36 @@ class ScoverageReportParserSpec extends AnyFlatSpec with Matchers {
       )
     )
 
-    moduleCoverage shouldBe expected
+    moduleCoverage should matchTo(expected)
   }
 
-  it should "be able to parse the report of a two files project" in {
+  it should "be able to parse a report with two files" in {
     val reportFilename = Paths.get("src/test/resources/scoverage/two-files-project.xml")
     val moduleCoverage = scoverageReportParser.parse(reportFilename, modulePath, scalaSources)
 
     val scoverageTotal = Scoverage(
-      totalStatements = 6,
+      statements = 6,
       coveredStatements = 5,
       statementCoverage = 83.33,
-      branchCoverage = 83.33
+      branches = 3,
+      coveredBranches = 2,
+      branchCoverage = 66.67
     )
     val scoverage1 = Scoverage(
-      totalStatements = 2,
+      statements = 2,
       coveredStatements = 2,
       statementCoverage = 100.0,
-      branchCoverage = 100.0
+      branches = 0,
+      coveredBranches = 0,
+      branchCoverage = 0
     )
     val scoverage2 = Scoverage(
-      totalStatements = 4,
+      statements = 4,
       coveredStatements = 3,
       statementCoverage = 75.0,
-      branchCoverage = 66.66
+      branches = 3,
+      coveredBranches = 2,
+      branchCoverage = 66.67
     )
 
     val expected = ProjectCoverage(
@@ -228,6 +267,6 @@ class ScoverageReportParserSpec extends AnyFlatSpec with Matchers {
       )
     )
 
-    moduleCoverage shouldBe expected
+    moduleCoverage should matchTo(expected)
   }
 }

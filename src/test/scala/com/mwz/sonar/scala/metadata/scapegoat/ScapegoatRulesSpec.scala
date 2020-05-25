@@ -105,8 +105,10 @@ class ScapegoatRulesSpec extends AnyFlatSpec with Matchers with Inspectors with 
       explanation = "Comparison with self will always yield true."
     )
 
-    ScapegoatRules.mdDescription(inspection) shouldBe "*Checks for equality checks with itself.*\n\nComparison with self will always yield true."
-    ScapegoatRules.sonarMdDescription(inspection) shouldBe "*Checks for equality checks with itself.*\n\n======= Comparison with self will always yield true."
+    ScapegoatRules.mdDescription(inspection) shouldBe
+    "*Checks for equality checks with itself.*\n\nComparison with self will always yield true."
+    ScapegoatRules.sonarMdDescription(inspection) shouldBe
+    "*Checks for equality checks with itself.*\n\n======= Comparison with self will always yield true."
   }
 
   it should "convert Scapegoat inspection level to SonarQube Severity" in {

@@ -27,7 +27,11 @@ class ReviewStatusSpec extends AnyFlatSpec with Matchers {
     ReviewStatus.description(ReviewStatus(blocker = 2, critical = 0)) shouldBe "2 blockers"
     ReviewStatus.description(ReviewStatus(blocker = 0, critical = 1)) shouldBe "1 critical issue"
     ReviewStatus.description(ReviewStatus(blocker = 0, critical = 2)) shouldBe "2 critical issues"
-    ReviewStatus.description(ReviewStatus(blocker = 1, critical = 1)) shouldBe "1 blocker and 1 critical issue"
-    ReviewStatus.description(ReviewStatus(blocker = 2, critical = 2)) shouldBe "2 blockers and 2 critical issues"
+    ReviewStatus.description(
+      ReviewStatus(blocker = 1, critical = 1)
+    ) shouldBe "1 blocker and 1 critical issue"
+    ReviewStatus.description(
+      ReviewStatus(blocker = 2, critical = 2)
+    ) shouldBe "2 blockers and 2 critical issues"
   }
 }

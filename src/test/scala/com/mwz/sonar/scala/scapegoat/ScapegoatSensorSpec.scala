@@ -494,68 +494,69 @@ class ScapegoatSensorSpec
 
 /** Mock of the ScapegoatReportParser */
 final class TestScapegoatReportParser extends ScapegoatReportParserAPI {
-  override def parse(reportPath: Path): Map[String, Seq[ScapegoatIssue]] = reportPath.toString match {
-    case "scapegoat-report/no-warnings.xml" =>
-      Map()
-    case "scapegoat-report/one-file-one-warning.xml" =>
-      Map(
-        "com/mwz/sonar/scala/scapegoat/TestFileA.scala" -> Seq(
-          ScapegoatIssue(
-            line = 1,
-            text = "Empty case class",
-            file = "com/mwz/sonar/scala/scapegoat/TestFileA.scala",
-            inspectionId = "com.sksamuel.scapegoat.inspections.EmptyCaseClass"
+  override def parse(reportPath: Path): Map[String, Seq[ScapegoatIssue]] =
+    reportPath.toString match {
+      case "scapegoat-report/no-warnings.xml" =>
+        Map()
+      case "scapegoat-report/one-file-one-warning.xml" =>
+        Map(
+          "com/mwz/sonar/scala/scapegoat/TestFileA.scala" -> Seq(
+            ScapegoatIssue(
+              line = 1,
+              text = "Empty case class",
+              file = "com/mwz/sonar/scala/scapegoat/TestFileA.scala",
+              inspectionId = "com.sksamuel.scapegoat.inspections.EmptyCaseClass"
+            )
           )
         )
-      )
-    case "scapegoat-report/two-files-five-warnings.xml" =>
-      Map(
-        "com/mwz/sonar/scala/scapegoat/TestFileA.scala" -> Seq(
-          ScapegoatIssue(
-            line = 1,
-            text = "Empty case class",
-            file = "com/mwz/sonar/scala/scapegoat/TestFileA.scala",
-            inspectionId = "com.sksamuel.scapegoat.inspections.EmptyCaseClass"
+      case "scapegoat-report/two-files-five-warnings.xml" =>
+        Map(
+          "com/mwz/sonar/scala/scapegoat/TestFileA.scala" -> Seq(
+            ScapegoatIssue(
+              line = 1,
+              text = "Empty case class",
+              file = "com/mwz/sonar/scala/scapegoat/TestFileA.scala",
+              inspectionId = "com.sksamuel.scapegoat.inspections.EmptyCaseClass"
+            ),
+            ScapegoatIssue(
+              line = 2,
+              text = "Array passed to String.format",
+              file = "com/mwz/sonar/scala/scapegoat/TestFileA.scala",
+              inspectionId = "com.sksamuel.scapegoat.inspections.string.ArraysInFormat"
+            )
           ),
-          ScapegoatIssue(
-            line = 2,
-            text = "Array passed to String.format",
-            file = "com/mwz/sonar/scala/scapegoat/TestFileA.scala",
-            inspectionId = "com.sksamuel.scapegoat.inspections.string.ArraysInFormat"
-          )
-        ),
-        "com/mwz/sonar/scala/scapegoat/TestFileB.scala" -> Seq(
-          ScapegoatIssue(
-            line = 1,
-            text = "Lonely sealed trait",
-            file = "com/mwz/sonar/scala/scapegoat/TestFileB.scala",
-            inspectionId = "com.sksamuel.scapegoat.inspections.LonelySealedTrait"
-          ),
-          ScapegoatIssue(
-            line = 2,
-            text = "Redundant final modifier on method",
-            file = "com/mwz/sonar/scala/scapegoat/TestFileB.scala",
-            inspectionId = "com.sksamuel.scapegoat.inspections.RedundantFinalModifierOnMethod"
-          ),
-          ScapegoatIssue(
-            line = 3,
-            text = "Empty case class",
-            file = "com/mwz/sonar/scala/scapegoat/TestFileB.scala",
-            inspectionId = "com.sksamuel.scapegoat.inspections.EmptyCaseClass"
-          )
-        )
-      )
-    case "scapegoat-report/absolute-file-path.xml" =>
-      val file = cwd.resolve("app").resolve("TestFile.scala").toString
-      Map(
-        file -> Seq(
-          ScapegoatIssue(
-            line = 1,
-            text = "Empty case class",
-            file = file,
-            inspectionId = "com.sksamuel.scapegoat.inspections.EmptyCaseClass"
+          "com/mwz/sonar/scala/scapegoat/TestFileB.scala" -> Seq(
+            ScapegoatIssue(
+              line = 1,
+              text = "Lonely sealed trait",
+              file = "com/mwz/sonar/scala/scapegoat/TestFileB.scala",
+              inspectionId = "com.sksamuel.scapegoat.inspections.LonelySealedTrait"
+            ),
+            ScapegoatIssue(
+              line = 2,
+              text = "Redundant final modifier on method",
+              file = "com/mwz/sonar/scala/scapegoat/TestFileB.scala",
+              inspectionId = "com.sksamuel.scapegoat.inspections.RedundantFinalModifierOnMethod"
+            ),
+            ScapegoatIssue(
+              line = 3,
+              text = "Empty case class",
+              file = "com/mwz/sonar/scala/scapegoat/TestFileB.scala",
+              inspectionId = "com.sksamuel.scapegoat.inspections.EmptyCaseClass"
+            )
           )
         )
-      )
-  }
+      case "scapegoat-report/absolute-file-path.xml" =>
+        val file = cwd.resolve("app").resolve("TestFile.scala").toString
+        Map(
+          file -> Seq(
+            ScapegoatIssue(
+              line = 1,
+              text = "Empty case class",
+              file = file,
+              inspectionId = "com.sksamuel.scapegoat.inspections.EmptyCaseClass"
+            )
+          )
+        )
+    }
 }

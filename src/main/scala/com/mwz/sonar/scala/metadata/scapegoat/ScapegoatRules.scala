@@ -31,7 +31,7 @@ object ScapegoatRules {
   private[metadata] def toRule(inspection: ScapegoatInspection): Rule = {
     Rule(
       key = inspection.id,
-      name = inspection.name,
+      name = inspection.name.replaceAll("`", ""),
       mdDescription = mdDescription(inspection),
       sonarMdDescription = sonarMdDescription(inspection),
       severity = toSeverity(inspection.defaultLevel),
@@ -47,9 +47,10 @@ object ScapegoatRules {
   // SonarQube's markdown parser converts any '=' characters in the middle of a sentence
   // into headings, so we're using a 7th level heading (which doesn't have any style properties)
   // to make it ignore the '=' characters and make it look like regular text.
+  // Any inline code blocks between `` are also ignored until Scapegoat has all code blocks wrapped in ``.
   private[metadata] def sonarMdDescription(inspection: ScapegoatInspection): String =
-    s"*${inspection.description}*" +
-    s"\n\n======= ${inspection.explanation}"
+    s"*${inspection.description.replaceAll("`", "")}*" +
+    s"\n\n======= ${inspection.explanation.replaceAll("`", "")}"
 
   private[metadata] def toSeverity(level: Level): Severity =
     level match {

@@ -2150,7 +2150,7 @@
           "template": false
         },
         {
-          "description": "*Checks for use of setScale() on a BigDecimal without setting the rounding mode can throw an exception.*\n\nWhen using setScale() on a BigDecimal without setting the rounding mode, this can throw an exception if rounding is required. Did you mean to call setScale(s, RoundingMode.XYZ)?",
+          "description": "*Checks for use of `setScale()` on a BigDecimal without setting the rounding mode can throw an exception.*\n\nWhen using `setScale()` on a BigDecimal without setting the rounding mode, this can throw an exception if rounding is required. Did you mean to call `setScale(s, RoundingMode.XYZ)`?",
           "key": "com.sksamuel.scapegoat.inspections.math.BigDecimalScaleWithoutRoundingMode",
           "name": "BigDecimal setScale() without rounding mode",
           "params": [],
@@ -2166,7 +2166,7 @@
           "template": false
         },
         {
-          "description": "*Checks for potentially broken odd checks.*\n\nCode that attempts to check for oddness using x % 2 == 1 will fail on negative numbers. Consider using x % 2 != 0",
+          "description": "*Checks for potentially broken odd checks.*\n\nCode that attempts to check for oddness using `x % 2 == 1` will fail on negative numbers. Consider using `x % 2 != 0`.",
           "key": "com.sksamuel.scapegoat.inspections.math.BrokenOddness",
           "name": "Broken odd check",
           "params": [],
@@ -2254,7 +2254,7 @@
           "template": false
         },
         {
-          "description": "*Checks for code like a == List() or a == Nil.*\n\nPrefer use of isEmpty instead of comparison to an empty List.",
+          "description": "*Checks for code like `a == List()` or `a == Nil`.*\n\nPrefer use of `isEmpty` instead of comparison to an empty List.",
           "key": "com.sksamuel.scapegoat.inspections.collections.ComparisonToEmptyList",
           "name": "Comparison to empty list",
           "params": [],
@@ -2262,7 +2262,7 @@
           "template": false
         },
         {
-          "description": "*Checks for code like a == Set() or a == Set.empty.*\n\nPrefer use of isEmpty instead of comparison to an empty Set.",
+          "description": "*Checks for code like `a == Set()` or `a == Set.empty`.*\n\nPrefer use of `isEmpty` instead of comparison to an empty Set.",
           "key": "com.sksamuel.scapegoat.inspections.collections.ComparisonToEmptySet",
           "name": "Comparison to empty set",
           "params": [],
@@ -2390,7 +2390,7 @@
           "template": false
         },
         {
-          "description": "*Checks if exists() can be simplified to contains().*\n\nexists(x => x == y) can be replaced with contains(y).",
+          "description": "*Checks if `exists()` can be simplified to `contains()`.*\n\n`exists(x => x == y)` can be replaced with `contains(y)`.",
           "key": "com.sksamuel.scapegoat.inspections.collections.ExistsSimplifiableToContains",
           "name": "Exists simplifiable to contains",
           "params": [],
@@ -2398,7 +2398,7 @@
           "template": false
         },
         {
-          "description": "*Checks for overridden finalizers that do not call super.*\n\nFinalizers should call super.finalize() to ensure superclasses are able to run their finalization logic.",
+          "description": "*Checks for overridden finalizers that do not call super.*\n\nFinalizers should call `super.finalize()` to ensure superclasses are able to run their finalization logic.",
           "key": "com.sksamuel.scapegoat.inspections.unsafe.FinalizerWithoutSuper",
           "name": "Finalizer without super",
           "params": [],
@@ -2758,7 +2758,7 @@
           "template": false
         },
         {
-          "description": "*Checks for use of reverse followed by head/headOption/iterator/map.*\n\nreverse followed by head, headOption, iterator, or map can be replaced, respectively, with last, lastOption, reverseIterator, or reverseMap.",
+          "description": "*Checks for use of reverse followed by head/headOption/iterator/map.*\n\n`reverse` followed by `head`, `headOption`, `iterator`, or `map` can be replaced, respectively, with `last`, `lastOption`, `reverseIterator`, or `reverseMap`.",
           "key": "com.sksamuel.scapegoat.inspections.collections.ReverseFunc",
           "name": "Unnecessary reverse",
           "params": [],
@@ -2774,7 +2774,7 @@
           "template": false
         },
         {
-          "description": "*Checks Seq.contains() and Option.contains() for unrelated types.*\n\ncontains() accepts arguments af any type, which means you might be checking if your collection contains an element of an unrelated type.",
+          "description": "*Checks `Seq.contains()` and `Option.contains()` for unrelated types.*\n\n`contains()` accepts arguments af any type, which means you might be checking if your collection contains an element of an unrelated type.",
           "key": "com.sksamuel.scapegoat.inspections.collections.UnsafeContains",
           "name": "Unsafe contains",
           "params": [],
@@ -2822,7 +2822,7 @@
           "template": false
         },
         {
-          "description": "*Checks for use of math.log(x + 1) instead of math.log1p(x)*\n\nUse math.log1p(x) is clearer and more performant than $math.log(1 + x).",
+          "description": "*Checks for use of math.log(x + 1) instead of math.log1p(x).*\n\nUse math.log1p(x) is clearer and more performant than $math.log(1 + x).",
           "key": "com.sksamuel.scapegoat.inspections.math.UseLog1P",
           "name": "Use log1p",
           "params": [],
@@ -2854,7 +2854,7 @@
           "template": false
         },
         {
-          "description": "*Checks for use of Option.get*\n\nUsing Option.get defeats the purpose of using Option in the first place. Use the following instead: Option.getOrElse, Option.fold, pattern matching or don't take the value out of the container and map over it to transform it.",
+          "description": "*Checks for use of Option.get.*\n\nUsing Option.get defeats the purpose of using Option in the first place. Use the following instead: Option.getOrElse, Option.fold, pattern matching or don't take the value out of the container and map over it to transform it.",
           "key": "com.sksamuel.scapegoat.inspections.option.OptionGet",
           "name": "Use of Option.get",
           "params": [],
@@ -2878,7 +2878,7 @@
           "template": false
         },
         {
-          "description": "**\n\nUse of asInstanceOf is considered a bad practice - consider using pattern matching instead.",
+          "description": "*Checks for use of asInstanceOf.*\n\nUse of asInstanceOf is considered a bad practice - consider using pattern matching instead.",
           "key": "com.sksamuel.scapegoat.inspections.unsafe.AsInstanceOf",
           "name": "Use of asInstanceOf",
           "params": [],
@@ -2950,7 +2950,7 @@
           "template": false
         },
         {
-          "description": "*Checks for use of filter().head.*\n\nfilter().head can throw an exception if the collection is empty - it can be replaced with find() match {...}.",
+          "description": "*Checks for use of filter().head.*\n\n`filter().head` can throw an exception if the collection is empty - it can be replaced with `find() match {...}`.",
           "key": "com.sksamuel.scapegoat.inspections.collections.FilterDotHead",
           "name": "filter().head can throw an exception",
           "params": [],
@@ -2958,7 +2958,7 @@
           "template": false
         },
         {
-          "description": "*Checks for use of filter().headOption.*\n\nfilter() scans the entire collection, which is unnecessary if you only want to get the first element that satisfies the predicate - filter().headOption can be replaced with find() to potentially avoid scanning the entire collection.",
+          "description": "*Checks for use of filter().headOption.*\n\n`filter()` scans the entire collection, which is unnecessary if you only want to get the first element that satisfies the predicate - `filter().headOption` can be replaced with `find()` to potentially avoid scanning the entire collection.",
           "key": "com.sksamuel.scapegoat.inspections.collections.FilterDotHeadOption",
           "name": "filter().headOption instead of find()",
           "params": [],
@@ -2966,7 +2966,7 @@
           "template": false
         },
         {
-          "description": "*Checks for use of filter().isEmpty.*\n\nfilter() scans the entire collection, which can potentially be avoided if the element exists in the collection - filter().isEmpty can be replaced with !exists().",
+          "description": "*Checks for use of filter().isEmpty.*\n\n`filter()` scans the entire collection, which can potentially be avoided if the element exists in the collection - `filter().isEmpty` can be replaced with `!exists()`.",
           "key": "com.sksamuel.scapegoat.inspections.collections.FilterDotIsEmpty",
           "name": "filter().isEmpty instead of !exists()",
           "params": [],
@@ -2974,7 +2974,7 @@
           "template": false
         },
         {
-          "description": "*Checks if filter().size can be simplified to count().*\n\nfilter().size can be replaced with count(), which is more concise.",
+          "description": "*Checks if filter().size can be simplified to count().*\n\n`filter().size` can be replaced with `count()`, which is more concise.",
           "key": "com.sksamuel.scapegoat.inspections.collections.FilterDotSize",
           "name": "filter().size() instead of count()",
           "params": [],
@@ -2982,7 +2982,7 @@
           "template": false
         },
         {
-          "description": "*Checks whether the expression can be rewritten using flatten.*\n\nfilter(_.isDefined).map(_.get) can be replaced with flatten.",
+          "description": "*Checks whether the expression can be rewritten using flatten.*\n\n`filter(_.isDefined).map(_.get)` can be replaced with `flatten`.",
           "key": "com.sksamuel.scapegoat.inspections.collections.FilterOptionAndGet",
           "name": "filter(_.isDefined).map(_.get) instead of flatten",
           "params": [],
@@ -2990,7 +2990,7 @@
           "template": false
         },
         {
-          "description": "*Checks whether find() can be replaced with exists().*\n\nfind().isDefined can be replaced with exists(), which is more concise.",
+          "description": "*Checks whether `find()` can be replaced with `exists()`.*\n\n`find().isDefined` can be replaced with `exists()`, which is more concise.",
           "key": "com.sksamuel.scapegoat.inspections.collections.FindDotIsDefined",
           "name": "find().isDefined() instead of exists()",
           "params": [],
@@ -2998,7 +2998,7 @@
           "template": false
         },
         {
-          "description": "*Checks whether find() can be replaced with exists().*\n\nfind() != None can be replaced with exists(), which is more concise.",
+          "description": "*Checks whether `find()` can be replaced with exists().*\n\n`find() != None` can be replaced with `exists()`, which is more concise.",
           "key": "com.sksamuel.scapegoat.inspections.collections.FindAndNotEqualsNoneReplaceWithExists",
           "name": "find(x => ) != None instead of exists(x =>)",
           "params": [],
@@ -3006,7 +3006,7 @@
           "template": false
         },
         {
-          "description": "*Checks for use of reverse.tail.reverse.*\n\nreverse.tail.reverse can be replaced with init, which is more concise.",
+          "description": "*Checks for use of reverse.tail.reverse.*\n\n`reverse.tail.reverse` can be replaced with `init`, which is more concise.",
           "key": "com.sksamuel.scapegoat.inspections.collections.ReverseTailReverse",
           "name": "reverse.tail.reverse instead of init",
           "params": [],
@@ -3014,7 +3014,7 @@
           "template": false
         },
         {
-          "description": "*Checks for use of reverse.take().reverse.*\n\nreverse.take().reverse can be replaced with takeRight, which is more concise.",
+          "description": "*Checks for use of reverse.take().reverse.*\n\n`reverse.take().reverse` can be replaced with `takeRight`, which is more concise.",
           "key": "com.sksamuel.scapegoat.inspections.collections.ReverseTakeReverse",
           "name": "reverse.take().reverse instead of takeRight",
           "params": [],
@@ -4016,7 +4016,7 @@
         "template": false
       },
       {
-        "description": "*Checks for use of setScale() on a BigDecimal without setting the rounding mode can throw an exception.*\n\nWhen using setScale() on a BigDecimal without setting the rounding mode, this can throw an exception if rounding is required. Did you mean to call setScale(s, RoundingMode.XYZ)?",
+        "description": "*Checks for use of `setScale()` on a BigDecimal without setting the rounding mode can throw an exception.*\n\nWhen using `setScale()` on a BigDecimal without setting the rounding mode, this can throw an exception if rounding is required. Did you mean to call `setScale(s, RoundingMode.XYZ)`?",
         "key": "com.sksamuel.scapegoat.inspections.math.BigDecimalScaleWithoutRoundingMode",
         "name": "BigDecimal setScale() without rounding mode",
         "params": [],
@@ -4032,7 +4032,7 @@
         "template": false
       },
       {
-        "description": "*Checks for potentially broken odd checks.*\n\nCode that attempts to check for oddness using x % 2 == 1 will fail on negative numbers. Consider using x % 2 != 0",
+        "description": "*Checks for potentially broken odd checks.*\n\nCode that attempts to check for oddness using `x % 2 == 1` will fail on negative numbers. Consider using `x % 2 != 0`.",
         "key": "com.sksamuel.scapegoat.inspections.math.BrokenOddness",
         "name": "Broken odd check",
         "params": [],
@@ -4120,7 +4120,7 @@
         "template": false
       },
       {
-        "description": "*Checks for code like a == List() or a == Nil.*\n\nPrefer use of isEmpty instead of comparison to an empty List.",
+        "description": "*Checks for code like `a == List()` or `a == Nil`.*\n\nPrefer use of `isEmpty` instead of comparison to an empty List.",
         "key": "com.sksamuel.scapegoat.inspections.collections.ComparisonToEmptyList",
         "name": "Comparison to empty list",
         "params": [],
@@ -4128,7 +4128,7 @@
         "template": false
       },
       {
-        "description": "*Checks for code like a == Set() or a == Set.empty.*\n\nPrefer use of isEmpty instead of comparison to an empty Set.",
+        "description": "*Checks for code like `a == Set()` or `a == Set.empty`.*\n\nPrefer use of `isEmpty` instead of comparison to an empty Set.",
         "key": "com.sksamuel.scapegoat.inspections.collections.ComparisonToEmptySet",
         "name": "Comparison to empty set",
         "params": [],
@@ -4256,7 +4256,7 @@
         "template": false
       },
       {
-        "description": "*Checks if exists() can be simplified to contains().*\n\nexists(x => x == y) can be replaced with contains(y).",
+        "description": "*Checks if `exists()` can be simplified to `contains()`.*\n\n`exists(x => x == y)` can be replaced with `contains(y)`.",
         "key": "com.sksamuel.scapegoat.inspections.collections.ExistsSimplifiableToContains",
         "name": "Exists simplifiable to contains",
         "params": [],
@@ -4264,7 +4264,7 @@
         "template": false
       },
       {
-        "description": "*Checks for overridden finalizers that do not call super.*\n\nFinalizers should call super.finalize() to ensure superclasses are able to run their finalization logic.",
+        "description": "*Checks for overridden finalizers that do not call super.*\n\nFinalizers should call `super.finalize()` to ensure superclasses are able to run their finalization logic.",
         "key": "com.sksamuel.scapegoat.inspections.unsafe.FinalizerWithoutSuper",
         "name": "Finalizer without super",
         "params": [],
@@ -4624,7 +4624,7 @@
         "template": false
       },
       {
-        "description": "*Checks for use of reverse followed by head/headOption/iterator/map.*\n\nreverse followed by head, headOption, iterator, or map can be replaced, respectively, with last, lastOption, reverseIterator, or reverseMap.",
+        "description": "*Checks for use of reverse followed by head/headOption/iterator/map.*\n\n`reverse` followed by `head`, `headOption`, `iterator`, or `map` can be replaced, respectively, with `last`, `lastOption`, `reverseIterator`, or `reverseMap`.",
         "key": "com.sksamuel.scapegoat.inspections.collections.ReverseFunc",
         "name": "Unnecessary reverse",
         "params": [],
@@ -4640,7 +4640,7 @@
         "template": false
       },
       {
-        "description": "*Checks Seq.contains() and Option.contains() for unrelated types.*\n\ncontains() accepts arguments af any type, which means you might be checking if your collection contains an element of an unrelated type.",
+        "description": "*Checks `Seq.contains()` and `Option.contains()` for unrelated types.*\n\n`contains()` accepts arguments af any type, which means you might be checking if your collection contains an element of an unrelated type.",
         "key": "com.sksamuel.scapegoat.inspections.collections.UnsafeContains",
         "name": "Unsafe contains",
         "params": [],
@@ -4688,7 +4688,7 @@
         "template": false
       },
       {
-        "description": "*Checks for use of math.log(x + 1) instead of math.log1p(x)*\n\nUse math.log1p(x) is clearer and more performant than $math.log(1 + x).",
+        "description": "*Checks for use of math.log(x + 1) instead of math.log1p(x).*\n\nUse math.log1p(x) is clearer and more performant than $math.log(1 + x).",
         "key": "com.sksamuel.scapegoat.inspections.math.UseLog1P",
         "name": "Use log1p",
         "params": [],
@@ -4720,7 +4720,7 @@
         "template": false
       },
       {
-        "description": "*Checks for use of Option.get*\n\nUsing Option.get defeats the purpose of using Option in the first place. Use the following instead: Option.getOrElse, Option.fold, pattern matching or don't take the value out of the container and map over it to transform it.",
+        "description": "*Checks for use of Option.get.*\n\nUsing Option.get defeats the purpose of using Option in the first place. Use the following instead: Option.getOrElse, Option.fold, pattern matching or don't take the value out of the container and map over it to transform it.",
         "key": "com.sksamuel.scapegoat.inspections.option.OptionGet",
         "name": "Use of Option.get",
         "params": [],
@@ -4744,7 +4744,7 @@
         "template": false
       },
       {
-        "description": "**\n\nUse of asInstanceOf is considered a bad practice - consider using pattern matching instead.",
+        "description": "*Checks for use of asInstanceOf.*\n\nUse of asInstanceOf is considered a bad practice - consider using pattern matching instead.",
         "key": "com.sksamuel.scapegoat.inspections.unsafe.AsInstanceOf",
         "name": "Use of asInstanceOf",
         "params": [],
@@ -4816,7 +4816,7 @@
         "template": false
       },
       {
-        "description": "*Checks for use of filter().head.*\n\nfilter().head can throw an exception if the collection is empty - it can be replaced with find() match {...}.",
+        "description": "*Checks for use of filter().head.*\n\n`filter().head` can throw an exception if the collection is empty - it can be replaced with `find() match {...}`.",
         "key": "com.sksamuel.scapegoat.inspections.collections.FilterDotHead",
         "name": "filter().head can throw an exception",
         "params": [],
@@ -4824,7 +4824,7 @@
         "template": false
       },
       {
-        "description": "*Checks for use of filter().headOption.*\n\nfilter() scans the entire collection, which is unnecessary if you only want to get the first element that satisfies the predicate - filter().headOption can be replaced with find() to potentially avoid scanning the entire collection.",
+        "description": "*Checks for use of filter().headOption.*\n\n`filter()` scans the entire collection, which is unnecessary if you only want to get the first element that satisfies the predicate - `filter().headOption` can be replaced with `find()` to potentially avoid scanning the entire collection.",
         "key": "com.sksamuel.scapegoat.inspections.collections.FilterDotHeadOption",
         "name": "filter().headOption instead of find()",
         "params": [],
@@ -4832,7 +4832,7 @@
         "template": false
       },
       {
-        "description": "*Checks for use of filter().isEmpty.*\n\nfilter() scans the entire collection, which can potentially be avoided if the element exists in the collection - filter().isEmpty can be replaced with !exists().",
+        "description": "*Checks for use of filter().isEmpty.*\n\n`filter()` scans the entire collection, which can potentially be avoided if the element exists in the collection - `filter().isEmpty` can be replaced with `!exists()`.",
         "key": "com.sksamuel.scapegoat.inspections.collections.FilterDotIsEmpty",
         "name": "filter().isEmpty instead of !exists()",
         "params": [],
@@ -4840,7 +4840,7 @@
         "template": false
       },
       {
-        "description": "*Checks if filter().size can be simplified to count().*\n\nfilter().size can be replaced with count(), which is more concise.",
+        "description": "*Checks if filter().size can be simplified to count().*\n\n`filter().size` can be replaced with `count()`, which is more concise.",
         "key": "com.sksamuel.scapegoat.inspections.collections.FilterDotSize",
         "name": "filter().size() instead of count()",
         "params": [],
@@ -4848,7 +4848,7 @@
         "template": false
       },
       {
-        "description": "*Checks whether the expression can be rewritten using flatten.*\n\nfilter(_.isDefined).map(_.get) can be replaced with flatten.",
+        "description": "*Checks whether the expression can be rewritten using flatten.*\n\n`filter(_.isDefined).map(_.get)` can be replaced with `flatten`.",
         "key": "com.sksamuel.scapegoat.inspections.collections.FilterOptionAndGet",
         "name": "filter(_.isDefined).map(_.get) instead of flatten",
         "params": [],
@@ -4856,7 +4856,7 @@
         "template": false
       },
       {
-        "description": "*Checks whether find() can be replaced with exists().*\n\nfind().isDefined can be replaced with exists(), which is more concise.",
+        "description": "*Checks whether `find()` can be replaced with `exists()`.*\n\n`find().isDefined` can be replaced with `exists()`, which is more concise.",
         "key": "com.sksamuel.scapegoat.inspections.collections.FindDotIsDefined",
         "name": "find().isDefined() instead of exists()",
         "params": [],
@@ -4864,7 +4864,7 @@
         "template": false
       },
       {
-        "description": "*Checks whether find() can be replaced with exists().*\n\nfind() != None can be replaced with exists(), which is more concise.",
+        "description": "*Checks whether `find()` can be replaced with exists().*\n\n`find() != None` can be replaced with `exists()`, which is more concise.",
         "key": "com.sksamuel.scapegoat.inspections.collections.FindAndNotEqualsNoneReplaceWithExists",
         "name": "find(x => ) != None instead of exists(x =>)",
         "params": [],
@@ -4872,7 +4872,7 @@
         "template": false
       },
       {
-        "description": "*Checks for use of reverse.tail.reverse.*\n\nreverse.tail.reverse can be replaced with init, which is more concise.",
+        "description": "*Checks for use of reverse.tail.reverse.*\n\n`reverse.tail.reverse` can be replaced with `init`, which is more concise.",
         "key": "com.sksamuel.scapegoat.inspections.collections.ReverseTailReverse",
         "name": "reverse.tail.reverse instead of init",
         "params": [],
@@ -4880,7 +4880,7 @@
         "template": false
       },
       {
-        "description": "*Checks for use of reverse.take().reverse.*\n\nreverse.take().reverse can be replaced with takeRight, which is more concise.",
+        "description": "*Checks for use of reverse.take().reverse.*\n\n`reverse.take().reverse` can be replaced with `takeRight`, which is more concise.",
         "key": "com.sksamuel.scapegoat.inspections.collections.ReverseTakeReverse",
         "name": "reverse.take().reverse instead of takeRight",
         "params": [],

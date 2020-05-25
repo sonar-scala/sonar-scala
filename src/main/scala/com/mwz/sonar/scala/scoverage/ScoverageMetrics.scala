@@ -70,7 +70,7 @@ object ScoverageMetrics {
       metricName = "Total statements",
       metricType = Metric.ValueType.INT,
       metricDescription = "Number of all statements",
-      metricDirection = Metric.DIRECTION_BETTER,
+      metricDirection = Metric.DIRECTION_NONE,
       metricDomain = CoreMetrics.DOMAIN_SIZE
     )
 
@@ -81,7 +81,7 @@ object ScoverageMetrics {
       metricType = Metric.ValueType.INT,
       metricDescription = "Number of all statements covered by tests",
       metricDirection = Metric.DIRECTION_BETTER,
-      metricDomain = CoreMetrics.DOMAIN_SIZE
+      metricDomain = CoreMetrics.DOMAIN_COVERAGE
     )
 
   val statementCoverage: Metric[java.lang.Double] =
@@ -102,7 +102,7 @@ object ScoverageMetrics {
       metricName = "Total branches",
       metricType = Metric.ValueType.INT,
       metricDescription = "Number of all branches",
-      metricDirection = Metric.DIRECTION_BETTER,
+      metricDirection = Metric.DIRECTION_NONE,
       metricDomain = CoreMetrics.DOMAIN_SIZE
     )
 
@@ -113,7 +113,7 @@ object ScoverageMetrics {
       metricType = Metric.ValueType.INT,
       metricDescription = "Number of all branches covered by tests",
       metricDirection = Metric.DIRECTION_BETTER,
-      metricDomain = CoreMetrics.DOMAIN_SIZE
+      metricDomain = CoreMetrics.DOMAIN_COVERAGE
     )
 
   val branchCoverage: Metric[java.lang.Double] =

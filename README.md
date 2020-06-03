@@ -5,8 +5,8 @@
 [![bintray-badge-lts-67]][bintray-lts-67]
 [![bintray-stats-badge]][bintray-stats] [![gitter-badge]][gitter]
 
-[bintray]: https://bintray.com/mwz/maven/sonar-scala/8.2.0/link
-[bintray-badge]: https://img.shields.io/badge/Download-8.2.0-blue.svg
+[bintray]: https://bintray.com/mwz/maven/sonar-scala/8.3.0/link
+[bintray-badge]: https://img.shields.io/badge/Download-8.3.0-blue.svg
 [bintray-badge-lts]:
   https://img.shields.io/badge/Download-7.9.0_(for_SonarQube_7.9_LTS)-blue.svg
 [bintray-badge-lts-67]:
@@ -23,7 +23,7 @@
 [coverage]:
   https://sonar.sonar-scala.com/component_measures?id=sonar-scala&metric=coverage
 [coverage-badge]:
-  https://sonar.sonar-scala.com/api/badges/measure?key=sonar-scala&metric=coverage
+  https://sonar.sonar-scala.com/api/project_badges/measure?project=sonar-scala&metric=coverage
 [gitter]: https://gitter.im/sonar-scala/sonar-scala
 [gitter-badge]:
   https://img.shields.io/gitter/room/sonar-scala/sonar-scala.svg?colorB=46BC99&label=Chat

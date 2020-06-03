@@ -26,9 +26,11 @@ import org.sonar.api.measures.{CoreMetrics, Metric, Metrics}
 final class ScoverageMetrics extends Metrics {
   override def getMetrics: java.util.List[Metric[_ <: java.io.Serializable]] =
     List[Metric[_ <: java.io.Serializable]](
-      ScoverageMetrics.totalStatements,
+      ScoverageMetrics.statements,
       ScoverageMetrics.coveredStatements,
       ScoverageMetrics.statementCoverage,
+      ScoverageMetrics.branches,
+      ScoverageMetrics.coveredBranches,
       ScoverageMetrics.branchCoverage
     ).asJava
 }
@@ -62,13 +64,13 @@ object ScoverageMetrics {
     }
   }
 
-  val totalStatements: Metric[java.lang.Integer] =
+  val statements: Metric[java.lang.Integer] =
     buildMetric(
       metricKey = "sonar-scala-scoverage-total-statements",
       metricName = "Total statements",
       metricType = Metric.ValueType.INT,
       metricDescription = "Number of all statements",
-      metricDirection = Metric.DIRECTION_BETTER,
+      metricDirection = Metric.DIRECTION_NONE,
       metricDomain = CoreMetrics.DOMAIN_SIZE
     )
 
@@ -77,9 +79,9 @@ object ScoverageMetrics {
       metricKey = "sonar-scala-scoverage-covered-statements",
       metricName = "Covered statements",
       metricType = Metric.ValueType.INT,
-      metricDescription = "Number of statements covered by tests",
+      metricDescription = "Number of all statements covered by tests",
       metricDirection = Metric.DIRECTION_BETTER,
-      metricDomain = CoreMetrics.DOMAIN_SIZE
+      metricDomain = CoreMetrics.DOMAIN_COVERAGE
     )
 
   val statementCoverage: Metric[java.lang.Double] =
@@ -87,19 +89,39 @@ object ScoverageMetrics {
       metricKey = "sonar-scala-scoverage-statement-coverage",
       metricName = "Statement coverage",
       metricType = Metric.ValueType.PERCENT,
-      metricDescription = "Percentage of statements covered by tests",
+      metricDescription = "Percentage of all statements covered by tests",
       metricDirection = Metric.DIRECTION_BETTER,
       metricDomain = CoreMetrics.DOMAIN_COVERAGE,
       isMetricQualitative = true,
       metricValues = Some((0.0d, 100.0d))
     )
 
+  val branches: Metric[java.lang.Integer] =
+    buildMetric(
+      metricKey = "sonar-scala-scoverage-total-branches",
+      metricName = "Total branches",
+      metricType = Metric.ValueType.INT,
+      metricDescription = "Number of all branches",
+      metricDirection = Metric.DIRECTION_NONE,
+      metricDomain = CoreMetrics.DOMAIN_SIZE
+    )
+
+  val coveredBranches: Metric[java.lang.Integer] =
+    buildMetric(
+      metricKey = "sonar-scala-scoverage-covered-branches",
+      metricName = "Covered branches",
+      metricType = Metric.ValueType.INT,
+      metricDescription = "Number of all branches covered by tests",
+      metricDirection = Metric.DIRECTION_BETTER,
+      metricDomain = CoreMetrics.DOMAIN_COVERAGE
+    )
+
   val branchCoverage: Metric[java.lang.Double] =
     buildMetric(
-      metricKey = "sonar-scala-scoverage-branch-scoverage",
-      metricName = "Branch coverage (reported by scoverage)",
+      metricKey = "sonar-scala-scoverage-branch-coverage",
+      metricName = "Branch coverage",
       metricType = Metric.ValueType.PERCENT,
-      metricDescription = "Percentage of branches covered by tests",
+      metricDescription = "Percentage of all branches covered by tests",
       metricDirection = Metric.DIRECTION_BETTER,
       metricDomain = CoreMetrics.DOMAIN_COVERAGE,
       isMetricQualitative = true,

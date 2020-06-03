@@ -26,7 +26,6 @@ import cats.effect.ExitCode
 import cats.effect.IO
 import cats.effect.IOApp
 import cats.instances.string._
-import cats.syntax.functor._
 import com.mwz.sonar.scala.metadata._
 import com.mwz.sonar.scala.metadata.scalastyle.ScalastyleRules
 import com.mwz.sonar.scala.metadata.scalastyle.ScalastyleRulesRepository

@@ -25,7 +25,7 @@ import org.sonar.api.{Plugin, SonarEdition, SonarQubeSide, SonarRuntime}
 
 class ScalaPluginSpec extends AnyFlatSpec with Matchers {
   val runtime: SonarRuntime = SonarRuntimeImpl.forSonarQube(
-    Version.create(8, 2),
+    Version.create(8, 3),
     SonarQubeSide.SCANNER,
     SonarEdition.COMMUNITY
   )
@@ -66,6 +66,7 @@ class ScalaPluginSpec extends AnyFlatSpec with Matchers {
   }
 
   it should "provide scoverage sensor" in {
+    context.getExtensions should contain(classOf[scoverage.ScoverageMeasures])
     context.getExtensions should contain(classOf[scoverage.ScoverageMetrics])
     context.getExtensions should contain(classOf[scoverage.ScoverageReportParser])
     context.getExtensions should contain(classOf[scoverage.ScoverageSensor])

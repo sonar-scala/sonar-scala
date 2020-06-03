@@ -53,11 +53,11 @@ class ScapegoatRulesSpec extends AnyFlatSpec with Matchers with Inspectors with 
   it should "convert Scapegoat inspection to a Rule" in {
     val inspection1 = ScapegoatInspection(
       id = "com.sksamuel.scapegoat.inspections.exception.CatchNpe",
-      name = "Catching NPE",
+      name = "Catching `NPE`",
       defaultLevel = Level.Error,
-      description = "Checks for try blocks that catch null pointer exceptions.",
+      description = "Checks for try blocks that catch `null` pointer exceptions.",
       explanation =
-        "Avoid using null at all cost and you shouldn't need to catch NullPointerExceptions. Prefer Option to indicate potentially missing values and use Try to materialize exceptions thrown by any external libraries."
+        "Avoid using `null` at all cost and you shouldn't need to catch NullPointerExceptions. Prefer Option to indicate potentially missing values and use Try to materialize exceptions thrown by any external libraries."
     )
 
     val inspection2 = ScapegoatInspection(
@@ -72,7 +72,7 @@ class ScapegoatRulesSpec extends AnyFlatSpec with Matchers with Inspectors with 
       key = "com.sksamuel.scapegoat.inspections.exception.CatchNpe",
       name = "Catching NPE",
       mdDescription =
-        "*Checks for try blocks that catch null pointer exceptions.*\n\nAvoid using null at all cost and you shouldn't need to catch NullPointerExceptions. Prefer Option to indicate potentially missing values and use Try to materialize exceptions thrown by any external libraries.",
+        "*Checks for try blocks that catch `null` pointer exceptions.*\n\nAvoid using `null` at all cost and you shouldn't need to catch NullPointerExceptions. Prefer Option to indicate potentially missing values and use Try to materialize exceptions thrown by any external libraries.",
       sonarMdDescription =
         "*Checks for try blocks that catch null pointer exceptions.*\n\n======= Avoid using null at all cost and you shouldn't need to catch NullPointerExceptions. Prefer Option to indicate potentially missing values and use Try to materialize exceptions thrown by any external libraries.",
       severity = Severity.Major,
@@ -105,8 +105,10 @@ class ScapegoatRulesSpec extends AnyFlatSpec with Matchers with Inspectors with 
       explanation = "Comparison with self will always yield true."
     )
 
-    ScapegoatRules.mdDescription(inspection) shouldBe "*Checks for equality checks with itself.*\n\nComparison with self will always yield true."
-    ScapegoatRules.sonarMdDescription(inspection) shouldBe "*Checks for equality checks with itself.*\n\n======= Comparison with self will always yield true."
+    ScapegoatRules.mdDescription(inspection) shouldBe
+    "*Checks for equality checks with itself.*\n\nComparison with self will always yield true."
+    ScapegoatRules.sonarMdDescription(inspection) shouldBe
+    "*Checks for equality checks with itself.*\n\n======= Comparison with self will always yield true."
   }
 
   it should "convert Scapegoat inspection level to SonarQube Severity" in {

@@ -42,11 +42,11 @@ object Github {
       val auth: Header = Header("Authorization", s"token ${pr.github.oauth}")
       val userUri: Uri = pr.github.apiuri / "user"
       val prUri: Uri =
-        pr.github.apiuri / "repos" / pr.github.repository / "pulls" / pr.prNumber
+        (pr.github.apiuri / "repos").addPath(pr.github.repository) / "pulls" / pr.prNumber
       val commentsUri: Uri = prUri / "comments"
       val filesUri: Uri = prUri / "files"
       def newStatusUri(sha: String): Uri =
-        pr.github.apiuri / "repos" / pr.github.repository / "statuses" / sha
+        (pr.github.apiuri / "repos").addPath(pr.github.repository) / "statuses" / sha
       def request(uri: Uri): Request[F] = {
         Request[F](
           uri = uri,

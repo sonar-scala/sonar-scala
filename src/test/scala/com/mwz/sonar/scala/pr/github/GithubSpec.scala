@@ -158,10 +158,6 @@ class GithubSpec extends AnyFlatSpec with Matchers with ScalaCheckDrivenProperty
       val http = AuthedRoutes.of[String, IO] {
         case POST -> Root / "repos" / "owner" / "repo" / "statuses" / _ as _ =>
           Ok(response)
-        case a => {
-          println(a)
-          Ok(response)
-        }
       }
 
       val client = Client.fromHttpApp(HttpApp(auth(http).orNotFound.run))

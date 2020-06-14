@@ -5,8 +5,8 @@
 [![bintray-badge-lts-67]][bintray-lts-67]
 [![bintray-stats-badge]][bintray-stats] [![gitter-badge]][gitter]
 
-[bintray]: https://bintray.com/mwz/maven/sonar-scala/8.3.0/link
-[bintray-badge]: https://img.shields.io/badge/Download-8.3.0-blue.svg
+[bintray]: https://bintray.com/mwz/maven/sonar-scala/8.4.0/link
+[bintray-badge]: https://img.shields.io/badge/Download-8.4.0-blue.svg
 [bintray-badge-lts]:
   https://img.shields.io/badge/Download-7.9.0_(for_SonarQube_7.9_LTS)-blue.svg
 [bintray-badge-lts-67]:

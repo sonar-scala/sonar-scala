@@ -42,7 +42,7 @@ scalafmtOnCompile in ThisBuild :=
   sys.env
     .get("DISABLE_SCALAFMT")
     .forall(_.toLowerCase == "false")
-scapegoatVersion in ThisBuild := "1.4.4"
+scapegoatVersion in ThisBuild := "1.4.5"
 scapegoatReports := Seq("xml")
 coverageOutputXML := true
 coverageOutputHTML := false

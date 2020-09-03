@@ -18,8 +18,6 @@
 package com.mwz.sonar.scala
 
 import cats.data.EitherT
-import cats.instances.option._
-import cats.instances.string._
 import cats.syntax.alternative._
 import cats.syntax.either._
 import cats.syntax.eq._

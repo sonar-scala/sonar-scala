@@ -18,9 +18,6 @@
 package com.mwz.sonar.scala
 
 import scala.util.Try
-
-import cats.instances.int.catsKernelStdGroupForInt
-import cats.instances.map.catsKernelStdMonoidForMap
 import cats.kernel.Semigroup
 import cats.syntax.semigroup.catsSyntaxSemigroup
 

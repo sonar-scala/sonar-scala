@@ -20,9 +20,6 @@ package util
 package syntax
 
 import java.nio.file.{Path, Paths}
-
-import cats.instances.list._
-import cats.instances.option._
 import com.mwz.sonar.scala.util.syntax.SonarFileSystem._
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._

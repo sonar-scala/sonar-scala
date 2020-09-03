@@ -20,8 +20,6 @@ package scalastyle
 
 import cats.data.Chain
 import cats.data.NonEmptyChain
-import cats.instances.int._
-import cats.instances.string._
 import cats.syntax.eq._
 import cats.syntax.option._
 import org.scalastyle.Level

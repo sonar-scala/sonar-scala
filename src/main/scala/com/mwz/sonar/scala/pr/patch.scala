@@ -20,9 +20,6 @@ package pr
 
 import scala.util.Try
 import scala.util.matching.Regex
-
-import cats.instances.either._
-import cats.instances.list._
 import cats.syntax.foldable._
 
 final case class PatchLine(value: Int) {

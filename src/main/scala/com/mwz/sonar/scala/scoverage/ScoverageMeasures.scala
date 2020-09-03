@@ -23,9 +23,6 @@ import scala.jdk.CollectionConverters._
 import ScoverageMeasures._
 import cats.data.Chain
 import cats.data.Chain._
-import cats.instances.option._
-import cats.instances.string._
-import cats.instances.tuple._
 import cats.syntax.bitraverse._
 import cats.syntax.eq._
 import cats.syntax.foldable._

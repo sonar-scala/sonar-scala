@@ -1145,6 +1145,21 @@
           "template": false
         },
         {
+          "description": "*Checks that throw is not used.*\n\n`throw` statements should be replaced with type-safe error constructs like `Try` and `Either`, which communicate the possibility of error in the type signature.",
+          "key": "org.scalastyle.scalariform.ThrowChecker",
+          "name": "No throw statements.",
+          "params": [
+            {
+              "default": "org.scalastyle.scalariform.ThrowChecker",
+              "description": "Scalastyle's rule (checker) class name.",
+              "name": "ruleClass",
+              "typ": "String"
+            }
+          ],
+          "severity": "Minor",
+          "template": false
+        },
+        {
           "description": "*Checks that Java @Deprecated is not used, Scala @deprecated should be used instead.*\n\nYou should be using the Scala `@deprecated` instead.",
           "key": "org.scalastyle.scalariform.DeprecatedJavaChecker",
           "name": "No use of Java @Deprecated",
@@ -3533,6 +3548,14 @@
         "description": "*Ensure single space before certain token(s).*\n\nCorrect formatting can help readability.",
         "key": "org.scalastyle.scalariform.EnsureSingleSpaceBeforeTokenChecker",
         "name": "No space before tokens",
+        "params": [],
+        "severity": "Minor",
+        "template": false
+      },
+      {
+        "description": "*Checks that throw is not used.*\n\n`throw` statements should be replaced with type-safe error constructs like `Try` and `Either`, which communicate the possibility of error in the type signature.",
+        "key": "org.scalastyle.scalariform.ThrowChecker",
+        "name": "No throw statements.",
         "params": [],
         "severity": "Minor",
         "template": false

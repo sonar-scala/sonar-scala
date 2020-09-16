@@ -72,7 +72,7 @@ libraryDependencies ++= List(
   "org.scalariform"          %% "scalariform"          % "0.2.10",
   "org.slf4j"                 % "slf4j-api"            % "1.7.30"     % Provided,
   "org.sonarsource.sonarqube" % "sonar-plugin-api"     % sonarVersion % Provided,
-  "org.typelevel"            %% "cats-core"            % "2.1.1",
+  "org.typelevel"            %% "cats-core"            % "2.2.0",
   "org.typelevel"            %% "cats-effect"          % "2.1.4",
   "org.typelevel"            %% "mouse"                % "0.25",
   // TEST

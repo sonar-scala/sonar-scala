@@ -1,6 +1,7 @@
-import org.scalatest._
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 
-class Example2Test extends FlatSpec with Matchers {
+class Example2Test extends AnyFlatSpec with Matchers {
   "Example2" should "sum two numbers" in {
     // No coverage!
   }

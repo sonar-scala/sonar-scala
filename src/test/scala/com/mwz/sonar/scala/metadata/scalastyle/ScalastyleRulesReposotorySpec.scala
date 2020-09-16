@@ -22,7 +22,6 @@ import cats.data.Chain
 import cats.data.NonEmptyChain
 import enumeratum.scalacheck._
 import org.scalacheck.Prop._
-import org.scalacheck.Prop._
 import org.scalacheck.ScalacheckShapeless._
 import org.scalacheck._
 import org.scalatest.flatspec.AnyFlatSpec

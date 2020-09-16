@@ -23,7 +23,6 @@ import java.nio.file.{Path, Paths}
 import scala.jdk.CollectionConverters._
 import scala.util.{Failure, Success, Try}
 
-import cats.instances.string._
 import cats.syntax.eq._
 import com.mwz.sonar.scala.scoverage.ScoverageSensor._
 import com.mwz.sonar.scala.util.PathUtils._

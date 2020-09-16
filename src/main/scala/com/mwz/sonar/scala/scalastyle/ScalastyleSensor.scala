@@ -23,7 +23,6 @@ import java.nio.file.Paths
 
 import scala.jdk.CollectionConverters._
 
-import cats.instances.string._
 import cats.syntax.eq._
 import com.mwz.sonar.scala.metadata.Rule
 import com.mwz.sonar.scala.metadata.scalastyle.ScalastyleRules

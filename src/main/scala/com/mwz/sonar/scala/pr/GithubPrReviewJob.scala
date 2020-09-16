@@ -23,8 +23,6 @@ import scala.concurrent.ExecutionContext
 import cats.NonEmptyParallel
 import cats.data.NonEmptyList
 import cats.effect.{ContextShift, IO, Sync}
-import cats.instances.list._
-import cats.instances.string._
 import cats.syntax.either._
 import cats.syntax.eq._
 import cats.syntax.flatMap._

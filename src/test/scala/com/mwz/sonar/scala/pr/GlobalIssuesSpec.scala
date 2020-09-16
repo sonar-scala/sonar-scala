@@ -53,9 +53,8 @@ class GlobalIssuesSpec extends AnyFlatSpec with Matchers with ScalaCheckDrivenPr
 
         issues.foreach(globalIssues.add)
 
-        Inspectors.forAll(globalIssues.allIssues) {
-          case (file, issues) =>
-            issues should contain theSameElementsAs expected(file)
+        Inspectors.forAll(globalIssues.allIssues) { case (file, issues) =>
+          issues should contain theSameElementsAs expected(file)
         }
       }
     }

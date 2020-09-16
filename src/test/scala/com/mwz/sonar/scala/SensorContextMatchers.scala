@@ -65,8 +65,8 @@ trait SensorContextMatchers extends Matchers {
         b match {
           case b: IssueLocation =>
             a.inputComponent === b.inputComponent &&
-            a.message === b.message &&
-            a.textRange === b.textRange
+              a.message === b.message &&
+              a.textRange === b.textRange
           case _ => false
         }
     }
@@ -78,8 +78,8 @@ trait SensorContextMatchers extends Matchers {
         b match {
           case b: Issue =>
             a.ruleKey === b.ruleKey &&
-            a.primaryLocation === b.primaryLocation &&
-            a.overriddenSeverity === b.overriddenSeverity
+              a.primaryLocation === b.primaryLocation &&
+              a.overriddenSeverity === b.overriddenSeverity
           case _ => false
         }
     }

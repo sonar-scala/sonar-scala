@@ -107,18 +107,17 @@ final class JUnitSensor(
     else
       log.info("No test metrics were saved by this sensor.")
 
-    reports.foreach {
-      case (file, report) =>
-        log.info(s"Saving junit test metrics for $file.")
-        context.saveMeasure[Integer](file, CoreMetrics.SKIPPED_TESTS, report.skipped)
-        context.saveMeasure[Integer](file, CoreMetrics.TESTS, report.tests - report.skipped)
-        context.saveMeasure[Integer](file, CoreMetrics.TEST_ERRORS, report.errors)
-        context.saveMeasure[Integer](file, CoreMetrics.TEST_FAILURES, report.failures)
-        context.saveMeasure[java.lang.Long](
-          file,
-          CoreMetrics.TEST_EXECUTION_TIME,
-          (report.time * 1000).longValue
-        )
+    reports.foreach { case (file, report) =>
+      log.info(s"Saving junit test metrics for $file.")
+      context.saveMeasure[Integer](file, CoreMetrics.SKIPPED_TESTS, report.skipped)
+      context.saveMeasure[Integer](file, CoreMetrics.TESTS, report.tests - report.skipped)
+      context.saveMeasure[Integer](file, CoreMetrics.TEST_ERRORS, report.errors)
+      context.saveMeasure[Integer](file, CoreMetrics.TEST_FAILURES, report.failures)
+      context.saveMeasure[java.lang.Long](
+        file,
+        CoreMetrics.TEST_EXECUTION_TIME,
+        (report.time * 1000).longValue
+      )
     }
   }
 }

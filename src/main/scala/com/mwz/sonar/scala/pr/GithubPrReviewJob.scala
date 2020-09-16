@@ -168,9 +168,8 @@ final class GithubPrReviewJob(
         mappedPatches
           .collect { case (file, Left(error)) => (file, error) }
           .toList
-          .traverse {
-            case (file, error) =>
-              Logger[F].error(s"Error parsing patch for $file.") >>
+          .traverse { case (file, error) =>
+            Logger[F].error(s"Error parsing patch for $file.") >>
               Logger[F].debug(s"""Invalid patch format: "${error.text}".""")
           }
       issuesWithComments = allCommentsForIssues(issues, mappedPatches, sonarComments)
@@ -190,38 +189,36 @@ object GithubPrReviewJob {
     allUserComments: Map[String, List[Comment]]
   ): Map[InputFile, Map[PatchLine, List[(Issue, List[Comment])]]] = {
     issues
-      .collect {
-        case (file, issues) =>
-          val issuesWithComments: Map[PatchLine, List[(Issue, List[Comment])]] =
-            issues
-              .flatMap { issue =>
-                // patchLine -> issue
-                mappedPatchLines
-                  .get(file.toString)
-                  .flatMap(_.toOption.flatMap {
-                    mapping =>
-                      mapping
-                        .get(FileLine(issue.line))
-                        .map { patchLine =>
-                          // patchLine -> comments
-                          // Filter comments by the line number.
-                          // Those are filtered again later on based on the body text.
-                          val comments: List[Comment] =
-                            allUserComments
-                              .get(file.toString)
-                              // Outdated comments are filtered out here
-                              // as they don't have a current position.
-                              .map(_.filter(_.position.contains(patchLine.value)))
-                              .getOrElse(List.empty)
-                          (patchLine, List((issue, comments)))
-                        }
-                  })
-              }
-              .groupBy { case (patchLine, _) => patchLine }
-              .view
-              .mapValues(_.flatMap { case (_, issuesAndComments) => issuesAndComments })
-              .toMap
-          (file, issuesWithComments)
+      .collect { case (file, issues) =>
+        val issuesWithComments: Map[PatchLine, List[(Issue, List[Comment])]] =
+          issues
+            .flatMap { issue =>
+              // patchLine -> issue
+              mappedPatchLines
+                .get(file.toString)
+                .flatMap(_.toOption.flatMap { mapping =>
+                  mapping
+                    .get(FileLine(issue.line))
+                    .map { patchLine =>
+                      // patchLine -> comments
+                      // Filter comments by the line number.
+                      // Those are filtered again later on based on the body text.
+                      val comments: List[Comment] =
+                        allUserComments
+                          .get(file.toString)
+                          // Outdated comments are filtered out here
+                          // as they don't have a current position.
+                          .map(_.filter(_.position.contains(patchLine.value)))
+                          .getOrElse(List.empty)
+                      (patchLine, List((issue, comments)))
+                    }
+                })
+            }
+            .groupBy { case (patchLine, _) => patchLine }
+            .view
+            .mapValues(_.flatMap { case (_, issuesAndComments) => issuesAndComments })
+            .toMap
+        (file, issuesWithComments)
       }
   }
 
@@ -248,13 +245,12 @@ object GithubPrReviewJob {
       .groupBy(i => i.severity)
       .view
       .mapValues(_.size)
-      .foldLeft(ReviewStatus(0, 0)) {
-        case (s, (severity, count)) =>
-          severity match {
-            case Severity.BLOCKER  => s.copy(blocker = s.blocker + count)
-            case Severity.CRITICAL => s.copy(critical = s.critical + count)
-            case _                 => s
-          }
+      .foldLeft(ReviewStatus(0, 0)) { case (s, (severity, count)) =>
+        severity match {
+          case Severity.BLOCKER  => s.copy(blocker = s.blocker + count)
+          case Severity.CRITICAL => s.copy(critical = s.critical + count)
+          case _                 => s
+        }
       }
   }
 

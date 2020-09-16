@@ -38,9 +38,8 @@ class PatchSpec extends AnyFlatSpec with Matchers with EitherValues with ScalaCh
 
   it should "parse successfully a patch with additions only" in {
     val expected: Map[FileLine, PatchLine] =
-      (69 to 84).zipWithIndex.map {
-        case (fileLine, index) =>
-          (FileLine(fileLine), PatchLine(index + 1))
+      (69 to 84).zipWithIndex.map { case (fileLine, index) =>
+        (FileLine(fileLine), PatchLine(index + 1))
       }.toMap
 
     Patch.parse(patch("patches/add.patch")).right.value shouldBe expected
@@ -51,9 +50,8 @@ class PatchSpec extends AnyFlatSpec with Matchers with EitherValues with ScalaCh
       List(
         List(26 -> 1, 27 -> 2, 28 -> 3, 29 -> 6, 30 -> 7, 31 -> 8),
         List(43 -> 10, 44 -> 11, 45 -> 12, 46 -> 15, 47 -> 16, 48 -> 20, 49 -> 21, 50 -> 22)
-      ).flatten.map {
-        case (k, v) =>
-          FileLine(k) -> PatchLine(v)
+      ).flatten.map { case (k, v) =>
+        FileLine(k) -> PatchLine(v)
       }.toMap
 
     Patch.parse(patch("patches/del.patch")).right.value shouldBe expected
@@ -65,9 +63,8 @@ class PatchSpec extends AnyFlatSpec with Matchers with EitherValues with ScalaCh
         (43 to 50).zipWithIndex.map(a => (a._1, a._2 + 1)),
         List(60 -> 10, 61 -> 11, 62 -> 12, 63 -> 15, 64 -> 16, 65 -> 17),
         List(77 -> 19, 78 -> 20, 79 -> 21, 80 -> 23, 81 -> 24, 82 -> 25, 83 -> 26)
-      ).flatten.map {
-        case (k, v) =>
-          FileLine(k) -> PatchLine(v)
+      ).flatten.map { case (k, v) =>
+        FileLine(k) -> PatchLine(v)
       }.toMap
 
     Patch.parse(patch("patches/add-del-mod.patch")).right.value shouldBe expected

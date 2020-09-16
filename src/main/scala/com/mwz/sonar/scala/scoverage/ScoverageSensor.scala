@@ -83,8 +83,8 @@ final class ScoverageSensor(
               // save the coverage of each line of the file
               val coverage = context.newCoverage()
               coverage.onFile(file)
-              fileCoverage.linesCoverage foreach {
-                case (lineNum, hits) => coverage.lineHits(lineNum, hits)
+              fileCoverage.linesCoverage foreach { case (lineNum, hits) =>
+                coverage.lineHits(lineNum, hits)
               }
 
               // Save the coverage (if not in pr decoration mode).

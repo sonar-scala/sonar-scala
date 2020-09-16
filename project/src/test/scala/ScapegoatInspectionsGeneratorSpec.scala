@@ -19,12 +19,14 @@ package com.mwz.sonar.scala.metadata.scapegoat
 
 import com.sksamuel.scapegoat.inspections.{AnyUse, EmptyCaseClass}
 import com.sksamuel.scapegoat.inspections.string.ArraysInFormat
-import org.scalatest.{FlatSpec, LoneElement, Matchers}
+import org.scalatest.LoneElement
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 
 import scala.meta._
 
 /** Tests the correct behavior of the Scapegoat Inspections Generator SBT Task */
-class ScapegoatInspectionsGeneratorSpec extends FlatSpec with LoneElement with Matchers {
+class ScapegoatInspectionsGeneratorSpec extends AnyFlatSpec with LoneElement with Matchers {
   "stringifyInspections" should "correctly format one scapegoat inspection" in {
     val expected =
       """ScapegoatInspection(

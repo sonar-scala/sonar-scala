@@ -62,66 +62,65 @@ object ScalastyleRules {
   private final case class Acc(codeBlock: Boolean, isEmpty: Boolean, text: String, prev: String)
   private[metadata] def format(s: String): String = {
     s.linesIterator
-      .foldLeft(Acc(codeBlock = false, isEmpty = true, "", "")) {
-        case (acc, l) =>
-          // Remove all backslashes as they are unnecessary.
-          val line = l.replace("\\", "")
-          val trimmed = line.trim
-          val trippleQuote = trimmed.contains("```")
-          // Replace all code blocks (inline and multiline) with ``.
-          val withInlineCode = line.replaceAll("^```(scala)?$", "`").replace("`", "``")
-          val trimmedWithInlineCode = withInlineCode.trim
+      .foldLeft(Acc(codeBlock = false, isEmpty = true, "", "")) { case (acc, l) =>
+        // Remove all backslashes as they are unnecessary.
+        val line = l.replace("\\", "")
+        val trimmed = line.trim
+        val trippleQuote = trimmed.contains("```")
+        // Replace all code blocks (inline and multiline) with ``.
+        val withInlineCode = line.replaceAll("^```(scala)?$", "`").replace("`", "``")
+        val trimmedWithInlineCode = withInlineCode.trim
 
-          acc match {
-            // Empty line.
-            case _ if trimmedWithInlineCode.length === 0 =>
-              acc.copy(isEmpty = true)
+        acc match {
+          // Empty line.
+          case _ if trimmedWithInlineCode.length === 0 =>
+            acc.copy(isEmpty = true)
 
-            // Previous line is code block.
-            case Acc(true, isEmpty, text, prev) =>
-              if (!trippleQuote) {
-                val closed = prev.contains("``") && isEmpty
-                val space = if (closed) s" " else s"\n"
+          // Previous line is code block.
+          case Acc(true, isEmpty, text, prev) =>
+            if (!trippleQuote) {
+              val closed = prev.contains("``") && isEmpty
+              val space = if (closed) s" " else s"\n"
+              Acc(
+                codeBlock = prev.contains("``") && !isEmpty,
+                isEmpty = false,
+                s"$text$space$withInlineCode",
+                withInlineCode
+              )
+            } else
+              Acc(
+                codeBlock = true,
+                isEmpty = false,
+                s"$text\n$trimmedWithInlineCode",
+                trimmedWithInlineCode
+              )
+
+          // Previous line not code block.
+          case Acc(false, isEmpty, text, _) =>
+            if (!trippleQuote)
+              if (isEmpty) {
+                val space = if (text.isEmpty) "" else "\n"
                 Acc(
-                  codeBlock = prev.contains("``") && !isEmpty,
+                  codeBlock = false,
                   isEmpty = false,
-                  s"$text$space$withInlineCode",
-                  withInlineCode
+                  s"$text$space$trimmedWithInlineCode",
+                  trimmedWithInlineCode
                 )
               } else
                 Acc(
-                  codeBlock = true,
+                  codeBlock = false,
                   isEmpty = false,
                   s"$text\n$trimmedWithInlineCode",
                   trimmedWithInlineCode
                 )
-
-            // Previous line not code block.
-            case Acc(false, isEmpty, text, _) =>
-              if (!trippleQuote)
-                if (isEmpty) {
-                  val space = if (text.isEmpty) "" else "\n"
-                  Acc(
-                    codeBlock = false,
-                    isEmpty = false,
-                    s"$text$space$trimmedWithInlineCode",
-                    trimmedWithInlineCode
-                  )
-                } else
-                  Acc(
-                    codeBlock = false,
-                    isEmpty = false,
-                    s"$text\n$trimmedWithInlineCode",
-                    trimmedWithInlineCode
-                  )
-              else
-                Acc(
-                  codeBlock = true,
-                  isEmpty = false,
-                  s"$text\n$trimmedWithInlineCode",
-                  trimmedWithInlineCode
-                )
-          }
+            else
+              Acc(
+                codeBlock = true,
+                isEmpty = false,
+                s"$text\n$trimmedWithInlineCode",
+                trimmedWithInlineCode
+              )
+        }
       }
       .text
   }
@@ -147,7 +146,7 @@ object ScalastyleRules {
       // The TEXT parameter type is used for header parameter of the HeaderMatchesChecker inspection.
       case StringType
           if ruleClass === "org.scalastyle.file.HeaderMatchesChecker" &&
-          name === "header" =>
+            name === "header" =>
         ParamType.Text
       case StringType  => ParamType.String
       case IntegerType => ParamType.Integer

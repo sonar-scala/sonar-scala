@@ -75,7 +75,7 @@ object Measures {
           Nil
         case token :: tail
             if token.tokenType === Tokens.WS &&
-            NewLineRegex.findFirstIn(token.text).nonEmpty =>
+              NewLineRegex.findFirstIn(token.text).nonEmpty =>
           tail
         case token :: tail if token.tokenType === Tokens.LINE_COMMENT =>
           tail

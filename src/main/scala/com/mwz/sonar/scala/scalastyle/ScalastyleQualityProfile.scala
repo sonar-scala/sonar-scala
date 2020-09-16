@@ -85,8 +85,8 @@ object ScalastyleQualityProfile {
           overrides.params
             .get(rule.key)
             .foreach {
-              _.foreach {
-                case (k, v) => activeRule.overrideParam(k, v)
+              _.foreach { case (k, v) =>
+                activeRule.overrideParam(k, v)
               }
             }
         }

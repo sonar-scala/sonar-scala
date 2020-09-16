@@ -69,23 +69,20 @@ class ScoverageMeasuresSpec extends AnyFlatSpec with Matchers with ScalaCheckDri
             )
 
           val expectedPercentageMeasures: List[(String, Double)] =
-            percentageMetrics zip expectedSumMeasures.grouped(2).map {
-              case List((_, total), (_, actual)) =>
-                if (total > 0)
-                  (BigDecimal.valueOf(actual.doubleValue) / total.intValue * 100)
-                    .setScale(scale = 2, mode = BigDecimal.RoundingMode.HALF_EVEN)
-                    .toDouble
-                else 0
+            percentageMetrics zip expectedSumMeasures.grouped(2).map { case List((_, total), (_, actual)) =>
+              if (total > 0)
+                (BigDecimal.valueOf(actual.doubleValue) / total.intValue * 100)
+                  .setScale(scale = 2, mode = BigDecimal.RoundingMode.HALF_EVEN)
+                  .toDouble
+              else 0
             }
 
-          Inspectors.forAll(expectedSumMeasures) {
-            case (key, value) =>
-              ctx.getMeasure(key).getIntValue shouldBe value
+          Inspectors.forAll(expectedSumMeasures) { case (key, value) =>
+            ctx.getMeasure(key).getIntValue shouldBe value
           }
 
-          Inspectors.forAll(expectedPercentageMeasures) {
-            case (key, value) =>
-              ctx.getMeasure(key).getDoubleValue shouldBe value
+          Inspectors.forAll(expectedPercentageMeasures) { case (key, value) =>
+            ctx.getMeasure(key).getDoubleValue shouldBe value
           }
       }
     }
@@ -111,9 +108,8 @@ class ScoverageMeasuresSpec extends AnyFlatSpec with Matchers with ScalaCheckDri
   }
 
   def addMeasures(ctx: TestMeasureComputerContext, values: List[(String, List[Integer])]): Unit =
-    values.foreach {
-      case (key, summed) =>
-        ctx.addChildrenMeasures(key, summed: _*)
+    values.foreach { case (key, summed) =>
+      ctx.addChildrenMeasures(key, summed: _*)
     }
 
   def sum(values: List[Integer]): Integer =

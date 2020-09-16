@@ -57,7 +57,7 @@ sourceGenerators in Compile ++= Seq(
 // Lib dependencies
 val sonarVersion = "8.3.0.34182"
 val circe = "0.13.0"
-val http4s = "0.21.4"
+val http4s = "0.21.7"
 libraryDependencies ++= List(
   "com.beachape"             %% "enumeratum"           % "1.6.1",
   "com.beachape"             %% "enumeratum-cats"      % "1.6.1",
@@ -73,19 +73,19 @@ libraryDependencies ++= List(
   "org.slf4j"                 % "slf4j-api"            % "1.7.30"     % Provided,
   "org.sonarsource.sonarqube" % "sonar-plugin-api"     % sonarVersion % Provided,
   "org.typelevel"            %% "cats-core"            % "2.1.1",
-  "org.typelevel"            %% "cats-effect"          % "2.1.3",
+  "org.typelevel"            %% "cats-effect"          % "2.1.4",
   "org.typelevel"            %% "mouse"                % "0.25",
   // TEST
   "com.beachape"               %% "enumeratum-scalacheck"     % "1.6.1"      % Test,
   "com.github.alexarchambault" %% "scalacheck-shapeless_1.14" % "1.2.5"      % Test,
   "org.http4s"                 %% "http4s-blaze-server"       % http4s       % Test,
   "org.http4s"                 %% "http4s-dsl"                % http4s       % Test,
-  "org.mockito"                %% "mockito-scala"             % "1.14.4"     % Test,
+  "org.mockito"                %% "mockito-scala"             % "1.14.8"     % Test,
   "org.scalacheck"             %% "scalacheck"                % "1.14.3"     % Test,
-  "org.scalatest"              %% "scalatest"                 % "3.1.2"      % Test,
+  "org.scalatest"              %% "scalatest"                 % "3.2.0"      % Test,
   "org.scalatestplus"          %% "mockito-1-10"              % "3.1.0.0"    % Test,
-  "org.scalatestplus"          %% "scalacheck-1-14"           % "3.1.2.0"    % Test,
-  "com.softwaremill.diffx"     %% "diffx-scalatest"           % "0.3.28"     % Test,
+  "org.scalatestplus"          %% "scalacheck-1-14"           % "3.2.2.0"    % Test,
+  "com.softwaremill.diffx"     %% "diffx-scalatest"           % "0.3.29"     % Test,
   "org.sonarsource.sonarqube"   % "sonar-plugin-api-impl"     % sonarVersion % Test
 )
 

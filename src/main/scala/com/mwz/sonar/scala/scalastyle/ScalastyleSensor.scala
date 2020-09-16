@@ -87,12 +87,11 @@ final class ScalastyleSensor(
         .toMap
 
     // Log a warning for invalid rules.
-    checks.filter { case (_, conf) => conf.isEmpty } foreach {
-      case (ruleKey, _) =>
-        log.warn(
-          s"Rule $ruleKey is missing the ${ScalastyleRulesRepository.RuleClassParam} parameter " +
-          "and it will be skipped during the analysis."
-        )
+    checks.filter { case (_, conf) => conf.isEmpty } foreach { case (ruleKey, _) =>
+      log.warn(
+        s"Rule $ruleKey is missing the ${ScalastyleRulesRepository.RuleClassParam} parameter " +
+        "and it will be skipped during the analysis."
+      )
     }
 
     val config: ScalastyleConfiguration = new ScalastyleConfiguration(

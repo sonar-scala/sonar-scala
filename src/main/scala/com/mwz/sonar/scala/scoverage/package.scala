@@ -18,6 +18,7 @@
 package com.mwz.sonar.scala
 
 import scala.util.Try
+
 import cats.kernel.Semigroup
 import cats.syntax.semigroup.catsSyntaxSemigroup
 

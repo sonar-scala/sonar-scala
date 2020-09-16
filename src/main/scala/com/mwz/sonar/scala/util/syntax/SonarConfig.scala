@@ -20,6 +20,7 @@ package util
 package syntax
 
 import java.nio.file.{Path, Paths}
+
 import cats.syntax.eq._
 import com.mwz.sonar.scala.util.syntax.Optionals._
 import org.sonar.api.config.Configuration

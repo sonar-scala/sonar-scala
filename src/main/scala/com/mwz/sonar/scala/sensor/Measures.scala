@@ -20,6 +20,7 @@ package sensor
 
 import scala.annotation.tailrec
 import scala.util.matching.Regex
+
 import cats.kernel.Eq
 import cats.syntax.eq._
 import scalariform.lexer.{Token, TokenType, Tokens}

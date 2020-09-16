@@ -22,6 +22,7 @@ import java.io.File
 import java.nio.file.{Path, Paths}
 
 import scala.jdk.CollectionConverters._
+
 import com.mwz.sonar.scala.util.Log
 import com.mwz.sonar.scala.util.syntax.SonarConfig._
 import com.mwz.sonar.scala.util.syntax.SonarFileSystem._

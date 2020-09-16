@@ -101,24 +101,23 @@ final class JUnitReportParser(fileSystem: FileSystem) extends JUnitReportParserA
   ): Map[InputFile, JUnitReport] =
     reports
       .groupBy(_.name)
-      .flatMap {
-        case (name, reports) =>
-          val path: String = name.replace(".", "/")
-          val files: List[Path] = tests.map(_.resolve(s"$path.scala"))
-          val predicates: List[FilePredicate] =
-            files.map(f => fileSystem.predicates.hasPath(f.toString))
+      .flatMap { case (name, reports) =>
+        val path: String = name.replace(".", "/")
+        val files: List[Path] = tests.map(_.resolve(s"$path.scala"))
+        val predicates: List[FilePredicate] =
+          files.map(f => fileSystem.predicates.hasPath(f.toString))
 
-          val inputFiles: Iterable[InputFile] =
-            fileSystem
-              .inputFiles(
-                fileSystem.predicates.or(predicates.asJava)
-              )
-              .asScala
+        val inputFiles: Iterable[InputFile] =
+          fileSystem
+            .inputFiles(
+              fileSystem.predicates.or(predicates.asJava)
+            )
+            .asScala
 
-          if (files.isEmpty)
-            log.error(s"The following files were not found: ${files.mkString(", ")}")
+        if (files.isEmpty)
+          log.error(s"The following files were not found: ${files.mkString(", ")}")
 
-          // Collect all of the input files.
-          inputFiles.flatMap(file => reports.headOption.map((file, _)))
+        // Collect all of the input files.
+        inputFiles.flatMap(file => reports.headOption.map((file, _)))
       }
 }

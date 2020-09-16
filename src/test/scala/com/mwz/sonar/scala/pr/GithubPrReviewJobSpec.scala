@@ -206,26 +206,25 @@ class GithubPrReviewJobSpec
   it should "log and skip patches which can't be parsed" in new Ctx with IOCtx {
     forAll { (baseUrl: Uri, user: User, pr: PullRequest, prFiles: NonEmptyList[File]) =>
       withTracing { trace =>
-        withLogging {
-          case (logs, implicit0(logger: Logger[IO])) =>
-            val github = new GithubNotImpl[IO] {
-              override def comments = trace.update("comments" :: _) >> IO.pure(List.empty)
-              override def files = trace.update("files" :: _) >> IO.pure(prFiles.toList)
-            }
-            val file: InputFile = TestInputFileBuilder.create("", prFiles.head.filename).build()
-            val issue = Issue(RuleKey.of("repo", "rule"), file, 1, Severity.CRITICAL, "msg")
+        withLogging { case (logs, implicit0(logger: Logger[IO])) =>
+          val github = new GithubNotImpl[IO] {
+            override def comments = trace.update("comments" :: _) >> IO.pure(List.empty)
+            override def files = trace.update("files" :: _) >> IO.pure(prFiles.toList)
+          }
+          val file: InputFile = TestInputFileBuilder.create("", prFiles.head.filename).build()
+          val issue = Issue(RuleKey.of("repo", "rule"), file, 1, Severity.CRITICAL, "msg")
 
-            val issues = new GlobalIssues
-            issues.add(issue)
-            val result = githubPrReviewJob(globalIssues = issues).review[IO](baseUrl, github, user, pr)
+          val issues = new GlobalIssues
+          issues.add(issue)
+          val result = githubPrReviewJob(globalIssues = issues).review[IO](baseUrl, github, user, pr)
 
-            result.attempt.unsafeRunSync() shouldBe Right(ReviewStatus(blocker = 0, critical = 1))
-            trace.get.unsafeRunSync() should contain theSameElementsAs List("files", "comments")
-            logs.get.unsafeRunSync().collect {
-              case (level, msg) if level === LogLevel.Error => msg
-            } should contain theSameElementsAs List(
-              s"Error parsing patch for ${prFiles.head.filename}."
-            )
+          result.attempt.unsafeRunSync() shouldBe Right(ReviewStatus(blocker = 0, critical = 1))
+          trace.get.unsafeRunSync() should contain theSameElementsAs List("files", "comments")
+          logs.get.unsafeRunSync().collect {
+            case (level, msg) if level === LogLevel.Error => msg
+          } should contain theSameElementsAs List(
+            s"Error parsing patch for ${prFiles.head.filename}."
+          )
         }
       }
     }
@@ -234,39 +233,38 @@ class GithubPrReviewJobSpec
   it should "post comments for pr issues" in new Ctx with IOCtx with EmptyLogger {
     forAll { (baseUrl: Uri, user: User, pr: PullRequest, prFile: File) =>
       withTracing { trace =>
-        withLogging {
-          case (logs, implicit0(logger: Logger[IO])) =>
-            val fileWithPatch = prFile.copy(patch = patch)
-            val github = new GithubNotImpl[IO] {
-              override def comments = trace.update("comments" :: _) >> IO.pure(List.empty)
-              override def createComment(comment: NewComment) =
-                trace.update("createComment" :: _) >>
-                IO.pure(Comment(1, comment.path, Some(comment.position), user, comment.body))
-              override def files = trace.update("files" :: _) >> IO.pure(List(fileWithPatch))
-            }
-            val file: InputFile = TestInputFileBuilder.create("", fileWithPatch.filename).build()
-            val issue = Issue(RuleKey.of("repo", "rule"), file, 5, Severity.BLOCKER, "msg")
-            val markdown: Markdown = Markdown.inline(baseUrl, issue)
+        withLogging { case (logs, implicit0(logger: Logger[IO])) =>
+          val fileWithPatch = prFile.copy(patch = patch)
+          val github = new GithubNotImpl[IO] {
+            override def comments = trace.update("comments" :: _) >> IO.pure(List.empty)
+            override def createComment(comment: NewComment) =
+              trace.update("createComment" :: _) >>
+              IO.pure(Comment(1, comment.path, Some(comment.position), user, comment.body))
+            override def files = trace.update("files" :: _) >> IO.pure(List(fileWithPatch))
+          }
+          val file: InputFile = TestInputFileBuilder.create("", fileWithPatch.filename).build()
+          val issue = Issue(RuleKey.of("repo", "rule"), file, 5, Severity.BLOCKER, "msg")
+          val markdown: Markdown = Markdown.inline(baseUrl, issue)
 
-            val issues = new GlobalIssues
-            issues.add(issue)
-            val result = githubPrReviewJob(globalIssues = issues).review[IO](baseUrl, github, user, pr)
+          val issues = new GlobalIssues
+          issues.add(issue)
+          val result = githubPrReviewJob(globalIssues = issues).review[IO](baseUrl, github, user, pr)
 
-            result.attempt.unsafeRunSync() shouldBe Right(ReviewStatus(blocker = 1, critical = 0))
-            trace.get.unsafeRunSync() should contain theSameElementsAs List(
-              "files",
-              "comments",
-              "createComment"
-            )
-            logs.get.unsafeRunSync().collect {
-              case (level, msg)
-                  if level === LogLevel.Info ||
+          result.attempt.unsafeRunSync() shouldBe Right(ReviewStatus(blocker = 1, critical = 0))
+          trace.get.unsafeRunSync() should contain theSameElementsAs List(
+            "files",
+            "comments",
+            "createComment"
+          )
+          logs.get.unsafeRunSync().collect {
+            case (level, msg)
+                if level === LogLevel.Info ||
                   (level === LogLevel.Debug && msg.contains("Posting a new comment for")) =>
-                msg
-            } should contain theSameElementsAs List(
-              "Posting new comments to Github.",
-              s"Posting a new comment for ${prFile.filename}:${issue.line} - ${markdown.text}"
-            )
+              msg
+          } should contain theSameElementsAs List(
+            "Posting new comments to Github.",
+            s"Posting a new comment for ${prFile.filename}:${issue.line} - ${markdown.text}"
+          )
         }
       }
     }
@@ -428,9 +426,8 @@ class GithubPrReviewJobSpec
           .view
           .mapValues(_.groupBy(v => PatchLine(v._1.line)))
           .toMap
-      val newComments = issuesComments.map {
-        case (issue, _) =>
-          NewComment(Markdown.inline(uri, issue).text, commit, issue.file.toString, issue.line)
+      val newComments = issuesComments.map { case (issue, _) =>
+        NewComment(Markdown.inline(uri, issue).text, commit, issue.file.toString, issue.line)
       }
 
       GithubPrReviewJob.commentsForNewIssues(uri, commit, issues) should
@@ -455,9 +452,8 @@ class GithubPrReviewJobSpec
           .mapValues(_.groupBy(v => PatchLine(v._1.line)))
           .toMap
 
-      val newComments = issues.map {
-        case (issue, _) =>
-          NewComment(Markdown.inline(uri, issue).text, commit, issue.file.toString, issue.line)
+      val newComments = issues.map { case (issue, _) =>
+        NewComment(Markdown.inline(uri, issue).text, commit, issue.file.toString, issue.line)
       }
 
       GithubPrReviewJob.commentsForNewIssues(

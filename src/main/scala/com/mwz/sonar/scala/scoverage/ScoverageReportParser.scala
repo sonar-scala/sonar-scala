@@ -101,8 +101,8 @@ final class ScoverageReportParser extends ScoverageReportParserAPI {
 
       linesCoverage =
         lines
-          .groupMapReduce { case (lineNum, _) => lineNum } {
-            case (_, count) => count
+          .groupMapReduce { case (lineNum, _) => lineNum } { case (_, count) =>
+            count
           }(_ + _)
 
       classCoverage = FileCoverage(classScoverage, linesCoverage)
@@ -111,8 +111,8 @@ final class ScoverageReportParser extends ScoverageReportParserAPI {
     // Merge the class coverages by filename.
     val files =
       classCoverages
-        .groupMapReduce { case (fileName, _) => fileName } {
-          case (_, classCoverage) => classCoverage
+        .groupMapReduce { case (fileName, _) => fileName } { case (_, classCoverage) =>
+          classCoverage
         }(_ |+| _)
 
     ProjectCoverage(projectScoverage, files)

@@ -23,7 +23,6 @@ import java.nio.file.Paths
 
 import scala.jdk.CollectionConverters._
 
-import cats.instances.string._
 import cats.syntax.eq._
 import com.mwz.sonar.scala.metadata.Rule
 import com.mwz.sonar.scala.metadata.scalastyle.ScalastyleRules
@@ -87,12 +86,11 @@ final class ScalastyleSensor(
         .toMap
 
     // Log a warning for invalid rules.
-    checks.filter { case (_, conf) => conf.isEmpty } foreach {
-      case (ruleKey, _) =>
-        log.warn(
-          s"Rule $ruleKey is missing the ${ScalastyleRulesRepository.RuleClassParam} parameter " +
-          "and it will be skipped during the analysis."
-        )
+    checks.filter { case (_, conf) => conf.isEmpty } foreach { case (ruleKey, _) =>
+      log.warn(
+        s"Rule $ruleKey is missing the ${ScalastyleRulesRepository.RuleClassParam} parameter " +
+        "and it will be skipped during the analysis."
+      )
     }
 
     val config: ScalastyleConfiguration = new ScalastyleConfiguration(

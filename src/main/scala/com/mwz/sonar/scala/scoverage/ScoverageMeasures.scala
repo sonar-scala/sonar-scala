@@ -23,9 +23,6 @@ import scala.jdk.CollectionConverters._
 import ScoverageMeasures._
 import cats.data.Chain
 import cats.data.Chain._
-import cats.instances.option._
-import cats.instances.string._
-import cats.instances.tuple._
 import cats.syntax.bitraverse._
 import cats.syntax.eq._
 import cats.syntax.foldable._
@@ -66,17 +63,15 @@ final class ScoverageMeasures extends MeasureComputer {
 
       val percentages: Map[String, BigDecimal] =
         percentageMetrics
-          .map {
-            case (key, (total, hits)) =>
-              (
-                key,
-                (summed.get(total), summed.get(hits)).bisequence
-                  .map {
-                    case (total, hits) =>
-                      if (total > 0) BigDecimal.valueOf(hits.toLong) / total * 100
-                      else BigDecimal(0)
-                  }
-              )
+          .map { case (key, (total, hits)) =>
+            (
+              key,
+              (summed.get(total), summed.get(hits)).bisequence
+                .map { case (total, hits) =>
+                  if (total > 0) BigDecimal.valueOf(hits.toLong) / total * 100
+                  else BigDecimal(0)
+                }
+            )
           }
           .collect { case (key, Some(sum)) => (key, sum) }
           .iterator

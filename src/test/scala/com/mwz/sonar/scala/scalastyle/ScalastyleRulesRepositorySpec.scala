@@ -47,9 +47,9 @@ class ScalastyleRulesRepositorySpec extends AnyFlatSpec with Matchers with Inspe
   }
 
   it should "include all Scalastyle inspections" in new Ctx {
-    ScalastyleRules.rules.length shouldBe 73 // 31 templates + 42 default rules
+    ScalastyleRules.rules.length shouldBe 74 // 31 templates + 43 default rules
     ScalastyleRules.rules.map(r => r.key -> r).iterator.toMap.size shouldBe ScalastyleRules.rules.length
-    repository.rules should have size 101 // 31 templates + 42 default rules + 28 template instances
+    repository.rules should have size 102 // 31 templates + 43 default rules + 28 template instances
   }
 
   it should "have all rules with non-empty properties" in new Ctx {

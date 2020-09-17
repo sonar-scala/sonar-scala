@@ -22,7 +22,6 @@ import java.nio.file.{Path, Paths}
 
 import scala.util.{Failure, Success, Try}
 
-import cats.instances.string._
 import cats.syntax.eq._
 import com.mwz.sonar.scala.metadata.scapegoat.ScapegoatRules
 import com.mwz.sonar.scala.metadata.scapegoat.ScapegoatRulesRepository

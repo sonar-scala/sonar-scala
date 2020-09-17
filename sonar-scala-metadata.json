@@ -1145,6 +1145,21 @@
           "template": false
         },
         {
+          "description": "*Checks that throw is not used.*\n\n`throw` statements should be replaced with type-safe error constructs like `Try` and `Either`, which communicate the possibility of error in the type signature.",
+          "key": "org.scalastyle.scalariform.ThrowChecker",
+          "name": "No throw statements.",
+          "params": [
+            {
+              "default": "org.scalastyle.scalariform.ThrowChecker",
+              "description": "Scalastyle's rule (checker) class name.",
+              "name": "ruleClass",
+              "typ": "String"
+            }
+          ],
+          "severity": "Minor",
+          "template": false
+        },
+        {
           "description": "*Checks that Java @Deprecated is not used, Scala @deprecated should be used instead.*\n\nYou should be using the Scala `@deprecated` instead.",
           "key": "org.scalastyle.scalariform.DeprecatedJavaChecker",
           "name": "No use of Java @Deprecated",
@@ -2230,7 +2245,7 @@
           "template": false
         },
         {
-          "description": "*Checks for collection operations that promote the collection to Any.*\n\nThe :+ (append) operator on collections accepts any argument you give it, which means that you can end up with e.g. Seq[Any] if your types don't match.",
+          "description": "*Checks for collection operations that promote the collection to Any.*\n\nThe `:+` (append) operator on collections accepts any argument you give it, which means that you can end up with e.g. `Seq[Any]` if your types don't match.",
           "key": "com.sksamuel.scapegoat.inspections.collections.CollectionPromotionToAny",
           "name": "Collection promotion to Any",
           "params": [],
@@ -2590,7 +2605,7 @@
           "template": false
         },
         {
-          "description": "*Finds type bounds of the form [A <: Any] or [A >: Nothing].*\n\nType bound resolves to Nothing <: T <: Any. Did you mean to put in other bounds?",
+          "description": "*Finds type bounds of the form `A <: Any` or `A >: Nothing`.*\n\nType bound resolves to `Nothing <: T <: Any`. Did you mean to put in other bounds?",
           "key": "com.sksamuel.scapegoat.inspections.inference.PointlessTypeBounds",
           "name": "Pointless type bounds",
           "params": [],
@@ -2598,7 +2613,7 @@
           "template": false
         },
         {
-          "description": "*Checks for use of Map().*\n\nMap[K,V]() allocates an intermediate object. Consider Map.empty which returns a singleton instance without creating a new object.",
+          "description": "*Checks for use of Map().*\n\n`Map[K,V]()` allocates an intermediate object. Consider `Map.empty` which returns a singleton instance without creating a new object.",
           "key": "com.sksamuel.scapegoat.inspections.collections.PreferMapEmpty",
           "name": "Prefer Map.empty",
           "params": [],
@@ -2614,7 +2629,7 @@
           "template": false
         },
         {
-          "description": "*Checks for use of Seq().*\n\nSeq[T]() allocates an intermediate object. Consider Seq.empty which returns a singleton instance without creating a new object.",
+          "description": "*Checks for use of Seq().*\n\n`Seq[T]()` allocates an intermediate object. Consider `Seq.empty` which returns a singleton instance without creating a new object.",
           "key": "com.sksamuel.scapegoat.inspections.collections.PreferSeqEmpty",
           "name": "Prefer Seq.empty",
           "params": [],
@@ -2622,7 +2637,7 @@
           "template": false
         },
         {
-          "description": "*Checks for use of Set().*\n\nSet[T]() allocates an intermediate object. Consider Set.empty which returns a singleton instance without creating a new object.",
+          "description": "*Checks for use of Set().*\n\n`Set[T]()` allocates an intermediate object. Consider `Set.empty` which returns a singleton instance without creating a new object.",
           "key": "com.sksamuel.scapegoat.inspections.collections.PreferSetEmpty",
           "name": "Prefer Set.empty",
           "params": [],
@@ -2838,7 +2853,7 @@
           "template": false
         },
         {
-          "description": "*Checks for use of .get on Left or Right projection.*\n\nMethod .get on a Left and a Right projection in deprecated since 2.13, use Either.getOrElse or Either.swap.getOrElse instead.",
+          "description": "*Checks for use of .get on Left or Right projection.*\n\nMethod .get on a Left and a Right projection is deprecated since 2.13, use Either.getOrElse or Either.swap.getOrElse instead.",
           "key": "com.sksamuel.scapegoat.inspections.option.EitherGet",
           "name": "Use of Either.right or Either.left projection followed by a get",
           "params": [],
@@ -3538,6 +3553,14 @@
         "template": false
       },
       {
+        "description": "*Checks that throw is not used.*\n\n`throw` statements should be replaced with type-safe error constructs like `Try` and `Either`, which communicate the possibility of error in the type signature.",
+        "key": "org.scalastyle.scalariform.ThrowChecker",
+        "name": "No throw statements.",
+        "params": [],
+        "severity": "Minor",
+        "template": false
+      },
+      {
         "description": "*Checks that Java @Deprecated is not used, Scala @deprecated should be used instead.*\n\nYou should be using the Scala `@deprecated` instead.",
         "key": "org.scalastyle.scalariform.DeprecatedJavaChecker",
         "name": "No use of Java @Deprecated",
@@ -4096,7 +4119,7 @@
         "template": false
       },
       {
-        "description": "*Checks for collection operations that promote the collection to Any.*\n\nThe :+ (append) operator on collections accepts any argument you give it, which means that you can end up with e.g. Seq[Any] if your types don't match.",
+        "description": "*Checks for collection operations that promote the collection to Any.*\n\nThe `:+` (append) operator on collections accepts any argument you give it, which means that you can end up with e.g. `Seq[Any]` if your types don't match.",
         "key": "com.sksamuel.scapegoat.inspections.collections.CollectionPromotionToAny",
         "name": "Collection promotion to Any",
         "params": [],
@@ -4456,7 +4479,7 @@
         "template": false
       },
       {
-        "description": "*Finds type bounds of the form [A <: Any] or [A >: Nothing].*\n\nType bound resolves to Nothing <: T <: Any. Did you mean to put in other bounds?",
+        "description": "*Finds type bounds of the form `A <: Any` or `A >: Nothing`.*\n\nType bound resolves to `Nothing <: T <: Any`. Did you mean to put in other bounds?",
         "key": "com.sksamuel.scapegoat.inspections.inference.PointlessTypeBounds",
         "name": "Pointless type bounds",
         "params": [],
@@ -4464,7 +4487,7 @@
         "template": false
       },
       {
-        "description": "*Checks for use of Map().*\n\nMap[K,V]() allocates an intermediate object. Consider Map.empty which returns a singleton instance without creating a new object.",
+        "description": "*Checks for use of Map().*\n\n`Map[K,V]()` allocates an intermediate object. Consider `Map.empty` which returns a singleton instance without creating a new object.",
         "key": "com.sksamuel.scapegoat.inspections.collections.PreferMapEmpty",
         "name": "Prefer Map.empty",
         "params": [],
@@ -4480,7 +4503,7 @@
         "template": false
       },
       {
-        "description": "*Checks for use of Seq().*\n\nSeq[T]() allocates an intermediate object. Consider Seq.empty which returns a singleton instance without creating a new object.",
+        "description": "*Checks for use of Seq().*\n\n`Seq[T]()` allocates an intermediate object. Consider `Seq.empty` which returns a singleton instance without creating a new object.",
         "key": "com.sksamuel.scapegoat.inspections.collections.PreferSeqEmpty",
         "name": "Prefer Seq.empty",
         "params": [],
@@ -4488,7 +4511,7 @@
         "template": false
       },
       {
-        "description": "*Checks for use of Set().*\n\nSet[T]() allocates an intermediate object. Consider Set.empty which returns a singleton instance without creating a new object.",
+        "description": "*Checks for use of Set().*\n\n`Set[T]()` allocates an intermediate object. Consider `Set.empty` which returns a singleton instance without creating a new object.",
         "key": "com.sksamuel.scapegoat.inspections.collections.PreferSetEmpty",
         "name": "Prefer Set.empty",
         "params": [],
@@ -4704,7 +4727,7 @@
         "template": false
       },
       {
-        "description": "*Checks for use of .get on Left or Right projection.*\n\nMethod .get on a Left and a Right projection in deprecated since 2.13, use Either.getOrElse or Either.swap.getOrElse instead.",
+        "description": "*Checks for use of .get on Left or Right projection.*\n\nMethod .get on a Left and a Right projection is deprecated since 2.13, use Either.getOrElse or Either.swap.getOrElse instead.",
         "key": "com.sksamuel.scapegoat.inspections.option.EitherGet",
         "name": "Use of Either.right or Either.left projection followed by a get",
         "params": [],

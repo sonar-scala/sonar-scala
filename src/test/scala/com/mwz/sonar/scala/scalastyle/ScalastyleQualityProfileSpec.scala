@@ -59,8 +59,8 @@ class ScalastyleQualityProfileSpec extends AnyFlatSpec with Matchers with LoneEl
     rules.map(_.ruleKey) should contain allElementsOf activated
   }
 
-  it should "have 69 rules" in new Ctx {
-    rules should have size 69 // 41 default rules + 28 template instances
+  it should "have all rules" in new Ctx {
+    rules should have size 70 // 42 default rules + 28 template instances
   }
 
   it should "not activate templates" in new Ctx {

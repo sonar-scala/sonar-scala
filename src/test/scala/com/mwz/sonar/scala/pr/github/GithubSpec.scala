@@ -26,8 +26,6 @@ import org.http4s.AuthedRoutes
 import org.http4s.HttpApp
 import org.http4s.HttpRoutes
 import org.http4s.Request
-import org.http4s.circe.CirceEntityCodec._
-import org.http4s.circe.CirceEntityEncoder._
 import org.http4s.client.Client
 import org.http4s.client.UnexpectedStatus
 import org.http4s.dsl.io._
@@ -66,9 +64,8 @@ class GithubSpec extends AnyFlatSpec with Matchers with ScalaCheckDrivenProperty
     AuthMiddleware(authUser)
 
   it should "get the authenticated user" in {
-    val service = AuthedRoutes.of[String, IO] {
-      case GET -> Root / "user" as _ =>
-        Ok(user)
+    val service = AuthedRoutes.of[String, IO] { case GET -> Root / "user" as _ =>
+      Ok(user)
     }
 
     val client = Client.fromHttpApp(HttpApp(auth(service).orNotFound.run))
@@ -77,9 +74,8 @@ class GithubSpec extends AnyFlatSpec with Matchers with ScalaCheckDrivenProperty
 
   it should "get a pull request" in {
     forAll { (pr: PullRequest) =>
-      val http = HttpRoutes.of[IO] {
-        case _ @GET -> Root / "repos" / "owner" / "repo" / "pulls" / _ =>
-          Ok(pr)
+      val http = HttpRoutes.of[IO] { case _ @GET -> Root / "repos" / "owner" / "repo" / "pulls" / _ =>
+        Ok(pr)
       }
 
       val client = Client.fromHttpApp(http.orNotFound)

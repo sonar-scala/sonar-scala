@@ -19,13 +19,14 @@ package com.mwz.sonar.scala.metadata.scalastyle
 
 import com.typesafe.config.ConfigFactory
 import org.scalastyle._
-import org.scalatest._
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 
 import scala.io.Source.fromResource
 import scala.meta._
 import scala.xml._
 
-class ScalastyleInspectionsGeneratorTest extends FlatSpec with Matchers {
+class ScalastyleInspectionsGeneratorTest extends AnyFlatSpec with Matchers {
 
   "extractInspections" should "successfully extract the inspections" in {
     val inspections = XML.load(fromResource("scalastyle/definition.xml").bufferedReader()) \\ "checker"

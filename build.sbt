@@ -174,7 +174,7 @@ logBuffered in Test := false
 testOptions in Test += Tests.Argument(TestFrameworks.ScalaTest, "-oDTF")
 
 // scalafix
-scalafixDependencies in ThisBuild += "com.nequissimus" %% "sort-imports" % "0.5.4"
+scalafixDependencies in ThisBuild += "com.nequissimus" %% "sort-imports" % "0.5.5"
 addCommandAlias("fix", "all compile:scalafix test:scalafix; fixImports")
 addCommandAlias("fixImports", "compile:scalafix SortImports; test:scalafix SortImports")
 addCommandAlias("fixCheck", "compile:scalafix --check; test:scalafix --check; fixCheckImports")

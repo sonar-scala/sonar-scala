@@ -81,7 +81,7 @@ libraryDependencies ++= List(
   "org.http4s"                 %% "http4s-blaze-server"       % http4s       % Test,
   "org.http4s"                 %% "http4s-dsl"                % http4s       % Test,
   "org.mockito"                %% "mockito-scala"             % "1.16.3"     % Test,
-  "org.scalacheck"             %% "scalacheck"                % "1.14.3"     % Test,
+  "org.scalacheck"             %% "scalacheck"                % "1.15.1"     % Test,
   "org.scalatest"              %% "scalatest"                 % "3.2.3"      % Test,
   "org.scalatestplus"          %% "mockito-1-10"              % "3.1.0.0"    % Test,
   "org.scalatestplus"          %% "scalacheck-1-14"           % "3.2.2.0"    % Test,

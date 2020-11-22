@@ -4,7 +4,7 @@ libraryDependencies ++= Seq(
   // Scapegoat & scalastyle inspections generator dependencies
   "com.sksamuel.scapegoat" % s"scalac-scapegoat-plugin_${scalaVersion.value}" % "1.4.6",
   "com.beautiful-scala"   %% "scalastyle"                                     % "1.5.0",
-  "org.scalameta"         %% "scalameta"                                      % "4.3.22",
+  "org.scalameta"         %% "scalameta"                                      % "4.3.24",
   "org.scalatest"         %% "scalatest"                                      % "3.2.3" % Test
 )
 

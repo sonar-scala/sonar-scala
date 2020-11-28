@@ -18,8 +18,9 @@ project/plugins/project/
 .cache
 
 # metals
-.metals
 .bloop
+.bsp
+.metals
 metals.sbt
 
 # Intellij IDEA Specific
@@ -27,6 +28,9 @@ metals.sbt
 *.iws
 *.ipr
 *.iml
+
+# VSCode
+.vscode
 
 # sonar-scanner
 .scannerwork/

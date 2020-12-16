@@ -73,7 +73,7 @@ libraryDependencies ++= List(
   "org.slf4j"                 % "slf4j-api"            % "1.7.30"     % Provided,
   "org.sonarsource.sonarqube" % "sonar-plugin-api"     % sonarVersion % Provided,
   "org.typelevel"            %% "cats-core"            % "2.2.0",
-  "org.typelevel"            %% "cats-effect"          % "2.2.0",
+  "org.typelevel"            %% "cats-effect"          % "2.3.0",
   "org.typelevel"            %% "mouse"                % "0.26.2",
   // TEST
   "com.beachape"               %% "enumeratum-scalacheck"     % "1.6.1"      % Test,

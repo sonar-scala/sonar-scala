@@ -55,9 +55,9 @@ sourceGenerators in Compile ++= Seq(
 )
 
 // Lib dependencies
-val sonarVersion = "8.4.0.35506"
+val sonarVersion = "8.5.0.37579"
 val circe = "0.13.0"
-val http4s = "0.21.11"
+val http4s = "0.21.14"
 libraryDependencies ++= List(
   "com.beachape"             %% "enumeratum"           % "1.6.1",
   "com.beachape"             %% "enumeratum-cats"      % "1.6.1",
@@ -73,8 +73,8 @@ libraryDependencies ++= List(
   "org.slf4j"                 % "slf4j-api"            % "1.7.30"     % Provided,
   "org.sonarsource.sonarqube" % "sonar-plugin-api"     % sonarVersion % Provided,
   "org.typelevel"            %% "cats-core"            % "2.3.0",
-  "org.typelevel"            %% "cats-effect"          % "2.2.0",
-  "org.typelevel"            %% "mouse"                % "0.25",
+  "org.typelevel"            %% "cats-effect"          % "2.3.0",
+  "org.typelevel"            %% "mouse"                % "0.26.2",
   // TEST
   "com.beachape"               %% "enumeratum-scalacheck"     % "1.6.1"      % Test,
   "com.github.alexarchambault" %% "scalacheck-shapeless_1.14" % "1.2.5"      % Test,

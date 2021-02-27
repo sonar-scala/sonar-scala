@@ -28,7 +28,7 @@ headerLicense := Some(
 excludeFilter.in(headerResources) := "*.scala"
 
 // Compile options
-scalaVersion := "2.13.3"
+scalaVersion := "2.13.5"
 scalacOptions ++= Seq(
   "-language:reflectiveCalls",
   "-Ymacro-annotations",

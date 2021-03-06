@@ -57,7 +57,7 @@ sourceGenerators in Compile ++= Seq(
 // Lib dependencies
 val sonarVersion = "8.5.0.37579"
 val circe = "0.13.0"
-val http4s = "0.21.14"
+val http4s = "0.21.20"
 libraryDependencies ++= List(
   "com.beachape"             %% "enumeratum"           % "1.6.1",
   "com.beachape"             %% "enumeratum-cats"      % "1.6.1",
@@ -72,16 +72,16 @@ libraryDependencies ++= List(
   "org.scalariform"          %% "scalariform"          % "0.2.10",
   "org.slf4j"                 % "slf4j-api"            % "1.7.30"     % Provided,
   "org.sonarsource.sonarqube" % "sonar-plugin-api"     % sonarVersion % Provided,
-  "org.typelevel"            %% "cats-core"            % "2.3.1",
+  "org.typelevel"            %% "cats-core"            % "2.4.2",
   "org.typelevel"            %% "cats-effect"          % "2.3.3",
-  "org.typelevel"            %% "mouse"                % "0.26.2",
+  "org.typelevel"            %% "mouse"                % "1.0.0",
   // TEST
   "com.beachape"               %% "enumeratum-scalacheck"     % "1.6.1"      % Test,
   "com.github.alexarchambault" %% "scalacheck-shapeless_1.14" % "1.2.5"      % Test,
   "org.http4s"                 %% "http4s-blaze-server"       % http4s       % Test,
   "org.http4s"                 %% "http4s-dsl"                % http4s       % Test,
-  "org.mockito"                %% "mockito-scala"             % "1.16.3"     % Test,
-  "org.scalacheck"             %% "scalacheck"                % "1.15.2"     % Test,
+  "org.mockito"                %% "mockito-scala"             % "1.16.29"     % Test,
+  "org.scalacheck"             %% "scalacheck"                % "1.15.3"     % Test,
   "org.scalatest"              %% "scalatest"                 % "3.2.3"      % Test,
   "org.scalatestplus"          %% "mockito-1-10"              % "3.1.0.0"    % Test,
   "org.scalatestplus"          %% "scalacheck-1-14"           % "3.2.2.0"    % Test,

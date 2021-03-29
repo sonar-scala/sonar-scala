@@ -39,3 +39,4 @@ metals.sbt
 *.log
 /bin/
 *.orig
+.DS_Store

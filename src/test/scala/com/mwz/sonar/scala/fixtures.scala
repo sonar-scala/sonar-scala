@@ -21,8 +21,8 @@ import java.io.File
 import java.nio.file.{Files, Path}
 
 import cats.effect.IO
-import cats.effect.concurrent.Ref
 import com.mwz.sonar.scala.util.Logger
+import cats.effect.Ref
 
 trait WithFiles {
   def withFiles(paths: String*)(test: Seq[File] => Any): Unit = {

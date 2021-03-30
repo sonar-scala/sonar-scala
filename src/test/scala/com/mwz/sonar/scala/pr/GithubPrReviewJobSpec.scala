@@ -20,7 +20,6 @@ package com.mwz.sonar.scala.pr
 import scala.concurrent.ExecutionContext
 
 import cats.data.NonEmptyList
-import cats.effect.ContextShift
 import cats.effect.IO
 import cats.syntax.flatMap._
 import com.mwz.sonar.scala.EmptyLogger

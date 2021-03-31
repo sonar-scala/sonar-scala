@@ -28,7 +28,7 @@ headerLicense := Some(
 excludeFilter.in(headerResources) := "*.scala"
 
 // Compile options
-scalaVersion := "2.13.3"
+scalaVersion := "2.13.5"
 scalacOptions ++= Seq(
   "-language:reflectiveCalls",
   "-Ymacro-annotations",
@@ -42,7 +42,7 @@ scalafmtOnCompile in ThisBuild :=
   sys.env
     .get("DISABLE_SCALAFMT")
     .forall(_.toLowerCase == "false")
-scapegoatVersion in ThisBuild := "1.4.6"
+scapegoatVersion in ThisBuild := "1.4.8"
 scapegoatReports := Seq("xml")
 coverageOutputXML := true
 coverageOutputHTML := false
@@ -55,9 +55,9 @@ sourceGenerators in Compile ++= Seq(
 )
 
 // Lib dependencies
-val sonarVersion = "8.5.0.37579"
+val sonarVersion = "8.6.0.39681"
 val circe = "0.13.0"
-val http4s = "0.21.20"
+val http4s = "0.21.21"
 libraryDependencies ++= List(
   "com.beachape"             %% "enumeratum"           % "1.6.1",
   "com.beachape"             %% "enumeratum-cats"      % "1.6.1",
@@ -72,7 +72,7 @@ libraryDependencies ++= List(
   "org.scalariform"          %% "scalariform"          % "0.2.10",
   "org.slf4j"                 % "slf4j-api"            % "1.7.30"     % Provided,
   "org.sonarsource.sonarqube" % "sonar-plugin-api"     % sonarVersion % Provided,
-  "org.typelevel"            %% "cats-core"            % "2.4.2",
+  "org.typelevel"            %% "cats-core"            % "2.5.0",
   "org.typelevel"            %% "cats-effect"          % "3.0.1",
   "org.typelevel"            %% "mouse"                % "1.0.0",
   // TEST
@@ -80,7 +80,7 @@ libraryDependencies ++= List(
   "com.github.alexarchambault" %% "scalacheck-shapeless_1.14" % "1.2.5"      % Test,
   "org.http4s"                 %% "http4s-blaze-server"       % http4s       % Test,
   "org.http4s"                 %% "http4s-dsl"                % http4s       % Test,
-  "org.mockito"                %% "mockito-scala"             % "1.16.29"    % Test,
+  "org.mockito"                %% "mockito-scala"             % "1.16.33"    % Test,
   "org.scalacheck"             %% "scalacheck"                % "1.15.3"     % Test,
   "org.scalatest"              %% "scalatest"                 % "3.2.6"      % Test,
   "org.scalatestplus"          %% "mockito-1-10"              % "3.1.0.0"    % Test,

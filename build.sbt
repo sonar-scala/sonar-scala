@@ -28,7 +28,7 @@ headerLicense := Some(
 excludeFilter.in(headerResources) := "*.scala"
 
 // Compile options
-scalaVersion := "2.13.3"
+scalaVersion := "2.13.5"
 scalacOptions ++= Seq(
   "-language:reflectiveCalls",
   "-Ymacro-annotations",
@@ -42,7 +42,7 @@ scalafmtOnCompile in ThisBuild :=
   sys.env
     .get("DISABLE_SCALAFMT")
     .forall(_.toLowerCase == "false")
-scapegoatVersion in ThisBuild := "1.4.6"
+scapegoatVersion in ThisBuild := "1.4.8"
 scapegoatReports := Seq("xml")
 coverageOutputXML := true
 coverageOutputHTML := false

@@ -19,7 +19,8 @@ package com.mwz.sonar.scala
 package junit
 
 import java.io.File
-import java.nio.file.{Path, Paths}
+import java.nio.file.Path
+import java.nio.file.Paths
 
 import scala.jdk.CollectionConverters._
 
@@ -27,8 +28,11 @@ import com.mwz.sonar.scala.util.Log
 import com.mwz.sonar.scala.util.syntax.SonarConfig._
 import com.mwz.sonar.scala.util.syntax.SonarFileSystem._
 import com.mwz.sonar.scala.util.syntax.SonarSensorContext._
-import org.sonar.api.batch.fs.{FileSystem, InputFile}
-import org.sonar.api.batch.sensor.{Sensor, SensorContext, SensorDescriptor}
+import org.sonar.api.batch.fs.FileSystem
+import org.sonar.api.batch.fs.InputFile
+import org.sonar.api.batch.sensor.Sensor
+import org.sonar.api.batch.sensor.SensorContext
+import org.sonar.api.batch.sensor.SensorDescriptor
 import org.sonar.api.config.Configuration
 import org.sonar.api.measures.CoreMetrics
 

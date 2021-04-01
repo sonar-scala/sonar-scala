@@ -27,27 +27,31 @@ import cats.syntax.eq._
 import com.mwz.sonar.scala.metadata.Rule
 import com.mwz.sonar.scala.metadata.scalastyle.ScalastyleRules
 import com.mwz.sonar.scala.metadata.scalastyle.ScalastyleRulesRepository
-import com.mwz.sonar.scala.pr.{GlobalIssues, Issue}
+import com.mwz.sonar.scala.pr.GlobalIssues
+import com.mwz.sonar.scala.pr.Issue
 import com.mwz.sonar.scala.util.Log
 import com.mwz.sonar.scala.util.syntax.Optionals._
-import org.scalastyle.{
-  ConfigurationChecker,
-  Directory,
-  ErrorLevel,
-  FileSpec,
-  InfoLevel,
-  Level,
-  Message,
-  ScalastyleConfiguration,
-  StyleError,
-  StyleException,
-  WarningLevel,
-  ScalastyleChecker => Checker
-}
-import org.sonar.api.batch.fs.{FilePredicates, InputFile}
-import org.sonar.api.batch.rule.{ActiveRule, Severity}
-import org.sonar.api.batch.sensor.issue.{NewIssue, NewIssueLocation}
-import org.sonar.api.batch.sensor.{Sensor, SensorContext, SensorDescriptor}
+import org.scalastyle.ConfigurationChecker
+import org.scalastyle.Directory
+import org.scalastyle.ErrorLevel
+import org.scalastyle.FileSpec
+import org.scalastyle.InfoLevel
+import org.scalastyle.Level
+import org.scalastyle.Message
+import org.scalastyle.ScalastyleConfiguration
+import org.scalastyle.StyleError
+import org.scalastyle.StyleException
+import org.scalastyle.WarningLevel
+import org.scalastyle.{ScalastyleChecker => Checker}
+import org.sonar.api.batch.fs.FilePredicates
+import org.sonar.api.batch.fs.InputFile
+import org.sonar.api.batch.rule.ActiveRule
+import org.sonar.api.batch.rule.Severity
+import org.sonar.api.batch.sensor.Sensor
+import org.sonar.api.batch.sensor.SensorContext
+import org.sonar.api.batch.sensor.SensorDescriptor
+import org.sonar.api.batch.sensor.issue.NewIssue
+import org.sonar.api.batch.sensor.issue.NewIssueLocation
 import org.sonar.api.config.Configuration
 import org.sonar.api.rule.RuleKey
 

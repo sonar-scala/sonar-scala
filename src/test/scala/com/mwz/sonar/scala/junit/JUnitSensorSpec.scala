@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018-2020  All sonar-scala contributors
+ * Copyright (C) 2018-2021  All sonar-scala contributors
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published
@@ -19,15 +19,19 @@ package com.mwz.sonar.scala
 package junit
 
 import java.io.File
-import java.nio.file.{Path, Paths}
+import java.nio.file.Path
+import java.nio.file.Paths
 
-import org.mockito.{ArgumentMatchersSugar, MockitoSugar}
+import org.mockito.ArgumentMatchersSugar
+import org.mockito.MockitoSugar
 import org.scalatest.LoneElement
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 import org.sonar.api.batch.fs.InputFile
-import org.sonar.api.batch.fs.internal.{DefaultFileSystem, TestInputFileBuilder}
-import org.sonar.api.batch.sensor.internal.{DefaultSensorDescriptor, SensorContextTester}
+import org.sonar.api.batch.fs.internal.DefaultFileSystem
+import org.sonar.api.batch.fs.internal.TestInputFileBuilder
+import org.sonar.api.batch.sensor.internal.DefaultSensorDescriptor
+import org.sonar.api.batch.sensor.internal.SensorContextTester
 import org.sonar.api.config.internal.MapSettings
 
 class JUnitSensorSpec

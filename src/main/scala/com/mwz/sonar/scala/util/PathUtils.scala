@@ -18,7 +18,8 @@
 package com.mwz.sonar.scala
 package util
 
-import java.nio.file.{Path, Paths}
+import java.nio.file.Path
+import java.nio.file.Paths
 
 import org.sonar.api.batch.fs.FileSystem
 

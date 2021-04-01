@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018-2020  All sonar-scala contributors
+ * Copyright (C) 2018-2021  All sonar-scala contributors
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published
@@ -18,10 +18,12 @@
 package com.mwz.sonar.scala
 
 import org.scalactic.Equality
+import org.scalatest.matchers.HavePropertyMatchResult
+import org.scalatest.matchers.HavePropertyMatcher
 import org.scalatest.matchers.should.Matchers
-import org.scalatest.matchers.{HavePropertyMatchResult, HavePropertyMatcher}
 import org.sonar.api.batch.sensor.internal.SensorContextTester
-import org.sonar.api.batch.sensor.issue.{Issue, IssueLocation}
+import org.sonar.api.batch.sensor.issue.Issue
+import org.sonar.api.batch.sensor.issue.IssueLocation
 
 /** Custom matchers to test properties of sensor contexts */
 trait SensorContextMatchers extends Matchers {

@@ -17,7 +17,8 @@
 
 package com.mwz.sonar.scala
 
-import java.nio.file.{Path, Paths}
+import java.nio.file.Path
+import java.nio.file.Paths
 
 import com.mwz.sonar.scala.util.Log
 import com.mwz.sonar.scala.util.syntax.Optionals._
@@ -25,7 +26,8 @@ import org.sonar.api.Plugin
 import org.sonar.api.config.Configuration
 import org.sonar.api.resources.AbstractLanguage
 import scalariform.ScalaVersion
-import scalariform.lexer.{ScalaLexer, Token}
+import scalariform.lexer.ScalaLexer
+import scalariform.lexer.Token
 import scalariform.utils.Utils._
 
 /** Defines Scala as a language for SonarQube */

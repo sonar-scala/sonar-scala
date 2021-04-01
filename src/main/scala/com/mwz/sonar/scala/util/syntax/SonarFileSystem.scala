@@ -22,10 +22,13 @@ package syntax
 import java.io.File
 import java.nio.file.Path
 
-import scala.util.{Failure, Success, Try}
+import scala.util.Failure
+import scala.util.Success
+import scala.util.Try
 
+import cats.Monad
+import cats.MonoidK
 import cats.syntax.flatMap._
-import cats.{Monad, MonoidK}
 import org.sonar.api.batch.fs.FileSystem
 
 object SonarFileSystem {

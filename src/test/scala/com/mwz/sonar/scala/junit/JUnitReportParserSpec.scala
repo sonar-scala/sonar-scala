@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018-2020  All sonar-scala contributors
+ * Copyright (C) 2018-2021  All sonar-scala contributors
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published
@@ -26,7 +26,8 @@ import org.scalatest.LoneElement
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 import org.sonar.api.batch.fs.InputFile
-import org.sonar.api.batch.fs.internal.{DefaultFileSystem, TestInputFileBuilder}
+import org.sonar.api.batch.fs.internal.DefaultFileSystem
+import org.sonar.api.batch.fs.internal.TestInputFileBuilder
 
 class JUnitReportParserSpec extends AnyFlatSpec with Matchers with WithFiles with LoneElement {
   it should "get report files" in {

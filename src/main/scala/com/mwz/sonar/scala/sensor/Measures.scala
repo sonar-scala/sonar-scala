@@ -23,7 +23,9 @@ import scala.util.matching.Regex
 
 import cats.kernel.Eq
 import cats.syntax.eq._
-import scalariform.lexer.{Token, TokenType, Tokens}
+import scalariform.lexer.Token
+import scalariform.lexer.TokenType
+import scalariform.lexer.Tokens
 
 /** Scala Sensor Metrics */
 object Measures {

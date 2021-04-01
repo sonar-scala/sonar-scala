@@ -20,7 +20,9 @@ package scoverage
 
 import scala.jdk.CollectionConverters._
 
-import org.sonar.api.measures.{CoreMetrics, Metric, Metrics}
+import org.sonar.api.measures.CoreMetrics
+import org.sonar.api.measures.Metric
+import org.sonar.api.measures.Metrics
 
 /** Statement coverage metric definition. */
 final class ScoverageMetrics extends Metrics {

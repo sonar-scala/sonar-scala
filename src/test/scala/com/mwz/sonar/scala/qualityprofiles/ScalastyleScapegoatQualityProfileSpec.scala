@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018-2020  All sonar-scala contributors
+ * Copyright (C) 2018-2021  All sonar-scala contributors
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published
@@ -17,10 +17,12 @@
 
 package com.mwz.sonar.scala.qualityprofiles
 
+import org.scalatest.Inspectors
+import org.scalatest.LoneElement
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
-import org.scalatest.{Inspectors, LoneElement}
-import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition.{BuiltInQualityProfile, Context}
+import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition.BuiltInQualityProfile
+import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition.Context
 
 /** Tests the correct behavior of the Scalastyle+Scapegoat Quality Profile */
 class ScalastyleScapegoatQualityProfileSpec

@@ -20,7 +20,6 @@ package scoverage
 
 import scala.jdk.CollectionConverters._
 
-import ScoverageMeasures._
 import cats.data.Chain
 import cats.data.Chain._
 import cats.syntax.bitraverse._
@@ -29,7 +28,10 @@ import cats.syntax.foldable._
 import org.sonar.api.ce.measure.Component
 import org.sonar.api.ce.measure.MeasureComputer
 import org.sonar.api.ce.measure.MeasureComputer.MeasureComputerContext
-import org.sonar.api.ce.measure.MeasureComputer.{MeasureComputerDefinition, MeasureComputerDefinitionContext}
+import org.sonar.api.ce.measure.MeasureComputer.MeasureComputerDefinition
+import org.sonar.api.ce.measure.MeasureComputer.MeasureComputerDefinitionContext
+
+import ScoverageMeasures._
 
 final class ScoverageMeasures extends MeasureComputer {
   override def define(context: MeasureComputerDefinitionContext): MeasureComputerDefinition =

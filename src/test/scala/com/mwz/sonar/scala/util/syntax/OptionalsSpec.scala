@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018-2020  All sonar-scala contributors
+ * Copyright (C) 2018-2021  All sonar-scala contributors
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published
@@ -21,10 +21,11 @@ package syntax
 
 import java.util.Optional
 
-import Optionals._
 import org.scalatest.OptionValues
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
+
+import Optionals._
 
 class OptionalsSpec extends AnyFlatSpec with Matchers with OptionValues {
   it should "convert Java Optional to Scala Option" in {

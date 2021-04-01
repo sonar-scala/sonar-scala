@@ -22,10 +22,8 @@ import com.mwz.sonar.scala.metadata.scalastyle.ScalastyleRules
 import com.mwz.sonar.scala.metadata.scalastyle.ScalastyleRulesRepository
 import com.mwz.sonar.scala.qualityprofiles.Overrides
 import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition
-import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition.{
-  NewBuiltInActiveRule,
-  NewBuiltInQualityProfile
-}
+import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition.NewBuiltInActiveRule
+import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition.NewBuiltInQualityProfile
 
 /**
  * Defines a Scalastyle quality profile.

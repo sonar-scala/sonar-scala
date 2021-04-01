@@ -19,7 +19,8 @@ package com.mwz.sonar.scala
 package util
 package syntax
 
-import java.nio.file.{Path, Paths}
+import java.nio.file.Path
+import java.nio.file.Paths
 
 import cats.syntax.eq._
 import com.mwz.sonar.scala.util.syntax.Optionals._

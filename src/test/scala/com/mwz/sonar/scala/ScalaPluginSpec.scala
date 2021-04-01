@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018-2020  All sonar-scala contributors
+ * Copyright (C) 2018-2021  All sonar-scala contributors
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published
@@ -19,9 +19,12 @@ package com.mwz.sonar.scala
 
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
+import org.sonar.api.Plugin
+import org.sonar.api.SonarEdition
+import org.sonar.api.SonarQubeSide
+import org.sonar.api.SonarRuntime
 import org.sonar.api.internal.SonarRuntimeImpl
 import org.sonar.api.utils.Version
-import org.sonar.api.{Plugin, SonarEdition, SonarQubeSide, SonarRuntime}
 
 class ScalaPluginSpec extends AnyFlatSpec with Matchers {
   val runtime: SonarRuntime = SonarRuntimeImpl.forSonarQube(

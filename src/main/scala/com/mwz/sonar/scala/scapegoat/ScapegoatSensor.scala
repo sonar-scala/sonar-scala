@@ -18,22 +18,30 @@
 package com.mwz.sonar.scala
 package scapegoat
 
-import java.nio.file.{Path, Paths}
+import java.nio.file.Path
+import java.nio.file.Paths
 
-import scala.util.{Failure, Success, Try}
+import scala.util.Failure
+import scala.util.Success
+import scala.util.Try
 
 import cats.syntax.eq._
 import com.mwz.sonar.scala.metadata.scapegoat.ScapegoatRules
 import com.mwz.sonar.scala.metadata.scapegoat.ScapegoatRulesRepository
-import com.mwz.sonar.scala.pr.{GlobalIssues, Issue}
+import com.mwz.sonar.scala.pr.GlobalIssues
+import com.mwz.sonar.scala.pr.Issue
 import com.mwz.sonar.scala.scapegoat.ScapegoatSensor._
 import com.mwz.sonar.scala.util.Log
 import com.mwz.sonar.scala.util.PathUtils._
 import com.mwz.sonar.scala.util.syntax.Optionals._
-import org.sonar.api.batch.fs.{FileSystem, InputFile}
+import org.sonar.api.batch.fs.FileSystem
+import org.sonar.api.batch.fs.InputFile
 import org.sonar.api.batch.rule.Severity
-import org.sonar.api.batch.sensor.issue.{NewIssue, NewIssueLocation}
-import org.sonar.api.batch.sensor.{Sensor, SensorContext, SensorDescriptor}
+import org.sonar.api.batch.sensor.Sensor
+import org.sonar.api.batch.sensor.SensorContext
+import org.sonar.api.batch.sensor.SensorDescriptor
+import org.sonar.api.batch.sensor.issue.NewIssue
+import org.sonar.api.batch.sensor.issue.NewIssueLocation
 import org.sonar.api.config.Configuration
 import scalariform.ScalaVersion
 

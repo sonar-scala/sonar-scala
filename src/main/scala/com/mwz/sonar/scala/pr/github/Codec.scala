@@ -20,8 +20,9 @@ package pr
 package github
 
 import cats.Applicative
+import io.circe.Encoder
+import io.circe.Printer
 import io.circe.generic.extras.Configuration
-import io.circe.{Encoder, Printer}
 import org.http4s
 import org.http4s.EntityEncoder
 import org.http4s.circe.CirceEntityDecoder

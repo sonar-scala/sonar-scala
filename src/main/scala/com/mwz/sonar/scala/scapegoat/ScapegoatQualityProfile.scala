@@ -22,10 +22,8 @@ import com.mwz.sonar.scala.metadata.scapegoat.ScapegoatRules
 import com.mwz.sonar.scala.metadata.scapegoat.ScapegoatRulesRepository
 import com.mwz.sonar.scala.qualityprofiles.Overrides
 import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition
-import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition.{
-  NewBuiltInActiveRule,
-  NewBuiltInQualityProfile
-}
+import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition.NewBuiltInActiveRule
+import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition.NewBuiltInQualityProfile
 
 /** Defines a quality profile that activates all Scapegoat rules/inspections */
 final class ScapegoatQualityProfile extends BuiltInQualityProfilesDefinition {

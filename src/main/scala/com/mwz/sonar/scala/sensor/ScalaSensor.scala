@@ -21,7 +21,9 @@ package sensor
 import scala.io.Source
 import scala.jdk.CollectionConverters._
 
-import org.sonar.api.batch.sensor.{Sensor, SensorContext, SensorDescriptor}
+import org.sonar.api.batch.sensor.Sensor
+import org.sonar.api.batch.sensor.SensorContext
+import org.sonar.api.batch.sensor.SensorDescriptor
 import org.sonar.api.measures.{CoreMetrics => CM}
 import scalariform.ScalaVersion
 

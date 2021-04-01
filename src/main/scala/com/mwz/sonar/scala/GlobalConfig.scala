@@ -26,9 +26,12 @@ import cats.syntax.functor._
 import com.mwz.sonar.scala.GlobalConfig._
 import com.mwz.sonar.scala.util.syntax.Optionals._
 import com.mwz.sonar.scala.util.syntax.SonarConfig._
-import org.http4s.{ParseFailure, ParseResult, Uri}
+import org.http4s.ParseFailure
+import org.http4s.ParseResult
+import org.http4s.Uri
 import org.sonar.api.CoreProperties
-import org.sonar.api.batch.{InstantiationStrategy, ScannerSide}
+import org.sonar.api.batch.InstantiationStrategy
+import org.sonar.api.batch.ScannerSide
 import org.sonar.api.config.Configuration
 
 @SuppressWarnings(Array("IncorrectlyNamedExceptions"))

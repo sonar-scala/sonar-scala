@@ -22,9 +22,10 @@ import java.util.concurrent.ConcurrentHashMap
 
 import scala.jdk.CollectionConverters._
 
+import org.sonar.api.batch.InstantiationStrategy
+import org.sonar.api.batch.ScannerSide
 import org.sonar.api.batch.fs.InputFile
 import org.sonar.api.batch.rule.Severity
-import org.sonar.api.batch.{InstantiationStrategy, ScannerSide}
 import org.sonar.api.rule.RuleKey
 
 final case class Issue(

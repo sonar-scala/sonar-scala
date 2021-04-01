@@ -174,11 +174,9 @@ logBuffered in Test := false
 testOptions in Test += Tests.Argument(TestFrameworks.ScalaTest, "-oDTF")
 
 // scalafix
-scalafixDependencies in ThisBuild += "com.nequissimus" %% "sort-imports" % "0.5.5"
-addCommandAlias("fix", "all compile:scalafix test:scalafix; fixImports")
-addCommandAlias("fixImports", "compile:scalafix SortImports; test:scalafix SortImports")
-addCommandAlias("fixCheck", "compile:scalafix --check; test:scalafix --check; fixCheckImports")
-addCommandAlias("fixCheckImports", "compile:scalafix --check SortImports; test:scalafix --check SortImports")
+scalafixDependencies in ThisBuild += "com.github.liancheng" %% "organize-imports" % "0.5.0"
+addCommandAlias("fix", "all compile:scalafix test:scalafix")
+addCommandAlias("fixCheck", "compile:scalafix --check; test:scalafix --check")
 
 // plugins
 addCompilerPlugin(scalafixSemanticdb)

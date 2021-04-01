@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018-2020  All sonar-scala contributors
+ * Copyright (C) 2018-2021  All sonar-scala contributors
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published
@@ -18,10 +18,12 @@
 package com.mwz.sonar.scala.scapegoat
 
 import com.mwz.sonar.scala.metadata.scapegoat.ScapegoatRules
+import org.scalatest.Inspectors
+import org.scalatest.LoneElement
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
-import org.scalatest.{Inspectors, LoneElement}
-import org.sonar.api.rule.{RuleStatus, Severity}
+import org.sonar.api.rule.RuleStatus
+import org.sonar.api.rule.Severity
 import org.sonar.api.rules.RuleType
 import org.sonar.api.server.rule.RulesDefinition.Context
 

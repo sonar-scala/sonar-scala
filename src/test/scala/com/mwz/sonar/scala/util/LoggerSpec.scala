@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018-2020  All sonar-scala contributors
+ * Copyright (C) 2018-2021  All sonar-scala contributors
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published
@@ -19,9 +19,10 @@ package com.mwz.sonar.scala.util
 
 import cats.effect.IO
 import com.mwz.sonar.scala.util.syntax.Optionals._
+import org.scalatest.LoneElement
+import org.scalatest.OptionValues
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
-import org.scalatest.{LoneElement, OptionValues}
 import org.sonar.api.utils.log.LoggerLevel._
 import org.sonar.api.utils.log.SonarLogTester
 

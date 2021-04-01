@@ -18,18 +18,26 @@
 package com.mwz.sonar.scala
 package scoverage
 
-import java.nio.file.{Path, Paths}
+import java.nio.file.Path
+import java.nio.file.Paths
 
 import scala.jdk.CollectionConverters._
-import scala.util.{Failure, Success, Try}
+import scala.util.Failure
+import scala.util.Success
+import scala.util.Try
 
 import cats.syntax.eq._
 import com.mwz.sonar.scala.scoverage.ScoverageSensor._
+import com.mwz.sonar.scala.util.Log
+import com.mwz.sonar.scala.util.PathUtils
 import com.mwz.sonar.scala.util.PathUtils._
 import com.mwz.sonar.scala.util.syntax.Optionals._
-import com.mwz.sonar.scala.util.{Log, PathUtils}
-import org.sonar.api.batch.fs.{FileSystem, InputComponent, InputFile}
-import org.sonar.api.batch.sensor.{Sensor, SensorContext, SensorDescriptor}
+import org.sonar.api.batch.fs.FileSystem
+import org.sonar.api.batch.fs.InputComponent
+import org.sonar.api.batch.fs.InputFile
+import org.sonar.api.batch.sensor.Sensor
+import org.sonar.api.batch.sensor.SensorContext
+import org.sonar.api.batch.sensor.SensorDescriptor
 import org.sonar.api.config.Configuration
 import org.sonar.api.measures.Metric
 import scalariform.ScalaVersion

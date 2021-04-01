@@ -24,8 +24,12 @@ import cats.syntax.flatMap._
 import com.mwz.sonar.scala.pr.github.Codec._
 import io.circe.generic.auto._
 import mouse.boolean._
+import org.http4s.Header
+import org.http4s.Headers
+import org.http4s.Method
+import org.http4s.Request
+import org.http4s.Uri
 import org.http4s.client.Client
-import org.http4s.{Header, Headers, Method, Request, Uri}
 
 trait Github[F[_]] {
   def authenticatedUser: F[User]

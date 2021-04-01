@@ -23,10 +23,13 @@ import java.nio.file.Path
 
 import scala.jdk.CollectionConverters._
 import scala.util.Try
-import scala.xml.{Elem, XML}
+import scala.xml.Elem
+import scala.xml.XML
 
 import com.mwz.sonar.scala.util.Log
-import org.sonar.api.batch.fs.{FilePredicate, FileSystem, InputFile}
+import org.sonar.api.batch.fs.FilePredicate
+import org.sonar.api.batch.fs.FileSystem
+import org.sonar.api.batch.fs.InputFile
 import org.sonar.api.scanner.ScannerSide
 
 trait JUnitReportParserAPI {

@@ -18,7 +18,8 @@
 package com.mwz.sonar.scala
 package scapegoat
 
-import java.nio.file.{Path, Paths}
+import java.nio.file.Path
+import java.nio.file.Paths
 
 import scala.xml.XML
 

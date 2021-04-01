@@ -18,7 +18,10 @@
 package com.mwz.sonar.scala
 package scalastyle
 
-import org.scalastyle.{FileSpec, Message, ScalastyleConfiguration, ScalastyleChecker => Checker}
+import org.scalastyle.FileSpec
+import org.scalastyle.Message
+import org.scalastyle.ScalastyleConfiguration
+import org.scalastyle.{ScalastyleChecker => Checker}
 import org.sonar.api.scanner.ScannerSide
 
 trait ScalastyleCheckerAPI {

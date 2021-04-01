@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018-2020  All sonar-scala contributors
+ * Copyright (C) 2018-2021  All sonar-scala contributors
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published
@@ -21,13 +21,17 @@ package scalastyle
 import scala.jdk.CollectionConverters._
 
 import com.mwz.sonar.scala.metadata.scalastyle.ScalastyleRules
+import org.scalatest.Inspectors
+import org.scalatest.LoneElement
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
-import org.scalatest.{Inspectors, LoneElement}
 import org.sonar.api.rule.RuleStatus
 import org.sonar.api.rules.RuleType
-import org.sonar.api.server.rule.RulesDefinition.{Context, Repository, Rule}
-import org.sonar.api.server.rule.{RuleParamType, RulesDefinition}
+import org.sonar.api.server.rule.RuleParamType
+import org.sonar.api.server.rule.RulesDefinition
+import org.sonar.api.server.rule.RulesDefinition.Context
+import org.sonar.api.server.rule.RulesDefinition.Repository
+import org.sonar.api.server.rule.RulesDefinition.Rule
 
 class ScalastyleRulesRepositorySpec extends AnyFlatSpec with Matchers with Inspectors with LoneElement {
   trait Ctx {

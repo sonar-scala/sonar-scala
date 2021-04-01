@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018-2020  All sonar-scala contributors
+ * Copyright (C) 2018-2021  All sonar-scala contributors
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published
@@ -18,7 +18,8 @@
 package com.mwz.sonar.scala
 package scapegoat
 
-import java.nio.file.{Path, Paths}
+import java.nio.file.Path
+import java.nio.file.Paths
 
 import scala.jdk.CollectionConverters._
 
@@ -27,14 +28,18 @@ import com.mwz.sonar.scala.pr.Issue
 import com.mwz.sonar.scala.util.PathUtils.cwd
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
+import org.scalatest.LoneElement
+import org.scalatest.OptionValues
 import org.scalatest.flatspec.AnyFlatSpec
-import org.scalatest.{LoneElement, OptionValues}
 import org.scalatestplus.mockito.MockitoSugar
 import org.sonar.api.batch.fs.InputFile
-import org.sonar.api.batch.fs.internal.{DefaultFileSystem, TestInputFileBuilder}
+import org.sonar.api.batch.fs.internal.DefaultFileSystem
+import org.sonar.api.batch.fs.internal.TestInputFileBuilder
 import org.sonar.api.batch.rule.Severity
-import org.sonar.api.batch.rule.internal.{ActiveRulesBuilder, NewActiveRule}
-import org.sonar.api.batch.sensor.internal.{DefaultSensorDescriptor, SensorContextTester}
+import org.sonar.api.batch.rule.internal.ActiveRulesBuilder
+import org.sonar.api.batch.rule.internal.NewActiveRule
+import org.sonar.api.batch.sensor.internal.DefaultSensorDescriptor
+import org.sonar.api.batch.sensor.internal.SensorContextTester
 import org.sonar.api.config.internal.MapSettings
 import org.sonar.api.rule.RuleKey
 import scalariform.ScalaVersion

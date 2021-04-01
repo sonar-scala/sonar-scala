@@ -22,7 +22,9 @@ import scala.concurrent.ExecutionContext
 
 import cats.NonEmptyParallel
 import cats.data.NonEmptyList
-import cats.effect.{ContextShift, IO, Sync}
+import cats.effect.ContextShift
+import cats.effect.IO
+import cats.effect.Sync
 import cats.syntax.either._
 import cats.syntax.eq._
 import cats.syntax.flatMap._
@@ -30,13 +32,16 @@ import cats.syntax.functor._
 import cats.syntax.parallel._
 import cats.syntax.traverse._
 import com.mwz.sonar.scala.pr.GithubPrReviewJob._
-import com.mwz.sonar.scala.pr.github.{Github, _}
+import com.mwz.sonar.scala.pr.github.Github
+import com.mwz.sonar.scala.pr.github._
 import com.mwz.sonar.scala.util.Logger
 import mouse.boolean._
 import org.http4s.Uri
 import org.http4s.client.blaze.BlazeClientBuilder
 import org.sonar.api.batch.fs.InputFile
-import org.sonar.api.batch.postjob.{PostJob, PostJobContext, PostJobDescriptor}
+import org.sonar.api.batch.postjob.PostJob
+import org.sonar.api.batch.postjob.PostJobContext
+import org.sonar.api.batch.postjob.PostJobDescriptor
 import org.sonar.api.batch.rule.Severity
 
 final class GithubPrReviewJob(

@@ -19,7 +19,8 @@ package com.mwz.sonar.scala
 package util
 
 import cats.effect.Sync
-import org.sonar.api.utils.log.{Logger => SonarLogger, Loggers => SonarLoggers}
+import org.sonar.api.utils.log.{Logger => SonarLogger}
+import org.sonar.api.utils.log.{Loggers => SonarLoggers}
 
 trait Logger[F[_]] {
   def debug(s: String): F[Unit]

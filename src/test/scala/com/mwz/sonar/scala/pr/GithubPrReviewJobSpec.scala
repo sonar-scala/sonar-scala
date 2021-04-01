@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018-2020  All sonar-scala contributors
+ * Copyright (C) 2018-2021  All sonar-scala contributors
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published
@@ -28,10 +28,13 @@ import com.mwz.sonar.scala.GlobalConfig
 import com.mwz.sonar.scala.WithLogging
 import com.mwz.sonar.scala.WithTracing
 import com.mwz.sonar.scala.pr.Generators._
+import com.mwz.sonar.scala.pr.github.Comment
 import com.mwz.sonar.scala.pr.github.File
 import com.mwz.sonar.scala.pr.github.Github
+import com.mwz.sonar.scala.pr.github.NewComment
+import com.mwz.sonar.scala.pr.github.NewStatus
 import com.mwz.sonar.scala.pr.github.PullRequest
-import com.mwz.sonar.scala.pr.github.{Comment, NewComment, NewStatus, User}
+import com.mwz.sonar.scala.pr.github.User
 import com.mwz.sonar.scala.util.Logger
 import org.http4s
 import org.http4s.Uri

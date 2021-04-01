@@ -25,7 +25,9 @@ import com.mwz.sonar.scala.scalastyle.ScalastyleRulesRepository._
 import org.sonar.api.rule.RuleStatus
 import org.sonar.api.rules.RuleType
 import org.sonar.api.server.rule.RulesDefinition
-import org.sonar.api.server.rule.RulesDefinition.{NewParam, NewRepository, NewRule}
+import org.sonar.api.server.rule.RulesDefinition.NewParam
+import org.sonar.api.server.rule.RulesDefinition.NewRepository
+import org.sonar.api.server.rule.RulesDefinition.NewRule
 
 /**
  * Defines a repository for the Scalastyle inspections.

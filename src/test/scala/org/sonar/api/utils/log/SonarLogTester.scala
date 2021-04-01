@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018-2020  All sonar-scala contributors
+ * Copyright (C) 2018-2021  All sonar-scala contributors
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published
@@ -19,7 +19,8 @@ package org.sonar.api.utils.log
 
 import scala.jdk.CollectionConverters._
 
-import org.scalatest.{BeforeAndAfter, Suite}
+import org.scalatest.BeforeAndAfter
+import org.scalatest.Suite
 
 trait SonarLogTester extends BeforeAndAfter { this: Suite =>
   before {

@@ -18,9 +18,11 @@
 package com.mwz.sonar.scala
 package scoverage
 
-import java.nio.file.{Path, Paths}
+import java.nio.file.Path
+import java.nio.file.Paths
 
-import scala.xml.{Node, XML}
+import scala.xml.Node
+import scala.xml.XML
 
 import cats.syntax.semigroup.catsSyntaxSemigroup
 import com.mwz.sonar.scala.util.PathUtils

@@ -5,14 +5,12 @@ import java.time.Year
 import org.sonar.updatecenter.common.PluginManifest
 import sbt._
 import sbt.librarymanagement.Resolver
-import sbtrelease.ReleasePlugin.autoImport.ReleaseTransformations._
-import sbtrelease.Version.Bump.Minor
 
 enablePlugins(AutomateHeaderPlugin)
 
 name := "sonar-scala"
-organization := "com.github.mwz"
-homepage := Some(url("https://github.com/mwz/sonar-scala"))
+organization := "com.sonar-scala"
+homepage := Some(url("https://github.com/sonar-scala/sonar-scala"))
 description := "Enables analysis of Scala projects with SonarQube."
 
 // Licence
@@ -26,6 +24,21 @@ headerLicense := Some(
   )
 )
 excludeFilter.in(headerResources) := "*.scala"
+scmInfo := Some(
+  ScmInfo(
+    url("https://github.com/sonar-scala/sonar-scala"),
+    "scm:git:https://github.com/sonar-scala/sonar-scala.git",
+    Some("scm:git:git@github.com:sonar-scala/sonar-scala.git")
+  )
+)
+developers := List(
+  Developer(
+    "mwz",
+    "Michael Wizner",
+    "@mwz",
+    url("https://github.com/mwz")
+  )
+)
 
 // Compile options
 scalaVersion := "2.13.5"
@@ -40,7 +53,7 @@ javacOptions := Seq("-Xlint:deprecation")
 cancelable in Global := true
 scalafmtOnCompile in ThisBuild :=
   sys.env
-    .get("DISABLE_SCALAFMT")
+    .get("CI")
     .forall(_.toLowerCase == "false")
 scapegoatVersion in ThisBuild := "1.4.8"
 scapegoatReports := Seq("xml")
@@ -91,8 +104,6 @@ libraryDependencies ++= List(
 
 // Project resolvers
 resolvers ++= List(
-  Resolver.sonatypeRepo("snapshots"),
-  Resolver.sonatypeRepo("releases"),
   "Artima Maven Repository" at "https://repo.artima.com/releases"
 )
 
@@ -136,31 +147,9 @@ artifact in (Compile, assembly) := {
 }
 addArtifact(artifact in (Compile, assembly), assembly)
 
-// Bintray
-bintrayRepository := "maven"
-bintrayPackage := "sonar-scala"
-bintrayVcsUrl := Some("git@github.com:mwz/sonar-scala.git")
-bintrayReleaseOnPublish := true
-publishMavenStyle := true
-publishArtifact in Test := false
+// Sonatype
+sonatypeCredentialHost := "s01.oss.sonatype.org"
 pomIncludeRepository := (_ => false)
-
-// Release
-releaseVersionBump := Minor
-releaseTagComment := s"Releasing ${(version in ThisBuild).value}. [ci skip]"
-releaseCommitMessage := s"Setting version to ${(version in ThisBuild).value}. [ci skip]"
-releaseProcess := Seq[ReleaseStep](
-  checkSnapshotDependencies,
-  inquireVersions,
-  setReleaseVersion,
-  releaseStepTask(sonarScan),
-  commitReleaseVersion,
-  tagRelease,
-  publishArtifacts,
-  setNextVersion,
-  commitNextVersion,
-  pushChanges
-)
 
 // Test
 parallelExecution in Test := false

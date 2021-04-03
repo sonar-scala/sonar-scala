@@ -31,6 +31,10 @@ jobs:
         with:
           name: scapegoat
           path: target/scala-2.13/scapegoat-report/scapegoat.xml
+      - uses: actions/upload-artifact@v2
+        with:
+          name: junit
+          path: target/test-reports/*
   sonar-scan:
     runs-on: ubuntu-20.04
     needs: test
@@ -58,6 +62,10 @@ jobs:
         with:
           name: scoverage
           path: target/scala-2.13/scoverage-report
+      - uses: actions/download-artifact@v2
+        with:
+          name: junit
+          path: target/test-reports
       - run: |
           sbt -Dsonar.host.url=${SONARQUBE_URL} \
               -Dsonar.login=${SONARQUBE_ACCESS_TOKEN} \

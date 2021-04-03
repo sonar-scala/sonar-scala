@@ -109,3 +109,6 @@ jobs:
           export SONAR_SCANNER_HOME="/opt/sonar-scanner-${SONAR_SCANNER_VERSION}" && \
           export PATH="${PATH}:${SONAR_SCANNER_HOME}/bin" && \
           cd examples && ./scan.sh
+        env:
+          SONARQUBE_URL: ${{secrets.SONARQUBE_URL}} 
+          SONARQUBE_ACCESS_TOKEN: ${{secrets.SONARQUBE_ACCESS_TOKEN}}

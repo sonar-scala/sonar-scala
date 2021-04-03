@@ -62,3 +62,6 @@ jobs:
           sbt -Dsonar.host.url=${SONARQUBE_URL} \
               -Dsonar.login=${SONARQUBE_ACCESS_TOKEN} \
               sonarScan < /dev/null
+        env:
+          SONARQUBE_URL: ${{secrets.SONARQUBE_URL}}
+          SONARQUBE_ACCESS_TOKEN: ${{secrets.SONARQUBE_ACCESS_TOKEN}}

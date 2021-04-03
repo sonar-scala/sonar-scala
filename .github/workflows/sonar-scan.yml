@@ -53,11 +53,11 @@ jobs:
       - uses: actions/download-artifact@v2
         with:
           name: scapegoat
-          path: target/scala-2.13/scapegoat-report/scapegoat.xml
+          path: target/scala-2.13/scapegoat-report
       - uses: actions/download-artifact@v2
         with:
           name: scoverage
-          path: target/scala-2.13/scoverage-report/scoverage.xml
+          path: target/scala-2.13/scoverage-report
       - run: |
           sbt -Dsonar.host.url=${SONARQUBE_URL} \
               -Dsonar.login=${SONARQUBE_ACCESS_TOKEN} \

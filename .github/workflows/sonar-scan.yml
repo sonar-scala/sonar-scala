@@ -99,6 +99,7 @@ jobs:
           path: ~/.sonar/cache
           key: sonar-scanner-${{hashFiles('~/sonar-scanner-version')}}
           restore-keys: sonar-scanner-
+      - run: sudo apt-get install -y wget maven gradle
       - run: |
           wget -O ~/sonar-scanner.zip \
             "https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-${SONAR_SCANNER_VERSION}.zip" && \
@@ -107,5 +108,4 @@ jobs:
         env:
           SONAR_SCANNER_HOME: "/opt/sonar-scanner-${SONAR_SCANNER_VERSION}"
           PATH: "${PATH}:${SONAR_SCANNER_HOME}/bin"
-      - run: sudo apt-get install -y maven gradle
       - run: cd examples && ./scan.sh

@@ -1,30 +1,30 @@
-# name: Release
-# on:
-#   push:
-#     branches: [master]
-#     tags: ["*"]
-# jobs:
-#   release:
-#     runs-on: ubuntu-20.04
-#     steps:
-#       - uses: actions/checkout@v2
-#       - run: git fetch --prune --unshallow
-#       - uses: olafurpg/setup-scala@v10
-#         with:
-#           java-version: adopt@1.8
-#       - uses: actions/cache@v1
-#         with:
-#           path: ~/.ivy2/cache
-#           key: ivy-${{hashFiles('**/*.sbt')}}
-#           restore-keys: ivy-
-#       - uses: actions/cache@v1
-#         with:
-#           path: ~/.sbt
-#           key: sbt-${{hashFiles('**/*.sbt')}}-${{hashFiles('project/build.properties')}}
-#           restore-keys: sbt-
-#       - run: sbt ci-release
-#         env:
-#           PGP_PASSPHRASE: ${{secrets.PGP_PASSPHRASE}}
-#           PGP_SECRET: ${{secrets.PGP_SECRET}}
-#           SONATYPE_PASSWORD: ${{secrets.SONATYPE_PASSWORD}}
-#           SONATYPE_USERNAME: ${{secrets.SONATYPE_USERNAME}}
+name: Release
+on:
+  push:
+    branches: [master]
+    tags: ["*"]
+jobs:
+  release:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+      - run: git fetch --prune --unshallow
+      - uses: olafurpg/setup-scala@v10
+        with:
+          java-version: adopt@1.8
+      - uses: actions/cache@v1
+        with:
+          path: ~/.ivy2/cache
+          key: ivy-${{hashFiles('**/*.sbt')}}
+          restore-keys: ivy-
+      - uses: actions/cache@v1
+        with:
+          path: ~/.sbt
+          key: sbt-${{hashFiles('**/*.sbt')}}-${{hashFiles('project/build.properties')}}
+          restore-keys: sbt-
+      - run: sbt ci-release
+        env:
+          PGP_PASSPHRASE: ${{secrets.PGP_PASSPHRASE}}
+          PGP_SECRET: ${{secrets.PGP_SECRET}}
+          SONATYPE_PASSWORD: ${{secrets.SONATYPE_PASSWORD}}
+          SONATYPE_USERNAME: ${{secrets.SONATYPE_USERNAME}}

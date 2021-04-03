@@ -26,11 +26,11 @@ jobs:
       - uses: actions/upload-artifact@v2
         with:
           name: scoverage
-          path: target/scala-2.12/scoverage-report/scoverage.xml
+          path: target/scala-2.13/scoverage-report/scoverage.xml
       - uses: actions/upload-artifact@v2
         with:
           name: scapegoat
-          path: target/scala-2.12/scapegoat-report/scapegoat.xml
+          path: target/scala-2.13/scapegoat-report/scapegoat.xml
   sonar-scan:
     runs-on: ubuntu-20.04
     needs: test
@@ -53,11 +53,11 @@ jobs:
       - uses: actions/download-artifact@v2
         with:
           name: scapegoat
-          path: target/scala-2.12/scapegoat-report/scapegoat.xml
+          path: target/scala-2.13/scapegoat-report/scapegoat.xml
       - uses: actions/download-artifact@v2
         with:
           name: scoverage
-          path: target/scala-2.12/scoverage-report/scoverage.xml
+          path: target/scala-2.13/scoverage-report/scoverage.xml
       - run: |
           sbt -Dsonar.host.url=${SONARQUBE_URL} \
               -Dsonar.login=${SONARQUBE_ACCESS_TOKEN} \

@@ -6,75 +6,75 @@ on:
 env:
   SONAR_SCANNER_VERSION: "4.2.0.1873"
 jobs:
-  test:
-    runs-on: ubuntu-20.04
-    steps:
-      - uses: actions/checkout@v2
-      - run: git fetch --prune --unshallow
-      - uses: olafurpg/setup-scala@v10
-        with:
-          java-version: adopt@1.8
-      - uses: actions/cache@v1
-        with:
-          path: ~/.ivy2/cache
-          key: ivy-${{hashFiles('**/*.sbt')}}
-          restore-keys: ivy-
-      - uses: actions/cache@v1
-        with:
-          path: ~/.sbt
-          key: sbt-${{hashFiles('**/*.sbt')}}-${{hashFiles('project/build.properties')}}
-          restore-keys: sbt-
-      - run: sbt 'clean; coverage; test; coverageReport; scapegoat' < /dev/null
-      - uses: actions/upload-artifact@v2
-        with:
-          name: scoverage
-          path: target/scala-2.13/scoverage-report/scoverage.xml
-      - uses: actions/upload-artifact@v2
-        with:
-          name: scapegoat
-          path: target/scala-2.13/scapegoat-report/scapegoat.xml
-      - uses: actions/upload-artifact@v2
-        with:
-          name: junit
-          path: target/test-reports/*
-  sonar-scan:
-    runs-on: ubuntu-20.04
-    needs: test
-    steps:
-      - uses: actions/checkout@v2
-      - run: git fetch --prune --unshallow
-      - uses: olafurpg/setup-scala@v10
-        with:
-          java-version: adopt@1.8
-      - uses: actions/cache@v1
-        with:
-          path: ~/.ivy2/cache
-          key: ivy-${{hashFiles('**/*.sbt')}}
-          restore-keys: ivy-
-      - uses: actions/cache@v1
-        with:
-          path: ~/.sbt
-          key: sbt-${{hashFiles('**/*.sbt')}}-${{hashFiles('project/build.properties')}}
-          restore-keys: sbt-
-      - uses: actions/download-artifact@v2
-        with:
-          name: scapegoat
-          path: target/scala-2.13/scapegoat-report
-      - uses: actions/download-artifact@v2
-        with:
-          name: scoverage
-          path: target/scala-2.13/scoverage-report
-      - uses: actions/download-artifact@v2
-        with:
-          name: junit
-          path: target/test-reports
-      - run: |
-          sbt -Dsonar.host.url=${SONARQUBE_URL} \
-              -Dsonar.login=${SONARQUBE_ACCESS_TOKEN} \
-              sonarScan < /dev/null
-        env:
-          SONARQUBE_URL: ${{secrets.SONARQUBE_URL}}
-          SONARQUBE_ACCESS_TOKEN: ${{secrets.SONARQUBE_ACCESS_TOKEN}}
+  # test:
+  #   runs-on: ubuntu-20.04
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - run: git fetch --prune --unshallow
+  #     - uses: olafurpg/setup-scala@v10
+  #       with:
+  #         java-version: adopt@1.8
+  #     - uses: actions/cache@v1
+  #       with:
+  #         path: ~/.ivy2/cache
+  #         key: ivy-${{hashFiles('**/*.sbt')}}
+  #         restore-keys: ivy-
+  #     - uses: actions/cache@v1
+  #       with:
+  #         path: ~/.sbt
+  #         key: sbt-${{hashFiles('**/*.sbt')}}-${{hashFiles('project/build.properties')}}
+  #         restore-keys: sbt-
+  #     - run: sbt 'clean; coverage; test; coverageReport; scapegoat' < /dev/null
+  #     - uses: actions/upload-artifact@v2
+  #       with:
+  #         name: scoverage
+  #         path: target/scala-2.13/scoverage-report/scoverage.xml
+  #     - uses: actions/upload-artifact@v2
+  #       with:
+  #         name: scapegoat
+  #         path: target/scala-2.13/scapegoat-report/scapegoat.xml
+  #     - uses: actions/upload-artifact@v2
+  #       with:
+  #         name: junit
+  #         path: target/test-reports/*
+  # sonar-scan:
+  #   runs-on: ubuntu-20.04
+  #   needs: test
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - run: git fetch --prune --unshallow
+  #     - uses: olafurpg/setup-scala@v10
+  #       with:
+  #         java-version: adopt@1.8
+  #     - uses: actions/cache@v1
+  #       with:
+  #         path: ~/.ivy2/cache
+  #         key: ivy-${{hashFiles('**/*.sbt')}}
+  #         restore-keys: ivy-
+  #     - uses: actions/cache@v1
+  #       with:
+  #         path: ~/.sbt
+  #         key: sbt-${{hashFiles('**/*.sbt')}}-${{hashFiles('project/build.properties')}}
+  #         restore-keys: sbt-
+  #     - uses: actions/download-artifact@v2
+  #       with:
+  #         name: scapegoat
+  #         path: target/scala-2.13/scapegoat-report
+  #     - uses: actions/download-artifact@v2
+  #       with:
+  #         name: scoverage
+  #         path: target/scala-2.13/scoverage-report
+  #     - uses: actions/download-artifact@v2
+  #       with:
+  #         name: junit
+  #         path: target/test-reports
+  #     - run: |
+  #         sbt -Dsonar.host.url=${SONARQUBE_URL} \
+  #             -Dsonar.login=${SONARQUBE_ACCESS_TOKEN} \
+  #             sonarScan < /dev/null
+  #       env:
+  #         SONARQUBE_URL: ${{secrets.SONARQUBE_URL}}
+  #         SONARQUBE_ACCESS_TOKEN: ${{secrets.SONARQUBE_ACCESS_TOKEN}}
   sonar-scan-examples:
     runs-on: ubuntu-20.04
     steps:
@@ -99,13 +99,13 @@ jobs:
           path: ~/.sonar/cache
           key: sonar-scanner-${{hashFiles('~/sonar-scanner-version')}}
           restore-keys: sonar-scanner-
-      - run: sudo apt-get install -y wget maven gradle
+      - run: sudo apt-get update && sudo apt-get install -y wget maven gradle
       - run: |
           wget -O ~/sonar-scanner.zip \
             "https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-${SONAR_SCANNER_VERSION}.zip" && \
           sudo unzip ~/sonar-scanner.zip -d /opt && \
           rm ~/sonar-scanner.zip
-        env:
-          SONAR_SCANNER_HOME: "/opt/sonar-scanner-${SONAR_SCANNER_VERSION}"
-          PATH: "${PATH}:${SONAR_SCANNER_HOME}/bin"
-      - run: cd examples && ./scan.sh
+      - run: |
+          export SONAR_SCANNER_HOME="/opt/sonar-scanner-${SONAR_SCANNER_VERSION}" && \
+          export PATH="${PATH}:${SONAR_SCANNER_HOME}/bin" && \
+          cd examples && ./scan.sh

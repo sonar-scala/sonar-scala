@@ -1,8 +1,8 @@
 <h1 align="left"> <img src="./img/sonar-scala.svg" height="80px"> sonar-scala</h1>
 
-[![circleci-badge]][circleci] [![coverage-badge]][coverage]
-[![bintray-badge]][bintray] [![bintray-badge-lts]][bintray-lts]
-[![bintray-badge-lts-67]][bintray-lts-67]
+![](https://img.shields.io/github/workflow/status/sonar-scala/sonar-scala/Release/master)
+[![coverage-badge]][coverage] [![bintray-badge]][bintray]
+[![bintray-badge-lts]][bintray-lts] [![bintray-badge-lts-67]][bintray-lts-67]
 [![bintray-badge-downloads]][bintray-downloads]
 [![bintray-stats-badge]][bintray-stats] [![gitter-badge]][gitter]
 

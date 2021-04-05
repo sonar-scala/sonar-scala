@@ -45,8 +45,7 @@ scalaVersion := "2.13.5"
 scalacOptions ++= Seq(
   "-language:reflectiveCalls",
   "-Ymacro-annotations",
-  "-Yrangepos",
-  "-Ywarn-unused"
+  "-Yrangepos"
 )
 scalacOptions -= "-Xfatal-warnings"
 javacOptions := Seq("-Xlint:deprecation")

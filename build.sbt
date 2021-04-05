@@ -162,6 +162,8 @@ logBuffered in Test := false
 testOptions in Test += Tests.Argument(TestFrameworks.ScalaTest, "-oDTF")
 
 // scalafix
+semanticdbEnabled := true
+semanticdbVersion := scalafixSemanticdb.revision
 scalafixDependencies in ThisBuild += "com.github.liancheng" %% "organize-imports" % "0.5.0"
 addCommandAlias("fix", "all compile:scalafix test:scalafix")
 addCommandAlias("fixCheck", "compile:scalafix --check; test:scalafix --check")

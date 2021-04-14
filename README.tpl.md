@@ -1,13 +1,13 @@
 <h1 align="left"> <img src="./img/sonar-scala.svg" height="80px"> sonar-scala</h1>
 
 ![](https://img.shields.io/github/workflow/status/sonar-scala/sonar-scala/Release/master)
-[![coverage-badge]][coverage] [![bintray-badge]][bintray]
+[![coverage-badge]][coverage] [![sonatype-badge]][sonatype]
 [![bintray-badge-lts]][bintray-lts] [![bintray-badge-lts-67]][bintray-lts-67]
-[![bintray-badge-downloads]][bintray-downloads]
-[![bintray-stats-badge]][bintray-stats] [![gitter-badge]][gitter]
+[![gitter-badge]][gitter]
 
-[bintray]: https://bintray.com/mwz/maven/sonar-scala/{{version}}/link
-[bintray-badge]: https://img.shields.io/badge/Download-{{version}}-blue.svg
+[sonatype]:
+  https://s01.oss.sonatype.org/content/repositories/releases/com/sonar-scala/sonar-scala_2.13/{{version}}/sonar-scala_2.13-{{version}}-assembly.jar
+[sonatype-badge]: https://img.shields.io/badge/Download-{{version}}-blue.svg
 [bintray-badge-lts]:
   https://img.shields.io/badge/Download-{{ltsVersion}}_(for_SonarQube_7.9_LTS)-blue.svg
 [bintray-badge-lts-67]:
@@ -15,16 +15,6 @@
 [bintray-lts]: https://bintray.com/mwz/maven/sonar-scala/{{ltsVersion}}/link
 [bintray-lts-67]:
   https://bintray.com/mwz/maven/sonar-scala/{{lts67Version}}/link
-[bintray-downloads]:
-  https://bintray.com/beta/#/mwz/maven/sonar-scala?tab=statistics
-[bintray-badge-downloads]:
-  https://img.shields.io/bintray/dt/mwz/maven/sonar-scala?label=Downloads
-[bintray-stats]: https://bintray.com/mwz/maven/sonar-scala#statistics
-[bintray-stats-badge]:
-  https://img.shields.io/badge/dynamic/json.svg?uri=https://bintray.com/statistics/packageStatistics?pkgPath=/mwz/maven/sonar-scala&query=$.totalDownloads&label=Downloads+(last+30+days)&colorB=green
-[circleci]: https://circleci.com/gh/mwz/sonar-scala
-[circleci-badge]:
-  https://img.shields.io/circleci/project/github/mwz/sonar-scala/master.svg?label=Build
 [coverage]:
   https://sonar.sonar-scala.com/component_measures?id=sonar-scala&metric=coverage
 [coverage-badge]:
@@ -42,7 +32,7 @@ sonar-scala is an independent SonarQube plugin, driven by and developed with
 
 Intended for [SonarQube 6.7 LTS](https://www.sonarqube.org/sonarqube-6-7-lts),
 [SonarQube 7.9 LTS](https://www.sonarqube.org/sonarqube-7-9-lts),
-[SonarQube 8.5](https://www.sonarqube.org/sonarqube-8-5) and Scala
+[SonarQube 8.7](https://www.sonarqube.org/sonarqube-8-7) and Scala
 2.11/2.12/2.13.
 
 sonar-scala is developed in Scala. It uses the

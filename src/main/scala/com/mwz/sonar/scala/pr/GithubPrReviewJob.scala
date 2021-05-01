@@ -22,7 +22,6 @@ import scala.concurrent.ExecutionContext
 
 import cats.NonEmptyParallel
 import cats.data.NonEmptyList
-import cats.effect.ContextShift
 import cats.effect.IO
 import cats.effect.Sync
 import cats.syntax.either._

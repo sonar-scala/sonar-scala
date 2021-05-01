@@ -21,7 +21,6 @@ import java.nio.file.Paths
 import java.nio.file.StandardOpenOption
 
 import cats.data.NonEmptyChain
-import cats.effect.Blocker
 import cats.effect.ExitCode
 import cats.effect.IO
 import cats.effect.IOApp
@@ -36,6 +35,7 @@ import fs2.text
 import io.circe.Printer
 import io.circe.generic.JsonCodec
 import io.circe.syntax._
+import cats.effect.Resource
 
 @JsonCodec
 final case class SonarScalaMetadata(
@@ -79,7 +79,7 @@ object Metadata extends IOApp {
     NonEmptyChain.fromNonEmptyList(rules.toNonEmptyList.sortBy(_.name))
 
   def run(args: List[String]): IO[ExitCode] = {
-    val write: Stream[IO, Unit] = Stream.resource(Blocker[IO]).flatMap { blocker =>
+    val write: Stream[IO, Unit] = Stream.resource(Resource.unit[IO]).flatMap { blocker =>
       Stream[IO, String](metadata.asJson.printWith(printer))
         .through(text.utf8Encode)
         .through(

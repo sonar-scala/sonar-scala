@@ -85,7 +85,7 @@ libraryDependencies ++= List(
   "org.slf4j"                 % "slf4j-api"            % "1.7.30"     % Provided,
   "org.sonarsource.sonarqube" % "sonar-plugin-api"     % sonarVersion % Provided,
   "org.typelevel"            %% "cats-core"            % "2.6.0",
-  "org.typelevel"            %% "cats-effect"          % "2.4.1",
+  "org.typelevel"            %% "cats-effect"          % "2.5.0",
   "org.typelevel"            %% "mouse"                % "1.0.2",
   // TEST
   "com.beachape"               %% "enumeratum-scalacheck"     % "1.6.1"      % Test,
@@ -94,7 +94,7 @@ libraryDependencies ++= List(
   "org.http4s"                 %% "http4s-dsl"                % http4s       % Test,
   "org.mockito"                %% "mockito-scala"             % "1.16.37"    % Test,
   "org.scalacheck"             %% "scalacheck"                % "1.15.3"     % Test,
-  "org.scalatest"              %% "scalatest"                 % "3.2.7"      % Test,
+  "org.scalatest"              %% "scalatest"                 % "3.2.8"      % Test,
   "org.scalatestplus"          %% "mockito-1-10"              % "3.1.0.0"    % Test,
   "org.scalatestplus"          %% "scalacheck-1-14"           % "3.2.2.0"    % Test,
   "com.softwaremill.diffx"     %% "diffx-scalatest"           % "0.3.30"     % Test,

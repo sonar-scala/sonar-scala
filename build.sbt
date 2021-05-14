@@ -80,7 +80,7 @@ libraryDependencies ++= List(
   "io.circe"                 %% "circe-generic"        % circe,
   "org.http4s"               %% "http4s-blaze-client"  % http4s,
   "org.http4s"               %% "http4s-circe"         % http4s,
-  "org.scala-lang.modules"   %% "scala-xml"            % "1.3.0",
+  "org.scala-lang.modules"   %% "scala-xml"            % "2.0.0",
   "org.scalariform"          %% "scalariform"          % "0.2.10",
   "org.slf4j"                 % "slf4j-api"            % "1.7.30"     % Provided,
   "org.sonarsource.sonarqube" % "sonar-plugin-api"     % sonarVersion % Provided,

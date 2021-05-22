@@ -84,7 +84,7 @@ libraryDependencies ++= List(
   "org.scalariform"          %% "scalariform"          % "0.2.10",
   "org.slf4j"                 % "slf4j-api"            % "1.7.30"     % Provided,
   "org.sonarsource.sonarqube" % "sonar-plugin-api"     % sonarVersion % Provided,
-  "org.typelevel"            %% "cats-core"            % "2.6.0",
+  "org.typelevel"            %% "cats-core"            % "2.6.1",
   "org.typelevel"            %% "cats-effect"          % "2.5.1",
   "org.typelevel"            %% "mouse"                % "1.0.2",
   // TEST
@@ -97,7 +97,7 @@ libraryDependencies ++= List(
   "org.scalatest"              %% "scalatest"                 % "3.2.9"      % Test,
   "org.scalatestplus"          %% "mockito-1-10"              % "3.1.0.0"    % Test,
   "org.scalatestplus"          %% "scalacheck-1-14"           % "3.2.2.0"    % Test,
-  "com.softwaremill.diffx"     %% "diffx-scalatest"           % "0.3.30"     % Test,
+  "com.softwaremill.diffx"     %% "diffx-scalatest"           % "0.4.5"      % Test,
   "org.sonarsource.sonarqube"   % "sonar-plugin-api-impl"     % sonarVersion % Test
 )
 

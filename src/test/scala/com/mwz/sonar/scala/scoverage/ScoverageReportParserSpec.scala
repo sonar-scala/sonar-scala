@@ -20,6 +20,7 @@ package scoverage
 
 import java.nio.file.Paths
 
+import com.softwaremill.diffx.generic.auto._
 import com.softwaremill.diffx.scalatest.DiffMatcher
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers

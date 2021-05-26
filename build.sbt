@@ -76,7 +76,7 @@ libraryDependencies ++= List(
   "com.beachape"             %% "enumeratum-circe"     % "1.6.1",
   "com.beautiful-scala"      %% "scalastyle"           % "1.5.0",
   "io.circe"                 %% "circe-core"           % circe,
-  "io.circe"                 %% "circe-generic-extras" % "0.13.0",
+  "io.circe"                 %% "circe-generic-extras" % "0.14.1",
   "io.circe"                 %% "circe-generic"        % circe,
   "org.http4s"               %% "http4s-blaze-client"  % http4s,
   "org.http4s"               %% "http4s-circe"         % http4s,

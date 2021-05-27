@@ -69,7 +69,7 @@ sourceGenerators in Compile ++= Seq(
 // Lib dependencies
 val sonarVersion = "8.7.0.41497"
 val circe = "0.13.0"
-val http4s = "0.21.23"
+val http4s = "0.21.24"
 libraryDependencies ++= List(
   "com.beachape"             %% "enumeratum"           % "1.6.1",
   "com.beachape"             %% "enumeratum-cats"      % "1.6.1",

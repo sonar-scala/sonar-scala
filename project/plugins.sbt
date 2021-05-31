@@ -1,4 +1,4 @@
-addSbtPlugin("ch.epfl.scala"             % "sbt-scalafix"         % "0.9.28")
+addSbtPlugin("ch.epfl.scala"             % "sbt-scalafix"         % "0.9.29")
 addSbtPlugin("com.artima.supersafe"      % "sbtplugin"            % "1.1.12")
 addSbtPlugin("com.eed3si9n"              % "sbt-assembly"         % "0.15.0")
 addSbtPlugin("com.geirsson"              % "sbt-ci-release"       % "1.5.7")

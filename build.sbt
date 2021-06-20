@@ -71,7 +71,7 @@ val sonarVersion = "8.7.0.41497"
 val circe = "0.13.0"
 val http4s = "0.21.23"
 libraryDependencies ++= List(
-  "com.beachape"             %% "enumeratum"           % "1.6.1",
+  "com.beachape"             %% "enumeratum"           % "1.7.0",
   "com.beachape"             %% "enumeratum-cats"      % "1.6.1",
   "com.beachape"             %% "enumeratum-circe"     % "1.6.1",
   "com.beautiful-scala"      %% "scalastyle"           % "1.5.0",

@@ -97,7 +97,7 @@ libraryDependencies ++= List(
   "org.scalatest"              %% "scalatest"                 % "3.2.9"      % Test,
   "org.scalatestplus"          %% "mockito-1-10"              % "3.1.0.0"    % Test,
   "org.scalatestplus"          %% "scalacheck-1-14"           % "3.2.2.0"    % Test,
-  "com.softwaremill.diffx"     %% "diffx-scalatest"           % "0.4.5"      % Test,
+  "com.softwaremill.diffx"     %% "diffx-scalatest"           % "0.5.3"      % Test,
   "org.sonarsource.sonarqube"   % "sonar-plugin-api-impl"     % sonarVersion % Test
 )
 

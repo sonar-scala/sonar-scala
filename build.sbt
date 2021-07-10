@@ -86,7 +86,7 @@ libraryDependencies ++= List(
   "org.sonarsource.sonarqube" % "sonar-plugin-api"     % sonarVersion % Provided,
   "org.typelevel"            %% "cats-core"            % "2.6.1",
   "org.typelevel"            %% "cats-effect"          % "2.5.1",
-  "org.typelevel"            %% "mouse"                % "1.0.2",
+  "org.typelevel"            %% "mouse"                % "1.0.4",
   // TEST
   "com.beachape"               %% "enumeratum-scalacheck"     % "1.6.1"      % Test,
   "com.github.alexarchambault" %% "scalacheck-shapeless_1.14" % "1.2.5"      % Test,

@@ -92,7 +92,7 @@ libraryDependencies ++= List(
   "com.github.alexarchambault" %% "scalacheck-shapeless_1.14" % "1.2.5"      % Test,
   "org.http4s"                 %% "http4s-blaze-server"       % http4s       % Test,
   "org.http4s"                 %% "http4s-dsl"                % http4s       % Test,
-  "org.mockito"                %% "mockito-scala"             % "1.16.37"    % Test,
+  "org.mockito"                %% "mockito-scala"             % "1.16.46"    % Test,
   "org.scalacheck"             %% "scalacheck"                % "1.15.4"     % Test,
   "org.scalatest"              %% "scalatest"                 % "3.2.9"      % Test,
   "org.scalatestplus"          %% "mockito-1-10"              % "3.1.0.0"    % Test,

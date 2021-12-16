@@ -2,17 +2,21 @@
 
 ![](https://img.shields.io/github/workflow/status/sonar-scala/sonar-scala/Release/master)
 [![coverage-badge]][coverage] [![sonatype-badge]][sonatype]
-[![bintray-badge-lts]][bintray-lts] [![bintray-badge-lts-67]][bintray-lts-67]
-[![gitter-badge]][gitter]
+[![bintray-badge-lts]][bintray-lts] [![bintray-badge-lts-79]][bintray-lts-79]
+[![bintray-badge-lts-67]][bintray-lts-67] [![gitter-badge]][gitter]
 
 [sonatype]:
   https://s01.oss.sonatype.org/content/repositories/releases/com/sonar-scala/sonar-scala_2.13/8.7.0/sonar-scala_2.13-8.7.0-assembly.jar
 [sonatype-badge]: https://img.shields.io/badge/Download-8.7.0-blue.svg
 [bintray-badge-lts]:
+  https://img.shields.io/badge/Download-8.9.0_(for_SonarQube_8.9_LTS)-blue.svg
+[bintray-badge-lts-79]:
   https://img.shields.io/badge/Download-7.9.0_(for_SonarQube_7.9_LTS)-blue.svg
 [bintray-badge-lts-67]:
   https://img.shields.io/badge/Download-6.8.0_(for_SonarQube_6.7_LTS)-blue.svg
-[bintray-lts]: https://bintray.com/mwz/maven/sonar-scala/7.9.0/link
+[bintray-lts]: https://bintray.com/mwz/maven/sonar-scala/8.9.0/link
+[bintray-lts-79]:
+  https://bintray.com/mwz/maven/sonar-scala/7.9.0/link
 [bintray-lts-67]:
   https://bintray.com/mwz/maven/sonar-scala/6.8.0/link
 [coverage]:
@@ -30,9 +34,10 @@ sonar-scala is an independent SonarQube plugin, driven by and developed with
 :heart: by the
 [community](https://github.com/mwz/sonar-scala/graphs/contributors).
 
-Intended for [SonarQube 6.7 LTS](https://www.sonarqube.org/sonarqube-6-7-lts),
+Intended for [SonarQube 8.7](https://www.sonarqube.org/sonarqube-8-7),
+[SonarQube 8.9 LTS](https://www.sonarqube.org/sonarqube-8-7),
 [SonarQube 7.9 LTS](https://www.sonarqube.org/sonarqube-7-9-lts),
-[SonarQube 8.7](https://www.sonarqube.org/sonarqube-8-7) and Scala
+[SonarQube 6.7 LTS](https://www.sonarqube.org/sonarqube-6-7-lts) and Scala
 2.11/2.12/2.13.
 
 sonar-scala is developed in Scala. It uses the

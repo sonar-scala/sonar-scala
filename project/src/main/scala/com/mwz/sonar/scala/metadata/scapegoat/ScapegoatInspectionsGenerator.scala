@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018-2020  All sonar-scala contributors
+ * Copyright (C) 2018-2022  All sonar-scala contributors
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published
@@ -62,23 +62,21 @@ object ScapegoatInspectionsGenerator {
 
   /** Stringifies a list of scapegoat inspections */
   def stringifyInspections(scapegoatInspections: Seq[(String, Inspection)]): Seq[String] =
-    scapegoatInspections map {
-      case (inspectionClassName, inspection) =>
-        s"""ScapegoatInspection(
-           |  id = "$inspectionClassName",
-           |  name = "${inspection.text}",
-           |  defaultLevel = Level.${inspection.defaultLevel},
-           |  description = "${inspection.description}",
-           |  explanation = "${inspection.explanation}"
-           |)""".stripMargin
+    scapegoatInspections map { case (inspectionClassName, inspection) =>
+      s"""ScapegoatInspection(
+         |  id = "$inspectionClassName",
+         |  name = "${inspection.text}",
+         |  defaultLevel = Level.${inspection.defaultLevel},
+         |  description = "${inspection.description}",
+         |  explanation = "${inspection.explanation}"
+         |)""".stripMargin
     }
 
   /** Fill the template file */
   def fillTemplate(template: Source, stringified: Seq[String]): Tree = {
     val term: Term = stringified.toString.parse[Term].get
-    template.transform {
-      case q"val AllInspections: $tpe = $expr" =>
-        q"val AllInspections: $tpe = $term"
+    template.transform { case q"val AllInspections: $tpe = $expr" =>
+      q"val AllInspections: $tpe = $term"
     }
   }
 }

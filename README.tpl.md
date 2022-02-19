@@ -1,8 +1,8 @@
 <h1 align="left"> <img src="./img/sonar-scala.svg" height="80px"> sonar-scala</h1>
 
 ![](https://img.shields.io/github/workflow/status/sonar-scala/sonar-scala/Release/master)
-[![coverage-badge]][coverage] [![sonatype-badge]][sonatype]
-[![bintray-badge-lts]][bintray-lts] [![bintray-badge-lts-79]][bintray-lts-79]
+[![sonatype-badge]][sonatype] [![bintray-badge-lts]][bintray-lts]
+[![bintray-badge-lts-79]][bintray-lts-79]
 [![bintray-badge-lts-67]][bintray-lts-67] [![gitter-badge]][gitter]
 
 [sonatype]:
@@ -19,10 +19,6 @@
   https://bintray.com/mwz/maven/sonar-scala/{{lts79Version}}/link
 [bintray-lts-67]:
   https://bintray.com/mwz/maven/sonar-scala/{{lts67Version}}/link
-[coverage]:
-  https://sonar.sonar-scala.com/component_measures?id=sonar-scala&metric=coverage
-[coverage-badge]:
-  https://sonar.sonar-scala.com/api/project_badges/measure?project=sonar-scala&metric=coverage
 [gitter]: https://gitter.im/sonar-scala/sonar-scala
 [gitter-badge]:
   https://img.shields.io/gitter/room/sonar-scala/sonar-scala.svg?colorB=46BC99&label=Chat

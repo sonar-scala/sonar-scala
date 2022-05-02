@@ -48,7 +48,7 @@ scalacOptions ++= Seq(
   "-Yrangepos"
 )
 scalacOptions -= "-Xfatal-warnings"
-javacOptions := Seq("-Xlint:deprecation", "-source", "11", "-target", "11")
+javacOptions := Seq("-Xlint:deprecation", "-source", "8", "-target", "8")
 cancelable in Global := true
 scalafmtOnCompile in ThisBuild :=
   sys.env

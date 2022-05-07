@@ -48,7 +48,7 @@ scalacOptions ++= Seq(
   "-Yrangepos"
 )
 scalacOptions -= "-Xfatal-warnings"
-javacOptions := Seq("-Xlint:deprecation")
+javacOptions := Seq("-Xlint:deprecation", "-source", "11", "-target", "11")
 cancelable in Global := true
 scalafmtOnCompile in ThisBuild :=
   sys.env
@@ -67,7 +67,7 @@ sourceGenerators in Compile ++= Seq(
 )
 
 // Lib dependencies
-val sonarVersion = "8.9.0.43852"
+val sonarVersion = "9.4.0.54424"
 val circe = "0.13.0"
 val http4s = "0.21.23"
 libraryDependencies ++= List(

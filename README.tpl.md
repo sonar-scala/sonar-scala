@@ -30,7 +30,7 @@ sonar-scala is an independent SonarQube plugin, driven by and developed with
 :heart: by the
 [community](https://github.com/mwz/sonar-scala/graphs/contributors).
 
-Intended for [SonarQube 8.7](https://www.sonarqube.org/sonarqube-8-7),
+Intended for [SonarQube 9.4](https://www.sonarqube.org/sonarqube-9-4),
 [SonarQube 8.9 LTS](https://www.sonarqube.org/sonarqube-8-7),
 [SonarQube 7.9 LTS](https://www.sonarqube.org/sonarqube-7-9-lts),
 [SonarQube 6.7 LTS](https://www.sonarqube.org/sonarqube-6-7-lts) and Scala

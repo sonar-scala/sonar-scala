@@ -41,7 +41,7 @@ developers := List(
 )
 
 // Compile options
-scalaVersion := "2.13.5"
+scalaVersion := "2.13.6"
 scalacOptions ++= Seq(
   "-language:reflectiveCalls",
   "-Ymacro-annotations",

@@ -54,7 +54,7 @@ scalafmtOnCompile in ThisBuild :=
   sys.env
     .get("CI")
     .forall(_.toLowerCase == "false")
-scapegoatVersion in ThisBuild := "1.4.8"
+scapegoatVersion in ThisBuild := "1.4.9"
 scapegoatReports := Seq("xml")
 coverageOutputXML := true
 coverageOutputHTML := false

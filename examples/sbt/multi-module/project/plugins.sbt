@@ -1,2 +1,2 @@
-addSbtPlugin("org.scoverage"          % "sbt-scoverage"  % "1.8.1")
+addSbtPlugin("org.scoverage"           % "sbt-scoverage" % "2.0.3")
 addSbtPlugin("com.sksamuel.scapegoat" %% "sbt-scapegoat" % "1.1.0")

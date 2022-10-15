@@ -94,7 +94,7 @@ libraryDependencies ++= List(
   "org.http4s"                 %% "http4s-dsl"                % http4s       % Test,
   "org.mockito"                %% "mockito-scala"             % "1.16.37"    % Test,
   "org.scalacheck"             %% "scalacheck"                % "1.15.4"     % Test,
-  "org.scalatest"              %% "scalatest"                 % "3.2.9"      % Test,
+  "org.scalatest"              %% "scalatest"                 % "3.2.14"     % Test,
   "org.scalatestplus"          %% "mockito-1-10"              % "3.1.0.0"    % Test,
   "org.scalatestplus"          %% "scalacheck-1-14"           % "3.2.2.0"    % Test,
   "com.softwaremill.diffx"     %% "diffx-scalatest"           % "0.4.5"      % Test,
